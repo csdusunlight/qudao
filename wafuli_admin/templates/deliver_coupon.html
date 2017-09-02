@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block js %}
+<script type="text/javascript" src="{%static 'js/jquery-1.11.2.min.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
+<script>
+    var deliver_coupon_url = "{%url 'deliver_coupon'%}"
+    var parse_file_url = "{%url 'parse_file'%}"
+   	$.ajaxSetup({
+   	    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+   	});
+    $(function(){
+    	$("li.home9").toggleClass("on");
+    	$('#type').change(function(){
+    		$("select#project").empty();
+    		var id=$(this).children('option:selected').val();
+    		if(id==='-1'){
+    			return;
+    		}
+    		else if(id==='2'){
+    			$("div#cash_coupon").hide();
+    			$("div#use_coupon").css("display", 'block');
+    		}
+    		else {
+    			$("div#use_coupon").hide();
+    			$("div#cash_coupon").css("display", 'block');
+    		}
+    		$.ajax({
+    			url:"{%url 'get_project_list' %}",
+    			dataType:"json",
+    			type:"GET",
+    			data:{
+    				'id':id,
+    			},
+    			success:function(ret){
+    				if(ret.prolist){
+    					dict = ret.prolist
+    					for (var x in dict){
+    					//	x = eval(x);
+    						$("select#project").append('<option value='+x+'>'+dict[x]+'</option>');
+    					}
+    					
+    				}
+    			},
+    			error:function(){
+    				alert("请检查网络连接");
+    			}
+    		});
+    	});
+    	$('#selectuser').change(function(){
+    		var select_val = $(this).children('option:selected').val();
+			if (select_val ==='1'){
+				$("div.part_user").hide();
+			}
+			else {
+				$("div.part_user").css("display", 'block');
+			}
+    	}); 
+    	$("button#submit").click(function(){
+    		var id=$("select#type").children('option:selected').val();
+    		var project = $("select#project").children('option:selected').val();
+    		if (!id || !project){
+    			alert("输入不完整！");
+    			return;
+    		}
+    		var data = {
+    			selecttype: id,
+    			selectproject: project,
+    		};
+    		if(id==='2'){
+    			data.codes = $("textarea#codes").val();
+    		}
+    		else if (id==='0' || id==='1'){
+    			data.selectuser = $("select#selectuser").children('option:selected').val();
+    			data.users = $("textarea#users").val();
+    		}
+    		$.ajax({
+    			url: deliver_coupon_url,
+    			dataType:"json",
+    			type:"POST",
+    			data: data,
+    			success:function(ret){
+    				if(ret.code=='0'){
+    					var succ_num = ret.succ_num;
+    					var fail_list = ret.fail_list;
+    					var fail_str = '';
+    					for (x in fail_list){
+    						fail_str += fail_list[x] + '；';
+    					}
+    					if (fail_str){
+    						fail_str = "；导入失败：" + fail_str;
+    					}
+    					alert("成功新建优惠券"+succ_num+"张" + fail_str);
+    				}
+    				else {
+    					alert(ret.res_msg);
+    				}
+    			},
+    			error:function(){
+    				alert("请检查网络连接");
+    			}
+    		});
+		});
+    	$('button.uploadbtn').click(function() {
+    		var fileElementId = null, areaId = null;
+    		if ($(this).attr("id") === 'uploadbtn1'){
+    			fileElementId = 'fileupload1';
+    			areaId = 'users';
+    		}
+    		else {
+    			fileElementId = 'fileupload2';
+    			areaId = 'codes';
+    		}
+	    	$.ajaxFileUpload({  
+	            url:parse_file_url,  
+	            secureuri:false,  
+	            fileElementId:fileElementId,//file标签的id  
+	            dataType: 'json',//返回数据的类型  
+	            data:{},//一同上传的数据  
+	            success: function (data, status) {
+	            	if (data.code==0){
+	            		var value = ''
+    	            	userlist = data.list;
+    	                for (x in userlist) {
+    	                	value += String(userlist[x])+'\n';
+    	                }
+    	                $("#"+areaId).val(value);
+	            	}
+	            	else {
+	            		alert(data.res_msg);
+	            	}
+	            },  
+	            error: function (data, status, e) {  
+	                alert(e);  
+	            }  
+	        });
+    	});
+    });
+</script>
+{% endblock js%}
+{% block right %}
+	<i style="letter-spacing:4.8px;">项目类型：</i>
+	<select name="selecttype" id="type">
+	<option value="-1">--</option>
+	{% for x in type_list %}
+	    <option value="{{x.0}}">{{x.1}}</option>
+	{%endfor%}
+	</select>
+	<i style="letter-spacing:4.8px;">选择项目：</i>
+	<select name="selectproject" id="project">
+	</select>
+	<div id="cash_coupon" style="display:none">
+		<i style="letter-spacing:4.8px;">选择发送用户：</i>
+		<select name="selectuser" id="selectuser">
+			<option value="1">全部用户</option>
+			<option value="2">指定用户</option>
+		</select>
+		<div class="part_user" style="display:none">
+			<i style="letter-spacing:4.8px;">发送指定用户：</i>
+			<textarea id="users" name="users" rows="15" cols="20"></textarea>
+			<label for="fileupload1">导入（纯文本文件，每行一个）：</label>
+			<input id="fileupload1" name="file"  type="file"/>
+			<button class="uploadbtn" id="uploadbtn1">上传</button>
+		</div>
+	</div>
+	<div id="use_coupon" style="display:none">
+		<i style="letter-spacing:4.8px;">优惠码：</i>
+		<textarea id="codes" name="codes" rows="15" cols="20"></textarea>
+		<label for="fileupload2">导入（纯文本文件，每行一个）：</label>
+		<input id="fileupload2" name="file"  type="file"/>
+		<button class="uploadbtn" id="uploadbtn2">上传</button>
+	</div>
+
+	<button id="submit">提交</button>
+{%endblock%}

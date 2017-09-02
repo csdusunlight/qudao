@@ -4,7 +4,6 @@ import time,os
 import random
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import F
-from wafuli_admin.models import Dict
 import logging
 from hashlib import sha1
 logger = logging.getLogger('wafuli')
@@ -77,35 +76,3 @@ def update_view_count(welfare):
     except Exception, e:
         logger.error(e)
 
-def get_weixin_params(url):
-    url = settings.DOMAIN_URL + url
-    print url
-    weixin_params = {}
-    jsapi_ticket = ''
-    try:
-        jsapi_ticket = Dict.objects.get(key="jsapi_ticket").value
-    except Exception, e:
-        logger.error("Obtain and jsapi_ticket is failed: " + str(e))
-        return weixin_params
-    timestamp = int(time.time())
-    sign_params = {
-                     'jsapi_ticket':jsapi_ticket,
-                     'noncestr':settings.NONCESTR,
-                     'timestamp':str(timestamp),
-                     'url':url,
-    }
-    items = sign_params.items()
-    items.sort()
-    l = []
-    for k, v in items:
-        l.append(k + '=' + v)
-    para_str = '&'.join(l)
-    sign = sha1(para_str).hexdigest()
-    weixin_params = {
-            'nonceStr':settings.NONCESTR,
-            'timestamp':timestamp,
-            'signature':sign,
-            'appId':settings.APPID,
-            'url':url, 
-    }
-    return weixin_params

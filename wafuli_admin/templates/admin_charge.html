@@ -1,0 +1,156 @@
+{% extends "base.html" %} {% block js %}
+<script type="text/javascript">
+	$.ajaxSetup({
+		data: {
+			csrfmiddlewaretoken: '{{ csrf_token }}'
+		},
+	});
+	var data = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>时间</th><th>初始余额</th>' +
+		'<th>变动值</th><th>变动原因</th><th>备注</th><th>操作管理员</th>' +
+		'</tr>[data]<tr><td>{username}</td><td>{mobile}</td><td>{time}</td>' +
+		'<td>{init_amount}</td><td>{charge_amount}</td><td>{reason}</td>' +
+		'<td>{remark}</td><td>{admin_user}</td></tr>[/data]</table>';
+
+	var url = "{% url 'get_admin_charge_page' %}" + "?page={page}&size={pageSize}";
+
+	$(document).ready(function() {
+		$("li.home11").toggleClass("on");
+		$(".Tin-table tr:even").css("background-color", "#fcfcfc");
+		$("#pagedata").ajaxPage({
+			url: url,
+			pageId: $("#page"),
+			pageSize: 10,
+			run: true,
+			content: data,
+		});
+
+		$("#search").click(function() {
+			startTime = $("#startTime").val();
+			endTime = $("#endTime").val();
+			newurl = url;
+			if(startTime && endTime) {
+				newurl += "&startTime=" + startTime;
+				newurl += "&endTime=" + endTime;
+			}
+			startTime2 = $("#startTime2").val();
+			endTime2 = $("#endTime2").val();
+			if(startTime2 && endTime2) {
+				newurl += "&startTime2=" + startTime2;
+				newurl += "&endTime2=" + endTime2;
+			}
+			username = $("#username").val();
+			mobile = $("#mobile").val();
+			if(username) {
+				newurl += "&username=" + username;
+			}
+			if(mobile) {
+				newurl += "&mobile=" + mobile;
+			}
+
+			adminname = $("#adminname").val();
+			if(adminname) {
+				newurl += "&adminname=" + adminname;
+			}
+			charge_reason = $("#charge_reason").val();
+			if(charge_reason) {
+				newurl += "&charge_reason=" + charge_reason;
+			}
+			$("#page").empty();
+			$("#pagedata").ajaxPage({
+				url: newurl,
+				pageId: $("#page"),
+				pageSize: 10,
+				run: true,
+				content: data,
+			});
+		});
+		
+		$("#export").click(function() {
+			var html = '<form action="' + "{% url 'export_charge_excel' %}" + '" method="get" target="_self" id="postData_form">';
+			startTime = $("#startTime").val();
+			endTime = $("#endTime").val();
+			if(startTime && endTime) {
+				html += '<input name="startTime" type="hidden" value="' + startTime + '"/>';
+				html += '<input name="endTime" type="hidden" value="' + endTime + '"/>';
+			}
+			username = $("#username").val();
+			mobile = $("#mobile").val();
+			if(username) {
+				html += '<input name="username" type="hidden" value="' + username + '"/>';
+			}
+			if(mobile) {
+				html += '<input name="mobile" type="hidden" value="' + mobile + '"/>';
+			}
+			
+			adminname = $("#adminname").val();
+			charge_reason = $("#charge_reason").val();
+			if(adminname) {
+				html += '<input name="adminname" type="hidden" value="' + adminname + '"/>';
+			}
+			if(charge_reason) {
+				html += '<input name="charge_reason" type="hidden" value="' + charge_reason + '"/>';
+			}
+			html += '</form>';
+			var iframe = document.getElementById('myIFrame');
+			iframe.contentWindow.document.open();
+			iframe.contentWindow.document.write(html);
+			iframe.contentWindow.document.close();
+			document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+		});
+	});
+</script>
+{% endblock js %} {% block right %}
+<div class="Criteria">
+	<span>搜索条件</span>
+	<div class="Crite-box">
+		<form>
+			<table width="100%">
+				<tr>
+					<td>
+						<i>开始时间：</i>
+						<input id="startTime" type="datetime-local" />
+					</td>
+					<td>
+						<i>结束时间：</i>
+						<input id="endTime" type="datetime-local" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<i>用&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</i>
+						<input id="username" type="text" />
+					</td>
+					<td>
+						<i style="letter-spacing:2px;">用户手机号：</i>
+						<input id="mobile" type="text" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<i>处&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人：</i>
+						<input id="adminname" type="text" />
+					</td>
+					<td>
+						<i>变动原因：</i>
+						<input id="charge_reason" type="text" />
+					</td>
+				</tr>
+			</table>
+			<div class="Submit-in">
+				<input id="export" type="button" value="导出" />
+				<input id="search" type="button" value="搜索" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="Tin-table">
+	<div id="pagedata">
+	</div>
+	<div class="Page-in-admin">
+		<div class="page" id="page">
+		</div>
+	</div>
+</div>
+<iframe id="myIFrame" scrolling="yes" src="abount:blank" style="display:none" frameborder=1></iframe>
+{%endblock%}

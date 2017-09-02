@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block js %}
+<script type="text/javascript">
+$.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
+var data = '<table width="100%"><tr><th>渠道等级</th><th>QQ号/QQ昵称</th><th>手机号</th><th>银行卡号</th><th>开户行姓名</th>'+
+	'<th>添加为渠道时间</th><th>账户余额</th>'+
+	'</tr>[data]<tr><td><span id="level_span_{id}">{level}</span> | <a onclick="changeChannel({id})">修改</a></td><td>{qq}</td><td>{mobile}</td><td>{card_number}</td>'+
+	'<td>{real_name}</td><td>{join_time}</td><td>{balance}</td></tr>[/data]</table>';
+
+var url = "{% url 'get_admin_channel_page' %}" + "?page={page}&size={pageSize}";
+var send_msg_para = {};
+var selected_id;
+function changeChannel(id){
+  $(".changeChannel").css("display","block");
+  selected_id = id;
+}
+$(document).ready(function(){
+	$("li.home14").toggleClass("on");
+	$(".Tin-table tr:even").css("background-color","#fcfcfc");
+	$("#pagedata").ajaxPage({
+	    url:url,
+	    pageId:$("#page"),
+	    pageSize:10,
+	    run:true,
+	    content:data,
+	});
+
+  $(".none-x").click(function(){
+    $(this).parent().parent().css("display","none");<!--隐藏-->
+  })
+  $(".none-x-s").click(function(){
+    $(this).parent().parent().parent().parent().css("display","none");<!--隐藏-->
+  })
+
+	$("#search").click(function(){
+		var startTime = $("#startTime").val();
+		var endTime = $("#endTime").val();
+		var newurl = url;
+		if(startTime && endTime){
+			newurl += "&startTime="+startTime;
+			newurl += "&endTime="+endTime;
+		}
+		var qq_number = $("#qq_number").val();
+		var mobile = $("#mobile").val();
+		if(qq_number){
+			newurl += "&qq="+qq_number;
+		}
+		if(mobile){
+			newurl += "&mobile="+mobile;
+		}
+		$("#page").empty();
+		$("#pagedata").ajaxPage({
+		    url:newurl,
+		    pageId:$("#page"),
+		    pageSize:10,
+		    run:true,
+		    content:data,
+		});
+	});
+  $("input#modify").click(function(){
+	  var level = $("input#level").val();
+	  if (!level){
+		  return;
+	  }
+	  $.ajax({
+		url:"{%url 'admin_user' %}",
+		dataType:"json",
+		type:"POST",
+		data:{
+			'id':selected_id,
+			'level':level,
+			'type':7,
+		},
+		success:function(ret){
+			if(ret.code==0){
+				$("#level_span_" + selected_id).text(level);
+			}
+			else if(ret.code==-1){
+				alert("该页面已过期，请重新登录！");
+				window.location.href = ret.url;
+			}
+			else {
+				alert(ret.res_msg);
+			}
+		},
+		error:function(){
+			alert("请检查网络连接");
+		}
+	});
+	 $(".changeChannel").css("display","none");
+  });
+});
+</script>
+{% endblock js %}
+{% block right %}
+<div class="Criteria">
+                        	<span>搜索条件</span>
+                            <div class="Crite-box">
+                            	<form>
+                                	<table width="100%">
+                                    	<tr>
+                                        	<td>
+                                            	<i>添加为渠道时间开始时间：</i>
+                                                <input id="startTime" type="datetime-local" />
+                                            </td>
+                                        	<td>
+                                            	<i>添加为渠道时间结束时间：</i>
+                                                <input id="endTime" type="datetime-local" />
+                                            </td>
+                                        </tr>
+                                      <tr>
+                                        	<td>
+                                            	<i>QQ帐号/QQ昵称：</i>
+                                                <input id="qq_number" type="text" />
+                                            </td>
+                                        	<td>
+                                              <i>用户手机号：</i>
+                                                <input id="mobile" type="text" />
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                    <div class="Submit-in">
+                                      <input id="send_msg" type="button" value="发送" />
+                                      <input id="search" type="button" value="搜索" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="Tin-table">
+                        	<div id="pagedata">
+							</div>
+		                    <div class="Page-in-admin">
+		                    	<div class="page"  id="page">
+		                        </div>
+		                    </div>
+                        </div>
+
+              <!--确认添加渠道-->
+              <div class="changeChannel">
+                <div class="w570-box">
+                    <h3>修改渠道等级操作</h3>
+                      <button class="none-x"></button>
+                      <h5> 渠道用户等级：<input id="level" type="text" placeholder="请输入渠道用户等级"></h5>
+                      <form class="Audit-in">
+                          <div class="Finnow-Sub" style="margin-top:0">
+                          <input id="modify" type="submit" value="确认" onclick="return false;"/>
+                          <input type="button" value="取消" class="none-x-s" />
+                          </div>
+                      </form>
+                  </div>
+              </div>
+{%endblock%}
+

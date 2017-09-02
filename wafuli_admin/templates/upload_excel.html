@@ -1,0 +1,38 @@
+{% load staticfiles %}
+<header>
+<script type="text/javascript" src="{%static 'js/jquery-1.11.2.min.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
+</header>
+<body>
+<input id="fileupload1" name="file"  type="file"/>
+<button class="uploadbtn" id="uploadbtn1">上传</button>
+<script>
+	$('button.uploadbtn').click(function() {
+    		var fileElementId  = 'fileupload1';
+	    	$.ajaxFileUpload({  
+	            url:'',  
+	            secureuri:false,  
+	            fileElementId:fileElementId,//file标签的id  
+	            dataType: 'json',//返回数据的类型  
+	            data:{fid:1},//一同上传的数据  
+	            success: function (data, status) {
+	            	if (data.code==0){
+	            		var value = ''
+    	            	userlist = data.list;
+    	                for (x in userlist) {
+    	                	value += String(userlist[x])+'\n';
+    	                }
+    	                $("#"+areaId).val(value);
+	            	}
+	            	else {
+	            		alert(data.msg);
+	            	}
+	            },  
+	            error: function (data, status, e) {  
+	                alert(e);  
+	            }  
+	        });
+    	});
+   </script>
+   
+   </body>

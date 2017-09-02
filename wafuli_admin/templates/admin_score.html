@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />         
+{% endblock css %}
+{% block js %}
+<script type="text/javascript"> 
+$.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
+var data = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>兑换商品名称</th><th>兑换积分</th>'+
+	'<th>剩余积分</th><th>收货人信息</th><th>处理状态</th><th>申请时间</th><th>处理人</th><th>处理时间</th>'+
+	'<th>操作</th><th>备注</th></tr>[data]<tr><td>{username}</td><td>{mobile}</td><td>{title}</td>'+
+	'<td>{price}</td><td>{score}</td><td onclick><a id={a_id} onClick="pop({order_id})">查看</a></td><td>{state}</td>'+
+	'<td>{time_sub}</td><td>{admin}</td><td>{time_admin}</td>'+
+	'<td id="item_{id}"><a class="fyin" onclick="pass({id})">接受'+
+	'</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td><td>{remark}</td></tr>[/data]</table>';
+var data2 = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>兑换商品名称</th><th>兑换积分</th>'+
+	'<th>剩余积分</th><th>收货人信息</th><th>处理状态</th><th>申请时间</th><th>处理人</th><th>处理时间</th>'+
+	'<th>操作</th><th>备注</th></tr>[data]<tr><td>{username}</td><td>{mobile}</td><td>{title}</td>'+
+	'<td>{price}</td><td>{score}</td><td onclick><a id={a_id} onClick="pop({order_id})">查看</a></td><td>{state}</td>'+
+	'<td>{time_sub}</td><td>{admin}</td><td>{time_admin}</td>'+
+	'<td>不可操作</td><td>{remark}</td></tr>[/data]</table>';
+var url = "{% url 'get_admin_score_page' %}" + "?page={page}&size={pageSize}";
+var selected_id = 0;
+function pop(n){
+	$.ajax({
+		url:"{%url 'lookup_order' %}?id="+n,
+		dataType:"json",
+		success:function(ret){
+			if(ret.code==0){
+				$("#rec_name font").text(ret.name);
+				$("#rec_tel font").text(ret.tel);
+				$("#rec_addr font").text(ret.addr);
+				$("#rec_remark font").text(ret.mes);
+				$(".Listpop").css("display","block");
+			}
+			else if((ret.code==1)){
+				alert("查不到该订单！");
+			}
+			else if(ret.code==-1){
+				alert("该页面已过期，请重新登录！");
+				window.location.href = ret.url;
+			}
+		},
+		error:function(){
+			alert("请检查网络连接");
+		}
+	});
+}
+function pass(id){
+	$(".Deny-y").css("display","block");
+	selected_id = id;
+}
+function refuse(id){
+	$(".Audit").css("display","block");
+	selected_id = id;
+}
+$(document).ready(function(){
+	$("li.home5").toggleClass("on");
+    $(".Close").click(function(){
+    	$(".Listpop").css("display","none")<!--隐藏-->
+    });
+	$(".Tin-table-box tr:even").css("background-color","#fcfcfc");
+	$("#pagedata").ajaxPage({
+	    url:url+"&state=1", 
+	    pageId:$("#page"),
+	    pageSize:10,
+	    run:true,
+	    content:data,
+	});
+	$(".none-x").click(function(){
+		$(this).parent().parent().css("display","none");<!--隐藏-->
+	})
+	$(".none-x-s").click(function(){
+		$(this).parent().parent().parent().parent().css("display","none");<!--隐藏-->
+	})
+	$('.Deny-y input[type="submit"]').click(function(){
+		id = selected_id;
+		if (!id){
+			return;
+		}
+		$.ajax({
+			url:"{%url 'admin_score' %}",
+			dataType:"json",
+			type:"POST",
+			data:{
+				'id':id,
+				'type':1,
+			},
+			success:function(ret){
+				if(ret.code==0){
+					$("#item_"+id).html("审核完成，通过");
+				}
+				else if(ret.code==-1){
+					alert("该页面已过期，请重新登录！");
+					window.location.href = ret.url;
+				}
+				else {
+					alert(ret.res_msg);
+				}
+			},
+			error:function(){
+				alert("请检查网络连接");
+			}
+		});
+		$(".Deny-y").css("display","none");
+	});
+	$('.Audit input[type="submit"]').click(function(){
+		id = selected_id;
+		reason = $("#refuse_reason").val();
+		if (!id || !reason){
+			return;
+		}
+		alert(reason);
+		$.ajax({
+			url:"{%url 'admin_score' %}",
+			dataType:"json",
+			type:"POST",
+			data:{
+				'id':id,
+				'reason':reason,
+				'type':2,
+			},
+			success:function(ret){
+				if(ret.code==0){
+					$("#item_"+id).html("审核完成，拒绝");
+				}
+				else if(ret.code==-1){
+					alert("该页面已过期，请重新登录！");
+					window.location.href = ret.url;
+				}
+				else {
+					alert(ret.res_msg);
+				}
+			},
+			error:function(){
+				alert("请检查网络连接");
+			}
+		});
+		$(".Audit").css("display","none");
+	});
+	$("#search").click(function(){
+		startTime = $("#startTime").val();
+		endTime = $("#endTime").val();
+		newurl = url;
+		if(startTime && endTime){
+			newurl += "&startTime="+startTime;
+			newurl += "&endTime="+endTime;
+		}
+		startTime2 = $("#startTime2").val();
+		endTime2 = $("#endTime2").val();
+		if(startTime2 && endTime2){
+			newurl += "&startTime2="+startTime2;
+			newurl += "&endTime2="+endTime2;
+		}
+		username = $("#username").val();
+		mobile = $("#mobile").val();
+		if(username){
+			newurl += "&username="+username;
+		}
+		if(mobile){
+			newurl += "&mobile="+mobile;
+		}
+		commodityname = $("#commodityname").val();
+		if(commodityname){
+			newurl += "&commodityname="+commodityname;
+		}
+		adminname = $("#adminname").val();
+		state = $("#state").val();
+		if(adminname){
+			newurl += "&adminname="+adminname;
+		}
+		if(state){
+			newurl += "&state="+state;
+		}
+		var newdata = data;
+		if(state!='1'){
+			newdata = data2;
+		}
+		$("#page").empty();
+		$("#pagedata").ajaxPage({
+		    url:newurl, 
+		    pageId:$("#page"),
+		    pageSize:10,
+		    run:true,
+		    content:newdata,
+		});
+	});
+});
+</script>     
+{% endblock js %}
+{% block right %}
+<div class="Criteria">
+                        	<span>搜索条件</span>
+                            <div class="Crite-box">
+                            	<form>
+                                	<table width="100%">
+                                    	<tr>
+                                        	<td>
+                                            	<i>申请开始时间：</i>
+                                                <input id="startTime" type="datetime-local" />
+                                            </td>
+                                        	<td>
+                                            	<i>申请结束时间：</i>
+                                                <input id="endTime" type="datetime-local" />
+                                            </td>
+                                        	<td>
+                                            	<i>操作开始时间：</i>
+                                                <input id="startTime2" type="datetime-local" />
+                                            </td>
+                                        	<td>
+                                            	<i>操作结束时间：</i>
+                                                <input id="endTime2" type="datetime-local" />
+                                            </td>
+                                        </tr>
+                                    	<tr>
+                                        	<td>
+                                            	<i>用&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</i>
+                                                <input id="username" type="text" />
+                                            </td>
+                                        	<td>
+                                            	<i style="letter-spacing:2px;">用户手机号：</i>
+                                                <input id="mobile" type="text" />
+                                            </td>
+                                        	<td>
+                                            	<i style="letter-spacing:4.8px;">商品名称：</i>
+                                                <input id="commodityname" type="text" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                        	<td>
+                                            	<i>处&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人：</i>
+                                                <input id="adminname" type="text" />
+                                            </td>
+                                        	<td>
+                                            	<i style="letter-spacing:4.8px;">处理状态：</i>
+                                                <select name="selectAge" id="state">   
+											        <option value="1">未审核</option>   
+											        <option value="0">审核通过</option>   
+											        <option value="2">审核拒绝</option>
+											    </select>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="Submit-in">
+                                    	<input id="search" type="button" value="搜索" />
+                                        <input id="export" type="button" value="导出" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="Tin-table">
+                        	<div id="pagedata">
+							</div>
+		                    <div class="Page-in-admin">
+		                    	<div class="page"  id="page">
+		                        </div>
+		                    </div> 
+                        </div>
+{%endblock%}
+
+	{% block modal %}
+    </div>
+	<!--审核接受-->
+    <div class="Deny-y">
+    	<div class="w570-box">
+        	<h3>审核接受</h3>
+            <button class="none-x"></button>
+            <h5> 确认接受？</h5>
+            <form class="Audit-in">
+                <div class="Finnow-Sub" style="margin-top:0">
+                <input type="submit" value="确认" onclick="return false;"/>
+                <input type="button" value="取消" class="none-x-s" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--审核拒绝-->
+    <div class="Audit">
+    	<div class="w570-box">
+        	<h3>审核拒绝</h3>
+            <button class="none-x"></button>
+            <form class="Audit-in">
+            	<span>填写拒绝原因：</span>
+                <textarea id="refuse_reason"></textarea>
+                <div class="Finnow-Sub">
+                <input type="submit" value="确认" class="Deny-box" onclick="return false;"/>
+                <input type="button" value="取消" class="none-x-s" />
+                </div>
+            </form>
+        </div>
+    </div>
+     <div class="Listpop">
+          <div class="w700v">
+          	<div class="Div-sin">
+              	<div class="Divleft">
+                  	<h3>请填写收件人信息</h3>
+                      <div class="Info-box">
+                	<p id="rec_name"><span>收件人姓名：</span><font>四季如风</font></p>
+                	<p id="rec_tel"><span>收件人手机号：</span><font>15066665858</font></p>
+                	<p id="rec_addr"><span>收件人地址：</span><font>深圳市宝安区福永街道新田社区大洋路美盛新村2号</font></p>
+                	<p id="rec_remark"><span>备  注：</span><font>无</font></p>
+                      </div>
+                  </div>
+                  <div class="Close">
+                  	<i><img src="{% static 'images/x-botin.png' %}" /></i>
+                  </div>
+              </div>
+          </div>
+      </div>
+    <!--end-->
+	{% endblock modal %}  

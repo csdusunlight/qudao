@@ -1,0 +1,320 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>免费福利</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}"/>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-flesslider.css' %}"/>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}"/>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-welfare.css' %}"/>
+	</head>
+	<body>
+		{% include "header.html" %}
+
+		<!--banner-container-->
+		<div class="banner-container wfl-wrap clearfix">
+			<div class="banner l">
+				<div class="flexslider">
+					<ul class="slides">
+							{% for adv in ad_list %}
+                  <li onclick="location='{{adv.url}}'" style="background:url({{adv.pic.url}}) 50% 0 no-repeat;cursor:pointer;"></li>
+              {%endfor%}
+				  	</ul>
+
+				</div>
+			</div>
+			<div class="hongbao-recommend fs-0 r">
+				{% for adv in ad_list2 %}
+	          <!-- <li onclick="location='{{adv.url}}'" style="background:url({{adv.pic.url}}) 50% 0 no-repeat;cursor:pointer;"></li> -->
+	          <a href="{{adv.url}}"><img class="hongbao-recommend-item" src="{{adv.pic.url}}" alt=""></a>
+	      {%endfor%}
+			</div>
+		</div>
+		<!--banner-container--end-->
+		<div class="wfl-wrap">
+			<div class="hongbao-search">
+			  <!-- <form action="" method="get"> -->
+			    <input class="hongbao-input" name="key" type="text">
+			    <input class="hongbao-submit" type="submit" value="">
+			  <!-- </form> -->
+			  <p class="hot-search">热搜：<span class="hot-txt">红包</span><span class="hot-txt">优惠</span><span class="hot-txt">折扣</span><span class="hot-txt">限时</span></p>
+			</div>
+		</div>
+		<!--红包、积分、福利购-->
+		<div class="wfl-wrap clearfix">
+			<div class="hongbao-content wleft l">
+				<div class="hongbao-nav-box clearfix">
+					<h4 class="hongbao-nav-name l">红包分类：</h4>
+					<ul class="hongbao-nav l">
+						<li class="hongbao-nav__item on">精选</li>
+						<li class="hongbao-nav__item">微信红包<!-- <span class="hongbao-nav__num">1234</span> --></li>
+						<li class="hongbao-nav__item">支付宝红包</li>
+						<li class="hongbao-nav__item">购物红包</li>
+						<li class="hongbao-nav__item">话费红包</li>
+						<li class="hongbao-nav__item">流量红包</li>
+						<li class="hongbao-nav__item">理财红包</li>
+					</ul>
+					<ul class="hongbao-choose fs-0 r">
+						<li class="hongbao-choose__item on">最新</li>
+						<li class="hongbao-choose__item">最热</li>
+					</ul>
+				</div>
+				<ul id="pagedata1" class="hongbao-box">
+				</ul>
+				<div class="changes-p">
+			      <div class="page"  id="page1">
+			      </div>
+			  </div>
+			</div>
+			<div class="sidebar wright r">
+				<div class="wflbox">
+					<div class="wflbox__titlebox clearfix">
+						<h1 class="wflbox__title">福利购</h1>
+						<a class="wflbox__more" href="http://fuligou.wafuli.cn">查看全部</a>
+					</div>
+					<ul class="fuligou-box">
+						{% for news in fuligou_side %}
+            <li class="fuligou"><a href="{{news.href}}" target="_blank">
+							<img class="fuligou__img" src="{{news.img_src}}" alt="" />
+							<div>
+                <div class="txtbox line-3s">
+                    <h3 class="fuligou__title txtinline">{{news.title}}</h3>
+                </div>
+								<div class="price l"><span class="price__now">￥<number>{{news.buy_price}}</number></span><span class="price__tag">券后价</span><span class="price__before">￥{{news.old_price}}</span></div>
+							</div>
+						</a></li>
+            {% endfor %}
+					</ul>
+				</div>
+
+				<div class="wflbox">
+					<div class="wflbox__titlebox m-mt clearfix">
+						<h1 class="wflbox__title">积分商城</h1>
+						<a class="wflbox__more" href="{% url 'mall' %}">查看全部</a>
+					</div>
+					<ul class="jifen-box">
+						{% for news in commodity_list %}
+            <li class="jifen"><a href="{{news.url}}" target="_blank">
+                <img class="jifen__img" src="{{news.pic.url}}" alt="" />
+                <div>
+                    <h3 class="jifen__title">{{news.name}}</h3>
+                    <p class="jifen__num">积分：{{news.price}}</p>
+                </div>
+            </a></li>
+            {% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!--红包、积分、福利购---end-->
+    {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+
+		<script src="/static/js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/wfl-common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="/static/js/wfl-flexslider-min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+		<script type="text/javascript">
+			$(function(){
+				var data='[results]<li class="hongbao"><a href="{url}" target="_blank"><h2 class="hongbao__title">{title}<span class="hongbao__title-two">{subtitle}</span></h2></a>'+
+                        '<div class="hongbao-detail"><img class="hongbao__img" src="{pic}" alt="" /><span class="hongbao__look">阅读量:&nbsp;&nbsp;{view_count}</span>'+
+                            '<div class="hongbao__detailbox"><p class="hongbao__detail">{seo_description}</p></div><div class="hongbao-action clearfix">'+
+                                '<div class="support l"><span class="support__up">顶&nbsp;&nbsp;<number data-upid = "{id}" class="support__up-num">{up}</number></span><span class="support__down">踩&nbsp;&nbsp;<number data-downid = "{id}" class="support__down-num">{down}</number></span></div>'+
+                                '<div class="hongbao-rb r"><span class="hongbao__time">{startTime}</span><span class="hongbao__source">{provider}</span><a class="btn m-green m-hongbao-link" href="{url}" target="_blank">查看详情</a>'+
+                                '</div></div></div></li>[/results]';
+			  var htype = '';
+			  var ordering = '-startTime';
+			  var url ='/hongbaolist/?state=1&page={page}&size={pageSize}';
+			  function pagecallback(){
+			  	console.log('after');
+					$(".lc-h2.new").append('<img src="/static/images/new_cont.png" class="new_cont2">');
+				  $(".end").text("已结束");
+				}
+			  $("#pagedata1").ajaxPage({
+			      url:url + '&is_qualified=true&htype=' + htype + '&ordering=' + ordering,
+			      pageId:$("#page1"),
+			      // pageSize:2,
+			      run:true,
+			      content:data,
+			      complete:pagecallback,
+			  });
+
+				$('.nav__item:eq(1)').addClass('active');
+				$('.flexslider').flexslider({
+				    directionNav: true,
+				    pauseOnAction: false
+				});
+
+				$('.hongbao-submit').click(function(){
+					console.log($('.hongbao-input').val());
+					var newurl = url + '&search=' + $('.hongbao-input').val();
+					console.log(newurl);
+					$("#pagedata1").ajaxPage({
+				      url:newurl,
+				      pageId:$("#page1"),
+				      // pageSize:2,
+				      run:true,
+				      content:data,
+				      complete:pagecallback,
+				  });
+				});
+				$('.hongbao-input').on('keypress',function(e){
+					if(e.keyCode == 13) {
+						var newurl = url + '&search=' + $('.hongbao-input').val();
+						console.log(newurl);
+						$("#pagedata1").ajaxPage({
+					      url:newurl,
+					      pageId:$("#page1"),
+					      pageSize:2,
+					      run:true,
+					      content:data,
+					      complete:pagecallback,
+					  });
+					}
+				});
+
+        var typeindex = 0;
+				$('.hongbao-nav__item').click(function(){
+					$(this).addClass('on').siblings().removeClass('on');
+          var newurl = url;
+          typeindex = $(this).index();
+          if (typeindex == 0) {
+            newurl += '&is_qualified=true';
+          } else {
+              htype = typeindex - 1;
+              newurl += '&htype=' + htype;
+          }
+          newurl += '&ordering=' + ordering;
+          console.log(newurl);
+					$("#pagedata1").ajaxPage({
+				      url:newurl,
+				      pageId:$("#page1"),
+				      // pageSize:2,
+				      run:true,
+				      content:data,
+				      complete:pagecallback,
+				  });
+				})
+				$('.hongbao-choose__item').click(function(){
+					$(this).addClass('on').siblings().removeClass('on');
+					if ($(this).index() == 0) {
+							ordering = '-startTime';
+					} else {
+						ordering = 'up';
+					}
+					var newurl = url + '&htype=' + htype + '&ordering=' + ordering;
+					console.log(newurl);
+					$("#pagedata1").ajaxPage({
+				      url:newurl,
+				      pageId:$("#page1"),
+				      // pageSize:2,
+				      run:true,
+				      content:data,
+				      complete:pagecallback,
+				  });
+				})
+
+				$('.hot-txt').click(function() {
+					$('.hongbao-input').val($(this).text());
+				})
+
+				// 点赞部分
+        $('.hongbao-box').on('click','.support__up', function(){
+            var self = this;
+            console.log($(self));
+            var upid = $(self).find('.support__up-num').data("upid");
+            console.log(upid);
+            var newurl = '/updown_welfare/' + upid + '/?click=up';
+            console.log(newurl);
+            if (!$(self).parent().hasClass('handled')) {
+                $.ajax({
+                    url: newurl,
+                    dataType: "json",
+                    type: "get",
+                    success: function() {
+                        var upText = $(self).find('.support__up-num').text()
+                        var upNum = parseInt(upText) + 1;
+                        $(self).find('.support__up-num').text(upNum);
+                        $(self).parent().addClass('handled');
+                        console.log('chengong');
+
+                        var show_amount = document.createElement('span');
+                        show_amount.className = 'show-amount show-amount-up';
+                        show_amount.innerText = '+1';
+                        $(self).parent().append(show_amount);
+                        $('.show-amount').css({
+                            'position': 'absolute',
+                            'top': '0',
+                            'left': '30px',
+                            'color': '#ffbe00',
+                            'font-size': '20px',
+                            'opcity': '1'
+                        });
+                        $('.show-amount').animate({
+                            top: -40,
+                            opcity: 0},
+                            500, function() {
+                            $('.show-amount').remove();
+                        });
+                    },
+                    error: function(ret) {
+                        console.log(JSON.stringify(ret));
+                    }
+                });
+            } else {
+                console.log('shibai');
+                return false;
+            }
+        })
+        $('.hongbao-box').on('click','.support__down', function(){
+            var self = this;
+            var downid = $(self).find('.support__down-num').data("downid");
+            console.log(downid);
+            var newurl = '/updown_welfare/' + downid + '/?click=down';
+            console.log(newurl);
+            if (!$(self).parent().hasClass('handled')) {
+                $.ajax({
+                    url: newurl,
+                    dataType: "json",
+                    type: "get",
+                    success: function() {
+                        var upText = $(self).find('.support__down-num').text()
+                        var upNum = parseInt(upText) + 1;
+                        $(self).find('.support__down-num').text(upNum);
+                        $(self).parent().addClass('handled');
+
+                        var show_amount = document.createElement('span');
+                        show_amount.className = 'show-amount show-amount-up';
+                        show_amount.innerText = '+1';
+                        $(self).parent().append(show_amount);
+                        $('.show-amount').css({
+                            'position': 'absolute',
+                            'top': '0',
+                            'left': '110px',
+                            'color': '#ffbe00',
+                            'font-size': '20px',
+                            'opcity': '1'
+                        });
+                        $('.show-amount').animate({
+                            top: 40,
+                            opcity: 0},
+                            500, function() {
+                            $('.show-amount').remove();
+                        });
+                    },
+                    error: function(ret) {
+                        console.log(JSON.stringify(ret));
+                    }
+                });
+            } else {
+                return false;
+            }
+        })
+        // // 点赞部分---end
+
+			})
+		</script>
+	</body>
+</html>

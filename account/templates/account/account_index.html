@@ -1,0 +1,294 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户中心</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+
+<script type="text/javascript" src="{% static "js/jquery-1.11.2.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/ZeroClipboard.js" %}"></script>
+<script type="text/javascript">
+$(function(){
+	$('.back-a1').parent().toggleClass("on");
+	now = new Date(),hour = now.getHours();
+	if(hour < 6){$("#hello").text("凌晨好！");}
+	else if (hour < 9){$("#hello").text("早上好！");}
+	else if (hour < 12){$("#hello").text("上午好！");}
+	else if (hour < 14){$("#hello").text("中午好！");}
+	else if (hour < 17){$("#hello").text("下午好！");}
+	else if (hour < 19){$("#hello").text("傍晚好！");}
+	else if (hour < 22){$("#hello").text("晚上好！");}
+	else {$("#hello").text("夜里好！");}
+  // 会员等级制度
+  var progress = document.getElementById("progress");
+  var fubi_get2 = document.getElementById("fubi_get2"),
+    Vip_logo = document.getElementById("Vip_logo"),
+    Vip_next = document.getElementById("Vip_next"),
+    Vip_next_hint = document.getElementById("Vip_next_hint");
+  var percent = 0;
+  var fubi_num = {{user.with_total}}; //提现福币
+  var level = {{user.level}};
+
+  percent = parseInt(fubi_num/100000);
+  progress.style.width = percent + "%";
+  fubi_get2.innerText = fubi_num;
+  switch(level)
+  {
+  case 0:
+    fubi_need.innerText = 10000 - fubi_num;
+    Vip_next.innerHTML = "VIP1";
+    Vip_logo.style.display = "none";
+    break;
+  case 1:
+    fubi_need.innerText = 100000 - fubi_num;
+    Vip_next.innerHTML = "VIP2";
+    Vip_logo.setAttribute("src","{% static 'images/vip1.png' %}");
+    break;
+  case 2:
+    fubi_need.innerText = 1000000 - fubi_num;
+    Vip_next.innerHTML = "VIP3";
+    Vip_logo.setAttribute("src","{% static 'images/vip2.png' %}");
+    break;
+  case 3:
+    fubi_need.innerText = 5000000 - fubi_num;
+    Vip_next.innerHTML = "VIP4";
+    Vip_logo.setAttribute("src","{% static 'images/vip3.png' %}");
+    break;
+  case 4:
+    fubi_need.innerText = 10000000 - fubi_num;
+    Vip_next.innerHTML = "VIP5";
+    Vip_logo.setAttribute("src","{% static 'images/vip4.png' %}");
+    break;
+  case 5:
+    Vip_next_hint.innerHTML = "恭喜您，您已经达到最高Vip等级！";
+    Vip_logo.setAttribute("src","{% static 'images/vip5.png' %}");
+    break;
+  }
+  // 会员等级制度---------end
+	$(".Sign-on.on").click(function(){
+		var obj = $(this)
+		$.ajax({
+			url:"{%url 'signin' %}",
+			dataType:"json",
+			success:function(ret){
+				if(ret.code==0){
+					alert("签到成功！")
+				}
+				else if((ret.code==1)){
+					alert("您已签到！");
+				}
+				else if(ret.code==-1){
+					alert("该页面已过期，请重新登录！");
+					window.location.href = ret.url;
+				}
+				obj.addClass("off").removeClass("on");
+			},
+			error:function(){
+				alert("请检查网络连接");
+			}
+		});
+		obj.unbind("click");
+	});
+    (function copyInit(textId,buttonId) {
+        ZeroClipboard.setMoviePath( "{% static 'swf/ZeroClipboard.swf' %}" );
+        var clip = new ZeroClipboard.Client(); // 新建一个对象
+        clip.setHandCursor( true ); // 设置鼠标为手型
+        clip.setText($('#'+textId).val());
+        clip.addEventListener('complete', function(){
+            alert('复制成功！');
+        });
+        clip.glue(buttonId); // 和上一句位置不可调换
+        $('#'+textId).change(function(){clip.setText($('#'+textId).val())});
+    })('url-content','copy');
+});
+</script>
+</head>
+
+<body>
+    	<!--头部-->
+{% include "header.html" %}
+   	<!--内容-->
+<div class="Content">
+   	<div class="w1100">
+			{% include "account/left.html" %}
+           <div class="RightCont">
+           	<div class="Sign-vi">
+               	<div class="Sign-Time"><span>上次登录：{{user.last_login_time|date:"Y-m-d  H:i:s"}}</span></div>
+                   <div class="Sign-Info">
+                   	<div class="Sign-InfoCont">
+                       	<div class="HeadInfo">
+                           	<div class="Head-img user-logo">
+                              <img style="margin-top: 15px" src="{% static 'images/headinfo.png' %}" />
+                              <img id="Vip_logo" class="vip-logo" src="{% static 'images/vip1.png' %}" />
+                            </div>
+                            </div>
+                           <div class="Sign-Rt">
+                           	<span>尊敬的{{user.mobile}}， </span><span id='hello'></span>
+                            <div class="Sign-pic">
+                              <p class="vip-right"><span id="Vip_next_hint" class="Vip-next-hint">再提现<span id="fubi_need" class="fubi-need">90000</span>福币，即可升级为<span id="Vip_next" class="Vip-next">Vip2</span>，享受更多特权，<a href="{% url 'account_vip' %}">查看更多特权>></a></span></p>
+                            </div>
+                            <div id="vip_rank" class="vip-rank">
+                              <span id="progress" class="progress"></span>
+                              <span class="fubi-num"><span id="fubi_get2" class="fubi-get" style="font-size: 12px;">500</span>/10000000</span>
+                            </div>
+                           </div>
+                       </div>
+                       <div class="Sign-ping">
+                       	<!--签到-->
+                      {% if isSigned %}
+                      	<span class="Sign-on off"></span>
+                      {% else %}
+                      	<span class="Sign-on on"></span>
+                      {% endif %}
+                      </div>
+                  </div>
+              </div>
+              <div class="Balance">
+              	<div class="Balance-T">
+                  	<div class="Bala-l">
+                      	<span>累计收益(福币)</span>
+                          <strong>{{user.accu_income}}</strong>
+                      </div>
+                      <div class="Bala-m">
+                      	<span>剩余福币</span>
+                          <strong>{{user.balance}}</strong>
+                      </div>
+                      <div class="Bala-r">
+                      	<span>剩余积分</span>
+                          <strong>{{user.scores}}</strong>
+                      </div>
+                      <div class="Cash">
+                      	<a href="{%url 'account_withdraw' %}" class="Casha1">提  现</a>
+                          <a href="{%url 'mall' %}" class="Casha2">积分兑换</a>
+                      </div>
+                  </div>
+                  <div class="Balance-y">
+                  	<strong>可用优惠券</strong>
+                      <span>未使用 <font>{{coupon_not_used}}</font> 张，即将过期{{coupon_to_expired}}张</span>
+                      <a href="{%url 'account_coupon' %}">点击查看</a>
+                  </div>
+              </div>
+              <div class="Rience">
+              	<div class="Rience-T">
+                  	<strong>最新任务体验情况</strong>
+                      <a href="{%url 'account_welfare' %}">查看更多 >></a>
+                  </div>
+                  <div class="Rience-B">
+                  {% if task_list %}
+                  	<table width="100%">
+                      	<tr>
+                          	<th height="45">项目</th>
+                          	<th>提交注册账号</th>
+                          	<th>提交时间</th>
+                          	<th>状态</th>
+                          	<th>任务截图</th>
+                          	<th>备注</th>
+                          </tr>
+                          {% for user_event in task_list %}
+                          <tr>
+                          	<td height="46">{{user_event.content_object.title}}</td>
+                          	<td>{{user_event.invest_account}}</td>
+                          	<td>{{user_event.time|date:"Y-m-d H:i"}}</td>
+                          	<td>{{user_event.get_audit_state_display}}</td>
+                          	<td><a target="_blank" href="{% url 'screenshot' %}?id={{user_event.id}}">
+                          		<span class="img-up"><img src="{% static 'images/task-suoluetu.jpg' %}" alt="截图上传图片" /></span>
+                          	</a></td>
+                          	<td>{{user_event.remark}}</td>
+                          </tr>
+					{% endfor %}
+                      </table>
+                  {% else %}
+                      <div class="Inlet-go">
+                      	<img style="width: 150px" src="{%static 'images/img2.png' %}" />
+                          <p>您还未开始参与体验福利，<a href="{%url 'task' %}">快去看看吧</a>！>></p>
+                      </div>
+                  {% endif %}
+                  </div>
+              </div>
+              <div class="Rience">
+              	<div class="Rience-T">
+                  	<strong>最新理财体验情况</strong>
+                      <a href="{%url 'account_welfare' %}">查看更多 >></a>
+                  </div>
+                  <div class="Rience-B">
+				{% if finance_list %}
+                  	<table width="100%">
+                      	<tr>
+                          	<th height="45">项目</th>
+                          	<th>提交注册账号</th>
+                          	<th>提交时间</th>
+                          	<th>状态</th>
+                          	<th>备注</th>
+                          </tr>
+                          {% for user_event in finance_list %}
+                          <tr>
+                          	<td height="46">{{user_event.content_object.title}}</td>
+                          	<td>{{user_event.invest_account}}</td>
+                          	<td>{{user_event.time|date:"Y-m-d H:i"}}</td>
+                          	<td>{{user_event.get_audit_state_display}}</td>
+                          	<td>{{user_event.remark}}</td>
+                          </tr>
+					{% endfor %}
+                      </table>
+                  {% else %}
+                      <div class="Inlet-go">
+                      	<img src="{%static 'images/img2.png' %}" />
+                          <p>您还未开始体验理财福利，<a href="{%url 'finance' %}">快去看看吧</a>！>></p>
+                      </div>
+                  {% endif %}
+                  </div>
+              </div>
+              <div class="Invite">
+              	<div class="Invite-Ti"><strong>邀请好友也赚钱</strong></div>
+                  <div class="Invite-Cont">
+                  	<div class="Invite-l">
+                      	<span>快把邀请链接发送给你的好友吧</span>
+                          <form>
+                          	<input id="url-content" type="text" value="http://www.wafuli.cn{%url 'register' %}?icode={{user.invite_code}}" />
+                              <input id="copy" type="button" value="点击复制" />
+                          </form>
+                          <h6>奖励规则：</h6>
+                          <p>1、每推荐一名好友提现成功，推荐人获得 <i>10</i> 积分</p>
+                          <p>2、推荐人获得好友提现金额的 <i>1%</i> 现金奖励</p>
+                      </div>
+                      <div class="Invite-r">
+                      	<span>我的邀请人数</span>
+                          <p><i>{{user.invitees.count}}</i>人</p>
+                          <span>我的奖励</span>
+                          <p><i>{{user.invite_income}}</i>福币，<i>{{user.invite_scores}}</i>积分</p>
+                      </div>
+                  </div>
+              </div>
+              <div class="Rience">
+              	<div class="Invite-Ti">
+                  	<strong>为您推荐</strong>
+                      <a href="{%url 'task'%}">查看更多 >></a>
+                  </div>
+                  <div class="Rivicont">
+                  	<ul>
+                  	{% for news in recomm_list %}
+                      	<li><a href="{{news.url}}">
+                          	<img src="{% static 'images/img1.png' %}" />
+                          	<div class="Fare">
+                              	<span>{{news.get_type}}</span>
+                                  <p>{{news.title}}</p>
+                              </div>
+                          </a></li>
+                     {% endfor %}
+                      </ul>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+</body>
+</html>

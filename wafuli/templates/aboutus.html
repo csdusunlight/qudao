@@ -1,0 +1,350 @@
+﻿{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>挖福利是做什么的？挖福利怎么样？挖福利好吗？- 挖福利的公司简介</title>
+<meta name="keywords" content="挖福利是做什么，挖福利怎么样，挖福利好吗" />
+<meta name="description" content="挖福利一直在寻找最高价值的互联网福利，给大家带来最后的福利体验。" />
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/welfare.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+<link rel="stylesheet" href="{% static 'css/lrtk.css' %}">
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
+<script type="text/javascript" src="{% static 'js/hashtabber.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+<style>
+a:hover{color: #fff;}
+</style>
+<script type="text/javascript">
+var data='[data]<div class="o0-0p"><a href="{url}"><article>'+
+	'<h4 class="oi-0o">{title}</h4><span class="spn-00">{time}</span>'+
+	'<p class="io0-0">{summary}...</p></article></a></div>[/data]';
+var url = "{% url 'get_press_page' %}" + "?page={page}&size={pageSize}&";
+
+$(function(){
+   	$('.about_h a').toggleClass("vo");
+	$("#pagedata1").ajaxPage({
+	    url:url+"type=1",
+	    pageId:$("#page1"),
+	    pageSize:5,
+	    run:true,
+	    content:data,
+	});
+	$("#pagedata2").ajaxPage({
+	    url:url+"type=2",
+	    pageId:$("#page2"),
+	    pageSize:5,
+	    run:true,
+	    content:data,
+	});
+	$("#pagedata3").ajaxPage({
+	    url:url+"type=3",
+	    pageId:$("#page3"),
+	    pageSize:5,
+	    run:true,
+	    content:data,
+	});
+	$("#pagedata4").ajaxPage({
+	    url:url+"type=5",
+	    pageId:$("#page4"),
+	    pageSize:5,
+	    run:true,
+	    content:data,
+	});
+});
+</script>
+</head>
+<body>
+{% include "header.html" %}
+<div id="content">
+   <div><img src="{{ad_list.pic.url}}"  class="co-imgp"/></div>
+    <!-- 代码 开始 -->
+    <div class="po-0q">
+    <section class="example">
+        <section class="hashTabber-sandstone-wrapper">
+        <ol class="hashTabber-nav hashTabber-sandstone" data-hashtabber-id="cont" data-hashtabber-default="pterosaur">
+            <h2 class="abt-h2">关于我们<p class="abt-p">About&nbsp;US</p><hr class="gh-hr"/><hr class="gh-hrr"/></h2>
+                <li data-hashtabber-pair=intro class="active">
+                    <a href="">公司介绍</a>
+                </li>
+                <li data-hashtabber-pair="announcement" class="">
+                    <a href="" >公告列表</a>
+                </li>
+                <li data-hashtabber-pair="strategy" class="">
+                    <a href="" >福利攻略</a>
+                </li>
+                <li data-hashtabber-pair="exchange_help" class="">
+                    <a href="" >兑奖帮助</a>
+                </li>
+                <li data-hashtabber-pair="news" class="">
+                    <a href="" >新闻动态</a>
+                </li>
+                <li data-hashtabber-pair="public" class="">
+                    <a href="">福利发布</a>
+                </li>
+                <li data-hashtabber-pair="cooperation" class="">
+                    <a href="">商务合作</a>
+                </li>
+                <li data-hashtabber-pair="statement" class="">
+                    <a href="">版权申明</a>
+                </li>
+                <li data-hashtabber-pair="contact" class="">
+                    <a href="contact">联系我们</a>
+                </li>
+                <li data-hashtabber-pair="declaration" class="">
+                    <a href="declaration">免责声明</a>
+                </li>
+        </ol><!--
+     --><ol class="hashTabber-data hashTabber-sandstone" data-hashtabber-id="cont">
+                <li id="intro" data-hashtabber-pair="intro" class="active">
+                    <article>
+                        <h3>公司简介</h3>
+                        	<p>湖南福利天下网络科技有限公司，全国首家综合性互联网产品体验超市！</p>
+                            <p><b>红包、优惠券、返利、0元购、免费</b>等字眼近些年成了互联网产品宣传的噱头，每每听说这些公司为了宣传烧了多少钱，但是，</p>
+                            <p>为什么每次当我在使用某个产品迫切需要优惠的时候却找不到活动了呢？<br/>为什么等我去抢的时候奖励已经结束了呢？<br/>为什么大家都能抢到那么多，而我获得的奖励却那么少？</p>
+                            <p>挖福利从用户角度出发，致力于对整合对用户有价值的互联网产品，打造全国首家互联网产品体验超市。</p>
+                            <img src="{% static 'images/about1.png' %}" style="width: 30%;"/>
+                            <p>&nbsp;</p>
+                    </article>
+                    <article>
+                        <h3 style="float:right;margin-right: 135px;">我们的使命</h3>
+                        	<div><img src="{% static 'images/about2.png' %}" style="float: left;margin-left:40px"/></div>
+                            <p class="ki-0p">在这里，我们能让您，<br/>获得红包、优惠券、流量话费的最新信息；<br/>通过完成体验任务获得返利；<br/>投资理财产品获得更多收益。</p>
+                            <img src="{% static 'images/about3.png' %}" style="margin-left: 3rem;"/>
+                    </article>
+                    <article>
+                        <h3>资深团队</h3>
+                            <p class="iu-0f">挖福利团队聚集的不仅是一群阳光活力的“四有青年”，更是一批有着坚定目标并脚踏实地的践行者，他们来自互联网、银行、新能源等行业中的top企业中，</p>
+                            <p class="iu-0f">对于当前互联网潮流有着很深的见解，同时具有专业的理财投资眼光。</p><p>&nbsp;</p>
+                            
+                            <p class="iu-0f">我们始终以高质的服务理念和高效的执行能力为工作准则，将企业目标和
+社会发展有机结合，协同前进。</p>
+                            <img src="{% static 'images/about4.png' %}" style="width: 30%;"/>
+                    </article>
+                </li>
+                <li data-hashtabber-pair="announcement" class="">
+                	<div id="pagedata1" class="summp">
+	                
+	                </div>
+	                <div class="changes-p-about">
+		                <div class="page"  id="page1">
+		                
+	                 	</div>
+	                </div>
+                </li>
+            
+                <li data-hashtabber-pair="strategy" class="">
+	                <div id="pagedata2" class="summp">
+	                
+	                </div>
+	                <div class="changes-p-about">
+		                <div class="page"  id="page2">
+		                
+	                 	</div>
+	                </div>
+                </li>
+                <li data-hashtabber-pair="exchange_help" class="">
+	                <div id="pagedata4" class="summp">
+	                
+	                </div>
+	                <div class="changes-p-about">
+		                <div class="page"  id="page4">
+		                
+	                 	</div>
+	                </div>
+                </li>
+                <li data-hashtabber-pair="news" class="">
+	                <div id="pagedata3" class="summp">
+	                
+	                </div>
+	                <div class="changes-p-about">
+		                <div class="page"  id="page3">
+		                
+	                 	</div>
+	                </div>
+                </li>
+                <li data-hashtabber-pair="public" class="">
+                    <article>
+                        4
+                    </article>
+                </li>
+            
+                <li data-hashtabber-pair="cooperation" class="">
+                    <article>
+<p style="margin: 0px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 24px"><br/></span>
+</p>
+                        <h3 style="margin-top:0;margin-right:0;margin-bottom:15px;border-left:8px solid rgb(238,238,238);padding:0 0 0 9px ;text-align:center;line-height:26px;background:rgb(253,253,253)">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-weight: normal;font-size: 24px;background: rgb(255, 255, 255)">商务合作</span>
+</h3>
+<p style="margin: 0px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 24px"><br/></span>
+</p>
+<p style="margin-top:5px;margin-right:15px;margin-bottom:10px;margin-left:15px;text-indent:28px;padding:0 0 0 0 ;line-height:29px;background:rgb(253,253,253)">
+    <span style="font-family: 微软雅黑;color: rgb(85, 85, 85);letter-spacing: 0;font-size: 16px">如果您</span><span style="font-family: 微软雅黑;color: rgb(85, 85, 85);letter-spacing: 0;font-size: 16px">有</span><span style="font-family: 微软雅黑;color: rgb(85, 85, 85);letter-spacing: 0;font-size: 16px">详细的商务合作方案，可以通过以下方式联系我们。</span>
+</p>
+<p style="margin-top:5px;margin-right:15px;margin-bottom:10px;margin-left:15px;text-indent:28px;padding:0 0 0 0 ;line-height:29px;background:rgb(253,253,253)">
+    <span style="font-family: 微软雅黑;color: rgb(85, 85, 85);letter-spacing: 0;font-size: 16px">邮箱：</span><span style="font-family: 微软雅黑;color: rgb(85, 85, 85);letter-spacing: 0;font-size: 16px">&nbsp;378715862@qq.com</span>
+</p>
+<p style="margin-top:5px;margin-right:15px;margin-bottom:10px;margin-left:15px;text-indent:28px;padding:0 0 0 0 ;line-height:29px;background:rgb(253,253,253)">
+    <span style="font-family: 微软雅黑;color: rgb(85, 85, 85);letter-spacing: 0;font-size: 16px">Q &nbsp;Q：378715862</span>
+</p>
+<p style="margin-top:5px;margin-right:15px;margin-bottom:10px;margin-left:15px;text-indent:28px;padding:0 0 0 0 ;line-height:29px;background:rgb(253,253,253)">
+    <span style="font-family: 微软雅黑;color: rgb(85, 85, 85);letter-spacing: 0;font-size: 16px">电话：</span><span style="font-family: 微软雅黑;color: rgb(85, 85, 85);letter-spacing: 0;font-size: 16px">&nbsp;18676032059</span>
+</p>
+<p>
+    <br/>
+</p>
+                    </article>
+                </li>
+                <li data-hashtabber-pair="statement" class="">
+                    <article>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px"><br/></span>
+						<p style="margin: 0px; text-indent: 0px; padding: 0px; text-align: center; line-height: 24px; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 24px">挖福利</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 24px">&nbsp;- </span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 24px">我要挖福利</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 24px">(</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 24px">wafuli</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 24px">.c</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 24px">n</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 24px">)版权声明</span>
+</p>
+<p style="margin: 0px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 24px"><br/></span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">1、所有来源标注为</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">挖福利</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">/</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">我要挖福利</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">/</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">wafuli.cn</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">的内容版权均为本站所有，若您需要引用、转载，只需要注明来源及原文链接即可，如涉及大面积转载，请来信告知，获取授权。</span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px"><br/></span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">2、本站所提供的</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">福利</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">资讯、</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">福利资源</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">等内容均为作者提供、网友推荐、互联网整理而来（部分报媒/平媒内容转载自网络合作媒体），仅供学习参考，如有侵犯您的版权，</span><a href="#cont=contact"><span style="font-family: 微软雅黑;color: rgb(0, 0, 0);letter-spacing: 0;font-size: 14px">请联系我们</span></a><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">，本站将在三个工作日内改正。</span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px"><br/></span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">3、若您的网站或机构从本站获取的一切资源进行商业使用，除来源为本站的资料需与本站协商外，其他资源请自行联系版权所有人。</span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px"><br/></span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">4、</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">挖福利</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">不保证资源的准确性、安全性和完整性，请您在阅读、下载及使用过程中自行确认，本站亦不承担上述资源对您或您的网站造成的任何形式的损失或伤害。</span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px"><br/></span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">5、未经</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">挖福利</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">允许，不得盗链、盗用本站资源；不得复制或仿造本网站，不得在非</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">挖福利</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">www.</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">wafuli</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">.c</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">n</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">所属的服务器上建立镜像，</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">挖福利</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">对其自行开发的或和他人共同开发的所有内容、技术手段和服务拥有全部知识产权，任何人不得侵害或破坏，也不得擅自使用。</span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px"><br/></span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">6、互联网的本质是自由与分享，我们真诚的希望，每一份有价值的正能量能够在互联网中自由传播，能够为每一个网站提供动力。</span>
+</p>
+<p>
+    <br/>
+</p>
+                    </article>
+                </li>
+                <li data-hashtabber-pair="contact" class="">
+                    <article>
+<p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:40px;text-indent:0;padding:0 0 0 0 ;line-height:24px;background:rgb(255,255,255)">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">&nbsp;</span>
+</p>
+<p style="text-align:center">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 24px;background: rgb(255, 255, 255)">联系我们</span>
+</p>
+<p>
+    <strong><span style="font-family: 宋体;font-size: 21px">&nbsp;</span></strong>
+</p>
+<p style="margin-top: 0;margin-right: 0;margin-bottom: 0;padding: 0;line-height: 28px;background: rgb(255, 255, 255)">
+    <strong><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 16px">工作时间</span></strong><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 16px">：周一至周</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 16px">六</span><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 16px">&nbsp;9:00-18:00（法定节假日除外）</span>
+</p>
+<p style="margin-top: 0;margin-right: 0;margin-bottom: 0;padding: 0;line-height: 28px;background: rgb(255, 255, 255)">
+    <strong><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 16px">办公地址</span></strong><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 16px">：长沙高新开发区麓谷大道658号湖南麓谷信息港4002-（C007-1）号房</span>
+</p>
+<p style="margin-top: 0;margin-right: 0;margin-bottom: 0;padding: 0;line-height: 28px;background: rgb(255, 255, 255)">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 16px">&nbsp;</span>
+</p>
+<p style="margin-top: 0;margin-right: 0;margin-bottom: 0;padding: 0;line-height: 28px;background: rgb(255, 255, 255)">
+    <img width="554" height="349" src="{%static 'images/address.png'%}" alt="联系地址" style="background:url(http://127.0.0.1:8000/static/ueditor/lang/zh-cn/images/localimage.png) no-repeat center center;border:1px solid #ddd"/><span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 16px">&nbsp;</span>
+</p>
+<p>
+    <br/>
+</p>
+                    </article>
+                </li>
+                <li data-hashtabber-pair="declaration" class="">
+                    <article>
+                    &nbsp;
+                     <p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;text-indent:0;padding:0 0 0 0 ;text-align:center;line-height:24px;background:rgb(255,255,255)">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 24px">免责声明</span>
+</p>
+<p style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:40px;text-indent:0;padding:0 0 0 0 ;line-height:24px;background:rgb(255,255,255)">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">&nbsp;</span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">1、在法律规定的情况下，如司法机关、监管机构及其他相关机构提出要求，我公司有可能提供您的相关信息；</span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px"><br/></span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">2、由于您将用户密码告知他人或与他人共享注册账户，由此导致的任何个人资料和客户信息的泄露；</span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px"><br/></span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">3、任何由于黑客攻击、计算机病毒侵入或发作、因政府管制或不可抗力而造成的暂时性关闭等影响网络正常经营之不可抗力而造成的个人 &nbsp;资料泄露、丢失、被盗用或被篡改等。</span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px"><br/></span>
+</p>
+<p style="margin: 0px 0px 0px 40px; text-indent: 0px; padding: 0px; line-height: 24px; text-align: left; background: rgb(255, 255, 255);">
+    <span style="font-family: 微软雅黑;letter-spacing: 0;font-size: 14px">4、本网站披露的用户信息、交易信息系由第三方提供，用户应自行判断信息真实性、自主参与交易并承担交易风险，由此产生的任何纠纷由用户与第三方协商解决，本网站对此不承担任何法律责任。</span>
+</p>
+<p>
+    <br/>
+</p>
+                    </article>
+                </li>
+        </ol>
+        </section>
+    </section>
+    </div>
+    <script>
+    var tabber = new HashTabber();
+    tabber.run();
+    </script>
+    <!-- 代码 结束 -->
+	<script>
+		function subMenu(liElement){
+			
+			var brother = liElement.nextSibling.nextSibling;
+			if(brother.style.display!='none'){
+				brother.style.display = 'none';
+				brother.nextSibling.nextSibling.style.display='none';
+			}else{
+				brother.style.display = 'block';
+				brother.nextSibling.nextSibling.style.display='block';
+			}
+		}
+	</script>
+  
+
+
+
+
+    	
+</div>
+<div style="clear:both"></div>
+<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->  
+  {% include "outline.html" %}
+</body>
+</html>

@@ -1,0 +1,12 @@
+ {% load staticfiles %}
+ <div class="ew-right">
+	<div class="ew-more">
+    	<div class="er-h2"><span>福利攻略</span><span><a href="{% url 'aboutus'%}#cont=strategy" class="er-hr">MORE</a></span></div>
+        <ul>
+        {% for news in strategy_list %}
+        	<li class="er-li"><a href="{{news.url}}">{{news.title}}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+     <img src="{% static 'images/rr.png' %}" class="re-imge"/>
+</div>

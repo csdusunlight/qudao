@@ -1,0 +1,185 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta charset="utf-8">
+
+
+<title>挖福利 -注册</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="viewport"
+	content="minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, width=device-width, user-scalable=yes">
+<link href="https://passport.9888.cn/pp-web2/css/base.css" rel="stylesheet" />
+<link href="https://passport.9888.cn/pp-web2/css/xu_comm.css"
+	rel="stylesheet" />
+<link href="https://passport.9888.cn/pp-web2/css/xu_style.css"
+	rel="stylesheet" />
+
+<link href="https://passport.9888.cn/pp-web2/css/common.css"
+	rel="stylesheet" type="text/css" />
+
+
+<script type="text/javascript"
+	src="https://passport.9888.cn/pp-web2/js/common/jquery-1.8.2.js"></script>
+<script type="text/javascript"
+	src="{% static "js/accounts/send.js" %}"></script>
+<script type="text/javascript"
+	src="{% static "js/accounts/refresh.js" %}"></script>
+<script type="text/javascript"
+	src="{% static "js/accounts/common.js" %}"></script>
+<script type="text/javascript"
+	src="{% static "js/accounts/user-validate.js" %}"></script>
+<script type="text/javascript"
+	src="{% static "js/accounts/jquery.blockUI.js" %}"></script>
+<script type="text/javascript">
+		var coderefresh_url = "{% url 'captcha-refresh' %}";
+		var phoneimageV_url = "{% url 'phoneImageV' %}";
+		var verifyemail_url = "{% url 'verifyemail' %}";
+		var verifymobile_url = "{% url 'verifymobile' %}";
+		var register_url = "{% url 'register' %}";
+		var login_url = "{% url 'login' %}";
+</script>
+	
+<style>
+.btn_gongchang_cl {
+	position: absolute;
+	width: 143px;
+	height: 46px;
+	display: inline-block;
+	top: 22px;
+	left: 2px;
+	background: #000;
+	opacity: 0;
+	filter: alpha(opacity =   0)
+}
+</style>
+
+</head>
+<body style="background-color:#ececec">
+<div style="width:100%;min-width:1000px;border-bottom:1px solid #ececec;background-color:#fff">
+	<div class="g-login-top rel" style="padding:58px 0 18px 50px;width:950px">
+		
+			<a href="http://www.9888.cn" ><img src="https://passport.9888.cn/pp-web2/images/logo2.jpg"  /></a>
+			<img src="https://passport.9888.cn/pp-web2/images/logo6.jpg"/>
+		
+	</div>
+</div>
+	<div style="background-color:#fff">
+	<div class="g-reg-box">
+		<form method="post" autocomplete="off" id="x_submit_form"
+			action="{% url 'register' %}">
+			{% csrf_token %}
+			<div class="clearfix" style="padding-top:30px">
+				<div class="fl" style="width:580px;padding-bottom:30px">
+				<div class="g-field2">
+					<label><span class="red">*</span>邮箱地址</label>
+					<input type="text" placeholder="" class="g-input-tx2" name="email" value="" />
+					<span class="g-input-error allvert red"><em class="bl mr0"></em>请输入邮箱地址</span> 
+					<span class="g-input-error allvert red"><em class="bl mr0"></em>邮箱格式错误</span>
+					<span class="g-input-error allvert red"><em class="bl mr0"></em>该邮箱已被占用</span>
+				    <span class="error_info color_red"></span>
+				</div>
+				<!-- 去掉邮箱
+			<div class="x_field2">
+				<em>邮箱地址&nbsp;<span class="color_red">*</span></em> 
+				<input type="text" placeholder="" class="x_input_tx2"  name="email" value="" id="input-mail" />
+				<span class="x_input_error allvert red"><em class="bl mr0"></em>请输入邮箱地址</span>
+				<span class="x_input_error allvert red"><em class="bl mr0"></em>邮箱格式错误</span>
+				<span class="error_info color_red"></span>
+			</div>
+			 -->
+		
+				<div class="g-field2">
+					<label><span class="red">*</span> 手机号</label>
+					<input type="text" placeholder="" class="g-input-tx2" value="" id="input-mobile" name="mobile"  onpaste="return false"/>
+					<span class="g-input-error allvert red"><em class="bl mr0"></em>请输入手机号</span>
+					<span class="g-input-error allvert red"><em class="bl mr0"></em>手机号格式错误</span>
+					<span class="g-input-error allvert red"><em class="bl mr0"></em>该手机号已被占用</span>
+					<span class="error_info color_red"></span>
+				</div>
+				<div class="g-field2">
+					<label><span class="red">*</span> 网页验证码</label>
+					<input type="text" class="g-input-tx2" name="x_yanzhengma" value="" id="x_yanzhengma" style="width:185px"/> 
+					<img width="87" height="32" src="{{ codimg_url }}" id="id_checkImg" class="imageCheckRefresh"> 
+					<input id="id_hashkey" name="hashkey" type="hidden" value="{{ hashkey }}">
+					<span class="g-input-error allvert red"><em class="bl mr0"></em>请输网页验证码</span>
+					<span class="g-input-error allvert red"><em class="bl mr0"></em>网页验证码式错误</span>
+					<span class="error_info color_red"></span>
+				</div>
+				<div class="g-field2">
+					<label><span class="red">*</span> 手机验证码</label>
+					<input type="text" placeholder="" class="g-input-tx2" style="width:185px" name="code" value="" /> 
+					
+					<a id="action-send-code-imagvalidate"  class="blue ml0" href="javascript:;">获取手机验证码</a>
+					
+					<span class="g-input-error allvert red"><em class="bl mr0"></em>请输入手机验证码</span>
+					<span class="g-input-error allvert red"><em class="bl mr0"></em>手机验证码式错误</span>
+					<span class="error_info color_red"></span>
+				</div>
+
+				<div class="g-field2">
+					<label><span class="red">*</span> 设置密码</label>
+					<input type="password" placeholder="" class="g-input-tx2" name="password1"  onpaste="return false"/>
+					<span class="g-input-error allvert red"><em class="bl mr0"></em>请设置密码</span>
+					<span class="g-input-error allvert red"><em class="bl mr0"></em>密码格式错误</span>
+					<div class="mt0 col2" style="margin-left:90px">6-16位字符，只能包含字母、数字及标点符号（需两两组合），区分大小写</div>
+					<span class="error_info color_red"></span>
+				</div>
+				<div class="g-field2">
+					<label><span class="red">*</span> 确认密码</label>
+				    <input type="password" placeholder="" class="g-input-tx2" name="password2" value=""  onpaste="return false"/> 
+				    <span class="g-input-error allvert red"><em class="bl mr0"></em>请确认密码</span>
+					<span class="g-input-error allvert red"><em class="bl mr0"></em>密码不一致</span>
+					<span class="g-input-error allvert red"><em class="bl mr0"></em>密码格式错误</span>
+					<span class="error_info color_red"></span>
+				</div>
+				
+<!--  				<div class="g-field2">
+						<div style="margin-left:89px" class="mt1 line_h2">
+							<span class="moni-checked allvert rel">
+								<span class="g-checkbox"></span>
+								<input type="checkbox" checked="checked" class="x_input_ck abs" style="left:-9999px" id="agreeChk"  />
+								<span class="g-lab-txt">我接受</span>
+							</span>
+							
+								<a href="http://www.9888.cn/register_terms.html" target="_blank" class="blue" id="btn_xieyi">《注册协议》</a> 、<a class="blue" target="_blank" href="http://www.9888.cn/register_terms2.html">《信息咨询服务协议》</a></div>
+							
+					</div>
+-->
+				<input type="hidden" id="verifyUrl"	value="{% url 'phoneImageV' %}" />
+				<input type="hidden" id="action-mobile" value="register" />
+				<input type="hidden" name="token" value="2f616ac6-beb2-47d5-8013-4b93bce896cb" />
+				<input type="hidden" name="qdFlag" value="0" />
+				<input type="hidden" name="sourcetype" value="" />
+				<input type="hidden" name="registClientType" value="" />
+				<div class="g-field2">
+					<input type="button" class="g-btn-reg2" name="registSubmit"
+						value="立即注册" />
+				</div>
+             </div>            
+				<div class="fl" style="width:390px">
+					
+						<p class="ft3 col3 line_h2 tr" style="padding-top:83px">已是金融工场用户？请直接 <a href="https://passport.9888.cn/pp-web2/passport/login.do?sourceSite=jrgc?qd=bdpzpc" style="color:#fa5d4e">登录</a></p>
+						<div>
+						<br/><br/>
+						
+							<img width="390" height="250" style="border:0px;" src="https://passport.9888.cn/pp-web2/images/ad.jpg?1449535155073">
+						 
+						</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	</div>
+
+	
+<div class="g-login-bot">
+	<p class="ft1">ICP备案号：京ICP备14029254号-1<span style="margin: 0 10px" class="bl">经营性ICP许可证号：京ICP证140736号 </span> 京公网安备11010502026549 <span style="margin: 0 10px" class="bl"> &copy; 2014 金融工场版权所有</span></p>
+	<p class="ft1">客服热线：<span class="blue ft3">400-6766-988</span></p>
+</div>
+
+</body>
+</html>
+
+

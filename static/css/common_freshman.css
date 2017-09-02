@@ -1,0 +1,94 @@
+@charset "utf-8";
+#header{width:100%;height:136px;clear:both;text-align:center;background: url(../images/header-x.gif) repeat-x;}
+.header-main{width:1100px;height:136px;display:inline-block;text-align:left;}
+.header-t{width:1100px;height:36px;clear:both;display:inline-block;text-align:left;color:#8c8c8c;line-height:36px;font-family:"\5B8B\4F53";}
+.header-t span{color:#f08519;font-weight:bold;}
+.header-t .rt{color:#d8d8d8;line-height:36px;font-family:"\5B8B\4F53";}
+.header-t .rt a{color:#8c8c8c;font-weight:bold;}
+.header-t .rt a:hover{color:#f08519;}
+.header-t .rt font{ color:#8c8c8c; font-size:12px; margin-right:20px;}
+.header-b{width:1100px;height:100px;clear:both;display:inline-block;text-align:left;}
+#logo{width:340px;height:53px;margin-top:23px;float:left;display:inline;text-align:left;}
+#menu{width:664px;height:35px;margin-top:32px;float:right;display:inline;text-align:left;}
+#menu ul li{width:84px;height:35px;float:left;text-align:center;line-height:35px;margin-left:32px;font-size:15px;}
+#menu ul li.home{margin:0;}
+#menu ul li a{display:block;}
+#menu ul li a:hover{background: url(../images/menu-hover.png) no-repeat;color:#fff;}
+#index-banner{width:100%;height:350px;clear:both;text-align:center;}
+.flexslider{position:relative;height:350px;}
+.slides{position:relative;z-index:1;}
+.slides li{height:350px;}
+
+.flex-control-nav{position:absolute;bottom:0px;z-index:100;width:100%;text-align:center; left:0px;}
+.flex-control-nav li{width:100px;height:38px; display:inline-block; margin-left:6px; margin-right:6px;}
+.flex-control-nav a{width:90px;height:12px;color:transparent;display:block;background:rgba(255,255,255,0.3);margin-top:14px;border-radius:6px;}
+.flex-control-nav .flex-active{width:90px;height:12px;background:#f08519;}
+
+.index-banner-main{width:1100px;height:auto;display:inline-block;text-align:left;position:relative;z-index:100;}
+.Icon{width:62px;height:62px;margin-top:60px;margin-left:22px}
+.signin{overflow:hidden;position:relative; left:30px; top:27px;}
+.signin a{width:92px;height:35px;background:url(../images/signin.png) no-repeat; clear:both; padding-top:6px; padding-left:10px;}
+.lottery{overflow:hidden;position:relative; left:150px; top:-14px;}
+.lottery a{width:92px;height:35px;background:url(../images/lottery.png) no-repeat; clear:both; padding-top:6px; padding-left:10px;}
+.signin img,.lottery img{display:block}
+.signin a,.lottery a{display:block; font-size:12px; color:#FFF;cursor:pointer}
+.welcome{ font-size:12px; color:#ebebeb; margin-top:10px; margin-left:10px;}
+
+#footer{width:100%;height:396px;clear:both;margin-top:40px;text-align:center;background: url(../images/footer-x.gif) repeat-x;}
+.footer-main{width:1100px;height:396px;display:inline-block;text-align:left;}
+.index_52{width:1100px;height:62px;clear:both;display:inline-block;text-align:left;line-height:62px;font-size:14px;}
+.index_52 a:hover{color:#fff;}
+.index_53{width:1100px;height:277px;clear:both;display:inline-block;text-align:left;border-bottom:1px solid #282828;}
+.index_54{width:682px;float:left;display:inline;text-align:left;padding-top:36px;}
+.index_54 .lf{width:170px;float:left;}
+.index_54 .lf.s{width:342px;}
+.index_54 .lf h2{line-height:40px;font-size:20px;color:#fff;font-weight:bold;}
+.index_54 .lf ul{padding-top:6px;}
+.index_54 .lf ul li{line-height:30px;font-size:13px;}
+.index_54 .lf ul li a:hover{color:#fff;}
+.index_55{width:278px;float:left;display:inline;text-align:left;padding-top:36px;}
+.index_55 h2{line-height:40px;font-size:20px;color:#fff;font-weight:bold;}
+.index_55 h3{line-height:32px;font-size:25px;color:#f88012;font-weight:bold;padding-top:6px;}
+.index_56{width:140px;float:left;display:inline;text-align:left;}
+.index_57{width:140px;height:70px;clear:both;margin-top:21px;display:inline-block;text-align:left;line-height:70px;font-size:20px;color:#fff;font-weight:bold;}
+.index_58{width:123px;height:123px;clear:both;display:inline-block;text-align:left;background:#fff;padding:7px 7px 7px 8px;border:1px solid #ccc;}
+.index_59{width:1100px;height:56px;clear:both;display:inline-block;text-align:left;line-height:56px;color:#fff;}
+.index_59 .rt a{margin-left:6px;}
+#online{width:63px;overflow:hidden;clear:both;text-align:left;position:fixed;top:30%;right:6px;z-index:1000;border:1px solid #f5f5f5;border-bottom:none;}
+#online li{position: static;width:63px;height:74px;float:left;display:inline-block;text-align:center;border-bottom:1px solid #f5f5f5;background:#fff;line-height:26px;}
+#online li a{display:block;width:63px;height:74px;color:#ccc;}
+#online li a:hover { color:#fff; background:#f08519;}
+#online li.qq img{padding-top:6px;}
+#online li.weixin img{padding-top:9px;}
+#online li.top img{padding-top:18px;}
+#online li.top{position:static;}
+.box_in { float:left; width:912px; height:auto; background:url(../images/newback1.png) no-repeat right; padding-right:2px; box-sizing:border-box;}
+.frcont { float:right; width:175px; height:auto; margin-top:23px;}
+.frcont p { font-size:13px; color:#3a3a3a; line-height:35px; margin:0;font-weight:bold;}
+.frcont p font { color:#ff0000; display:inline-block; width:54px; text-align:center;}
+
+.box_back { float:left; width:100%; height:auto; background:#fbfbfb; padding-bottom:20px;}
+.ico1 { position:absolute; left:0; top:0;}
+.ico2 { position:absolute; left:0; bottom:-235px;}
+.ico3 { position:absolute; left:0; bottom:0;}
+.ico4 { position:absolute; left:237px; top:0;}
+.ico5 { position:absolute; left:237px; bottom:0;}
+#scroll { margin-top:10px; background-color:#fff; border-bottom:2px solid #dea700;}
+.no { display:none;}
+#online li:hover .no { display:inline !important;}
+#online li:hover img { display:none;}
+.newpost { position:absolute; left:21px; top:20px; background:url(../images/newbox.png) no-repeat center; width:41px; height:41px; line-height:20px; box-sizing:border-box; padding-left:3px; text-align:left; color:#fff; font-size:16px;}
+.newpost.zero {top:0;}
+.new_cont { vertical-align:top; margin-left:10px; margin-top:10px;}
+.new_cont2 { vertical-align:top; margin-left:10px; margin-top:-7px;}
+@media screen and (max-width: 1000px) {
+    #footer {
+        width: 1300px;
+    }
+    body {
+        width:1300px
+    }
+    #content {
+        width: 1300px;
+    }
+}

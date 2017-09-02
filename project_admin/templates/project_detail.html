@@ -1,0 +1,632 @@
+{% extends "project_base.html" %} {%load staticfiles%} {% block js %}
+<script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
+<script type="text/javascript">
+
+	var data = '<table width="100%"><tr><th>项目编号</th><th>结项日期</th><th>项目名称</th><th>甲方名称</th><th>商务对接人</th>' +
+		'<th>合作方式</th><th>结算方式</th><th>签约公司</th><th>结算详情</th><th>项目状态</th><th>结算费用</th><th>备注</th>' +
+		'<th>操作</th></tr>[results]<tr id="parent{id}"><td>{id}</td><td>{finish_time}</td><td>{name}</td><td data-platform_id={platform}>{platformname}</td><td>{contact}</td>' +
+		'<td>{coopway}</td><td>{settleway_des}</td><td>{contract_company}</td><td>{settle_detail}</td>' +
+		'<td class="look-{state}" data-id="{id}">{state_des}</td><td>{settle}</td><td>{remark}</td>' +
+		'<td id="item_{id}"><a class="revise-btn revise-{state}" onclick="pass({id})">修改' +
+		'</a> │ <a class="delete-btn" onclick="refuse({id})">删除</a></td></tr>[/results]</table>';
+	var url = "/project/projects/" + "?page={page}";
+	var url2 = "/project/projects/";
+	
+	var project_flag;		// project_flag = -1 时，为导入单条数据；project_flag != -1 时，为修改单条数据
+	var parent;
+	
+	function pass(id) {			//弹出修改单条数据弹窗
+		$("input#project_change_id").val(id);
+		project_flag = id;
+		
+		parent = "parent" + id;
+		
+		$.ajax({
+			url: url2 + project_flag + "/",
+			dataType: "json",
+			type: "get",
+			success: function(ret) {
+				$("#name_change").val(ret.name);
+				$("#platform_change").val(ret.platform);
+				$("#contact_change").val(ret.contact);
+				$("#coopway_change").val(ret.coopway);
+				$("#settleway_change").val(ret.settleway);
+				$("#contract_company_change").val(ret.contract_company);
+				$("#settle_detail_change").val(ret.settle_detail);
+				$("#settle_money_change").val(ret.settle);
+				
+				$("#chengben_change").val(ret.cost);
+				$("#chengbenbeizhu_change").val(ret.cost_explain);
+				$("#maoli_change").val(ret.profit);
+				$("#remark_change").val(ret.remark);
+				
+				var radio_btn = "project-" + ret.state;
+				var dom = document.getElementById(radio_btn);
+				dom.checked = true;
+				if(ret.state == "finish") {
+					$(".show-hide").show();
+				}else {
+					$(".show-hide").hide();
+				}
+			},
+			error: function(ret) {
+				alert(JSON.stringify(ret));
+			}
+		});
+
+		
+		
+		$(".change-project").show();
+	}
+	
+	function refuse(id) {		//弹出删除项目数据弹窗
+		$("input#project_delete_id").val(id);
+		$(".delete-project").show();
+	}
+	
+	
+	$(document).ready(function() {
+		$("li.home15").addClass("show-project").toggleClass("on");
+		$("li.home4").toggleClass("show");
+		$(".Tin-table tr:even").css("background-color", "#fcfcfc");
+		
+		
+		$("#pagedata").ajaxPage({
+			url: url,
+			pageId: $("#page"),
+			run: true,
+			content: data,
+		});
+		
+//		获取甲方名称信息
+		$.ajax({
+			url: '/project/platform/',
+			dataType: "json",
+			type: "get",
+			data: {
+					'pageSize': 1000,
+			},
+			success: function(ret) {
+				for (var i=0; i<ret.results.length; i++) {
+					var option_item = document.createElement('option');
+					option_item.innerText = ret.results[i].name;
+					option_item.value = ret.results[i].id;
+					$(".platform-select").append(option_item);
+				}
+			},
+			error: function(ret) {
+				alert(JSON.stringify(ret));
+			}
+		});
+		
+		$('#add_project_btn').click(function() {		//点击新增项目数据
+			var name_add = $("#name_add").val(),
+				platform_add = $("#platform_add").val(),
+				contact_add = $("#contact_add").val(),
+				coopway_add = $("#coopway_add").val(),
+				settleway_add = $("#settleway_add").val(),
+				contract_company_add = $("#contract_company_add").val(),
+				settle_detail_add = $("#settle_detail_add").val(),
+				settle_money_add = $("#settle_money_add").val(),
+				remark_add = $("#remark_add").val();
+				
+			$.ajax({
+				url: url2,
+				dataType: "json",
+				type: "POST",
+				data: {
+					'name': name_add,
+					'platform': platform_add,
+					'contact': contact_add,
+					'coopway': coopway_add,
+					'settleway': settleway_add,
+					'contract_company': contract_company_add,
+					'settle_detail': settle_detail_add,
+					'settle': settle_money_add,
+					'remark': remark_add,
+					"state": "start"
+				},
+				success: function(ret) {
+						alert("操作成功！");
+				},
+				error: function(ret) {
+					alert(JSON.stringify(ret));
+				}
+			});
+			$(".add-project").hide();
+		});
+		
+
+		$('#change_project_btn').click(function() {		//点击修改项目数据
+			var name_change = $("#name_change").val(),
+				platform_change = $("#platform_change").val(),
+				contact_change = $("#contact_change").val(),
+				coopway_change = $("#coopway_change").val(),
+				settleway_change = $("#settleway_change").val(),
+				contract_company_change = $("#contract_company_change").val(),
+				settle_detail_change = $("#settle_detail_change").val(),
+				//				state_change
+				
+				settle_money_change = $("#settle_money_change").val(),
+				chengben_change = $("#chengben_change").val(),
+				chengbenbeizhu_change = $("#chengbenbeizhu_change").val(),
+				maoli_change = $("#maoli_change").val(),
+				remark_change = $("#remark_change").val();
+			var state_change = $("input[name='state']:checked").val();
+			
+			
+			console.log(url2 + project_flag);
+			$.ajax({
+				url: url2 + project_flag + "/",
+				dataType: "json",
+				type: "PUT",
+				data: {
+					'name': name_change,
+					'platform': platform_change,
+					'contact': contact_change,
+					'coopway': coopway_change,
+					'settleway': settleway_change,
+					'contract_company': contract_company_change,
+					'settle_detail': settle_detail_change,
+					'state': state_change,
+					'settle': settle_money_change,
+					'cost': chengben_change,
+					'cost_explain': chengbenbeizhu_change,
+					'profit': maoli_change,
+					'remark': remark_change,
+				},
+				success: function(ret) {
+					alert("操作成功！");
+					var dom = document.getElementById(parent);
+//					$(dom).find("td").eq(0).text(ret.time);
+//					$(dom).find("td").eq(1).text(ret.id);
+					$(dom).find("td").eq(2).text(ret.name);
+					$(dom).find("td").eq(3).text(ret.platformname);
+					$(dom).find("td").eq(4).text(ret.contact);
+					$(dom).find("td").eq(5).text(ret.coopway);
+					$(dom).find("td").eq(6).text(ret.settleway_des);
+					$(dom).find("td").eq(7).text(ret.contract_company);
+					$(dom).find("td").eq(8).text(ret.settle_detail);
+					$(dom).find("td").eq(9).text(ret.state_des);
+					var class_change = "look-" + ret.state
+					$(dom).find("td").eq(9).attr("class", class_change);
+					$(dom).find("td").eq(10).text(ret.settle);
+					$(dom).find("td").eq(11).text(ret.remark);
+				},
+				error: function(ret) {
+					alert(JSON.stringify(ret));
+				}
+			});
+			
+			$(".change-project").hide();
+		});
+		
+//		查看已结项项目详情
+		$('#pagedata').on('click', '.look-finish', function(){
+			var state = $(this).text();
+			var finish_id = this.dataset.id;
+			if (state == "已结束") {
+				
+				$.ajax({
+					url: url2 + finish_id + "/",
+					dataType: "json",
+					type: "get",
+					data: {
+						'id': finish_id
+					},
+					success: function(ret) {
+						$('#finish_detail_1').text(ret.cost);
+						$('#finish_detail_2').text(ret.cost_explain);
+						$('#finish_detail_3').text(ret.profit);
+						$(".finish-project").show();
+					},
+					error: function(ret) {
+						alert(JSON.stringify(ret));
+					}
+				});
+				
+			}
+		})
+//		查看已结项项目详情---end
+		
+		$('#delete_project_btn').click(function() {		//点击确认按钮删除单条项目数据
+			project_flag = $("input#project_delete_id").val();
+			console.log(url2 + project_flag);
+			$.ajax({
+				url: url2 + project_flag + "/",
+				dataType: "json",
+				type: "DELETE",
+				data: {
+					'id': project_flag
+				},
+				success: function(ret) {
+						alert("删除成功！");
+				},
+				error: function(ret) {
+					alert(JSON.stringify(ret));
+				}
+			});
+			$(".delete-project").hide();
+		});
+		
+		$("#search").click(function() {			//搜索项目数据
+			var newurl = url;
+			
+			dateft_0 = $("#dateft_0").val();
+			dateft_1 = $("#dateft_1").val();
+			project_id = $("#project_id").val();
+			name = $("#name").val();
+			contact = $("#contact").val();
+			coopway = $("#coopway").val();
+			settleway = $("#settleway").val();
+			contract_company = $("#contract_company").val();
+			state = $("#state").val();
+			
+			if(dateft_0) {
+				newurl += "&dateft_0=" + dateft_0;
+			}
+			if(dateft_1) {
+				newurl += "&dateft_1=" + dateft_1;
+			}
+			if(project_id) {
+				newurl += "&id=" + project_id;
+			}
+			if(name) {
+				newurl += "&name__contains=" + name;
+			}
+			if(contact) {
+				newurl += "&contact=" + contact;
+			}
+			if(coopway && coopway != 0) {
+				newurl += "&coopway=" + coopway;
+			}
+			if(settleway && settleway != 0) {
+				newurl += "&settleway=" + settleway;
+			}
+			if(contract_company) {
+				newurl += "&contract_company=" + contract_company;
+			}
+			if(state && state != 0) {
+				newurl += "&state=" + state;
+			}
+			console.log(newurl);
+			
+			var newdata = data;
+//			alert(newurl);
+			$("#page").empty();
+			$("#pagedata").ajaxPage({
+				url: newurl,
+				pageId: $("#page"),
+				run: true,
+				content: newdata,
+			});
+		});
+		
+		$("#export").click(function() {			//导出表格
+			dateft_0 = $("#dateft_0").val();
+			dateft_1 = $("#dateft_1").val();
+			project_id = $("#project_id").val();
+			name = $("#name").val();
+			contact = $("#contact").val();
+			coopway = $("#coopway").val();
+			settleway = $("#settleway").val();
+			contract_company = $("#contract_company").val();
+			state = $("#state").val();
+			
+			var html = '<form action="' + "{% url 'export_finance_excel' %}" + '" method="get" target="_self" id="postData_form">';
+			
+			if(dateft_0) {
+				html += '<input name="dateft_0" type="hidden" value="' + dateft_0 + '"/>';
+			}
+			if(dateft_1) {
+				html += '<input name="dateft_1" type="hidden" value="' + dateft_1 + '"/>';
+			}
+			
+			if(name) {
+				html += '<input name="name" type="hidden" value="' + name + '"/>';
+			}
+			
+			if(contact) {
+				html += '<input name="contact" type="hidden" value="' + contact + '"/>';
+			}
+			if(project_id) {
+				html += '<input name="project_id" type="hidden" value="' + project_id + '"/>';
+			}
+			
+			if(coopway) {
+				html += '<input name="coopway" type="hidden" value="' + coopway + '"/>';
+			}
+			if(settleway) {
+				html += '<input name="settleway" type="hidden" value="' + settleway + '"/>';
+			}
+			
+			if(contract_company) {
+				html += '<input name="contract_company" type="hidden" value="' + contract_company + '"/>';
+			}
+			if(state) {
+				html += '<input name="state" type="hidden" value="' + state + '"/>';
+			}
+			
+			html += '</form>';
+			var iframe = document.getElementById('myIFrame');
+			iframe.contentWindow.document.open();
+			iframe.contentWindow.document.write(html);
+			iframe.contentWindow.document.close();
+			document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+		});
+		
+		
+		$(".project-state:radio").click(function() {
+			
+			if ($(this).val() == "start") {
+				$(".show-hide").hide();
+			} else {
+				$(".show-hide").show();
+			}
+		});
+		
+		$("#single_import").click(function(){			//弹出单条导入弹窗
+			$(".add-project").show();
+		})
+		
+		$(".none-x, .none-x-s").click(function() {		// 关闭或取消 弹窗
+			$(".project-box").hide(); 
+		})
+
+	});
+</script>
+{% endblock js %} {% block right %}
+<div class="Criteria">
+	<span>搜索条件</span>
+	<div class="Crite-box">
+		<form>
+			<table width="100%">
+				<tr>
+					<td>
+						<i>结项日期start：</i>
+						<input id="dateft_0" type="date" />
+					</td>
+					<td>
+						<i>结项日期end：</i>
+						<input id="dateft_1" type="date" />
+					</td>
+					<td>
+						<i style="letter-spacing:4.8px;">项目编号：</i>
+						<input id="project_id" type="text" />
+					</td>
+					<td>
+						<i style="letter-spacing:4.8px;">项目名称：</i>
+						<input id="name" type="text" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<i style="letter-spacing:4.8px;">商务对接人：</i>
+						<input id="contact" type="text" />
+					</td>
+					<td>
+						<i>合作方式：</i>
+						<!--<input id="coopway" type="text" />-->
+						<select name="selectType" id="coopway">
+							<option value="0">全部</option>
+							<option value="cpa">cpa</option>
+							<option value="cpc">cpc</option>
+							<option value="cps">cps</option>
+							<option value="cpm">cpm</option>
+							<option value="other">其他</option>
+						</select>
+					</td>
+					<td>
+						<i style="letter-spacing:2px;">结算方式：</i>
+						<!--<input id="settleway" type="text" />-->
+						<select name="selectType" id="settleway">
+							<option value="0">全部</option>
+							<option value="advance">预付款</option>
+							<option value="later">后付款</option>
+						</select>
+					</td>
+					<td>
+						<i style="letter-spacing:4.8px;">签约公司：</i>
+						<input id="contract_company" type="text" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<i style="letter-spacing:4.8px;">项目状态</i>
+						<select name="selectAge" id="state">
+							<option value="0">全部</option>
+							<option value="start">正在进行</option>
+							<option value="finish">已结项</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<div class="Submit-in">
+				<input id="single_import" type="button" value="新增项目" />
+				<input id="search" type="button" value="搜索" />
+				<input id="export" type="button" value="导出" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="Tin-table">
+	<div id="pagedata">
+	</div>
+	<div class="Page-in-admin">
+		<div class="page" id="page">
+		</div>
+	</div>
+</div>
+{%endblock%} {% block modal %}
+<div class="add-project project-box">			<!--新增项目数据-->
+	<div class="w570-box">
+		<h3 class="popup-title">新增项目数据</h3>
+		<button class="none-x"></button>
+		<form class="Finnow set-project">
+			<p>
+				<span>项目名称：</span>
+				<input id="name_add" type="text" />
+			</p>
+			<p>
+				<span>甲方名称：</span>
+				<!--<input id="platform_add" type="text" />-->
+				<select class="platform-select" name="selectType" id="platform_add">
+					<option value="0">--</option>
+				</select>
+			</p>
+			<p>
+				<span>商务对接人：</span>
+				<input id="contact_add" type="text" />
+			</p>
+			<p>
+				<span>合作方式：</span>
+				<!--<input id="cooperate_type_change" type="text" />-->
+				<select name="selectType" id="coopway_add">
+					<option value="cpa">cpa</option>
+					<option value="cpc">cpc</option>
+					<option value="cps">cps</option>
+					<option value="cpm">cpm</option>
+					<option value="other">其他</option>
+				</select>
+			</p>
+			<p>
+				<span>结算方式：</span>
+				<!--<input id="balance_type_change" type="text" />-->
+				<select name="selectType" id="settleway_add">
+					<option value="advance">预付款</option>
+					<option value="later">后付款</option>
+				</select>
+			</p>
+			<p>
+				<span>签约公司：</span>
+				<input id="contract_company_add" type="text" />
+			</p>
+			<p>
+				<span>结算详情：</span>
+				<input id="settle_detail_add" type="text" />
+			</p>
+			<p>
+				<span>结算费用：</span>
+				<input id="settle_money_add" type="text" />
+			</p>
+			<p>
+				<span>备注：</span>
+				<input id="remark_add" type="text" />
+			</p>
+			
+			<div class="Finnow-Sub">
+				<input id="add_project_btn" type="submit" value="确认" onclick="return false;"/>
+				<input type="button" value="取消" class="none-x-s" />
+			</div>
+		</form>
+	</div>
+</div>				<!--新增项目数据---end-->
+
+<div class="change-project project-box">			<!--修改项目数据-->
+	<div class="w570-box" style="height: 600px; overflow-y: scroll;">
+		<h3 class="popup-title">修改项目数据</h3>
+		<button class="none-x"></button>
+		<form class="Finnow set-project">
+				<input id="project_change_id" type="hidden" />
+			<p>
+				<span>项目名称：</span>
+				<input id="name_change" type="text" />
+			</p>
+			<p>
+				<span>甲方名称：</span>
+				<select name="selectType" class="platform-select" id="platform_change">
+					<option value="0">--</option>
+				</select>
+			</p>
+			<p>
+				<span>商务对接人：</span>
+				<input id="contact_change" type="text" />
+			</p>
+			<p>
+				<span>合作方式：</span>
+				<!--<input id="cooperate_type_change" type="text" />-->
+				<select name="selectType" id="coopway_change">
+					<option value="cpa">cpa</option>
+					<option value="cpc">cpc</option>
+					<option value="cps">cps</option>
+					<option value="cpm">cpm</option>
+					<option value="else">其他</option>
+				</select>
+			</p>
+			<p>
+				<span>结算方式：</span>
+				<!--<input id="balance_type_change" type="text" />-->
+				<select name="selectType" id="settleway_change">
+					<option value="advance">预付款</option>
+					<option value="later">后付款</option>
+				</select>
+			</p>
+			<p>
+				<span>签约公司：</span>
+				<input id="contract_company_change" type="text" />
+			</p>
+			<p>
+				<span>结算详情：</span>
+				<input id="settle_detail_change" type="text" />
+			</p>
+			<p>
+				<span>项目状态：</span>
+				<input id="project-start" class="project-state" type="radio" name="state" value="start" />正在进行&nbsp;&nbsp;
+				<input id="project-finish" class="project-state" type="radio" name="state" value="finish" />已结束
+			</p>
+			<p>
+				<span>结算费用：</span>
+				<input id="settle_money_change" type="text" />
+			</p>
+			<p class="show-hide">
+				<span>项目成本：</span>
+				<input id="chengben_change" type="text" />
+			</p>
+			<p class="show-hide">
+				<span>成本备注：</span>
+				<input id="chengbenbeizhu_change" type="text" />
+			</p>
+			<p class="show-hide">
+				<span>项目毛利：</span>
+				<input id="maoli_change" type="text" />
+			</p>
+			<p>
+				<span>备注：</span>
+				<input id="remark_change" type="text" />
+			</p>
+			
+			<div class="Finnow-Sub">
+				<input id="change_project_btn" type="submit" value="确认" onclick="return false;"/>
+				<input type="button" value="取消" class="none-x-s" />
+			</div>
+		</form>
+	</div>
+</div>						<!--修改项目数据---end-->
+
+<div class="finish-project project-box">			<!--结项详情-->
+	<div class="w570-box">
+		<h3 class="popup-title">结项详情</h3>
+		<button class="none-x"></button>
+		<p>项目成本：<span id="finish_detail_1"></span></p>
+		<p>成本备注：<span id="finish_detail_2"></span></p>
+		<p>项目毛利：<span id="finish_detail_3"></span></p>
+	</div>
+</div>				<!--结项详情---end-->
+
+<!--删除项目弹窗-->
+<div class="delete-project project-box">
+	<div class="w570-box">
+		<h3>确认删除该条数据？</h3>
+		<button class="none-x"></button>
+		<form class="Audit-in">
+			<input id="project_delete_id" type="hidden" />
+			<div class="Finnow-Sub">
+				<input id="delete_project_btn" type="submit" value="确认" class="Deny-box" onclick="return false;" />
+				<input type="button" value="取消" class="none-x-s" />
+			</div>
+		</form>
+	</div>
+</div>
+<!--end-->
+{% endblock modal %}

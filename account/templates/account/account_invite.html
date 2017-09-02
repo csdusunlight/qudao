@@ -1,0 +1,191 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户中心</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+<script type="text/javascript" src="{% static "js/ZeroClipboard.js" %}"></script>
+<script type="text/javascript" >
+$.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
+var data1 = '<table width="100%"><thead><tr><th height="44">手机号</th><th>注册时间</th>'+
+'<th>是否绑定银行卡</th><th>是否提现</th></tr></thead><tbody>'+
+'[data]<tr><td height="44">{mobile}</td><td>{time}</td><td>{is_bind}</td><td>{is_with}</td></tr>[/data]'
++ '</tbody></table>';
+var data2 = '<table width="100%"><thead><tr><th height="44">手机号</th><th>提现完成时间</th>'+
+'<th>提现福币(个)</th><th>佣金分成(福币)</th></tr></thead><tbody>'+
+'[data]<tr><td height="44">{mobile}</td><td>{time}</td><td>{amount}</td><td>{take}</td></tr>[/data]'
++ '</tbody></table>';
+var data3 = '<table width="100%"><thead><tr><th height="44">月份</th><th>好友提现(福币)</th>'+
+'<th>好友提现人数</th><th>佣金分成(福币)</th><th>积分奖励</th></tr></thead><tbody>'+
+'[data]<tr><td height="44">{month}</td><td>{amount}</td><td>{cou}</td><td>{take}</td><td>{score}</td></tr>[/data]'
++ '</tbody></table>';
+var url = "{% url 'get_user_invite_page' %}" + "?page={page}&size={pageSize}&filter=";
+var left_award = {{statis.left_award}};
+function emptydisplay(obj){
+	pic_url = "{%static 'images/picin.png' %}";
+	obj.html('<div class="Defa-in"><img src="' + pic_url + '">'+
+			'<h2>咦~~ 您还没有相关记录~~</h2></div>');
+}
+$(function(){
+	$('.back-a12').parent().toggleClass("on");
+
+	(function copyInit(textId,buttonId) {
+        ZeroClipboard.setMoviePath( "{% static 'swf/ZeroClipboard.swf' %}" );
+        var clip = new ZeroClipboard.Client(); // 新建一个对象
+        clip.setHandCursor( true ); // 设置鼠标为手型
+        clip.setText($('#'+textId).val());
+        clip.addEventListener('complete', function(){
+            alert('复制成功！');
+        });
+        clip.glue(buttonId); // 和上一句位置不可调换
+        $('#'+textId).change(function(){clip.setText($('#'+textId).val())});
+    })('url-content','copy');
+
+	$("#pagedata").ajaxPage({
+	    url:url+0,
+	    pageId:$("#page"),
+	    pageSize:6,
+	    run:true,
+	    content:data1,
+	});
+	$("#Swi-Top li").click(function(){
+		if($(this).attr("class")!="on"){
+			$(this).toggleClass("on").siblings().removeClass("on")
+			var index = $(this).index();
+			$("#page").empty();
+			var data = data1
+			if (index==1){
+				data = data2
+			}
+			else if (index==2){
+				data = data3
+			}
+			$("#pagedata").ajaxPage({
+			    url:url+index,
+			    pageId:$("#page"),
+			    pageSize:6,
+			    run:true,
+			    content:data,
+			});
+		}
+	});
+	$("#transToBalance").click(function(){
+		if(left_award==0){
+			alert('邀请奖励结余为0');
+		}
+		else {
+			var post_url = "{%url 'account_invite' %}";
+			$.ajax({
+				url: post_url,
+				dataType:"json",
+				type:'POST',
+				success:function(ret){
+					if(ret.code!=0){
+						alert(ret.res_msg);
+					}
+					else {
+						alert("您的邀请奖励已成功转至账户余额！");
+					}
+				},
+				error:function(){
+					alert("请检查网络连接");
+				}
+			});
+		}
+	});
+});
+</script>
+</head>
+
+<body>
+	<div>
+    	<!--头部-->
+    	{% include "header.html" %}
+    	<!--内容-->
+    	<div class="Content">
+        	<div class="w1100">
+            	{% include "account/left.html" %}
+                <div class="RightCont">
+                	<div class="binding-cont">
+                    	<div class="Binding-Top">
+                        	<h2>推荐好友</h2>
+                        </div>
+                        <div class="Recom-sin">
+                        	<div class="Recom-l">
+                            	<span>邀请奖励结余</span>
+                                <strong id="inviter_account">{{statis.left_award}} <font>（福币）</font></strong>
+                                <a id="transToBalance" href="#">转至余额</a>
+                            </div>
+                            <div class="Recom-m">
+                            	<span>累计邀请奖励</span>
+                                <div class="Recom-box">
+                                    <strong class="fl">{{statis.accu_invite_award}} <font>（福币）</font></strong>
+                                    <strong class="fr">{{statis.accu_invite_scores}} <font>（积分）</font></strong>
+                                </div>
+                                <p>说明：积分奖励实时发放到系统，福币奖励每月1日统一发放。</p>
+                            </div>
+                            <div class="Recom-r">
+                            	<span>累积邀请人数：{{statis.acc_count}}人 </span>
+                                <span>完成提现人数：{{statis.acc_with_count}}人 </span>
+                                <span>本月待发奖励：{{statis.this_month_award}}福币</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="binding-cont">
+                    	<div class="Binding-Top">
+                        	<h2>我要邀请</h2>
+                            <a href="{%url 'freshman_award'%}" class="more-id">查看邀请奖励规则 >></a>
+                        </div>
+                        <div class="Invite-box">
+                        	<div class="Invite-in">
+                            	<span>邀请码</span>
+                                <strong>{{user.invite_code}}</strong>
+                            </div>
+                            <div class="Invite-l mt14">
+                                <h6>邀请链接：</h6>
+                                <form>
+                                	<input id="url-content" type="text" value="http://www.wafuli.cn{%url 'register' %}?icode={{user.invite_code}}">
+                                    <input id="copy" type="button" value="点击复制">
+                                </form>
+                                <span>快把邀请链接发送给你的好友吧</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="Welfare" style="margin:0">
+                    	<div class="Welfare-T">
+                        	<strong>邀请记录</strong>
+                            <ul class="Welfare-li" id="Swi-Top">
+                            	<li class="on">好友明细</li>
+                            	<li>推荐明细</li>
+                            	<li>月度数据</li>
+                            </ul>
+                        </div>
+                        <div class="Welfare-td">
+
+                            <div id="pagedata"></div>
+                       		<div class="Page-in">
+                       			<div class="page"  id="page"></div>
+                       		</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    	<!--底部-->
+	  {% include "footer.html" %}
+  <!--浮动窗口-->
+  	{% include "outline.html" %}
+    </div>
+</body>
+</html>

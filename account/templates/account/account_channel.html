@@ -1,0 +1,802 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>渠道数据提交</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/account_channel.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.searchableSelect.css' %}" />
+		<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/ajaxfileupload.js'%}"></script>
+		<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/jquery.searchableSelect.js' %}"></script>
+		<script>
+		</script>
+	</head>
+
+	<body>
+		<!--头部-->
+		{% include "header.html" %}
+		<!--内容-->
+		<div class="Content">
+			<div class="w1100">
+				{% include "account/left.html" %}
+				<div class="container-box">
+					<div class="content-box">
+						<div class="channel-header">
+							<!-- <h3>选择项目名称</h3>
+						<select id="project_select">
+							<option value="0">-</option>
+							{% for x in flist %}
+							    <option value="{{x.id}}">{{x.title}}</option>
+							{%endfor%}
+						</select> -->
+							<ul id="tab_head" class="tab-head">
+								<li class="on">导入数据</li>
+								<li>导出数据</li>
+							</ul>
+						</div>
+
+						<div class="content-in content">
+							<ul id="submit_way" class="submit-way">
+								<li class="submit-on">逐条提交</li>
+								<li>表格提交</li>
+							</ul>
+
+							<div class="submit-content by-item" id="submit_content">
+								<img id="add_data_btn" class="add-data-btn" src="{% static 'images/add-data-btn.png' %}" />
+								<div id="submit_data_container" class="submit-data-container">
+									<ul class="submit-head">
+										<li class="item-01">项目名称</li>
+										<li class="item-02">投资日期</li>
+										<li class="item-03">注册手机号</li>
+										<li class="item-04">投资金额（元）</li>
+										<li class="item-05">投资标期（天）</li>
+										<li class="item-06">备注</li>
+									</ul>
+									<ul class="submit-item-box">
+										<li class="submit-item item-01">
+											<select class="project_select height-add01" placeholder="选择项目">
+												<option value="0">--</option>
+												{% for x in flist %}
+												<option value="{{x.id}}">{{x.title}}</option>
+												{%endfor%}
+											</select>
+										</li>
+										<li class="submit-item item-02"><input type="text" class="height-add02 time date_picker" id="date_picker" placeholder="选择日期">
+										</li>
+										<li class="submit-item item-03"><input type="text" maxlength=11 class="telnum" id="telnum" placeholder="填写正确的手机号">
+										</li>
+										<li class="submit-item item-04"><input type="text" class="amount" id="amount" placeholder="仅限纯数字">
+										</li>
+										<li class="submit-item item-05"><input type="text" class="term" id="term" placeholder="仅限纯数字">
+										</li>
+										<li class="submit-item item-06"><input type="text" class="remark" id="remark" placeholder="选填">
+										</li>
+										<li class="delete-item item-07">删除</li>
+									</ul>
+								</div>
+
+								<a id="upload_byitem" class="upload-byitem">提交数据</a>
+								<div class="attention">
+									<h6>注意事项：</h6>
+									<p>1、投资金额、投资标期只能为纯数字<br /> 2、点击右边的“+”号，可连续添加多条数据，再一并提交
+										<br /> 3、删除按钮可删除该条数据
+									</p>
+								</div>
+								<div class="popup-box popup-box-01">
+									<div class="popup-content">
+										<h3>删除提示</h3>
+										<p id="hint_delete">确定删除该条数据？</p>
+										<a id="cancel" class="cancel confirm" onclick="popupOutInfo()">取&nbsp;&nbsp;&nbsp;&nbsp;消</a>
+										<a id="confirm_delete" class="confirm">确认删除</a>
+									</div>
+								</div>
+								<div class="popup-box popup-box-03">
+									<div class="popup-content">
+										<h3>温馨提示</h3>
+										<p class="hint-msg"></p>
+										<a id="cancel" class="cancel confirm" onclick="popupOutError()">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+									</div>
+								</div>
+								<div class="popup-box popup-box-04">
+									<div class="popup-content">
+										<h3>数据提交反馈</h3>
+										<p>本次提交数据：<span class="data-item-submit"></span>项</p>
+										<!-- <p class="repeat-list">提交重复数据：<span class="data-item-repeat"></span>项</p> -->
+										<p class="repeat-phonenumber">重复数据：<span class="data-item-repeat-phone"></span></p>
+										<!-- <p>已存在的数据：<span class="data-item-exist"></span>项</p> -->
+										<p class="exist-phonenumber">无效数据：<span class="data-item-exist-phone"></span></p>
+										<p style="color: #ff6767;">有效提交：<span class="data-item-valid"></span>项</p>
+										<p style="text-align: left;padding-left: 38px;">注：<br/> 提交重复数据：提交中的重复项
+											<br /> 已存在的数据：挖福利数据库中已存在，其他用户或自己之前提交过的数据
+										</p>
+										<a id="upload_again" class="upload-again table-btn" onclick="popupOutItem()">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+									</div>
+								</div>
+							</div>
+							<!-- submit-content________end -->
+							<div class="submit-content" style="display: none">
+								<h3 class="project-select-head">选择项目名称</h3>
+								<select id="project_select" class="project-select-common">
+									<option value="0">--</option>
+									{% for x in flist %}
+									<option value="{{x.id}}">{{x.title}}</option>
+									{%endfor%}
+								</select>
+								<div class="upload-box">
+									<a class="download-templete" href="/static/download/template.xls">下载表格模版</a>
+									<b>支持小于1M的表格文件格式（.xls 和 .xlsx）</b>
+									<form id="form" name="form" method="post" action="" enctype="multipart/form-data">
+										<input name="userfile" id="choose" type="file" onchange="filechange(this)" /><br/>
+										<p class="table-choosed" style="padding-left: 50px;">已选择表格：<span id="hint" class="hint">未选择任何文件</span></p><br />
+										<a class="upload-box-btn" id="upload">选择表格</a>
+										<a class="upload-box-btn" id="uploadsubmit">提交表格</a>
+										</from>
+
+										<div class="img-mask">
+											<div class="loader-inner ball-triangle-path">
+												<div></div>
+												<div></div>
+												<div></div>
+											</div>
+											<p>文件上传中</p>
+										</div>
+								</div>
+								<div class="attention">
+									<h6>注意事项：</h6>
+									<p>1、请按项目名称导入数据<br /> 2、提交的表格需为挖福利提供的表格模版
+										<br /> 3、所有数字需在英文格式下输入
+										<br /> 4、输入日期时，设置单元格式中的“日期”分类，“xxxx/x/x”或者“xxxx-x-x”类型
+										<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若投资1万元，只能在表格中填纯数字“10000”，不能填“10000元”或者“1万元”
+										<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若投资日期为一个月，
+										<span style="color: #ff6767">只能在表格中填纯数字</span>“30”，不能填“30天”或者“1个月”<br /> 5、上传文件大小需小于1M，若导入数据超过上传大小，建议拆分为多个文件再逐个导入
+										<br /> 6、暂不支持IE浏览器
+									</p>
+								</div>
+							</div>
+							<!-- submit-content_________end -->
+						</div>
+						<!-- content_________end -->
+						<div class="content-out content" style="display: none;">
+							<h3 class="project-select-head">选择项目名称</h3>
+							<select id="project_select_out" class="project-select-common">
+								<option value="0">全部</option>
+								{% for x in flist %}
+								<option value="{{x.id}}">{{x.title}}</option>
+								{%endfor%}
+							</select>
+							<input class="export-btn" type="button" name="" id="export" value="导出审核数据" />
+							<h6>注意事项：</h6>
+							<p>1、请按项目名称导出数据<br /> 2、数据自动导出成Excel表格
+								<br /> 3、暂不支持IE浏览器
+							</p>
+						</div>
+						<!-- content_________end -->
+					</div>
+					<!-- content-box_________end -->
+
+					<!--表格展示部分-->
+					<div class="Welfare">
+						<div class="Welfare-T">
+							<strong>理财福利</strong>
+							<ul class="Welfare-li" id="Swi-Top">
+								<li class="on">全部</li>
+								<li>已通过</li>
+								<li>审核中</li>
+								<li>已拒绝</li>
+							</ul>
+						</div>
+						<div class="Welfare-td">
+							<div class="tabCon">
+								<div class="curs">
+									<ul id="pagedata">
+
+									</ul>
+								</div>
+							</div>
+
+							<div class="changes-p">
+								<div class="page" id="page">
+								</div>
+							</div>
+							<div class="popup-box popup-box-05">
+								<div class="popup-content">
+									<h3>数据修改</h3>
+									<p>
+										<span>项目名称：</span>
+										<!--<input id="create_time_change" type="text" />-->
+										<select class="invest-project height-add01" placeholder="选择项目">
+											<option value="0">--</option>
+											{% for x in flist %}
+											<option value="{{x.id}}">{{x.title}}</option>
+											{%endfor%}
+										</select>
+									</p>
+									<p>
+										<span>投资日期：</span>
+										<input type="text" class="height-add02 invest-time date_picker" placeholder="选择投资日期" />
+									</p>
+									<p>
+										<span>提交手机号：</span>
+										<input id="project_name_change" class="submit-tel" maxlength=11 type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" placeholder="填写正确的手机号" />
+									</p>
+									<p>
+										<span>投资标期：</span>
+										<input id="contact_person_change" class="invest-days" type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" placeholder="仅限纯数字" />
+									</p>
+									<p>
+										<span>投资金额：</span>
+										<input id="cooperate_type_change" class="invest-money" type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" placeholder="仅限纯数字" />
+									</p>
+									<p>
+										<span>备注：</span>
+										<input id="balance_type_change" class="invest-remarks" type="text" placeholder="选填" />
+									</p>
+
+									<a id="cancel" class="cancel confirm" onclick="popupOutInfo()">取&nbsp;&nbsp;&nbsp;&nbsp;消</a>
+									<a id="confirm_revise" class="confirm">确认修改</a>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="popup-box popup-box-02">
+							<div class="popup-content">
+								<h3>数据提交成功</h3>
+								<p>提交数据：<span class="data-submit"></span>项</p>
+								<p class="repeat-list">表格重复数据：<span class="data-repeat"></span>项</p>
+								<p>已存在的数据：<span class="data-exist"></span>项</p>
+								<p>有效提交：<span class="data-valid"></span>项</p>
+								<p style="text-align: left;padding-left: 38px;">已存在的数据：<br /><span class="submit-phonenumber"></span></p>
+								<p style="text-align: left;padding-left: 38px;">注：<br/> 已存在的数据：挖福利数据库中已存在，其他用户或自己之前提交过的数据
+									<br /> 表格重复数据：提交的表格中的重复项
+								</p>
+								<a id="upload_again" class="upload-again table-btn" onclick="popupOutMistake()">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+			<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
+			<!--底部-->
+			{% include "footer.html" %}
+			<!--浮动窗口-->
+			{% include "outline.html" %}
+
+			<script type="text/javascript">
+				var data = '<table width="100%"><tr><th width="12%">项目</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
+					'<th>投资金额</th><th width="15%">备注</th><th>审核结果</th><th>返现福币</th><th width="12%">拒绝原因</th>' +
+					'</tr>[data]<tr><td>{project}</td><td>{invest_time}</td><td>{mobile}</td>' +
+					'<td>{invest_term}</td><td>{invest_amount}</td><td>{remark}</td><td>{audit_result}</td>' +
+					'<td>{return_amount}</td><td>{refuse_reason}</td></tr>[/data]</table>';
+				var data2 = '<table width="100%"><tr><th width="12%">项目</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
+					'<th>投资金额</th><th width="15%">备注</th><th>审核结果</th><th>返现福币</th><th width="12%">操作</th>' +
+					'</tr>[data]<tr><td>{project}</td><td>{invest_time}</td><td>{mobile}</td>' +
+					'<td>{invest_term}</td><td>{invest_amount}</td><td>{remark}</td><td>{audit_result}</td>' +
+					'<td>{return_amount}</td><td><a class="revise-data" onclick=reviseData({id},this)>修改</a></td></tr>[/data]</table>';
+				var url = "{% url 'get_channel_result_page' %}" + "?page={page}&size={pageSize}";
+				$('.back-a14').parent().toggleClass("on");
+				$.ajaxSetup({
+					data: {
+						csrfmiddlewaretoken: '{{ csrf_token }}'
+					},
+				});
+				$("#pagedata").ajaxPage({
+					url: url,
+					pageId: $("#page"),
+					pageSize: 10,
+					run: true,
+					content: data,
+				});
+				//			var filechooser = document.getElementById("choose");
+				var upload = document.getElementById("upload");
+				var hint = document.getElementById("hint");
+				upload.onclick = function() {
+					//				var temp = document.getElementById("choose");
+					//				alert(temp);
+					document.getElementById("choose").click();
+				}
+
+				function filechange(that) {
+					var aa = that.value.toLowerCase().split('.');
+					//		alert(document.getElementById('choose').value);
+					if(document.form.userfile.value == "") {
+						alert('文件不能为空！');
+						return false;
+					} else {
+						if(aa[aa.length - 1] == 'xls' || aa[aa.length - 1] == 'xlsx') {
+							var fileSize = that.files[0].size;
+							if(fileSize > 1024 * 1024 * 1) {
+								alert("文件大小不能超过1M");
+								return false;
+							} else {
+								hint.innerHTML = that.files[0].name;
+							}
+						} else {
+							alert('请选择excel格式文件');
+							return false;
+						}
+					}
+				}
+				$('a#uploadsubmit').click(function() {
+					var fileElementId = 'choose';
+					if(!document.getElementById(fileElementId).value) {
+						alert("请先选择上传文件");
+						return;
+					}
+					// 		alert(document.getElementById('choose').value);
+					var fid = $("select#project_select").val();
+					if(fid == "0") {
+						alert("请先选择项目");
+						return;
+					}
+					maskIn();
+					$.ajaxFileUpload({
+						url: '',
+						secureuri: false,
+						fileElementId: fileElementId, //file标签的id
+						dataType: 'json', //返回数据的类型
+						data: {
+							fid: fid
+						}, //一同上传的数据
+						success: function(data, status) {
+							$(".img-mask").css("display", "none");
+							if(data.code == 0) {
+								console.log("yes")
+
+								$(".data-submit").text(data.anum);
+								$(".data-repeat").text(data.dup1);
+								$(".data-exist").text(data.dup2);
+								$(".data-valid").text(data.sun);
+								$(".submit-phonenumber").text(data.dupstr);
+								popupInMistake();
+							} else {
+								alert(data.msg);
+							}
+						},
+						error: function(data, status, e) {
+							alert(e);
+						}
+					});
+				});
+
+				//			选项卡切换
+				var tabs = document.getElementById("tab_head").getElementsByTagName("li");
+				var contents = $('.content');
+
+				for(var i = 0; i < contents.length; i++) {
+					tabs[i].onclick = function() {
+						change(this);
+					}
+
+				}
+
+				function change(obj) {
+					for(var i = 0; i < tabs.length; i++) {
+						if(tabs[i] == obj) {
+							tabs[i].className = "on";
+							contents[i].style.display = "block";
+						} else {
+							tabs[i].className = "";
+							contents[i].style.display = "none";
+						}
+					}
+				}
+				// 提交方式切换
+				var submitWay = document.getElementById("submit_way").getElementsByTagName("li");
+				var submitContent = $('.submit-content');
+
+				for(var i = 0; i < contents.length; i++) {
+					submitWay[i].onclick = function() {
+						chooseWay(this);
+					}
+
+				}
+
+				function chooseWay(obj) {
+					for(var i = 0; i < submitWay.length; i++) {
+						if(submitWay[i] == obj) {
+							submitWay[i].className = "submit-on";
+							submitContent[i].style.display = "block";
+						} else {
+							submitWay[i].className = "";
+							submitContent[i].style.display = "none";
+						}
+					}
+				}
+				// 单项提交部分-------start
+				$(".submit-content").on("focus", ".date_picker", function() {
+					$('.date_picker').date_input();
+				})
+				var need_refresh = false;
+				var add_data_btn = document.getElementById('add_data_btn');
+				var remove_data_btn = document.getElementById('remove_data_btn');
+				var submit_data_container = document.getElementById('submit_data_container');
+				var that;
+				add_data_btn.onclick = function() {
+					addData();
+				}
+				$(".submit-content").on("click", ".delete-item", function() {
+					that = this;
+					popupInInfo();
+					return that;
+				})
+				$("#confirm_delete").click(function() {
+					that.parentNode.parentNode.removeChild(that.parentNode);
+					popupOutInfo();
+				})
+
+				var	select_id = 1;
+				$('.project_select').searchableSelect();
+				$('.invest-project').searchableSelect();
+				$('.project-select-common').searchableSelect();
+				function addData() {
+					var ul = document.createElement('ul');
+					ul.className = 'submit-item-box';
+					ul.innerHTML = '<li class="submit-item item-01"><select class="project_select select_id_' + select_id + ' height-add01">' +
+						$('#project_select').html() +
+						'</select></li>' +
+						'<li class="submit-item item-02"><input type="text" class="height-add02 time date_picker"></li>' +
+						'<li class="submit-item item-03"><input type="text" maxlength=11 class="telnum"></li>' +
+						'<li class="submit-item item-04"><input type="text" class="amount"></li>' +
+						'<li class="submit-item item-05"><input type="text" class="term"></li>' +
+						'<li class="submit-item item-06"><input type="text" class="remark"></li>' +
+						'<li class="delete-item item-07">删除</li>';
+					submit_data_container.appendChild(ul);
+
+					var select_dom = '.select_id_'+select_id;
+					console.log(select_dom);
+					$(select_dom).searchableSelect();
+					console.log(select_id);
+					select_id++;
+				}
+				// 删除提示信息弹窗调用函数
+				function popupInInfo() {
+					$(".popup-box-01").addClass("in");
+				}
+				// 取消删除信息弹窗点击确定调用函数（已写入html）
+				function popupOutInfo() {
+					$(".popup-box-01, .popup-box-05").removeClass("in");
+				}
+
+				function popupInError() {
+					$(".popup-box-03").addClass("in");
+				}
+				// 再次提交调用函数
+				function popupOutError() {
+					$(".popup-box-03").removeClass("in");
+				}
+				//      点击提交按钮
+				var Data = new Array;
+				var Data2 = new Array;
+				var promptNumber = 0;
+				var promptStr = "温馨提示：";
+				var re_num = 0; //重复提交条数
+				var repeat_num = 0; //存储重复提交条数
+				var re_phone = ""; //重复手机号
+				var repeat_phone = ""; //存储重复手机号
+				$("#upload_byitem").on("click", function() {
+					$(".submit-item-box").each(function(index, domEle) {
+						var project_select01 = $(this).find(".project_select"),
+							time01 = $(this).find(".time"),
+							telnum01 = $(this).find(".telnum"),
+							amount01 = $(this).find(".amount"),
+							term01 = $(this).find(".term"),
+							remark01 = $(this).find(".remark");
+
+						var project_select = $(this).find(".project_select option:selected").val(),
+							time = time01.val(),
+							telnum = telnum01.val(),
+							amount = amount01.val(),
+							term = term01.val(),
+							remark = remark01.val(),
+							data_list = [project_select, time, telnum, amount, term, remark];
+
+						var re = /^1[1,2,3,4,6,5,7,8,9]\d{9}$/, //验证手机号
+							re_amount = /^\d+(\.\d+)?$/; //验证数字格式
+
+						var is_repeat = 0; //是否重复参数
+
+						if(project_select == "0") {
+							promptNumber++;
+							project_select01.css("border", "2px solid #ff6767");
+						} else {
+							project_select01.css("border", "1px solid #c1c1c1");
+						}
+						if(time == "") {
+							promptNumber++;
+							time01.css("border", "2px solid #ff6767");
+						} else {
+							time01.css("border", "1px solid #c1c1c1");
+						}
+						if(!re.test(telnum)) {
+							promptNumber++;
+							telnum01.css("border", "2px solid #ff6767");
+						} else {
+							telnum01.css("border", "1px solid #c1c1c1");
+						}
+						if(!re_amount.test(amount)) {
+							promptNumber++;
+							amount01.css("border", "2px solid #ff6767");
+						} else {
+							amount01.css("border", "1px solid #c1c1c1");
+						}
+						if(!re_amount.test(term)) {
+							promptNumber++;
+							term01.css("border", "2px solid #ff6767");
+						} else {
+							term01.css("border", "1px solid #c1c1c1");
+						}
+						//    数据去重
+						if(Data.length > 0) {
+							for(var i = 0; i < Data.length; i++) {
+								if((Data[i][0] == data_list[0]) && (Data[i][2] == data_list[2])) {
+									is_repeat = 1;
+								}
+							}
+						}
+						if(!is_repeat) {
+							Data.push(data_list);
+						} else {
+							re_num++;
+							re_phone = re_phone + String(data_list[2]) + ", ";
+						}
+						//    数据去重-----------end
+						// Data.push(data_list.join('|'));
+					})
+					if(promptNumber == 0) {
+						//   console.log(Data);
+						// var data = Data.join('$');
+						console.log(re_num);
+						console.log(Data);
+						Data2 = [];
+						for(var i = 0; i < Data.length; i++) {
+							Data2.push(Data[i].join('|'));
+						}
+						repeat_num = re_num;
+						repeat_phone = re_phone;
+						var data = Data2.join('$');
+						$.ajax({
+							url: "{%url 'submit_itembyitem' %}",
+							dataType: "json",
+							type: "POST",
+							async: false,
+							data: {
+								'data': data
+							},
+							success: function(ret) {
+								if(ret.code == 0) {
+									$(".data-item-submit").text(repeat_num + ret.exist_num + ret.suc_num);
+									// $(".data-item-repeat").text(repeat_num);
+									// console.log(repeat_num);
+									// console.log(ret.exist_num);
+									if (ret && ret.exist_num==0){
+										need_refresh = true;
+									}
+									else{
+										need_refresh = false;
+									}
+									if(!repeat_num) {
+										$(".repeat-phonenumber").hide();
+									} else {
+										$(".repeat-phonenumber").show();
+									}
+									$(".data-item-repeat-phone").text(repeat_phone);
+									// $(".data-item-exist").text(ret.exist_num);
+									if(!ret.exist_num) {
+										$(".exist-phonenumber").hide();
+									} else {
+										$(".exist-phonenumber").show();
+									}
+									$(".data-item-exist-phone").text(ret.exist_phone);
+									$(".data-item-valid").text(ret.suc_num);
+									popupInItem();
+								} else {
+									$(".hint-msg").text(ret.msg);
+									popupInError();
+								}
+							},
+							error: function() {
+								alert("请检查网络连接");
+							}
+						});
+						Data = [];
+						re_num = 0;
+						re_phone = "";
+					} else {
+						Data = [];
+						$(".hint-msg").html('共有<span class="error-num">' + promptNumber + '</span>项填写格式不正确，请检查后按照规范重新填写后提交！');
+						promptNumber = 0;
+						popupInError();
+					}
+				});
+				// 单项提交部分----end
+
+				$("#Swi-Top li").click(function() {
+					if($(this).attr("class") != "on") {
+						$(this).toggleClass("on").siblings().removeClass("on")
+						var index = $(this).index();
+						$("#page1").empty();
+						if(index == 2) {
+							$("#pagedata").ajaxPage({
+								url: url + "&filter=" + index,
+								pageId: $("#page"),
+								pageSize: 30,
+								run: true,
+								content: data2,
+								//	    complete:pagecallback,
+							});
+						} else {
+							$("#pagedata").ajaxPage({
+								url: url + "&filter=" + index,
+								pageId: $("#page"),
+								pageSize: 30,
+								run: true,
+								content: data,
+								//	    complete:pagecallback,
+							});
+						}
+					}
+				});
+
+				$("#Swi-Top li").click(function() {
+					if($(this).attr("class") != "on") {
+						$(this).toggleClass("on").siblings().removeClass("on")
+					}
+				});
+
+				// 上传中调用函数
+				function maskIn() {
+					$(".img-mask").css("display", "block");
+				}
+
+				// 数据异常调用函数
+				function popupInMistake() {
+					$(".popup-box-02").addClass("in");
+				}
+				// 再次提交调用函数
+				function popupOutMistake() {
+					$(".popup-box-02").removeClass("in");
+				}
+				// 单条数据提交成功调用函数
+				function popupInItem() {
+					$(".popup-box-04").addClass("in");
+				}
+				// 再次提交调用函数
+				function popupOutItem() {
+					$(".popup-box-04").removeClass("in");
+					if (need_refresh){
+						location.reload();
+					}
+				}
+				$("#export").click(function() {
+					var fid = $("select#project_select_out").val();
+//					if(fid == "0") {
+//						alert("请先选择项目");
+//						return;
+//					}
+					var html = '<form action="' + "{% url 'export_audit_result' %}" + '" method="get" target="_self" id="postData_form">';
+					html += '<input name="fid" type="hidden" value="' + fid + '"/></form>';
+					var iframe = document.getElementById('myIFrame');
+					iframe.contentWindow.document.open();
+					iframe.contentWindow.document.write(html);
+					iframe.contentWindow.document.close();
+					document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+				});
+
+				//修改审核中项目数据部分
+				function popupOutRevise() { // 再次提交调用函数
+					$(".popup-box-05").addClass("in");
+				}
+				//				$(".tabCon").on("click", ".revise-data", function() {
+				//					popupOutRevise();
+				//				})
+				var project_id;
+				var revise_parent;
+				function reviseData(id, obj) {
+					project_id = id;
+					//					console.log(id);
+					revise_parent = $(obj).parent().parent();
+					var parent_dom = $(revise_parent);
+					var children0 = parent_dom.find("td").eq(0).text(),
+						children1 = parent_dom.find("td").eq(1).text(),
+						children2 = parent_dom.find("td").eq(2).text(),
+						children3 = parent_dom.find("td").eq(3).text(),
+						children4 = parent_dom.find("td").eq(4).text(),
+						children5 = parent_dom.find("td").eq(5).text();
+					//					console.log(children0+", "+children1+", "+children2+", "+children3+", "+children4+", "+children5+", ");
+					var option_val;
+					var options = $(".project_select option");
+					//					var options = $(select).find("option");
+					for(var i = 0; i < options.length; i++) {
+						if($(options)[i].text == children0) {
+							option_val = options[i].value;
+						}
+
+					}
+					console.log(option_val);
+					$(".invest-project").val(option_val);
+					$(".invest-time").val(children1);
+					$(".submit-tel").val(children2);
+					$(".invest-days").val(children3);
+					$(".invest-money").val(children4);
+					$(".invest-remarks").val(children5);
+
+					//					console.log($(options)[0].value);
+					popupOutRevise();
+				}
+				$(".popup-box-05").on("focus", ".date_picker", function() {
+					$('.date_picker').date_input();
+				})
+
+				$("#confirm_revise").click(function() {
+					var invest_project = $(".invest-project").val(),
+						invest_time = $(".invest-time").val(),
+						invest_tel = $(".submit-tel").val(),
+						invest_days = $(".invest-days").val(),
+						invest_money = $(".invest-money").val(),
+						invest_remarks = $(".invest-remarks").val();
+					console.log(invest_project);
+//					var bank = $("#bank option:selected").val();
+					console.log(project_id+","+invest_project+","+invest_time+","+invest_tel+","+invest_days+","+invest_money+","+invest_remarks+",");
+					if(!invest_project || !invest_time || !invest_tel || !invest_days || !invest_money) {
+						alert("填写项不能为空");
+						return;
+					}
+					if(invest_project == 0) {
+						alert("请选择项目");
+						return;
+					}
+
+					var revise_url = "{%url 'revise_project' %}";
+					$.ajax({
+						url: revise_url,
+						dataType: "json",
+						type: 'POST',
+						data: {
+							'project_id': project_id,
+							'invest_project': invest_project,
+							'invest_time': invest_time,
+							'invest_tel': invest_tel,
+							'invest_days': invest_days,
+							'invest_money': invest_money,
+							'invest_remarks': invest_remarks
+						},
+						success: function(ret) {
+							if(ret.code == 1) {
+								alert("请重新登录！")
+								window.location.href = ret.url;
+							} else if(ret.code == 0) {
+								alert("更改数据成功！");
+								console.log(ret.data);
+								var parent_dom = $(revise_parent);
+								parent_dom.find("td").eq(0).text(ret.data.content_object);
+								parent_dom.find("td").eq(1).text(ret.data.invest_time);
+								parent_dom.find("td").eq(2).text(ret.data.invest_account);
+								parent_dom.find("td").eq(3).text(ret.data.invest_term);
+								parent_dom.find("td").eq(4).text(ret.data.invest_amount);
+								parent_dom.find("td").eq(5).text(ret.data.remark);
+								popupOutInfo();
+							} else {
+								alert(ret.res_msg);
+							}
+						},
+						error: function() {
+							alert("请检查网络连接");
+						}
+					});
+				});
+
+			</script>
+	</body>
+
+</html>

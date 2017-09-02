@@ -1,0 +1,224 @@
+{% extends "project_base.html" %} {%load staticfiles%} {% block js %}
+<script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/echarts.common.min.js'%}"></script>
+<script type="text/javascript">
+	$.ajaxSetup({
+		data: {
+			csrfmiddlewaretoken: '{{ csrf_token }}'
+		},
+	});
+	var data = '<table width="100%"><tr><th>日期</th><th>在线项目数</th><th>结项项目数</th>' +
+		'<th>投资人数</th><th>投资金额</th><th>预估消耗费用</th><th>返现人数</th><th>返现投资金额</th><th>返现费用</th>' +
+		'</tr>[results]<tr><td>{date}</td><td>{start_num}</td><td>{finish_num}</td><td>{invest_count}</td><td>{invest_sum}</td>' +
+		'<td>{consume_sum}</td><td>{ret_count}</td><td>{ret_invest_sum}</td><td>{ret_sum}</td>' +
+		'</tr>[/results]</table>';
+	var url = "/project/daystatis/" + "?page={page}";
+	var url2 = "/project/daystatis/";
+	 
+	$(document).ready(function() {
+		
+		$("li.home15").addClass("show-project").toggleClass("on");
+		$("li.home1").toggleClass("show");
+		$(".Tin-table tr:even").css("background-color", "#fcfcfc");
+
+		$("#pagedata").ajaxPage({
+			url: url,
+			pageId: $("#page"),
+			run: true,
+			content: data,
+		});
+		
+//		获取饼状图数据
+		var pie_data_1 = [],
+			pie_data_2 = [],
+			pie_data_3 = [],
+			num_detail_1 = 0,
+			num_detail_2 = 0,
+			num_detail_3 = 0;
+			
+		$.ajax({
+			type:"get",
+			url:"/project/projectstatis/",
+			data: {
+				'pageSize': 1000,
+			},
+			success: function(ret) {
+				for (var i=0; i<ret.results.length; i++) {
+					console.log(ret.results[i].state);
+					if(ret.results[i].state_des == "正在进行") {
+						if(ret.results[i].topay_amount >= 0) {
+							pie_data_1.push({
+								value: ret.results[i].topay_amount,
+								name: ret.results[i].projectname
+							});
+							num_detail_1 += parseFloat(ret.results[i].topay_amount);
+						} else {
+							pie_data_2.push({
+								value: ret.results[i].topay_amount,
+								name: ret.results[i].projectname
+							});
+							num_detail_2 += parseFloat(ret.results[i].topay_amount);
+						}
+					}
+					
+				}
+				$('.num-detail-1').text(num_detail_1.toFixed(2));
+				$('.num-detail-2').text(num_detail_2.toFixed(2))
+				
+				//		饼状图部分
+				var myChart = echarts.init(document.getElementById('main'));
+				var myChart2 = echarts.init(document.getElementById('main2'));
+					
+				option1 = {
+					title: {
+						text: '项目预估待收分布',
+						x: 'center'
+					},
+					tooltip: {
+						trigger: 'item',
+						formatter: "{a} <br/>{b} : {c} ({d}%)"
+					},
+					series: [{
+						name: '详情',
+						type: 'pie',
+						radius: '55%',
+						center: ['50%', '60%'],
+						data: pie_data_1,
+						itemStyle: {
+							emphasis: {
+								shadowBlur: 10,
+								shadowOffsetX: 0,
+								shadowColor: 'rgba(0, 0, 0, 0.5)'
+							}
+						}
+					}]
+				};
+				option2 = {
+					title: {
+						text: '项目预估待消耗分布',
+						x: 'center',
+					},
+					tooltip: {
+						trigger: 'item',
+						formatter: "{a} <br/>{b} : {c} ({d}%)"
+					},
+					series: [{
+						name: '详情',
+						type: 'pie',
+						radius: '55%',
+						center: ['50%', '60%'],
+						data: pie_data_2,
+						itemStyle: {
+							emphasis: {
+								shadowBlur: 10,
+								shadowOffsetX: 0,
+								shadowColor: 'rgba(0, 0, 0, 0.5)'
+							}
+						}
+					}]
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				myChart.setOption(option1);
+				myChart2.setOption(option2);
+				//		饼状图部分---end
+			},
+			error: function(ret) {
+				alert(JSON.stringify(ret));
+			}
+		});		
+		
+		var date_now = new Date();
+		var date_now_str = date_now.getFullYear()+"-"+(date_now.getMonth()+1)+"-"+1;
+		$.ajax({
+			type:"get",
+			url:"/project/projects/" + "?state=finish&dateft_0=" + date_now_str,
+			data: {
+				'pageSize': 1000,
+			},
+			success: function(ret) {
+				
+				for (var i=0; i<ret.results.length; i++) {
+					
+					pie_data_3.push({
+//						value: Math.abs(ret.results[i].settle),
+						value: ret.results[i].settle,
+						name: ret.results[i].name
+					});
+					num_detail_3 += parseFloat(ret.results[i].settle);
+				}
+				$('.num-detail-3').text(num_detail_3.toFixed(2));
+				console.log(pie_data_3);
+				//		饼状图部分
+				var myChart3 = echarts.init(document.getElementById('main3'));
+					
+				option3 = {
+					title: {
+						text: '当月结项项目分布',
+						x: 'center'
+					},
+					tooltip: {
+						trigger: 'item',
+						formatter: "{a} <br/>{b} : {c} ({d}%)"
+					},
+					series: [{
+						name: '详情',
+						type: 'pie',
+						radius: '55%',
+						center: ['50%', '60%'],
+						data: pie_data_3,
+						itemStyle: {
+							emphasis: {
+								shadowBlur: 10,
+								shadowOffsetX: 0,
+								shadowColor: 'rgba(0, 0, 0, 0.5)'
+							}
+						}
+					}]
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				myChart3.setOption(option3);
+				//		饼状图部分---end
+			},
+			error: function(ret) {
+				alert(JSON.stringify(ret));
+			}
+		});		
+
+	});
+</script>
+{% endblock js %} {% block right %}
+<div class="Need-T">
+   <span>项目总览</span>
+   <p class="num-detail">当前在线项目&nbsp;&nbsp;<number class="num-detail-0 num-detail-num">{{online_num}}</number>&nbsp;&nbsp;个</p>
+   <div class="Need-Cont">
+	   	<div class="pie-box">
+   			<div id="main" style="width: 300px;height:200px;"></div>
+   			<p class="num-detail">总额:<number class="num-detail-1 num-detail-num">445546546</number></p>
+   		</div>
+	   	<div class="pie-box">
+   			<div id="main2" style="width: 300px;height:200px;"></div>
+   			<p class="num-detail">总额:<number class="num-detail-2 num-detail-num">445546546</number></p>
+   		</div>
+   		<div class="pie-box">
+   			<div id="main3" style="width: 300px;height:200px;"></div>
+   			<p class="num-detail">总额:<number class="num-detail-3 num-detail-num">445546546</number></p>
+   		</div>
+   </div>
+</div>
+
+<div class="Need-T">
+	<span>每日项目数据</span>
+</div>
+
+<div class="Tin-table">
+	<div id="pagedata">
+	</div>
+	<div class="Page-in-admin">
+		<div class="page" id="page">
+		</div>
+	</div>
+</div>
+{%endblock%} {% block modal %}
+<iframe id="myIFrame" scrolling="yes" src="abount:blank" style="display:none" frameborder=1></iframe>
+<!--end-->
+{% endblock modal %}

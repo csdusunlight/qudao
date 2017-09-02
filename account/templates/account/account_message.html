@@ -1,0 +1,82 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户中心</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+<script src="{% static 'js/jquery-1.11.2.min.js' %}" type="text/javascript"></script>
+<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+<script type="text/javascript">
+$.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
+var data = '<ul>[data]<li onclick="readon($(this),{id})" class="{state}"><div ' + 
+'class="New-title"><strong>{title}</strong>'+
+'<span>{time}</span></div><p>{content}</p></li>[/data]</ul>';
+var url = "{% url 'get_user_message_page' %}" + "?page={page}&size={pageSize}";
+function readon(a,n){
+	if(a.attr("class")!="on"){
+		a.toggleClass("on");
+	}
+	a.removeAttr("onclick");
+
+	$.ajax({
+		url:"{%url 'account_message' %}",
+		dataType:"json",
+		type:"POST",
+		data : {
+			'id': n,
+		},
+		success:function(ret){
+		},
+		error:function(){
+			alert("请检查网络连接");
+		}
+	});
+}
+$(function(){
+	$('.back-a13').parent().toggleClass("on");
+	$("#pagedata").ajaxPage({
+	    url:url, 
+	    pageId:$("#page"),
+	    pageSize:5,
+	    run:true,
+	    content:data,
+	});
+});
+</script>
+</head>
+
+<body>
+	<div class="Max">
+    	<!--头部-->
+    	{% include "header.html" %}
+    	<!--内容-->
+    	<div class="Content">
+        	<div class="w1100">
+            	{% include "account/left.html" %}
+                <div class="RightCont">
+                	<div class="binding" style="padding-bottom:0;">
+                    	<div class="Binding-Top">
+                        	<h2>消息中心</h2>
+                        </div>
+                        <div class="Newlist" id="pagedata"></div>
+                        <div class="changes-p-msg"><div class="page" id="page"></div></div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    	<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->  
+  {% include "outline.html" %}
+    </div>
+
+</body>
+</html>

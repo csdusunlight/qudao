@@ -1,0 +1,136 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>会员奖励</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+
+<script type="text/javascript" src="{% static "js/jquery-1.11.2.min.js" %}"></script>
+<script type="text/javascript">
+$(function(){
+	$('.back-a15').parent().toggleClass("on");
+  // 会员等级制度
+var progress = document.getElementById("progress");
+  var fubi_get = document.getElementById("fubi_get"),
+    fubi_get2 = document.getElementById("fubi_get2"),
+    tast_add = document.getElementById("tast_add"),
+    finance_add = document.getElementById("finance_add"),
+    Vip_logo = document.getElementById("Vip_logo"),
+    Vip_next = document.getElementById("Vip_next"),
+    Vip_next_hint = document.getElementById("Vip_next_hint");
+  var fubi_num = {{user.with_total}}; //提现福币
+  var percent = 0;
+  var level = {{user.level}};
+
+  percent = parseInt(fubi_num/100000);
+  progress.style.width = percent + "%";
+  fubi_get.innerText = fubi_get2.innerText = fubi_num;
+  switch(level) {
+    case 0:
+      tast_add.innerText = "0%";
+      finance_add.innerText = "0%";
+      fubi_need.innerText = 10000 - fubi_num;
+      Vip_next.innerHTML = "VIP1";
+      Vip_logo.style.display = "none";
+      break;
+    case 1:
+      tast_add.innerText = "5%";
+      finance_add.innerText = "1%";
+      fubi_need.innerText = 100000 - fubi_num;
+      Vip_next.innerHTML = "VIP2";
+      Vip_logo.setAttribute("src","{% static 'images/vip1.png' %}");
+      break;
+    case 2:
+      tast_add.innerText = "15%";
+      finance_add.innerText = "2%";
+      fubi_need.innerText = 1000000 - fubi_num;
+      Vip_next.innerHTML = "VIP3";
+      Vip_logo.setAttribute("src","{% static 'images/vip2.png' %}");
+      break;
+    case 3:
+      tast_add.innerText = "16%";
+      finance_add.innerText = "3%";
+      fubi_need.innerText = 5000000 - fubi_num;
+      Vip_next.innerHTML = "VIP4";
+      Vip_logo.setAttribute("src","{% static 'images/vip3.png' %}");
+      break;
+    case 4:
+      tast_add.innerText = "18%";
+      finance_add.innerText = "4%";
+      fubi_need.innerText = 10000000 - fubi_num;
+      Vip_next.innerHTML = "VIP5";
+      Vip_logo.setAttribute("src","{% static 'images/vip4.png' %}");
+      break;
+    case 5:
+      tast_add.innerText = "20%";
+      finance_add.innerText = "5%";
+      Vip_next_hint.innerHTML = "恭喜您，您已经达到最高Vip等级！";
+      Vip_logo.setAttribute("src","{% static 'images/vip5.png' %}");
+      break;
+  }
+  // 会员等级制度---------end
+
+
+});
+</script>
+</head>
+
+<body>
+    	<!--头部-->
+{% include "header.html" %}
+   	<!--内容-->
+<div class="Content">
+   	<div class="w1100">
+			{% include "account/left.html" %}
+      <div class="RightCont">
+        <div class="vip-head">
+          <div class="user-logo">
+            <img src="{% static 'images/head.png' %}"/>
+            <img id="Vip_logo" class="vip-logo" src="" />
+          </div>
+          <p class="vip-right">已提现<span id="fubi_get" class="fubi-get">500</span>福币，每单体验福利奖励增加<span id="tast_add" class="tast-add">10%</span>，理财福利返现金额增加<span id="finance_add" class="finance-add">1%</span> <br />
+          <span id="Vip_next_hint" class="Vip-next-hint">再提现<span id="fubi_need" class="fubi-need">90000</span>福币，即可升级为<span id="Vip_next" class="Vip-next">Vip2</span>，享受更多福利</span></p>
+          <div id="vip_rank" class="vip-rank">
+            <span id="progress" class="progress"></span>
+            <span class="fubi-num"><span id="fubi_get2" class="fubi-get">500</span>/10000000</span>
+          </div>
+        </div>
+        <div class="vip-intro">
+          <div class="intro-head">
+            <h3>会员制度图解</h3>
+            <a href="/press/8/">如何提升会员等级<span>?</span></a>
+          </div>
+          <div class="intro-content">
+            <img src="{% static 'images/vip-intro.png' %}"/>
+          </div>
+        </div>
+        <div class="vip-intro">
+          <div class="intro-head">
+            <h3>会员制度说明</h3>
+          </div>
+          <div class="intro-content">
+            <p>1、挖福利会员包括五个等级，分别为：VIP1、VIP2、VIP3、VIP4、VIP5；</p>
+            <p>2、提现奖励中的提现金额从会员制度上线之日起开始计算，在会员制度之前的提现数额不计入该体系中。</p>
+            <p>3、部分理财项目不参与到该会员制度中，会在理财板块标记出，同时也会在投资流程中详细说明。</p>
+            <p>4、体验福利奖励为体验福利任务奖励多增加相应的百分比<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例：项目a任务奖励500福币，则VIP5得到任务返现为：500+500*20%=600<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;理财福利返现为理财项目挖福利返现额多增加相应的百分比<br />
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例：项目b挖福利返现60000福币，则VIP5得到总返现为：60000+60000*5%=63000
+              </p>
+            <p>5、升级奖励为一次性奖励，在升级的同时发放。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+</body>
+</html>

@@ -1,0 +1,266 @@
+/*banner-container*/
+.banner-container {
+	height: 402px;
+	background: #fff;
+}
+
+.banner {
+	width: 680px;
+	height: 100%;
+	padding: 11px 0;
+	background-color: #fff;
+}
+
+.hongbao-recommend {
+	padding: 11px 0;
+	width: 570px;
+}
+.hongbao-recommend-item {
+	display: inline-block;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	width: 275px;
+	height: 185px;
+}
+/*banner-container--end*/
+
+/*红包、积分、福利购*/
+
+.hongbao-search {
+	position: relative;
+	padding: 20px 20px 0;
+	background-color: #fff;
+}
+.hongbao-input[type="text"] {
+	width: 1210px;
+	height: 46px;
+	padding-left: 10px;
+	border: 1px solid #e4e4e4;
+	border-radius: 8px;
+}
+.hongbao-submit {
+	position: absolute;
+	top: 20px;
+	right: 30px;
+	width: 46px;
+	height: 46px;
+	border: none;
+	background: url(../images/search.png) center center no-repeat;
+	cursor: pointer;
+}
+.hot-txt {
+	display: inline-block;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.hongbao-content {
+	background-color: #fff;
+}
+.hongbao-nav-box {
+	margin-top: 8px;
+	margin-left: 12px;
+}
+.hongbao-nav-name {
+	margin-right: 10px;
+	font-weight: normal;
+	line-height: 46px;
+	color: #666;
+}
+.hongbao-nav {
+	font-size: 0;
+}
+.hongbao-nav__item {
+	position: relative;
+	display: inline-block;
+	padding: 16px 10px;
+	font-size: 14px;
+	line-height: 1;
+	color: #222;
+	cursor: pointer;
+}
+.hongbao-nav__item:hover {
+	color: #91C11D;
+}
+.hongbao-choose {
+    font-size: 0;
+}
+.hongbao-nav__num {
+	display: inline-block;
+	margin-left: 4px;
+	color: #999;
+}
+.hongbao-choose {
+	font-size: 0;
+}
+.hongbao-choose__item {
+	display: inline-block;
+	margin-top: 16px;
+	margin-right: 20px;
+	font-size: 14px;
+	cursor: pointer;
+}
+.hongbao-nav__item.on, .hongbao-choose__item.on {
+	color: #91c11d;
+}
+.hongbao-nav__item:after {
+	content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    color: #91c11d;
+    background-color: #91c11d;
+    opacity: 0;
+    transform: scaleX(0);
+    transition: all 0.4s ease-in;
+}
+.hongbao-nav__item.on:after {
+	opacity: 1;
+	transform: scaleX(1);
+}
+
+.hongbao-box {
+	margin-top: 4px;
+}
+.hongbao {
+	position: relative;;
+	padding: 20px 35px;
+	border-bottom: 1px solid #f5f5f5;
+}
+.hongbao__title {
+    margin-bottom: 20px;
+    line-height: 1;
+}
+.hongbao__title:hover {
+  color: #ffbe00;
+}
+.hongbao__title-two {
+    margin-left: 10px;
+    color: #91C11D;
+}
+.hongbao__img {
+	width: 190px;
+	height: 190px;
+	margin-right: 24px;
+	float: left;
+}
+.hongbao__look {
+    font-size: 12px;
+    line-height: 32px;
+}
+.hongbao-more {
+	margin-top: 12px;
+	line-height: 32px;
+	text-align: center;
+	color: #222;
+	background-color: rgba(145,193,29,0.3);
+	cursor: pointer;
+}
+.hongbao__detailbox {
+    margin-top: 15px;
+    height: 96px;
+    overflow: hidden;
+}
+.hongbao__detail {
+}
+.hongbao-action {
+	margin-top: 12px;
+	line-height: 1;
+}
+.support {
+		position: relative;
+    height: 36px;
+    line-height: 36px;
+    border: 1px solid #e4e4e4;
+    border-radius: 8px;
+}
+.support__up, .support__down {
+	display: inline-block;
+	width: 80px;
+	text-align: center;
+	cursor: pointer;
+	vertical-align: bottom;
+}
+.support__up {
+    color: #91C11D;
+	border-right: 1px solid #e4e4e4;
+}
+.hongbao__time,
+.hongbao__source {
+	display: inline-block;
+	margin-top: 13px;
+	vertical-align: bottom;
+}
+.hongbao__source {
+	margin: 0 136px 0 30px;
+}
+.btn.m-hongbao-link {
+	position: absolute;
+	right: 35px;
+	bottom: 19px;
+}
+.btn.m-hongbao-link:hover {
+	color: #fff;
+}
+
+.wflbox__titlebox.m-mt {
+    margin-top: 15px;
+}
+.fuligou-box,
+.jifen-box {
+	margin-top: -6px;
+}
+.fuligou,
+.jifen {
+	height: 118px;
+	padding: 10px 20px;
+}
+.fuligou__img,
+.jifen__img {
+	width: 98px;
+	height: 98px;
+	float: left;
+	margin-right: 20px;
+}
+.fuligou__title,
+.jifen__title {
+	line-height: 24px;
+}
+.fuligou__title {
+    margin-bottom: 6px;
+}
+.fuligou:hover .fuligou__title {
+	color: #91c11d;
+}
+.jifen:hover .jifen__title {
+	color: #91c11d;
+}
+.price {
+    height: 20px;
+    font-size: 0;
+    color: #F95A5A;
+}
+.price__now, .price__tag, .price__before {
+    display: inline-block;
+    vertical-align: baseline;
+}
+.price__now {
+    font-size: 18px;
+}
+.price__tag {
+    margin: 0 2px;
+    font-size: 12px;
+}
+.price__before {
+    color: #999;
+    font-size: 12px;
+    text-decoration: line-through;
+}
+.jifen__num {
+	color: #91c11d;
+}
+/*红包、积分、福利购---end*/
+

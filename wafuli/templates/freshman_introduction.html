@@ -1,0 +1,244 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>一分钟了解挖福利</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="{% static 'css/common_freshman.css' %}" type="text/css" rel="stylesheet">
+		<link href="{% static 'css/freshman_intro.css' %}" type="text/css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/style_freshman_intro.css' %}" />
+	</head>
+
+	<body>
+		<div id="mask_box" class="mask-box">
+			<h2 class="top-title">福币来袭！每获取<number>100</number>个福币可兑换<number>1</number>元现金</h2>
+			<img src="{% static 'images/understand-monkey.png' %}" />
+			<div id="understand_close" class="understand-close" onclick="maskClose()">知道啦</div>
+		</div>
+		<div id="article">
+			<div class="page top section1 current">
+				<div class="contain" style="position: relative;">
+          <a href="/" class="to-index to-index-top"><<回到首页</a>
+					<div class="content-center">
+						<img src="{% static 'images/understand-qiqiu.png' %}" />
+						<div class="center-right">
+							<img src="{% static 'images/undetstand-text.png' %}" />
+							<p>挖福利是一个信息整合平台。<br /> 在这里，你可以：
+								<br /> 领取各种 免费福利 。<br /> 也可以 做做小任务，<br /> 赚点 零花钱。<br /> 或者小投一把，让钱 生钱。</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="page section2 free">
+				<div class="contain">
+					<!--路径-->
+					<div class="road-center">
+						<div class="left-circle"></div>
+						<div class="left-circle-mask"></div>
+						<div class="right-circle"></div>
+						<div class="right-circle-mask"></div>
+					</div>
+					<div class="road-top">
+					</div>
+					<div class="road-bottom">
+					</div>
+					<span class="left-car commom-car"></span>
+					<div class="free-guide-top guide">
+						<img src="{% static 'images/understand-guide-03.png' %}" />
+						<p>用&nbsp;户</p>
+					</div>
+					<div class="free-man-top man">
+						<img src="{% static 'images/understand-women.png' %}" />
+						<p>网站、微信公众号、app</p>
+					</div>
+					<div class="free-guide-center guide">
+						<img src="{% static 'images/understand-guide-03.png' %}" />
+						<p>挖福利</p>
+					</div>
+					<div class="free-store-center store">
+						<img src="{% static 'images/understand-store-02.png' %}" />
+					</div>
+					<p class="free-text-center text">免费领取红包、话费、<br /> 优惠券、电影票、爱奇艺vip会员
+					</p>
+					<div class="free-guide-bottom guide">
+						<img src="{% static 'images/understand-guide-03.png' %}" />
+						<p>省&nbsp;钱</p>
+					</div>
+					<div class="free-man-bottom man">
+						<p>省钱就是这么简单</p>
+						<img src="{% static 'images/understand-man-03.png' %}" />
+					</div>
+				</div>
+
+			</div>
+
+			<div class="page task section3">
+				<div class="contain">
+					<!--路径-->
+					<div class="road-center">
+						<div class="left-circle"></div>
+						<div class="left-circle-mask"></div>
+						<div class="right-circle"></div>
+						<div class="right-circle-mask"></div>
+					</div>
+					<div class="road-top">
+					</div>
+					<div class="road-bottom">
+					</div>
+					<span class="right-car commom-car"></span>
+					<!--页面元素-->
+					<div class="task-guide-top guide">
+						<img src="{% static 'images/understand-guide-02.png' %}" />
+						<p>用&nbsp;户</p>
+					</div>
+					<div class="task-man-top man">
+						<img src="{% static 'images/understand-man-02.png' %}" />
+					</div>
+					<p class="task-text-top text">网站、微信公众号、app</p>
+					<div class="task-guide-center guide">
+						<img src="{% static 'images/understand-guide-02.png' %}" />
+						<p>挖福利</p>
+					</div>
+					<div class="task-store-center store">
+						<p>下载APP并注册，完成任务<br /> 轻轻松松赚现金
+						</p>
+						<img src="{% static 'images/understand-store.png' %}" />
+					</div>
+					<div class="task-guide-bottom guide">
+						<img src="{% static 'images/understand-guide-02.png' %}" />
+						<p>挖福利</p>
+					</div>
+					<div class="task-store-bottom store">
+						<img src="{% static 'images/understand-money.png' %}" />
+						<p>动动手指、每天赚点零花钱</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="page finance section4">
+				<div class="contain">
+					<!--路径-->
+					<div class="road-center">
+						<div class="left-circle"></div>
+						<div class="left-circle-mask"></div>
+						<div class="right-circle"></div>
+						<div class="right-circle-mask"></div>
+					</div>
+					<div class="road-top">
+					</div>
+					<div class="road-bottom">
+					</div>
+					<span class="left-car commom-car"></span>
+					<div class="finance-guide-top guide">
+						<img src="{% static 'images/understand-guide.png' %}" />
+						<p>用&nbsp;户</p>
+					</div>
+					<div class="finance-man-top man">
+						<img src="{% static 'images/understand-man.png' %}" />
+					</div>
+					<div class="finance-guide-center guide">
+						<img src="{% static 'images/understand-guide.png' %}" />
+						<p>挖福利</p>
+					</div>
+					<p class="finance-text-top text">网站、微信公众号、app</p>
+					<div class="finance-guide-center-02 guide">
+						<img src="{% static 'images/understand-guide.png' %}" />
+						<p>金融平台</p>
+					</div>
+					<p class="finance-text-center text">挖福利通过三重考核，<br /> 甄选出安全优质的理财产品
+					</p>
+					<p class="finance-text-center-02 text">用户进行投资，拿到固定收益的同时，<br /> 也能拿到挖福利额外的返现
+					</p>
+					<div class="finance-guide-bottom guide">
+						<img src="{% static 'images/understand-guide.png' %}" />
+						<p>钱生钱</p>
+					</div>
+					<p class="finance-text-bottom text">谁说高收益一定伴随<br /> 着高风险？
+					</p>
+				</div>
+			</div>
+
+			<div class="page bottom section5">
+				<div class="contain">
+					<h2 class="title">为什么选择挖福利？</h2>
+					<a href="/" class="to-index">回到首页>></a>
+					<div class="cloud cloud-01">
+						<h4>全面</h4>
+						<p>红包、话费、电影券、</p>
+						<p>爱奇艺会员、各类优惠券</p>
+						<p>——<span class="point point-01">免费领！</span></p>
+					</div>
+					<div class="cloud cloud-02">
+						<h4>简单</h4>
+						<p>下载or注册app，</p>
+						<p>简单动手，<span class="point point-02">现金拿走！</span></p>
+					</div>
+					<div class="cloud cloud-03">
+						<h4>严谨</h4>
+						<p>对入驻金融平台进行</p>
+						<p><span class="point point-03">三重审核，</span></p>
+						<p>100分是满分也是及格分。</p>
+					</div>
+					<div class="cloud cloud-04">
+						<h4>大气</h4>
+						<p>平台推广费<span class="point point-04">全额返现</span>给用户，</p>
+						<p>同样的理财产品,</p>
+						<p>在这里收益更高！</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<ul id="navBar">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+		<script src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/fullPage.min.js' %}"></script>
+		<script type="text/javascript">
+			var runPage;
+			runSection = new FullPage({
+
+				id: 'article', // id of contain
+				slideTime: 800, // time of slide
+				effect: { // slide effect
+					transform: {
+						translate: 'Y', // 'X'|'Y'|'XY'|'none'
+						scale: [0, 1], // [scalefrom, scaleto]
+						rotate: [0, 0] // [rotatefrom, rotateto]
+					},
+					opacity: [0, 1] // [opacityfrom, opacityto]
+				},
+				mode: 'touch,wheel,nav:navBar', // mode of fullpage
+				easing: [0, .93, .39, .98]
+			});
+			window.onmousewheel = document.onmousewheel = function(e) {
+				var close = document.getElementById("understand_close"),
+					mask_box = document.getElementById("mask_box");
+				var direct = -e.wheelDelta || e.detail,
+					display = $('#mask_box').css('display');
+				//				display = mask_box.style.display;0
+				if(display == "block") {
+					return false;
+				} else if(direct > 0) {
+					runSection.go(runSection.thisPage() + 1);
+				} else {
+					runSection.go(runSection.thisPage() - 1);
+				}
+			};
+			var close = document.getElementById("understand_close"),
+				mask_box = document.getElementById("mask_box");
+
+			function maskClose() {
+				var close = document.getElementById("understand_close"),
+					mask_box = document.getElementById("mask_box");
+				mask_box.style.display = "none";
+			}
+		</script>
+
+	</body>
+
+</html>

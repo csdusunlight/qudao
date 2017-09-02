@@ -1,0 +1,418 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户中心</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript">
+$.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
+function validate_password(pwd){
+	var ret = false;
+	if (!pwd){
+		alert("不能为空");
+	}
+	else if (pwd.length>16){
+		alert("密码长度不能超过16位");
+	}
+	else if (pwd.length<6){
+		alert("密码长度不能少于6位");
+	}
+	else {
+		ret = true;
+	}
+	return ret;
+}
+$(function(){
+	$('.back-a5').parent().toggleClass("on");
+	email = "{{user.email}}";
+	start = email.indexOf("@");
+	email = email.substr(start+1);
+	mail_addr = 'http://mail.' + email;
+	$("a#goto").attr('href', mail_addr);
+	$(".None-p button").click(function(){
+		$(".Password-modify").css("display","none");
+		$(".Password-modify2").css("display","none");
+		// $(".Password-modify3").css("display","none");
+		$(".Password-modify4").css("display","none");
+	});
+	$(".login-modify").click(function(){
+		$(".Password-modify").css("display","block");
+	});
+	$("#acti2").click(function(){
+		$(".Password-modify2").css("display","block");
+	});
+	// $("#acti1").click(function(){
+	// 	var post_url = "{%url 'active_email' %}";
+	// 	$.ajax({
+	// 		url: post_url,
+	// 		dataType:"json",
+	// 		type:'GET',
+	// 		success:function(ret){
+	// 			if(ret.code==1){
+	// 				alert("请重新登录！")
+	// 				window.location.href = ret.url;
+	// 			}
+	// 			else if(ret.code==2){
+	// 				alert("发送验证邮件失败，邮箱地址不存在！");
+	// 			}
+	// 			else if(ret.code==0){
+	// 				$(".Password-modify3").css("display","block");
+	// 			}
+	// 		},
+	// 		error:function(){
+	// 			alert("请检查网络连接");
+	// 		}
+	// 	});
+	// });
+	$(".Pay-modify").click(function(){
+		$(".Password-modify4").css("display","block")
+	});
+	$("#submit").click(function(){
+		initp = $("#initial_password").val();
+		newp = $("#new_password").val();
+		newp_again = $("#new_password_again").val();
+		if (!initp || !newp || !newp_again){
+			alert("不能为空");
+			return;
+		}
+		else if (!validate_password(newp)){
+			return;
+		}
+		else if (newp_again!=newp){
+			alert("两次密码输入不一致");
+			return;
+		}
+		var post_url = "{%url 'password_change' %}";
+		$.ajax({
+			url: post_url,
+			dataType:"json",
+			type:'POST',
+			data : {
+				'initp': initp,
+				'newp': newp,
+			},
+			success:function(ret){
+				if(ret.code==1){
+					alert("请重新登录！")
+					window.location.href = ret.url;
+				}
+				else if(ret.code==2){
+					alert("初始登录密码输入错误！");
+				}
+				else if(ret.code==0){
+					alert("修改密码成功！");
+				}
+			},
+			error:function(){
+				alert("请检查网络连接");
+			}
+		});
+	});
+	$("#submit2").click(function(){
+		initp = $("#initial_password2").val();
+		newp = $("#new_password2").val();
+		newp_again = $("#new_password_again2").val();
+		if (!initp || !newp || !newp_again){
+			alert("不能为空");
+			return;
+		}
+		else if (!validate_password(newp)){
+			return;
+		}
+		else if (newp_again!=newp){
+			alert("两次密码输入不一致");
+			return;
+		}
+		var post_url = "{%url 'change_pay_password' %}";
+		$.ajax({
+			url: post_url,
+			dataType:"json",
+			type:'POST',
+			data : {
+				'initp': initp,
+				'newp': newp,
+				'type':'set',
+			},
+			success:function(ret){
+				if(ret.code==1){
+					alert("请重新登录！")
+					window.location.href = ret.url;
+				}
+				else if(ret.code==2){
+					alert("初始密码输入错误！");
+				}
+				else if(ret.code==0){
+					alert("修改密码成功！");
+					window.location.reload();
+				}
+			},
+			error:function(){
+				alert("请检查网络连接");
+			}
+		});
+	});
+	$("#submit4").click(function(){
+		initp = $("#initial_password4").val();
+		newp = $("#new_password4").val();
+		newp_again = $("#new_password_again4").val();
+		if (!initp || !newp || !newp_again){
+			alert("不能为空");
+			return;
+		}
+		else if (!validate_password(newp)){
+			return;
+		}
+		else if (newp_again!=newp){
+			alert("两次密码输入不一致");
+			return;
+		}
+		var post_url = "{%url 'change_pay_password' %}";
+		$.ajax({
+			url: post_url,
+			dataType:"json",
+			type:'POST',
+			data : {
+				'initp': initp,
+				'newp': newp,
+				'type':'change',
+			},
+			success:function(ret){
+				if(ret.code==1){
+					alert("请重新登录！")
+					window.location.href = ret.url;
+				}
+				else if(ret.code==2){
+					alert("初始密码输入错误！");
+				}
+				else if(ret.code==0){
+					alert("修改密码成功！");
+					$(".Password-modify4").css("display","none");
+				}
+			},
+			error:function(){
+				alert("请检查网络连接");
+			}
+		});
+	});
+});
+</script>
+
+</head>
+
+<body>
+	<div class="Max">
+    	<!--头部-->
+    	{% include "header.html" %}
+    	<!--内容-->
+    	<div class="Content">
+        	<div class="w1100">
+            	{% include "account/left.html" %}
+                <div class="RightCont">
+                	<div class="binding" style="padding-bottom:0;">
+                    	<div class="Binding-Top">
+                        	<h2>账户管理</h2>
+                        </div>
+                        <div class="Account">
+                        	<div class="Acchead">
+                            	<img src="{% static 'images/head.png' %}" />
+                            </div>
+                            <div class="Account-info">
+                            	<p><font>用户名：</font>{{user.username}}</p>
+                            	<div class="Salf-info">
+                                	<span>安全等级：</span>
+                                    <div class="Salf-box"><div class="Salf-cont" style="width:50%"></div></div>
+                                    <i>中</i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bin-more-info">
+<!--               <script type="text/javascript">
+  							$(document).ready(function(){
+  							  $(".bin-more-info li:odd").css("border-right","none")
+  							});
+							</script> -->
+                        	<ul>
+                            	<li>
+                                	<div class="bing-top-li">
+                                    	<div class="Bin-img"><div class="Bin-mi"><img style="width: 32px" src="{% static 'images/phone.png' %}" /></div></div>
+                                        <div class="Bin-right">
+                                        	<strong>手机（{{user.mobile}}）</strong>
+                                            <span>已绑定</span>
+                                        </div>
+                                    </div>
+                                    <div class="Bing-note"><p>您在申请体现时须通过手机获取验证码</p></div>
+                                </li>
+                            	<li style="display: none;">
+                            		{% if user.is_email_authenticated %}
+                            		<div class="bing-top-li">
+                                    	<div class="Bin-img"><div class="Bin-mi"><img style="width: 32px" src="{% static 'images/pic5.png' %}" /></div></div>
+                                        <div class="Bin-right">
+                                        	<strong>邮箱（{{user.email}}）</strong>
+                                            <span>已激活</span>
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                	<div class="bing-top-li">
+                                    	<div class="Bin-img"><div class="Bin-mi ons"><img style="width: 32px" src="{% static 'images/pic5.png' %}" /></div></div>
+                                        <div class="Bin-right">
+                                        	<strong>邮箱（{{user.email}}）</strong>
+                                            <a class="acti-jump" id="acti1">我要激活</a>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    <div class="Bing-note"><p>您可以通过邮箱找回密码</p></div>
+                                </li>
+                                <li style="border-right: none; border-bottom: 1px solid #ebebeb">
+                                	<div class="bing-top-li">
+                                    	<div class="Bin-img"><div class="Bin-mi"><img style="width: 32px" src="{% static 'images/pic6.png' %}" /></div></div>
+                                        <div class="Bin-right">
+                                        	<strong>登陆密码</strong>
+                                            <span>已设置</span><a class="login-modify">修改</a>
+                                        </div>
+                                    </div>
+                                    <div class="Bing-note"><p>登陆用户账户是需要输入的密码</p></div>
+                                </li>
+                                <li>
+                                {% if user.pay_password %}
+                                	<div class="bing-top-li">
+                                    	<div class="Bin-img"><div class="Bin-mi"><img style="width: 32px" src="{% static 'images/pic7.png' %}" /></div></div>
+                                        <div class="Bin-right">
+                                        	<strong>支付密码</strong>
+                                            <span>已设置</span><a class="Pay-modify">修改</a>
+                                        </div>
+                                    </div>
+                                 {% else %}
+                                	<div class="bing-top-li">
+                                    	<div class="Bin-img"><div class="Bin-mi ons"><img style="width: 32px" src="{% static 'images/pic7.png' %}" /></div></div>
+                                        <div class="Bin-right">
+                                        	<strong>支付密码</strong>
+                                            <a class="acti-jump" id="acti2">我要设置</a>
+                                        </div>
+                                    </div>
+                                 {% endif %}
+                                    <div class="Bing-note"><p>在账户资金变动时需要输入的密码</p></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <!--登录密码修改弹窗-->
+        <div class="Password-modify" style="display:none;">
+        	<div class="Passbox">
+            	<div class="Passinfo">
+                	<h2>登录密码修改</h2>
+
+                    	<div class="Input-in">
+                        	<span>初始密码：</span>
+                            <input id="initial_password" type="text" />
+                        </div>
+                    	<div class="Input-in">
+                        	<span>新登录密码：</span>
+                            <input id="new_password" type="text" />
+                        </div>
+                    	<div class="Input-in">
+                        	<span>再次确认新登录密码：</span>
+                            <input id="new_password_again" type="text" />
+                        </div>
+
+                        <div class="Submit-box">
+                        	<input id="submit" type="submit"  value="提  交" />
+                        </div>
+
+                </div>
+                <div class="None-p">
+            	<button></button>
+            </div>
+            </div>
+        </div>
+
+        <!--支付密码设置弹窗-->
+        <div class="Password-modify2" style="display:none;">
+        	<div class="Passbox">
+            	<div class="Passinfo">
+                	<h2>支付密码修改</h2>
+
+                    	<div class="Input-in">
+                        	<span>登陆密码：</span>
+                            <input id="initial_password2" type="text" />
+                        </div>
+                    	<div class="Input-in">
+                        	<span>新支付密码：</span>
+                            <input id="new_password2" type="text" />
+                        </div>
+                    	<div class="Input-in">
+                        	<span>再次确认新支付密码：</span>
+                            <input id="new_password_again2" type="text" />
+                        </div>
+
+                        <div class="Submit-box">
+                        	<input id="submit2" type="submit"  value="提  交" />
+                        </div>
+
+                </div>
+                <div class="None-p">
+            	<button></button>
+            </div>
+            </div>
+        </div>
+        <!--支付密码设置弹窗-->
+        <div class="Password-modify3" style="display:none;">
+        	<div class="Passbox">
+            	<div class="Passinfo" style="height:200px;">
+                	<h2>温馨提示</h2>
+                	<p>挖福利给您发送了一封激活邮件，<a target='_blank' id='goto'>请速查看！</a></p>
+              </div>
+                <div class="None-p">
+            	<button></button>
+            </div>
+            </div>
+        </div>
+        <div class="Password-modify4" style="display:none;">
+        	<div class="Passbox">
+            	<div class="Passinfo">
+                	<h2>支付密码修改</h2>
+                    	<div class="Input-in">
+                        	<span>初始密码：</span>
+                            <input id="initial_password4" type="text" />
+                        </div>
+                    	<div class="Input-in">
+                        	<span>新支付密码：</span>
+                            <input id="new_password4" type="text" />
+                        </div>
+                    	<div class="Input-in">
+                        	<span>再次确认新支付密码：</span>
+                            <input id="new_password_again4" type="text" />
+                        </div>
+                        <div class="Submit-box">
+                        	<input id="submit4" type="submit"  value="提  交" />
+                        </div>
+                </div>
+                <div class="None-p">
+            	<button></button>
+            </div>
+            </div>
+        </div>
+<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+    </div>
+
+
+
+</body>
+</html>

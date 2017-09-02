@@ -1,0 +1,331 @@
+@charset "utf-8";
+/* CSS Document */
+
+a { cursor:pointer;}
+.Top { float:left; width:100%; height:80px; background:#008fd7; box-sizing:border-box; padding:13.5px 30px;}
+.Name-info { float:right; width:auto; height:auto;}
+.Head-img { float:left; width:44px; height:44px; border-radius:200px; border:2px solid #82c7eb;}
+.Head-img img { width:100%; height:100%;}
+.Name { float:left; width:auto; height:auto;}
+.Name span { font-size:14px; color:#fff; font-family:Arial, Helvetica, sans-serif; padding-right:18px; margin-left:10px; background:url(../images/ico.png) no-repeat right; cursor:pointer; line-height:48px;}
+.Name-link { float:left; width:auto; height:auto; margin-left:5px;}
+.Name-link a { font-size:13px; color:#ffffff; line-height:48px; margin-left:16px;}
+.Signout { color:#f0ff00 !important;}
+.Content { margin-top:20px; box-sizing:border-box; padding-right:30px; padding-bottom:40px;}
+.LeftNav-in { float:left; width:100%; height:auto; background:#fafafa;}
+.LeftNav-in li {background-color: #e9f8ff;border-bottom: 2px solid #fff; float:left; width:100%; height:auto;}
+.LeftNav-in li a { float:left; width:100%; height:56px; box-sizing:border-box; padding:0 30px 0 54px; font-size:15px; color:#008fd7; line-height:56px;/*font-weight: bold;*/}
+.LeftNav-in li:hover { background-color:#008fd7}
+.LeftNav-in li:hover a { color:#fff;/* background:url(../images/back.png) right no-repeat ;*/}
+.LeftNav-in .on { background-color:#008fd7}
+.LeftNav-in .on a { color:#fff;/* background:url(../images/back.png) right no-repeat ;*/}
+.Right-box { float:left; width:100%; height:auto; }
+.Need-T {/*overflow: hidden;*/ float:left; width:100%; height:auto; border:1px solid #fafafa;}
+.Need-T span {margin-bottom: 10px; font-size:14px;font-weight: bold; color:#2b2b2b; line-height:44px; display:block; width:100%; height:44px; margin-left:20px; box-sizing:border-box;border-bottom: 2px solid #008fd7;/* background:#979797;*/}
+.Need-T span:before{
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    background-color: #fe1e1b;
+    margin-right: 20px;
+    position: relative;
+    top: 5px;
+}
+.Need-Cont { float:left; width:100%; height:auto; box-sizing:border-box; padding:12px 20px 5px;}
+.Need-Cont p {margin-left: 18px; font-size:12px; color:#666666; font-family:"宋体"; line-height:20px;margin-bottom: 10px;}
+.Need-Cont p font { color:#fe1e1b;background-color: #e9f8ff;border-radius: 4px;color: #fe1e1b;display: inline-block;font-weight: bold;padding: 0 10px;}
+.Need-Cont p a {/*color:#4daa84;*/display: inline-block;margin-left: 30px;font-weight: bold;text-decoration:underline;}
+.Table-in { float:left; width:100%; height:auto; margin-top:20px; border:1px solid #fafafa;}
+.Table-in table {margin-left: 20px;}
+.Table-in th { background-color: #e9f8ff;/*font-weight:400;*/ font-size:12px; color: #4daa84; text-align:center; border-bottom: 2px solid ##008fd7; height:44px;}
+.Table-in td { font-size:12px; color:#da1c1c; font-family:"宋体"; text-align:center; height:50px;}
+.Dateover { float:left; width:100%; height:auto; border:1px solid #fafafa; margin-top:20px;overflow: hidden;}
+.Dateover span {margin-left: 20px; font-size:14px;font-weight: bold; color:#2b2b2b; line-height:44px; display:block; width:100%; height:44px; margini-left:20px; box-sizing:border-box; border-bottom: 2px solid #008fd7;}
+.Dateover span:before{
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    background-color: #fe1e1b;
+    margin-right: 20px;
+    position: relative;
+    top: 5px;
+}
+.Date-box { float:left; width:100%; height:auto; box-sizing:border-box; padding:0 15px;}
+.Date-Form { float:left; width:100%; height:auto; padding:20px 0;}
+.Date-Form form {text-align: right;margin-left: 6px; font-size:12px; color:#666666; line-height:30px;}
+.Date-Form form input[type="month"]{ width:auto; padding:5px 0; border:1px solid #cecece; outline:none; text-align:center; background:url(../images/motime.png) no-repeat 95%;}
+.Date-Form form input[type="month"]:hover { background:none;}
+.Date-Form form input[type="month"]:focus { background:none;}
+.Date-Form form input[type="submit"]{ width:79px; height:30px; border:1px solid #0770a6; background:#008fd7; color:#fff; font-size:16px; margin-left:5px;}
+.Date-Form form input[type="button"]{ width:79px; height:30px; /*border:1px solid #0770a6;*/ background:#4daa84; color:#fff; font-size:16px; margin-left:20px;}
+.ListTable { float:left; width:100%; height:auto;}
+.ListTable table { border:1px solid #fafafa;}
+.ListTable th { background-color: #e9f8ff; text-align:center; font-weight:bold; font-size:12px; color:#4daa84; height:44px;}
+.ListTable td {border-bottom: 1px dashed #4daa84; text-align:center; font-size:12px; color:#666666; font-family:"宋体"; height:46px;}
+.page { float:left; width:100%; height:auto; text-align:center; padding:20px 0; font-family:"宋体";}
+.page font { color:#008fd7;}
+#text-box { outline:none; width:40px; height:18px; text-align:center;}
+.Bottom { float:left; width:100%; height:49px; background:url(../images/botton.png) repeat-x center; text-align:center;}
+.Bottom p { font-size:14px; color:#fff; line-height:49px;}
+
+.Td-ing1 { background:#fafafa;}
+@media screen and (max-width: 1240px) {
+.Td-ing1 { background:#fafafa; width:160px;}
+	}
+
+.Criteria { float:left; width:100%; height:auto; border:1px solid #fafafa;}
+.Criteria span {margin-bottom: 10px; font-size:14px;font-weight: bold; color:#2b2b2b; line-height:44px; display:block; width:100%; height:44px; margin-left:20px; box-sizing:border-box;border-bottom: 2px solid #008fd7;/* background:#979797;*/}
+.criteria span:before{
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    background-color: #fe1e1b;
+    margin-right: 20px;
+    position: relative;
+    top: 5px;
+}
+.Crite-box { float:left; width:100%; height:auto; box-sizing:border-box; padding:0 15px;}
+.Crite-box i { font-size:12px; color:#666666; line-height:30px; vertical-align:middle;}
+.Crite-box td { text-align:center; height:50px;}
+.Crite-box td input[type="datetime-local"] { height:30px; padding:3.5px 5px; box-sizing:border-box; width:60%; margin-left:1%; border:1px solid #4daa84; background:url(../images/motime.png) no-repeat 95%; vertical-align:middle;}
+.Crite-box td input[type="datetime-local"]:hover { background:none;}
+.Crite-box td input[type="datetime-local"]:focus { background:none;}
+.Crite-box td input[type="text"],
+.Crite-box td input[type="date"]{ width:58%; margin-left:1%; height:28px; border:1px solid #4daa84; outline:none; padding:0 5px; box-sizing:border-box; vertical-align:middle;}
+.Crite-box td select{ width:60%; margin-left:1%; height:28px; border:1px solid #4daa84; outline:none; padding:0 5px; box-sizing:border-box; vertical-align:middle;}
+.Submit-in { width:100%; height:auto; text-align:right; padding:10px 0;}
+.Submit-in input, .leading-in input { width:150px; height:30px; border:1px solid #1377aa; color:#fff; font-size:16px; color:#fff; padding:0 40px 0 0; box-sizing:border-box; min-width:80px; margin:0 7px;}
+.Submit-in input[type="submit"]{ background:url(../images/ico1.png) no-repeat 80% #4daa84;border: none;}
+.Submit-in input[type="button"], .leading-in input[type="button"]{ background:url(../images/ico2.png) no-repeat 80% #4daa84;border: none;}
+.Submit-in .choose-btn {
+    width: 30px;
+    background: #4daa84 !important;
+    padding-right: 0;
+    border-radius: 8px;
+}
+.Submit-in i,
+.Submit-in textarea {float: left;}
+.leading-in #import,
+.leading-in #fileupload1,
+.input-clone {
+    display: inline-block;
+    width:150px;
+    height:30px;
+    background-color: #4daa84;
+    border:none;
+    color:#fff;
+    font-size:16px;
+    box-sizing:border-box;
+    min-width:80px;
+    vertical-align:bottom;
+}
+.leading-in {
+    position: relative;
+}
+.input-clone {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    text-align: center;
+    line-height: 30px;
+}
+#import {
+    margin-left: 20px;
+}
+.hint-box {
+    display: inline-block;
+}
+.Tin-table { float:left; width:100%; height:auto; margin-top:18px; border:1px solid #fafafa;}
+.Tin-table th { font-weight:400; font-size:12px; color:#4daa84; background:#e9f8ff; height:44px;}
+.Tin-table td {border-bottom: 1px dashed #4daa84;font-size: 12px; text-align:center; height:44px; font-family:"宋体"; color:#666666;}
+.Tin-table td a { color:#666666; font-family:"宋体"}
+/*任务管理修改部分*/
+.img-up {
+    display: block;
+    height: 34px;
+}
+.img-up img {
+    height: 100%;
+}
+.Submit-box { float:left; width:100%; height:auto; text-align:center; padding:10px 0; min-width:190px;}
+.Submit-box input{ width:40%; height:30px; border:1px solid #1377aa; color:#fff; font-size:16px; color:#fff; padding:0 40px 0 0; box-sizing:border-box; min-width:80px; margin:0 7px; float:left;}
+.Submit-box input[type="submit"]{ background:url(../images/ico1.png) no-repeat 80% #4daa84;border:none;}
+.Submit-box input[type="button"]{ background:url(../images/ico2.png) no-repeat 80% #4daa84;border: none;}
+
+
+.Tin-table-box { float:left; width:100%; height:auto; margin-top:18px; border:1px solid #fafafa;}
+.Tin-table-box th { font-weight:400; font-size:12px; color:#fff; background:#979797; height:44px;}
+.Tin-table-box td { text-align:center; height:44px; font-family:"宋体"; color:#666666;}
+.Tin-table-box td a { color:#666666; font-family:"宋体"}
+.fyin { cursor:pointer;}
+.BackNow, .project-box, .delete-project { position:fixed; width:100%; height:100%; background:url(../images/back-in.png); display:none;}
+.w570-box { width:570px; height:auto; overflow:hidden; margin:10% auto; background:#fff; position:relative;border-radius: 8px;}
+.w570-box h3 {padding: 20px 0; font-weight:400; font-size:25px; color:#04b3ff; line-height:44px; /*background:#979797;*/ text-align:center;}
+.none-x { position:absolute; right:17px; top:13px; width:19px; height:19px; border:none; background:url(../images/none.png) no-repeat center; outline:none;}
+.Finnow { float:left; width:100%; height:auto; padding:20px 6px; box-sizing:border-box; text-align:center;}
+.Finnow span { font-size:12px; color:#666666; line-height:28px; margin-left:30px;}
+.Finnow input[type="text"],.Finnow input[type="datetime-local"], .Finnow select { width:153px; height:28px; border:1px solid #cdcdcd; line-height:28px; outline:none; text-indent:10px;}
+.Finnow-Sub {/* float:left;*/ width:100%; height:auto; margin-top:30px;}
+.Finnow-Sub input[type="submit"]{ width:98px; height:26px; background:url(../images/pic2.png) no-repeat right #008fd7; border:none; border-radius: 13px; color:#fff; padding-right:10px; margin:0 5px;}
+.Finnow-Sub input[type="button"]{ width:98px; height:26px; background:url(../images/pic1.png) no-repeat right #c8c8c8; border:none; border-radius: 13px; color:#fff; padding-right:10px; margin:0 5px;}
+.Audit { position:fixed; width:100%; height:100%; background:url(../images/back-in.png); display:none;}
+.Audit-in { float:left; width:100%; height:auto; padding:20px 40px; box-sizing:border-box; text-align:center;}
+.Audit-in span { float:left; width:92px; height:auto;}
+.Audit-in textarea { width:394px; height:80px; line-height:20px; resize:none; box-sizing:border-box; float:left; outline:none;}
+.jion-s { cursor:pointer;}
+.Deny { position:fixed; width:100%; height:100%; background:url(../images/back-in.png);display:none;}
+.Deny-y { position:fixed; width:100%; height:100%; background:url(../images/back-in.png); display:none;}
+.w570-box h5 { font-size:25px; color:#666666; font-weight:400; text-align:center; line-height:60px;}
+
+.Balance { position:fixed; width:100%; height:100%; background:url(../images/back-in.png); display:none;}
+
+.Balance-in { float:left; width:100%; height:auto; padding:20px 20px 0; box-sizing:border-box; }
+.Balance-in textarea { width:406px; height:80px; line-height:20px; resize:none; box-sizing:border-box; outline:none; border:1px solid #cdcdcd}
+
+
+.Points,
+.Blacklist,
+.Blacklist-none,
+.Channel,
+.Channel-none,
+.changeChannel { position:fixed; width:100%; height:100%; background:rgba(0,0,0,0.3); display:none;}
+/*#item_1555{width: 100px;}*/
+
+/*优惠券发放页面样式*/
+.Right-box i {
+        font-size: 16px;
+}
+#type {
+        width: 125px;
+        height: 28px;
+        border: 1px solid #4daa84;
+        border-radius: 4px;
+    }
+#type+i{
+        margin-left: 50px;
+}
+#project,#selectuser {
+    width: 125px;
+    height: 28px;
+    border: 1px solid #4daa84;
+    border-radius: 4px;
+}
+#submit {
+        background-color: #0088CC;
+        width: 180px;
+        height: 40px;
+        color: #fff;
+        margin-top: 50px;
+        font-size: 16px;
+/*        margin-left: 20px;*/
+        border: none;
+}
+#cash_coupon {
+        margin-top: 50px;
+}
+#selectuser+i{
+        margin-left: 50px;
+}
+#users {
+        height: 200px;
+        border: 1px solid #0088cc;
+}
+#users+label {
+        display: block;
+        margin-top: 10px;
+}
+#uploadbtn1 {
+        background-color: #4daa84;
+        width: 79px;
+        height: 30px;
+        color: #fff;
+        font-size: 16px;
+        margin-left: 20px;
+        border: none;
+        position: relative;
+        top: 10px;
+}
+/*立项部分添加*/
+.LeftNav-in .admin-project li a {
+	background-color: #fff;
+	color: #4daa84;
+	padding-left: 80px;
+}
+.LeftNav-in .admin-project li:hover a {
+	background-color: #4daa84;
+	color: #fff;
+}
+.admin-project {
+	display: none;
+}
+.show-project .admin-project {
+	display: block;
+}
+.project-item.show a {
+	background-color: #4daa84 !important;
+	color: #fff !important;
+}
+
+.set-project p {
+	margin-bottom: 10px;
+}
+.set-project span {
+	display: inline-block;
+	width: 90px;
+	margin-left: 0;
+	font-size: 14px;
+	text-align: right;
+}
+.set-project input[type="text"],
+.set-project input[type="date"],
+.set-project input[type="datetime-local"],
+.set-project select {
+	width: 200px;
+	height: 30px;
+}
+.pie-box {
+	display: inline-block;
+	width: 32%;
+}
+.tab-box {
+	font-size: 0;
+}
+.tab-item {
+	display: inline-block;
+	width: 100px;
+	font-size: 14px;
+	line-height: 30px;
+	text-align: center;
+	color: #fff;
+	background-color: darkseagreen;
+	cursor: pointer;
+}
+.tab-item.cur {
+	color: red;
+}
+.look-finish {
+	color: red !important;
+	text-decoration: underline;
+	cursor: pointer;
+}
+.finish-project p {
+	font-size: 14px;
+	line-height: 30px;
+	text-align: center;
+}
+.Need-T>.num-detail {
+	margin-left: 20px;
+	font-size: 16px;
+	line-height: 30px;
+	font-weight: bold;
+
+}
+.pie-box .num-detail {
+	font-size: 16px;
+	margin-left: 100px;
+	margin-top: 20px;
+}
+/*立项部分---end*/

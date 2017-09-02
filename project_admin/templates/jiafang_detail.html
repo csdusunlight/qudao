@@ -1,0 +1,236 @@
+{% extends "project_base.html" %} {%load staticfiles%} {% block js %}
+<script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
+<script type="text/javascript">
+	$.ajaxSetup({
+		data: {
+			csrfmiddlewaretoken: '{{ csrf_token }}'
+		},
+	});
+	var data = '<table width="100%"><tr><th>甲方ID</th><th>甲方名称</th>' +
+		'<th>甲方网址</th><th>甲方联系信息</th><th>操作</th>' +
+		'</tr>[results]<tr id="parent{id}"><td>{id}</td><td>{name}</td>' +
+		'<td>{url}</td><td><a href="/project/contacts_detail/{id}" target="_blank">查看</a></td>' +
+		'<td id="item_{id}"><a class="revise-btn" onclick="pass({id})">编辑</a>' +
+		' │ <a class="delete-btn" onclick="refuse({id})">删除</a></td></tr>[/results]</table>';
+	var url = "/project/platform/" + "?page={page}";
+	var url2 = "/project/platform/";
+	
+	var project_flag;		// project_flag = -1 时，为导入单条数据；project_flag != -1 时，为修改单条数据
+	var parent;
+	
+	function pass(id) {			//弹出修改单条数据弹窗
+		$("input#project_change_id").val(id);
+		project_flag = id;
+		
+		parent = "parent" + id;
+		var dom = document.getElementById(parent);
+		var children1 = $(dom).find("td").eq(1).text(),
+			children2 = $(dom).find("td").eq(2).text(); 
+
+		$("#name_change").val(children1);
+		$("#url_change").val(children2);
+		
+		$(".change-project").show();
+	}
+	
+	function refuse(id) {		//弹出删除项目数据弹窗
+		$("input#project_delete_id").val(id);
+		$(".delete-project").show();
+	}
+	
+	
+	$(document).ready(function() {
+		$("li.home15").addClass("show-project").toggleClass("on");
+		$("li.home3").toggleClass("show");
+		$(".Tin-table tr:even").css("background-color", "#fcfcfc");
+		
+		
+		$("#pagedata").ajaxPage({
+			url: url,
+			pageId: $("#page"),
+			run: true,
+			content: data,
+		});
+		
+//		$("#tab li").click(function(){				//		tab切换
+//			if($(this).attr("class")!="cur"){
+//				$(this).toggleClass("cur").siblings().removeClass("cur")
+//				var index = $(this).index();
+//				$("#page").empty();
+//				$("#pagedata").ajaxPage({
+//				    url:url,
+//				    pageId:$("#page"),
+//				    run:true,
+//				    content:data,
+////				    complete:pagecallback,
+//				});
+//			}
+//	 	});
+		
+		$("#single_import").click(function(){			//弹出单条导入弹窗
+			$(".add-project").show();
+			project_flag = -1;
+		})
+		
+		$(".none-x, .none-x-s").click(function() {		// 关闭或取消 弹窗
+			$(".project-box").hide(); 
+		})
+		
+		$('#add_project_btn').click(function() {		//点击新建数据
+			var name_change = $("#name_add").val(),
+				url_change = $("#url_add").val();
+			
+			$.ajax({
+				url: url2,
+				dataType: "json",
+				type: "POST",
+				data: {
+					'name': name_change,
+					'url': url_change
+				},
+				success: function(ret) {
+						alert("操作成功！");
+				},
+				error: function(ret) {
+					alert(JSON.stringify(ret));
+				}
+			});
+			
+			$(".add-project").hide();
+		});
+		
+		$('#change_project_btn').click(function() {		//点击修改数据
+			var name_change = $("#name_change").val(),
+				url_change = $("#url_change").val();
+			
+			$.ajax({
+				url: url2 + project_flag + "/",
+				dataType: "json",
+				type: "PUT",
+				data: {
+					'name': name_change,
+					'url': url_change
+				},
+				success: function(ret) {
+					console.log(ret);
+					alert("操作成功！");
+					var dom = document.getElementById(parent);
+					$(dom).find("td").eq(1).text(ret.name);
+					$(dom).find("td").eq(2).text(ret.url);
+				},
+				error: function(ret) {
+					alert(JSON.stringify(ret));
+				}
+			});
+			$(".change-project").hide();
+		});
+		
+		$('#delete_project_btn').click(function() {		//点击确认按钮删除单条项目数据
+			project_flag = $("input#project_delete_id").val();
+			console.log(url2 + project_flag);
+			
+			$.ajax({
+				url: url2 + project_flag + "/",
+				dataType: "json",
+				type: "DELETE",
+				data: {
+					'id': project_flag,
+				},
+				success: function(ret) {
+						alert("操作成功！");
+				},
+				error: function(ret) {
+					alert(JSON.stringify(ret));
+				}
+			});
+			$(".delete-project").hide();
+		});
+		
+	});
+</script>
+{% endblock js %} {% block right %}
+<!--<div class="Criteria">
+	<span>搜索条件</span>-->
+	<div class="Crite-box">
+		<form>
+			<!--<ul id="tab" class="tab-box">
+				<li class="tab-item cur">显示</li>
+				<li class="tab-item">隐藏</li>
+			</ul>-->
+			<div class="Submit-in">
+				<input id="single_import" type="button" value="新建甲方信息" />
+			</div>
+			
+		</form>
+	</div>
+<!--</div>-->
+
+<div class="Tin-table">
+	<div id="pagedata">
+	</div>
+	<div class="Page-in-admin">
+		<div class="page" id="page">
+		</div>
+	</div>
+</div>
+{%endblock%} {% block modal %}
+<div class="add-project project-box">
+	<div class="w570-box">
+		<h3 class="popup-title">新建甲方信息</h3>
+		<button class="none-x"></button>
+		<form class="Finnow set-project">
+			<p>
+				<span>甲方名称：</span>
+				<input id="name_add" type="text" />
+			</p>
+			<p>
+				<span>甲方网址：</span>
+				<input id="url_add" type="text" />
+			</p>
+			<div class="Finnow-Sub">
+				<input id="add_project_btn" type="submit" value="确认" onclick="return false;"/>
+				<input type="button" value="取消" class="none-x-s" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="change-project project-box">
+	<div class="w570-box">
+		<h3 class="popup-title">修改甲方数据</h3>
+		<button class="none-x"></button>
+		<form class="Finnow set-project">
+				<input id="project_change_id" type="hidden" />
+			<p>
+				<span>甲方名称：</span>
+				<input id="name_change" type="text" />
+			</p>
+			<p>
+				<span>甲方网址：</span>
+				<input id="url_change" type="text" />
+			</p>
+			
+			<div class="Finnow-Sub">
+				<input id="change_project_btn" type="submit" value="确认" onclick="return false;"/>
+				<input type="button" value="取消" class="none-x-s" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<!--删除项目弹窗-->
+<div class="delete-project project-box">
+	<div class="w570-box">
+		<h3>确认删除该条数据？</h3>
+		<button class="none-x"></button>
+		<form class="Audit-in">
+			<input id="project_delete_id" type="hidden" />
+			<div class="Finnow-Sub">
+				<input id="delete_project_btn" type="submit" value="确认" class="Deny-box" onclick="return false;" />
+				<input type="button" value="取消" class="none-x-s" />
+			</div>
+		</form>
+	</div>
+</div>
+<!--end-->
+{% endblock modal %}

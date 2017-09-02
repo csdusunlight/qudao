@@ -1,0 +1,47 @@
+@charset "utf-8";
+/*可合并到你的css中*/
+.page {background-color:#fff;text-align: right; line-height: 24px; font-size: 0;}
+.page a,.page span { color:#333; text-decoration:none;cursor: pointer; padding: 0 4px; border: 1px solid #dedede; display: inline-block; font-size: 12px; margin-right: 5px; }
+.page .disable { background-color: #f3f3f3; cursor: default; color: #999; }
+.page a:hover,.page .on { background-color: #91C11D; text-decoration: none; color: #fff; border-color: #91C11D; }
+.page .on { cursor: default; }
+.page .dot { cursor: default; border: none; vertical-align: 5px; }
+.page .href{border:none;height:30px;/*line-height:33px;*/overflow:hidden;vertical-align:top;_vertical-align:middle;}
+.page .a_href,.page .on,.page .a_first,.page .a_last {width:26px;text-align:center;}
+.page .dot{width:18px;text-align:center;}
+.page label{ vertical-align:middle;}
+.page .a_text{margin:0 5px;width:26px;border:1px solid #dedede;text-align:center;height:18px;line-height:18px; vertical-align:middle;}
+.page .a_text:focus{border-color:#a40000;}
+.page .a_button{margin-left:5px;background-color:#91C11D;color:#fff;width:40px;text-align:center;border:0;height:24px;line-height:24px; vertical-align:middle; cursor:pointer;}
+
+.Page-in { position:absolute; width:880px; border-top:none !important; height:auto; padding:10px 0; text-align:right; /*border:1px solid #eeeeee;*/top:320px;}
+.Page-in-score { position:absolute; width:880px; border-top:none !important; height:auto; padding:10px 0; text-align:right; top:320px;}
+.Page-in-coupon { position:absolute; width:880px; border-top:none !important; height:auto; padding:10px 0; text-align:right; top:300px;}
+.Page-in-exc-coupon-detail { position:absolute; width:880px; border-top:none !important; height:auto; padding:10px 0; text-align:right; top:360px;}
+.Page-in-recomm{margin-right:50px;margin-top:10px;}
+.changes-p {
+    /*border-bottom: 1px solid #eee;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;*/
+    padding:10px 0;
+    padding-right: 2rem;
+	width: 930px;
+}
+/*.changes-p-about {
+
+    height:auto;
+    line-height: 50px;
+    text-align: right;
+    padding:20px 0;
+
+	width: 930px;
+}
+.changes-p-msg {
+
+    height:auto;
+    line-height: 50px;
+    text-align: right;
+    padding:20px 0;
+	float:left;
+	width: 100%;
+}*/

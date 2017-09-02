@@ -1,0 +1,107 @@
+{% extends "detail-base.html" %}
+{% load staticfiles %}
+{% block jsblock %}
+<script type="text/javascript">
+{%if news.isonMobile %}
+var ismobile = true;
+{%else%}
+var ismobile = false;
+var url_openwindow = "{% url 'exp_welfare_openwindow' %}"
+{%endif%}
+$(function(){
+	var ahref = $("a.login").attr("href");
+	ahref += "?next="+this_url;
+	$("a.login").attr("href",ahref);
+	$("button.te-mo").click(function(){
+		if(ismobile){
+			$.ajax({
+				url:"{%url 'exp_welfare_erweima' %}?id=" + id + "&type=" + type,
+				dataType:"json",
+				success:function(ret){
+					if(ret.code==0){
+						alert("请先登录！")
+						window.location.href = ret.url;
+					}
+					else if(ret.code==1){
+						$('img#erweima').attr('src',ret.url);
+						$('#myReModal').modal();
+					}
+				},
+				error:function(){
+					alert("请检查网络连接");
+				}
+			});
+		}
+		else {
+			window.open(url_openwindow + "?id=" + id + "&type=" + type);
+		}
+
+	});
+	$("button.td-tj").click(function(){
+		var telnum = $('input#telnum').val();
+		telnum = telnum.replace(/(^\s*)|(\s*$)/g, "");
+		var remark = $('input#remark').val();
+		var re=/^1[1,2,3,4,6,5,7,8,9]\d{9}$/;
+		if(!re.test(telnum)){
+			alert("手机号格式不正确！")
+		}
+		else{
+			$('#myModal').modal();
+		}
+	});
+});
+</script>
+{% endblock %}
+
+ {% block expblock %}
+  <div class="td-ti">
+  	<div style="max-width:500px;max-height:175px;float:left;overflow:hidden"><img src="{{news.pic.url}}" style="padding:10px"></img></div>
+    <div class="td-inimg">
+    	<p class="tli-title td-tij">{{news.title}}</p>
+        <p class="td-p">
+        {% if not user.is_authenticated %}
+        	<span><a href="{%url 'register' %}"  style="color:#0090D7;">注册</a></span>&nbsp;或&nbsp;<span>
+        	<a class="login" href="{%url 'login' %}"  style="color:#0090D7;">登陆</a>&nbsp;</span>
+			挖福利体验,完成后请刷新本页,查看最新状态
+		{% else %}
+        	请认真阅读下面的奖励规则和体验步骤后再点击“立即体验”
+        {% endif %}
+        </p>
+        {% if not news.is_expired %}
+        <button class="md-trigger te-mo">立即体验</button>
+        {% else %}
+        <button class="te-moe">已结束</button>
+        {% endif %}
+    </div>
+  </div>
+  {%endblock%}
+	{%block dialogblock%}
+  <!--//体验-->
+      <div class="modal fade" id="myReModal">
+          <div class="modal-dialog modal-mg">
+            <div class="modal-content">
+            <div>
+                <p style="color:#F08619;font-size:16px;margin:2em 0px 0em 0px;">用手机扫描二维码进行体验</p>
+                <img id='erweima' src="#" style="margin:2em 0px 3em 0px;"/>
+            </div>
+                </div>
+              </div>
+        </div>
+
+      <div class="modal fade" id="myModal">
+          <div class="modal-dialog modal-mg">
+            <div class="modal-content">
+             <div class="md-content">
+				<div>
+					<p style="color:#04B3FF;font-size:25px;">温馨提示</p>
+					<p style="padding: 0px 0px 30px 0px;">内容提交后不可更改,提交别人的信息会冻结账户,请谨慎确认</p>
+                    <a id="confirm" class="submit_mores">确认</a>
+                    <a id="cancel" class="submit_mores" class="close" data-dismiss="modal" aria-label="Close">取消</a>
+				</div>
+			</div>
+				</div><!-- modal-body-->
+
+                </div>
+       </div>
+       {%endblock%}
+

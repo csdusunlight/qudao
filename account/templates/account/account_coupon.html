@@ -1,0 +1,268 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户中心</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+<script type="text/javascript" >
+$.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
+var data0 = '<ul>[data]<li><strong>{amount} <font></font></strong><span>{title}</span>'+
+'<p>有效期至：{endtime}</p><p class="coupon-use-intro"><b>使用说明：</b><span class="intro-text">{introduction}</span></p>'+
+'<a class="open" mobile="{isonMobile}" url="{url}" pro_id="{pro_id}">进入网站</a><a id="{id}" onClick="pop({id})" class="bul">兑  换</a></li>[/data]</ul>';
+var data1 = '<ul>[data]<li class="jiaxi"><strong>{amount} <font></font></strong><span>{title}</span>'+
+'<p>有效期至：{endtime}</p><p class="coupon-use-intro"><b>使用说明：</b><span class="intro-text">{introduction}</span></p>'+
+'<a class="open" mobile="{isonMobile}" url="{url}" pro_id="{pro_id}">进入网站</a><a id="{id}" onClick="pop({id})" class="bul">兑  换</a></li>[/data]</ul>';
+var data2 = '<ul>[data]<li class="shiyong"><strong>{amount} <font></font></strong><span>{title}</span>'+
+'<p><b>兑换码：</b>{code}</p><p>有效期至：{endtime}</p><p class="coupon-use-intro"><b>使用说明：</b><span class="intro-text">{introduction}</span></p>'+
+'<a class="open" mobile="{isonMobile}" url="{url}" pro_id="{pro_id}">进入网站</a></li>[/data]</ul>';
+var data3 = '<table width="100%"><thead><tr><th width="80">类型</th><th width="130">项目'+
+'</th><th width="130">优惠券面值</th><th width="140">提交手机号</th><th width="175">'+
+'提交时间</th><th width="100">状态</th><th>备注</th></tr></thead><tbody>'+
+'[data]<tr><td>现金券</td><td>{title}</td><td>{amount}</td><td>{account}</td>'+
+'<td>{time}</td><td reason="{reason}" class="state_{state_int}">{state}</td><td>{remark}</td></tr>[/data]'+
+'</tbody></table>';
+var url = "{% url 'get_user_coupon_page' %}" + "?page={page}&size={pageSize}&filter=";
+var url2 = "{% url 'get_user_coupon_exchange_detail' %}" + "?page={page}&size={pageSize}";
+var url_openwindow = "{% url 'exp_welfare_openwindow' %}";
+function pop(n){
+	$("#coupon_id").val(n);
+	$(".Password-modify").css("display","block");
+}
+function emptydisplay(obj){
+	pic_url = "{%static 'images/picin.png' %}";
+	obj.html('<div class="Defa-in"><img src="' + pic_url + '">'+
+			'<h2>咦~~ 您还没有相关记录~~</h2></div>');
+}
+$(function(){
+	$('.back-a11').parent().toggleClass("on");
+	$(".None-p button").click(function(){
+		$(".Password-modify").css("display","none");
+	});
+	$("#pagedata1").ajaxPage({
+	    url:url+0,
+	    pageId:$("#page1"),
+	    pageSize:6,
+	    run:true,
+	    content:data0,
+	});
+	$("#pagedata2").ajaxPage({
+	    url:url2,
+	    pageId:$("#page2"),
+	    pageSize:6,
+	    run:true,
+	    content:data3,
+	});
+	$(".Swi-Top li").click(function(){
+		if($(this).attr("class")!="on"){
+			$(this).toggleClass("on").siblings().removeClass("on")
+			var index = $(this).index();
+			var data = data0;
+      if (index==1){
+        data = data1;
+      }
+			if (index==2){
+				data = data2;
+			}
+			$("#page").empty();
+			$("#pagedata1").ajaxPage({
+			    url:url+index,
+			    pageId:$("#page1"),
+			    pageSize:6,
+			    run:true,
+			    content:data,
+			});
+		}
+	});
+	$('#submit').click(function(){
+		var telnum = $("#telnum").val();
+		var remark = $("#remark").val();
+		var amount = $("#amount").val();
+		var term = $("#term").val();
+		var id = $("#coupon_id").val();
+		telnum = telnum.replace(/(^\s*)|(\s*$)/g, "");
+		remark = remark.replace(/(^\s*)|(\s*$)/g, "");
+		term = term.replace(/(^\s*)|(\s*$)/g, "");
+		amount = amount.replace(/(^\s*)|(\s*$)/g, "");
+		var re_amount=/^\d+(\.\d+)?$/;
+		var re=/^1[1,2,3,4,6,5,7,8,9]\d{9}$/;
+		if(!re.test(telnum)){
+			alert("手机号格式不正确！")
+			return;
+		}
+		if(!re_amount.test(amount)){
+			alert("投资金额不能为空且必须为纯数字格式！")
+			return;
+		}
+		if(!re_amount.test(term)){
+			alert("投资标期不能为空且必须为纯数字格式！")
+			return;
+		}
+		amount = parseFloat(amount);
+		$.ajax({
+			url:"{%url 'useCoupon' %}",
+			dataType:"json",
+			type:"POST",
+			data : {
+				'id': id,
+				'telnum': telnum,
+				'remark': remark,
+				'term': term,
+				'amount': amount
+			},
+			success:function(ret){
+				if(ret.code==-1){
+					alert("该页面已过期，请重新登录！");
+					window.location.href = ret.url;
+				}
+				else{
+					alert(ret.msg);
+				}
+			},
+			error:function(){
+				alert("请检查网络连接");
+			}
+		});
+		$(".Password-modify").css("display","none");
+	});
+	$("#pagedata1").on("click", ".open", function(){
+		var is_mobile = this.getAttribute("mobile");
+		var pro_id = this.getAttribute("pro_id");
+		var url = this.getAttribute("url");
+		if (is_mobile==1){
+			document.getElementById("erweima").src=url;
+			$(".popup-box").addClass("in");
+		}
+		else{
+			window.open(url_openwindow + "?id=" + pro_id + "&type=CouponProject");
+		}
+	});
+
+  // 二维码部分
+  $(".popup-content ").click(function(){
+    event.stopPropagation();
+  });
+  $(".popup-box ").click(function(){
+    $(".popup-box ").removeClass("in ");
+  });
+
+  // 审核拒绝原因弹窗
+  $('.Content').on('click','.state_2',function(){
+	  var reason = $(this).attr('reason');
+      alert(reason);
+  });
+
+  //文字提示
+  $('.Swi-info').on("mouseover", ".intro-text",  function() {
+    this.title = this.innerHTML;
+  });
+});
+</script>
+</head>
+
+<body>
+	<div class="Max">
+    	<!--头部-->
+    	{% include "header.html" %}
+    	<!--内容-->
+    	<div class="Content">
+        	<div class="w1100">
+            	{% include "account/left.html" %}
+                <div class="RightCont">
+                	<div  class="Top-info">
+                    	<ul class="Swi-Top">
+                        	<li class="on">
+                            	现金券
+                            	{% if dict.cash_num > 0 %}
+                            	<span>{{dict.cash_num }}</span>
+                            	{%endif%}
+                            </li>
+                        	<li>
+                            	加息券
+                            	{% if dict.interest_num > 0 %}
+                            	<span>{{dict.interest_num }}</span>
+                            	{%endif%}
+                            </li>
+                        	<li>
+                            	使用券
+                            	{% if dict.exc_num > 0 %}
+                            	<span>{{dict.exc_num }}</span>
+                            	{%endif%}
+                            </li>
+                        </ul>
+                        <div class="Swi-Bot Swi-info" style="height: 455px;">
+                        	<div id="pagedata1"></div>
+
+                            <div class="Page-in-coupon" style="border:none; top: 400px;">
+                            	<div class="page"  id="page1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="Bot-info">
+                    	<h2>优惠券兑换明细</h2>
+                    	<div id="pagedata2">
+						</div>
+		                <div class="Page-in-exc-coupon-detail">
+	                    	<div class="page"  id="page2">
+	                        </div>
+	                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="Password-modify" style="display:none;">
+        	<div class="Passbox" style="height: auto">
+            	<div class="Passinfo">
+                	<h2>优惠券兑换</h2>
+                    	<div class="Input-in">
+                        	<span>投资账号（手机号）：</span>
+                            <input id="telnum" type="text" placeholder="输入您的手机号" />
+                        </div>
+                      <div class="Input-in" style="width: auto;">
+                          <span>投资金额：</span>
+                            <input id="amount" type="text" placeholder="输入您的投资金额（仅限数字）" />
+                            <span style="position: absolute;width:0;margin-left: 10px;">元</span>
+                        </div>
+                      <div class="Input-in" style="width: auto;">
+                          <span>投资标期：</span>
+                            <input id="term" type="text" placeholder="输入您的投资标期（仅限数字）" />
+                            <span style="position: absolute;width:0;margin-left: 10px;">天</span>
+                        </div>
+                    	<div class="Input-in">
+                        	<span>备注：</span>
+                            <input id="remark" type="text" placeholder="可不填" />
+                        </div>
+						          <input id="coupon_id" type="hidden" />
+                        <div class="Submit-box">
+                        	<input id="submit" type="submit"  value="提  交" />
+                        </div>
+
+                </div>
+                <div class="None-p">
+            	<button></button>
+            	</div>
+            </div>
+        	</div>
+        </div>
+        <!-- 弹出二维码部分 -->
+        <div class="popup-box">
+          <div class="popup-content ">
+            <h3>优惠券体验二维码</h3>
+            <img id="erweima" src="" />
+          </div>
+        </div>
+	  {% include "footer.html" %}
+  <!--浮动窗口-->
+  	{% include "outline.html" %}
+    </div>
+</body>
+</html>

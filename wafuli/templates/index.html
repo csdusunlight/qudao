@@ -1,0 +1,565 @@
+﻿{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="360-site-verification" content="a6adbfe1e803ce6e25950ba5c0ad9b61" />
+<title>挖福利-全国首家互联网产品体验超市！</title>
+<meta name="keywords" content="挖福利，我要挖福利，p2p理财平台，p2p投资理财，p2p投资理财平台，小额投资理财，个人投资理财，互联网理财产品，互联网理财平台，互联网金融平台，互联网金融产品，网络理财产品" />
+<meta name="description" content="挖福利从用户角度出发，致力于对整合对用户有价值的互联网产品，打造全国首家互联网产品体验超市。" />
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/index.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/dialog.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-flexslider.css' %}" />
+<script type="text/javascript" src="{% static "js/jquery-1.11.2.min.js" %}"></script>
+<script type="text/javascript" src="{% static "js/jquery.flexslider-min.js" %}"></script>
+<script>
+var textarray=[];
+function getText(n) {
+	 if (textarray[n-1])
+		 return textarray[n-1];
+	 else
+		 return n;
+}
+</script>
+</head>
+<body>
+{% include "header.html" %}
+<div id="content">
+  <div id="index-banner">
+    <div class="flexslider">
+      <ul class="slides">
+      {% for adv in ad_list %}
+        <li onclick="location='{{adv.url}}'" style="background:url({{adv.pic.url}}) 50% 0 no-repeat;cursor:pointer;"></li>
+        <script>textarray.push("{{adv.navigation}}");</script>
+      {%endfor%}
+      </ul>
+    <div class="index-banner-main">
+      <div class="index_31">
+      {% if user.is_authenticated %}
+        <!-- <div class="Icon"><img src="{% static "images/Icon.png" %}" alt=""/></div> -->
+        <div class="Icon user-logo">
+          <img src="{% static 'images/Icon.png' %}" />
+          {% if user.level = 1 %}
+              <img id="Vip_logo" class="vip-logo" src="{% static 'images/vip1.png' %}" />
+          {% elif user.level = 2 %}
+              <img id="Vip_logo" class="vip-logo" src="{% static 'images/vip2.png' %}" />
+          {% elif user.level = 3 %}
+              <img id="Vip_logo" class="vip-logo" src="{% static 'images/vip3.png' %}" />
+          {% elif user.level = 4 %}
+              <img id="Vip_logo" class="vip-logo" src="{% static 'images/vip4.png' %}" />
+          {% elif user.level = 5 %}
+              <img id="Vip_logo" class="vip-logo" src="{% static 'images/vip5.png' %}" />
+          {% endif %}
+        </div>
+        <div class="usename">尊敬的：</div>
+        <div class="usename_1"><a href="{%url 'account_index'%}">{{user.mobile}}</a></div>
+        <div class="welcome">欢迎来到挖福利</div>
+        <div class="index_30">推荐好友送现金，<a href="{% url 'account_invite' %}">立即推荐</a></div>
+        <div class="signin"><a>每日签到</a></div>
+        <div class="lottery"><a href="{% url 'account_index' %}">个人中心</a></div>
+      {%else%}
+      	<div class="index_29"><a href="{% url 'register' %}">注册领现金</a></div>
+        <div class="index_30">若已有账号，请<a href="{% url 'login' %}">登录</a></div>
+      {%endif%}
+      </div>
+    </div>
+    </div>
+  </div>
+  <div id="index_8">
+    <div class="index_9">
+      <div class="index_10">
+        <h2>最新公告：</h2>
+        <div class="show-list" rel="wrapper">
+          <div class="show-move" rel="slider">
+          {%for news in announce_list%}
+          <div class="item" rel="item"><a href={{news.url}}><span>{{news.title}}</span>&nbsp;&nbsp;&nbsp;&nbsp;{{news.summary}}</a></div>
+          {%endfor%}
+          </div>
+          <div class="prev" rel="btn" dire='0'></div>
+          <div class="next" rel="btn" dire='1'></div>
+        </div>
+      </div>
+      <div class="box_in">
+	      <div class="index_11">
+	        <ul>
+	          <li>
+	            <div class="lf"><img src="{% static "images/icon-1.jpg" %}" alt=""/></div>
+	            <div class="rt"><h2>畅享免费</h2><p>为你搜寻最有价值的活动，红包优惠券任你拿</p></div>
+	          </li>
+	          <li>
+	            <div class="lf"><img src="{% static "images/icon-2.jpg" %}" alt=""/></div>
+	            <div class="rt"><h2>体验任务</h2><p>携手当前最火爆的互联网产品，让你玩赚不停</p></div>
+	          </li>
+	          <li>
+	            <div class="lf"><img src="{% static "images/icon-3.jpg" %}" alt=""/></div>
+	            <div class="rt"><h2>安全理财</h2><p>为你筛选最优质的理财产品，让你放心拿收益</p></div>
+	          </li>
+	        </ul>
+	      </div>
+      </div>
+      <div class="frcont">
+      	<p>今日上线福利：       <font>{{new_wel_num}}</font>      个</p>
+        <p>总计上线福利：    <font>{{all_wel_num}}</font>     个</p>
+        <p>累积提现金额：  <font>{{withdraw_total}}</font>   元</p>
+      </div>
+	  <script type="text/javascript">
+      $(function(){
+          $(".index_11 ul li:nth-child(3)").addClass('s');
+      });
+      </script>
+    </div>
+  </div>
+<div class="box_back">
+  <div id="index_12">
+    <div class="index_13" style="display: block;">
+    	<h2>免费福利</h2><h3>抢到就是赚到</h3><a href="{%url 'welfare' %}" class="more">更多 &gt;</a>
+        <div class="index_13_nav">
+        <a>红包</a>
+        <a>9.9包邮</a>
+        <a>优惠券</a>
+        </div>
+    </div>
+
+    <div class="index_15">
+      <div class="icobox">
+          	<img src="{% static 'images/ico1.png' %}" class="ico1" />
+            <img src="{% static 'images/ico2.png' %}" class="ico2" />
+      </div>
+      <ul style="display: block;">
+{% for news in hongbao_list %}
+        <li>
+          <a target="_blank" href="{{news.url}}" ><img src="{{news.pic.url}}" alt="{{news.title}}" width="258" height="148"/></a>
+          <h2><a target="_blank" href="{{news.url}}" >{{news.title}}</a></h2>
+          <div>{{news.title}}</div>
+          <p>商&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 家：{{news.provider}}<br />浏 览 数 ：{{news.view_count}}<br />活动时间：{{news.time_limit}}</p>
+          <a href="{{news.url}}" class="more" target="_blank">立即查看</a>
+          {% if news.is_new %}
+          <div class="newpost zero">新</div>
+          {% endif %}
+        </li>
+{% endfor %}
+      <a href="{% url 'welfare' %}" class="more-content">更多红包>></a>
+      </ul>
+
+      <ul>
+{% for news in baoyou_list %}
+        <li>
+          <a target="_blank" href="{{news.url}}" ><img src="{{news.pic.url}}" alt="{{news.title}}" width="258" height="148"/></a>
+          <h2><a target="_blank" href="{{news.url}}" >{{news.title}}</a></h2>
+          <div>{{news.title}}</div>
+          <p>商家：{{news.provider}}<br />市场价：<span class="shichangjia">￥{{news.mprice}}</span><br />现&nbsp;&nbsp;价：<span class="xianjia">￥{{news.nprice}}</span></p>
+          <a href="{{news.url}}" class="more" target="_blank">立即抢购</a>
+          {% if news.is_new %}
+          <div class="newpost zero">新</div>
+          {% endif %}
+        </li>
+{% endfor %}
+      <a href="{% url 'welfare' %}" class="more-content">更多包邮>></a>
+      </ul>
+
+      <ul>
+{% for news in youhuiquan_list %}
+        <li>
+          <a target="_blank" href="{{news.url}}" ><img src="{{news.pic.url}}" alt="{{news.title}}" width="258" height="148"/></a>
+          <h2><a target="_blank" href="{{news.url}}" >{{news.title}}</a></h2>
+          <div>{{news.title}}</div>
+          <p>商&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 家：{{news.provider}}<br />剩余张数 ：{{news.left_count}}<br />活动时间：{{news.time_limit}}</p>
+          <a href="{{news.url}}" class="more" target="_blank">立即领取</a>
+          {% if news.is_new %}
+          <div class="newpost zero">新</div>
+          {% endif %}
+        </li>
+{% endfor %}
+      <a href="{% url 'welfare' %}" class="more-content">更多优惠>></a>
+      </ul>
+    </div>
+
+
+  </div>
+  <div id="index_16">
+    <div class="index_17">
+    	<h2>体验福利</h2><h3>完成任务就送福利</h3><a href="{%url 'task'%}" class="more">更多 &gt;</a>
+        <div class="index_17_nav">
+        <a>注册有礼</a>
+        <a>小试牛刀</a>
+        </div>
+    </div>
+    <div class="index_18">
+      <div class="icobox">
+          	<img src="{% static 'images/ico3.png' %}" class="ico1" />
+            <img src="{% static 'images/ico4.png' %}" class="ico3" />
+      </div>
+      <ul style="display: block;" class="ty-container-box" >
+        <li>
+          <h2>新手入门</h2>
+          <div class="li-content-img from_top_and_bottom">
+              <div class="img"><img src="{% static 'images/task-xinshou.jpg' %}" alt="理财福利介绍图片"></div>
+              <div class="info">
+                <p><span>操作简单</span>完成指定的app下载/注册/试用/试玩/关注微信公众号等新手任务，即可获得奖励。</p>
+                <a target="_blank" href="{%url 'task'%}?type=junior">more>></a>
+              </div>
+          </div>
+          <ul class="ty-content">
+            <li><a  target="_blank" href="{{task1.url}}">
+              <div class="wrapper">
+                <img src="{{task1.pic.url}}" alt="理财福利图片">
+                <div class="information">
+                  <h4>{{task1.title}}</h4>
+                  <p>体验奖励：{{task1.moneyToAdd}}福币</p>
+                  <p>剩余名额：{{task1.left_num}}</p>
+                </div>
+              </div>
+            </a></li>
+            <li><a  target="_blank" href="{{task2.url}}">
+              <div class="wrapper">
+                <img src="{{task2.pic.url}}" alt="理财福利图片">
+                <div class="information">
+                  <h4>{{task2.title}}</h4>
+                  <p>体验奖励：{{task2.moneyToAdd}}福币</p>
+                  <p>剩余名额：{{task2.left_num}}</p>
+                </div>
+              </div>
+            </a></li>
+          </ul>
+        </li>
+        <li>
+          <h2>进阶体验</h2>
+          <div class="li-content-img from_top_and_bottom">
+              <div class="img"><img src="{% static 'images/task-jinjie.jpg' %}" alt="理财福利介绍图片"></div>
+              <div class="info">
+                <p><span>零成本 零风险</span>完成指定金融平台的注册绑卡，信用卡申请，或证券平台的用户注册等进阶任务，即可获得奖励。</p>
+                <a target="_blank" href="{%url 'task'%}?type=middle">more>></a>
+              </div>
+          </div>
+          <ul class="ty-content">
+            <li><a  target="_blank" href="{{task3.url}}">
+              <div class="wrapper">
+                <img src="{{task3.pic.url}}" alt="理财福利图片">
+                <div class="information">
+                  <h4>{{task3.title}}</h4>
+                  <p>体验奖励：{{task3.moneyToAdd}}福币</p>
+                  <p>剩余名额：{{task3.left_num}}</p>
+                </div>
+              </div>
+            </a></li>
+            <li><a  target="_blank" href="{{task4.url}}">
+              <div class="wrapper">
+                <img src="{{task4.pic.url}}" alt="理财福利图片">
+                <div class="information">
+                  <h4>{{task4.title}}</h4>
+                  <p>体验奖励：{{task4.moneyToAdd}}福币</p>
+                  <p>剩余名额：{{task4.left_num}}</p>
+                </div>
+              </div>
+            </a></li>
+          </ul>
+        </li>
+        <li>
+          <h2>高手专区</h2>
+          <div class="li-content-img from_top_and_bottom">
+              <div class="img"><img src="{% static 'images/task-gaoshou.jpg' %}" alt="理财福利介绍图片"></div>
+              <div class="info">
+                <p><span>收益高，提现快</span>完成指定金融平台推出的小额理财产品的注册试投等高手任务，即可获得奖励。</p>
+                <a target="_blank" href="{%url 'task'%}?type=senior">more>></a>
+              </div>
+          </div>
+          <ul class="ty-content">
+            <li><a  target="_blank" href="{{task5.url}}">
+              <div class="wrapper">
+                <img src="{{task5.pic.url}}" alt="理财福利图片">
+                <div class="information">
+                  <h4>{{task5.title}}</h4>
+                  <p>体验奖励：{{task5.moneyToAdd}}福币</p>
+                  <p>剩余名额：{{task5.left_num}}</p>
+                </div>
+              </div>
+            </a></li>
+            <li><a  target="_blank" href="{{task6.url}}">
+              <div class="wrapper">
+                <img src="{{task6.pic.url}}" alt="理财福利图片">
+                <div class="information">
+                  <h4>{{task6.title}}</h4>
+                  <p>体验奖励：{{task6.moneyToAdd}}福币</p>
+                  <p>剩余名额：{{task6.left_num}}</p>
+                </div>
+              </div>
+            </a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  <script type="text/javascript">
+  $(function(){
+      $(".index_18 ul li:nth-child(3)").addClass('s');
+  });
+  </script>
+  </div>
+  <div id="index_20">
+    <div class="index_21">
+    	<h2>理财福利</h2><h3>让您多些利息</h3><a href="{%url 'finance'%}" class="more">更多 &gt;</a>
+        <div class="index_21_nav">
+        </div>
+    </div>
+    <div class="index_22">
+      <div class="icobox">
+          	<img src="{% static 'images/ico5.png' %}" class="ico1" />
+            <img src="{% static 'images/ico6.png' %}" class="ico3" />
+      </div>
+
+      <div class="finance-container">
+        <ul>
+          <li class="item-box">
+            <div class="finance-item">
+              <div class="intro">
+                <div class="intro-content">
+                  <h3>新手投资</h3>
+                  <p>关键词：风险低，收益合理</p>
+                  <img src="{% static 'images/finance-new.png' %}" alt="img">
+                </div>
+                <p>适宜人群：初次接触网贷人群</p>
+              </div>
+              <div class="info">
+              {%for news in finance_list1%}
+                <div class="finance-list">
+                  <h3>{{news.title}}</h3>
+                  <p><span class="profit">{{news.interest}}</span><span class="date">{{news.investTime}}</span><span class="money">起投金额：{{news.amount_to_invest}}</span></p>
+                  <div><span class="add-profit"><number>补贴收益：+{{news.benefit}}</number></span>
+                    <a href="{{news.url}}" class="to-finance">查看详情</a>
+                  </div>
+                </div>
+               {%endfor%}
+              </div>
+            </div>
+          </li>
+          <li class="item-box">
+            <div class="finance-item">
+              <div class="intro">
+                <div class="intro-content">
+                  <h3>稳健投资</h3>
+                  <p>关键词：项目安全、收益靠谱</p>
+                  <img class="finance-solid" src="{% static 'images/finance-solid.png' %}" alt="img">
+                </div>
+                <p>适宜人群：高净值人群</p>
+              </div>
+              <div class="info">
+                {%for news in finance_list2%}
+                <div class="finance-list">
+                  <h3>{{news.title}}</h3>
+                  <p><span class="profit">{{news.interest}}</span><span class="date">{{news.investTime}}</span><span class="money">起投金额：{{news.amount_to_invest}}</span></p>
+                  <div><span class="add-profit"><number>补贴收益：+{{news.benefit}}</number></span>
+                    <a href="{{news.url}}" class="to-finance">查看详情</a>
+                  </div>
+                </div>
+               {%endfor%}
+              </div>
+            </div>
+          </li>
+          <li class="item-box item-last">
+            <div class="finance-item">
+              <div class="intro">
+                <div class="intro-content">
+                  <h3>高收益区</h3>
+                  <p>关键词：风险高、收益高</p>
+                  <img src="{% static 'images/finance-profit.png' %}" alt="img">
+                </div>
+                <p>适宜人群：能接受一定投资风险</p>
+              </div>
+              <div class="info">
+                <div class="finance-list finance-risk">
+                  <h3>高收益项目</h3>
+                  <p>高收益项目拥有着比其他项目更高的收益，但更高的收益往往伴随着更高的风险哦。</p>
+                  <a href="{% url 'add_finance' %}" class="to-finance">点击查看</a>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+    </div>
+
+    </div>
+  </div>
+  <div id="index_23">
+    <div class="index_26"><h2>积分商城</h2><h3>积分也能购物</h3><a href="{% url 'mall' %}" class="more">更多 &gt;</a></div>
+    <div class="icobox">
+          	<img src="{% static 'images/ico7.png' %}" class="ico4" />
+            <img src="{% static 'images/ico8.png' %}" class="ico5" />
+    </div>
+    <div class="index_33">
+      <div class="index_36 s1">
+        <h2>数码产品</h2>
+        <ul>
+          <li><a href="{% url 'mall' %}?type=pro_1">手机</a></li>
+          <li><a href="{% url 'mall' %}?type=pro_2">电脑</a></li>
+        </ul>
+      </div>
+      <div class="index_36 s2">
+        <h2>游戏相关</h2>
+        <ul>
+          <li><a href="{% url 'mall' %}?type=pro_3">外设</a></li>
+          <li><a href="{% url 'mall' %}?type=pro_4">周边</a></li>
+        </ul>
+      </div>
+      <div class="index_36 s3">
+        <h2>虚拟充值</h2>
+        <ul>
+          <li><a href="{% url 'mall' %}?type=pro_5">话费</a></li>
+          <li><a href="{% url 'mall' %}?type=pro_6">Q币</a></li>
+          <li><a href="{% url 'mall' %}?type=pro_7">骏网卡</a></li>
+        </ul>
+      </div>
+      <div class="index_36 s4">
+        <h2>居家生活</h2>
+        <ul>
+          <li><a href="{% url 'mall' %}?type=pro_8">书籍</a></li>
+          <li><a href="{% url 'mall' %}?type=pro_9">厨房用品</a></li>
+          <li><a href="{% url 'mall' %}?type=pro_10">生活用品</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="index_28" id="scroll">
+      <ul id="ulscroll">
+      {%for obj in exchange_list%}
+        <li>{{obj.tranlist.user.username}} <span class="s1">刚刚</span> 兑换了 ：<span class="s2">{{obj.commodity}}</span></li>
+      {%endfor%}
+      </ul>
+    </div>
+  </div>
+</div>
+  <div id="index_32">
+    <div class="index_38">
+      <div class="index_34">活动中心<a href="{% url 'aboutus' %}#cont=news" class="more">更多 +</a></div>
+      <div class="index_35">
+        <div class="index_40"><img src="{% static "images/i316x241.jpg" %}" alt="" width="316" height="241"/></div>
+        <div class="index_37">
+        {% for news in news_list %}
+          <div class="index_41"><a href="{{news.url}}">{{news.title}}</a></div>
+          <div class="index_42 {%if forloop.last%}s{%endif%}">
+            <div class="lf"><a href="{{news.url}}"><img src="{{news.pic.url}}" alt="未上传图片" width="110" height="72"/></a></div>
+            <div class="rt">{{news.summary}}</div>
+          </div>
+		{% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="index_43">
+      <div class="index_46">福利攻略<a href="{% url 'aboutus' %}#cont=strategy" class="more">更多 +</a></div>
+      <ul>
+      {% for news in strategy_list %}
+        <li><a href="{{news.url}}">{{news.title}}</a></li>
+       {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div id="index_47">
+    <div class="index_48">合作伙伴</div>
+    <div class="index_49">
+      <ul>
+        <li><img src="{% static "images/i-8.jpg" %}" alt=""/></li>
+        <li><img src="{% static "images/i-9.jpg" %}" alt=""/></li>
+        <li><img src="{% static "images/i-10.jpg" %}" alt=""/></li>
+        <li><img src="{% static "images/i-11.jpg" %}" alt=""/></li>
+        <li><img src="{% static "images/i-12.jpg" %}" alt=""/></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div style="clear:both"></div>
+<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+
+<div class="popup1" style="display:none;">
+  	<div class="w698_box">
+    	<div class="pop_left">
+        	<h2>温馨提示</h2>
+            <p>签到成功！连续签到有惊喜呢~</p>
+            <div class="btn_cont">
+            	<button class="confirm_lottery">确  定</button>
+            </div>
+        </div>
+    </div>
+  </div>
+<div class="popup2" style="display:none;">
+  	<div class="w698_box">
+    	<div class="pop_left">
+        	<h2>温馨提示</h2>
+            <p>今日已经签到过了~</p>
+            <div class="btn_cont">
+            	<button class="confirm_lottery">确  定</button>
+            </div>
+        </div>
+    </div>
+  </div>
+<script type="text/javascript" src="{% static "js/jQuery.infiniteCarousel.js" %}"></script>
+<script type="text/javascript" src="{% static "js/MSClass.js" %}"></script>
+<script type="text/javascript" src="{% static "js/define.js" %}"></script>
+<script type="text/javascript">
+$(function(){
+	$('.home a').toggleClass("vo");
+	$('.flexslider').flexslider({
+		directionNav: true,
+		pauseOnAction: false
+	});
+    new Marquee(["scroll","ulscroll"],0,1,298,356,20,0,0);
+	$(".signin a").click(function(){
+		$.ajax({
+			url:"{%url 'signin' %}",
+			dataType:"json",
+			success:function(ret){
+				if(ret.code==0){
+					$("div.popup1").fadeIn();
+				}
+				else if((ret.code==1)){
+					$("div.popup2").fadeIn();
+				}
+				else if(ret.code==-1){
+					alert("该页面已过期，请重新登录！");
+					window.location.href = ret.url;
+				}
+			},
+			error:function(){
+				alert("请检查网络连接");
+			}
+		});
+	});
+	$('.btn_cont button').click(function(){
+    	$(this).parent().parent().parent().parent().hide();
+    });
+	$(".index_13_nav a").eq(0).mouseenter();
+	$(".index_10").infiniteCarousel();
+
+  // 会员等级制度
+  // var Vip_logo = document.getElementById("Vip_logo");
+  // var level = {{user.level}};
+  // var percent = 0;
+
+  // switch(level) {
+  //   case 0:
+  //     Vip_logo.style.display = "none";
+  //     console.log("00000");
+  //     break;
+  //   case 1:
+  //     Vip_logo.setAttribute("src","{% static 'images/vip1.png' %}");
+  //     break;
+  //   case 2:
+  //     Vip_logo.setAttribute("src","{% static 'images/vip2.png' %}");
+  //     break;
+  //   case 3:
+  //     Vip_logo.setAttribute("src","{% static 'images/vip3.png' %}");
+  //     break;
+  //   case 4:
+  //     Vip_logo.setAttribute("src","{% static 'images/vip4.png' %}");
+  //     break;
+  //   case 5:
+  //     Vip_logo.setAttribute("src","{% static 'images/vip5.png' %}");
+  //     break;
+  // }
+  // 会员等级制度---------end
+});
+</script>
+</body>
+</html>

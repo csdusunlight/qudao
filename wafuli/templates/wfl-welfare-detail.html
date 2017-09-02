@@ -1,0 +1,212 @@
+{%load staticfiles%}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>免费福利详情页</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-welfare-detail.css' %}"/>
+	</head>
+	<body>
+		{% include "header.html" %}
+		<div class="wfl-wrap m-welfare-detail clearfix">
+		    <p class="crumb">当前位置：&nbsp;&nbsp;<a href="#">免费领</a>&nbsp;>&nbsp;<a href="{% url 'welfare' %}">红包福利</a>&nbsp;>&nbsp;<a href="{% url 'welfare' %}">{{news.title}}</a></p>
+		    <div class="leftcontainer l wleft">
+    		    <div class="detailmain">
+    		        <img class="detailmain__img" src="{{news.pic.url}}" alt="" />
+    		        <div class="detailmain__content">
+    		            <h1 class="detailmain__title">{{news.title}}<span class="hongbao__title-two">{{news.subtitle}}</span></h1>
+    		            <p class="detail__p1">商家：<span>{{news.provider}}</span></p>
+    		            <p class="detail__p2">分类：
+                        {% for mark in news.marks.all|slice:":3" %}
+                           <span>{{mark.name}}</span>
+                        {% endfor %}</p>
+
+                        {% if not user.is_authenticated %}
+                            <a href="{% url 'login' %}" class="btn m-green m-detailmain">点击登录</a>
+                        {% else %}
+    		              <a class="btn m-green m-detailmain show-ewm">直达链接</a>
+                        {% endif %}
+    		            <div class="support d-ib">
+                            <span class="support__up">顶（<number data-upid = "{{news.id}}" class="support__up-num">{{news.up}}</number>）</span><span class="support__down">踩（<number data-downid = "{{news.id}}" class="support__down-num">{{news.down}}</number>）</span>
+                        </div>
+    		        </div>
+    		    </div>
+    		    <div class="detail-html">
+    		          {{news.strategy|safe}}
+    		    </div>
+    		    <div class="near">
+    		        <p class="near__pre">上一福利
+    		        {% if prev %}
+    		        <a class="near__link" href="{{prev.url}}">{{prev.title}}</a>
+    		        {% endif %}
+    		        </p>
+    		        <p class="near__next">下一福利
+    		        {% if next %}
+    		        <a class="near__link" href="{{next.url}}">{{next.title}}</a>
+    		        {% endif %}
+    		        </p>
+    		    </div>
+    		    <div class="other-recommend">
+                    <h3 class="other-recommend__title">您可能还喜欢</h3>
+                    <ul class="other-recommend__box">
+                        {% for news in like_hongbao_list %}
+                        <li class="other-recommend__item"><a href="{{news.url}}">
+                            <img class="other-recommend__img" src="{{news.pic.url}}" alt="" />
+                            <div class="txtbox line-2">
+                                <p class="other-recommend__txt">{{news.title}}</p>
+                            </div>
+                        </a></li>
+                        {%endfor%}
+                    </ul>
+                </div>
+		    </div>            <!--leftcontainer---end-->
+    		<!--热门推荐-->
+    		<div class="sidebar wright r">
+    			<div class="wflbox">
+    				<div class="wflbox__titlebox clearfix">
+    					<h1 class="wflbox__title">热门推荐</h1>
+    					<a class="wflbox__more" href="{% url 'welfare' %}">查看全部</a>
+    				</div>
+    				<ul class="recommend-box">
+                        {% for news in other_hongbao_list %}
+                        <li class="recommend"><a href="{{news.url}}">
+                            <img class="recommend__img" src="{{news.pic.url}}" alt="" />
+                            <div>
+                                <div class="txtbox line-2">
+                                    <h3 class="recommend__title txtinline">{{news.title}}</h3>
+                                </div>
+                                <div class="recommend__detail clearfix"><span class="recommend__support-up">顶&nbsp;&nbsp;<number>{{news.up}}</number></span><span class="recommend__source">{{news.provider}}</span></div>
+                            </div>
+                        </a></li>
+                        {%endfor%}
+    				</ul>
+    			</div>
+    		</div>
+    		<!--热门推荐---end-->
+		</div>
+
+        {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+
+		<script src="/static/js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/wfl-common.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/wfl-popup.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$(function(){
+
+                {%if news.isonMobile %}
+                var ismobile = true;
+                console.log(ismobile);
+                $('.show-ewm').click(function(){
+                    $.warning({
+                        Title: '手机扫二维码体验',
+                        Content: '<img style="width:100%" src="{{news.exp_code.url}}" alt="" />',
+                        Confirm: '关闭'
+                    });
+                })
+                {%else%}
+                var ismobile = false;
+                console.log(ismobile);
+                $('.show-ewm').attr('href', "{{news.exp_url_pc}}");
+                {%endif%}
+
+
+                // 点赞部分
+                $('.support').on('click','.support__up', function(){
+                    var self = this;
+
+
+
+                    var upid = $(self).find('.support__up-num').data("upid");
+                    var newurl = '/updown_welfare/' + upid + '/?click=up';
+                    if (!$(self).parent().hasClass('handled')) {
+                        $.ajax({
+                            url: newurl,
+                            dataType: "json",
+                            type: "get",
+                            success: function() {
+                                var upText = $(self).find('.support__up-num').text()
+                                var upNum = parseInt(upText) + 1;
+                                $(self).find('.support__up-num').text(upNum);
+                                $(self).parent().addClass('handled');
+                                console.log('chengong');
+
+                                var show_amount = document.createElement('span');
+                                show_amount.className = 'show-amount show-amount-up';
+                                show_amount.innerText = '+1';
+                                $(self).parent().append(show_amount);
+                                $('.show-amount').css({
+                                    'position': 'absolute',
+                                    'top': '0',
+                                    'left': '30px',
+                                    'color': '#ffbe00',
+                                    'font-size': '20px',
+                                    'opcity': '1'
+                                });
+                                $('.show-amount').animate({
+                                    top: -40,
+                                    opcity: 0},
+                                    500, function() {
+                                    $('.show-amount').remove();
+                                });
+                            },
+                            error: function(ret) {
+                                console.log(JSON.stringify(ret));
+                            }
+                        });
+                    } else {
+                        console.log('shibai');
+                        return false;
+                    }
+                })
+                $('.support').on('click','.support__down', function(){
+                    var self = this;
+                    var downid = $(self).find('.support__down-num').data("downid");
+                    console.log(downid);
+                    var newurl = '/updown_welfare/' + downid + '/?click=down';
+                    console.log(newurl);
+                    if (!$(self).parent().hasClass('handled')) {
+                        $.ajax({
+                            url: newurl,
+                            dataType: "json",
+                            type: "get",
+                            success: function() {
+                                var upText = $(self).find('.support__down-num').text()
+                                var upNum = parseInt(upText) + 1;
+                                $(self).find('.support__down-num').text(upNum);
+                                $(self).parent().addClass('handled');
+
+                                var show_amount = document.createElement('span');
+                                show_amount.className = 'show-amount show-amount-up';
+                                show_amount.innerText = '+1';
+                                $(self).parent().append(show_amount);
+                                $('.show-amount').css({
+                                    'position': 'absolute',
+                                    'top': '0',
+                                    'left': '170px',
+                                    'color': '#ffbe00',
+                                    'font-size': '20px',
+                                    'opcity': '1'
+                                });
+                                $('.show-amount').animate({
+                                    top: 40,
+                                    opcity: 0},
+                                    500, function() {
+                                    $('.show-amount').remove();
+                                });
+                            },
+                            error: function(ret) {
+                                console.log(JSON.stringify(ret));
+                            }
+                        });
+                    } else {
+                        return false;
+                    }
+                })
+                // // 点赞部分---end
+			});
+		</script>
+	</body>
+</html>

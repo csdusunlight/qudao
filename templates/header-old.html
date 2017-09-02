@@ -1,0 +1,36 @@
+{% load staticfiles %}
+<div id="header">
+  <div class="header-main">
+    <div class="header-t">欢迎来到挖福利，全国首家综合性互联网产品体验超市！客服热线：<span>0731-85586375</span>&nbsp;&nbsp;<a href="http://m.wafuli.cn"><span class="goto-mobile">切换到触屏版</span></a>
+    	<div class="rt">
+    	{% if not user.is_authenticated %}
+    	<a href="{% url 'register' %}">注册</a>&nbsp;|&nbsp;<a href="{% url 'login' %}">登录</a>
+  		&nbsp;|&nbsp;
+  		{% else %}
+  		<font>您好，<a href="{% url 'account_index' %}">{{user.mobile}}</a>
+  			{%if user.level > 0 %}
+  			 （VIP{{user.level}}）
+  			{%endif%}
+  		</font>
+  		<a href="{%url 'logout' %}">退出</a>&nbsp;|&nbsp;
+  		<a href="{%url 'account_message' %}">消息中心</a>&nbsp;|&nbsp;
+  		{% endif %}
+  		<a href="{%url 'aboutus' %}#cont=strategy">帮助</a>&nbsp;|&nbsp;
+      	<a target="_blank" href="{%url 'APP_download' %}">APP下载</a>
+    	</div>
+    </div>
+    <div class="header-b">
+      <div id="logo"><a href="{% url 'index' %}"><img src="{% static 'images/logo.jpg' %}" alt="logo"/></a></div>
+      <div id="menu">
+        <ul>
+          <li class="home"><a href="{% url 'index' %}">首 页</a></li>
+          <li class="zero_h"><a href="{% url 'welfare_list' %}">免费福利</a></li>
+          <li class="task_h"><a href="{% url 'task' %}">体验福利</a></li>
+          <li class="finan_h"><a href="{% url 'finance' %}">理财福利</a></li>
+          <li class="mall_h"><a href="{% url 'mall' %}">积分商城</a></li>
+          <li class="about_h"><a href="{% url 'aboutus' %}">关于我们</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

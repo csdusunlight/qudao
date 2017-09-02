@@ -1,0 +1,275 @@
+{% load staticfiles %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>密码重置</title>
+<meta content="密码重置" name="keywords">
+<meta content="忘记密码，密码重置" name="description">
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon">
+<link href="{% static 'css/style.css'%}" type="text/css" rel="stylesheet">
+<link href="{% static 'css/common.css'%}" type="text/css" rel="stylesheet">
+<link href="{% static 'css/password.css'%}" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js'%}"></script>
+<script type="text/javascript" src="{% static 'js/accounts/forgot_passwd.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/accounts/user-validate.js' %}"></script>
+<script>
+var get_code_url = "{% url 'phoneImageV' %}";
+var coderefresh_url = "{% url 'captcha-refresh' %}";
+var randcode_validate_url = "{% url 'forgot-validate-randcode' %}";
+var telcode_validate_url = "{% url 'forgot-validate-telcode' %}";
+var get_code_url = "{% url 'phoneImageV' %}";
+var mobile;
+$.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
+$(function(){
+	$(".imageCheckRefresh").click(function(){
+	      $.getJSON(coderefresh_url, function(json) {
+	          var new_cptch_key = json['key'];
+	          var new_cptch_image = json['image_url'];
+	          key = $("#id_hashkey");
+	          img = $("#id_checkImg");
+	          key.attr("value", new_cptch_key);
+	          img.attr("src", new_cptch_image);
+	      });
+	 });
+	$('#Btn_01').click(function() {
+		mobile = $("input[name='phone']").val();
+		var response = $("#x_yanzhengma").val();
+		if ( !mobile || !response ){
+			$("p#hint_text").text("请输入手机号和验证码！");
+			$("p#hint_text").css("display","block");
+			return;
+		}
+		if(!validatePhone(mobile)){
+			$("p#hint_text").text("手机号格式不正确，请检查后重新输入！");
+			$("p#hint_text").css("display","block");
+			return;
+		}
+		var hashkey = $("#id_hashkey").val();
+		var response = $("#x_yanzhengma").val();
+		$.ajax({
+			url : randcode_validate_url,
+			data : {
+				'mobile':mobile,
+				'hashkey':hashkey,
+				'response':response,
+			},
+			dataType : 'json',
+			async : false,
+			success : function(data) {
+				if (data.code == 0) {
+					$("p#hint_text").hide();
+					$("span#dis_mobile").text(mobile);
+					$('.content').removeClass('show');
+					$('#cont_02').addClass('show');
+				}else if (data.code == 1){
+					$("p#hint_text").text("验证码输入错误！");
+					$("p#hint_text").css("display","block");
+					var new_cptch_key = data['key'];
+			        var new_cptch_image = data['image_url'];
+			        key = $("#id_hashkey");
+			        img = $("#id_checkImg");
+			        key.attr("value", new_cptch_key);
+			        img.attr("src", new_cptch_image);
+				}
+				else{
+					$("p#hint_text").text("您填写的帐号尚未注册挖福利，请检查后重新输入！");
+					$("p#hint_text").css("display","block");
+				}
+			},
+			error : function() {
+				alert("网络异常，请检查网络。");
+			}
+		});
+	});
+	$('#get_code_button').click(function(){
+		alert('sdd');
+		var hashkey = $("#id_hashkey").val();
+		var response = $("#x_yanzhengma").val();
+		sendTelVerifyCodeImageV(mobile, "forgot_passwd", get_code_url, hashkey, response);
+	});
+	$('#Btn_02').click(function() {
+		var telcode = $("input#id_telcode").val();
+		if(!telcode){
+			return;
+		}
+		$.ajax({
+			url : telcode_validate_url,
+			data : {
+				'mobile':mobile,
+				'code':telcode,
+			},
+			dataType : 'json',
+			async : false,
+			success : function(data) {
+				if (data.code == 0) {
+					$('.content').removeClass('show');
+					$('#cont_03').addClass('show');
+				}else if (data.code == 1){
+					alert(data.res_msg);
+				}
+			},
+			error : function() {
+				alert("网络异常，请检查网络。");
+			}
+		});
+	});
+	$('#Btn_03').click(function() {
+		var telcode = $("input#id_telcode").val();
+		var passwd = $("input[name='passwd']").val()
+		var passwd2 = $("input[name='passwd_again']").val()
+		if(!validatePassport(passwd)){
+			$("p#hint_text2").text("密码格式有误，至少包含字母、数字和特殊字符中的两种，6~16位！");
+			$("p#hint_text2").css("display","block");
+			return;
+		}
+		if(passwd2!==passwd){
+			$("p#hint_text2").text("两次密码输入不相同，请重新输入！");
+			$("p#hint_text2").css("display","block");
+			return;
+		}
+		$("p#hint_text2").hide();
+		$.ajax({
+			url : '',
+			data : {
+				'passwd':passwd,
+				'code':telcode,
+				'mobile':mobile,
+			},
+			dataType : 'json',
+			async : false,
+			type: "post",
+			success : function(data) {
+				if (data.code == 0) {
+					$('.content').removeClass('show');
+					$('#cont_04').addClass('show');
+				}else{
+					alert(data.res_msg);
+				}
+			},
+			error : function() {
+				alert("网络异常，请检查网络。");
+			}
+		});
+	});
+
+});
+
+</script>
+
+
+</head>
+<body>
+<!--头部-->
+{% include "header.html" %}
+<!-- 内容 -->
+<div class="content show" id="cont_01">
+    <h3>找回密码</h3>
+    <ul>
+      <li class="li-01">1.输入手机号</li>
+      <li class="li-02">2.验证身份</li>
+      <li class="li-03">3.设置新密码</li>
+      <li class="li-04">4.完成</li>
+    </ul>
+  <div class="form">
+  <div class="first">
+      <label for="text">手机号：&nbsp;&nbsp;</label>
+      <input type="tel" name="phone" maxlength="11" pattern="^1[3|4|5|7|8]\d{9}$" required placeholder="请输入手机号码">
+  </div>
+  <div class="second">
+      <label for="yanzhen">验证码：&nbsp;&nbsp;</label>
+      <input type="text" name="yanzhen" id="x_yanzhengma" minlength="1" maxLength="4" required placeholder="请输入验证码">
+      <img width="120" height="40" src="{{ codimg_url }}" id="id_checkImg" class="imageCheckRefresh yzm-img" alt="验证码图片">
+      <input id="id_hashkey" name="hashkey" type="hidden" value="{{ hashkey }}">
+      <span class="imageCheckRefresh" id="yanzhen">看不清楚，换一张</span>
+  </div>
+  <button type="submit" id="Btn_01">下一步</button>
+  <p id="hint_text" style="display:none">您填写的帐号尚未注册挖福利，请检查后重新输入</p>
+  </div>
+</div>
+
+<div class="content" id="cont_02">
+    <h3>找回密码</h3>
+    <ul>
+      <li class="li2-01">1.输入手机号</li>
+      <li class="li2-02">2.验证身份</li>
+      <li class="li2-03">3.设置新密码</li>
+      <li class="li2-04">4.完成</li>
+    </ul>
+  <div class="form">
+    <div class="first f-02">
+        手机号：&nbsp;&nbsp;
+        <span id="dis_mobile"></span>
+    </div>
+    <div class="second s-02">
+        <label for="yanzhen">验证码：&nbsp;&nbsp;</label>
+        <input id="id_telcode" type="text" name="yanzhen" minlength="6" maxLength="6" placeholder="请输入验证码">
+        <input id="get_code_button" type="button" value="免费获取验证码" onclick="settime(this)"/>
+    </div>
+    <button type="submit" id="Btn_02">下一步</button>
+  </div>
+</div>
+
+<div class="content" id="cont_03">
+    <h3>找回密码</h3>
+    <ul>
+      <li class="li3-01">1.输入手机号</li>
+      <li class="li3-02">2.验证身份</li>
+      <li class="li3-03">3.设置新密码</li>
+      <li class="li3-04">4.完成</li>
+    </ul>
+
+  <div class="form">
+  <div class="first f-03">
+      <label for="password">新密码：&nbsp;&nbsp;</label>
+      <input type="password" name="passwd" maxlength="16" pattern="\w{6,16}$" required placeholder="6到16位，包括数字、字母或下划线">
+  </div>
+  <div class="second s-03">
+      <label for="again">确认新密码：&nbsp;&nbsp;</label>
+      <input type="password" name="passwd_again" minlength="6" maxLength="16" pattern="\w{6,15}$" required placeholder="请再次输入新密码">
+
+  </div>
+  <button class="bt-03" type="submit" id="Btn_03">下一步</button>
+  <p id="hint_text2" style="display:none"></p>
+  </div>
+</div>
+
+<div class="content" id="cont_04">
+    <h3>找回密码</h3>
+    <ul>
+      <li class="li4-01">1.输入手机号</li>
+      <li class="li4-02">2.验证身份</li>
+      <li class="li4-03">3.设置新密码</li>
+      <li class="li4-04">4.完成</li>
+    </ul>
+
+  <div class="text">
+      <p>恭喜您，密码重置成功</p>
+      <p>您现在可以<a href="{% url 'login' %}">登录</a>或返回<a href="{% url 'index' %}">挖福利首页</a></p>
+  </div>
+</div>
+<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+
+<script type="text/javascript">
+  var countdown=60;
+  function settime(val) {
+    if (countdown == 0) {
+    val.removeAttribute("disabled");
+    val.value="免费获取验证码";
+    countdown = 60;
+    return;
+  } else {
+    val.setAttribute("disabled", true);
+    val.value="重新发送(" + countdown + ")";
+    countdown--;
+  }
+  setTimeout(function() {
+    settime(val)
+    },1000)
+  }
+</script>
+</body></html>

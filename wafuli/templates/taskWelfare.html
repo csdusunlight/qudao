@@ -1,0 +1,235 @@
+﻿{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>体验福利，互联网产品体验返现。</title>
+<meta name="keywords" content="体验福利，e贝宝返现，借贷宝返现，小诺理财返现，唐小僧返现，理财返现，前海航交所返现，爱房筹返现" />
+<meta name="description" content="挖福利为您提供互联网金融产品返现的优质活动信息！让你体验不一样的金融理财。" />
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-flexslider.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/welfare.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.flexslider-min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jQuery.infiniteCarousel.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/MSClass.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+<script type="text/javascript">
+var data='[data]<li class="tab-li {is_new}">'+
+	'<p class="p-img"><a target="_blank" href="{url}"><img src="{pic}" alt="{title}" class="o-img"/></a></p>'+
+	'<h2><a target="_blank" href="{url}"  class="tli-title">{title}</a></h2>'+
+	'<p class="line-k">体验奖励：<span>{award}</span><br />'+
+	'剩余名额：{num}<br />体验时间：{time}</p>'+
+	'<a target="_blank" href="{url}" class="mores">立即查看</a></li>[/data]';
+var data2='[data]<li class="tab-li">'+
+	'<p class="p-img"><a target="_blank" href="{url}"><img src="{pic}" alt="{title}" class="o-img"/></a></p>'+
+	'<h2><a target="_blank" href="{url}"  class="tli-title">{title}</a></h2>'+
+	'<p class="line-k">体验奖励：<span>{award}</span><br />'+
+	'剩余名额：{num}<br />体验时间：{time}</p>'+
+	'<a target="_blank" href="{url}" class="ends">立即查看</a></li>[/data]';
+var url = "{% url 'get_task_page' %}" + "?page={page}&size={pageSize}&";
+function pagecallback(){
+	$(".tab-li.new").prepend('<div class="newpost t">新</div>');
+}
+var default_filter = {{defalut_filter}};
+var textarray=[];
+function getText(n) {
+	 if (textarray[n-1])
+		 return textarray[n-1];
+	 else
+		 return n;
+}
+
+$(function(){
+   	// $('.task_h a').toggleClass("vo");
+    $('.nav__item:eq(2)').addClass('active');
+   	$("#tab li").eq(default_filter).toggleClass("cur");
+	$("#pagedata1").ajaxPage({
+	    url:url+"state=1&filter=" + default_filter,
+	    pageId:$("#page1"),
+	    pageSize:6,
+	    run:true,
+	    content:data,
+	    complete:pagecallback,
+	});
+	$("#pagedata2").ajaxPage({
+	    url:url+"state=2&filter=0",
+	    pageId:$("#page2"),
+	    pageSize:6,
+	    run:true,
+	    content:data2,
+	});
+ 	$("#tab li").click(function(){
+		if($(this).attr("class")!="cur"){
+			$(this).toggleClass("cur").siblings().removeClass("cur")
+			var index = $(this).index();
+			$("#page1").empty();
+			$("#pagedata1").ajaxPage({
+			    url:url+"state=1&filter="+index,
+			    pageId:$("#page1"),
+			    pageSize:6,
+			    run:true,
+			    content:data,
+			    complete:pagecallback,
+			});
+		}
+ 	});
+ 	$("#tabg li").click(function(){
+		if($(this).attr("class")!="curs"){
+			$(this).toggleClass("curs").siblings().removeClass("curs")
+			var index = $(this).index();
+			$("#page2").empty();
+			$("#pagedata2").ajaxPage({
+			    url:url+"state=2&filter="+index,
+			    pageId:$("#page2"),
+			    pageSize:6,
+			    run:true,
+			    content:data2,
+			});
+		}
+ 	});
+    $('.flexslider').flexslider({
+           directionNav: true,
+           pauseOnAction: false
+    });
+
+});
+</script>
+
+</head>
+<body>
+{% include "header.html" %}
+<div id="content">
+   <div id="index-banner">
+    <div class="flexslider">
+      <ul class="slides">
+	  {% for adv in ad_list %}
+        <li onclick="location='{{adv.url}}'" style="background:url({{adv.pic.url}}) 50% 0 no-repeat;cursor:pointer;"></li>
+        <script>textarray.push("{{adv.navigation}}");</script>
+      {%endfor%}
+      </ul>
+
+
+    </div>
+  </div>
+    <div class="cont-box">
+	<div class="cont">
+    <span class="we-one"><b>体验福利参与步骤</b>:</span>
+    <span><img src="{% static 'images/number.png' %}" class="ew-img"/><span class="ew">1</span></span><span><a href="#" class="ew-dian">点击查看操作流程</a><img src="{% static 'images/jiantou.png' %}" class="ew-jt" style="margin-left:12rem"/></span>
+    <span style="margin-left: 18rem;"><img src="{% static 'images/number.png' %}" class="ew-img"/><span class="ew">2</span></span><span><a href="#" class="ew-dian">进行商家操作</a><img src="{% static 'images/jiantou.png' %}" class="ew-jt" style="margin-left: 9.5rem;"/></span>
+     <span style="margin-left: 15rem;"><img src="{% static 'images/number.png' %}" class="ew-img"/><span class="ew">3</span></span><span><a href="#" class="ew-dian">返回网站提交数据</a></span>
+    </div>
+    </div>
+
+    <div class="conte">
+    	<div class="ew-left">
+        	<!-- 代码 begin -->
+
+                <div id="tab">
+                <span class="rep-ones"> <img src="{% static 'images/shape.png' %}"/>正在进行的体验福利</span>
+                  <div class="tabList" style="float:right;">
+
+                    <ul>
+                    	<li>全部</li>
+                        <li>新手入门</li>
+                        <li>进阶体验</li>
+                        <li>高手专区</li>
+                    </ul>
+                  </div>
+                  <div class="tabCon">
+                    <div class="cur">
+                    	<ul id="pagedata1">
+
+                      </ul>
+                    </div>
+                  </div>
+            </div>
+            <div class="changes-p">
+            	<div class="page"  id="page1">
+                 </div>
+            </div>
+
+            <!-- 代码 begin -->
+
+                <div id="tabg" style="margin-top:2rem;">
+                <span class="rep-ones"> <img src="{% static 'images/shape.png' %}"/>已经结束的体验福利</span>
+                  <div class="tabList" style="float:right;">
+
+                    <ul>
+                        <li class="curs">全部</li>
+                        <li>新手入门</li>
+                        <li>进阶体验</li>
+                        <li>高手专区</li>
+                    </ul>
+                  </div>
+                  <div class="tabCon">
+                    <div class="curs">
+                    	<ul id="pagedata2">
+
+                      </ul>
+                    </div>
+
+                  </div>
+            </div>
+            <div class="changes-p">
+				<div class="page"  id="page2">
+                </div>
+            </div>
+        </div>
+        	<div class="ew-right">
+		<div class="ew-more">
+	    	<div class="er-h2"><span>谁刚刚体验了</span></div>
+	        <div id="colee" style="overflow:hidden;height:320px; width:100%;">
+                <div id="colee1">
+                 {%for exp in exps %}
+                       <li>
+                       		<p><font>{{exp.username}}</font>&nbsp;&nbsp;&nbsp; 体验了<span>1分钟前</span></p>
+                       		<a href="#">{{exp.title}}</a>
+                       </li>
+                 {% empty %}
+						<li>最近还没有人提交。</li>
+				 {% endfor %}
+                </div><div id="colee2"></div>
+            </div>
+	    </div>
+		<div class="ew-more s">
+	    	<div class="er-h2"><span>福利攻略</span><span><a href="{% url 'aboutus'%}#cont=strategy" class="er-hr">MORE</a></span></div>
+	        <ul>
+	        {% for news in strategy_list %}
+	        	<li class="er-li"><a href="{{news.url}}">{{news.title}}</a></li>
+	        {% endfor %}
+	        </ul>
+	    </div>
+	</div>
+    </div>
+</div>
+<div style="clear:both"></div>
+<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+  <script type="text/javascript">
+var wwwzzjsnet = document.getElementById("colee");
+var www_zzjs_net_1 = document.getElementById("colee1");
+var www_zzjs_net_2 = document.getElementById("colee2");
+var speed=50;    //滚动速度值，值越大速度越慢
+var nnn=200/www_zzjs_net_1.offsetHeight;
+for(i=0;i<nnn;i++){www_zzjs_net_1.innerHTML+=""+ www_zzjs_net_1.innerHTML}
+www_zzjs_net_2.innerHTML = www_zzjs_net_1.innerHTML    //克隆www_zzjs_net_2为www_zzjs_net_1
+function Marquee(){
+    if(www_zzjs_net_2.offsetTop-wwwzzjsnet.scrollTop<=0)    //当滚动至www_zzjs_net_1与www_zzjs_net_2交界时
+        wwwzzjsnet.scrollTop-=www_zzjs_net_1.offsetHeight    //wwwzzjsnet跳到最顶端
+    else{
+        wwwzzjsnet.scrollTop++     //如果是横向的 将 所有的 height top 改成 width left
+    }
+}//欢迎来到站长特效网，我们的网址是www.zzjs.net，很好记，zz站长，js就是js特效，.net打造靓站，还有许多广告代码下载。
+var MyMar = setInterval(Marquee,speed);        //设置定时器
+wwwzzjsnet.onmouseover = function(){clearInterval(MyMar)}    //鼠标经过时清除定时器达到滚动停止的目的
+wwwzzjsnet.onmouseout = function(){MyMar = setInterval(Marquee,speed)}    //鼠标移开时重设定时器
+</script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+{% extends "project_base.html" %} {%load staticfiles%} {% block js %}
+<script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
+<script type="text/javascript">
+	$.ajaxSetup({
+		data: {
+			csrfmiddlewaretoken: '{{ csrf_token }}'
+		},
+	});
+	var data = '<table width="100%"><tr><th>日期</th><th>名称</th>' +
+		'<th>收入</th><th>支出</th><th>摘要</th>' +
+		'<th>操作</th></tr>[results]<tr id="parent{id}"><td>{date}</td><td>{company}</td>' +
+		'<td>{income}</td><td>{expenditure}</td><td>{remark}</td>' +
+		'<td id="item_{id}"><a class="revise-btn" onclick="pass({id})">修改' +
+		'</a> │ <a class="delete-btn" onclick="refuse({id})">删除</a></td></tr>[/results]</table>';
+	var url = "/project/balance/" + "?page={page}";
+	var url2 = "/project/balance/";
+	
+	var project_flag;		// project_flag = -1 时，为导入单条数据；project_flag != -1 时，为修改单条数据
+	var parent;
+	
+	function pass(id) {			//弹出修改单条数据弹窗
+		$(".popup-title").text("修改项目数据");
+		$("#create_time_change")[0].type = "text";
+		$("input#project_change_id").val(id);
+		project_flag = id;
+		
+		parent = "parent" + id;
+		var dom = document.getElementById(parent);
+		var children0 = $(dom).find("td").eq(0).text(),
+			children1 = $(dom).find("td").eq(1).text(),
+			children2 = $(dom).find("td").eq(2).text(),
+			children3 = $(dom).find("td").eq(3).text(),
+			children4 = $(dom).find("td").eq(4).text();
+
+		$("#create_time_change").val(children0);
+		$("#project_name_change").val(children1);
+		$("#profit_change").val(children2);
+		$("#use_change").val(children3);
+		$("#summary_change").val(children4);
+		
+		$(".change-project").show();
+	}
+	
+	function refuse(id) {		//弹出删除项目数据弹窗
+		$("input#project_delete_id").val(id);
+		$(".delete-project").show();
+	}
+	
+	
+	$(document).ready(function() {
+		$("li.home15").addClass("show-project").toggleClass("on");
+		$("li.home4").toggleClass("show");
+		$(".Tin-table tr:even").css("background-color", "#fcfcfc");
+		
+		var choose_file = document.getElementById("input_clone");
+		var hint = document.getElementById("hint");
+		choose_file.onclick = function() {
+			document.getElementById("fileupload1").click();
+		}
+		
+		$("#pagedata").ajaxPage({
+			url: url,
+			pageId: $("#page"),
+			run: true,
+			content: data,
+		});
+		
+		$("#single_import").click(function(){			//弹出单条导入弹窗
+			$(".Finnow p input").val("");
+			$(".popup-title").text("单条数据导入");
+			$("#create_time_change")[0].type = "date";
+			$(".change-project").show();
+			project_flag = -1;
+		})
+		
+		$(".none-x, .none-x-s").click(function() {		// 关闭或取消 弹窗
+			$(".project-box").hide(); 
+		})
+		
+		$('#change_project_btn').click(function() {		//点击确认按钮提交或修改单条项目数据
+			var create_time_change = $("#create_time_change").val(),
+				project_name_change = $("#project_name_change").val(),
+				profit_change = $("#profit_change").val(),
+				use_change = $("#use_change").val(),
+				summary_change = $("#summary_change").val();
+			
+//			console.log(project_flag+", "+create_time_change+", "+project_name_change+", "+profit_change+", "+use_change+", "+summary_change);
+			if (project_flag == -1) {
+				console.log(url2)
+				$.ajax({
+					url: url2,
+					dataType: "json",
+					type: "POST",
+					data: {
+						'date': create_time_change,
+						'company': project_name_change,
+						'income': profit_change,
+						'expenditure': use_change,
+						'remark': summary_change
+					},
+					success: function(ret) {
+							alert("操作成功！");
+					},
+					error: function(ret) {
+						alert(JSON.stringify(ret));
+					}
+				});
+			} else{
+				console.log(url2 + project_flag)
+				$.ajax({
+					url: url2 + project_flag + "/",
+					dataType: "json",
+					type: "PUT",
+					data: {
+						'date': create_time_change,
+						'company': project_name_change,
+						'income': profit_change,
+						'expenditure': use_change,
+						'remark': summary_change
+					},
+					success: function(ret) {
+							console.log(ret);
+							alert("操作成功！");
+							var dom = document.getElementById(parent);
+							$(dom).find("td").eq(0).text(ret.date);
+							$(dom).find("td").eq(1).text(ret.company);
+							$(dom).find("td").eq(2).text(ret.income);
+							$(dom).find("td").eq(3).text(ret.expenditure);
+							$(dom).find("td").eq(4).text(ret.remark);
+					},
+					error: function(ret) {
+						alert(JSON.stringify(ret));
+					}
+				});
+			}
+			$(".change-project").hide();
+		});
+		
+		$('#delete_project_btn').click(function() {		//点击确认按钮删除单条项目数据
+			project_flag = $("input#project_delete_id").val();
+			console.log(url2 + project_flag);
+			
+			$.ajax({
+				url: url2 + project_flag + "/",
+				dataType: "json",
+				type: "DELETE",
+				data: {
+					'id': project_flag,
+				},
+				success: function(ret) {
+						alert("操作成功！");
+				},
+				error: function(ret) {
+					alert(JSON.stringify(ret));
+				}
+			});
+			$(".delete-project").hide();
+		});
+		
+		$("#search").click(function() {			//搜索项目数据
+			var newurl = url;
+			
+			created_time_start = $("#created_time_start").val();
+			created_time_end = $("#created_time_end").val();
+			project_name = $("#project_name").val();
+			
+			if(created_time_start) {
+				newurl += "&dateft_0=" + created_time_start;
+			}
+			if(created_time_end) {
+				newurl += "&dateft_1=" + created_time_end;
+			}
+			if(project_name) {
+				newurl += "&company=" + project_name;
+			}
+			console.log(newurl);
+			
+			var newdata = data;
+			$("#page").empty();
+			$("#pagedata").ajaxPage({
+				url: newurl,
+				pageId: $("#page"),
+				run: true,
+				content: newdata,
+			});
+		});
+		
+		$("#export").click(function() {			//导出表格
+			created_time_start = $("#created_time_start").val();
+			created_time_end = $("#created_time_end").val();
+			project_name = $("#project_name").val();
+			
+			var html = '<form action="' + "{% url 'export_finance_excel' %}" + '" method="get" target="_self" id="postData_form">';
+			
+			if(created_time_start) {
+				html += '<input name="created_time_start" type="hidden" value="' + created_time_start + '"/>';
+			}
+			if(created_time_end) {
+				html += '<input name="created_time_end" type="hidden" value="' + created_time_end + '"/>';
+			}
+			
+			if(project_name) {
+				html += '<input name="project_name" type="hidden" value="' + project_name + '"/>';
+			}
+			
+			html += '</form>';
+			var iframe = document.getElementById('myIFrame');
+			iframe.contentWindow.document.open();
+			iframe.contentWindow.document.write(html);
+			iframe.contentWindow.document.close();
+			document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+		});
+		
+		$('#import').click(function() {			//导入表格
+			var fileElementId = 'fileupload1';
+			if(!document.getElementById(fileElementId).value) {
+				alert("请先选择文件");
+				return;
+			}
+			$.ajaxFileUpload({
+				url: "{% url 'import_finance_excel'%}",
+				secureuri: false,
+				fileElementId: fileElementId, //file标签的id
+				dataType: 'json', //返回数据的类型
+				data: {}, //一同上传的数据
+				success: function(data, status) {
+					if(data.code == 0) {
+						alert("导入成功！ 数量：" + data.num);
+					} else {
+						alert(data.msg + " 成功数量：" + data.num);
+					}
+				},
+				error: function(data, status, e) {
+					alert(e);
+				}
+			});
+			//	hint.innerHTML = '无';
+		});
+
+	});
+</script>
+{% endblock js %} {% block right %}
+<div class="Criteria">
+	<span>搜索条件</span>
+	<div class="Crite-box">
+		<form>
+			<table width="100%">
+				<tr>
+					<td>
+						<i>开始日期：</i>
+						<input id="created_time_start" type="date" />
+					</td>
+					<td>
+						<i>结束日期：</i>
+						<input id="created_time_end" type="date" />
+					</td>
+					<td>
+						<i style="letter-spacing:4.8px;">公司名称：</i>
+						<input id="project_name" type="text" />
+					</td>
+				</tr>
+			</table>
+			<div class="Submit-in">
+				<input id="single_import" type="button" value="单条导入" />
+				<input id="search" type="button" value="搜索" />
+				<input id="export" type="button" value="导出" />
+			</div>
+			<div class="leading-in">
+				<input id="fileupload1" name="file" type="file" onchange='hint.innerHTML = this.files[0].name;' />
+				<a id="input_clone" class="input-clone">选择文件</a>
+				<p class="hint-box">已选择表格：<b id="hint" class="hint">无</b></p>
+				<input id="import" type="button" value="表格导入" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="Tin-table">
+	<div id="pagedata">
+	</div>
+	<div class="Page-in-admin">
+		<div class="page" id="page">
+		</div>
+	</div>
+</div>
+{%endblock%} {% block modal %}
+<div class="change-project project-box">
+	<div class="w570-box">
+		<h3 class="popup-title">修改项目数据</h3>
+		<button class="none-x"></button>
+		<form class="Finnow set-project">
+				<input id="project_change_id" type="hidden" />
+			<p>
+				<span>日期：</span>
+				<input id="create_time_change" type="text" />
+			</p>
+			<p>
+				<span>公司名称：</span>
+				<input id="project_name_change" type="text" />
+			</p>
+			<p>
+				<span>收入：</span>
+				<input id="profit_change" type="text" />
+			</p>
+			<p>
+				<span>支出：</span>
+				<input id="use_change" type="text" />
+			</p>
+			<p>
+				<span>摘要：</span>
+				<input id="summary_change" type="text" />
+			</p>
+			
+			<div class="Finnow-Sub">
+				<input id="change_project_btn" type="submit" value="确认" onclick="return false;"/>
+				<input type="button" value="取消" class="none-x-s" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<!--删除项目弹窗-->
+<div class="delete-project project-box">
+	<div class="w570-box">
+		<h3>确认删除该条数据？</h3>
+		<button class="none-x"></button>
+		<form class="Audit-in">
+			<input id="project_delete_id" type="hidden" />
+			<div class="Finnow-Sub">
+				<input id="delete_project_btn" type="submit" value="确认" class="Deny-box" onclick="return false;" />
+				<input type="button" value="取消" class="none-x-s" />
+			</div>
+		</form>
+	</div>
+</div>
+<iframe id="myIFrame" scrolling="yes" src="abount:blank" style="display:none" frameborder=1></iframe>
+<!--end-->
+{% endblock modal %}

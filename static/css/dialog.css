@@ -1,0 +1,13 @@
+.popup1,.popup2,.popup3,.popup4,.popup5,.popup6,.popup7 { position:fixed; top:0; width:100%; height:100%; background:url(../images/pop.png); left:0; z-index:10000;}
+.w698_box { width:698px; height:auto; margin:15% auto; overflow:hidden;}
+.pop_left { float:left; width:638px; height:auto; background:#fff;}
+.pop_left h2 { font-size:24px; color:#00b4ff; line-height:80px; text-align:center;}
+.pop_left p { font-size:14px; color:#8c8c8c; line-height:44px; text-align:center; margin:0;}
+.pop_left p font { color:#ff0000;}
+.btn_cont { float:left; width:100%; height:auto; text-align:center; margin-top:25px; padding-bottom:40px;}
+.btn_cont button { margin:0 30px ; width:93px; height:28px; border:1px solid #f08519; border-radius:20px; font-size:15px; color:#fff; background:#f08519; cursor:pointer;}
+.btn_x { float:right; width:60px; height:60px; }
+.btn_x button{ width:100%; height:100%; background:url(../images/btn_x.png) no-repeat center; cursor:pointer; border:none;}
+.btn_cont2 { float:left; width:100%; height:auto; text-align:center; margin-top:20px; padding-bottom:40px;}
+.btn_cont2 button { margin:0 30px ; width:122px; height:28px; border:1px solid #f08519; border-radius:20px; font-size:15px; color:#fff; background:#f08519; cursor:pointer;}
+.pop_left form { float:left; width:100%; height:auto;}

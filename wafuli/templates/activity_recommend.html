@@ -1,0 +1,257 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>活动详情</title>
+    <meta name="keywords" content="福利详情" />
+    <meta name="description" content="福利详情" />
+    <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+    <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}" />
+    <link rel="stylesheet" type="text/css" href="{%static 'css/common.css'%}" />
+    <link rel="stylesheet" type="text/css" href="{%static 'css/activity.css'%}" />
+    <link rel="stylesheet" type="text/css" href="{%static 'css/User.css'%}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+    <script type="text/javascript" src="{%static 'js/jquery-1.11.2.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+    <!--[if IE 6]>
+    <script src="{%static 'js/DD_belatedPNG.js'%}"></script>
+    <script>
+        DD_belatedPNG.fix('.ie6Png,.ie6Png img,*');
+    </script>
+    <![endif]-->
+<script>
+var data = '<table class="mytable" id="tb1"><tr class="mytable1">'+
+'<td style="width: 150px;">提交时间</td><td style="width: 250px;">活动主题</td><td style="width: 250px;">活动链接</td>'+
+'<td style="width: 220px;">推荐理由</td><td style="width: 100px;">审核结果</td>'+
+'</tr>[data]<tr><td>{date}</td><td>{title}</td><td>{url}</td><td>{reason}</td>'+
+'<td reason="{refuse_reason}" class="state_{state_int}">{result}</td></tr>[/data]</table>';
+var data2 = '<table class="mytable3" id="tb2"><tr class="mytable1">'+
+'<td>用户名</td><td>通过审核数</td><td>当前排名（月度）</td><td>奖励福币</td>'+
+'</tr>[data]<tr><td>{username}</td><td>{num}</td><td>{rank}</td>'+
+'<td class="mycheck">{award}</td></tr>[/data]</table>';
+var url = "{% url 'get_activity_recommend_page' %}" + "?page={page}&size={pageSize}";
+var url2 = "{% url 'get_recommend_rank_page' %}" + "?page={page}&size={pageSize}";
+var this_url = window.location.href;
+$.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
+    $(function () {
+    	var ahref = $("a.login").attr("href");
+    	ahref += "?next="+this_url;
+    	$("a.login").attr("href",ahref);
+        $(".page a").click(function () {
+
+            $(this).addClass("mytableon").siblings().removeClass("mytableon")
+        })
+        $("#tb1_click").click(function () {
+        	$("#page").empty();
+            $("#pagedata").ajaxPage({
+        	    url:url,
+        	    pageId:$("#page"),
+        	    pageSize:3,
+        	    run:true,
+        	    content:data,
+        	});
+            $("#AuditInfo").show();
+        })
+        $("#tb2_click").click(function () {
+        	$("#page").empty();
+        	$("#pagedata").ajaxPage({
+        	    url:url2,
+        	    pageId:$("#page"),
+        	    pageSize:3,
+        	    run:true,
+        	    content:data2,
+        	});
+            $("#AuditInfo").show();
+        })
+
+        $("#btnsave").click(function () {
+        	var title = $("#txttit").val();
+        	var url = $("#txtnet").val();
+        	var reason = $("#txtrea").val();
+            if (title.length == 0 || url.length < 4) {
+                $("#fil").show();
+                $("#suc").hide();
+            }
+            else {
+            	$.ajax({
+        			url:"{%url 'activity_recommend' %}",
+        			dataType:"json",
+        			type:"post",
+        			data:{
+        				'title':title,
+        				'url':url,
+        				'reason':reason
+        			},
+        			success:function(ret){
+        				if(ret.code==-1){
+        					alert("请先登录！")
+        					window.location.href = ret.url;
+        				}
+        				else if(ret.code==0){
+        					$("#suc").show();
+        				}
+        				else{
+        					alert(ret.res_msg);
+        				}
+        			},
+        			error:function(){
+        				alert("请检查网络连接");
+        			}
+        		});
+            }
+        });
+        $("#btnclear").click(function () {
+        	$("#txttit").val("");
+        	$("#txtnet").val("");
+        	$("#txtrea").val("");
+        })
+        $(".None-p button").click(function () {
+            $(".Password-modify4").css("display", "none")
+        })
+        $("input.close").click(function () {
+            $(".Password-modify4").css("display", "none")
+        })
+
+        // 审核拒绝原因弹窗
+        $('#AuditInfo').on('click','.state_2',function(){
+  		  var reason = $(this).attr('reason');
+  	      alert(reason);
+  	  });
+    })
+</script>
+</head>
+<body>
+   {% include "header.html" %}
+    <div id="content">
+        <div><a href="{{adv.url}}"><img src="{{adv.pic.url}}"  class="co-imgp"/></a></div>
+        <div class="myclear"></div>
+        {% if user.is_authenticated %}
+		<div class="myfuli">
+            <div class="myfuli1">
+                <img src="{%static 'images/my_pic1.gif'%}" />
+            </div>
+            <div class="myfuli2">我的福利信息</div>
+        </div>
+        <div class="myfulis">
+            <div>
+                <div class="myfuli3">
+                    <span>当月提交福利条数: <font>{{total_num}} 条</font></span>
+                    <span style="margin-left: 200px;">通过审核数: <font>{{acc_num}} 条</font></span>
+                    <span style="margin-left: 200px;">当前排名（月度）: <font>{{rank}}</font></span><br />
+                    <span><a id="tb1_click">点击查看审核信息 >></a></span>
+                    <span style="margin-left: 340px;"><a id="tb2_click">查看当前排名 >></a></span>
+                </div>
+	                <div class="myclear"></div>
+	            <div id="AuditInfo" style="display: none">
+	                <div id="pagedata">
+					</div>
+	                <div class="Page-in-recomm">
+	                	<div class="page"  id="page">
+	                    </div>
+	      			</div>
+	      		</div>
+                <div class="myclear"></div>
+            </div>
+        </div>
+      {%endif%}
+        <div class="myclear"></div>
+        <div class="myfuli">
+            <div class="myfuli1">
+                <img src="{%static 'images/my_pic2.png'%}" />
+            </div>
+            <div class="myfuli2">提交福利信息</div>
+
+        </div>
+        <div class="myfulis">
+            <div class="myfuli3" style="height: 300px;">
+
+                    <div class="myclear"></div>
+                    <div class="myclear"></div>
+                    <span>活动主题：</span>
+                    <input type="text" class="myre-input" id="txttit" placeholder="必填项，活动主题，不超过200字"/>
+                    <div class="myclear"></div>
+                    <span>活动链接：</span>
+                    <input type="text" class="myre-input" id="txtnet" placeholder="必填项，活动地址（网页URL）,不超过200字"/>
+                    <div class="myclear"></div>
+					<span>推荐理由：</span>
+                    <input type="text" class="myre-input" id="txtrea" placeholder="选填项，提高审核通过几率"/>
+                    <div>
+                        <div style="margin-left:100px;">
+                            <button class="myre-liji" type="button" id="btnsave">提交</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button class="myre-lijis" id="btnclear">清空</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="myclear"></div>
+        <div class="myfuli">
+            <div class="myfuli1">
+                <img src="{%static 'images/my_pic3.png'%}" />
+            </div>
+            <div class="myfuli2">活动流程&规则</div>
+
+        </div>
+        <div class="myfulis">
+            <div>
+                <img src="{%static 'images/my_pic5.gif'%}" />
+            </div>
+            <div class="myinfo">
+                1、用户登录挖福利官方网站，由专门入口提供免费福利信息。包括且不仅限于红包、P2P体验金、话费、流量、优惠券等福利信息；<br />
+                2、用户提供的所有免费福利对应的主体必须为正规的主流公司，并确保信息的真实性、有效性、合法性，否则一律为无效福利；<br />
+                3、用户提供的福利需提交活动页面直达链接、活动主题、推荐理由三项，否则一律为无效福利；<br />
+                4、用户提供的福利信息活动时间跨度不少于三天，否则一律为无效福利；<br />
+                5、用户提供的福利信息与对应网站其他活动不冲突，否则一律为无效福利；<br />
+                6、目前涉及到关注扫码、转发文章、有地域限制、以及使用成本过高等福利信息，一律为无效福利；<br />
+				7、用户提交带有广告嫌疑或者促销嫌疑的福利信息时，挖福利保留对福利信息拒绝的权利。<br />
+                <span style="font-size: 18px; color: #F28117; font-weight: 500">本次活动规则：</span>
+                <br />
+                1、不同用户递交相同的福利，将按照提交时间优先采纳提交时间较早的；<br />
+				2、每天征收的福利条数为10条，若有优质福利信息可酌情增加；<br />
+				3、挖福利用户每人每天限提交5条福利，请确保福利亲测有效；<br />
+				4、我们将在一个工作日内对提交的福利进行审核，并给出反馈意见；<br />
+				5、一经采用，我们将在24小时内发放3元现金和50个积分至您的挖福利账户；<br />
+				6、按月进行统计，我们对提供有效福利信息的用户给予一定奖励：<br />
+				①、每月提交的福利达到10条（审核通过），将送精美礼品一份；<br />
+				②、按照自然月进行排名（本页面将实时公布最新排名），第一名：书包一个。第二、三名：各送抱枕一个。<br />
+				7、挖福利对本次活动拥有最终解释权；<br />
+                如有疑问请联系<span style="color: #F28117">在线客服</span>或拨打服务热线：<span style="color: #F28117">0734-8344414</span>
+                <div class="myclear"></div>
+
+            </div>
+        </div>
+        <div class="myclear"></div>
+        <div class="Password-modify4" style="display: none;" id="fil">
+            <div class="Passbox">
+                <div class="Passinfo" style="height: 245px;">
+                    <h2>温馨提示</h2>
+                    <p>您提交的信息为<span style="color: red"> 非法链接 </span>请输入正确的链接</p>
+                    <input class="close" type="submit" value="返  回" />
+
+                </div>
+                <div class="None-p">
+                    <button></button>
+                </div>
+            </div>
+        </div>
+        <div class="Password-modify4" style="display: none;" id="suc">
+            <div class="Passbox">
+                <div class="Passinfo" style="height: 245px;">
+                    <h2>温馨提示</h2>
+                    <p>您的信息已提交成功，我们将尽快处理！</p>
+                    <input class="close" type="submit" value="确  定" />
+                </div>
+                <div class="None-p">
+                    <button></button>
+                </div>
+            </div>
+        </div>
+        <!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+</body>
+</html>

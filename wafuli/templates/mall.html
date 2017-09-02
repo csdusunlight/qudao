@@ -1,0 +1,168 @@
+﻿{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>积分商城—挖福利网</title>
+<meta name="keywords" content="挖福利，挖福利积分商城" />
+<meta name="description" content="积分商城—挖福利网" />
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/welfare.css' %}" />
+<link rel="stylesheet" type="text/css" href="/static/css/wfl-flesslider.css"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<!-- <script type="text/javascript" src="{% static 'js/jquery.flexslider-min.js' %}"></script> -->
+<script src="/static/js/wfl-flexslider-min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="{% static 'js/jQuery.infiniteCarousel.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/MSClass.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+<!--[if IE 6]>
+<script src="{% static 'js/DD_belatedPNG.js' %}"></script>
+<script>
+    DD_belatedPNG.fix('.ie6Png,.ie6Png img,*');
+</script>
+<![endif]-->
+<script type="text/javascript">
+var data='[data]<li class="op-li"><a target="_blank" href="{url}"><img src="{pic}" width=190px height=165px class="op-limg"/></a>' +
+			'<a target="_blank" href="{url}"><p class="po-p">{name}</p></a><p class="po-dou">兑换该奖品需：' +
+			'<span class="lo-sp">{price}</span><img src='+
+			'"{% static 'images/doudou.png' %}" class="dou-dou"/></p></li>[/data]';
+var url = "{% url 'get_commodity_page' %}" + "?page={page}&size={pageSize}";
+function switchpage(attr){
+	$("#pagedata").ajaxPage({
+	    url: url + attr,
+	    pageId:$("#page"),
+	    pageSize:16,
+	    run:true,
+	    content:data,
+	});
+}
+$(function(){
+    $('.nav__item:eq(3)').addClass('active');
+ 	var type = "{{type}}"
+ 	if (type){
+ 	 	obj = $("#"+type);
+ 	 	try {
+	 	 	obj.addClass("on");
+	 	 	attr = obj.attr("id").replace("_","=");
+	 	 	switchpage('&'+attr)
+ 	 	}
+ 	 	catch(e){
+ 	 		switchpage();
+ 	 	}
+ 	}
+ 	else {
+ 		switchpage();
+ 	}
+
+ 	$(".num").click(function(){
+ 		$(".num").removeClass("on");
+ 		obj = $(this);
+ 		obj.addClass("on");
+ 		attr = obj.attr("id").replace("_","=");
+ 		switchpage('&'+attr)
+ 	});
+    $('.flexslider').flexslider({
+        directionNav: true,
+        pauseOnAction: false
+    });
+});
+</script>
+</head>
+<body>
+{% include "header.html" %}
+<div id="content">
+   <div id="index-banner">
+
+    <div style="height: 307px" class="flexslider">
+        <ul class="slides">
+            {% for adv in ad_list %}
+                <li onclick="location='{{adv.url}}'" style="height: 307px;background:url({{adv.pic.url}}) 50% 0 no-repeat;cursor:pointer;"></li>
+            {%endfor%}
+        </ul>
+
+    </div>
+    <!-- <div class="flexslider">
+      <ul class="slides">
+	  {% for adv in ad_list %}
+        <li onclick="location='{{adv.url}}'" style="background:url({{adv.pic.url}}) 50% 0 no-repeat;cursor:pointer;"></li>
+      {%endfor%}
+      </ul> -->
+
+
+    </div>
+  </div>
+    <div class="conte">
+    	<div class="ews-left">
+        	<div class="ewg-morese">
+            	<div class="erg-h2"><span>奖品分类</span><span></div>
+                <ul>
+                	<li class="esrg-lie">
+                        <p class="num" id='cat_1' style="font-size:14px;">数码产品</p>
+                        <p class="num hg-p" id='pro_1'>手机</p>
+                        <p class="num hg-p" id='pro_2'>电脑</p>
+                    </li>
+                    <li class="esrg-lie">
+                    	<p class="num" id='cat_2' style="font-size:14px;">相关产品</p>
+                        <p class="num hg-p" id='pro_3'>外设</p>
+                        <p class="num hg-p" id='pro_4'>周边</p>
+                    </li>
+                    <li class="esrg-lie">
+                    	<p class="num"  id='cat_3'style="font-size:14px;">虚拟充值</p>
+                        <p class="num hg-p" id='pro_5'>话费</p>
+                        <p class="num hg-p" id='pro_6'>Q币</p>
+                        <p class="num hg-p" id='pro_7'>骏网卡</p>
+                    </li>
+                    <li class="esrg-lie">
+                    	<p class="num" id='cat_4' style="font-size:14px;">居家生活</p>
+                        <p class="num hg-p" id='pro_8'>书籍</p>
+                        <p class="num hg-p" id='pro_9'>厨房用品</p>
+                        <p class="num hg-p" id='pro_10'>生活用品</p>
+                    </li>
+                </ul>
+            </div>
+        	<div class="ew-mores">
+            	<div class="er-h2"><span>兑奖帮助</span><span><a href="{% url 'aboutus'%}#cont=exchange_help"
+            	   class="er-hr">MORE</a></span></div>
+                <ul>
+                	{% for news in help_list %}
+			        	<li class="er-li"><a href="{{news.url}}">{{news.title}}</a></li>
+			        {% endfor %}
+                </ul>
+            </div>
+             <img src="{% static 'images/rr.png' %}" class="re-imge" style="float:left;"/>
+
+        </div>
+         <div class="ews-right">
+        	<div class="lk-o">
+            	<div class="er-h2"><span>奖品列表</span></div>
+                <ul id="pagedata">
+                    <li class="op-li">
+                    	<a href="#"><img src="{% static 'images/jf3.png' %}" class="op-limg"/></a>
+                       <a href="#"> <p class="po-p">数码一游戏鼠标</p></a>
+                        <p class="po-dou">兑换该奖品需：<span class="lo-sp">339,330</span><img src="{% static 'images/doudou.png' %}" class="dou-dou"/></p>
+                    </li>
+                </ul>
+            </div>
+            <div class="changes-p">
+            	<div class="page"  id="page">
+                 </div>
+            </div>
+        </div>
+        </div>
+
+
+
+
+
+    </div>
+</div>
+<div style="clear:both"></div>
+ <!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+</body>
+</html>

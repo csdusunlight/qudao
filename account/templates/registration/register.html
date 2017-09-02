@@ -1,0 +1,184 @@
+﻿{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>注册</title>
+<meta name="keywords" content="注册" />
+<meta name="description" content="注册" />
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/accounts/user-validate.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/accounts/refresh.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/accounts/send.js' %}"></script>
+<style>
+  .bottom-nav {
+    position: relative;
+    width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .bottom-nav a, .bottom-nav .down-app-hover {
+    cursor: pointer;
+    color: #666;
+    text-decoration: none;
+  }
+  .bottom-nav .bottom-nav-item {
+    display: inline-block;
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .link-phone {
+    padding-left: 24px;
+    background: url(/static/images/link-phone-icon.png)  left center/auto 24px no-repeat;
+  }
+  .apk-container {
+    position: absolute;
+    top: -270px;
+    left: 280px;
+    display: none;
+    width: 200px;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #e4e4e4;
+    border-radius: 8px;
+    opacity: 0;
+    -webkit-transition: opacity 0.4s ease-in;
+    transition: opacity 0.4s ease-in;
+  }
+  .apk-container:after {
+    content: "";
+    position: absolute;
+    top: 250px;
+    left: 110px;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border-top: 1px solid #e4e4e4;
+    border-right: 1px solid #e4e4e4;
+    -webkit-transform: rotate(135deg);
+    transform: rotate(135deg);
+  }
+  .apk-container p{
+    text-align: center;
+    color: #666;
+    margin: 8px 0;
+  }
+  .apk-container img {
+    width: 100%;
+  }
+  .down-app-hover:hover + .apk-container {
+    display: block;
+    opacity: 1;
+  }
+</style>
+<script type="text/javascript">
+	var coderefresh_url = "{% url 'captcha-refresh' %}";
+	var phoneimageV_url = "{% url 'phoneImageV' %}";
+	var verifyemail_url = "{% url 'verifyemail' %}";
+	var verifymobile_url = "{% url 'verifymobile' %}";
+	var verifyusername_url = "{% url 'verifyusername' %}";
+	var verifyinviter_url = "{% url 'verifyinviter' %}";
+	var get_code_url = "{% url 'phoneImageV' %}";
+	var register_url = "{% url 'register' %}";
+	var index_url = "{% url 'freshman_introduction' %}";
+	var login_url = "{% url 'login' %}";
+	$.ajaxSetup({
+	    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+	});
+$(function(){
+  $(".g-checkbox,.g-lab-txt").click(function() {
+    $("#agreeChk").click();
+    if(document.getElementById("agreeChk").checked) {
+      $(this).parent().find(".g-checkbox").css("background-position", "0 0");
+    } else {
+      $(this).parent().find(".g-checkbox").css("background-position", "0 -18px")
+    }
+  });
+
+  $("#recommend_id").click(function(){
+    $("#recommend_container").toggleClass("recommend-container");
+  });
+  var password_input = document.getElementById('password_input');
+  var passwordEye = document.getElementById('password_eye');
+  passwordEye.onclick = function (){
+    if (password_input.type == "password") {
+      password_input.type = "text";
+      passwordEye.setAttribute("class", "password-eye show")
+    } else{
+      password_input.type = "password";
+      passwordEye.setAttribute("class", "password-eye")
+    }
+  }
+
+//$(".re-input").each(function() {
+//  this.value = "";
+//});
+});
+  </script>
+</head>
+<body>
+{% include "header.html" %}
+	<div>
+    <div class="contant">
+    	<div class="co-left" style="width:45%;margin-left: 6.85em;">
+            <div class="re-d">
+              <img class="register-icon register-phone" src="{% static 'images/register-phone.png' %}" />
+              <input type="text" class="re-input" name="mobile" placeholder="请输入您的手机号" /><span class="tips" id="divphone"></span>
+            </div>
+            <div class="re-d">
+              <input type="text" autocomplete="off" class="re-input" name="code" placeholder="请输入手机验证码" />
+              <button id="action-send-code-imagvalidate" class="re-huo">获取手机验证码</button>
+              <span class="tips" id="divcode"></span>
+            </div>
+            <div class="re-d" style="position: relative;">
+              <img class="register-icon register-lock" src="{% static 'images/register-lock.png' %}" />
+              <input type="password" onfocus="this.type='password'" autocomplete="off" id="password_input" class="re-input" name="password1" placeholder="登录密码，6-16位，至少包含数字、字母和特殊符号中的两种" />
+              <span class="tips" id="divpd"></span>
+              <a id="password_eye" class="password-eye"></a>
+            </div>
+            <div id="recommend_container" class="re-d">
+            <p id="recommend_id" class="re-ti re-dti recommend-id">推荐人ID<span style="color:#008fd7;font-size:14px;">（选填）</span></p>
+              <div id="recommend_box" class="recommend-box">
+                <img class="register-icon register-recommend" src="{% static 'images/register-recommend.png' %}" />
+                <input type="text" name="invite" class="re-input" value="{{icode}}"  placeholder="请输入邀请人ID" />
+                <span class="tips" id="divinvite"></span>
+              </div>
+            </div>
+            <div class="re-d">
+					<span class="moni-checked allvert rel">
+						<span class="g-checkbox"></span>
+						<input type="checkbox" class="x_input_ck abs" checked="checked" style="left:-9999px" id="agreeChk"/>
+						<span class="g-lab-txt">我接受</span>
+					</span>
+				<a href="/press/19/" target="_blank" class="blue" id="btn_xieyi">《注册协议》</a> 、<a class="blue" target="_blank" href="/press/20/">《免责声明》</a>
+
+			</div>
+            <input type="button" class="g-btn-reg2 re-liji" id="btnSubmit" name='registSubmit' value="立即注册"/>
+
+        </div>
+        <div class="co-left" style="text-align:left;width:45%">
+       		<div class="re-pad"><p style="font-size:16px;color:#111;margin: 0;">已有账号？<span><a href="{%url 'login'%}" class="ljdl">立即登录</a></span></p></div>
+            <a href="{%url 'account_invite'%}"><div class="re-ret"><img src="{% static 'images/register-bg.png' %}" style="margin:3rem;margin-top: 10px;width: 280px;"/></div></a>
+        </div>
+    </div>
+
+</div>
+<div style="clear:both"></div>
+<div class="bottom-nav">
+  <span class="bottom-nav-item down-app-hover">下载APP</span> &nbsp;|&nbsp;
+  <div class="apk-container">
+    <p>下载APP更有惊喜等着你</p>
+    <img src="{% static 'images/app-download-erweima.png' %}" alt="apk二维码" />
+  </div>
+  <a class="bottom-nav-item" href="{% url 'aboutus' %}">关于我们</a> &nbsp;|&nbsp;
+  <a class="bottom-nav-item" href="{% url 'freshman_introduction' %}">了解挖福利</a> &nbsp;|&nbsp;
+  <span class="link-phone bottom-nav-item">0731-85586375</span>
+</div>
+<div>Copyright&nbsp; &copy; 2015-2024&nbsp; 挖福利 版权所有 备案号：湘ICP备15015815号-2</div>
+</body>
+</html>

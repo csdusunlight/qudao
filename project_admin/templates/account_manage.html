@@ -1,0 +1,338 @@
+{% extends "project_base.html" %} {%load staticfiles%} {% block js %}
+<script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
+<script type="text/javascript">
+
+	var data = '<table width="100%"><tr><th>创建时间</th><th>账户ID</th><th>账户类型</th>' +
+		'<th>账户名称</th><th>银行帐号</th><th>开户行</th><th>支行信息</th><th>余额</th><th>备注</th>' +
+		'</tr>[results]<tr id="parent{id}"><td>{time}</td><td>{id}</td><td data-value={type}>{type_des}</td>' +
+		'<td>{name}</td><td>{bankaccount}</td><td data-value={bank}>{bank_des}</td><td>{subbranch}</td><td>{balance}</td>' +
+		'<td>{remark}</td>' +
+//		'<td id="item_{id}"><a class="revise-btn" onclick="pass({id})">修改</a> │ <a class="delete-btn" onclick="refuse({id})">删除</a></td>' +
+		'</tr>[/results]</table>';
+	var url = "/project/account/" + "?page={page}";
+	var url2 = "/project/account/";
+	
+	var project_flag;		// project_flag = -1 时，为导入单条数据；project_flag != -1 时，为修改单条数据
+	var parent;
+	
+	function pass(id) {			//弹出修改单条数据弹窗
+		$("input#project_change_id").val(id);
+		project_flag = id;
+		
+		parent = "parent" + id;
+		var dom = document.getElementById(parent);
+		var account_type_change = $(dom).find("td").eq(2).data("value"),
+			account_name_change = $(dom).find("td").eq(3).text(),
+			bank_account_change = $(dom).find("td").eq(4).text(),
+			bank_change = $(dom).find("td").eq(5).data("value"),
+			bank_sub_change = $(dom).find("td").eq(6).text(),
+			start_money_change = $(dom).find("td").eq(7).text(),
+			remark_change = $(dom).find("td").eq(8).text();
+
+		$("#account_type_change").val(account_type_change);
+		$("#account_name_change").val(account_name_change);
+		$("#bank_account_change").val(bank_account_change);
+		$("#bank_change").val(bank_change);
+		$("#bank_sub_change").val(bank_sub_change);
+		$("#start_money_change").val(start_money_change);
+		$("#remark_change").val(remark_change);
+		
+		$(".change-project").show();
+	}
+	
+	function refuse(id) {		//弹出删除项目数据弹窗
+		$("input#project_delete_id").val(id);
+		$(".delete-project").show();
+	}
+	
+	
+	$(document).ready(function() {
+		$("li.home15").addClass("show-project").toggleClass("on");
+		$("li.home7").toggleClass("show");
+		$(".Tin-table tr:even").css("background-color", "#fcfcfc");
+		
+		
+		$("#pagedata").ajaxPage({
+			url: url,
+			pageId: $("#page"),
+			run: true,
+			content: data,
+		});
+		
+		$('#add_project_btn').click(function() {		//点击新增项目数据
+			var account_type_add = $("#account_type_add").val(),
+				account_name_add = $("#account_name_add").val(),
+				bank_account_add = $("#bank_account_add").val(),
+				bank_add = $("#bank_add").val(),
+				bank_sub_add = $("#bank_sub_add").val(),
+				start_money_add = $("#start_money_add").val(),
+				remark_add = $("#remark_add").val();
+			
+			$.ajax({
+				url: url2,
+				dataType: "json",
+				type: "POST",
+				data: {
+					'type': account_type_add,
+					'name': account_name_add,
+					'bankaccount': bank_account_add,
+					'bank': bank_add,
+					'subbranch': bank_sub_add,
+					'balance': start_money_add,
+					'remark': remark_add
+				},
+				success: function(ret) {
+						alert("操作成功！");
+				},
+				error: function(ret) {
+					alert(JSON.stringify(ret));
+				}
+			});
+			$(".add-project").hide();
+		});
+		
+		$('#change_project_btn').click(function() {		//点击修改项目数据
+			var account_type_change = $("#account_type_change").val(),
+				account_name_change = $("#account_name_change").val(),
+				bank_account_change = $("#bank_account_change").val(),
+				bank_change = $("#bank_change").val(),
+				bank_sub_change = $("#bank_sub_change").val(),
+				start_money_change = $("#start_money_change").val(),
+				remark_change = $("#remark_change").val();
+			
+			
+			$.ajax({
+				url: url2 + project_flag + "/",
+				dataType: "json",
+				type: "PUT",
+				data: {
+					'type': account_type_change,
+					'name': account_name_change,
+					'bankaccount': bank_account_change,
+					'bank': bank_change,
+					'subbranch': bank_sub_change,
+					'balance': start_money_change,
+					'remark': remark_change
+				},
+				success: function(ret) {
+					alert("操作成功！");
+					var dom = document.getElementById(parent);
+					$(dom).find("td").eq(0).text(ret.time);
+					$(dom).find("td").eq(1).text(ret.id);
+					$(dom).find("td").eq(2).text(ret.account_type);
+					$(dom).find("td").eq(3).text(ret.account_name);
+					$(dom).find("td").eq(4).text(ret.bank_account);
+					$(dom).find("td").eq(5).text(ret.bank);
+					$(dom).find("td").eq(6).text(ret.bank_sub);
+					$(dom).find("td").eq(7).text(ret.start_money);
+					$(dom).find("td").eq(8).text(ret.remark);
+				},
+				error: function(ret) {
+					alert(JSON.stringify(ret));
+				}
+			});
+			
+			$(".change-project").hide();
+		});
+		
+		$('#delete_project_btn').click(function() {		//点击确认按钮删除单条项目数据
+			project_flag = $("input#project_delete_id").val();
+			$.ajax({
+				url: url2 + project_flag + "/",
+				dataType: "json",
+				type: "DELETE",
+				data: {
+					'id': project_flag
+				},
+				success: function(ret) {
+						alert("删除成功！");
+				},
+				error: function(ret) {
+					alert(JSON.stringify(ret));
+				}
+			});
+			$(".delete-project").hide();
+		});
+		
+		
+		$("#single_import").click(function(){			//弹出单条导入弹窗
+			$(".add-project").show();
+		})
+		
+		$(".none-x, .none-x-s").click(function() {		// 关闭或取消 弹窗
+			$(".project-box").hide(); 
+		})
+		
+
+
+	});
+</script>
+{% endblock js %} {% block right %}
+<div class="Criteria">
+	<span>搜索条件</span>
+	<div class="Crite-box">
+		<form>
+			<div class="Submit-in">
+				<input id="single_import" type="button" value="新建账户" />
+			</div>
+
+		</form>
+	</div>
+</div>
+
+<div class="Tin-table">
+	<div id="pagedata">
+	</div>
+	<div class="Page-in-admin">
+		<div class="page" id="page">
+		</div>
+	</div>
+</div>
+{%endblock%} {% block modal %}
+<div class="add-project project-box">			<!--新增项目数据-->
+	<div class="w570-box">
+		<h3 class="popup-title">新增项目数据</h3>
+		<button class="none-x"></button>
+		<form class="Finnow set-project">
+				<!--<input id="project_add_id" type="hidden" />-->
+			<p>
+				<span>账户类型：</span>
+				<select name="selectType" id="account_type_add">
+					<option value="public">公帐</option>
+					<option value="private">私帐</option>
+					<option value="invest">投资</option>
+					<option value="loan">借贷</option>
+					<option value="other">其他</option>
+				</select>
+			</p>
+			<p>
+				<span>账户名称：</span>
+				<input id="account_name_add" type="text" />
+			</p>
+			<p>
+				<span>银行帐号：</span>
+				<input id="bank_account_add" type="text" />
+			</p>
+			<p>
+				<span>开户行：</span>
+				<!--<input id="bank_add" type="text" />-->
+				<select name="selectType" id="bank_add">
+					<option value="gsyh">中国工商银行</option>
+					<option value="nyyh">中国农业银行</option>
+					<option value="zgyh">中国银行</option>
+					<option value="jsyh">中国建设银行</option>
+					<option value="jtyh">交通银行</option>
+					<option value="ycyh">中国邮政储蓄银行</option>
+					<option value="zxyh">中信银行</option>
+					<option value="gdyh">中国光大银行</option>
+					<option value="hxyh">华夏银行</option>
+					<option value="msyh">中国民生银行</option>
+					<option value="gfyh">广发银行股份有限公司</option>
+					<option value="payh">平安银行</option>
+					<option value="zsyh">招商银行</option>
+					<option value="xyyh">兴业银行</option>
+				</select>
+			</p>
+			<p>
+				<span>支行信息：</span>
+				<input id="bank_sub_add" type="text" />
+			</p>
+			<p>
+				<span>初始余额：</span>
+				<input id="start_money_add" type="text" />
+			</p>
+			<p>
+				<span>备注：</span>
+				<input id="remark_add" type="text" />
+			</p>
+			
+			<div class="Finnow-Sub">
+				<input id="add_project_btn" type="submit" value="确认" onclick="return false;"/>
+				<input type="button" value="取消" class="none-x-s" />
+			</div>
+		</form>
+	</div>
+</div>				<!--新增项目数据---end-->
+
+<div class="change-project project-box">			<!--修改项目数据-->
+	<div class="w570-box">
+		<h3 class="popup-title">修改项目数据</h3>
+		<button class="none-x"></button>
+		<form class="Finnow set-project">
+				<input id="project_change_id" type="hidden" />
+			<p>
+				<span>账户类型：</span>
+				<select name="selectType" id="account_type_change">
+					<option value="public">公帐</option>
+					<option value="private">私帐</option>
+					<option value="invest">投资</option>
+					<option value="loan">借贷</option>
+					<option value="other">其他</option>
+				</select>
+			</p>
+			<p>
+				<span>账户名称：</span>
+				<input id="account_name_change" type="text" />
+			</p>
+			<p>
+				<span>银行帐号：</span>
+				<input id="bank_account_change" type="text" />
+			</p>
+			<p>
+				<span>开户行：</span>
+				<!--<input id="bank_change" type="text" />-->
+				<select name="selectType" id="bank_change">
+					<option value="gsyh">中国工商银行</option>
+					<option value="nyyh">中国农业银行</option>
+					<option value="zgyh">中国银行</option>
+					<option value="jsyh">中国建设银行</option>
+					<option value="jtyh">交通银行</option>
+					<option value="ycyh">中国邮政储蓄银行</option>
+					<option value="zxyh">中信银行</option>
+					<option value="gdyh">中国光大银行</option>
+					<option value="hxyh">华夏银行</option>
+					<option value="msyh">中国民生银行</option>
+					<option value="gfyh">广发银行股份有限公司</option>
+					<option value="payh">平安银行</option>
+					<option value="zsyh">招商银行</option>
+					<option value="xyyh">兴业银行</option>
+				</select>
+			</p>
+			<p>
+				<span>支行信息：</span>
+				<input id="bank_sub_change" type="text" />
+			</p>
+			<p>
+				<span>初始余额：</span>
+				<input id="start_money_change" type="text" />
+			</p>
+			<p>
+				<span>备注：</span>
+				<input id="remark_change" type="text" />
+			</p>
+			
+			<div class="Finnow-Sub">
+				<input id="change_project_btn" type="submit" value="确认" onclick="return false;"/>
+				<input type="button" value="取消" class="none-x-s" />
+			</div>
+		</form>
+	</div>
+</div>						<!--修改项目数据---end-->
+
+<!--删除项目弹窗-->
+<div class="delete-project project-box">
+	<div class="w570-box">
+		<h3>确认删除该条数据？</h3>
+		<button class="none-x"></button>
+		<form class="Audit-in">
+			<input id="project_delete_id" type="hidden" />
+			<div class="Finnow-Sub">
+				<input id="delete_project_btn" type="submit" value="确认" class="Deny-box" onclick="return false;" />
+				<input type="button" value="取消" class="none-x-s" />
+			</div>
+		</form>
+	</div>
+</div>
+<iframe id="myIFrame" scrolling="yes" src="abount:blank" style="display:none" frameborder=1></iframe>
+<!--end-->
+{% endblock modal %}

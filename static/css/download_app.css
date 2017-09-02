@@ -1,0 +1,122 @@
+#header {
+	z-index: 10;
+	position: fixed;
+	background: #fff;
+}
+
+.container-box {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: url(../images/app-download-bg.jpg) top center/100% auto no-repeat;
+}
+
+.content-box {
+	width: 900px;
+	/*width: 60%;*/
+	margin: 220px auto 0;
+	/*margin-top: 10%;*/
+	overflow: hidden;
+}
+
+.left-phone {
+	float: left;
+	/*width: 330px;*/
+	width: 32%;
+}
+
+.left-phone img {
+	width: 100%;
+}
+
+.right-download {
+	float: right;
+	/*width: 704px;*/
+	width: 60%;
+}
+
+.download-head {
+	width: 100%;
+	margin-top: 50px;
+	margin-bottom: 88px;
+}
+
+.download-box {
+	/*width: 425px;*/
+	width: 60%;
+	float: left;
+}
+
+.download-text {
+	/*width: 415px;*/
+	width: 96%;
+	margin-top: 10px;
+}
+
+.right-download a {
+	display: block;
+	/*width: 425px;*/
+	width: 100%;
+	height: 94px;
+	margin-top: 60px;
+	/*border: 2px solid #fff;*/
+	border-radius: 8px;
+	background: url(../images/app-download-android.png) top left/100% auto no-repeat;
+}
+
+.right-download a:hover {
+	background-image: url(../images/app-download-hover.png);
+}
+
+.download-erweima {
+	display: block;
+	width: 36%;
+	float: right;
+}
+
+.apk-box {
+	display: none;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: rgba(0,0,0,0.3);
+	z-index: 11;
+}
+.apk-box-in {
+	display: block;
+}
+.apk-box-in .apk-download {
+	-webkit-animation: apk-in 0.4s ease;
+	animation: apk-in 0.4s ease;
+}
+.apk-download {
+	position: absolute;
+	top: 20%;
+	left: 40%;
+	width: 400px;
+	height: 400px;
+	background: url(../images/apk-download.png) center center/auto auto no-repeat #fff;
+}
+.apk-download p {
+	font-size: 14px;
+}
+@-webkit-keyframes apk-in{
+	0% {
+		transform: translateY(-50%);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+@keyframes apk-in{
+	0% {
+		transform: translateY(-50%);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}

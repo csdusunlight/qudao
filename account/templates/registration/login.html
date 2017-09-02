@@ -1,0 +1,100 @@
+﻿{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>登录</title>
+<meta name="keywords" content="登录" />
+<meta name="description" content="登录" />
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/accounts/cookie.js' %}"></script>
+<script type="text/javascript">
+$(function(){
+	$(".g-checkbox,.g-lab-txt").click(function(){
+		if($(this).parent().find("input").attr("checked")!="checked"){
+			$(this).parent().find("input").attr("checked","checked");
+			$(this).parent().find(".g-checkbox").css("background-position","0 0");
+		}else{
+			$(this).parent().find("input").attr("checked",false);
+			$(this).parent().find(".g-checkbox").css("background-position","0 -18px")
+		}
+	});
+	var username = GetCookie("username"); 
+	if(username != null) 
+	{ 			
+		$('#agreeChk').attr("checked","checked");
+		$('.rememberme').find(".g-checkbox").css("background-position","0 0");
+		$('#txtUserName').val(username);
+	} 
+	else 
+	{ 			
+		$('#agreeChk').attr("checked",false);
+		$('.rememberme').find(".g-checkbox").css("background-position","0 -18px")
+		$('#txtUserName').val('');
+	    //document.getElementById('username').value = ""; 
+	} 	
+});
+function check(){
+	if($('#agreeChk').attr("checked") == "checked") 
+	{ 
+		
+		var username = $("#txtUserName").val();
+		var expdate = new Date(); 
+		expdate.setTime(expdate.getTime() + 14 * (24 * 60 * 60 * 1000)); 
+		SetCookie("username",username, expdate); 				
+	}
+	else{
+		ResetCookie();
+	}
+	return false;
+}
+</script>
+</head>
+<body>
+ {% include "header.html" %}
+  
+<div id="content">
+	<div class="bgd">
+    	<div class="lodet">
+        	<h2 class="lo-h2">用户登录</h2>
+        	{% if form.errors %}
+        	<span class="tipsl" id="divname">
+        	<font class="tips_falsel">用户名或密码输入有误!</font>
+        	</span>
+        	{% endif %}
+            <form name="myform" method="post" action="">
+            	{% csrf_token %}
+            	<div>
+                	<img src="{% static 'images/user.jpg' %}" class="lo-us"/>
+                    <input id="txtUserName" name="username" type="text" placeholder="请输入您的邮箱/用户名/手机" class="lo-input"/>
+                </div>
+            	<div>
+                	<img src="{% static 'images/pwd.jpg' %}" class="lo-us"/>
+                	<input id="txtPassWord" name="password" type="password" placeholder="请输入密码" class="lo-input"/>
+                </div>
+                <div class="rememberme">
+	                <span class="g-checkbox"></span>
+					<input type="checkbox" class="x_input_ck abs" checked="checked" style="left:-9999px" id="agreeChk"/>
+					<span class="g-lab-txt" style="margin-left:5px">记住我</span>
+                </div>
+                <div style="width:60%; float:right;">
+                	<span><a href="{% url 'forgot_passwd' %}" class="lo-for">忘记密码？</a></span>
+                    <span>丨</span>
+                    <span><a href="{% url 'register' %}" class="lo-re">快速注册</a></span>
+                </div>
+                <button class="lo-btn" id="btnSubmit" onclick="check()">登录</button>
+            </form>
+            
+        
+        </div>
+    </div>
+ 
+</div>
+<div style="margin-top:5rem;">Copyright&nbsp; &copy; 2015-2024&nbsp; 挖福利 版权所有 备案号：湘ICP备15015815号-2</div>
+
+</body>
+</html>

@@ -1,0 +1,414 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户中心</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+<style type="text/css">
+	.Welfare-td-03 tr td {
+	    line-height: 1.2;
+	    white-space: normal;
+	}
+</style>
+<script type="text/javascript">
+var data = '<table width="100%"><thead><tr><th width="20%">项目</th><th width="15%">提交手机号</th>'+
+	'<th width="20%">提交时间</th><th width="15%">状态</th><th width="10%">任务截图</th><th width="20%">备注</th></tr></thead><tbody>'+
+	'[data]<tr><td>{title}</td><td>{username}</td><td>{time}</td><td>{state}</td><td><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
+	'<span class="img-up"><img src="{% static 'images/task-suoluetu.jpg' %}" alt="截图上传图片" /></span></a></td><td>{reason}</td></tr>[/data]'
+	+ '</tbody></table>';
+var data3 = '<table width="100%"><thead><tr><th width="20%">项目</th><th width="20%">提交手机号</th>'+
+	'<th width="20%">提交时间</th><th width="20%">状态</th><th width="20%">备注</th></tr></thead><tbody>'+
+	'[data]<tr><td>{title}</td><td>{username}</td><td>{time}</td><td>{state}</td><td>{reason}</td></tr>[/data]'
+	+ '</tbody></table>';
+var data2 = '<table width="100%"><thead><tr><th width="20%">项目</th><th width="20%">提交手机号</th>'+
+	'<th width="20%">提交时间</th><th width="20%">状态</th><th width="20%">拒绝原因</th></tr></thead><tbody>'+
+	'[data]<tr><td>{title}</td><td>{username}</td><td>{time}</td><td>{state}</td><td class="refuse-reason">{reason}</td></tr>[/data]'
+	+ '</tbody></table>';
+var data_media = '<table width="100%"><thead><tr><th>平台</th><th>手机号</th>'+
+// <<<<<<< HEAD
+//     '<th>投资时间</th><th>金额</th><th>期限</th><th>状态</th><th>任务截图</th><th>备注</th></tr></thead><tbody>'+
+//     '[results]<tr><td>{title}</td><td>{invest_account}</td><td>{invest_time}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{audit_state}</td><td><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
+//     '<span class="img-up"><img src="{% static 'images/task-suoluetu.jpg' %}" alt="截图上传图片" /></span></a></td><td>{remark}</td></tr>[/results]'
+//     + '</tbody></table>';
+// var data_media2 = '<table width="100%"><thead><tr><th>平台</th><th>手机号</th>'+
+//     '<th>投资时间</th><th>金额</th><th>期限</th><th>状态</th><th>任务截图</th><th>备注</th><th>操作</th></tr></thead><tbody>'+
+//     '[results]<tr><td>{title}</td><td>{invest_account}</td><td>{invest_time}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{audit_state}</td><td><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
+//     '<span class="img-up"><img src="{% static 'images/task-suoluetu.jpg' %}" alt="截图上传图片" /></span></a></td><td>{remark}</td><td><a class="revise-data" onclick=reviseData({id},this)>修改</a></td></tr>[/results]'
+//     + '</tbody></table>';
+// var data_media3 = '<table width="100%"><thead><tr><th>平台</th><th>手机号</th>'+
+//     '<th>投资时间</th><th>金额</th><th>期限</th><th>状态</th><th>任务截图</th><th>拒绝原因</th></tr></thead><tbody>'+
+//     '[results]<tr><td>{title}</td><td>{invest_account}</td><td>{invest_time}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{audit_state}</td><td><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
+//     '<span class="img-up"><img src="{% static 'images/task-suoluetu.jpg' %}" alt="截图上传图片" /></span></a></td><td>{remark}</td></tr>[/results]'
+// =======
+    '<th>提交时间</th><th>金额</th><th>期限</th><th>状态</th><th>任务截图</th><th>备注</th></tr></thead><tbody>'+
+    '[data]<tr><td>{title}</td><td>{username}</td><td>{time}</td><td>{amount}</td><td>{term}</td><td>{state}</td><td><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
+    '<span class="img-up"><img src="{% static 'images/task-suoluetu.jpg' %}" alt="截图上传图片" /></span></a></td><td>{reason}</td></tr>[/data]'
+    + '</tbody></table>';
+var data_media2 = '<table width="100%"><thead><tr><th>平台</th><th>手机号</th>'+
+    '<th>提交时间</th><th>金额</th><th>期限</th><th>状态</th><th>任务截图</th><th>备注</th><th>操作</th></tr></thead><tbody>'+
+    '[data]<tr><td>{title}</td><td>{username}</td><td>{time}</td><td>{amount}</td><td>{term}</td><td>{state}</td><td><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
+    '<span class="img-up"><img src="{% static 'images/task-suoluetu.jpg' %}" alt="截图上传图片" /></span></a></td><td>{reason}</td><td><a class="revise-data" onclick=reviseData({id},this)>修改</a></td></tr>[/data]'
+    + '</tbody></table>';
+var data_media3 = '<table width="100%"><thead><tr><th>平台</th><th>手机号</th>'+
+    '<th>提交时间</th><th>金额</th><th>期限</th><th>状态</th><th>任务截图</th><th>拒绝原因</th></tr></thead><tbody>'+
+    '[data]<tr><td>{title}</td><td>{username}</td><td>{time}</td><td>{amount}</td><td>{term}</td><td>{state}</td><td><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
+    '<span class="img-up"><img src="{% static 'images/task-suoluetu.jpg' %}" alt="截图上传图片" /></span></a></td><td>{reason}</td></tr>[/data]'
+// >>>>>>> 197c45c7034963afbc05d566230bb39f24ed7b48
+    + '</tbody></table>';
+var turl = "{% url 'get_user_wel_page' %}" + "?tpage={page}&size={pageSize}&filter=";
+var furl = "{% url 'get_user_wel_page' %}" + "?fpage={page}&size={pageSize}&filter=";
+var murl = "{% url 'get_user_wel_page' %}" + "?mpage={page}&size={pageSize}&filter=";
+function emptydisplay(obj){
+	pic_url = "{%static 'images/picin.png' %}";
+	obj.html('<div class="Defa-in"><img src="' + pic_url + '">'+
+			'<h2>咦~~ 您还没有相关记录~~</h2></div>');
+}
+
+var project_id;
+var revise_parent;
+function reviseData(id, obj) {
+    project_id = id;
+    revise_parent = $(obj).parent().parent();
+    var parent_dom = $(revise_parent);
+    var children0 = parent_dom.find("td").eq(0).text(),
+        children1 = parent_dom.find("td").eq(1).text(),
+        children2 = parent_dom.find("td").eq(2).text(),
+        children3 = parent_dom.find("td").eq(3).text(),
+        children4 = parent_dom.find("td").eq(4).text(),
+        children7 = parent_dom.find("td").eq(7).text();
+    //                  console.log(children0+", "+children1+", "+children2+", "+children3+", "+children4+", "+children7+", ");
+    var option_val;
+    var options = $(".invest-project option");
+    //                  var options = $(select).find("option");
+    for(var i = 0; i < options.length; i++) {
+        console.log($(options)[i].text);
+        if($(options)[i].text == children0) {
+            option_val = options[i].value;
+        }
+
+    }
+    console.log(option_val);
+    $(".invest-project").val(option_val);
+//  $(".invest-time").val(children2);
+    $(".submit-tel").val(children1);
+    $(".invest-days").val(children3);
+    $(".invest-money").val(children4);
+    $(".invest-remarks").val(children7);
+
+    //                  console.log($(options)[0].value);
+    popupOutRevise();
+};
+function popupOutRevise() { // 再次提交调用函数
+    $(".popup-box-05").addClass("in");
+}
+function popupOutInfo() {
+    $(".popup-box-01, .popup-box-05").removeClass("in");
+}
+
+$(function(){
+	$('.back-a2').parent().toggleClass("on");
+	$("#pagedata1").ajaxPage({
+	    url:turl+0,
+	    pageId:$("#page1"),
+	    pageSize:6,
+	    run:true,
+	    content:data,
+	});
+	$("#pagedata2").ajaxPage({
+	    url:furl+0,
+	    pageId:$("#page2"),
+	    pageSize:6,
+	    run:true,
+	    content:data3,
+	});
+	$("#pagedata3").ajaxPage({
+// <<<<<<< HEAD
+//         url:'/usereventlist/?event_type=8',
+// =======
+        url:murl+0,
+// >>>>>>> 197c45c7034963afbc05d566230bb39f24ed7b48
+        pageId:$("#page3"),
+        pageSize:6,
+        run:true,
+        content:data_media,
+    });
+	$("#Swi-Top li").click(function(){
+		if($(this).attr("class")!="on"){
+			$(this).toggleClass("on").siblings().removeClass("on")
+			var index = $(this).index();
+			var pdata = data;
+			if (index==3){
+				pdata = data2;
+			}
+			$("#page1").empty();
+			$("#pagedata1").ajaxPage({
+			    url:turl+index,
+			    pageId:$("#page1"),
+			    pageSize:6,
+			    run:true,
+			    content:pdata,
+			});
+		}
+	});
+	$("#Swi-Top2 li").click(function(){
+		if($(this).attr("class")!="on"){
+			$(this).toggleClass("on").siblings().removeClass("on")
+			var index = $(this).index();
+			var pdata = data3;
+			if (index==3){
+				pdata = data2;
+			}
+			$("#page2").empty();
+			$("#pagedata2").ajaxPage({
+			    url:furl+index,
+			    pageId:$("#page2"),
+			    pageSize:6,
+			    run:true,
+			    content:pdata,
+			});
+		}
+	});
+	$("#Swi-Top3 li").click(function(){
+        if($(this).attr("class")!="on"){
+            $(this).toggleClass("on").siblings().removeClass("on")
+            var index = $(this).index();
+            // if (index == 0) {
+            //     index = '';
+            // } else {
+            //     index--;
+            // }
+            var pdata = data_media;
+            if (index==2){
+                pdata = data_media;
+            }
+            if (index==3){
+                pdata = data_media3;
+            }
+            $("#page3").empty();
+            $("#pagedata3").ajaxPage({
+// <<<<<<< HEAD
+//                 url:'/usereventlist/?event_type=8&audit_state=' +index,
+// =======
+                url:murl+index,
+// >>>>>>> 197c45c7034963afbc05d566230bb39f24ed7b48
+                pageId:$("#page3"),
+                pageSize:6,
+                run:true,
+                content:pdata,
+            });
+        }
+    });
+  // 点击图片放大
+  $(".img-up img").onclick = function(){
+    $(".img-up img").toggleClass("big-img");
+    $(".img-up").toggleClass("mask");
+  };
+
+    //媒体单修改部分
+
+
+
+
+
+    $(".popup-box-05").on("focus", ".date_picker", function() {
+        $('.date_picker').date_input();
+    })
+
+    $("#confirm_revise").click(function() {
+        var invest_project = $(".invest-project").val(),
+//          invest_time = $(".invest-time").val(),
+            invest_tel = $(".submit-tel").val(),
+            invest_days = $(".invest-days").val(),
+            invest_money = $(".invest-money").val(),
+            invest_remarks = $(".invest-remarks").val();
+        console.log(invest_project);
+        //                  var bank = $("#bank option:selected").val();
+        console.log(project_id + "," + invest_project + "," + invest_tel + "," + invest_days + "," + invest_money + "," + invest_remarks + ",");
+        if(!invest_project || !invest_tel || !invest_days || !invest_money) {
+            alert("填写项不能为空");
+            return;
+        }
+        if(invest_project == 0) {
+            alert("请选择项目");
+            return;
+        }
+
+        // var revise_url = "{%url 'revise_project' %}";
+        $.ajax({
+            url: '/userevent/' + project_id + '/',
+            dataType: "json",
+            type: 'put',
+            data: {
+                // 'project_id': project_id,
+                'invest_project': invest_project,
+//              'invest_time': invest_time,
+                'invest_tel': invest_tel,
+                'invest_days': invest_days,
+                'invest_money': invest_money,
+                'invest_remarks': invest_remarks
+            },
+            success: function(ret) {
+                if(ret.code == 1) {
+                    alert("请重新登录！")
+                    window.location.href = ret.url;
+                } else if(ret.code == 0) {
+                    alert("更改数据成功！");
+                    console.log(ret.data);
+                    var parent_dom = $(revise_parent);
+                    parent_dom.find("td").eq(0).text(ret.data.content_object);
+//                  parent_dom.find("td").eq(2).text(ret.data.invest_time);
+                    parent_dom.find("td").eq(1).text(ret.data.invest_account);
+                    parent_dom.find("td").eq(3).text(ret.data.invest_term);
+                    parent_dom.find("td").eq(4).text(ret.data.invest_amount);
+                    parent_dom.find("td").eq(7).text(ret.data.remark);
+                    popupOutInfo();
+                } else {
+                    alert(ret.res_msg);
+                }
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+    });//媒体单修改部分---end
+});
+</script>
+</head>
+
+<body>
+<!--头部-->
+{% include "header.html" %}
+<!--内容-->
+<div class="Content">
+    <div class="w1100">
+        {% include "account/left.html" %}
+        <div class="RightCont">
+            <div class="Online">
+                <strong>当前在线</strong>
+                <div class="Online-M">
+                    <p>体验福利：{{statis.tcount}}个，今日参与人数：{{statis.tsum}}人
+                        <a href="{%url 'task' %}"> 点击查看 ></a>
+                    </p>
+                    <p>理财福利：{{statis.fcount}}个，今日参与人数：{{statis.fsum}}人
+                        <a href="{%url 'finance' %}"> 点击查看 ></a>
+                    </p>
+                </div>
+                <div class="Online-R">
+                    <h6>您已完成</h6>
+                    <span>体验福利：<font>{{statis.tcount_u}}</font> 个</span>
+                    <span>理财福利：<font>{{statis.fcount_u}}</font> 个</span>
+                </div>
+            </div>
+            <div class="Welfare">
+                <div class="Welfare-T">
+                    <strong>体验福利</strong>
+                    <ul class="Welfare-li" id="Swi-Top">
+                        <li class="on">全部</li>
+                        <li>已通过</li>
+                        <li>审核中</li>
+                        <li>已拒绝</li>
+                    </ul>
+                </div>
+                <div class="Welfare-td">
+                    <div id="pagedata1">
+                    </div>
+                    <div class="Page-in">
+                        <div class="page" id="page1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="Welfare">
+                <div class="Welfare-T">
+                    <strong>理财福利</strong>
+                    <ul class="Welfare-li" id="Swi-Top2">
+                        <li class="on">全部</li>
+                        <li>已通过</li>
+                        <li>审核中</li>
+                        <li>已拒绝</li>
+                    </ul>
+                </div>
+                <div class="Welfare-td">
+                    <div id="pagedata2">
+                    </div>
+                    <div class="Page-in">
+                        <div class="page" id="page2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="Welfare">
+                <div class="Welfare-T">
+                    <strong>媒体单</strong>
+                    <ul class="Welfare-li" id="Swi-Top3">
+                        <li class="on">全部</li>
+                        <li>已通过</li>
+                        <li>审核中</li>
+                        <li>已拒绝</li>
+                    </ul>
+                </div>
+                <div class="Welfare-td Welfare-td-03">
+                    <div id="pagedata3">
+                    </div>
+                    <div class="Page-in">
+                        <div class="page" id="page3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="popup-box popup-box-05">
+                <div class="popup-content">
+                    <h3>数据修改</h3>
+                    <p>
+                        <span>项目名称：</span>
+                        <!--<input id="create_time_change" type="text" />-->
+                        <select class="invest-project height-add01" placeholder="选择项目">
+                            <option value="0">--</option>
+                            <option value="1">唐小僧返现70元</option>
+                            <option value="2">乐行理财最高返现65元</option>
+                        </select>
+                    </p>
+                    <!--<p>
+                        <span>投资日期：</span>
+                        <input type="text" class="height-add02 invest-time date_picker" placeholder="选择投资日期" />
+                    </p>-->
+                    <p>
+                        <span>提交手机号：</span>
+                        <input id="project_name_change" class="submit-tel" maxlength=11 type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" placeholder="填写正确的手机号" />
+                    </p>
+                    <p>
+                        <span>投资标期：</span>
+                        <input id="contact_person_change" class="invest-days" type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" placeholder="仅限纯数字" />
+                    </p>
+                    <p>
+                        <span>投资金额：</span>
+                        <input id="cooperate_type_change" class="invest-money" type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" placeholder="仅限纯数字" />
+                    </p>
+                    <p>
+                        <span>备注：</span>
+                        <input id="balance_type_change" class="invest-remarks" type="text" placeholder="选填" />
+                    </p>
+
+                    <a id="cancel" class="cancel confirm" onclick="popupOutInfo()">取&nbsp;&nbsp;&nbsp;&nbsp;消</a>
+                    <a id="confirm_revise" class="confirm">确认修改</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+</body>
+</html>

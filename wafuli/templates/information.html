@@ -1,0 +1,166 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+{%if type == 'wahangqing' %}
+<title>行业资讯-各行业最新资讯-挖福利行业资讯频道</title>
+<meta name="keywords" content="行业资讯，财富人物，理财行情，干货分享" />
+<meta name="description" content="挖行情提供包括行业经济行情，行业经济产业动态，行业经济行业新闻，行业经济商业信息，
+行业经济商业资讯，行业经济行业资讯，行业经济最新资讯，行业经济行业前景等投资项目资讯。" />
+{%elif type == 'wagushi'%}
+<title>用户与挖福利的故事-挖故事</title>
+<meta name="keywords" content="用户与挖福利的故事" />
+<meta name="description" content="用户与挖福利的故事。" />
+{%elif type == 'washuju'%}
+<title>公司动态-挖数据</title>
+<meta name="keywords" content="福利，福利资讯，福利最新信息" />
+<meta name="description" content="挖福利资讯，挖福利资讯24小时提供免费福利资讯、理财资讯、
+金融行业资讯、理财科普，福利聚焦，福利资讯刷不停，大参考、第一解读、谈兵论战提供大智慧和犀利观点。" />
+{%elif type == 'wahuodong'%}
+<title>活动资讯，免费有奖活动</title>
+<meta name="keywords" content="活动网，微信活动，QQ活动，试用活动，微博活动，领集分宝，有奖活动，团购活动，优惠券，免费活动，有奖一起赚" />
+<meta name="description" content="挖活动提供国内免费有奖活动分享-提供活动线报，网友互助，赚客心经，大家一起做活动赚钱省钱。" />
+{%else%}
+<title>福利资讯-挖福利</title>
+<meta name="keywords" content="福利，福利资讯，福利最新信息" />
+<meta name="description" content="挖福利资讯，挖福利资讯24小时提供免费福利资讯、理财资讯、
+金融行业资讯、理财科普，福利聚焦，福利资讯刷不停，大参考、第一解读、谈兵论战提供大智慧和犀利观点。" />
+{%endif%}
+<meta name="keywords" content="免费福利，理财红包，理财活动，购物红包，体验红包" />
+<meta name="description" content="挖福利免费为您提供互联网优惠券和免费福利领取活动信息！" />
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/information.css' %}" />
+
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.flexslider-min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jQuery.infiniteCarousel.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/MSClass.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+
+<script type="text/javascript">
+var textarray=[];
+var type = "{{type}}";
+function getText(n) {
+	 if (textarray[n-1])
+		 return textarray[n-1];
+	 else
+		 return n;
+}
+$(function(){
+    $('.flexslider').flexslider({
+           directionNav: true,
+           pauseOnAction: false
+    });
+    if (type!=="None"){
+    	$('.left_box_nav .'+type).toggleClass("add");
+    }
+    else {
+    	$('.left_box_nav .all').toggleClass("add");
+    }
+});
+
+</script>
+</head>
+<body>
+{% include "header.html" %}
+<div id="content">
+   <div id="index-banner">
+    <div class="flexslider">
+          <ul class="slides">
+          {% for adv in ad_list %}
+            <li onclick="location='{{adv.url}}'" style="background:url({{adv.pic.url}}) 50% 0 no-repeat;cursor:pointer;"></li>
+            <script>textarray.push("{{adv.navigation}}");</script>
+          {%endfor%}
+          </ul>
+
+    </div>
+  </div>
+
+<div class="content-box">
+<div class="all">
+ <div class="left">
+   <div class="left_box">
+     <div class="left_box_nav">
+       <a class="all" href="{% url 'information_list' %}">全部资讯</a>
+       <a class="wahangqing" href="{% url 'information_list' type='wahangqing' %}">挖行情</a>
+       <a class="wagushi" href="{% url 'information_list' type='wagushi' %}">挖故事</a>
+       <a class="washuju" href="{% url 'information_list' type='washuju' %}">挖数据</a>
+       <a class="wahuodong" href="{% url 'information_list' type='wahuodong' %}">挖活动</a>
+     </div>
+ <div class="partition">
+ </div>
+   <div class="left_box_children">
+   {%for info in info_list%}
+     <div class="small_box">
+      <a target="_blank" href="{% url 'information' id=info.id %}"><img src="{{info.pic.url}}"></a>
+      <div class="small_box_children">
+       <a href={%url 'information_list' type=info.type %}>{{info.get_type_display}}</a>
+       <a target="_blank" href="{% url 'information' id=info.id %}"><h1>{{info.title}}</h1></a>
+       <p>{{info.summary}}</p>
+      </div>
+     </div>
+    {%endfor%}
+        {% if info_list.paginator.num_pages >= 2 %}
+  <div class="item_con_pager">
+            <div class="pager_container">
+            {% if info_list.number != 1 %}
+        <a href="{{page_dic.pre_path}}list-page{{info_list.previous_page_number}}{{page_dic.suf_path}}" class="page_no" >上一页</a>
+      {% else %}
+        <a class="page_no pager_prev_disabled">上一页</a>
+      {% endif %}
+      {% for i in page_dic.page_list %}
+        {% if i == "..." %}
+          ...
+        {% elif i == info_list.number %}
+          <a class="page_no pager_is_current">{{i}}</a>
+        {% else %}
+          <a href="{{page_dic.pre_path}}list-page{{i}}{{page_dic.suf_path}}" class="page_no">{{i}}</a>
+        {% endif  %}
+      {% endfor %}
+      {% if info_list.number != info_list.paginator.num_pages %}
+        <a href="{{page_dic.pre_path}}list-page{{info_list.next_page_number}}{{page_dic.suf_path}}" class="page_no" >下一页</a>
+      {% else %}
+        <a class="page_no pager_prev_disabled">下一页</a>
+      {% endif %}
+
+             </div>
+        </div>
+  {%endif%}
+   </div>
+   </div>
+ </div>
+ <div class="right">
+   <div class="right-top">
+     <div class="right-top-nav">本周热点</div>
+    {%for info in hot_info_list%}
+      {%if forloop.counter < 4%}
+     <p><span class="circle1">{{forloop.counter}}</span><a target="_blank" href="{{info.url}}"><span class="text1">{{info.title}}</span></a></p>
+      {%else%}
+      <p><span class="circle2">{{forloop.counter}}</span><a target="_blank" href="{{info.url}}"><span class="text2">{{info.title}}</span></a></p>
+      {%endif%}
+  {%endfor%}
+   </div>
+   <div class="right-middle">
+      <div class="right-top-nav">福利活动</div>
+    {%for wel in hot_wel_list%}
+      {%if forloop.counter < 4%}
+     <p><span class="circle1">{{forloop.counter}}</span><a target="_blank" href="{{wel.url}}"><span class="text1">{{wel.title}}</span></a></p>
+      {%else%}
+      <p><span class="circle2">{{forloop.counter}}</span><a target="_blank" href="{{wel.url}}"><span class="text2">{{wel.title}}</span></a></p>
+      {%endif%}
+  {%endfor%}
+   </div>
+ </div>
+
+</div>
+</div>
+
+<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+</body>
+</html>

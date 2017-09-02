@@ -1,0 +1,283 @@
+{% extends "project_base.html" %} {%load staticfiles%} {% block js %}
+<script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/echarts.common.min.js'%}"></script>
+<script type="text/javascript">
+	$.ajaxSetup({
+		data: {
+			csrfmiddlewaretoken: '{{ csrf_token }}'
+		},
+	});
+	var data = '<table width="100%"><tr><th>日期</th><th>收入</th><th>支出</th><th>结余</th>' +
+		'</tr>[results]<tr id="parent{id}"><td>{date}</td><td>{income}</td><td>{expenditure}</td><td>{balance}</td></tr>[/results]</table>';
+	var url = "/project/dayaccountstatis/" + "?page={page}";
+	var url2 = "/project/dayaccountstatis/";
+	
+	
+	
+	
+	
+	$(document).ready(function() {
+		$("li.home15").addClass("show-project").toggleClass("on");
+		$("li.home6").toggleClass("show");
+		$(".Tin-table tr:even").css("background-color", "#fcfcfc");
+
+		
+		$("#pagedata").ajaxPage({
+			url: url,
+			pageId: $("#page"),
+			run: true,
+			content: data,
+		});
+		
+		
+//		获取饼状图数据
+		var pie_data_1 = [],
+			pie_data_2 = [{
+							value: 0,
+							name: "商务入账"
+						},
+						{
+							value: 0,
+							name: "内部转入"
+						},
+						{
+							value: 0,
+							name: "其他收入"
+						}],
+			pie_data_3 = [{
+							value: 0,
+							name: "内部转出"
+						},
+						{
+							value: 0,
+							name: "网站提现"
+						},
+						{
+							value: 0,
+							name: "工资报销"
+						},
+						{
+							value: 0,
+							name: "税务费用"
+						},
+						{
+							value: 0,
+							name: "商务出账"
+						},
+						{
+							value: 0,
+							name: "其他支出"
+						}],
+			num_detail_1 = 0,
+			num_detail_2 = 0,
+			num_detail_3 = 0;
+		$.ajax({
+			type:"get",
+			url:"/project/account/",
+			data: {
+				'pageSize': 1000,
+			},
+			success: function(ret) {
+				for (var i=0; i<ret.results.length; i++) {
+					pie_data_1.push({
+						value: ret.results[i].balance,
+						name: ret.results[i].name
+					});
+					num_detail_1 += parseFloat(ret.results[i].balance);
+				}
+				$('.num-detail-1').text(num_detail_1.toFixed(2));
+				
+				//		饼状图部分
+				var myChart1 = echarts.init(document.getElementById('main'));
+					
+				option1 = {
+					title: {
+						text: '现金余额分布',
+						x: 'center'
+					},
+					tooltip: {
+						trigger: 'item',
+						formatter: "{a} <br/>{b} : {c} ({d}%)"
+					},
+					series: [{
+						name: '详情',
+						type: 'pie',
+						radius: '55%',
+						center: ['50%', '60%'],
+						data: pie_data_1,
+						itemStyle: {
+							emphasis: {
+								shadowBlur: 10,
+								shadowOffsetX: 0,
+								shadowColor: 'rgba(0, 0, 0, 0.5)'
+							}
+						}
+					}]
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				myChart1.setOption(option1);
+				//		饼状图部分---end
+			},
+			error: function(ret) {
+				alert(JSON.stringify(ret));
+			}
+		});	
+		
+		$.ajax({
+			type:"get",
+			url:"/project/accountbill/",
+			data: {
+				'pageSize': 1000,
+			},
+			success: function(ret) {
+				for (var i=0; i<ret.results.length; i++) {
+					if(ret.results[i].type == "income") {
+						console.log(ret.results[i].subtype_des);
+						switch (ret.results[i].subtype_des){
+							case "商务入账":
+								pie_data_2[0].value += parseFloat(ret.results[i].amount);
+								console.log(pie_data_2[0].value);
+								break;
+							case "内部转入":
+								pie_data_2[1].value += parseFloat(ret.results[i].amount);
+								break;
+							case "其他收入":
+								pie_data_2[2].value += parseFloat(ret.results[i].amount);
+								break;
+						}
+						num_detail_2 += parseFloat(ret.results[i].amount);
+					} else {
+						switch (ret.results[i].subtype_des){
+							case "内部转出":
+								pie_data_3[0].value += parseFloat(ret.results[i].amount);
+								break;
+							case "网站提现":
+								pie_data_3[1].value += parseFloat(ret.results[i].amount);
+								break;
+							case "工资报销":
+								pie_data_3[2].value += parseFloat(ret.results[i].amount);
+								break;
+							case "税务费用":
+								pie_data_3[3].value += parseFloat(ret.results[i].amount);
+								break;
+							case "商务出账":
+								pie_data_3[4].value += parseFloat(ret.results[i].amount);
+								break;
+							case "其他支出":
+								pie_data_3[5].value += parseFloat(ret.results[i].amount);
+								break;
+						}
+						num_detail_3 += parseFloat(ret.results[i].amount);
+					}
+					
+				}
+				$('.num-detail-2').text(num_detail_2.toFixed(2));
+				$('.num-detail-3').text(num_detail_3.toFixed(2))
+				
+				//		饼状图部分
+				var myChart2 = echarts.init(document.getElementById('main2'));
+				var myChart3 = echarts.init(document.getElementById('main3'));
+					
+				option2 = {
+					title: {
+						text: '收入类型分布',
+						x: 'center'
+					},
+					tooltip: {
+						trigger: 'item',
+						formatter: "{a} <br/>{b} : {c} ({d}%)"
+					},
+					series: [{
+						name: '详情',
+						type: 'pie',
+						radius: '55%',
+						center: ['50%', '60%'],
+						data: pie_data_2,
+						itemStyle: {
+							emphasis: {
+								shadowBlur: 10,
+								shadowOffsetX: 0,
+								shadowColor: 'rgba(0, 0, 0, 0.5)'
+							}
+						}
+					}]
+				};
+				option3 = {
+					title: {
+						text: '支出类型分布',
+						x: 'center',
+					},
+					tooltip: {
+						trigger: 'item',
+						formatter: "{a} <br/>{b} : {c} ({d}%)"
+					},
+					series: [{
+						name: '详情',
+						type: 'pie',
+						radius: '55%',
+						center: ['50%', '60%'],
+						data: pie_data_3,
+						itemStyle: {
+							emphasis: {
+								shadowBlur: 10,
+								shadowOffsetX: 0,
+								shadowColor: 'rgba(0, 0, 0, 0.5)'
+							}
+						}
+					}]
+				};
+				// 使用刚指定的配置项和数据显示图表。
+				myChart2.setOption(option2);
+				myChart3.setOption(option3);
+				//		饼状图部分---end
+			},
+			error: function(ret) {
+				alert(JSON.stringify(ret));
+			}
+		});	
+		
+		
+		
+		
+		
+
+	});
+</script>
+{% endblock js %} {% block right %}
+<div class="Need-T">
+   <span>项目总览</span>
+   <div class="Need-Cont">
+   		<div class="pie-box">
+   			<div id="main" style="width: 300px;height:200px;"></div>
+   			<p>当前余额<number class="num-detail-1 num-detail-num"></number></p>
+   		</div>
+	   	<div class="pie-box">
+   			<div id="main2" style="width: 300px;height:200px;"></div>
+   			<p>本月收入<number class="num-detail-2 num-detail-num"></number></p>
+   		</div>
+   		<div class="pie-box">
+   			<div id="main3" style="width: 300px;height:200px;"></div>
+   			<p>本月支出<number class="num-detail-3 num-detail-num"></number></p>
+   		</div>
+   </div>
+</div>
+
+<div class="Need-T">
+	<span>每日财务数据</span>
+</div>
+
+<div class="Tin-table">
+	<div id="pagedata">
+	</div>
+	<div class="Page-in-admin">
+		<div class="page" id="page">
+		</div>
+	</div>
+</div>
+{%endblock%} {% block modal %}
+
+
+
+<iframe id="myIFrame" scrolling="yes" src="abount:blank" style="display:none" frameborder=1></iframe>
+<!--end-->
+{% endblock modal %}

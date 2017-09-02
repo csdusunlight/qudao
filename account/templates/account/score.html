@@ -1,0 +1,157 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户中心</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+<script type="text/javascript">
+var data1 = '<table width="100%"><thead><tr><th width="25%" height="44">项目</th>' +
+'<th width="30%">数量</th><th width="25%">获取时间</th><th width="20%">备注</th></tr></thead><tbody>'+
+'[data]<tr><td height="48">{item}</td><td>{amount}</td><td>{time}</td><td>{remark}</td></tr>[/data]'+
+'</tbody></table>';
+var data2 = '<table width="100%"><thead><tr><th width="20%" height="44">项目</th>' +
+'<th width="15%">数量</th><th width="25%">获取时间</th><th width="20%">状态</th><th width="20%">备注</th></tr></thead><tbody>'+
+'[data]<tr><td height="48">{item}</td><td>{amount}</td><td>{time}</td><td>{state}</td>' + 
+'<td><a class="chakan" id={id} onClick="pop({id})">查看</a></td></tr>[/data]' +
+'</tbody></table>';
+var url = "{% url 'get_user_score_page' %}" + "?page={page}&size={pageSize}&filter=";
+function pop(n){
+	$.ajax({
+		url:"{%url 'lookup_order' %}?id="+n,
+		dataType:"json",
+		success:function(ret){
+			if(ret.code==0){
+				$("#rec_name font").text(ret.name);
+				$("#rec_tel font").text(ret.tel);
+				$("#rec_addr font").text(ret.addr);
+				$("#rec_remark font").text(ret.mes);
+				$(".Listpop").css("display","block");
+			}
+			else if((ret.code==1)){
+				alert("不存在订单！");
+			}
+			else if(ret.code==-1){
+				alert("该页面已过期，请重新登录！");
+				window.location.href = ret.url;
+			}
+		},
+		error:function(){
+			alert("请检查网络连接");
+		}
+	});
+}
+function emptydisplay(obj){
+	pic_url = "{%static 'images/picin.png' %}";
+	obj.html('<div class="Defa-in"><img src="' + pic_url + '">'+
+			'<h2>咦~~ 您还没有相关记录~~</h2></div>');
+}
+$(function(){
+	$('.back-a3').parent().toggleClass("on");
+    $(".Close").click(function(){
+    	$(".Listpop").css("display","none")<!--隐藏-->
+    });
+	$("#pagedata").ajaxPage({
+	    url:url+0, 
+	    pageId:$("#page"),
+	    pageSize:6,
+	    run:true,
+	    content:data1,
+	});
+	$(".Detail-T li").click(function(){
+		if($(this).attr("class")!="on"){
+			$(this).toggleClass("on").siblings().removeClass("on")
+			var index = $(this).index();
+			var data = data1
+			if (index==1){
+				data = data2
+			}
+			$("#page").empty();
+			$("#pagedata").ajaxPage({
+			    url:url+index, 
+			    pageId:$("#page"),
+			    pageSize:6,
+			    run:true,
+			    content:data,
+			});
+		}					
+	});
+});
+</script>
+</head>
+
+<body>
+        <div class="Listpop">
+            <div class="w700v">
+            	<div class="Div-sin">
+                	<div class="Divleft">
+                    	<h3>请填写收件人信息</h3>
+                        <div class="Info-box">
+		                	<p id="rec_name"><span>收件人姓名：</span><font>四季如风</font></p>
+		                	<p id="rec_tel"><span>收件人手机号：</span><font>15066665858</font></p>
+		                	<p id="rec_addr"><span>收件人地址：</span><font>深圳市宝安区福永街道新田社区大洋路美盛新村2号</font></p>
+		                	<p id="rec_remark"><span>备  注：</span><font>无</font></p>
+                        </div>
+                    </div>
+                    <div class="Close">
+                    	<i><img src="{% static 'images/x-botin.png' %}" /></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+	<div class="Max">
+    	<!--头部-->
+    	{% include "header.html" %}
+    	<!--内容-->
+    	<div class="Content">
+        	<div class="w1100">
+            	{% include "account/left.html" %}
+                <div class="RightCont">
+                	<div class="Integral">
+                    	<span>
+                        	您总共获得的积分
+                        	<strong>{{user.accu_scores}}</strong>
+                        </span>
+                    	<span>
+                        	可用积分
+                        	<strong class="red-st">{{user.scores}}</strong>
+                        </span>
+                        <a href="#">积分兑换</a>
+                    </div>
+                    <div class="Detail">
+                    	<div class="Detail-T">
+                        	<ul>
+                            	<li class="on">收入明细</li>
+                            	<li>支出明细</li>
+                            </ul>
+                        </div>
+                        <div class="Detail-B">
+							<div id="pagedata">
+							</div>
+		                    <div class="Page-in-score">
+		                    	<div class="page"  id="page">
+		                        </div>
+		                    </div> 
+                		</div>  
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    	<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->  
+  {% include "outline.html" %}
+    </div>
+        <!--支出明细弹窗-->
+		
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+.Content { padding-top:32px; background:#fafafa; padding-bottom:50px;}
+.binding { float:left; width:100%; height:auto; border:1px solid #eee; background:#fff; padding-bottom:70px;margin-bottom:10px;}
+.Bindin-info { float:left; width:100%; height:auto;}
+.Bindin-Title { float:left; width:100%; height:auto; border-bottom:1px dashed #dcdcdc; text-align:center; padding-top:20px;}
+.Bindin-Title h1 { font-size:24px; color:#000000; line-height:44px; text-align:center;}
+.Bindin-Title span { font-size:12px; color:#919191; line-height:54px; display:block; font-family:"宋体"; text-align:center;}
+.Bindin-bot { float:left; width:1080px;height:auto; border-bottom:1px solid #efefef; padding:20px 0 40px; margin:0 10px; text-align:left;}
+.Bindin-bot p { font-size:13px; color:#888888; line-height:30px; text-indent:27px;}
+.Bind-page { float:left; width:100%; height:auto; padding:16px 9px 70px; box-sizing:border-box; text-align:left;}
+.Bind-page p { font-size:13px; color:#282828; line-height:28px; display:block;}
+.Bind-page p a { font-size:13px; color:#282828; line-height:28px;}

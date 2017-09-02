@@ -1,0 +1,618 @@
+{% extends "project_base.html" %} {%load staticfiles%} {% block js %}
+<script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
+<script type="text/javascript">
+
+	var data = '<table width="100%"><tr><th>账单时间</th><th>账户ID</th><th>账户类型</th><th>账户名称</th><th>账单类型</th>' +
+		'<th>收/支类型</th><th>交易对象</th><th>交易金额</th><th>账户余额</th><th>备注</th>' +
+		'</tr>[results]<tr id="parent{id}"><td>{strftime}</td><td>{account}</td><td>{account_type}</td>' +
+		'<td data-value={account}>{account_name}</td><td data-value={type}>{type_des}</td><td data-value={subtype}>{subtype_des}</td><td>{target}</td><td>{amount}</td>' +
+		'<td>{account_balance}</td><td>{remark}</td>' +
+//		'<td id="item_{id}"><a class="revise-btn" onclick="pass({id})">修改</a> │ <a class="delete-btn" onclick="refuse({id})">删除</a></td>' +
+		'</tr>[/results]</table>';
+	var url = "/project/accountbill/" + "?page={page}";
+	var url2 = "/project/accountbill/";
+	
+	var project_flag;		// project_flag = -1 时，为导入单条数据；project_flag != -1 时，为修改单条数据
+	var parent;
+	
+	function pass(id) {			//弹出修改单条数据弹窗
+		$("input#project_change_id").val(id);
+		project_flag = id;
+		
+		parent = "parent" + id;
+		var dom = document.getElementById(parent);
+		var bill_time_change = $(dom).find("td").eq(0).text(),
+			account_type_change = $(dom).find("td").eq(2).text(),
+			account_name_change_value = $(dom).find("td").eq(3).data("value"),
+			bill_type_change_value = $(dom).find("td").eq(4).data("value"),
+			in_out_change_value = $(dom).find("td").eq(5).data("value"),
+			trade_obj_change = $(dom).find("td").eq(6).text(),
+			trade_money_change = $(dom).find("td").eq(7).text(),
+			remark_change = $(dom).find("td").eq(9).text();
+			
+		var account_type_change_value = "";
+		
+		switch (account_type_change){
+			case "公账":
+				console.log("sdf");
+				account_type_change_value = "public";
+				break;
+			case "私账":
+				account_type_change_value = "private";
+				break;
+			case "投资":
+				account_type_change_value = "invest";
+				break;
+			case "借贷":
+				account_type_change_value = "loan";
+				break;
+			case "其他":
+				account_type_change_value = "other";
+				break;
+		}
+			
+			
+		if (bill_type_change_value == "income") {
+			document.getElementById('bill_in_change').checked = true;
+			$('.in-out-change').html('<option value="swrz">商务入账</option>' +
+									'<option value="nbzr">内部转入</option>' +
+									'<option value="qtsr">其他收入</option>');
+			
+		} else{
+			document.getElementById('bill_out_change').checked = true;
+			$('#in_out_change').html('<option value="nbzc">内部转出</option>' +
+									'<option value="wztx">网站提现</option>' +
+									'<option value="gzbx">工资报销</option>' +
+									'<option value="swfy">税务费用</option>' +
+									'<option value="swcz">商务出账</option>' +
+									'<option value="qtzc">其他支出</option>');
+		}
+		$('#in_out_change').val(in_out_change_value)
+		
+
+		$("#bill_time_change").val(bill_time_change);
+		$("#account_type_change").val(account_type_change_value);
+		$("#account_name_change").val(account_name_change_value);
+		$("#bill_type_change").val(bill_type_change_value);
+		$("#trade_obj_change").val(trade_obj_change);
+		$("#trade_money_change").val(trade_money_change);
+		$("#remark_change").val(remark_change);
+		
+		$(".change-project").show();
+	}
+	
+	function refuse(id) {		//弹出删除项目数据弹窗
+		$("input#project_delete_id").val(id);
+		$(".delete-project").show();
+	}
+	
+	
+	$(document).ready(function() {
+		$("li.home15").addClass("show-project").toggleClass("on");
+		$("li.home8").toggleClass("show");
+		$(".Tin-table tr:even").css("background-color", "#fcfcfc");
+		
+		
+		$("#pagedata").ajaxPage({
+			url: url,
+			pageId: $("#page"),
+			run: true,
+			content: data,
+		});
+		
+		//		获取账户名称信息
+		$.ajax({
+			url: '/project/account/',
+			dataType: "json",
+			type: "get",
+			success: function(ret) {
+				for (var i=0; i<ret.results.length; i++) {
+					var option_item = document.createElement('option');
+					option_item.innerText = ret.results[i].name;
+					option_item.value = ret.results[i].id;
+					$(".account-name").append(option_item);
+				}
+				$("#account_name").prepend('<option value="0" selected="selected">全部</option>');
+			},
+			error: function(ret) {
+				alert(JSON.stringify(ret));
+			}
+		});
+		
+		
+		$('#add_project_btn').click(function() {		//点击新增项目数据
+			var bill_time_add = $("#bill_time_add").val(),
+				account_type_add = $("#account_type_add").val(),
+				account_name_add = $("#account_name_add").val(),
+				bill_type_add = $("input[name='bill_type_add']:checked").val(),
+				in_out_add = $("#in_out_add").val(),
+				trade_obj_add = $("#trade_obj_add").val(),
+				trade_money_add = $("#trade_money_add").val(),
+				remark_add = $("#remark_add").val();
+
+			$.ajax({
+				url: url2,
+				dataType: "json",
+				type: "POST",
+				data: {
+					'time': bill_time_add,
+					'account_type': account_type_add,
+					'account': account_name_add,
+					'type': bill_type_add,
+					'subtype': in_out_add,
+					'target': trade_obj_add,
+					'amount': trade_money_add,
+					'remark': remark_add
+				},
+				success: function(ret) {
+						alert("操作成功！");
+				},
+				error: function(ret) {
+					alert(JSON.stringify(ret));
+				}
+			});
+			$(".add-project").hide();
+		});
+		
+		
+		$('#change_project_btn').click(function() {		//点击修改项目数据
+			var bill_time_change = $("#bill_time_change").val(),
+				account_type_change = $("#account_type_change").val(),
+				account_name_change = $("#account_name_change").val(),
+				bill_type_change = $("input[name='bill_type_change']:checked").val(),
+				in_out_change = $("#in_out_change").val(),
+				trade_obj_change = $("#trade_obj_change").val(),
+				trade_money_change = $("#trade_money_change").val(),
+				remark_change = $("#remark_change").val();
+			
+			console.log(url2 + project_flag)
+			$.ajax({
+				url: url2 + project_flag + "/",
+				dataType: "json",
+				type: "PUT",
+				data: {
+					'time': bill_time_change,
+					'account_type': account_type_change,
+					'account_name': account_name_change,
+					'type': bill_type_change,
+					'subtype': in_out_change,
+					'target': trade_obj_change,
+					'amount': trade_money_change,
+					'remark': remark_change
+				},
+				success: function(ret) {
+					alert("操作成功！");
+					var dom = document.getElementById(parent);
+					$(dom).find("td").eq(0).text(ret.bill_time);
+					$(dom).find("td").eq(2).text(ret.account_type);
+					$(dom).find("td").eq(3).text(ret.account_name);
+					$(dom).find("td").eq(4).text(ret.bill_type);
+					$(dom).find("td").eq(5).text(ret.in_out);
+					$(dom).find("td").eq(6).text(ret.trade_obj);
+					$(dom).find("td").eq(7).text(ret.trade_money);
+					$(dom).find("td").eq(9).text(ret.remark);
+				},
+				error: function(ret) {
+					alert(JSON.stringify(ret));
+				}
+			});
+			
+			$(".change-project").hide();
+		});
+		
+		$('#delete_project_btn').click(function() {		//点击确认按钮删除单条项目数据
+			project_flag = $("input#project_delete_id").val();
+			console.log(url2 + project_flag);
+			$.ajax({
+				url: url2 + project_flag + "/",
+				dataType: "json",
+				type: "DELETE",
+				data: {
+					'id': project_flag
+				},
+				success: function(ret) {
+						alert("删除成功！");
+				},
+				error: function(ret) {
+					alert(JSON.stringify(ret));
+				}
+			});
+			$(".delete-project").hide();
+		});
+		
+		$("#search").click(function() {			//搜索项目数据
+			var newurl = url;
+			
+			bill_time_start = $("#bill_time_start").val();
+			bill_time_end = $("#bill_time_end").val();
+			account_name = $("#account_name option:selected").text();
+			account_id = $("#account_id").val();
+			account_type = $("#account_type").val();
+			bill_type = $("#bill_type").val();
+			in_out_type = $("#in_out_type").val();
+			trade_obj = $("#trade_obj").val();
+			
+			if(bill_time_start) {
+				newurl += "&timeft_0=" + bill_time_start;
+			}
+			if(bill_time_end) {
+				newurl += "&timeft_1=" + bill_time_end;
+			}
+			if(account_name && account_name != "全部") {
+				newurl += "&name__contains=" + account_name;
+			}
+			if(account_id) {
+				newurl += "&account=" + account_id;
+			}
+			if(account_type && account_type != 0) {
+				newurl += "&account_type=" + account_type;
+			}
+			if(bill_type && bill_type != 0) {
+				newurl += "&type=" + bill_type;
+			}
+			if(in_out_type && in_out_type != 0) {
+				newurl += "&subtype=" + in_out_type;
+			}
+			if(trade_obj) {
+				newurl += "&target=" + trade_obj;
+			}
+			
+			var newdata = data;
+			console.log(newurl);
+			$("#page").empty();
+			$("#pagedata").ajaxPage({
+				url: newurl,
+				pageId: $("#page"),
+				run: true,
+				content: newdata,
+			});
+		});
+		
+		$("#export").click(function() {			//导出表格
+			bill_time_start = $("#bill_time_start").val();
+			bill_time_end = $("#bill_time_end").val();
+			account_name = $("#account_name").val();
+			account_id = $("#account_id").val();
+			account_type = $("#account_type").val();
+			bill_type = $("#bill_type").val();
+			in_out_type = $("#in_out_type").val();
+			trade_obj = $("#trade_obj").val();
+			
+			var html = '<form action="' + "{% url 'export_account_bill_excel' %}" + '" method="get" target="_self" id="postData_form">';
+			
+			if(bill_time_start) {
+				html += '<input name="timeft_0" type="hidden" value="' + bill_time_start + '"/>';
+			}
+			if(bill_time_end) {
+				html += '<input name="timeft_1" type="hidden" value="' + bill_time_end + '"/>';
+			}
+			
+			if(account_name && account_name != 0) {
+				html += '<input name="name" type="hidden" value="' + account_name + '"/>';
+			}
+			
+			if(account_id) {
+				html += '<input name="account" type="hidden" value="' + account_id + '"/>';
+			}
+			if(account_type && account_type != 0) {
+				html += '<input name="account_type" type="hidden" value="' + account_type + '"/>';
+			}
+			
+			if(bill_type && bill_type != 0) {
+				html += '<input name="type" type="hidden" value="' + bill_type + '"/>';
+			}
+			if(in_out_type && in_out_type != 0) {
+				html += '<input name="subtype" type="hidden" value="' + in_out_type + '"/>';
+			}
+			
+			if(trade_obj) {
+				html += '<input name="target" type="hidden" value="' + trade_obj + '"/>';
+			}
+			
+			html += '</form>';
+			var iframe = document.getElementById('myIFrame');
+			iframe.contentWindow.document.open();
+			iframe.contentWindow.document.write(html);
+			iframe.contentWindow.document.close();
+			document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+		});
+		
+		$('#import').click(function() {			//导入表格
+			var fileElementId = 'fileupload1';
+			if(!document.getElementById(fileElementId).value) {
+				alert("请先选择文件");
+				return;
+			}
+			$.ajaxFileUpload({
+				url: "{% url 'import_finance_excel'%}",
+				secureuri: false,
+				fileElementId: fileElementId, //file标签的id
+				dataType: 'json', //返回数据的类型
+				data: {}, //一同上传的数据
+				success: function(data, status) {
+					if(data.code == 0) {
+						alert("导入成功！ 数量：" + data.num);
+					} else {
+						alert(data.msg + " 成功数量：" + data.num);
+					}
+				},
+				error: function(data, status, e) {
+					alert(e);
+				}
+			});
+			//	hint.innerHTML = '无';
+		});
+		
+		$(".project-state:radio").click(function() {
+			console.log($(this).val());
+			if ($(this).val() == "start") {
+				$(".show-hide").show();
+			} else{
+				$(".show-hide").hide();
+			}
+		});
+		
+		$("#single_import").click(function(){			//弹出单条导入弹窗
+			$(".add-project").show();
+		})
+		
+		$(".none-x, .none-x-s").click(function() {		// 关闭或取消 弹窗
+			$(".project-box").hide(); 
+		})
+		
+//		导入表格部分
+		var choose_file = document.getElementById("input_clone");
+		var hint = document.getElementById("hint");
+		choose_file.onclick = function() {
+			document.getElementById("fileupload1").click();
+		}
+		
+		//切换单选按钮
+		$(".bill-type-radio:radio").click(function() {
+			
+			if ($(this).val() == "income") {
+				$('.in-out').html('<option value="swrz">商务入账</option>' +
+								'<option value="nbzr">内部转入</option>' +
+								'<option value="qtsr">其他收入</option>');
+			} else {
+				$('.in-out').html('<option value="nbzc">内部转出</option>' +
+								'<option value="wztx">网站提现</option>' +
+								'<option value="gzbx">工资报销</option>' +
+								'<option value="swfy">税务费用</option>' +
+								'<option value="swcz">商务出账</option>' +
+								'<option value="qtzc">其他支出</option>');
+			}
+		});
+		
+
+	});
+</script>
+{% endblock js %} {% block right %}
+<div class="Criteria">
+	<span>搜索条件</span>
+	<div class="Crite-box">
+		<form>
+			<table width="100%">
+				<tr>
+					<td>
+						<i>账单时间-start：</i>
+						<input id="bill_time_start" type="datetime-local" />
+					</td>
+					<td>
+						<i>账单时间-end：</i>
+						<input id="bill_time_end" type="datetime-local" />
+					</td>
+					<td>
+						<i style="letter-spacing:4.8px;">账户类型：</i>
+						<select name="selectType" id="account_type">
+							<option value="0">全部</option>
+							<option value="public">公帐</option>
+							<option value="private">私帐</option>
+							<option value="invest">投资</option>
+							<option value="loan">借贷</option>
+							<option value="other">其他</option>
+						</select>
+						
+					</td>
+					<td>
+						<i style="letter-spacing:4.8px;">账户名称：</i>
+						<select name="selectType" id="account_name" class="account-name">
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<i style="letter-spacing:4.8px;">账户ID：</i>
+						<input id="account_id" type="text" />
+					</td>
+					<td>
+						<i>账单类型：</i>
+						<!--<input id="bill_type" type="text" />-->
+						<select name="selectType" id="bill_type">
+							<option value="0">全部</option>
+							<option value="income">收入</option>
+							<option value="expend">支出</option>
+						</select>
+					</td>
+					<td>
+						<i style="letter-spacing:2px;">收支类型：</i>
+						<select name="selectType" id="in_out_type">
+							<option value="0">全部</option>
+							<option value="swrz">商务入账</option>
+							<option value="nbzr">内部转入</option>
+							<option value="qtsr">其他收入</option>
+							<option value="nbzc">内部转出</option>
+							<option value="wztx">网站提现</option>
+							<option value="gzbx">工资报销</option>
+							<option value="swfy">税务费用</option>
+							<option value="swcz">商务出账</option>
+							<option value="qtzc">其他支出</option>
+						</select>
+					</td>
+					<td>
+						<i style="letter-spacing:4.8px;">交易对象：</i>
+						<input id="trade_obj" type="text" />
+					</td>
+				</tr>
+				
+			</table>
+			<div class="Submit-in">
+				<input id="single_import" type="button" value="新建明细" />
+				<input id="search" type="button" value="搜索" />
+				<input id="export" type="button" value="导出" />
+			</div>
+			<div class="leading-in">
+				<input id="fileupload1" name="file" type="file" onchange='hint.innerHTML = this.files[0].name;' />
+				<a id="input_clone" class="input-clone">选择文件</a>
+				<p class="hint-box">已选择表格：<b id="hint" class="hint">无</b></p>
+				<input id="import" type="button" value="表格导入" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="Tin-table">
+	<div id="pagedata">
+	</div>
+	<div class="Page-in-admin">
+		<div class="page" id="page">
+		</div>
+	</div>
+</div>
+{%endblock%} {% block modal %}
+<div class="add-project project-box">			<!--新增项目数据-->
+	<div class="w570-box">
+		<h3 class="popup-title">新增项目数据</h3>
+		<button class="none-x"></button>
+		<form class="Finnow set-project">
+				<!--<input id="project_add_id" type="hidden" />-->
+			<p>
+				<span>账单时间：</span>
+				<input id="bill_time_add" type="datetime-local" />
+			</p>
+			<p>
+				<span>账户类型：</span>
+				<select name="selectType" id="account_type_add">
+					<option value="public">公帐</option>
+					<option value="private">私帐</option>
+					<option value="invest">投资</option>
+					<option value="loan">借贷</option>
+					<option value="other">其他</option>
+				</select>
+			</p>
+			<p>
+				<span>账户名称：</span>
+				<!--<input id="account_name_add" type="text" />-->
+				<select name="selectType" id="account_name_add" class="account-name">
+				</select>
+			</p>
+			<p>
+				<span>账单类型：</span>
+				<!--<input id="bill_type_add" type="text" />-->
+				<input class="bill-type-radio bill-type-add" type="radio" name="bill_type_add" value="income"/>收入&nbsp;&nbsp;
+				<input class="bill-type-radio" type="radio" name="bill_type_add" value="expend" />支出
+			</p>
+			<p>
+				<span class="in-out-name">收入类型：</span>
+				<!--<input id="in_out_add" type="text" />-->
+				<select name="selectType" id="in_out_add" class="in-out">
+					<option value="swrz">商务入账</option>
+					<option value="nbzr">内部转入</option>
+					<option value="qtsr">其他收入</option>
+				</select>
+			</p>
+			<p>
+				<span>交易对象：</span>
+				<input id="trade_obj_add" type="text" />
+			</p>
+			<p>
+				<span>交易金额：</span>
+				<input id="trade_money_add" type="text" />
+			</p>
+			<p>
+				<span>备注：</span>
+				<input id="remark_add" type="text" />
+			</p>
+			
+			<div class="Finnow-Sub">
+				<input id="add_project_btn" type="submit" value="确认" onclick="return false;"/>
+				<input type="button" value="取消" class="none-x-s" />
+			</div>
+			<p style="margin-top: 10px; color: red;">一旦提交将变动账户余额，且不可删除和修改，务必核对准确</p>
+		</form>
+	</div>
+</div>				<!--新增项目数据---end-->
+
+<div class="change-project project-box">			<!--修改项目数据-->
+	<div class="w570-box">
+		<h3 class="popup-title">修改项目数据</h3>
+		<button class="none-x"></button>
+		<form class="Finnow set-project">
+				<input id="project_change_id" type="hidden" />
+			<p>
+				<span>账单时间：</span>
+				<input id="bill_time_change" type="text" />
+			</p>
+			<p>
+				<span>账户类型：</span>
+				<select name="selectType" id="account_type_change">
+					<option value="public">公帐</option>
+					<option value="private">私帐</option>
+					<option value="invest">投资</option>
+					<option value="loan">借贷</option>
+					<option value="other">其他</option>
+				</select>
+			</p>
+			<p>
+				<span>账户名称：</span>
+				<select name="selectType" id="account_name_change" class="account-name">
+				</select>
+			</p>
+			<p>
+				<span>账单类型：</span>
+				<input id="bill_in_change" class="bill-type-radio bill-type-change" type="radio" name="bill_type_change" value="income"/>收入&nbsp;&nbsp;
+				<input id="bill_out_change" class="bill-type-radio bill-type-change" type="radio" name="bill_type_change" value="expend" />支出
+			</p>
+			<p>
+				<span class="in-out-name">收入类型：</span>
+				<select name="selectType" id="in_out_change" class="in-out in-out-change">
+				</select>
+			</p>
+			<p>
+				<span>交易对象：</span>
+				<input id="trade_obj_change" type="text" />
+			</p>
+			<p>
+				<span>交易金额：</span>
+				<input id="trade_money_change" type="text" />
+			</p>
+			<p>
+				<span>备注：</span>
+				<input id="remark_change" type="text" />
+			</p>
+			
+			<div class="Finnow-Sub">
+				<input id="change_project_btn" type="submit" value="确认" onclick="return false;"/>
+				<input type="button" value="取消" class="none-x-s" />
+			</div>
+		</form>
+	</div>
+</div>						<!--修改项目数据---end-->
+
+<!--删除项目弹窗-->
+<div class="delete-project project-box">
+	<div class="w570-box">
+		<h3>确认删除该条数据？</h3>
+		<button class="none-x"></button>
+		<form class="Audit-in">
+			<input id="project_delete_id" type="hidden" />
+			<div class="Finnow-Sub">
+				<input id="delete_project_btn" type="submit" value="确认" class="Deny-box" onclick="return false;" />
+				<input type="button" value="取消" class="none-x-s" />
+			</div>
+		</form>
+	</div>
+</div>
+<iframe id="myIFrame" scrolling="yes" src="abount:blank" style="display:none" frameborder=1></iframe>
+<!--end-->
+{% endblock modal %}

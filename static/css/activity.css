@@ -1,0 +1,184 @@
+.myclear {
+    clear: both;
+    height: 5px;
+}
+
+.myfuli {
+    width: 1100px;
+    height: 50px;
+    margin: auto;
+    border: 1px solid #ebebeb;
+    background-color: #f9f9f9;
+    margin-top:30px;
+}
+
+.myfulis {
+    width: 1100px;
+    border: 1px solid #ebebeb;
+    border-top: none;
+    margin: auto;
+}
+
+.myfuli1 {
+    width: 35px;
+    height: 50px;
+    float: left;
+}
+
+.myfuli2 {
+    width: 165px;
+    height: 50px;
+    float: left;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 50px;
+    color: black;
+    text-align: left;
+}
+
+.myfuli3 {
+    height: 140px;
+    line-height: 70px;
+    width: 1030px;
+    margin: auto;
+    text-align: left;
+}
+
+    .myfuli3 span {
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .myfuli3 font {
+        color: #f08619;
+    }
+
+    .myfuli3 a {
+        color: #f08619;
+    }
+
+.mytable {
+    width: 1030px;
+    margin: auto;
+    table-layout: fixed;
+}
+
+    .mytable a {
+        font-size: 13px;
+        border: 1px solid #ebebeb;
+        padding: 5px 10px;
+        margin-left: 8px;
+    }
+
+
+
+.mytableon {
+    font-size: 13px;
+    border: 1px solid #f08519;
+    padding: 5px;
+    background-color: #f08519;
+    color: white;
+}
+
+.mytable tr {
+    height: 50px;
+    font-size: 14px;
+    word-break: break-all;
+}
+
+.mytable1 {
+    border: 1px solid #ebebeb;
+    background-color: #f9f9f9;
+    height: 50px;
+}
+
+.mycheck {
+    color: #f08519;
+}
+
+.checkTjleft {
+    width: 58px;
+    height: 34px;
+    float: left;
+}
+
+.checkTjright {
+    width: 100px;
+    height: 34px;
+    float: left;
+    line-height: 34px;
+}
+
+.myre-input {
+    width: 540px;
+    height: 35px;
+    border-radius: 2px;
+    border: 1px solid #E7E7E7;
+    background: #fff;
+}
+
+.myload {
+    width: 82px;
+    height: 34px;
+    float: left;
+    line-height: 34px;
+    font-size: 16px;
+}
+
+.myload1 {
+    width: 200px;
+    height: 34px;
+    float: left;
+    border: 1px solid #eee;
+    line-height: 34px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.myre-liji {
+    color: rgb(255, 255, 255);
+    background: #f08519;
+    border: 1px solid rgb(240, 134, 25);
+    width: 135px;
+    height: 40px;
+    border-radius: 2px;
+    font-size: 16px;
+}
+
+.myre-lijis {
+    border: 1px solid #ebebeb;
+    width: 135px;
+    height: 40px;
+    border-radius: 2px;
+    font-size: 16px;
+}
+
+.myinfo {
+    width: 1030px;
+    margin: auto;
+    text-align: left;
+    font-size: 15px;
+    line-height: 55px;
+}
+.mytable3 {
+    width: 1030px;
+    margin: auto;
+    border-collapse: collapse;
+    border: none;
+}
+
+    .mytable3 a {
+        font-size: 13px;
+        border: 1px solid #ebebeb;
+        padding: 5px 10px;
+        margin-left: 8px;
+    }
+
+    .mytable3 tr {
+        height: 50px;
+        font-size: 14px;  
+    }
+
+    .mytable3 td {
+        border:  1px solid #ebebeb;
+    }

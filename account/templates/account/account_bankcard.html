@@ -1,0 +1,283 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户中心</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/accounts/send.js' %}"></script>
+<script type="text/javascript">
+var phoneNum = "{{user.mobile}}";
+var this_url = "{%url 'account_bankcard' %}";
+var get_code_url = "{% url 'phoneImageV' %}";
+$.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
+$(function(){
+	$('.back-a6').parent().toggleClass("on");
+	$("#submit").click(function(){
+		subbranch = $("#subbranch").val();
+    real_name = $("#real_name").val();
+    card_number = $("#card_number").val();
+
+    console.log(card_number);
+
+    var bank = $("#bank option:selected").val();
+		if (!subbranch || !real_name || !card_number){
+			alert("填写项不能为空");
+			return;
+		}
+    if(bank == 0) {
+      alert("请选择开户行");
+      return;
+    }
+
+    var re_account=/^[\u2E80-\u9FFF]+$/;  //验证中文
+    var re_number=/^[0-9]*$/;  //验证数字
+    var re_card = /^[\d\s]+$/;  //验证银行卡号
+
+    if(!re_account.test(subbranch)){
+      alert("请输入正确的银行卡支行名称")
+      return;
+    }
+    if(!re_account.test(real_name)){
+      alert("请输入正确的银行卡绑定的真实姓名")
+      return;
+    }
+
+		var post_url = "{%url 'bind_bankcard' %}";
+		$.ajax({
+			url: post_url,
+			dataType:"json",
+			type:'GET',
+			data : {
+				'bank': bank,
+        'subbranch': subbranch,
+        'real_name':real_name,
+        'card_number':card_number,
+			},
+			success:function(ret){
+				if(ret.code==1){
+					alert("请重新登录！")
+					window.location.href = ret.url;
+				}
+				else if(ret.code==0){
+					alert("绑定银行卡号成功！");
+					window.location.href = this_url;
+				}
+			},
+			error:function(){
+				alert("请检查网络连接");
+			}
+		});
+	});
+	$("#submit2").click(function(){
+    subbranch = $("#subbranch").val();
+    real_name = $("#real_name").val();
+    card_number = $("#card_number").val();
+    code = $("#yanzhengma").val();
+
+    console.log(card_number);
+
+    var bank = $("#bank option:selected").val();
+    // alert(bank);
+    if(bank == 0) {
+      alert("请选择开户行");
+      return;
+    }
+
+    var re_account=/^[\u2E80-\u9FFF]+$/;  //验证中文
+    var re_number=/^[0-9]*$/;  //验证数字
+    var re_card = /^[\d\s]+$/;  //验证银行卡号
+
+    if(!re_account.test(subbranch)){
+      alert("请输入正确的银行卡支行名称")
+      return;
+    }
+    if(!re_account.test(real_name)){
+      alert("请输入正确的银行卡绑定的真实姓名")
+      return;
+    }
+    // if(!re_card.test(card_number)){
+    //   alert("请输入正确格式的银行卡号码")
+    //   return;
+    // }
+
+		if (!subbranch || !real_name || !card_number || !code){
+      alert("填写项不能为空");
+      return;
+    }
+		var post_url = "{%url 'bind_bankcard' %}";
+		$.ajax({
+			url: post_url,
+			dataType:"json",
+			type:'POST',
+			data : {
+				'bank': bank,
+				'subbranch': subbranch,
+		        'real_name':real_name,
+		        'card_number':card_number,
+		        'code':code,
+			},
+			success:function(ret){
+				if(ret.code==1){
+					alert("请重新登录！")
+					window.location.href = ret.url;
+				}
+				else if(ret.code==0){
+					alert("更改银行卡号成功！");
+					window.location.href = this_url;
+				}
+				else {
+					alert(ret.res_msg);
+				}
+			},
+			error:function(){
+				alert("请检查网络连接");
+			}
+		});
+	});
+  $("#confirm_delete").click(function(){    //点击解除绑定银行卡
+    console.log("点击解除绑定银行卡");
+  });
+
+});
+
+// 删除提示信息弹窗调用函数
+  function popupInInfo() {
+    $(".popup-box-01").addClass("in");
+  }
+  // 取消删除信息弹窗点击确定调用函数（已写入html）
+  function popupOutInfo() {
+    $(".popup-box-01").removeClass("in");
+  }
+</script>
+</head>
+
+<body>
+	<div class="Max">
+    	<!--头部-->
+    	{% include "header.html" %}
+    	<!--内容-->
+    	<div class="Content">
+        	<div class="w1100">
+            	{% include "account/left.html" %}
+                <div class="RightCont">
+                	{% if card %}
+                	<div class="binding">
+                    	<div class="Binding-Top">
+                        	<h2>银行卡绑定</h2>
+                        </div>
+                        <div class="Binding-Box">
+                        	<div class="Bin-info">
+                            <div class="bank-head"><span>持卡人</span><span>开户银行</span><span>银行卡号</span></div>
+                            <div class="bank-detail">
+                              <span>{{card.real_name}}</span>
+                              <span>
+                              <img src="/static/images/{{card.bank}}.png" />
+
+                                <b>{{card.get_bank_display}}</b>
+                              </span>
+                              <span>{{card.card_number}}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="popup-box popup-box-01">
+                          <div class="popup-content">
+                            <h3>温馨提示</h3>
+                            <p id="hint_delete">确定解除绑定银行卡信息？</p>
+                            <a id="cancel" class="cancel confirm" onclick="popupOutInfo()">取&nbsp;&nbsp;&nbsp;&nbsp;消</a>
+                            <a id="confirm_delete" class="confirm">确认解除</a>
+                          </div>
+                        </div>
+                        <div class="update" id="update">
+                        	<h6>更换银行卡号：</h6>
+                            	<div class="Inout-box">
+                                  <span>请选择银行：</span>
+                                    <!-- <input id='bank_choose' maxlength="15" type="text" placeholder="请选择相应的银行卡" /> -->
+                                    <select id='bank'>
+                                      <option value ="0">请选择相应的开户行</option>
+                                    {% for x in banks %}
+							    		<option value="{{x.0}}">{{x.1}}</option>
+									{%endfor%}
+                                    </select>
+                                </div>
+                              <div class="Inout-box">
+                                  <span>请填写支行：</span>
+                                    <input id='subbranch' maxlength="15" type="text" placeholder="请输入银行卡支行" />
+                                </div>
+                              <div class="Inout-box">
+                                  <span>持卡人姓名：</span>
+                                    <input id='real_name' maxlength="15" type="text" placeholder="请输入银行卡绑定的真实姓名" />
+                                </div>
+                              <div class="Inout-box">
+                                  <span>请输入卡号：</span>
+                                    <input id='card_number' maxlength="23" type="text" placeholder="请输入真实的银行卡帐号" onkeyup="this.value =this.value.replace(/\s/g,'').replace(/[^\d]/g,'').replace(/(\d{4})(?=\d)/g,'$1 ');" />
+                                </div>
+                            	<div class="Inout-yz">
+                                	<span>验证码：</span>
+                                    <input id="yanzhengma" type="text" maxlength="6"/>
+                                    <input id="yanzhengma_button" type="button" value="获取手机验证码" />
+                                </div>
+                                <p style="float: left;width: 100%;margin-top: 10px;margin-left: 96px;">温馨提示：银行卡信息若有误，将提现失败!</p>
+                                <input id="submit2" type="submit" value="确  定" />
+                        </div>
+                    </div>
+                	{% else %}
+                	<div class="binding">
+                    	<div class="Binding-Top">
+                        	<h2>银行卡绑定</h2>
+                        </div>
+                        <div class="Binding-Box">
+                        	<div class="Bin-info">
+                            	<a href="#update" id="Bin-new"></a>
+                            </div>
+                        </div>
+                        <div class="update" id="update">
+                              <div class="Inout-box">
+                                  <span>请选择银行：</span>
+                                    <!-- <input id='bank_choose' maxlength="15" type="text" placeholder="请选择相应的银行卡" /> -->
+                                    <select id='bank'>
+                                    <option value ="0">请选择相应的开户行</option>
+                                    {% for x in banks %}
+							    		<option value="{{x.0}}">{{x.1}}</option>
+									{%endfor%}
+
+                                    </select>
+                                </div>
+                              <div class="Inout-box">
+                                  <span>请填写支行：</span>
+                                    <input id='subbranch' maxlength="15" type="text" placeholder="请输入银行卡支行" />
+                                </div>
+                            	<div class="Inout-box">
+                                	<span>持卡人姓名：</span>
+                                    <input id='real_name' maxlength="15" type="text" placeholder="请输入银行卡绑定的真实姓名" />
+                                </div>
+                            	<div class="Inout-box">
+                                	<span>请输入卡号：</span>
+                                    <input id='card_number' maxlength="23" type="text" placeholder="请输入真实的银行卡帐号" onkeyup="this.value =this.value.replace(/\s/g,'').replace(/[^\d]/g,'').replace(/(\d{4})(?=\d)/g,'$1 ');" />
+                                </div>
+                              <p style="float: left;width: 100%;margin-top: 10px;margin-left: 96px;">温馨提示：银行卡信息若有误，将提现失败!</p>
+                                <input id="submit" type="submit" value="确  定" />
+
+                        </div>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+    </div>
+</body>
+</html>

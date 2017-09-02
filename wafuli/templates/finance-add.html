@@ -1,0 +1,240 @@
+﻿{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>理财福利，互联网理财平台。</title>
+<meta name="keywords" content="P2P理财,P2P网贷,投资理财,网络理财,网络投资,小额投资理财,如何投资理财,个人理财,家庭理财,挖福利" />
+<meta name="description" content="挖福利是一个优质的互联网理财平台！让你感受到不一样的金融理财。" />
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/welfare.css' %}" /> -->
+<link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/finance.css' %}" />
+
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.flexslider-min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jQuery.infiniteCarousel.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/MSClass.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+<script type="text/javascript">
+
+  // var data='[data]<div class="item-add-content">'+
+  // '<p class="item-name item-add-name">{title}{marks}</p>'+
+  // '<div class="item-add-box"><img src="{img_url}" alt="商家logo" />'+
+  // '<p class="item-interest"><span>{interest}</span>官网利息</p>'+
+  // '<p class="item-invest"><span>{amount}</span>起投金额</p>'+
+  // '<p class="item-date"><span>{time}</span>标期长度</p>'+
+  // '<p class="item-profit"><span>+{benefit}</span>补贴收益</p>'+
+  // '<p class="item-year"><span>{revenue}</span>预计年化收益</p>'+
+  // '<a class="item-add-btn {end}" href="{url}">立即投资</a>'+
+  // '</div></div>[/data]';
+  var data='[data]<div class="item-content">'+
+  '<img src="{img_url}" alt="商家logo" />'+
+  '<p class="item-name">{title}{marks}</p>'+
+  '<p class="item-interest">官网利率<span>{interest}</span></p>'+
+  '<p class="item-invest">起投金额<span>{amount}</span></p>'+
+  '<p class="item-date">标期长度<span>{time}</span></p>'+
+  '<p class="item-profit">补贴收益<span>+{benefit}</span></p>'+
+  '<p class="item-year">预计年化收益<span>{revenue}</span></p>'+
+  '<a class="item-btn {end}" href="{url}">立即投资</a>'+
+  '</div>[/data]';
+
+var url = "{% url 'get_finance_page' %}" + "?page={page}&size={pageSize}";
+function pagecallback(){
+	$(".lc-h2.new").append('<img src="/static/images/new_cont.png" class="new_cont2">');
+  $(".end").text("已结束");
+}
+var textarray=[];
+function getText(n) {
+	 if (textarray[n-1])
+		 return textarray[n-1];
+	 else
+		 return n;
+}
+function emptydisplay(obj){
+  obj.html('<p style="margin-top:20px;">抱歉，没有找到符合条件的项目！</p>');
+}
+$(function(){
+   	$('.finan_h a').toggleClass("vo");
+
+  var newurl = url;
+  var index = "0",
+    index_text;
+  var company_name = "全部",
+    company_background = "不限",
+    invest_account = "不限",
+    project_status = "0";
+
+
+  $("#pagedata1").ajaxPage({
+      url:url + "&company_name=全部" + "&company_background=不限" + "&invest_account=不限" + "&project_type=3" + "&project_status=0",
+      pageId:$("#page1"),
+      pageSize:12,
+      run:true,
+      content:data,
+      complete:pagecallback,
+  });
+
+  $(".fiter-item-container li").click(function() {
+    var parent = $(this).parent(".filter-item");
+
+    if($(parent).hasClass("company-background")) {
+      $(this).addClass("on").siblings().removeClass("on");
+      index = $(this).index();
+      index_text = $(this).children().text();
+      company_background = index_text;
+    }
+
+    if($(parent).hasClass("invest-count")) {
+      $(this).addClass("on").siblings().removeClass("on");
+      index = $(this).index();
+      index_text = $(this).children().text();
+      invest_account = index_text;
+    }
+
+    if($(parent).hasClass("project-status")) {
+      $(this).addClass("on").siblings().removeClass("on");
+      index = $(this).index();
+      var text_item = $(this).children().text();
+      project_status = index;
+    }
+    newurl=url + "&company_name=" + company_name + "&company_background=" + company_background + "&invest_account=" + invest_account + "&project_type=3" + "&project_status=" + project_status;
+    console.log(newurl)
+
+  	$("#pagedata1").ajaxPage({
+  	    url:newurl,
+  	    pageId:$("#page1"),
+  	    pageSize:12,
+  	    run:true,
+  	    content:data,
+  	    complete:pagecallback,
+  	});
+  })
+
+
+    $('.flexslider').flexslider({
+           directionNav: true,
+           pauseOnAction: false
+    });
+
+    $('.know').click(function() {
+      $('.finance-add-mask').hide();
+    });
+
+});
+
+function tounicode(data) {
+   if(data == '') return '请输入汉字';
+   var str ='';
+   for(var i=0;i<data.length;i++)
+   {
+      str+="\\u"+parseInt(data[i].charCodeAt(0),10).toString(16);
+   }
+   return str;
+}
+</script>
+</head>
+<body>
+{% include "header.html" %}
+<div id="content">
+  <div id="index-banner">
+    <div class="flexslider">
+      <ul class="slides">
+      {% for adv in ad_list %}
+        <li onclick="location='{{adv.url}}'" style="background:url({{adv.pic.url}}) 50% 0 no-repeat;cursor:pointer;"></li>
+        <script>textarray.push("{{adv.navigation}}");</script>
+      {%endfor%}
+      </ul>
+    </div>
+  </div>      <!-- index-banner-end-->
+
+  <div class="fiter-item-container">
+    <div class="fiter-title">
+      <h2>筛选平台</h2>
+      <p>若您想要更稳健的理财项目<a href="{% url 'finance' %}">请点这里</a></p>
+    </div>
+    <div class="fiter-content">
+      <div class="filter-box-company">
+        <div class="filter-box-name">
+          平台背景：
+        </div>
+        <ul class="filter-item company-background">
+          <li class="on">
+            <a href="javascript:void(0);">不限</a>
+          </li>
+          <li>
+            <a href="javascript:void(0);">民营系</a>
+          </li>
+          <li>
+            <a href="javascript:void(0);">国资系</a>
+          </li>
+          <li>
+            <a href="javascript:void(0);">上市系</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="filter-box-company">
+        <div class="filter-box-name">
+          投标次数：
+        </div>
+        <ul class="filter-item invest-count">
+          <li class="on">
+            <a href="javascript:void(0);">不限</a>
+          </li>
+          <li>
+            <a href="javascript:void(0);">首投</a>
+          </li>
+          <li>
+            <a href="javascript:void(0);">复投</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="filter-box-company">
+        <div class="filter-box-name">
+          项目状态：
+        </div>
+        <ul class="filter-item project-status">
+          <li class="on">
+            <a href="javascript:void(0);">不限</a>
+          </li>
+          <li>
+            <a href="javascript:void(0);">正在进行</a>
+          </li>
+          <li>
+            <a href="javascript:void(0);">已结束</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>  <!--fiter-item-container-end-->
+
+  <div id="pagedata1" class="item-container clearfix">
+
+  </div>
+  <div class="changes-p">
+      <div class="page"  id="page1">
+      </div>
+  </div>
+</div>
+
+<!-- 遮罩部分 -->
+<!-- <div class="finance-add-mask">
+  <div class="mask-box">
+    <img src="{% static 'images/finance-add-mask.png' %}" alt="提示图片" />
+    <a class="know">好的，我知道了</a>
+  </div>
+</div> -->
+<div style="clear:both"></div>
+<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+
+
+</body>
+</html>

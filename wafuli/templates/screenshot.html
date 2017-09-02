@@ -1,0 +1,20 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>截图展示</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/screenshot.css' %}"/>
+	</head>
+	<body>
+		<ul class="img-container">
+		{% for img in img_list %}
+			<li>				
+				<p>{{img.name}}</p>
+				<img src="{{img.url}}" alt="{{img.name}}" />
+			</li>
+			<br />
+		{% endfor %}
+		</ul>
+	</body>
+</html>

@@ -1,0 +1,96 @@
+{% load staticfiles %}
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>免费领取各类优惠券福利平台-挖福利商家大全</title>
+<meta content="优惠券,优惠券网,优惠券网站,什么值得买,免费资源,有奖活动,免费试用" name="keywords">
+<meta content="挖福利为您提供互联网优惠券和免费福利领取活动信息！包括电商优惠券、O2O免费体验券、免费试用，有奖活动等。" name="description">
+<link href="{% static 'images/favicon.ico' %}" rel="shortcut icon">
+<link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet">
+<link href="{% static 'css/common.css' %}" type="text/css" rel="stylesheet">
+<link href="{% static 'css/page.css' %}" type="text/css" rel="stylesheet">
+<link href="{% static 'css/business.css' %}" type="text/css" rel="stylesheet">
+</head>
+<body>
+<!--头部-->
+{% include "header.html" %}
+
+<div class="search">
+    <div>当前位置：<a href="{% url 'index' %}">挖福利</a> > <a href="{% url 'business_list' %}">商家大全</a></div>
+</div>
+
+<!-- 内容 -->
+<div class="content">
+    <div class="all">
+  <div class="left">
+    <div class="hot">
+      <div class="hot-nav">热门商家</div>
+      <div class="list">
+      {%for business in hot_business_list%}
+      <a href="{%url 'welfare'%}?business={{business.name}}">
+      	<img src="{{business.logo.url}}" class="list_img">
+      </a>
+      {%endfor%}
+      </div>
+    </div>
+    <div class="whole">
+        <!-- <img src="{% static 'images/01_20.jpg' %}" class="whole-nav-font_img"> -->
+        <div class="whole-nav-font">商家大全</div>
+      <form action="{%url 'business_list'%}" method="get" class="input_box">
+          <!-- <img src="{% static 'images/01_14.jpg' %}" style="position:absolute; left:-13px; top:0px;"> -->
+          <input name="key" type="text" placeholder="请输入关键词" size="10">
+          <input type="submit" value="">
+      </form>
+      <div class="whole-content">
+      {%for business in business_list%}
+      	<a href="{%url 'welfare'%}?business={{business.name}}">
+      	<img src="{{business.logo.url}}" class="list_img">
+      	</a>
+      {%endfor%}
+      </div>
+    </div>
+
+   {% if business_list.paginator.num_pages >= 2 %}
+  <div class="item_con_pager">
+            <div class="pager_container">
+            {% if business_list.number != 1 %}
+				<a href="{{page_dic.pre_path}}list-page{{business_list.previous_page_number}}{{page_dic.suf_path}}" class="page_no" >上一页</a>
+			{% else %}
+				<a class="page_no pager_prev_disabled">上一页</a>
+			{% endif %}
+			{% for i in page_dic.page_list %}
+				{% if i == "..." %}
+					...
+				{% elif i == business_list.number %}
+					<a class="page_no pager_is_current">{{i}}</a>
+				{% else %}
+					<a href="{{page_dic.pre_path}}list-page{{i}}{{page_dic.suf_path}}" class="page_no">{{i}}</a>
+				{% endif  %}
+			{% endfor %}
+			{% if business_list.number != business_list.paginator.num_pages %}
+				<a href="{{page_dic.pre_path}}list-page{{business_list.next_page_number}}{{page_dic.suf_path}}" class="page_no" >下一页</a>
+			{% else %}
+				<a class="page_no pager_prev_disabled">下一页</a>
+			{% endif %}
+
+             </div>
+        </div>
+  {%endif%}
+  </div>
+  <div class="right">
+    <div class="right-box">
+      <h3>你可能感兴趣的福利</h3>
+      {%for wel in hot_wel_list%}
+      	<a target="_blank" href="{{wel.url}}">
+          <img src="{{wel.pic.url}}">
+          <p>{{wel.title}}</p>
+        </a>
+      {%endfor%}
+    </div>
+  </div>
+</div>
+</div>
+<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+</body></html>

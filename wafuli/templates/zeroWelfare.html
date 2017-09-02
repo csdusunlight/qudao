@@ -1,0 +1,327 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>一个提供免费福利的网络理财平台，挖福利。</title>
+<meta name="keywords" content="免费福利，理财红包，理财活动，购物红包，体验红包" />
+<meta name="description" content="挖福利免费为您提供互联网优惠券和免费福利领取活动信息！" />
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/welfare.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-flexslider.css' %}" />
+
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.flexslider-min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jQuery.infiniteCarousel.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/MSClass.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+
+<script type="text/javascript">
+
+function pagecallback(){
+  $(".tab-li.new").prepend('&lt;div class="newpost z"&gt;新&lt;/div&gt;');
+}
+var textarray=[];
+var type = "{{type}}";
+function getText(n) {
+	 if (textarray[n-1])
+		 return textarray[n-1];
+	 else
+		 return n;
+}
+$(function(){
+	// $('.zero_h a').toggleClass("vo");
+  $('.nav__item:eq(1)').addClass('active');
+	if (type!=="None"){
+    	$('.nav_'+type).toggleClass("box-shadow");
+    }
+    else {
+    	$('.nav_all').toggleClass("box-shadow");
+    }
+	$('.flexslider').flexslider({
+	       directionNav: true,
+	       pauseOnAction: false
+	});
+	$(".box_children").mouseover(function(){
+		$(this).attr("src","images/pict_42.png")
+	});
+});
+
+</script>
+</head>
+<body>
+{% include "header.html" %}
+<div id="content">
+   <div id="index-banner">
+    <div class="flexslider">
+          <ul class="slides">
+          {% for adv in ad_list %}
+            <li onclick="location='{{adv.url}}'" style="background:url({{adv.pic.url}}) 50% 0 no-repeat;cursor:pointer;"></li>
+            <script>textarray.push("{{adv.navigation}}");</script>
+          {%endfor%}
+          </ul>
+        <div class="index-banner-main">
+              <div class="top">
+              	<div class="top_nav"><span>本月提交福利排行榜</span></div>
+		        <ul class="top_list">
+	            	<li><img src="{%static 'images/top-1.png'%}" /> &nbsp;&nbsp; <span>{{rank1.username}}</span>&nbsp;&nbsp;&nbsp;&nbsp; {{rank1.acc_num}}</li>
+	            	<li><img src="{%static 'images/top-2.png'%}" /> &nbsp;&nbsp; <span>{{rank2.username}}</span>&nbsp;&nbsp;&nbsp;&nbsp; {{rank2.acc_num}}</li>
+	            	<li><img src="{%static 'images/top-3.png'%}" /> &nbsp;&nbsp; <span>{{rank3.username}}</span>&nbsp;&nbsp;&nbsp;&nbsp; {{rank3.acc_num}}</li>
+	            	<li><img src="{%static 'images/top-4.png'%}" /> &nbsp;&nbsp; <span>{{rank4.username}}</span>&nbsp;&nbsp;&nbsp;&nbsp; {{rank4.acc_num}}</li>
+	            </ul>
+              <div class="submit">
+              	<img src="{%static 'images/submit.png'%}" />
+                <a href="{%url 'activity_recommend' %}">提交福利送现金</a>
+              </div>
+              </div>
+        </div>
+    </div>
+  </div>
+<div class="wel_nav">
+  <ul class="nav_children">
+    <li>
+        <a class="nav_all" href="{%url 'welfare_list' %}">
+			<img id="img1" src="{%static 'images/nav-1.png'%}" />
+			<p>全部</p>
+        </a>
+  </li>
+    <li>
+	    <a class="nav_hb" href="{%url 'welfare_list' type='hb' %}">
+	        <img src="{%static 'images/nav-2.png'%}" />
+	        <p>红包</p>
+	    </a>
+    </li>
+    <li>
+		<a class="nav_yhq" href="{%url 'welfare_list' type='yhq' %}">
+			<img src="{%static 'images/nav-3.png'%}" />
+		    <p>优惠券</p>
+		</a>
+    </li>
+    <li>
+	    <a class="nav_by" href="{%url 'welfare_list' type='by' %}">
+	    	<img src="{%static 'images/nav-4.png'%}" />
+	    	<p>9.9包邮</p>
+    	</a>
+    </li>
+ </ul>
+</div>
+
+<script>
+$(".nav_all").mouseover(function(){
+$(this).children().attr("src","{%static 'images/pic_14.png'%}");
+});
+$(".nav_all").mouseleave(function(){
+$(this).children().attr("src","{%static 'images/nav-1.png'%}");
+});
+$(".nav_hb").mouseover(function(){
+$(this).children().attr("src","{%static 'images/pic_08.png'%}");
+});
+$(".nav_hb").mouseleave(function(){
+$(this).children().attr("src","{%static 'images/nav-2.png'%}");
+
+});
+$(".nav_yhq").mouseover(function(){
+$(this).children().attr("src","{%static 'images/pic_03.png'%}");
+});
+$(".nav_yhq").mouseleave(function(){
+$(this).children().attr("src","{%static 'images/nav-3.png'%}");
+});
+$(".nav_by").mouseover(function(){
+$(this).children().attr("src","{%static 'images/pic_05.png'%}");
+});
+$(".nav_by").mouseleave(function(){
+$(this).children().attr("src","{%static 'images/nav-4.png'%}");
+});
+</script>
+
+
+<div class="search">
+  <form action="{%url 'welfare_list'%}" method="get">
+    <input name="key" type="text">
+    <input type="submit" value="搜&nbsp;&nbsp;索">
+    <!-- <img src="images/search.png"> -->
+  </form>
+</div>
+
+<div class="walfare">
+  <div class="walfare_top">
+    <div class="walfare_top_1"></div>
+    <div class="walfare_font">
+         <h1>福利大全</h1>
+         <a>WELFARE</a>
+        	<img src="{%static 'images/pict_38.png'%}" />
+    <div class="walfare_top_2"></div>
+  </div>
+   <div class="middle">
+      <a href="{{ref_dic.ref_path1}}" {% if ref_dic.state == '1' %} class="active" {%endif%}>正在进行的免费福利</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="{{ref_dic.ref_path2}}" {% if ref_dic.state == '2' %} class="active" {%endif%}>已经结束的免费福利</a>
+   </div>
+  {%if not wel_list %}
+   <div class="box content-box">抱歉，您要找的福利不存在，或者已经结束了。</div>
+  {%else%}
+  <div class="box">
+    <ul>
+       {%for wel in wel_list%}
+      <li>
+        <div class="box_children">
+        <div class="box_pic">
+          <a href="{{wel.url}}" target="_blank"><img src="{{wel.pic.url}}"></a>
+          <div class="box_pic_bg">
+          	<p style="color:#FFF; font-size:10px;">
+          	<a href="{{wel.url}}" target="_blank" style="color:#FF0">
+          {%if wel.type == 'youhuiquan'%}
+            	点击领取
+          {%else%}
+          		点击体验
+          {%endif%}
+          	</a></p>
+          </div>
+        </div>
+        <a href="{{wel.url}}"  target="_blank" class="box_name">{{wel.title}}</a>
+        <span class="tag">{{wel.get_type_display}}</span>
+        <div class="box_line"></div>
+        <div>
+        {%if wel.type == 'baoyou'%}
+            <div class="classes"><span class="new-price">￥{{wel.baoyou.nprice}}</span>&nbsp;<span class="old-price">￥{{wel.baoyou.mprice}}</span></div>
+        {%else%}
+          	<div class="classes">
+          	{% for mark in wel.marks.all|slice:":3" %}
+          	<span>{{mark.name}}</span>
+          	{% endfor %}
+          	</div>
+        {%endif%}
+        <img src="{%static 'images/pict_60.png'%}" class="see" />
+        <span class="number">{{wel.view_count}}</span>
+        </div>
+      </div>
+      </li>
+      {%endfor%}
+
+     </ul>
+  </div>
+{%endif%}
+   {% if wel_list.paginator.num_pages >= 2 %}
+  <div class="item_con_pager">
+            <div class="pager_container">
+            {% if wel_list.number != 1 %}
+				<a href="{{page_dic.pre_path}}list-page{{wel_list.previous_page_number}}{{page_dic.suf_path}}" class="page_no" >上一页</a>
+			{% else %}
+				<a class="page_no pager_prev_disabled">上一页</a>
+			{% endif %}
+			{% for i in page_dic.page_list %}
+				{% if i == "..." %}
+					...
+				{% elif i == wel_list.number %}
+					<a class="page_no pager_is_current">{{i}}</a>
+				{% else %}
+					<a href="{{page_dic.pre_path}}list-page{{i}}{{page_dic.suf_path}}" class="page_no">{{i}}</a>
+				{% endif  %}
+			{% endfor %}
+			{% if wel_list.number != wel_list.paginator.num_pages %}
+				<a href="{{page_dic.pre_path}}list-page{{wel_list.next_page_number}}{{page_dic.suf_path}}" class="page_no" >下一页</a>
+			{% else %}
+				<a class="page_no pager_prev_disabled">下一页</a>
+			{% endif %}
+
+             </div>
+        </div>
+  {%endif%}
+  </div>
+
+ </div>
+<script>
+
+</script>
+<div class="Business">
+  <div class="Business_children">
+      <div class="Business_top">
+        <div class="Business_top_1"></div>
+        <div class="Business_font">
+             <h1>商家大全</h1>
+             <a>MARCHANT</a>
+             <img src="{%static 'images/pict_38.png'%}" />
+        </div>
+        <div class="Business_top_2"></div>
+      </div>
+  <div class="Business_box">
+  {%for busi in business_list|slice:":5" %}
+    <a href="{%url 'welfare_list'%}?business={{busi.name}}"><img src="{{busi.logo.url}}" /></a>
+   {%endfor%}
+  </div>
+  <div class="Business_box">
+  {%for busi in business_list|slice:"5:10" %}
+    <a href="{%url 'welfare_list'%}?business={{busi.name}}"><img src="{{busi.logo.url}}" /></a>
+   {%endfor%}
+  </div>
+  <a href="{%url 'business_list'%}"><img src="{%static 'images/pict_94.png'%}" class="more_bg" /></a>
+  <a href="{%url 'business_list'%}" class="more">MORE>></a>
+  </div>
+</div>
+
+<div class="footer_box">
+  <div class="other">
+    <div class="other_top">
+      <div>你可能感兴趣的福利</div>
+      <img src="{%static 'images/pict_98.png'%}" />
+    </div>
+    <div class="other_box">
+    {% for wel in hot_wel_list %}
+       <div class="box_children box-bottom">
+        <div class="box_pic">
+          <a href="{{wel.url}}" target="_blank"><img src="{{wel.pic.url}}"></a>
+          <div class="box_pic_bg">
+          	<p style="color:#FFF; font-size:10px;">
+          	<a href="{{wel.url}}" target="_blank" style="color:#FF0">
+          {%if wel.type == 'youhuiquan'%}
+            	点击领取
+          {%else%}
+          		点击体验
+          {%endif%}
+          	</a></p>
+          </div>
+        </div>
+        <a href="{{wel.url}}"  target="_blank" class="box_name">{{wel.title}}</a>
+        <span class="tag">{{wel.get_type_display}}</span>
+        <div class="box_line"></div>
+        <div>
+        {%if wel.type == 'baoyou'%}
+            <div class="classes"><span class="new-price">￥{{wel.baoyou.nprice}}</span>&nbsp;<span class="old-price">￥{{wel.baoyou.mprice}}</span></div>
+        {%else%}
+          	<div class="classes">
+          	{% for mark in wel.marks.all|slice:":3" %}
+          	<span>{{mark.name}}</span>
+          	{% endfor %}
+          	</div>
+        {%endif%}
+        <img src="{%static 'images/pict_60.png'%}" class="see" />
+        <span class="number">{{wel.view_count}}</span>
+        </div>
+      </div>
+      {%endfor%}
+    </div>
+  </div>
+
+  <div class="subject">
+    <div class="subject_top" style="position: relative;">
+      <div>专题栏目</div>
+      <img src="{%static 'images/pict_100.png'%}" />
+      <a href="{% url 'information_list' %}" style="position: absolute;bottom: 6px;right: 10px;text-decoration: underline;color: #f08519">更多精彩&gt;&gt;</a>
+    </div>
+    <div class="subject_box">
+        <a href="{{info.url}}" target="_blank"><img src="{{info.pic.url}}"  /></a>
+        <a href="{{info.url}}" target="_blank"><h1>{{info.title}}</h1></a>
+        <p>{{info.summary}}</p>
+      </div>
+  </div>
+</div>
+
+<div style="clear:both"></div>
+<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+</body>
+</html>

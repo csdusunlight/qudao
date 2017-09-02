@@ -1,0 +1,54 @@
+
+/**************新手奖励-4.24******************/
+.Cont-Max { float:left; width:100%; height:auto; background-repeat:no-repeat; background-position:top center; background-color:#9fd4ff; padding-top:514px; padding-bottom:60px;}
+
+.box-list { float:left; width:100%; height:auto; min-height:320px; margin-top:130px; background:#fffdf0; border-radius:7px; position:relative; box-sizing:border-box; padding-top:130px;}
+.Lin-ons { position:absolute; top:-80px; left:13px; background:url(../images/new-1.png) no-repeat center; width:858px; height:208px; box-sizing:border-box; padding-left:100px; padding-top:40px;}
+.Lin-ons img { float:left;}
+.Info-new { float:left; width:100%; height:auto; text-align:left; padding-left:100px; box-sizing:border-box; font-size:30px; color:#7c6949; padding-top:30px;}
+.Info-new b { color:#f13410; font-size:48px;}
+.Info-new img { margin:0 15px;}
+.Lin-info { float:left; width:100%; height:auto; line-height:135px; font-size:80px; color:#7c6949; vertical-align:middle;}
+.Lin-info img { margin:0 25px;}
+.Infobot { float:left; width:100%; height:auto; margin-top:20px;}
+.Infobot strong { display:inline-block; width:163px; height:40px; line-height:37px; text-align:center; background:#5388f6; border-radius:200px; font-size:23px; color:#fff; vertical-align:middle; margin:0 60px;}
+.Infobot span { font-size:30px; color:#5388f6; vertical-align:middle; margin:0 60px;}
+.Botinfo { float:left; width:1075px; height:auto; margin-left:13px; border-top:3px solid #dbd6b8; margin-top:30px; padding-top:20px; vertical-align:middle; font-size:80px; color:#7c6949;}
+.Infobot2 { float:left; width:100%; height:auto; margin-top:20px; text-align:left; padding-left:40px; padding-bottom:20px;}
+.Infobot2 strong { display:inline-block; width:163px; height:40px; line-height:37px; text-align:center; background:#5388f6; border-radius:200px; font-size:23px; color:#fff; vertical-align:middle; margin:0 60px;}
+.Infobot2 span { font-size:30px; color:#5388f6; vertical-align:middle; margin-left:85px; margin-right:}
+.New-binfo { float:left; width:100%; height:auto; border-radius:10px; margin-top:60px; box-sizing:border-box; padding-left:13px; padding-right:330px; background:url(../images/newimg4.png) no-repeat right bottom #fff; padding-bottom:30px;}
+
+.New-binfo h3 { font-size:38px; color:#7dc5ff; line-height:100px; text-align:left;}
+.New-binfo p { font-size:20px; color:#7dc5ff; line-height:40px; display:block; text-align:left;}
+
+
+.Content-in { float:left; width:100%; height:auto;}
+.banner-new { float:left; width:100%; height:350px; background:url(../images/banner-new1.png) no-repeat center;}
+.Info-c { float:left; width:100%; height:auto; margin-top:35px;}
+.Info-c h2 { font-size:40px; color:#536880; line-height:60px; stext-align:center; font-weight:bold;}
+.Info-c h6 { font-size:16px; color:#666666; line-height:42px; text-align:center; font-weight:400;}
+.Fin-xi { float:left; width:100%; height:auto; margin-top:20px; padding-bottom:50px; border-bottom:1px dashed #cacaca;}
+.Fin-xi strong { font-size:20px; color:#008fd7; margin-right:60px; float:left; line-height:210px; margin-left:24px;}
+.Fin-xi2 { float:left; width:100%; height:auto; margin-top:20px; padding-bottom:50px;}
+.Fin-xi2 strong { font-size:20px; color:#f08519; margin-right:60px; float:left; padding:69px 0; margin-left:24px;}
+.Advantage { float:left; width:100%; height:auto; margin-top:10px; background:#9fd4ff; padding-bottom:70px;}
+.Advinfo { float:left; width:100%; height:auto;}
+.Advinfo h3 { font-size:40px; color:#ffffff; line-height:170px; font-weight:bold;}
+.Advilist { float:left ; width:100%; height:auto;}
+.Advilist li { float:left; width:220px; height:auto; text-align:center;}
+.Advilist li strong { display:block; font-size:20px; color:#fff; line-height:52px;}
+.Advilist li span { display:block; font-size:14px; color:#ffffff; line-height:24px;}
+.Adimg { float:left; width:100%; height:auto; text-align:center;}
+.Features { float:left; width:100%; height:auto; margin-top:35px; padding-bottom:45px;}
+.Features h2 { font-size:40px; color:#536880; line-height:85px; stext-align:center; font-weight:bold;}
+.Feat-box { float:left; width:50%; height:auto; padding-top:30px; text-align:center;}
+.Feat-box span { font-size:25px; color:#008fd7; line-height:65px;}
+.Feat-box p { font-size:16px; color:#666666; line-height:24px;}
+.Feat-img { float:left; width:100%; height:215px;}
+.Advflow { float:left; width:100%; height:343px; background:url(../images/flow-back.png) no-repeat center; box-sizing:border-box; padding-left:40px; padding-right:40px;}
+.Flow-Title { float:left ; width:100%; height:auto; line-height:60px;}
+.Flow-Title span { font-size:20px; color:#000000; line-height:60px; text-align:left; display:block; margin-left:10px;}
+.Flow-info { width:1020px; height:274px; vertical-align:middle; display:table-cell;}
+.Flow-info img { display:block; margin:auto; max-width:100%; max-height:100%;}
+.Flow-box { float:left; width:100%; height:auto;}

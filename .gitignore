@@ -4,7 +4,7 @@ media/
 debug.log
 migrations/
 db.sqlite3
-settings.py
+dragon/settings.py
 .settings/
 uwsgi.ini
 reload

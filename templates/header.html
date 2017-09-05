@@ -39,14 +39,10 @@
             <ul class="nav nav-layout l fs-0">
                 <li class="nav__itembox d-ib"><a class="nav__item" href="{% url 'index' %}">首页</a></li>
                 <li class="nav__itembox subnav-show d-ib">
-                    <a class="nav__item" href="#">免费领</a>
-                    <ul class="subnav welfare-subnav">
-                        <li><a class="subnav__item link" href="{% url 'welfare' %}">红包福利</a></li>
-                        <li><a class="subnav__item link" href="http://fuligou.wafuli.cn">福利购</a></li>
-                    </ul>
+                    <a class="nav__item" href="{% url 'finance' %}">项目库</a>
                 </li>
                 <li class="nav__itembox subnav-show d-ib">
-                    <a class="nav__item" href="#">轻松赚</a>
+                    <a class="nav__item" href="#">新人指南</a>
                     <ul class="subnav">
                         <li><a class="subnav__item link" href="{% url 'task' %}">任务赚</a></li>
                         <li><a class="subnav__item link" href="{% url 'finance' %}">p2p返利</a></li>
@@ -54,7 +50,8 @@
                 <!--        <li><a class="subnav__item link" href="{% url 'task' %}">信用卡</a></li> -->
                     </ul>
                 </li>
-                <li class="nav__itembox d-ib"><a class="nav__item" href="{% url 'mall' %}">积分商城</a></li>
+                <li class="nav__itembox d-ib"><a class="nav__item" href="{% url 'mall' %}">排行榜</a></li>
+                <li class="nav__itembox d-ib"><a class="nav__item" href="{% url 'mall' %}">合作共赢</a></li>
                 <li class="nav__itembox d-ib"><a class="nav__item" href="{% url 'account_index' %}">个人中心</a></li>
             </ul>
         </div>

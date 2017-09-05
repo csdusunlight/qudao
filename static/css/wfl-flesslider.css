@@ -1,6 +1,6 @@
-.flexslider{position:relative;height:380px;overflow:hidden;background:url(../images/loading.gif) 50% no-repeat;}
+.flexslider{position:relative;height:400px;overflow:hidden;background:url(../images/loading.gif) 50% no-repeat;}
 .slides{position:relative;z-index:1;}
-.slides li{height:380px;}
+.slides li{height:400px;}
 .flex-control-nav{position:absolute;bottom:10px;z-index:2;width:100%;text-align:center;}
 .flex-control-nav li{display:inline-block;width:14px;height:14px;margin:0 5px;*display:inline;zoom:1;}
 .flex-control-nav a{display:inline-block;width:14px;height:14px;line-height:40px;overflow:hidden;

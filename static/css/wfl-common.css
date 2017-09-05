@@ -19,7 +19,7 @@ p,a,span,li { color: inherit; font-size: 14px; }
 span { font-size: inherit;}
 p {line-height: 24px; color: inherit;}
 a.link:hover {
-	color: #91C11D;
+    color: #91C11D;
 }
 input[type="text"],
 select {
@@ -30,41 +30,41 @@ select {
 }
 /*快捷样式*/
 .wleft {
-	width: 930px;
+    width: 930px;
 }
 .wright {
-	width: 300px;
+    width: 300px;
 }
 .l {
-	float: left;
+    float: left;
 }
 .r {
-	float: right;
+    float: right;
 }
 .d-ib {
-	display: inline-block;
-	vertical-align: baseline;
+    display: inline-block;
+    vertical-align: baseline;
 }
 .d-tc {
-	display: table-cell;
+    display: table-cell;
 }
 .fs-0 {
-	font-size: 0;
+    font-size: 0;
 }
 .color-fff {
-	color: #fff;
+    color: #fff;
 }
 .color-red {
-	color: #f95a5a;
+    color: #f95a5a;
 }
 .bgc-333 {
-	background-color: #333;
+    background-color: #333;
 }
 .bgc-fff {
-	background-color: #fff;
+    background-color: #fff;
 }
 .bg-green {
-	background-color: #91C11D;
+    background-color: #91C11D;
 }
 .one-line {
     overflow: hidden;
@@ -74,11 +74,11 @@ select {
 }
 .clearfix:before,
 .clearfix:after {
-	content: " ";
-	display: table;
+    content: " ";
+    display: table;
 }
 .clearfix:after {
-	clear: both;
+    clear: both;
 }
 .line-2 {height: 60px;}
 .line-2s {height: 48px;}
@@ -86,60 +86,43 @@ select {
 .line-3s {height: 72px;}
 /*组件定义*/
 .wfl-wrap {
-	width: 1250px;
-	margin: 15px auto 0;
+    width: 1250px;
+    margin: 20px auto 0;
 }
 .wflbox {
-	background-color: #fff;
-}
-.wflbox__titlebox {
-	padding-top: 14px;
-	padding-bottom: 20px;
+    background-color: #fff;
 }
 .wflbox__title {
-	position: relative;
-	float: left;
-	padding-left: 40px;
-	line-height: 36px;
+    /*position: relative;
+    float: left;*/
+    padding-left: 6px;
+    line-height: 44px;
 }
-.wflbox__title:before {
-	position: absolute;
-	top: 0;
-	left: 20px;
-	float: right;
-	content: '';
-	width: 6px;
-	height: 36px;
-	border-radius: 3px;
-	background-color: #91C11D;
-
+.wflbox__title.m-green {
+    color: #91C11D;
 }
-.wflbox__more {
-	float: right;
-	margin-right: 20px;
-	line-height: 36px;
-}
-a.wflbox__more:hover {
-	color: #91C11D;
+.wflbox__title.m-center {
+    padding-left: 0;
+    text-align: center;
 }
 .btn {
-	display: inline-block;
-	width: 110px;
-	line-height: 36px;
-	text-align: center;
-	color: #fff;
-	border-radius: 4px;
-	transform: translateY(0);
-	transition: all 0.4s ease;
+    display: inline-block;
+    width: 110px;
+    line-height: 36px;
+    text-align: center;
+    color: #fff;
+    border-radius: 4px;
+    transform: translateY(0);
+    transition: all 0.4s ease;
 }
 .btn:hover {
-	transform: translateY(-4px);
+    transform: translateY(-4px);
 }
 .btn.m-green {
-	background-color: #91C11D;
+    background-color: #91C11D;
 }
 .btn.m-green:active {
-	background-color: #628314;
+    background-color: #628314;
 }
 
 .txtbox {
@@ -158,43 +141,43 @@ a.wflbox__more:hover {
 }
 
 .popup {
-	position: fixed;
-	visibility: hidden;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	background-color: rgba(0,0,0,0.3);
-	opacity: 0;
-	z-index: 10;
-	transition: all 0.4s ease;
+    position: fixed;
+    visibility: hidden;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.3);
+    opacity: 0;
+    z-index: 10;
+    transition: all 0.4s ease;
 }
 .popup.in {
-	visibility: visible;
-	opacity: 1;
+    visibility: visible;
+    opacity: 1;
 }
 .popup__content {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	padding: 30px 88px;
-	margin-top: -100px;
-	width: 40%;
-	min-width: 600px;
-	transform: translate(-50%, -50%);
-	background-color: #fff;
-	border-radius: 5px;
-	box-shadow: 5px 5px 13px 2px rgba(0,0,0,0.4);
-	opacity: 0;
-	transition: all 0.4s ease;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    padding: 30px 88px;
+    margin-top: -100px;
+    width: 40%;
+    min-width: 600px;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 5px 5px 13px 2px rgba(0,0,0,0.4);
+    opacity: 0;
+    transition: all 0.4s ease;
 }
 .popup.in .popup__content {
-	opacity: 1;
-	margin-top: 0px;
+    opacity: 1;
+    margin-top: 0px;
 }
 .popup__title {
-	margin-bottom: 22px;
-	text-align: center;
+    margin-bottom: 22px;
+    text-align: center;
 }
 .popup__close {
     position: absolute;
@@ -216,14 +199,14 @@ a.wflbox__more:hover {
     line-height: 30px;
 }
 .popup__btnbox {
-	margin-top: 22px;
-	text-align: center;
+    margin-top: 22px;
+    text-align: center;
 }
 .popup__btnbox .btn:hover {
     transform: translateY(0);
 }
 .btn.m-right {
-	margin-right: 100px;
+    margin-right: 100px;
 }
 /*板块样式*/
 /*header*/
@@ -255,7 +238,6 @@ a.wflbox__more:hover {
 .nav-layout {
     float: right;
     margin-top: 36px;
-    margin-left: 110px;
 }
 .nav__itembox {
     margin-right: 8px;

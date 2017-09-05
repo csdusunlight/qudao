@@ -1,818 +1,136 @@
 h1,h2,h3,h4,h5,h6 {line-height: 1;}
 /*banner-container*/
 .banner-container {
-	height: 402px;
-}
-.left-iconnav {
-	width: 246px;
-	background-color: #fff;
-}
-.left-iconnav__itembox {
-	width: 50%;
-}
-.iconnav__item {
-	box-sizing: border-box;
-	display: block;
-	height: 134px;
-	padding-top: 80px;
-	text-align: center;
-	background-position: center 30px;
-	background-repeat: no-repeat;
-	transition: all 0.2s ease-in;
-}
-.iconnav__item:hover {
-	color: #91C11D;
-	background-position: center 26px;
-}
-.left-iconnav-01 {
-	background-image: url(../images/hongbao-welfare.png);
-}
-.left-iconnav-02 {
-	background-image: url(../images/welfare-buy.png);
-}
-.left-iconnav-03 {
-	background-image: url(../images/task-profit.png);
-}
-.left-iconnav-04 {
-	background-image: url(../images/p2p-profit.png);
-}
-.left-iconnav-05 {
-	background-image: url(../images/borrow-money.png);
-}
-.left-iconnav-06 {
-	background-image: url(../images/credit-card.png);
+    position: relative;
+	height: 400px;
 }
 
 .banner {
-	width: 680px;
+	width: 100%;
 	height: 100%;
-	padding: 11px 0;
 	background-color: #fff;
 }
-
-.user-login {
-	padding: 20px;
-	width: 324px;
-	height: 100%;
-	padding-top: 20px;
-	padding-left: 20px;
-	background-color: #fff;
-}
-.user-img {
-	float: left;
-	margin-right: 20px;
-	width: 70px;
-	height: 70px;
-}
-.user-info {
-	display: table;
-	width: 194px;
-	height: 70px;
-}
-.user-info-detail {
-    padding-top: 10px;
-	height: 70px;
-	font-size: 18px;
-	color: #222;
-}
-.login-link {
-	font-size: 18px;
-	color: #91C11D;
-	cursor: pointer;
-}
-.user-login-detail {
+.banner-mask {
+    position: absolute;
+    top: 60px;
+    left: 325px;
+    padding-top: 50px;
+    width: 600px;
+    height: 260px;
+    background-color: rgba(0,0,0,0.3);
     font-size: 18px;
-    color: #222;
-}
-.user-account {
-    font-size: 18px;
-    color: #91C11D;
-    cursor: pointer;
-}
-.user-vip-level {
-    display: inline-block;
-    padding: 0 4px;
-    margin-left: 8px;
-    font-size: 14px;
-    line-height: 24px;
     color: #fff;
-    background-color: #ffbe00;
-    border-radius: 2px;
-}
-.user-fubi,
-.user-jifen {
-    margin-top: 4px;
-    font-size: 12px;
-}
-.btn-signin {
-	display: block;
-	margin-top: 20px;
-	width: 284px;
-	line-height: 48px;
-	text-align: center;
-	border-radius: 8px;
-	color: #fff;
-	font-size: 18px;
-}
-
-.welfare-top {
-	position: relative;
-}
-.welfare-top h2 {
-	position: absolute;
-	top: -40px;
-}
-.flexslider2 {
-	position: relative;
-	margin-top: 70px;
-}
-.slides-box {
-    height: 48px;
-    overflow: hidden;
-}
-.flexslider2 .flex-control-nav {
-	top: -40px;
-}
-.flexslider2 .flex-direction-nav {
-	top: -32px;
-}
-.flexslider2 .slides li {
-	height: auto;
-}
-.flexslider2 li a.flex-prev,
-.flexslider2 li a.flex-next {
-	display: inline-block;
-	width: 8px;
-	height: 8px;
-	border-top: 2px solid #e4e4e4;
-	border-right: 2px solid #e4e4e4;
-	background: none;
-	opacity: 1;
-}
-.flexslider2 li a.flex-prev {
-	left: 170px;
-	transform: rotate(-135deg);
-}
-.flexslider2 li a.flex-next {
-	transform: rotate(45deg);
-	right: 10px;
-}
-.flexslider2 .flex-control-nav {
-	left: 80px;
-	height: 24px;
-}
-.flexslider2 .flex-control-nav li {
-	margin: 0 2px;
-}
-.flexslider2 .flex-control-nav a {
-	background: none;
-	background-color: #e4e4e4;
-}
-.flexslider2 .flex-control-nav a {
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	background: none;
-	background-color: #e4e4e4;
-}
-.flexslider2 .flex-control-nav .flex-active {
-	background-color: #91C11D;
-}
-
-.right-iconnav__itembox {
-	width: 33.33%;
-}
-.right-iconnav-01 {
-	background-image: url(../images/new-user-reward.png);
-}
-.right-iconnav-02 {
-	background-image: url(../images/lottery-draw.png);
-}
-.right-iconnav-03 {
-	background-image: url(../images/recommend.png);
-}
-/*banner-container--end*/
-
-/*推荐、发现*/
-
-.hot-recommend-box {
-	padding-left: 15px;
-	padding-bottom: 16px;
-	height: 288px;
-	font-size: 0;
-}
-.hot-recommend {
-	display: inline-block;
-	width: 200px;
-	margin-left: 20px;
-}
-.hot-recommend__img {
-	width: 200px;
-	height: 200px;
-	margin-bottom: 12px;
-	vertical-align: middle;
-}
-.hot-recommend__txt {
-	overflow: hidden;
-	line-height: 30px;
-	word-wrap: normal;
-}
-.hot-recommend:hover .hot-recommend__txt {
-	color: #91C11D;
-}
-.discover {
-	padding: 0 10px 16px;
-}
-.discover-content {
-	height: 414px;
-	background: url(../images/developing.png) center center no-repeat #f5f5f5;
-}
-.discover__img {
-	width: 280px;
-	height: 200px;
-	margin-bottom: 12px;
-}
-.discover__txt {
-	line-height: 30px;
-}
-.discover:hover .discover__txt {
-	color: #91C11D;
-}
-/*推荐、发现---end*/
-/*红包、积分会员*/
-.hongbao-content {
-	background-color: #fff;
-}
-.hongbao-nav-box {
-	margin-top: 8px;
-	margin-left: 12px;
-}
-.hongbao-nav {
-	font-size: 0;
-}
-.hongbao-nav__item {
-	position: relative;
-	display: inline-block;
-	padding: 16px 23px;
-	font-size: 14px;
-	line-height: 1;
-	color: #222;
-	cursor: pointer;
-}
-.hongbao-nav__item:hover {
-	color: #91C11D;
-}
-.hongbao-choose {
-	font-size: 0;
-}
-.hongbao-choose__item {
-	display: inline-block;
-	margin-top: 16px;
-	margin-right: 20px;
-	font-size: 14px;
-	cursor: pointer;
-}
-.hongbao-nav__item.on, .hongbao-choose__item.on {
-	color: #91c11d;
-}
-.hongbao-nav__item:after {
-	content: "";
-	position: absolute;
-	left: 0;
-	bottom: 0;
-	width: 100%;
-	height: 6px;
-	border-radius: 3px;
-	color: #91c11d;
-	background-color: #91c11d;
-	opacity: 0;
-	transform: scaleX(0);
-	transition: all 0.4s ease-in;
-}
-.hongbao-nav__item.on:after {
-	opacity: 1;
-	transform: scaleX(1);
-}
-
-.hongbao-box {
-	margin-top: 4px;
-	line-height: 30px;
-}
-.hongbao {
-	position: relative;;
-	padding: 20px 35px;
-	border-bottom: 1px solid #f5f5f5;
-}
-.hongbao__title {
-    margin-bottom: 20px;
-}
-.hongbao__title:hover {
-	color: #ffbe00;
-}
-.hongbao__title-two {
-    margin-left: 10px;
-    color: #91C11D;
-}
-.hongbao__img {
-	width: 190px;
-	height: 190px;
-	margin-right: 24px;
-	float: left;
-}
-.hongbao__look {
-    font-size: 12px;
-    line-height: 32px;
-}
-.hongbao-more {
-	margin-top: 12px;
-	line-height: 32px;
-	text-align: center;
-	color: #222;
-	background-color: rgba(145,193,29,0.3);
-	cursor: pointer;
-}
-.hongbao__detailbox {
-    margin-top: 15px;
-    height: 96px;
-    overflow: hidden;
-}
-.hongbao__detail {
-}
-.hongbao-action {
-	margin-top: 12px;
-	line-height: 1;
-}
-.support {
-		position: relative;
-    height: 36px;
-    line-height: 36px;
-    border: 1px solid #e4e4e4;
-    border-radius: 8px;
-}
-.support__up, .support__down {
-	display: inline-block;
-	width: 80px;
-	text-align: center;
-	cursor: pointer;
-	vertical-align: bottom;
-}
-.support__up {
-    color: #91C11D;
-	border-right: 1px solid #e4e4e4;
-}
-.hongbao__time,
-.hongbao__source {
-	display: inline-block;
-	margin-top: 13px;
-	vertical-align: bottom;
-}
-.hongbao__source {
-	margin: 0 136px 0 30px;
-}
-.btn.m-hongbao-link {
-	position: absolute;
-	right: 35px;
-	bottom: 19px;
-}
-.btn.m-hongbao-link:hover {
-	color: #fff;
-}
-
-.jifen-box {
-	margin-top: -6px;
-}
-.jifen {
-	height: 118px;
-	padding: 10px 20px;
-}
-.jifen__img {
-	width: 98px;
-	height: 98px;
-	float: left;
-	margin-right: 20px;
-}
-.jifen__title {
-	line-height: 30px;
-}
-.jifen:hover .jifen__title {
-	color: #91c11d;
-}
-.jifen__num {
-	color: #91c11d;
-}
-
-.wflbox.m-vip {
-	margin-top: 15px;
-}
-.wflbox__titlebox.m-vip {
-	padding-bottom: 10px;
-}
-.title-link {
-	margin-left: 8px;
-}
-.title-link.on {
-	color: #91c11d;
-}
-.vip-content {
-	padding: 20px 8px 4px;
-	display: none;
-	height: 334px;
-}
-.vip-item {
-	margin-bottom: 14px;
-}
-.vip-num,
-.vip-account,
-.vip-withdrow {
-	display: inline-block;
-	line-height: 24px;
-}
-.vip-num {
-	width: 24px;
-	text-align: center;
-	border-radius: 50%;
-}
-.vip-account {
-	width: 100px;
-	margin: 0 10px;
-	text-align: left;
-}
-.vip-withdrow {
-	width: 130px;
-	text-align: left;
-}
-.vip-item:nth-of-type(1) .vip-num {
-	color: #fff;
-	background-color: #f66b14;
-}
-.vip-item:nth-of-type(2) .vip-num {
-	color: #fff;
-	background-color: #f79401;
-}
-.vip-item:nth-of-type(3) .vip-num {
-	color: #fff;
-	background-color: #f8c321;
-}
-/*红包、积分会员---end*/
-/*福利购*/
-.fuligou-content {
-	padding-left: 15px;
-}
-.fuligou {
-    width: 200px;
-	margin-left: 20px;
-}
-.fuligou__img {
-    width: 200px;
-    height: 200px;
-}
-.fuligou__price {
-    margin-top: 20px;
-    margin-bottom: 16px;
-}
-.price {
-	height: 20px;
-	font-size: 0;
-	color: #F95A5A;
-}
-.price__now, .price__tag, .price__before {
-	display: inline-block;
-	vertical-align: baseline;
-}
-.price__now {
-	font-size: 18px;
-}
-.price__tag {
-	margin: 0 2px;
-	font-size: 12px;
-}
-.price__before {
-	color: #999;
-	font-size: 12px;
-	text-decoration: line-through;
-}
-.quan {
-	width: 50px;
-	height: 21px;
-	font-size: 12px;
-	line-height: 21px;
-	text-align: center;
-	background: url(../images/coupon.png) center center/100% auto no-repeat;
-}
-.fuligou__txt {
-	overflow: hidden;
-	color: #666;
-}
-.fuligou:hover .fuligou__txt {
-	color: #91c11d;
-}
-
-.fuligou-right-content {
-	width: 318px;
-}
-.fuligou-right-item {
-	position: relative;
-	width: 139px;
-	height: 139px;
-	margin-right: 20px;
-	margin-bottom: 20px;
-	transition: all 0.4s ease;
-}
-.fuligou-right-item:hover {
-	transform: translateY(-4px);
-}
-.fuligou-right-img {
-	width: 100%;
-	height: 100%;
-}
-.fuligou-right-title {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 58px;
-	line-height: 22px;
-	color: #fff;
-	background-color: #f47e7e;
-	text-align: center;
-}
-/*福利购---end*/
-.ad-box img{
-	width: 1250px;
-	height: 110px;
-}
-/*任务赚*/
-.task-box {
-	width: 898px;
-}
-.task {
-	width: 414px;
-	height: 132px;
-	margin-left: 35px;
-	margin-bottom: 26px;
-}
-.task__img {
-	width: 234px;
-	height: 132px;
-	margin-right: 24px;
-	float: left;
-}
-.task:hover .task__title {
-	color: #91c11d;
-}
-.task__reward, .task__person, .task__time {
-	margin-top: 24px;
-	line-height: 1;
-}
-
-.task-flow-content {
-	width: 318px;
-	margin-right: 10px;
-	border: 2px solid #f5f5f5;
-}
-.task-flow-title {
-	width: 318px;
-	margin: 14px 0 4px 14px;
-}
-.task-flow-item {
-	position: relative;
-	width: 75px;
-	height: 75px;
-	margin: 11px 14px;
-	border-radius: 50%;
-	vertical-align: bottom;
-}
-.task-flow-item:after {
-	position: absolute;
-	content: "";
-	width: 0;
-	height: 0;
-	border-top: 0 solid #91C11D;
-	border-right: 8px solid transparent;
-	border-bottom: 14px solid #91C11D;
-	border-left: 8px solid transparent;
-}
-.task-flow-item:nth-of-type(1):after {
-	top: 33px;
-	right: -18px;
-	-webkit-transform: rotate(90deg);
-	transform: rotate(90deg);
-}
-.task-flow-item:nth-of-type(2):after {
-	top: 33px;
-	right: -18px;
-	-webkit-transform: rotate(90deg);
-	transform: rotate(90deg);
-}
-.task-flow-item:nth-of-type(3):after {
-	top: 78px;
-	left: 30px;
-	-webkit-transform: rotate(180deg);
-	transform: rotate(180deg);
-}
-.task-flow-item:nth-of-type(4):after {
-	display: none;
-}
-.task-flow-item:nth-of-type(5):after {
-	top: 33px;
-	left: -18px;
-	-webkit-transform: rotate(-90deg);
-	transform: rotate(-90deg);
-}
-.task-flow-item:nth-of-type(6):after {
-	top: 33px;
-	left: -18px;
-	-webkit-transform: rotate(-90deg);
-	transform: rotate(-90deg);
-}
-.taskflow-item-name {
-	display: block;
-	margin-top: 50%;
-	-webkit-transform: translateY(-50%);
-	transform: translateY(-50%);
-	line-height: 24px;
-	text-align: center;
-	color: #fff;
-
-}
-.task-ask {
-	margin: 6px 0 6px 14px;
-}
-/*任务赚---end*/
-/*理财返利*/
-.finance-box {
-	width: 850px;
-	margin-left: 15px;
-}
-.finance {
-	float: left;
-	width: 263px;
-	margin-left: 20px;
-	margin-bottom: 20px;
-	border: 1px solid #e4e4e4;
-	-webkit-transition: -webkit-transform 0.4s ease;
-	transition: transform 0.4s ease;
-}
-.finance:hover {
-	box-shadow: 0 2px 20px 0 rgba(0,0,0,0.1);
-	-webkit-transform: translateY(-4px);
-	transform: translateY(-4px);
-}
-.finance:nth-child(4n) {
-	margin-right: 0;
-}
-.finance__column {
-	height: 24px;
-	margin: 14px 0;
-	margin-left: 10px;
-	text-align: left;
-}
-.finance__mark {
-	display: inline-block;
-	margin-left: 8px;
-	padding: 4px 6px;
-	color: #fff;
-	font-size: 12px;
-	line-height: 1;
-	border-radius: 4px;
-	background-color: #ffbe00;
-}
-.finance__column-title {
-    display: inline-block;
-    width: 148px;
-    text-align: left;
-}
-.finance__img {
-	display: block;
-	width: 144px;
-	height: 96px;
-	padding: 9px 0 9px 60px;
-}
-.btn.m-finance {
-	display: block;
-	width: 208px;
-	margin: 0 auto 10px;
-}
-.btn.end {
-	background-color: #c4c5c2;
-}
-.btn.gray {
-	background-color: #c4c5c2;
-}
-.finance__interest,
-.finance__profit,
-.finance__year {
-	color: #91C11D;
-}
-
-.profit-calc {
-	width: 350px;
-	margin-right: 10px;
-	border: 1px solid #f5f5f5;
-}
-.profit-calc>.profit-calc-title {
-	margin-top: 20px;
-	margin-left: 24px;
-}
-.calc-box {
-	margin-top: 36px;
-}
-.calc-item {
-	margin-top: 26px;
-}
-.calc-item>input[type="text"],
-.calc-item>select {
-	width: 80px;
-}
-.calc-item>input[type="radio"] {
-	margin-top: 5px;
-}
-.calc-item-name {
-	display: inline-block;
-	width: 60px;
-	line-height: 30px;
-	margin-left: 8px;
-	color: #222;
-}
-.btn.m-calc-profit {
-	margin: 20px 31px 10px;
-	width: 112px;
-}
-
-.popup.calc-table .popup__content {
-    width: 1000px;
-    overflow-y: scroll;
-}
-.popup__table {
-    width: 100%;
     text-align: center;
 }
-.popup__rowtitle {
-    height: 40px;
+
+/*banner-container--end*/
+
+.intro {
+    margin-top: 0;
+    height: 150px;
+    background-color: #fff;
+    font-size: 0;
 }
-.popup__row {
-    height: 40px;
-    border-bottom: 1px dashed #e4e4e4;
+.intro__item {
+    display: inline-block;
+    padding-left: 150px;
+    padding-top: 44px;
+    margin-right: 110px;
+    width: 230px;
+    height: 100%;
+    font-size: 16px;
+    line-height: 32px;
+    color: #91C11D;
+    background-position: 16px center;
+    background-size: 120px 120px;
+    background-repeat: no-repeat;
 }
-.year-interest-content {
-    margin-right: 20px;
+.intro__item:last-child {
+    margin-right: 0;
 }
-/*理财返利---end*/
-/*信用卡借点钱*/
-.creditcard {
-	width: 430px;
-	margin-left: 35px;
-	margin-bottom: 20px;
+.intro__item.m-01 {
+    background-image: url(../images/box_pic.png);
 }
-.creditcard__img{
-	width: 234px;
-	height: 132px;
-	margin-right: 26px;
-	float: left;
+.intro__item.m-02 {
+    background-image: url(../images/box_pic.png);
 }
-.creditcard__title {
-	margin-top: 10px;
+.intro__item.m-03 {
+    background-image: url(../images/box_pic.png);
 }
-.creditcard__persons {
-	margin-top: 22px;
-	line-height: 1;
+.intro__item.m-04 {
+    background-image: url(../images/box_pic.png);
 }
 
-.btn.m-creditcard {
-	display: block;
-	width: 130px;
-	margin-top: 20px;
-	margin-left: 260px;
+
+/*main*/
+.wflbox.m-total {
+    position: relative;
+    width: 285px;
 }
-.creditcard-ad {
-	display: block;
-	margin-left: 35px;
+.wflbox.m-total:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(#fff,  #91c11d 50%,#fff);
 }
-.creditcard-ad-img {
-	width: 870px;
-	height: 110px;
-	margin-bottom: 14px
+.wflbox.m-today {
+    width: 965px;
 }
-/*信用卡借点钱---end*/
-/*引导页部分*/
-.guide-box {
-	position: fixed;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	background-color: rgba(0,0,0,0.5);
-	z-index: 20;
+.total__item {
+    margin-left: 22px;
+    font-size: 16px;
+    line-height: 40px;
 }
-.guide {
-	position: relative;
-	width: 1250px;
-	margin: 0 auto;
+.total__item-num {
+    display: inline-block;
+    width: 100px;
+    text-align: right;
 }
-.guide__item {
-	position: absolute;
+.wflbox.m-today {
+    height: 204px;
 }
-.guide__btn {
-	display: block;
-	margin-top: 70px
+.today {
+    margin-top: 12px;
+    font-size: 0;
 }
-/*引导页部分---end*/
+.today__item {
+    display: inline-block;
+    width: 33.33%;
+}
+.today__img {
+    float: left;
+    margin: 0 12px 0 24px;
+    width: 150px;
+    height: 130px;
+    border: 1px solid #d4d4d4;
+}
+.today__title {
+    margin: 30px 0 22px;
+}
+/*main---end*/
+
+/*商家展示*/
+.wflbox__title.m-business {
+    font-size: 20px;
+    line-height: 64px;
+}
+.business {
+    font-size: 0;
+}
+.business__item {
+    display: inline-block;
+    margin-top: 24px;
+    margin-left: 60px;
+    width: 178px;
+    height: 74px;
+}
+.business__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+/*商家展示---end*/
+

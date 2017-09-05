@@ -124,6 +124,12 @@ select {
 .btn.m-green:active {
     background-color: #628314;
 }
+.btn.m-yellow {
+    background-color: #ffbe00;
+}
+.btn.m-yellow:active {
+    background-color: #cf9a00;
+}
 
 .txtbox {
     position: relative;

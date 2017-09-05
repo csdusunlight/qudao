@@ -2,14 +2,14 @@
 /* CSS Document */
 td {white-space:nowrap;overflow:hidden;}
 #header { border-bottom:1px solid #c1c1c1;}
-.Content { padding-top:32px; padding-bottom:50px;overflow: hidden;}
-.LeftNav { float:left; width:196px; height:auto; border:1px solid #e1e1e1; background:#fbfbfb;}
-.LeftNav li { float:left; width:100%; height:auto;background: #f7f7f7;position: relative;}
-.LeftNav li a{ display:block; width:auto; height:44px; line-height:44px; padding-left:70px; font-size:15px; color:#666666; background:url(../images/sin-picon.png) no-repeat; text-align:left; border-bottom:1px solid #e1e1e1;}
-.LeftNav li:hover { background:#91C11D;}
-.LeftNav li:hover a{ background-image:url(../images/sin-picon-v.png); color:#fff;}
-.LeftNav .on{ background:#91C11D;}
-.LeftNav .on a{ background-image:url(../images/sin-picon-v.png); color:#fff;}
+/*.Content { padding-top:32px; padding-bottom:50px;overflow: hidden;}*/
+/*.LeftNav { float:left; width:196px; height:auto; border:1px solid #e1e1e1; background:#fbfbfb;}*/
+/*.LeftNav li { float:left; width:100%; height:auto;background: #f7f7f7;position: relative;}*/
+/*.LeftNav li a{ display:block; width:auto; height:44px; line-height:44px; padding-left:70px; font-size:15px; color:#666666; background:url(../images/sin-picon.png) no-repeat; text-align:left; border-bottom:1px solid #e1e1e1;}*/
+/*.LeftNav li:hover { background:#91C11D;}*/
+/*.LeftNav li:hover a{ background-image:url(../images/sin-picon-v.png); color:#fff;}*/
+/*.LeftNav .on{ background:#91C11D;}*/
+/*.LeftNav .on a{ background-image:url(../images/sin-picon-v.png); color:#fff;}
 .back-a1 { background-position:27px 15px !important;}
 .back-a2 { background-position:27px -30px !important;}
 .back-a3 { background-position:27px -75px !important;}
@@ -27,8 +27,8 @@ td {white-space:nowrap;overflow:hidden;}
 .LeftNav li:hover .back-a14{ background-image:url(../images/channel-bg02.png); color:#fff;}
 .LeftNav .on .back-a14 {
   background-image: url(../images/channel-bg02.png); color:#fff);
-}
-.RightCont { float:right; width:882px; height:auto;}
+}*/
+
 .Sign-vi { float:left; width:100%; height:auto; border:1px solid #eeeeee; background:#fff; border-top:3px solid #91C11D !important; }
 .Sign-Time { float:left; width:100%; height:auto; border-bottom:1px solid #eee; text-align:left;}
 .Sign-Time span { font-size:12px; color:#afafaf; line-height:40px; margin-left:13px;}

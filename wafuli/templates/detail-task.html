@@ -200,6 +200,7 @@
 			formdata.append('telnum', telnum);
 			formdata.append('remark', remark);
 			formdata.append('csrfmiddlewaretoken', csrfmiddlewaretoken);
+			console.log(formdata);
 			xhr.open('post', '/expsubmit/task/');
 			xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 			maskIn();

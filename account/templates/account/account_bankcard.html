@@ -6,9 +6,10 @@
 <title>用户中心</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />-->
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
 
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/accounts/send.js' %}"></script>
@@ -20,7 +21,7 @@ $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 });
 $(function(){
-	$('.back-a6').parent().toggleClass("on");
+	$('.back-a6').toggleClass("on");
 	$("#submit").click(function(){
 		subbranch = $("#subbranch").val();
     real_name = $("#real_name").val();
@@ -146,9 +147,26 @@ $(function(){
   $("#confirm_delete").click(function(){    //点击解除绑定银行卡
     console.log("点击解除绑定银行卡");
   });
-
+    
+    
+    
 });
-
+var countdown=60;
+function settime(val) {
+    if (countdown == 0) {
+        val.removeAttribute("disabled");
+        val.value="获取验证码";
+        countdown = 60;
+        return;
+    } else {
+        val.setAttribute("disabled", true);
+        val.value="重新发送(" + countdown + ")";
+        countdown--;
+    }
+    setTimeout(function() {
+        settime(val)
+    },1000)
+}
 // 删除提示信息弹窗调用函数
   function popupInInfo() {
     $(".popup-box-01").addClass("in");
@@ -161,13 +179,12 @@ $(function(){
 </head>
 
 <body>
-	<div class="Max">
+    {% include "header.html" %}
+	<div class="Content">
     	<!--头部-->
-    	{% include "header.html" %}
     	<!--内容-->
-    	<div class="Content">
-        	<div class="w1100">
-            	{% include "account/left.html" %}
+    	{% include "account/left.html" %}
+    	<div class="RightCont">
                 <div class="RightCont">
                 	{% if card %}
                 	<div class="binding">
@@ -223,7 +240,7 @@ $(function(){
                             	<div class="Inout-yz">
                                 	<span>验证码：</span>
                                     <input id="yanzhengma" type="text" maxlength="6"/>
-                                    <input id="yanzhengma_button" type="button" value="获取手机验证码" />
+                                    <input id="yanzhengma_button" type="button" value="获取手机验证码" onclick="settime(this)" />
                                 </div>
                                 <p style="float: left;width: 100%;margin-top: 10px;margin-left: 96px;">温馨提示：银行卡信息若有误，将提现失败!</p>
                                 <input id="submit2" type="submit" value="确  定" />
@@ -271,7 +288,6 @@ $(function(){
                     {% endif %}
 
                 </div>
-            </div>
         </div>
 
 <!--底部-->

@@ -96,6 +96,9 @@
 .btn.m-export {
     margin-right: 30px;
 }
+.time-input-box {
+    display: inline-block;
+}
 .time-input {
     width: 100px !important;
 }
@@ -153,4 +156,7 @@
 /*我的项目---end*/
 .date_selector {
     box-sizing: content-box;
+}
+.popup .date_selector {
+    margin-left: 90px;
 }

@@ -6,10 +6,11 @@
 <title>用户中心</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
 <script type="text/javascript">
@@ -28,7 +29,7 @@ function emptydisplay(obj){
 			'<h2>咦~~ 您还没有相关记录~~</h2></div>');
 }
 $(function(){
-	$('.back-a8').parent().toggleClass("on");
+	$('.back-a8').toggleClass("on");
     $(".Close").click(function(){
     	$(".Listpop").css("display","none")<!--隐藏-->
     });
@@ -68,13 +69,12 @@ $(function(){
 </head>
 
 <body>
-	<div class="Max">
+    {% include "header.html" %}
+	<div class="Content">
     	<!--头部-->
-    	{% include "header.html" %}
     	<!--内容-->
-    	<div class="Content">
-        	<div class="w1100">
-            	{% include "account/left.html" %}
+    	{% include "account/left.html" %}
+    	<div class="RightCont">
                 <div class="RightCont">
                 	<div class="Integral">
                     	<span>
@@ -85,7 +85,7 @@ $(function(){
                         	可用福币
                         	<strong class="red-st">{{user.balance}}</strong>
                         </span>
-                        <a href="{%url 'account_withdraw'%}" id="back2">提  现</a>
+                        <a style="float: right;" href="{%url 'account_withdraw'%}" class="btn m-yellow">提  现</a>
                     </div>
                     <div class="Detail">
                     	<div class="Detail-T">
@@ -97,7 +97,7 @@ $(function(){
                         <div class="Detail-B">
 							<div id="pagedata">
 							</div>
-		                    <div class="Page-in-score">
+		                    <div class="changes-p">
 		                    	<div class="page"  id="page">
 		                        </div>
 		                    </div>
@@ -105,7 +105,6 @@ $(function(){
                     </div>
 
                 </div>
-            </div>
         </div>
     	<!--底部-->
   {% include "footer.html" %}

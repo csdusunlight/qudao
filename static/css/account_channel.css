@@ -99,41 +99,41 @@ h5 {
 	width: 600px;
 	padding: 20px;
 	margin-top: 20px;
-	border: 1px dashed #e4e4e4;
+	/*border: 1px dashed #e4e4e4;*/
 	text-align: center;
 }
 
 .submit-content {
 	position: relative;
 	box-sizing: content-box;
-	width: 845px;
+	width: 965px;
 	padding: 10px 0;
 	margin-top: 20px;
-	border: 1px dashed #e4e4e4;
+	/*border: 1px dashed #e4e4e4;*/
 }
 
 .item-01 {
-	width: 150px;
+	width: 170px;
 }
 
 .item-02 {
-	width: 150px;
+	width: 170px;
 }
 
 .item-03 {
-	width: 130px;
+	width: 150px;
 }
 
 .item-04 {
-	width: 130px;
+	width: 150px;
 }
 
 .item-05 {
-	width: 130px;
+	width: 150px;
 }
 
 .item-06 {
-	width: 100px;
+	width: 120px;
 }
 
 .item-07 {
@@ -159,7 +159,7 @@ h5 {
 
 .submit-item-box {
 	padding: 15px 0;
-	border-bottom: 1px dashed #e4e4e4;
+	border-bottom: 1px solid #f5f5f5;
 }
 
 .submit-item-box:after {

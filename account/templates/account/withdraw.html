@@ -6,9 +6,10 @@
 <title>用户中心</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
 <link rel="stylesheet" type="text/css" href="{% static 'css/dialog.css' %}" />
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/accounts/refresh.js' %}"></script>
@@ -18,7 +19,7 @@ $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 });
 $(function(){
-	$('.back-a9').parent().toggleClass("on");
+	$('.back-a9').toggleClass("on");
 	$("#submit").click(function(){
 		varicode = $("#input_varicode").val();
 		amount = $("#withdraw_amount").val();
@@ -76,18 +77,19 @@ $(function(){
     $('.btn_cont button').click(function(){
         $(this).parent().parent().parent().parent().hide();
     });
+    
+    
 });
 </script>
 </head>
 
 <body>
-	<div class="Max">
+    {% include "header.html" %}
+	<div class="Content">
     	<!--头部-->
-    	{% include "header.html" %}
     	<!--内容-->
-    	<div class="Content">
-        	<div class="w1100">
-            	{% include "account/left.html" %}
+    	{% include "account/left.html" %}
+    	<div class="RightCont">
                 <div class="RightCont">
                 	<div class="binding" style=" min-height:515px">
                     	<div class="Binding-Top">
@@ -130,7 +132,6 @@ $(function(){
 
 
                 </div>
-            </div>
         </div>
         <!-- 提现弹窗部分 -->
         <div class="popup1" style="display:none;">

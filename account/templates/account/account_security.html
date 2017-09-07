@@ -6,9 +6,10 @@
 <title>用户中心</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />-->
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
 
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 <script type="text/javascript">
@@ -32,7 +33,7 @@ function validate_password(pwd){
 	return ret;
 }
 $(function(){
-	$('.back-a5').parent().toggleClass("on");
+	$('.back-a5').toggleClass("on");
 	email = "{{user.email}}";
 	start = email.indexOf("@");
 	email = email.substr(start+1);
@@ -209,13 +210,12 @@ $(function(){
 </head>
 
 <body>
-	<div class="Max">
+    {% include "header.html" %}
+	<div class="Content">
     	<!--头部-->
-    	{% include "header.html" %}
     	<!--内容-->
-    	<div class="Content">
-        	<div class="w1100">
-            	{% include "account/left.html" %}
+    	{% include "account/left.html" %}
+    	<div class="RightCont">
                 <div class="RightCont">
                 	<div class="binding" style="padding-bottom:0;">
                     	<div class="Binding-Top">
@@ -249,7 +249,7 @@ $(function(){
                                             <span>已绑定</span>
                                         </div>
                                     </div>
-                                    <div class="Bing-note"><p>您在申请体现时须通过手机获取验证码</p></div>
+                                    <div class="Bing-note"><p style="margin-left: 90px;">您在申请体现时须通过手机获取验证码</p></div>
                                 </li>
                             	<li style="display: none;">
                             		{% if user.is_email_authenticated %}
@@ -269,7 +269,7 @@ $(function(){
                                         </div>
                                     </div>
                                     {% endif %}
-                                    <div class="Bing-note"><p>您可以通过邮箱找回密码</p></div>
+                                    <div class="Bing-note"><p style="margin-left: 90px;">您可以通过邮箱找回密码</p></div>
                                 </li>
                                 <li style="border-right: none; border-bottom: 1px solid #ebebeb">
                                 	<div class="bing-top-li">
@@ -279,7 +279,7 @@ $(function(){
                                             <span>已设置</span><a class="login-modify">修改</a>
                                         </div>
                                     </div>
-                                    <div class="Bing-note"><p>登陆用户账户是需要输入的密码</p></div>
+                                    <div class="Bing-note"><p style="margin-left: 90px;">登陆用户账户是需要输入的密码</p></div>
                                 </li>
                                 <li>
                                 {% if user.pay_password %}
@@ -299,7 +299,7 @@ $(function(){
                                         </div>
                                     </div>
                                  {% endif %}
-                                    <div class="Bing-note"><p>在账户资金变动时需要输入的密码</p></div>
+                                    <div class="Bing-note"><p style="margin-left: 90px;">在账户资金变动时需要输入的密码</p></div>
                                 </li>
                             </ul>
                         </div>
@@ -307,7 +307,6 @@ $(function(){
 
 
                 </div>
-            </div>
         </div>
 
         <!--登录密码修改弹窗-->

@@ -209,7 +209,7 @@ select {
 }
 .popup__itemname {
     display: inline-block;
-    width: 72px;
+    width: 86px;
 }
 .popup__btnbox {
     margin-top: 22px;
@@ -244,9 +244,9 @@ select {
     width: 1250px;
 }
 .logo {
-    width: 240px;
-    height: 74px;
-    padding: 18px 0;
+    width: 259px;
+    height: 78px;
+    padding: 16px 0;
 }
 .nav-layout {
     float: right;

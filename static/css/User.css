@@ -148,13 +148,13 @@ td {white-space:nowrap;overflow:hidden;}
 }
 /*体验福利图片改版部分——end*/
 
-.Integral { float:left; width:858px; height:auto; padding:24px 12px; border:1px solid #eeeeee; text-align:left; background:#fff;}
+.Integral { float:left; width:100%; height:auto; padding:24px 12px; border:1px solid #eeeeee; text-align:left; background:#fff;}
 .Integral span { font-size:16px; color:#888888; line-height:40px; margin-right:60px; float:left;}
 .Integral strong { font-size:24px; color:#91C11D; margin-left:16px; line-height:40px;}
 .red-st { color:#ff0000 !important;}
-.Integral a { width:101px; height:40px; text-align:center; float:right; line-height:38px; background:url(../images/back1.png) no-repeat center; color:#fff; font-size:18px;}
+/*.Integral a { width:101px; height:40px; text-align:center; float:right; line-height:38px; background:url(../images/back1.png) no-repeat center; color:#fff; font-size:18px;}*/
 .Detail { float:left; width:100%; height:auto; margin-top:20px; background:#fff}
-.Detail-T { float:left; width:880px; height:auto; border:1px solid #ebebeb;}
+.Detail-T { float:left; width:100%; height:auto; border:1px solid #ebebeb;}
 .Detail-T li { float:left; width:auto; height:auto; padding:0 20px; line-height:44px; text-align:center; color:#91C11D; font-size:15px; cursor:pointer;}
 .Detail-T li:hover { background:#91C11D; color:#fff;}
 .Detail-T .on { background:#91C11D; color:#fff;}
@@ -163,7 +163,7 @@ a.chakan { color:#91C11D; font-size:14px;}
 .Detail-B  tr { border:1px solid #ebebeb;}
 .Detail-B  th { font-weight:400; font-size:16px; color:#666666;  background:#f8f8f8; text-align:center; border-top:1px solid #fff;}
 .Detail-B tr th {height:44px; line-height:44px;}
-.Detail-B  tr td { font-size:14px; color:#afafaf; height:44px; line-height:44px;}
+.Detail-B  tr td {text-align: center; font-size:14px; color:#afafaf; height:44px; line-height:44px;}
 
 .Listpop { position:fixed; width:100%; height:100%; background:url(../images/back-si.png); z-index:1000; display:none;}
 .w700v { width:700px; margin:5% auto 0; height:auto; overflow:hidden;}
@@ -267,7 +267,7 @@ a.chakan { color:#91C11D; font-size:14px;}
 -o-filter: grayscale(100%);
 filter: grayscale(100%);
 filter: gray; opacity:.5;}
-input[type="text"] {padding-left: 10px !important;padding-right: 10px !important;}
+/*input[type="text"] {padding-left: 10px !important;padding-right: 10px !important;}*/
 
 .Cash-box { float:left; width:100%; height:auto; text-align:left;}
 .Cash-info { float:left; width:100%; height:auto; margin-top:20px;}

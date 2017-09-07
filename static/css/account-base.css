@@ -46,15 +46,58 @@
     width: 1030px;
     height: auto;
 }
-th {
+.table {
+    padding: 0 20px;
+    background-color: #fff;
+}
+.table__title {
+    line-height: 60px;
+    color: #91C11D;
+}
+.table th {
     background-color: #f5f5f5;
     height: 40px;
     font-weight: normal;
 }
-td {
+.table td {
     height: 52px;
     text-align: center;
     border-bottom: 2px solid #f5f5f5;
+}
+.search {
+    padding-left: 30px;
+    font-size: 0;
+}
+.search__item {
+    display: inline-block;
+    margin-bottom: 30px;
+    width: 33.33%;
+    font-size: 14px;
+}
+.search__name {
+    width: 70px;
+    font-size: 14px;
+}
+.search__item>input[type='text'],
+.search__item>select {
+    width: 200px;
+}
+.handle {
+    margin-bottom: 20px;
+}
+.btn.m-choose,
+.btn.m-import {
+    margin-left: 30px;
+}
+.hint-box {
+    display: inline;
+}
+.btn.m-search,
+.btn.m-export {
+    margin-right: 30px;
+}
+.time-input {
+    width: 100px !important;
 }
 /*我的项目*/
 .look-projects,
@@ -65,4 +108,49 @@ td {
     font-size: 16px;
     color: #222;
 }
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: #fff;
+    border: 1px solid #e4e4e4;
+    transition: all 0.4s ease;  
+    cursor: pointer;
+}
+.switch:before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+    transition: all 0.4s ease;  
+}
+.switch.true {
+    background-color: #91C11D;
+    /*border: 1px solid #91C11D;*/
+}
+.switch.true:before {
+    left: 32px;
+}
+.edit {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.link-tip {
+    margin-left: 70px;
+    color: #bcbcbc;
+}
+.link-btn {
+    text-decoration: underline;
+    color: #ffbe00;
+}
 /*我的项目---end*/
+.date_selector {
+    box-sizing: content-box;
+}

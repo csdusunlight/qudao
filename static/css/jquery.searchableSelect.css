@@ -63,7 +63,7 @@ Date: 2014-11-05
   z-index: 20;
 }
 
-.searchable-select-input {
+.searchable-select .searchable-select-input {
   margin-top: 5px;
   border: 1px solid #ccc;
   outline: none;

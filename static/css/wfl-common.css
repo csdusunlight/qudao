@@ -204,6 +204,13 @@ select {
 .popup__detail {
     line-height: 30px;
 }
+.popup__item {
+    margin-bottom: 30px;
+}
+.popup__itemname {
+    display: inline-block;
+    width: 72px;
+}
 .popup__btnbox {
     margin-top: 22px;
     text-align: center;

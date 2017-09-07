@@ -5,10 +5,11 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>渠道数据提交</title>
-		<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
-		<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
-		<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
-		<link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+		<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
+		<!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
+		<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
 		<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
 		<link rel="stylesheet" type="text/css" href="{% static 'css/account_channel.css' %}" />
 		<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.searchableSelect.css' %}" />
@@ -26,11 +27,10 @@
 		{% include "header.html" %}
 		<!--内容-->
 		<div class="Content">
-			<div class="w1100">
 				{% include "account/left.html" %}
-				<div class="container-box">
+				<div class="RightCont container-box">
 					<div class="content-box">
-						<div class="channel-header">
+						<!--<div class="channel-header">-->
 							<!-- <h3>选择项目名称</h3>
 						<select id="project_select">
 							<option value="0">-</option>
@@ -38,11 +38,11 @@
 							    <option value="{{x.id}}">{{x.title}}</option>
 							{%endfor%}
 						</select> -->
-							<ul id="tab_head" class="tab-head">
+							<!--<ul id="tab_head" class="tab-head">
 								<li class="on">导入数据</li>
 								<li>导出数据</li>
-							</ul>
-						</div>
+							</ul>-->
+						<!--</div>-->
 
 						<div class="content-in content">
 							<ul id="submit_way" class="submit-way">
@@ -80,7 +80,7 @@
 										</li>
 										<li class="submit-item item-06"><input type="text" class="remark" id="remark" placeholder="选填">
 										</li>
-										<li class="delete-item item-07">删除</li>
+										<li class="item-07"><a class="delete-item">删除</a><a class="copy-item">复制</a></li>
 									</ul>
 								</div>
 
@@ -165,7 +165,7 @@
 							<!-- submit-content_________end -->
 						</div>
 						<!-- content_________end -->
-						<div class="content-out content" style="display: none;">
+						<!--<div class="content-out content" style="display: none;">
 							<h3 class="project-select-head">选择项目名称</h3>
 							<select id="project_select_out" class="project-select-common">
 								<option value="0">全部</option>
@@ -178,14 +178,14 @@
 							<p>1、请按项目名称导出数据<br /> 2、数据自动导出成Excel表格
 								<br /> 3、暂不支持IE浏览器
 							</p>
-						</div>
+						</div>-->
 						<!-- content_________end -->
 					</div>
 					<!-- content-box_________end -->
 
 					<!--表格展示部分-->
 					<div class="Welfare">
-						<div class="Welfare-T">
+						<!--<div class="Welfare-T">
 							<strong>理财福利</strong>
 							<ul class="Welfare-li" id="Swi-Top">
 								<li class="on">全部</li>
@@ -193,26 +193,26 @@
 								<li>审核中</li>
 								<li>已拒绝</li>
 							</ul>
-						</div>
-						<div class="Welfare-td">
-							<div class="tabCon">
-								<div class="curs">
-									<ul id="pagedata">
+						</div>-->
+						<div class="table">
+						    <h2 class="table__title">导入的数据</h2>
+							<!--<div class="tabCon">-->
+								<!--<div class="curs">-->
+									<div id="pagedata">
 
-									</ul>
-								</div>
-							</div>
+									</div>
+								<!--</div>-->
+							<!--</div>-->
 
 							<div class="changes-p">
 								<div class="page" id="page">
 								</div>
 							</div>
-							<div class="popup-box popup-box-05">
+							<!--<div class="popup-box popup-box-05">
 								<div class="popup-content">
 									<h3>数据修改</h3>
 									<p>
 										<span>项目名称：</span>
-										<!--<input id="create_time_change" type="text" />-->
 										<select class="invest-project height-add01" placeholder="选择项目">
 											<option value="0">--</option>
 											{% for x in flist %}
@@ -244,7 +244,7 @@
 									<a id="cancel" class="cancel confirm" onclick="popupOutInfo()">取&nbsp;&nbsp;&nbsp;&nbsp;消</a>
 									<a id="confirm_revise" class="confirm">确认修改</a>
 								</div>
-							</div>
+							</div>-->
 
 						</div>
 
@@ -265,7 +265,6 @@
 					</div>
 				</div>
 			</div>
-			</div>
 			<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
 			<!--底部-->
 			{% include "footer.html" %}
@@ -273,18 +272,18 @@
 			{% include "outline.html" %}
 
 			<script type="text/javascript">
-				var data = '<table width="100%"><tr><th width="12%">项目</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-					'<th>投资金额</th><th width="15%">备注</th><th>审核结果</th><th>返现福币</th><th width="12%">拒绝原因</th>' +
+				var data = '<table width="100%"><tr><th width="12%">项目名称</th><th>投资日期</th><th>提交手机号</th>' +
+					'<th>投资金额</th><th>投资标期</th><th>备注</th>' +
 					'</tr>[data]<tr><td>{project}</td><td>{invest_time}</td><td>{mobile}</td>' +
-					'<td>{invest_term}</td><td>{invest_amount}</td><td>{remark}</td><td>{audit_result}</td>' +
-					'<td>{return_amount}</td><td>{refuse_reason}</td></tr>[/data]</table>';
-				var data2 = '<table width="100%"><tr><th width="12%">项目</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-					'<th>投资金额</th><th width="15%">备注</th><th>审核结果</th><th>返现福币</th><th width="12%">操作</th>' +
-					'</tr>[data]<tr><td>{project}</td><td>{invest_time}</td><td>{mobile}</td>' +
-					'<td>{invest_term}</td><td>{invest_amount}</td><td>{remark}</td><td>{audit_result}</td>' +
-					'<td>{return_amount}</td><td><a class="revise-data" onclick=reviseData({id},this)>修改</a></td></tr>[/data]</table>';
+					'<td>{invest_amount}</td><td>{invest_term}</td><td>{remark}</td>' +
+					'</tr>[/data]</table>';
+//				var data2 = '<table width="100%"><tr><th width="12%">项目</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
+//					'<th>投资金额</th><th width="15%">备注</th><th>审核结果</th><th>返现福币</th><th width="12%">操作</th>' +
+//					'</tr>[data]<tr><td>{project}</td><td>{invest_time}</td><td>{mobile}</td>' +
+//					'<td>{invest_term}</td><td>{invest_amount}</td><td>{remark}</td><td>{audit_result}</td>' +
+//					'<td>{return_amount}</td><td><a class="revise-data" onclick=reviseData({id},this)>修改</a></td></tr>[/data]</table>';
 				var url = "{% url 'get_channel_result_page' %}" + "?page={page}&size={pageSize}";
-				$('.back-a14').parent().toggleClass("on");
+				$('.back-a14').toggleClass("on");
 				$.ajaxSetup({
 					data: {
 						csrfmiddlewaretoken: '{{ csrf_token }}'
@@ -297,12 +296,12 @@
 					run: true,
 					content: data,
 				});
-				//			var filechooser = document.getElementById("choose");
+							var filechooser = document.getElementById("choose");
 				var upload = document.getElementById("upload");
 				var hint = document.getElementById("hint");
 				upload.onclick = function() {
-					//				var temp = document.getElementById("choose");
-					//				alert(temp);
+//					//				var temp = document.getElementById("choose");
+//					//				alert(temp);
 					document.getElementById("choose").click();
 				}
 
@@ -370,32 +369,33 @@
 				});
 
 				//			选项卡切换
-				var tabs = document.getElementById("tab_head").getElementsByTagName("li");
-				var contents = $('.content');
-
-				for(var i = 0; i < contents.length; i++) {
-					tabs[i].onclick = function() {
-						change(this);
-					}
-
-				}
-
-				function change(obj) {
-					for(var i = 0; i < tabs.length; i++) {
-						if(tabs[i] == obj) {
-							tabs[i].className = "on";
-							contents[i].style.display = "block";
-						} else {
-							tabs[i].className = "";
-							contents[i].style.display = "none";
-						}
-					}
-				}
+//				var tabs = document.getElementById("tab_head").getElementsByTagName("li");
+//				var contents = $('.content');
+//
+//				for(var i = 0; i < contents.length; i++) {
+//					tabs[i].onclick = function() {
+//						change(this);
+//					}
+//
+//				}
+//
+//				function change(obj) {
+//					for(var i = 0; i < tabs.length; i++) {
+//						if(tabs[i] == obj) {
+//							tabs[i].className = "on";
+//							contents[i].style.display = "block";
+//						} else {
+//							tabs[i].className = "";
+//							contents[i].style.display = "none";
+//						}
+//					}
+//				}
 				// 提交方式切换
+//				var contents = $('.submit-content');
 				var submitWay = document.getElementById("submit_way").getElementsByTagName("li");
 				var submitContent = $('.submit-content');
 
-				for(var i = 0; i < contents.length; i++) {
+				for(var i = 0; i < submitContent.length; i++) {
 					submitWay[i].onclick = function() {
 						chooseWay(this);
 					}
@@ -413,9 +413,18 @@
 						}
 					}
 				}
+				$(".submit-content").on("click", ".copy-item", function(){
+                    var item_parent = $(this).parent().parent().clone();
+                    $(this).parent().parent().parent().append(item_parent);
+                    item_parent.find('.searchable-select').remove();
+                    item_parent.find('.telnum').val(''); 
+                    var value = $(this).parent().parent().find('.project_select').val();
+                    item_parent.find('.project_select').val(value);
+                    item_parent.find('.project_select').searchableSelect();
+				})
 				// 单项提交部分-------start
 				$(".submit-content").on("focus", ".date_picker", function() {
-					$('.date_picker').date_input();
+					$(this).date_input();
 				})
 				var need_refresh = false;
 				var add_data_btn = document.getElementById('add_data_btn');
@@ -431,7 +440,7 @@
 					return that;
 				})
 				$("#confirm_delete").click(function() {
-					that.parentNode.parentNode.removeChild(that.parentNode);
+					that.parentNode.parentNode.parentNode.removeChild(that.parentNode.parentNode);
 					popupOutInfo();
 				})
 
@@ -450,7 +459,7 @@
 						'<li class="submit-item item-04"><input type="text" class="amount"></li>' +
 						'<li class="submit-item item-05"><input type="text" class="term"></li>' +
 						'<li class="submit-item item-06"><input type="text" class="remark"></li>' +
-						'<li class="delete-item item-07">删除</li>';
+						'<li class="item-07"><a class="delete-item">删除</a><a class="copy-item">复制</a></li>';
 					submit_data_container.appendChild(ul);
 
 					var select_dom = '.select_id_'+select_id;
@@ -509,6 +518,7 @@
 						if(project_select == "0") {
 							promptNumber++;
 							project_select01.css("border", "2px solid #ff6767");
+							alert('请选择项目名称');
 						} else {
 							project_select01.css("border", "1px solid #c1c1c1");
 						}
@@ -621,38 +631,38 @@
 				});
 				// 单项提交部分----end
 
-				$("#Swi-Top li").click(function() {
-					if($(this).attr("class") != "on") {
-						$(this).toggleClass("on").siblings().removeClass("on")
-						var index = $(this).index();
-						$("#page1").empty();
-						if(index == 2) {
-							$("#pagedata").ajaxPage({
-								url: url + "&filter=" + index,
-								pageId: $("#page"),
-								pageSize: 30,
-								run: true,
-								content: data2,
-								//	    complete:pagecallback,
-							});
-						} else {
-							$("#pagedata").ajaxPage({
-								url: url + "&filter=" + index,
-								pageId: $("#page"),
-								pageSize: 30,
-								run: true,
-								content: data,
-								//	    complete:pagecallback,
-							});
-						}
-					}
-				});
+//				$("#Swi-Top li").click(function() {
+//					if($(this).attr("class") != "on") {
+//						$(this).toggleClass("on").siblings().removeClass("on")
+//						var index = $(this).index();
+//						$("#page1").empty();
+//						if(index == 2) {
+//							$("#pagedata").ajaxPage({
+//								url: url + "&filter=" + index,
+//								pageId: $("#page"),
+//								pageSize: 30,
+//								run: true,
+//								content: data2,
+//								//	    complete:pagecallback,
+//							});
+//						} else {
+//							$("#pagedata").ajaxPage({
+//								url: url + "&filter=" + index,
+//								pageId: $("#page"),
+//								pageSize: 30,
+//								run: true,
+//								content: data,
+//								//	    complete:pagecallback,
+//							});
+//						}
+//					}
+//				});
 
-				$("#Swi-Top li").click(function() {
-					if($(this).attr("class") != "on") {
-						$(this).toggleClass("on").siblings().removeClass("on")
-					}
-				});
+//				$("#Swi-Top li").click(function() {
+//					if($(this).attr("class") != "on") {
+//						$(this).toggleClass("on").siblings().removeClass("on")
+//					}
+//				});
 
 				// 上传中调用函数
 				function maskIn() {
@@ -678,65 +688,65 @@
 						location.reload();
 					}
 				}
-				$("#export").click(function() {
-					var fid = $("select#project_select_out").val();
-//					if(fid == "0") {
-//						alert("请先选择项目");
-//						return;
-//					}
-					var html = '<form action="' + "{% url 'export_audit_result' %}" + '" method="get" target="_self" id="postData_form">';
-					html += '<input name="fid" type="hidden" value="' + fid + '"/></form>';
-					var iframe = document.getElementById('myIFrame');
-					iframe.contentWindow.document.open();
-					iframe.contentWindow.document.write(html);
-					iframe.contentWindow.document.close();
-					document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
-				});
+//				$("#export").click(function() {
+//					var fid = $("select#project_select_out").val();
+////					if(fid == "0") {
+////						alert("请先选择项目");
+////						return;
+////					}
+//					var html = '<form action="' + "{% url 'export_audit_result' %}" + '" method="get" target="_self" id="postData_form">';
+//					html += '<input name="fid" type="hidden" value="' + fid + '"/></form>';
+//					var iframe = document.getElementById('myIFrame');
+//					iframe.contentWindow.document.open();
+//					iframe.contentWindow.document.write(html);
+//					iframe.contentWindow.document.close();
+//					document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+//				});
 
 				//修改审核中项目数据部分
-				function popupOutRevise() { // 再次提交调用函数
-					$(".popup-box-05").addClass("in");
-				}
+//				function popupOutRevise() { // 再次提交调用函数
+//					$(".popup-box-05").addClass("in");
+//				}
 				//				$(".tabCon").on("click", ".revise-data", function() {
 				//					popupOutRevise();
 				//				})
 				var project_id;
 				var revise_parent;
-				function reviseData(id, obj) {
-					project_id = id;
-					//					console.log(id);
-					revise_parent = $(obj).parent().parent();
-					var parent_dom = $(revise_parent);
-					var children0 = parent_dom.find("td").eq(0).text(),
-						children1 = parent_dom.find("td").eq(1).text(),
-						children2 = parent_dom.find("td").eq(2).text(),
-						children3 = parent_dom.find("td").eq(3).text(),
-						children4 = parent_dom.find("td").eq(4).text(),
-						children5 = parent_dom.find("td").eq(5).text();
-					//					console.log(children0+", "+children1+", "+children2+", "+children3+", "+children4+", "+children5+", ");
-					var option_val;
-					var options = $(".project_select option");
-					//					var options = $(select).find("option");
-					for(var i = 0; i < options.length; i++) {
-						if($(options)[i].text == children0) {
-							option_val = options[i].value;
-						}
-
-					}
-					console.log(option_val);
-					$(".invest-project").val(option_val);
-					$(".invest-time").val(children1);
-					$(".submit-tel").val(children2);
-					$(".invest-days").val(children3);
-					$(".invest-money").val(children4);
-					$(".invest-remarks").val(children5);
-
-					//					console.log($(options)[0].value);
-					popupOutRevise();
-				}
-				$(".popup-box-05").on("focus", ".date_picker", function() {
-					$('.date_picker').date_input();
-				})
+//				function reviseData(id, obj) {
+//					project_id = id;
+//					//					console.log(id);
+//					revise_parent = $(obj).parent().parent();
+//					var parent_dom = $(revise_parent);
+//					var children0 = parent_dom.find("td").eq(0).text(),
+//						children1 = parent_dom.find("td").eq(1).text(),
+//						children2 = parent_dom.find("td").eq(2).text(),
+//						children3 = parent_dom.find("td").eq(3).text(),
+//						children4 = parent_dom.find("td").eq(4).text(),
+//						children5 = parent_dom.find("td").eq(5).text();
+//					//					console.log(children0+", "+children1+", "+children2+", "+children3+", "+children4+", "+children5+", ");
+//					var option_val;
+//					var options = $(".project_select option");
+//					//					var options = $(select).find("option");
+//					for(var i = 0; i < options.length; i++) {
+//						if($(options)[i].text == children0) {
+//							option_val = options[i].value;
+//						}
+//
+//					}
+//					console.log(option_val);
+//					$(".invest-project").val(option_val);
+//					$(".invest-time").val(children1);
+//					$(".submit-tel").val(children2);
+//					$(".invest-days").val(children3);
+//					$(".invest-money").val(children4);
+//					$(".invest-remarks").val(children5);
+//
+//					//					console.log($(options)[0].value);
+////					popupOutRevise();
+//				}
+//				$(".popup-box-05").on("focus", ".date_picker", function() {
+//					$('.date_picker').date_input();
+//				})
 
 				$("#confirm_revise").click(function() {
 					var invest_project = $(".invest-project").val(),

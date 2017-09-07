@@ -7,13 +7,13 @@ h5 {
 	margin: 0 auto;
 }
 
-.container-box {
+/*.container-box {
 	position: relative;
 	width: 880px;
 	float: right;
 	margin: 0 auto;
 	text-align: left;
-}
+}*/
 
 .channel-header {
 	height: 44px;
@@ -137,13 +137,15 @@ h5 {
 }
 
 .item-07 {
+    float: right;
 	width: 55px;
+	line-height: 1;
 }
 
 .add-data-btn {
 	position: absolute;
 	right: 10px;
-	bottom: 154px;
+	bottom: 128px;
 	width: 40px;
 	cursor: pointer;
 }
@@ -174,9 +176,13 @@ h5 {
 	text-align: center;
 }
 
+.copy-item,
 .delete-item {
-	float: right;
-	line-height: 30px;
+    /*position: absolute;*/
+	/*float: right;*/
+	/*line-height: 30px;*/
+	padding: 2px 0;
+	display: block;
 	text-align: center;
 	text-decoration: underline;
 	cursor: pointer;
@@ -224,8 +230,9 @@ h5 {
 .content {
 	position: relative;
 	padding: 16px;
-	border: 1px solid #e4e4e4;
+	margin-bottom: 20px;
 	border-top: none;
+	background-color: #fff;
 }
 
 .upload-box {
@@ -624,4 +631,7 @@ table td {
 
 .Welfare-td {
 	height: auto;
+}
+.date_selector {
+    box-sizing: content-box;
 }

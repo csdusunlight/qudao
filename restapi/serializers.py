@@ -5,11 +5,28 @@ Created on 2017年8月10日
 @author: lch
 '''
 from rest_framework import serializers
-from wafuli.models import Project
+from wafuli.models import Project, InvestLog
+from account.models import MyUser
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyUser
+        fields = ('mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'type',
+                  'level', 'picture', 'profile', 'balance', 'is_active')
+        read_only_fields = ('mobile', 'username', 'balance')
+        
 class ProjectSerializer(serializers.ModelSerializer):
+#     subscribers = UserSerializer(many=True)
     class Meta:
         model = Project
         fields = '__all__'
+        
+class InvestLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InvestLog
+        fields = '__all__'
+        read_only_fields = ('user', 'project', 'balance', 'audit_state', 'audit_time',
+                             'settle_amount','return_amount', "admin_user", "is_official")
 # class MediaProjectSerializer(serializers.ModelSerializer):
 #     state_des = serializers.CharField(source='get_state_display', read_only=True)
 #     class Meta:

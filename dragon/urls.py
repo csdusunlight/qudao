@@ -19,14 +19,15 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^', include('wafuli.urls',)),
-    url('^account/', include('account.urls')),
-    url('^Admin/', include('wafuli_admin.urls')),
-    url(r'^ueditor/',  include('DjangoUeditor.urls' )),
-    url(r'^captcha/', include('captcha.urls')),
-#     url(r'^statistic/', include('statistics.urls', namespace='statistic'),),
+    url('^restapi/', include('restapi.urls')),
+#     url('^account/', include('account.urls')),
+#     url('^Admin/', include('wafuli_admin.urls')),
+#     url(r'^ueditor/',  include('DjangoUeditor.urls' )),
+#     url(r'^captcha/', include('captcha.urls')),
+# #     url(r'^statistic/', include('statistics.urls', namespace='statistic'),),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^project/', include('project_admin.urls')),
-#     url(r'^test/$', 'wafuli.views.index', name='captcha-refresh'),
+#     url(r'^project/', include('project_admin.urls')),
+# #     url(r'^test/$', 'wafuli.views.index', name='captcha-refresh'),
 ]
 
 from django.conf.urls.static import static

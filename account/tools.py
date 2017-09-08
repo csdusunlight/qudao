@@ -10,7 +10,6 @@ from email.mime.text import MIMEText
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.shortcuts import render_to_response
-mailto_list=["lvchunhui7@126.com"] 
 mail_host="smtp.126.com"  #设置服务器
 mail_user="hunanjinyezi@126.com"    #用户名
 mail_pass="jinyezi520"   #口令 

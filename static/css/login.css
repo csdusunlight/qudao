@@ -104,7 +104,7 @@
 	position: absolute;
 	width: 24px;
 	height: 24px;
-	left: 350px;
+	left: 448px;
 	top: 10px;
 	background: url("../images/password-eye.png") center center/100% auto no-repeat;
 }
@@ -142,21 +142,21 @@
 .re-yu{color:#239EDB;}
 .re-liji{
 	color: rgb(255, 255, 255);
-	background: rgb(240, 134, 25) none repeat scroll 0% 0%;
-	border: 1px solid rgb(240, 134, 25);
-	width: 335px;
-	height: 40px;
-	border-radius: 5px;
-	font-size: 16px;}
-.re-liji:hover{
-	cursor:pointer;
-	color: rgb(255, 255, 255);
-	background: rgb(234, 121, 4) none repeat scroll 0% 0%;
-	border: 1px solid rgb(234, 121, 4);
+	background-color: #91C11D;
+	border: none;
 	width: 335px;
 	height: 40px;
 	border-radius: 5px;
 	font-size: 16px;
+	transform: translateY(0);
+    transition: all 0.4s ease;
+    cursor:pointer;
+}
+.re-liji:hover{
+	transform: translateY(-4px);
+}
+.re-liji:active{
+    background-color: #628314;
 }
 .ljdl{color:#F18F2B;
 	text-decoration:underline;}
@@ -262,4 +262,122 @@ float: left;}
 	margin-left:30px;
 	height:25px;
 	line-height:20px;
+}
+/*qudao*/
+.reg__box {
+    margin: 0 auto;
+    width: 700px;
+    text-align: left;
+}
+.reg {
+    position: relative;
+    margin-bottom: 40px;
+    margin-left: 50px;
+}
+.reg__name {
+    display: inline-block;
+    width: 90px;
+}
+.tips_false {
+    position: absolute;
+    top: 10px;
+}
+.re-tex {
+    display: inline-block;
+    width: 340px;
+    height: 120px;
+    vertical-align: top;
+}
+.img-up {
+    display: inline-block;
+    vertical-align: top;
+}
+.img-up>input {
+    display: none;
+}
+
+canvas {
+    width: 100%;
+    border: 1px solid #000000;
+}
+
+.img-btn {
+    margin: 10px auto;
+    width: 300px;
+}
+
+.img-btn a {
+    display: inline-block;
+    width: 40%;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    border: 1px solid;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.img-btn a:first-child {
+    margin-right: 20px;
+}
+
+.touch {
+    background-color: #ddd;
+}
+
+.img-list {
+    width: 350px;
+    margin: 20px auto 10px;
+    /*border: 1px solid #e4e4e4;*/
+    border-radius: 6px;
+}
+
+.img-list li {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    margin: 5px 5px 20px 5px;
+    border: 1px solid rgb(100, 149, 198);
+    background: #fff no-repeat center;
+    background-size: cover;
+}
+
+.progress {
+    position: absolute;
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(100, 149, 198, .5);
+}
+
+.progress span {
+    display: block;
+    width: 0;
+    height: 100%;
+    background-color: rgb(100, 149, 198);
+    text-align: center;
+    color: #FFF;
+    font-size: 13px;
+}
+
+.size {
+    position: absolute;
+    width: 100%;
+    height: 15px;
+    line-height: 15px;
+    bottom: -18px;
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+}
+
+.img-tips {
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    margin: 10px;
+    color: #999;
 }

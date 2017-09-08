@@ -17,7 +17,7 @@ $('.txtinline').each(function(index, el) {      //多行
     }
 });
 $('.oneline').each(function(index, el) {        //单行
-    if ($(this).height() > 30) {
+    if ($(this).height() > 40) {
         $(this).addClass('one-line')
         $(this).addTitle();
     }

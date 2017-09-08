@@ -52,6 +52,31 @@ function validateUserName(str){
 	}
 	return true;
 }
+/******************** QQ校验规则********************8*/
+function validateQQ(str){
+    var reQQ = /^[1-9]\d{4,9}$/; 
+    if(!reQQ.test(str)){
+        return false;
+    }else{
+        return true;
+    }
+}
+/******************** QQName校验规则********************8*/
+function validateQQname(str){
+    if(!str){
+        return false;
+    }else{
+        return true;
+    }
+}
+/******************** intro个人简介校验规则********************8*/
+function validateIntro(str){
+    if(!((str.length>=10)&&(str.length<=200))){
+        return false;
+    }else{
+        return true;
+    }
+}
 
 /******************* 邮箱格式验证*********************8*/
 function validateEmail(str){

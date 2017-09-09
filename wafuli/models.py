@@ -14,7 +14,6 @@ AUDIT_STATE = (
     ('0', u'审核通过'),
     ('1', u'待审核'),
     ('2', u'审核未通过'),
-    ('3', u'待返现'),
 )    
 class Company(models.Model):
     name = models.CharField(u"平台名称(必填)",max_length=100,unique=True)
@@ -171,8 +170,8 @@ TRANS_TYPE = (
 class TransList(models.Model):
     user = models.ForeignKey(MyUser, related_name="translist")
     time = models.DateTimeField(u'时间', auto_now_add=True)
-    initAmount = models.IntegerField(u'变动前数值')
-    transAmount = models.IntegerField(u'变动数值')
+    initAmount = models.DecimalField(u'变动前数值', max_digits=10, decimal_places=2)
+    transAmount = models.DecimalField(u'变动数值', max_digits=10, decimal_places=2)
     reason = models.CharField(max_length=20, verbose_name=u"变动原因")
     remark = models.CharField(u"备注", max_length=100, blank=True)
     transType = models.CharField(max_length=2, choices=TRANS_TYPE, verbose_name=u"变动类型")
@@ -184,7 +183,16 @@ class TransList(models.Model):
     class Meta:
         ordering = ["-time",]
 
-
+class WithdrawLog(models.Model):
+    user = models.ForeignKey(MyUser, related_name="withdrawlog")
+    submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
+    audit_time = models.DateTimeField(u'审核时间', null=True, blank=True)
+    amount = models.DecimalField(u'变动数值', max_digits=10, decimal_places=2)
+    audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
+    class Meta:
+        ordering = ["submit_time",]
+    def __unicode__(self):
+        return u"%s申请提现：%s" % (self.user, self.amount)
 # class Press(Base):
 #     summary = models.TextField(verbose_name=u"摘要")
 #     type = models.CharField(u"新闻类型", max_length=1, choices=NEWS_TYPE)

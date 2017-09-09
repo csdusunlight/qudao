@@ -26,18 +26,17 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.contrib.contenttypes.models import ContentType
-from account.models import UserSignIn, EmailActCode, BankCard
+from account.models import UserSignIn, BankCard
 from datetime import date, timedelta, datetime
 import time as ttime
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from wafuli.models import (UserEvent, Finance, Task, ExchangeRecord,
-    ScoreTranlist, TransList, Coupon, Message, MediaProject)
 from django.db.models import Sum, Count
-from .transaction import charge_money, charge_score
+from transaction import charge_money
 from account.tools import send_mail, get_client_ip
-from django.db import connection
+from django.db import connection, transaction
 from wafuli.data import BANK
+from wafuli.models import TransList, WithdrawLog, Message
 @sensitive_post_parameters()
 @csrf_protect
 @never_cache
@@ -62,10 +61,10 @@ def login(request, template_name='registration/login.html',
             user = form.get_user()
             auth_login(request, user)
             # anything you can add here
-            user.last_login_time = user.this_login_time
-            user.this_login_time = datetime.now()
+#             user.last_login_time = user.this_login_time
+#             user.this_login_time = datetime.now()
             Userlogin.objects.create(user=user,)
-            user.save(update_fields=["last_login_time", "this_login_time"])
+#             user.save(update_fields=["last_login_time", "this_login_time"])
             return HttpResponseRedirect(redirect_to)
     else:
         form = authentication_form(request)
@@ -129,12 +128,12 @@ def register(request):
             user.save()
             logger.info('Creating User:' + mobile + ' succeed!')
             # 注册奖励2元
-            reg_award = 200
-            trans = charge_money(user, '0', reg_award, u"注册奖励")
-            if trans:
-                logger.debug('Registering Award money is successfully payed!')
-            else:
-                logger.debug('Registering Award money is failed to pay!!!')
+#             reg_award = 200
+#             trans = charge_money(user, '0', reg_award, u"注册奖励")
+#             if trans:
+#                 logger.debug('Registering Award money is successfully payed!')
+#             else:
+#                 logger.debug('Registering Award money is failed to pay!!!')
         except Exception,e:
             logger.error(e)
             result['code'] = '4'
@@ -142,15 +141,15 @@ def register(request):
         else:
             result['code'] = '0'
             # 邀请人奖励10积分
-            if inviter:
-                invite_award_scores = 10
-                inviter.invite_scores += invite_award_scores
-                translist = charge_score(inviter, '0', invite_award_scores, u"邀请奖励")
-                if translist:
-                    logger.debug('Inviting Award scores is successfully payed!')
-                    inviter.save(update_fields=['invite_scores'])
-                else:
-                    logger.debug('Inviting Award scores is failed to pay!!!')
+#             if inviter:
+#                 invite_award_scores = 10
+#                 inviter.invite_scores += invite_award_scores
+#                 translist = charge_score(inviter, '0', invite_award_scores, u"邀请奖励")
+#                 if translist:
+#                     logger.debug('Inviting Award scores is successfully payed!')
+#                     inviter.save(update_fields=['invite_scores'])
+#                 else:
+#                     logger.debug('Inviting Award scores is failed to pay!!!')
             try:
                 userl = authenticate(username=username, password=password)
                 auth_login(request, userl)
@@ -172,23 +171,8 @@ def register(request):
             'mobile':mobile,
         }
         return render(request,'registration/register.html', context)
-@login_required
-def get_nums(request):
-    coupon_num = Coupon.objects.filter(user=request.user, is_used=False).count()
-    message_num = Message.objects.filter(user=request.user, is_read=False).count()
-    result = {'coupon_num':coupon_num,'message_num':message_num,}
-    return JsonResponse(result)
-def verifyemail(request):
-    emailv = request.GET.get('email', None)
-    users = None
-    code = '0' # is used
-    if emailv:
-        users = MyUser.objects.filter(email=emailv)
-        if not users.exists():
-            code = '1'
 
-    result = {'code':code,}
-    return JsonResponse(result)
+
 def verifymobile(request):
     mobilev = request.GET.get('mobile', None)
     users = None
@@ -298,283 +282,33 @@ def phoneImageV(request):
 
 @login_required
 def account(request):
-    task_type = ContentType.objects.get_for_model(Task)
-    finance_type = ContentType.objects.get_for_model(Finance)
-    task_list = UserEvent.objects.filter(user=request.user, content_type = task_type)[0:3]
-    finance_list = UserEvent.objects.filter(user=request.user, content_type = finance_type)[0:3]
-    recomm_list1 = Task.objects.order_by("-view_count")[0:4]
-    recomm_list2 = Finance.objects.filter(level__in=['all','normal']).order_by("-view_count")[0:4]
-    recomm_list = list(recomm_list1) + list(recomm_list2)
-    recomm_list.sort(key=lambda x:x.view_count, reverse=True)
-    signin_last = UserSignIn.objects.filter(user=request.user).first()
-    isSigned = False
-    signed_conse_days = 0
-    if signin_last:
-        if signin_last.date >= date.today() - timedelta(days=1):
-            signed_conse_days = signin_last.signed_conse_days
-            if signin_last.date == date.today():
-                isSigned = True
-    coupons = Coupon.objects.filter(user=request.user, is_used=False)
-    coupon_not_used = 0
-    for coupon in coupons:
-        if not coupon.is_expired():
-            coupon_not_used += 1
-    coupon_to_expired = 0
-    coupons = Coupon.objects.filter(user=request.user, is_used=False)
-    for coupon in coupons:
-        if coupon.is_to_expired():
-            coupon_to_expired += 1
-    return render(request, 'account/account_index.html',
-                    {
-                        'task_list':task_list, 'finance_list':finance_list,
-                         'recomm_list':recomm_list[0:4], 'coupon_not_used':coupon_not_used,
-                        'isSigned':isSigned, 'signed_conse_days':signed_conse_days,
-                        'coupon_to_expired':coupon_to_expired,
-                    }
+    return render(request, 'account/account_index.html',)
 
-                  )
-
-def signin(request):
-
-    if not request.is_ajax():
-        raise Http404
-
-    result={'code':-1, 'url':''}
-    if not request.user.is_authenticated():
-        result['code'] = -1
-        result['url'] = reverse('login') + "?next=" + reverse('account_index')
-    else:
-        signin_last = UserSignIn.objects.filter(user=request.user).first()
-        if signin_last and signin_last.date == date.today():
-            result['code'] = 1
-        else:
-            signed_conse_days = 1
-            if signin_last and signin_last.date == date.today() - timedelta(days=1):
-                signed_conse_days += signin_last.signed_conse_days
-            UserSignIn.objects.create(user=request.user, date=date.today(), signed_conse_days=signed_conse_days)
-            charge_score(request.user, '0', 5, u"签到奖励")
-            if signed_conse_days%7 == 0:
-                charge_score(request.user, '0', 20, u"连续签到7天奖励")
-            result['code'] = 0
-    return JsonResponse(result)
-
-@login_required
-def welfare(request):
-    tcount = Task.objects.filter(state='1').count()
-    fcount = Finance.objects.filter(state='1').count()
-    ttype = ContentType.objects.get_for_model(Task)
-    ftype = ContentType.objects.get_for_model(Finance)
-    tcount_u = UserEvent.objects.filter(user=request.user.id, content_type = ttype.id).count()
-    fcount_u = UserEvent.objects.filter(user=request.user.id, content_type = ftype.id).count()
-    tsum = UserEvent.objects.filter(time__gte=date.today(), content_type = ttype.id).count()
-    fsum = UserEvent.objects.filter(time__gte=date.today(), content_type = ftype.id).count()
-    statis = {'tcount':tcount,'fcount':fcount,'tcount_u':tcount_u,'fcount_u':fcount_u,'tsum':tsum,'fsum':fsum}
-    return render(request, 'account/welfare.html', {'statis':statis})
+# def signin(request):
+# 
+#     if not request.is_ajax():
+#         raise Http404
+# 
+#     result={'code':-1, 'url':''}
+#     if not request.user.is_authenticated():
+#         result['code'] = -1
+#         result['url'] = reverse('login') + "?next=" + reverse('account_index')
+#     else:
+#         signin_last = UserSignIn.objects.filter(user=request.user).first()
+#         if signin_last and signin_last.date == date.today():
+#             result['code'] = 1
+#         else:
+#             signed_conse_days = 1
+#             if signin_last and signin_last.date == date.today() - timedelta(days=1):
+#                 signed_conse_days += signin_last.signed_conse_days
+#             UserSignIn.objects.create(user=request.user, date=date.today(), signed_conse_days=signed_conse_days)
+#             charge_score(request.user, '0', 5, u"签到奖励")
+#             if signed_conse_days%7 == 0:
+#                 charge_score(request.user, '0', 20, u"连续签到7天奖励")
+#             result['code'] = 0
+#     return JsonResponse(result)
 
 
-def get_user_wel_page(request):
-    if not request.is_ajax():
-        raise Http404
-    res={'code':0,}
-    if not request.user.is_authenticated():
-        res['code'] = -1
-        res['url'] = reverse('login') + "?next=" + reverse('account_welfare')
-        return JsonResponse(res)
-    tpage = request.GET.get("tpage", None)
-    fpage = request.GET.get("fpage", None)
-    mpage = request.GET.get("mpage", None)
-    size = request.GET.get("size", 10)
-    filter = request.GET.get("filter",0)
-    try:
-        size = int(size)
-    except ValueError:
-        size = 10
-    try:
-        filter = int(filter)
-    except ValueError:
-        filter = 0
-    if not tpage and not fpage and not mpage or size <= 0 or filter < 0 or filter > 3:
-        raise Http404
-    item_list = []
-    if tpage:
-        page = tpage
-        etype = ContentType.objects.get_for_model(Task)
-    elif fpage:
-        page = fpage
-        etype = ContentType.objects.get_for_model(Finance)
-    elif mpage:
-        page = mpage
-        etype = ContentType.objects.get_for_model(MediaProject)
-    item_list = UserEvent.objects.filter(user=request.user, content_type = etype)
-    if filter == 1:
-        item_list = item_list.filter(audit_state='0')
-    elif filter == 2:
-        item_list = item_list.filter(audit_state='1')
-    elif filter == 3:
-        item_list = item_list.filter(audit_state='2')
-    paginator = Paginator(item_list, size)
-    try:
-        contacts = paginator.page(page)
-    except PageNotAnInteger:
-    # If page is not an integer, deliver first page.
-        contacts = paginator.page(1)
-    except EmptyPage:
-    # If page is out of range (e.g. 9999), deliver last page of results.
-        contacts = paginator.page(paginator.num_pages)
-    data = []
-
-    for con in contacts:
-        reason = con.remark
-        if filter == 3:
-            log = con.audited_logs.first()
-            if log:
-                reason = log.reason
-        i = {"title":con.content_object.title,
-             "username":con.invest_account,
-             "time":con.time.strftime("%Y-%m-%d %H:%M:%S"),
-             "state":con.get_audit_state_display(),
-             "reason":reason,
-             "id":con.id,
-             "amount":con.invest_amount,
-             "term":con.invest_term,
-             }
-        data.append(i)
-    if data:
-        res['code'] = 1
-    res["pageCount"] = paginator.num_pages
-    res["recordCount"] = item_list.count()
-    res["data"] = data
-    return JsonResponse(res)
-
-def get_channel_result_page(request):
-    if not request.is_ajax():
-        raise Http404
-    res={'code':0,}
-    if not request.user.is_authenticated():
-        res['code'] = -1
-        res['url'] = reverse('login') + "?next=" + reverse('account_channel')
-        return JsonResponse(res)
-    page = request.GET.get("page", None)
-    size = request.GET.get("size", 10)
-    filter = request.GET.get("filter",0)
-    try:
-        size = int(size)
-    except ValueError:
-        size = 10
-    try:
-        filter = int(filter)
-    except ValueError:
-        filter = 0
-    if not page or size <= 0 or filter < 0 or filter > 3:
-        raise Http404
-    item_list = []
-    etype = ContentType.objects.get_for_model(Finance)
-    item_list = UserEvent.objects.filter(user=request.user, content_type = etype)
-    if filter == 1:
-        item_list = item_list.filter(audit_state='0')
-    elif filter == 2:
-        item_list = item_list.filter(audit_state='1')
-    elif filter == 3:
-        item_list = item_list.filter(audit_state='2')
-    paginator = Paginator(item_list, size)
-    try:
-        contacts = paginator.page(page)
-    except PageNotAnInteger:
-    # If page is not an integer, deliver first page.
-        contacts = paginator.page(1)
-    except EmptyPage:
-    # If page is out of range (e.g. 9999), deliver last page of results.
-        contacts = paginator.page(paginator.num_pages)
-    data = []
-
-    for con in contacts:
-        reason = ''
-        if con.audit_state == '2':
-            log = con.audited_logs.first()
-            if log:
-                reason = log.reason
-        return_amount = ''
-        if con.audit_state == '0':
-            trans = con.translist.first()
-            if trans:
-                return_amount = trans.transAmount
-        i = {"project":con.content_object.title,
-             "mobile":con.invest_account,
-             "invest_time":con.invest_time.strftime("%Y-%m-%d"),
-             "audit_result":con.get_audit_state_display(),
-             "refuse_reason": reason,
-             "id":con.id,
-             'remark':con.remark,
-             'invest_term':con.invest_term,
-             'invest_amount':con.invest_amount,
-             'return_amount':return_amount,
-             }
-        data.append(i)
-    if data:
-        res['code'] = 1
-    res["pageCount"] = paginator.num_pages
-    res["recordCount"] = item_list.count()
-    res["data"] = data
-    return JsonResponse(res)
-
-@login_required
-def score(request):
-    return render(request, 'account/score.html', {})
-
-def get_user_score_page(request):
-    res={'code':0,}
-    if not request.user.is_authenticated():
-        res['code'] = -1
-        res['url'] = reverse('login') + "?next=" + reverse('account_score')
-        return JsonResponse(res)
-    page = request.GET.get("page", None)
-    size = request.GET.get("size", 10)
-    filter = request.GET.get("filter",0)
-
-    try:
-        size = int(size)
-    except ValueError:
-        size = 10
-    try:
-        filter = int(filter)
-    except ValueError:
-        filter = 0
-    if not page or size <= 0 or filter < 0 or filter > 3:
-        raise Http404
-    item_list = []
-
-    item_list = ScoreTranlist.objects.filter(user=request.user)
-    if filter == 0:
-        item_list = item_list.filter(transType='0')
-    elif filter == 1:
-        item_list = item_list.filter(transType='1').select_related('user_event')
-    paginator = Paginator(item_list, size)
-    try:
-        contacts = paginator.page(page)
-    except PageNotAnInteger:
-    # If page is not an integer, deliver first page.
-        contacts = paginator.page(1)
-    except EmptyPage:
-    # If page is out of range (e.g. 9999), deliver last page of results.
-        contacts = paginator.page(paginator.num_pages)
-    data = []
-    for con in contacts:
-        i = {"item":con.reason,
-             "amount":con.transAmount,
-             "time":con.time.strftime("%Y-%m-%d %H:%M:%S"),
-             "remark":con.remark,
-             "id":con.pk,
-             }
-        if filter == 1:
-            event = con.user_event
-            i["state"]=event.get_audit_state_display() if event.event_type!='7' else "无"
-        data.append(i)
-    if data:
-        res['code'] = 1
-    res["pageCount"] = paginator.num_pages
-    res["recordCount"] = item_list.count()
-    res["data"] = data
-    return JsonResponse(res)
 @login_required
 def security(request):
     return render(request, 'account/account_security.html', {})
@@ -633,32 +367,7 @@ def change_pay_password(request):
     else:
         result['code'] = 2
     return JsonResponse(result)
-def active_email(request):
-    result={'code':-1, 'url':'asd'}
-    if request.is_ajax():
-        user = request.user
-        if not user.is_authenticated():
-            result['code'] = 1
-            result['url'] = reverse('login') + "?next=" + reverse('active_email')
-            return JsonResponse(result)
-        code = send_mail(user.email, user.pk)
-        if code:
-            EmailActCode.objects.update_or_create(email=user.email, defaults={'rand_code':code})
-            result['code'] = 0
-        else:
-            result['code'] = 2
-        return JsonResponse(result)
-    elif request.method == 'GET':
-        code = request.GET.get("code", '')
-        try:
-            obj = EmailActCode.objects.get(rand_code=code)
-            user = MyUser.objects.get(email=obj.email)
-            user.is_email_authenticated = True
-            user.save(update_fields=["is_email_authenticated"])
-            return redirect('account_security')
-        except Exception, e:
-            logger.error(str(e))
-            raise Http404
+
 def bind_bankcard(request):
     result={'code':-1, 'url':''}
     if not request.is_ajax():
@@ -820,161 +529,20 @@ def withdraw(request):
             result['res_msg'] = u'图形验证码输入错误！'
             result.update(generateCap())
         else:
-            translist = charge_money(user, '1', withdraw_amount, u'提现')
-            if translist:
-                event = UserEvent.objects.create(user=user, event_type='2', invest_account=card.card_number,
-                            invest_amount=withdraw_amount, audit_state='1')
-                translist.user_event = event
-                translist.save(update_fields=['user_event'])
-                result['code'] = 0
-            else:
+            try:
+                with transaction.atomic():
+                    translist = charge_money(user, '1', withdraw_amount, u'提现')
+                    event = WithdrawLog.objects.create(user=user, amount=withdraw_amount, audit_state='1')
+                    translist.user_event = event
+                    translist.save(update_fields=['user_event'])
+                    result['code'] = 0
+            except:
                 result['code'] = -2
                 result['res_msg'] = u'提现失败！'
         return JsonResponse(result)
 
 
-@login_required
-def coupon(request):
-    user = request.user
-    coupons = user.user_coupons.filter(is_used=False)
-    dict = {
-        'cash_num' : coupons.filter(project__ctype='0').count(),
-        'interest_num' : coupons.filter(project__ctype='1').count(),
-        'exc_num' : coupons.filter(project__ctype='2').count()
-    }
-    return render(request, 'account/account_coupon.html', {'dict':dict})
-def get_user_coupon_page(request):
-    res={'code':0,}
-    if not request.user.is_authenticated():
-        res['code'] = -1
-        res['url'] = reverse('login') + "?next=" + reverse('account_coupon')
-        return JsonResponse(res)
-    page = request.GET.get("page", None)
-    size = request.GET.get("size", 2)
-    filter = request.GET.get("filter", '')
-    try:
-        size = int(size)
-    except ValueError:
-        size = 2
-    if not page or not filter or size <= 0:
-        raise Http404
-    item_list = Coupon.objects.filter(user=request.user,project__ctype=str(filter),is_used=False).select_related('project')
-    paginator = Paginator(item_list, size)
-    try:
-        contacts = paginator.page(page)
-    except PageNotAnInteger:
-    # If page is not an integer, deliver first page.
-        contacts = paginator.page(1)
-    except EmptyPage:
-    # If page is out of range (e.g. 9999), deliver last page of results.
-        contacts = paginator.page(paginator.num_pages)
-    data = []
-    for con in contacts:
-        project = con.project
-        i = {"title":project.title,
-             "amount":project.amount,
-             "introduction":project.introduction,
-             "url":project.exp_code.url if project.isonMobile else "",
-             "isonMobile": 1 if project.isonMobile else 0,
-             'endtime':project.endtime,
-             'id':con.id,
-             "pro_id":project.id,
-             'code':con.exchange_code
-        }
-        data.append(i)
-    if data:
-        res['code'] = 1
-    res["pageCount"] = paginator.num_pages
-    res["recordCount"] = item_list.count()
-    res["data"] = data
-    return JsonResponse(res)
-def get_user_coupon_exchange_detail(request):
-    res={'code':0,}
-    if not request.user.is_authenticated():
-        res['code'] = -1
-        res['url'] = reverse('login') + "?next=" + reverse('account_coupon')
-        return JsonResponse(res)
-    page = request.GET.get("page", None)
-    size = request.GET.get("size", 6)
-    try:
-        size = int(size)
-    except ValueError:
-        size = 6
-    if not page or size <= 0:
-        raise Http404
-    item_list = UserEvent.objects.filter(user=request.user,event_type='4')
-    paginator = Paginator(item_list, size)
-    try:
-        contacts = paginator.page(page)
-    except PageNotAnInteger:
-    # If page is not an integer, deliver first page.
-        contacts = paginator.page(1)
-    except EmptyPage:
-    # If page is out of range (e.g. 9999), deliver last page of results.
-        contacts = paginator.page(paginator.num_pages)
-    data = []
-    for con in contacts:
-        coupon = con.content_object
-        i = {"title":coupon.project.title,
-             "amount":coupon.project.amount,
-             "account":con.invest_account,
-             "state":con.get_audit_state_display(),
-             "state_int":con.audit_state,
-             'remark':con.remark,
-             'reason':'' if con.audit_state!='2' else con.audited_logs.first().reason,
-             'time':con.time.strftime("%Y-%m-%d %H:%M:%S"),
-             'type':coupon.project.get_ctype_display()
-        }
-        data.append(i)
-    if data:
-        res['code'] = 1
-    res["pageCount"] = paginator.num_pages
-    res["recordCount"] = item_list.count()
-    res["data"] = data
-    return JsonResponse(res)
 
-def useCoupon(request):
-    user = request.user
-    res={'code':0,}
-    if not user.is_authenticated():
-        res['code'] = -1
-        res['url'] = reverse('login') + "?next=" + reverse('account_coupon')
-        return JsonResponse(res)
-    coupon_id = request.POST.get('id', None)
-    telnum = request.POST.get('telnum', None)
-    invest_amount = request.POST.get('amount', None)
-    invest_term = request.POST.get('term', None)
-    remark = request.POST.get('remark', '')
-    if coupon_id is None or telnum is None or invest_amount is None:
-        logger.error("Coupon ID or telnum or amount is missing!!!")
-        raise Http404
-    invest_amount = int(float(invest_amount))
-    coupon = Coupon.objects.get(pk=coupon_id)
-    code=''
-    msg=''
-    if coupon.is_used:
-        code = '2'
-        msg = u'该优惠券已兑换，请查看兑换记录！'
-    else:
-        events = UserEvent.objects.filter(invest_account=telnum, event_type='4').exclude(audit_state='2')
-        if events.exists():
-            pro_list = []
-            project = coupon.project
-            for eve in events:
-                cou = eve.content_object
-                pro_list.append(cou.project)
-            if project in pro_list:
-                code = '2'
-                msg = u'该账号已领取奖励，请不要重复提交！'
-    if code!='2':
-        UserEvent.objects.create(user=user, event_type='4', invest_account=telnum, invest_amount=invest_amount,
-                     invest_term=invest_term, content_object=coupon, audit_state='1',remark=remark,)
-        code = '1'
-        msg = u'提交成功，请查看兑换记录！'
-        coupon.is_used = True
-        coupon.save(update_fields=['is_used'],)
-    result = {'code':code, 'msg':msg}
-    return JsonResponse(result)
 
 @login_required
 def message(request):
@@ -991,6 +559,7 @@ def message(request):
             pass
         result = {}
         return JsonResponse(result)
+    
 def get_user_message_page(request):
     res={'code':0,}
     if not request.user.is_authenticated():
@@ -1031,156 +600,156 @@ def get_user_message_page(request):
     res["data"] = data
     return JsonResponse(res)
 
-@login_required
-def invite(request):
-    inviter = request.user
-    if request.method == 'GET':
-        withdraw_thismonth = UserEvent.objects.filter(user__inviter=inviter, event_type='2',
-                    audit_state='0',audit_time__year=ttime.localtime()[0],audit_time__month=ttime.localtime()[1]).\
-                    aggregate(sumofwith=Sum('invest_amount'))
-        acc_count = inviter.invitees.count()
-        acc_with_count = UserEvent.objects.filter(user__inviter=inviter, event_type='2',
-                    audit_state='0').values('user__mobile').distinct().order_by().count()
-        this_month_award = float(withdraw_thismonth.get('sumofwith') or 0)*settings.AWARD_RATE
-        this_month_award = int(this_month_award)
-        statis = {
-            'left_award':inviter.invite_account,
-            'accu_invite_award':inviter.invite_income,
-            'accu_invite_scores':inviter.invite_scores,
-            'acc_count':acc_count,
-            'acc_with_count':acc_with_count,
-            'this_month_award':this_month_award,
-        }
-        return render(request,'account/account_invite.html', {'statis':statis})
-    elif request.method == 'POST':
-        result = {'code':-1, 'res_msg':''}
-        left_award = inviter.invite_account
-        if left_award == 0:
-            result['res_msg'] = u'邀请奖励结余为0'
-        else:
-            translist = charge_money(inviter, '0', left_award, u'邀请奖励')
-            if translist:
-                inviter.invite_account = 0
-                inviter.save(update_fields=['invite_account'])
-                event = UserEvent.objects.create(user=inviter, event_type='5',
-                            invest_amount=left_award, audit_state='1')
-                translist.user_event = event
-                translist.save(update_fields=['user_event'])
-                result['code'] = 0
-            else:
-                result['code'] = -2
-                result['res_msg'] = u'操作失败，请联系客服！'
-        print result
-        return JsonResponse(result)
-
-def get_user_invite_page(request):
-    if not request.is_ajax():
-        raise Http404
-    user = request.user
-    res={'code':0,}
-    if not user.is_authenticated():
-        res['code'] = -1
-        res['url'] = reverse('login') + "?next=" + reverse('account_invite')
-        return JsonResponse(res)
-    page = request.GET.get("page", None)
-    size = request.GET.get("size", 6)
-    filter = request.GET.get("filter",0)
-    try:
-        size = int(size)
-    except ValueError:
-        size = 6
-    try:
-        filter = int(filter)
-    except ValueError:
-        filter = 0
-    if not page or size <= 0 or filter < 0 or filter > 2:
-        raise Http404
-
-    data = []
-    if filter == 0:
-        invitees = user.invitees.all()
-        paginator = Paginator(invitees, size)
-        try:
-            contacts = paginator.page(page)
-        except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-            contacts = paginator.page(1)
-        except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-            contacts = paginator.page(paginator.num_pages)
-        for con in contacts:
-            reg = UserEvent.objects.filter(user=con, event_type='2',audit_state='0').exists()
-            mobile = con.mobile
-            if len(mobile)==11:
-                mobile = mobile[0:3] + '****' + mobile[7:]
-            i = {
-                 "mobile":mobile,
-                 "time":con.date_joined.strftime("%Y-%m-%d %H:%M"),
-                 "is_bind":u'是' if con.user_bankcard else u'否',
-                 "is_with":u'是' if reg else u'否',
-             }
-            data.append(i)
-        if data:
-            res['code'] = 1
-        res["pageCount"] = paginator.num_pages
-        res["recordCount"] = invitees.count()
-    elif filter == 1:
-        events = UserEvent.objects.filter(user__inviter=user, event_type='2', audit_state='0')
-        paginator = Paginator(events, size)
-        try:
-            contacts = paginator.page(page)
-        except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-            contacts = paginator.page(1)
-        except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-            contacts = paginator.page(paginator.num_pages)
-        for con in contacts:
-            take_award = float(con.invest_amount)*settings.AWARD_RATE
-            take_award = int(take_award)
-            i = {
-                 "mobile":con.user.mobile,
-                 "time":con.audit_time.strftime("%Y-%m-%d %H:%M"),
-                 "amount":con.invest_amount,
-                 "take":take_award,
-             }
-            data.append(i)
-        if data:
-            res['code'] = 1
-        res["pageCount"] = paginator.num_pages
-        res["recordCount"] = events.count()
-    elif filter == 2:
-        select = {'month': connection.ops.date_trunc_sql('month', 'time')}
-        withdraw_list = UserEvent.objects.filter(user__inviter=user, event_type='2',
-                audit_state='0',).extra(select=select)\
-                .values('month').annotate(cou=Count('user',distinct=True),sumofwith=Sum('invest_amount')).order_by('-month',)
-        paginator = Paginator(withdraw_list, size)
-
-        try:
-            contacts = paginator.page(page)
-        except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-            contacts = paginator.page(1)
-        except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-            contacts = paginator.page(paginator.num_pages)
-        for con in contacts:
-            take_award = float(con['sumofwith'] or 0)*settings.AWARD_RATE
-            take_award = int(take_award)
-            i = {
-                 "month":str(con['month'])[0:7],
-                 "amount":con['sumofwith'] or 0,
-                 "cou":con['cou'],
-                 "take":take_award,
-                 "score":con['cou']*100,
-             }
-            data.append(i)
-        if data:
-            res['code'] = 1
-        res["pageCount"] = paginator.num_pages
-        res["recordCount"] = withdraw_list.count()
-    res["data"] = data
-    return JsonResponse(res)
+# @login_required
+# def invite(request):
+#     inviter = request.user
+#     if request.method == 'GET':
+#         withdraw_thismonth = UserEvent.objects.filter(user__inviter=inviter, event_type='2',
+#                     audit_state='0',audit_time__year=ttime.localtime()[0],audit_time__month=ttime.localtime()[1]).\
+#                     aggregate(sumofwith=Sum('invest_amount'))
+#         acc_count = inviter.invitees.count()
+#         acc_with_count = UserEvent.objects.filter(user__inviter=inviter, event_type='2',
+#                     audit_state='0').values('user__mobile').distinct().order_by().count()
+#         this_month_award = float(withdraw_thismonth.get('sumofwith') or 0)*settings.AWARD_RATE
+#         this_month_award = int(this_month_award)
+#         statis = {
+#             'left_award':inviter.invite_account,
+#             'accu_invite_award':inviter.invite_income,
+#             'accu_invite_scores':inviter.invite_scores,
+#             'acc_count':acc_count,
+#             'acc_with_count':acc_with_count,
+#             'this_month_award':this_month_award,
+#         }
+#         return render(request,'account/account_invite.html', {'statis':statis})
+#     elif request.method == 'POST':
+#         result = {'code':-1, 'res_msg':''}
+#         left_award = inviter.invite_account
+#         if left_award == 0:
+#             result['res_msg'] = u'邀请奖励结余为0'
+#         else:
+#             translist = charge_money(inviter, '0', left_award, u'邀请奖励')
+#             if translist:
+#                 inviter.invite_account = 0
+#                 inviter.save(update_fields=['invite_account'])
+#                 event = UserEvent.objects.create(user=inviter, event_type='5',
+#                             invest_amount=left_award, audit_state='1')
+#                 translist.user_event = event
+#                 translist.save(update_fields=['user_event'])
+#                 result['code'] = 0
+#             else:
+#                 result['code'] = -2
+#                 result['res_msg'] = u'操作失败，请联系客服！'
+#         print result
+#         return JsonResponse(result)
+# 
+# def get_user_invite_page(request):
+#     if not request.is_ajax():
+#         raise Http404
+#     user = request.user
+#     res={'code':0,}
+#     if not user.is_authenticated():
+#         res['code'] = -1
+#         res['url'] = reverse('login') + "?next=" + reverse('account_invite')
+#         return JsonResponse(res)
+#     page = request.GET.get("page", None)
+#     size = request.GET.get("size", 6)
+#     filter = request.GET.get("filter",0)
+#     try:
+#         size = int(size)
+#     except ValueError:
+#         size = 6
+#     try:
+#         filter = int(filter)
+#     except ValueError:
+#         filter = 0
+#     if not page or size <= 0 or filter < 0 or filter > 2:
+#         raise Http404
+# 
+#     data = []
+#     if filter == 0:
+#         invitees = user.invitees.all()
+#         paginator = Paginator(invitees, size)
+#         try:
+#             contacts = paginator.page(page)
+#         except PageNotAnInteger:
+#         # If page is not an integer, deliver first page.
+#             contacts = paginator.page(1)
+#         except EmptyPage:
+#         # If page is out of range (e.g. 9999), deliver last page of results.
+#             contacts = paginator.page(paginator.num_pages)
+#         for con in contacts:
+#             reg = UserEvent.objects.filter(user=con, event_type='2',audit_state='0').exists()
+#             mobile = con.mobile
+#             if len(mobile)==11:
+#                 mobile = mobile[0:3] + '****' + mobile[7:]
+#             i = {
+#                  "mobile":mobile,
+#                  "time":con.date_joined.strftime("%Y-%m-%d %H:%M"),
+#                  "is_bind":u'是' if con.user_bankcard else u'否',
+#                  "is_with":u'是' if reg else u'否',
+#              }
+#             data.append(i)
+#         if data:
+#             res['code'] = 1
+#         res["pageCount"] = paginator.num_pages
+#         res["recordCount"] = invitees.count()
+#     elif filter == 1:
+#         events = UserEvent.objects.filter(user__inviter=user, event_type='2', audit_state='0')
+#         paginator = Paginator(events, size)
+#         try:
+#             contacts = paginator.page(page)
+#         except PageNotAnInteger:
+#         # If page is not an integer, deliver first page.
+#             contacts = paginator.page(1)
+#         except EmptyPage:
+#         # If page is out of range (e.g. 9999), deliver last page of results.
+#             contacts = paginator.page(paginator.num_pages)
+#         for con in contacts:
+#             take_award = float(con.invest_amount)*settings.AWARD_RATE
+#             take_award = int(take_award)
+#             i = {
+#                  "mobile":con.user.mobile,
+#                  "time":con.audit_time.strftime("%Y-%m-%d %H:%M"),
+#                  "amount":con.invest_amount,
+#                  "take":take_award,
+#              }
+#             data.append(i)
+#         if data:
+#             res['code'] = 1
+#         res["pageCount"] = paginator.num_pages
+#         res["recordCount"] = events.count()
+#     elif filter == 2:
+#         select = {'month': connection.ops.date_trunc_sql('month', 'time')}
+#         withdraw_list = UserEvent.objects.filter(user__inviter=user, event_type='2',
+#                 audit_state='0',).extra(select=select)\
+#                 .values('month').annotate(cou=Count('user',distinct=True),sumofwith=Sum('invest_amount')).order_by('-month',)
+#         paginator = Paginator(withdraw_list, size)
+# 
+#         try:
+#             contacts = paginator.page(page)
+#         except PageNotAnInteger:
+#         # If page is not an integer, deliver first page.
+#             contacts = paginator.page(1)
+#         except EmptyPage:
+#         # If page is out of range (e.g. 9999), deliver last page of results.
+#             contacts = paginator.page(paginator.num_pages)
+#         for con in contacts:
+#             take_award = float(con['sumofwith'] or 0)*settings.AWARD_RATE
+#             take_award = int(take_award)
+#             i = {
+#                  "month":str(con['month'])[0:7],
+#                  "amount":con['sumofwith'] or 0,
+#                  "cou":con['cou'],
+#                  "take":take_award,
+#                  "score":con['cou']*100,
+#              }
+#             data.append(i)
+#         if data:
+#             res['code'] = 1
+#         res["pageCount"] = paginator.num_pages
+#         res["recordCount"] = withdraw_list.count()
+#     res["data"] = data
+#     return JsonResponse(res)
 
 def vip(request):
     return render(request, 'account/account_vip.html')

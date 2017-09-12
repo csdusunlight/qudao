@@ -5,7 +5,7 @@ Created on 20160222
 '''
 from django.conf.urls import url,include
 from django.views.generic.base import TemplateView
-from wafuli import views, rest
+from wafuli import views
 # url_about = [
 #     url(r'^aboutus/$', 'wafuli.views.aboutus', name="about"),
 #     url(r'^report/$', 'wafuli.views.report'),
@@ -15,6 +15,5 @@ from wafuli import views, rest
 #     url(r'^statement/$', 'wafuli.views.statement'),
 # ]
 urlpatterns = [
-    url(r'^projects/$', rest.ProjectList.as_view()),
-    url(r'^projects/(?P<pk>[0-9]+)/$', rest.ProjectDetail.as_view()),
+    url(r'^$', 'wafuli.views.index', name='index'),
 ]

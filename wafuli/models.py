@@ -36,7 +36,7 @@ class Company(models.Model):
         return self.name
 class Base(models.Model):
     title = models.CharField(max_length=200, verbose_name=u"标题")
-    news_priority = models.IntegerField(u"优先级",default=3)
+    priority = models.IntegerField(u"优先级",default=3)
     pub_date = models.DateTimeField(u"创建时间", default=timezone.now)
     view_count = models.IntegerField(u"浏览量", default=0)
     change_user = models.CharField(u"上次修改用户", max_length=200, blank=True)
@@ -71,6 +71,7 @@ Project_TYPE = (
 )
 class Project(Base):
     create_user = models.ForeignKey(MyUser, null=True, related_name="created_projects")
+    is_official = models.BooleanField()
     state = models.CharField(u"项目状态", max_length=1, choices=Project_STATE)
     pic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）")
     strategy = models.URLField(u"攻略链接")
@@ -88,7 +89,7 @@ class Project(Base):
     class Meta:
         verbose_name = u"理财项目"
         verbose_name_plural = u"理财项目"
-        ordering = ["-news_priority", "-pub_date"]
+        ordering = ["-priority", "-pub_date"]
     
     def is_expired(self):
         return self.state != '10'
@@ -122,9 +123,10 @@ class InvestLog(models.Model):
     qq_number = models.CharField(u"QQ号", max_length=20)
     zhifubao = models.CharField(u'支付宝账号', max_length=64)
     zhifubao_name = models.CharField(u'支付宝姓名', max_length=30)
-    admin_user = models.ForeignKey(MyUser, related_name="investlog_admin")
+    admin_user = models.ForeignKey(MyUser, related_name="investlog_admin", null=True)
     audit_time = models.DateTimeField(u'审核时间', null=True, blank=True)
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
+    audit_reason = models.CharField(u"审核原因", max_length=30)
     settle_amount = models.DecimalField(u'结算金额', max_digits=10, decimal_places=2, default=0)
     return_amount = models.DecimalField(u'返现金额', max_digits=10, decimal_places=2, default=0)
     remark = models.CharField(u"备注", max_length=100)
@@ -133,18 +135,17 @@ class InvestLog(models.Model):
     class Meta:
         ordering = ["-submit_time",]
     
-class Message(models.Model):
-    user = models.ForeignKey(MyUser, related_name="user_msgs")
-    title = models.CharField(u"标题", max_length=30, default=u"系统消息")
-    time = models.DateTimeField(u"日期", default=timezone.now)
-    is_read = models.BooleanField(u"是否已读", default=False)
-    content = models.TextField(u"消息内容")
+class Notice(models.Model):
+    user = models.ForeignKey(MyUser, related_name="user_notice")
+    content = models.CharField(u"通知内容", max_length=100)
+    time = models.DateTimeField(u"创建时间", default=timezone.now)
+    priority = models.IntegerField(u"优先级",default=1)
     def __unicode__(self):
         return self.title
     class Meta:
-        verbose_name = u"消息"
-        verbose_name_plural = u"消息"
-        ordering = ['-time']
+        verbose_name = u"个人主页最新公告"
+        verbose_name_plural = u"个人主页最新公告"
+        ordering = ['-priority', '-time']
 
 ADMIN_TYPE = (
     ('1', u'更改现金余额'),
@@ -175,8 +176,8 @@ class TransList(models.Model):
     reason = models.CharField(max_length=20, verbose_name=u"变动原因")
     remark = models.CharField(u"备注", max_length=100, blank=True)
     transType = models.CharField(max_length=2, choices=TRANS_TYPE, verbose_name=u"变动类型")
-    user_event = models.ForeignKey(InvestLog, related_name="translist", null=True,on_delete=models.SET_NULL)
-    admin_event = models.ForeignKey(AdminLog, related_name="translist", null=True,on_delete=models.SET_NULL)
+    investlog = models.ForeignKey(InvestLog, related_name="translist", null=True,on_delete=models.SET_NULL)
+    adminlog = models.ForeignKey(AdminLog, related_name="translist", null=True,on_delete=models.SET_NULL)
     def __unicode__(self):
         return u"%s:%s了%s现金 提交时间%s" % (self.user, self.get_transType_display(),self.transAmount,
                                        self.user_event.time if self.user_event else "")
@@ -187,7 +188,9 @@ class WithdrawLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="withdrawlog")
     submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
     audit_time = models.DateTimeField(u'审核时间', null=True, blank=True)
-    amount = models.DecimalField(u'变动数值', max_digits=10, decimal_places=2)
+    amount = models.DecimalField(u'提现数值', max_digits=10, decimal_places=2)
+    admin_user = models.ForeignKey(MyUser, related_name="withdrawlog_admin", null=True)
+    audit_reason = models.CharField(u"审核原因", max_length=30)
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
     class Meta:
         ordering = ["submit_time",]
@@ -210,7 +213,7 @@ class WithdrawLog(models.Model):
 #         if self.type == '3' and not self.pic:
 #             raise ValidationError({'pic': u'新闻类型必输'})
 #     class Meta:
-#         ordering = ["-news_priority","-pub_date"]
+#         ordering = ["-priority","-pub_date"]
 #         verbose_name = u"公告、攻略（关于我们）"
 #         verbose_name_plural = u"公告、攻略（关于我们）"
 
@@ -231,7 +234,7 @@ class MAdvert_PC(Base):
     description = models.CharField(u"文字描述", max_length=30, blank=True)
     is_hidden = models.BooleanField(u"是否隐藏",default=False)
     class Meta:
-        ordering = ["-news_priority","-pub_date"]
+        ordering = ["-priority","-pub_date"]
         verbose_name = u"PC端广告位（新）"
         verbose_name_plural = u"PC端广告位（新）"
     def clean(self):

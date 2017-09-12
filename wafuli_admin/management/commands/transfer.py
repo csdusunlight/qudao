@@ -23,6 +23,6 @@ class Command(BaseCommand):
         for adv in advs:
             Advertisement_Mobile.objects.create(mpic=adv.mpic,location=adv.location,
                     is_hidden=adv.is_hidden,navigation=adv.navigation,
-                    title=adv.title,news_priority=adv.news_priority,
+                    title=adv.title,priority=adv.priority,
                     pub_date=adv.pub_date,view_count=adv.view_count,
                     change_user=adv.change_user,url=adv.url)

@@ -12,14 +12,7 @@ class IsAdmin(permissions.BasePermission):
 
         # 写的请求只对对象的创建者开放
         return request.user.is_staff
-    def has_object_permission(self, request, view, obj):
-        # 查看的权限对所有请求开放
-        # 所以我们永远开放 GET, HEAD or OPTIONS 请求
-#         if request.method in permissions.SAFE_METHODS:
-#             return True
 
-        # 写的请求只对对象的创建者开放
-        return request.user.is_staff
     
 from rest_framework.authentication import SessionAuthentication 
 
@@ -27,3 +20,13 @@ class CsrfExemptSessionAuthentication(SessionAuthentication):
 
     def enforce_csrf(self, request):
         return  # To not perform the csrf check previously happening
+    
+class IsOwnerOrStaff(permissions.BasePermission):
+    """
+    Object-level permission to only allow owners of an object to edit it.
+    Assumes the model instance has an `owner` attribute.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        
+        return request.user.is_staff or obj.user == request.user 

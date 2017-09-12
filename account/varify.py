@@ -1,14 +1,13 @@
 #coding:utf-8
 import urllib, urllib2, json
-from .models import MobileCode, Access_Token
-from .tools import random_code
+from .models import MobileCode
 import time as ttime
 from datetime import datetime
 import hmac
 import base64
 from hashlib import sha1, md5
 import logging
-from account.tools import random_str
+from account.tools import random_str, random_code
 from wafuli_admin.models import Message_Record
 logger = logging.getLogger("wafuli")
 # typ: 0:get  1:post
@@ -139,42 +138,6 @@ def sendmsg_by189(app_id, app_secret, access_token, token, timestamp, phone):
         return -1
     except:
         return -1
-def sendMsg(phone):
-    app_id = '213239060000249108'
-    try:
-        obj = Access_Token.objects.get(app_id=app_id)
-    except Access_Token.DoesNotExist:
-        logger.error('There is no access_token in database!!!')
-        return -1
-    app_secret = obj.app_secret
-    access_token = obj.access_token
-    expire_time = obj.expire_stramp
-    now = int(ttime.time())
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    if now > expire_time:
-        access_token, expire = get_access_token(app_id, app_secret, obj)
-        if not access_token:
-            logger.error('Getting access_token is failed!!!')
-            return -1
-        obj.expire_stramp = now + expire
-        obj.access_token = access_token
-        obj.save()
-    token = get_token(app_id, app_secret, access_token,timestamp)
-    if token == '':
-        logger.info('The access_token expired, get a new one.')
-        access_token, expire = get_access_token(app_id, app_secret, obj)
-        if not access_token:
-            logger.error('Getting access_token is failed!!!')
-            return -1
-        obj.expire_stramp = now + expire
-        obj.access_token = access_token
-        obj.save()
-        token = get_token(app_id, app_secret, access_token, timestamp)
-    if not token:
-        logger.error('Getting access_token is failed!!!')
-        return -1
-    ret = sendmsg_by189(app_id, app_secret, access_token, token, timestamp, phone)
-    return ret
 
 
 

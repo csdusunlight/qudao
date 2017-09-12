@@ -5,7 +5,7 @@ Created on 2017年8月10日
 @author: lch
 '''
 from rest_framework import serializers
-from wafuli.models import Project, InvestLog
+from wafuli.models import Project, InvestLog, TransList, Notice
 from account.models import MyUser
 
 class UserSerializer(serializers.ModelSerializer):
@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = MyUser
         fields = ('mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'type',
                   'level', 'picture', 'profile', 'balance', 'is_active')
-        read_only_fields = ('mobile', 'username', 'balance')
+        read_only_fields = ('mobile', 'username', 'balance', 'is_active', 'level', 'type')
         
 class ProjectSerializer(serializers.ModelSerializer):
 #     subscribers = UserSerializer(many=True)
@@ -25,8 +25,18 @@ class InvestLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvestLog
         fields = '__all__'
-        read_only_fields = ('user', 'project', 'balance', 'audit_state', 'audit_time',
+        read_only_fields = ('audit_state', 'audit_time',
                              'settle_amount','return_amount', "admin_user", "is_official")
+class TransListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TransList
+        fields = '__all__'
+        
+class NoticeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notice
+        fields = '__all__'
+        read_only_fields = ('user', 'time')
 # class MediaProjectSerializer(serializers.ModelSerializer):
 #     state_des = serializers.CharField(source='get_state_display', read_only=True)
 #     class Meta:

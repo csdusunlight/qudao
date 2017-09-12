@@ -30,7 +30,9 @@
 # from .tools import listing
 # import re
 # 
-# def index(request):
+from django.shortcuts import render
+def index(request):
+    return render(request, 'wfl-index.html', )
 #     ad_list = Advertisement.objects.filter(Q(location='0')|Q(location='1'),is_hidden=False)[0:8]
 #     announce_list = Press.objects.filter(type='1')[0:5]
 #     hongbao_list = Hongbao.objects.filter(is_display=True,state='1')[0:3]

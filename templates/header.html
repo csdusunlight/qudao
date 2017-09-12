@@ -24,35 +24,15 @@
                     {%endif%}
                 </font>
                 <li class="d-ib"><a class="headertop__navitem link" href="{%url 'logout' %}">退出</a></li>
-                <!-- <a href="{%url 'account_message' %}">消息中心</a>&nbsp;|&nbsp; -->
                 {% endif %}
 
 
-                <li class="d-ib"><a class="headertop__navitem link" href="{%url 'aboutus' %}#cont=strategy">帮助中心</a></li>
-                <li class="d-ib"><a class="headertop__navitem link" href="{%url 'APP_download' %}">app下载</a></li>
             </ul>
         </div>
     </div>
     <div class="headermain-box bgc-fff">
         <div class="headermain clearfix">
-            <a href="{% url 'index' %}"><img src="{% static 'images/qudao-logo.png' %}" alt="logo" class="logo l" /></a>
             <ul class="nav nav-layout l fs-0">
-                <li class="nav__itembox d-ib"><a class="nav__item" href="{% url 'index' %}">首页</a></li>
-                <li class="nav__itembox subnav-show d-ib">
-                    <a class="nav__item" href="{% url 'finance' %}">项目库</a>
-                </li>
-                <li class="nav__itembox subnav-show d-ib">
-                    <a class="nav__item" href="#">新人指南</a>
-                    <ul class="subnav">
-                        <li><a class="subnav__item link" href="{% url 'task' %}">任务赚</a></li>
-                        <li><a class="subnav__item link" href="{% url 'finance' %}">p2p返利</a></li>
-                        <!-- <li><a class="subnav__item link nav-make-money">借点钱</a></li> -->
-                <!--        <li><a class="subnav__item link" href="{% url 'task' %}">信用卡</a></li> -->
-                    </ul>
-                </li>
-                <li class="nav__itembox d-ib"><a class="nav__item" href="{% url 'mall' %}">排行榜</a></li>
-                <li class="nav__itembox d-ib"><a class="nav__item" href="{% url 'mall' %}">合作共赢</a></li>
-                <li class="nav__itembox d-ib"><a class="nav__item" href="{% url 'account_index' %}">个人中心</a></li>
             </ul>
         </div>
     </div>

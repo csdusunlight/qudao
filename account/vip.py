@@ -5,7 +5,6 @@ Created on 2017年4月23日
 @author: lch
 '''
 from account.transaction import charge_money
-from wafuli.models import Message
 from wafuli_admin.models import UserStatis
 from django.db.models import F
 VIP_BONUS = {
@@ -43,6 +42,5 @@ def vip_judge(user, with_amount):
                 user.level = key
                 charge_money(user, '0', VIP_BONUS[key]['money'], u'VIP升级奖励')
                 msg_content = u'恭喜您的会员等级提升为VIP' + str(key) + u'！'
-                Message.objects.create(user=user, content=msg_content, title=u"会员升级")
     user.save(update_fields=['level', 'with_total'])
     

@@ -104,7 +104,7 @@ def get_finance_page(request):
     else:
         item_list = item_list.filter(f_type=project_type)
     if project_status == '0':
-        item_list = item_list.filter(state__in=["1","2"]).order_by("state","-news_priority", "-pub_date")
+        item_list = item_list.filter(state__in=["1","2"]).order_by("state","-priority", "-pub_date")
     else:
         item_list = item_list.filter(state=project_status)
         # now = datetime.now()

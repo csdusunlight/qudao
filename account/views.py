@@ -36,7 +36,7 @@ from transaction import charge_money
 from account.tools import send_mail, get_client_ip
 from django.db import connection, transaction
 from wafuli.data import BANK
-from wafuli.models import TransList, WithdrawLog, Message
+from wafuli.models import TransList, WithdrawLog
 @sensitive_post_parameters()
 @csrf_protect
 @never_cache
@@ -544,61 +544,6 @@ def withdraw(request):
 
 
 
-@login_required
-def message(request):
-    if request.method == 'GET':
-        return render(request,'account/account_message.html')
-    elif request.method == 'POST':
-        user = request.user
-        id = request.POST.get('id', 0)
-        try:
-            msg = Message.objects.get(id=id)
-            msg.is_read = True
-            msg.save(update_fields=['is_read',])
-        except:
-            pass
-        result = {}
-        return JsonResponse(result)
-    
-def get_user_message_page(request):
-    res={'code':0,}
-    if not request.user.is_authenticated():
-        res['code'] = -1
-        res['url'] = reverse('login') + "?next=" + reverse('account_coupon')
-        return JsonResponse(res)
-    page = request.GET.get("page", None)
-    size = request.GET.get("size", 5)
-    try:
-        size = int(size)
-    except ValueError:
-        size = 5
-    if not page or size <= 0:
-        raise Http404
-    item_list = Message.objects.filter(user=request.user)
-    paginator = Paginator(item_list, size)
-    try:
-        contacts = paginator.page(page)
-    except PageNotAnInteger:
-    # If page is not an integer, deliver first page.
-        contacts = paginator.page(1)
-    except EmptyPage:
-    # If page is out of range (e.g. 9999), deliver last page of results.
-        contacts = paginator.page(paginator.num_pages)
-    data = []
-    for con in contacts:
-        i = {"title":con.title,
-             'content':con.content,
-             'id':con.id,
-             'time':con.time.strftime("%Y-%m-%d"),
-             'state':"on" if con.is_read else "",
-        }
-        data.append(i)
-    if data:
-        res['code'] = 1
-    res["pageCount"] = paginator.num_pages
-    res["recordCount"] = item_list.count()
-    res["data"] = data
-    return JsonResponse(res)
 
 # @login_required
 # def invite(request):

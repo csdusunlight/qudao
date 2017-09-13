@@ -7,7 +7,7 @@
 <meta name="description" content="挖福利是一个优质的互联网理财平台！让你感受到不一样的金融理财。" />
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/finance.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/project_all.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
 
 
@@ -136,7 +136,7 @@
   '<a class="btn m-green m-finance" href="/finance/38/" target="_blank">查看攻略</a>'+
   '<a class="copy-link btn m-green m-finance" target="_blank" data-clipboard-text="{img_url}">复制攻略</a>'+
   '<a class="add-project true btn m-green m-finance" data-isadd = "true" onclick = "addProject(this, 1)">添加至主页</a></div></li>[/data]';
-var url = "{% url 'get_finance_page' %}" + "?page={page}&size={pageSize}";
+var url = "/project_all/";
 function pagecallback(){
 //  $(".lc-h2.new").append('<img src="/static/images/new_cont.png" class="new_cont2">');
 //  $(".end").text("已结束");

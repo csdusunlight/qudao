@@ -3,11 +3,11 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r'^$', 'account.views.account', name='account_index'),
-#     url(r'^money/$', 'account.views.money', name='account_money'),
+    url(r'^money/$', 'account.views.money', name='account_money'),
 #     url(r'^moneypage/$', 'account.views.get_user_money_page', name='get_user_money_page'),
-#     url(r'security/$', 'account.views.security', name='account_security'),
-#     url(r'^bankcard/$', 'account.views.bankcard', name='account_bankcard'),
-#     url(r'^withdraw/$', 'account.views.withdraw', name='account_withdraw'),
+    url(r'security/$', 'account.views.security', name='account_security'),
+    url(r'^bankcard/$', 'account.views.bankcard', name='account_bankcard'),
+    url(r'^withdraw/$', 'account.views.withdraw', name='account_withdraw'),
 #     url(r'^message/$', 'account.views.message', name='account_message'),
 #     url(r'^messagepage/$', 'account.views.get_user_message_page', name='get_user_message_page'),
     url(r'^register/$', 'account.views.register', name='register'),
@@ -28,16 +28,22 @@ urlpatterns = [
 #     url(r'^phoneImageV/$', 'account.views.phoneImageV', name='phoneImageV'),
 # #    url(r'verifytelcode/$', 'account.views.verifytelcode', name='verifytelcode'),
 #     url(r'^callback/$', 'account.views.callbackby189', name='callback'),
-# 
+#
     url(r'^resetpw/$', 'account.forgot_passwd.forgot_passwd', name='forgot_passwd'),
 #     url(r'^forgot_validate_randcode/$', 'account.forgot_passwd.validate_randcode', name='forgot-validate-randcode'),
 #     url(r'^forgot_validate_telcode/$', 'account.forgot_passwd.validate_telcode', name='forgot-validate-telcode'),
-# 
-#     url(r'^channel/$', 'account.channel.channel', name='account_channel'),
+#
+    url(r'^channel/$', 'account.channel.channel', name='account_channel'),
 #     url(r'^export/$', 'account.channel.export_audit_result', name='export_audit_result'),
-# 
+#
 #     url(r'^submit_itembyitem/$', 'account.channel.submit_itembyitem', name='submit_itembyitem'),
 #     url(r'^revise_project/$', 'account.channel.revise_project', name='revise_project'),
-# 
+#
 #     url(r'^vip/$', 'account.views.vip', name='account_vip'),
+url(r'^get_nums$', 'account.views.get_nums', name='get_nums'),
+url(r'^account_setting/$', 'account.views.account_setting', name='account_setting'),
+url(r'^account_myproject/$', 'account.views.account_myproject', name='account_myproject'),
+url(r'^account_submit/$', 'account.views.account_submit', name='account_submit'),
+url(r'^account_audited/$', 'account.views.account_audited', name='account_audited'),
+url(r'^my_homepage/$', 'account.views.my_homepage', name='my_homepage'),
 ]

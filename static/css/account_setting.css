@@ -87,9 +87,30 @@ canvas{width: 100%;border: 1px solid #000000;}
     margin-right: 20px;
     width: 104px;
     height: 84px;
-    background: url(../images/01_09.png) top center/104px 64px no-repeat;
+    background-position: top center;
+    background-size: 104px 64px;
+    background-repeat: no-repeat;
+    /*background: url(../images/01_09.png) top center/104px 64px no-repeat;*/
     text-align: center;
     cursor: pointer;
+}
+.skin__item.m-01 {
+    background-image: url(../images/skin_1.jpg);
+}
+.skin__item.m-02 {
+    background-image: url(../images/skin_2.jpg);
+}
+.skin__item.m-03 {
+    background-image: url(../images/skin_3.jpg);
+}
+.skin__item.m-04 {
+    background-image: url(../images/skin_4.jpg);
+}
+.skin__item.m-05 {
+    background-image: url(../images/skin_5.jpg);
+}
+.skin__item.m-06 {
+    background-image: url(../images/skin_6.jpg);
 }
 .skin__item.on:after {
     content: '';

@@ -20,7 +20,7 @@ class ProjectList(BaseViewMixin, generics.ListCreateAPIView):
     queryset = Project.objects.filter(state__in=['10','20'])
     serializer_class = ProjectSerializer
     filter_backends = (SearchFilter, django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
-    filter_fields = ['state','type','is_multisub_allowed']
+    filter_fields = ['state','type','is_multisub_allowed','is_official']
     ordering_fields = ('state','pub_date')
     search_fields = ('title', 'introduction')
     pagination_class = MyPageNumberPagination

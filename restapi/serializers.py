@@ -25,7 +25,7 @@ class InvestLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvestLog
         fields = '__all__'
-        read_only_fields = ('audit_state', 'audit_time',
+        read_only_fields = ('audit_state', 'audit_time','submit_time',
                              'settle_amount','return_amount', "admin_user", "is_official")
 class TransListSerializer(serializers.ModelSerializer):
     class Meta:

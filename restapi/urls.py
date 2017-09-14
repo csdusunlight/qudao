@@ -1,8 +1,9 @@
 
-from django.conf.urls import url
+from django.conf.urls import url, include
 from restapi import views
 
 urlpatterns = [
+    url(r'^api-auth/', include('rest_framework.urls',namespace='rest_framework')),
     url(r'^projects/$', views.ProjectList.as_view()),
     url(r'^projects/(?P<pk>[0-9]+)/$', views.ProjectDetail.as_view()),
     

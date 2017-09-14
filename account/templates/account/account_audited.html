@@ -8,6 +8,7 @@
 <!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/add-img.css' %}" />
 <!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />-->
 <!--<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
 
@@ -15,6 +16,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
+
 
 </head>
 
@@ -214,6 +216,28 @@
             </div>
         </div>
     </div>
+    <div class="popup m-add-img">
+        <div class="popup__content" style="width: 600px;">
+            <div class="popup__top">
+                <h2 class="popup__title">编辑自建项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+            </div>
+            <div class="popup__detail">
+                <div class="img-up">
+                    <input type="file" name="picfile" id="choose" accept="image/jpeg,image/png" multiple>
+                    <ul class="img-list"></ul>
+                    <div class="img-btn">
+                            <a id="clear_img" onclick="clearBtn()">清除截图</a>
+                            <a id="upload">上传截图</a>
+                    </div>
+                    <span class="tips">图片格式限jpg和png，最多可上传6张</span>
+                </div>
+            </div>
+            <div class="popup__btnbox">
+                <a id="cancel_add-img" class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
+                <a id="confirm_add-img" class="btn m-green popup__close-btn">确认</a>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 <iframe id="myIFrame" scrolling="yes" src="abount:blank" style="display:none" frameborder=1></iframe>
@@ -221,69 +245,71 @@
 <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
 <script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
+<script type="text/javascript" src="{% static 'js/add-img.js' %}"></script>
 <script type="text/javascript">
 //  未审核
     var data = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>备注</th><th>审核状态</th><th>操作</th></tr>[data]' +
+        '<th>投资金额</th><th>备注</th><th>审核状态</th><th>操作</th></tr>[results]' +
         '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
         '<td>{invest_amount}</td><td>{remark}</td><td>{state}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData(this,{id})">删除' +
-        '</a> │ <a class="jion-s" onclick="editData(this,{id})">编辑</a></td></tr>[/data]</table>';
+        '</a> │ <a class="jion-s" onclick="editData(this,{id})">编辑' +
+        '</a> │ <a class="jion-s" onclick="addImg(this,{id})">提交截图</a></td></tr>[/results]</table>';
 //  已通过
     var data1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>返现金额</th><th>备注</th><th>审核状态</th></tr>[data]' +
+        '<th>投资金额</th><th>返现金额</th><th>备注</th><th>审核状态</th></tr>[results]' +
         '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
-        '<td>{invest_amount}</td><td>{ret_amount}</td><td>{remark}</td><td>{state}</td></tr>[/data]</table>';
+        '<td>{invest_amount}</td><td>{ret_amount}</td><td>{remark}</td><td>{state}</td></tr>[/results]</table>';
 //  已拒绝
     var data2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>拒绝原因</th><th>备注</th><th>审核状态</th></tr>[data]' +
+        '<th>投资金额</th><th>拒绝原因</th><th>备注</th><th>审核状态</th></tr>[results]' +
         '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
-        '<td>{invest_amount}</td><td>{refuse_reason}</td><td>{remark}</td><td>{state}</td></tr>[/data]</table>';
+        '<td>{invest_amount}</td><td>{refuse_reason}</td><td>{remark}</td><td>{state}</td></tr>[/results]</table>';
 //  已删除
     var data3 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>备注</th><th>审核状态</th></tr>[data]' +
+        '<th>投资金额</th><th>备注</th><th>审核状态</th></tr>[results]' +
         '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
-        '<td>{invest_amount}</td><td>{remark}</td><td>{state}</td></tr>[/data]</table>';
+        '<td>{invest_amount}</td><td>{remark}</td><td>{state}</td></tr>[/results]</table>';
       
 //  未审核
     var data_user = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th><th>操作</th></tr>[data]' +
+        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th><th>操作</th></tr>[results]' +
         '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
         '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zfbname}</td><td>{remark}</td><td>{state}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData_02(this,{id})">删除' +
-        '</a> │ <a class="jion-s" onclick="editData_02(this,{id})">编辑</a></td></tr>[/data]</table>';
+        '</a> │ <a class="jion-s" onclick="editData_02(this,{id})">编辑</a></td></tr>[/results]</table>';
 //  已通过
     var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th></tr>[data]' +
+        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th></tr>[results]' +
         '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zfbname}</td><td>{remark}</td><td>{state}</td></tr>[/data]</table>';
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zfbname}</td><td>{remark}</td><td>{state}</td></tr>[/results]</table>';
 //  已打款
     var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>返现金额</th><th>备注</th><th>审核状态</th></tr>[data]' +
+        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>返现金额</th><th>备注</th><th>审核状态</th></tr>[results]' +
         '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zfbname}</td><td>{ret_amount}</td><td>{remark}</td><td>{state}</td></tr>[/data]</table>';
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zfbname}</td><td>{ret_amount}</td><td>{remark}</td><td>{state}</td></tr>[/results]</table>';
 //  已拒绝
     var data_user3 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>拒绝原因</th><th>备注</th><th>审核状态</th></tr>[data]' +
+        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>拒绝原因</th><th>备注</th><th>审核状态</th></tr>[results]' +
         '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zfbname}</td><td>{refuse_reason}</td><td>{remark}</td><td>{state}</td></tr>[/data]</table>';
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zfbname}</td><td>{refuse_reason}</td><td>{remark}</td><td>{state}</td></tr>[/results]</table>';
 //  已删除
     var data_user4 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th></tr>[data]' +
+        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th></tr>[results]' +
         '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zfbname}</td><td>{remark}</td><td>{state}</td></tr>[/data]</table>';
-        var url = "{% url 'get_admin_finance_page' %}" + "?page={page}&size={pageSize}";
-        var url = "{% url 'get_admin_finance_page' %}" + "?page={page}&size={pageSize}";
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zfbname}</td><td>{remark}</td><td>{state}</td></tr>[/results]</table>';
+
+        var url = "/restapi/projects/?page={page}&size={pageSize}";
         
         $("#pagedata").ajaxPage({
-            url: url + "&state=1",
+            url: url,
             pageId: $("#page"),
             pageSize: 10,
             run: true,
             content: data,
         });
         $("#pagedata2").ajaxPage({
-            url: url + "&state=1",
+            url: url,
             pageId: $("#page2"),
             pageSize: 10,
             run: true,
@@ -293,6 +319,9 @@
         //          编辑/删除数据部分(官方)
         function removeData (obj,id) {
         console.log(id);
+        }
+        function addImg (obj,id) {
+            $('.popup.m-add-img').addClass('in');
         }
         var project_id;
         var edit_parent;
@@ -538,7 +567,7 @@
                 console.log(newurl);
                 $("#page").empty();
                 $("#pagedata").ajaxPage({
-                    url: newurl,
+                    url: url,
                     pageId: $("#page"),
                     pageSize: 10,
                     run: true,
@@ -546,7 +575,7 @@
                 });
             });
             $("#export").click(function() {
-                var html = '<form action="' + "{% url 'export_finance_excel' %}" + '" method="get" target="_self" id="postData_form">';
+                var html = '<form action="' + "export_finance_excel" + '" method="get" target="_self" id="postData_form">';
                 var proj_name = $("#proj_name").val(),
                     invest_date0 = $("#invest_date0").val(),
                     invest_date1 = $("#invest_date1").val(),
@@ -615,7 +644,7 @@
                 console.log(newurl);
                 $("#page").empty();
                 $("#pagedata2").ajaxPage({
-                    url: newurl,
+                    url: url,
                     pageId: $("#page2"),
                     pageSize: 10,
                     run: true,
@@ -623,7 +652,7 @@
                 });
             });
             $("#export_02").click(function() {
-                var html = '<form action="' + "{% url 'export_finance_excel' %}" + '" method="get" target="_self" id="postData_form">';
+                var html = '<form action="' + "export_finance_excel" + '" method="get" target="_self" id="postData_form">';
                 var proj_name = $("#proj_name_02").val(),
                     invest_date0 = $("#invest_date0_02").val(),
                     invest_date1 = $("#invest_date1_02").val(),
@@ -661,7 +690,7 @@
                     return;
                 }
                 $.ajaxFileUpload({
-                    url: "{% url 'import_finance_excel'%}",
+                    url: "import_finance_excel",
                     secureuri: false,
                     fileElementId: fileElementId, //file标签的id
                     dataType: 'json', //返回数据的类型
@@ -681,7 +710,50 @@
             });
             
             
-
+    //      图片上传部分
+            $('#confirm_add-img').click(function(){
+                var xhr = new XMLHttpRequest();
+                var formdata = getFormData();
+//              var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+                var telnum = $('input#telnum').val();
+                var remark = $('input#remark').val();
+                if(file_list.length == 0) {
+                    alert("请上传任务完成截图");
+                    return;
+                }
+                console.log(file_list);
+                for(i in file_list) {
+                    formdata.append(file_list[i].name, file_list[i].blob);
+                }
+//              formdata.append('id', id);
+                formdata.append('telnum', telnum);
+                formdata.append('remark', remark);
+//              formdata.append('csrfmiddlewaretoken', csrfmiddlewaretoken);
+                xhr.open('post', '/restapi/projects/');
+                xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+//              maskIn();
+                xhr.onreadystatechange = function() {
+                    $(".img-mask").css("display", "none");
+                    if(xhr.readyState == 4 && xhr.status == 200) {
+                        var ret = JSON.parse(xhr.responseText);
+                        if(ret.code == 0) {
+                            $(".img-mask").css("display", "none");
+                            alert("请先登录！")
+                            window.location.href = ret.url;
+                            return;
+                        } else if(ret.code == 1) {
+                            $("#hint").text("任务完成，请耐心等待工作人员审核!")
+//                          popupIn();
+                        } else {
+                            $("#hint").text(ret.msg)
+//                          popupIn()
+                        }
+                    }
+                };
+        
+                xhr.send(formdata);
+            })
+    //      图片上传部分---end
         })
 </script>
 </body>

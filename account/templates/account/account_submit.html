@@ -272,17 +272,18 @@
 			{% include "outline.html" %}
 
 			<script type="text/javascript">
+			    $('.back-a4').toggleClass("on");
 				var data = '<table width="100%"><tr><th width="12%">项目名称</th><th>投资日期</th><th>提交手机号</th>' +
 					'<th>投资金额</th><th>投资标期</th><th>备注</th>' +
-					'</tr>[data]<tr><td>{project}</td><td>{invest_time}</td><td>{mobile}</td>' +
+					'</tr>[results]<tr><td>{project}</td><td>{invest_time}</td><td>{mobile}</td>' +
 					'<td>{invest_amount}</td><td>{invest_term}</td><td>{remark}</td>' +
-					'</tr>[/data]</table>';
+					'</tr>[/results]</table>';
 //				var data2 = '<table width="100%"><tr><th width="12%">项目</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
 //					'<th>投资金额</th><th width="15%">备注</th><th>审核结果</th><th>返现福币</th><th width="12%">操作</th>' +
 //					'</tr>[data]<tr><td>{project}</td><td>{invest_time}</td><td>{mobile}</td>' +
 //					'<td>{invest_term}</td><td>{invest_amount}</td><td>{remark}</td><td>{audit_result}</td>' +
 //					'<td>{return_amount}</td><td><a class="revise-data" onclick=reviseData({id},this)>修改</a></td></tr>[/data]</table>';
-				var url = "{% url 'get_channel_result_page' %}" + "?page={page}&size={pageSize}";
+				var url = "/restapi/projects/?page={page}&size={pageSize}";
 				$('.back-a14').toggleClass("on");
 				$.ajaxSetup({
 					data: {
@@ -576,7 +577,7 @@
 						repeat_phone = re_phone;
 						var data = Data2.join('$');
 						$.ajax({
-							url: "{%url 'submit_itembyitem' %}",
+							url: "url",
 							dataType: "json",
 							type: "POST",
 							async: false,
@@ -694,7 +695,7 @@
 ////						alert("请先选择项目");
 ////						return;
 ////					}
-//					var html = '<form action="' + "{% url 'export_audit_result' %}" + '" method="get" target="_self" id="postData_form">';
+//					var html = '<form action="' + "" + '" method="get" target="_self" id="postData_form">';
 //					html += '<input name="fid" type="hidden" value="' + fid + '"/></form>';
 //					var iframe = document.getElementById('myIFrame');
 //					iframe.contentWindow.document.open();
@@ -748,63 +749,63 @@
 //					$('.date_picker').date_input();
 //				})
 
-				$("#confirm_revise").click(function() {
-					var invest_project = $(".invest-project").val(),
-						invest_time = $(".invest-time").val(),
-						invest_tel = $(".submit-tel").val(),
-						invest_days = $(".invest-days").val(),
-						invest_money = $(".invest-money").val(),
-						invest_remarks = $(".invest-remarks").val();
-					console.log(invest_project);
-//					var bank = $("#bank option:selected").val();
-					console.log(project_id+","+invest_project+","+invest_time+","+invest_tel+","+invest_days+","+invest_money+","+invest_remarks+",");
-					if(!invest_project || !invest_time || !invest_tel || !invest_days || !invest_money) {
-						alert("填写项不能为空");
-						return;
-					}
-					if(invest_project == 0) {
-						alert("请选择项目");
-						return;
-					}
-
-					var revise_url = "{%url 'revise_project' %}";
-					$.ajax({
-						url: revise_url,
-						dataType: "json",
-						type: 'POST',
-						data: {
-							'project_id': project_id,
-							'invest_project': invest_project,
-							'invest_time': invest_time,
-							'invest_tel': invest_tel,
-							'invest_days': invest_days,
-							'invest_money': invest_money,
-							'invest_remarks': invest_remarks
-						},
-						success: function(ret) {
-							if(ret.code == 1) {
-								alert("请重新登录！")
-								window.location.href = ret.url;
-							} else if(ret.code == 0) {
-								alert("更改数据成功！");
-								console.log(ret.data);
-								var parent_dom = $(revise_parent);
-								parent_dom.find("td").eq(0).text(ret.data.content_object);
-								parent_dom.find("td").eq(1).text(ret.data.invest_time);
-								parent_dom.find("td").eq(2).text(ret.data.invest_account);
-								parent_dom.find("td").eq(3).text(ret.data.invest_term);
-								parent_dom.find("td").eq(4).text(ret.data.invest_amount);
-								parent_dom.find("td").eq(5).text(ret.data.remark);
-								popupOutInfo();
-							} else {
-								alert(ret.res_msg);
-							}
-						},
-						error: function() {
-							alert("请检查网络连接");
-						}
-					});
-				});
+//				$("#confirm_revise").click(function() {
+//					var invest_project = $(".invest-project").val(),
+//						invest_time = $(".invest-time").val(),
+//						invest_tel = $(".submit-tel").val(),
+//						invest_days = $(".invest-days").val(),
+//						invest_money = $(".invest-money").val(),
+//						invest_remarks = $(".invest-remarks").val();
+//					console.log(invest_project);
+////					var bank = $("#bank option:selected").val();
+//					console.log(project_id+","+invest_project+","+invest_time+","+invest_tel+","+invest_days+","+invest_money+","+invest_remarks+",");
+//					if(!invest_project || !invest_time || !invest_tel || !invest_days || !invest_money) {
+//						alert("填写项不能为空");
+//						return;
+//					}
+//					if(invest_project == 0) {
+//						alert("请选择项目");
+//						return;
+//					}
+//
+//					var revise_url = url;
+//					$.ajax({
+//						url: revise_url,
+//						dataType: "json",
+//						type: 'POST',
+//						data: {
+//							'project_id': project_id,
+//							'invest_project': invest_project,
+//							'invest_time': invest_time,
+//							'invest_tel': invest_tel,
+//							'invest_days': invest_days,
+//							'invest_money': invest_money,
+//							'invest_remarks': invest_remarks
+//						},
+//						success: function(ret) {
+//							if(ret.code == 1) {
+//								alert("请重新登录！")
+//								window.location.href = ret.url;
+//							} else if(ret.code == 0) {
+//								alert("更改数据成功！");
+//								console.log(ret.data);
+//								var parent_dom = $(revise_parent);
+//								parent_dom.find("td").eq(0).text(ret.data.content_object);
+//								parent_dom.find("td").eq(1).text(ret.data.invest_time);
+//								parent_dom.find("td").eq(2).text(ret.data.invest_account);
+//								parent_dom.find("td").eq(3).text(ret.data.invest_term);
+//								parent_dom.find("td").eq(4).text(ret.data.invest_amount);
+//								parent_dom.find("td").eq(5).text(ret.data.remark);
+//								popupOutInfo();
+//							} else {
+//								alert(ret.res_msg);
+//							}
+//						},
+//						error: function() {
+//							alert("请检查网络连接");
+//						}
+//					});
+//				});
 
 			</script>
 	</body>

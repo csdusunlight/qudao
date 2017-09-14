@@ -71,7 +71,7 @@ Project_TYPE = (
 )
 class Project(Base):
     create_user = models.ForeignKey(MyUser, null=True, related_name="created_projects")
-    is_official = models.BooleanField()
+    is_official = models.BooleanField(u"是否官方项目")
     state = models.CharField(u"项目状态", max_length=1, choices=Project_STATE)
     pic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）")
     strategy = models.URLField(u"攻略链接")

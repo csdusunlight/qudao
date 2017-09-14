@@ -11,9 +11,9 @@ from account.models import MyUser
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyUser
-        fields = ('mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'type',
+        fields = ('id', 'mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'type',
                   'level', 'picture', 'profile', 'balance', 'is_active')
-        read_only_fields = ('mobile', 'username', 'balance', 'is_active', 'level', 'type')
+        read_only_fields = ('id', 'mobile', 'username', 'balance', 'is_active', 'level', 'type')
         
 class ProjectSerializer(serializers.ModelSerializer):
 #     subscribers = UserSerializer(many=True)

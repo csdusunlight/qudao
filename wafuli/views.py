@@ -1,6 +1,6 @@
 # #coding:utf-8
 # from django.shortcuts import render
-# 
+#
 # from django.http.response import Http404
 # from wafuli.models import Welfare, Task, Finance, Commodity, Information, \
 #     ExchangeRecord, Press, UserEvent, Advertisement, Activity, Company,\
@@ -29,10 +29,12 @@
 # logger = logging.getLogger('wafuli')
 # from .tools import listing
 # import re
-# 
+#
 from django.shortcuts import render
 def index(request):
     return render(request, 'wfl-index.html', )
+def project_all(request):
+    return render(request, 'finance_all.html', )
 #     ad_list = Advertisement.objects.filter(Q(location='0')|Q(location='1'),is_hidden=False)[0:8]
 #     announce_list = Press.objects.filter(type='1')[0:5]
 #     hongbao_list = Hongbao.objects.filter(is_display=True,state='1')[0:3]
@@ -75,7 +77,7 @@ def index(request):
 #     task_list = list(Task.objects.filter(state__in=['1','2'],type='senior').order_by("state","-news_priority","-pub_date")[0:2])
 #     if len(task_list)==2:
 #         context.update(task5=task_list[0],task6=task_list[1])
-# 
+#
 #     try:
 #         statis = DayStatis.objects.get(date=date.today())
 #     except:
@@ -86,7 +88,7 @@ def index(request):
 #     if glo_statis:
 #         all_wel_num = glo_statis.all_wel_num
 #         withdraw_total = int(glo_statis.award_total/100.0)
-# 
+#
 #     else:
 #         withdraw_total = 0
 #         all_wel_num = 0
@@ -127,8 +129,8 @@ def index(request):
 #                'week_statis':week_statis,#提现金额周排名前8
 #                'month_statis':month_statis,#提现金额月排名前8
 #     }
-# 
-# 
+#
+#
 #     try:
 #         statis = DayStatis.objects.get(date=date.today())
 #     except:
@@ -139,7 +141,7 @@ def index(request):
 #     if glo_statis:
 #         all_wel_num = glo_statis.all_wel_num
 #         withdraw_total = int(glo_statis.award_total/100.0)
-# 
+#
 #     else:
 #         withdraw_total = 0#提现总额
 #         all_wel_num = 0
@@ -153,7 +155,7 @@ def index(request):
 #         else:
 #             isSigned = True
 #         context.update(isSigned=isSigned)
-#     
+#
 #     return render(request, 'wfl-index.html', context)
 # # def get_hongbao_by_type(request):
 # #     htype = request.GET.get('type', None)
@@ -181,7 +183,7 @@ def index(request):
 #     ordering_fields = ('up','startTime')
 #     search_fields = ('title', 'subtitle', 'provider', 'seo_description')
 #     pagination_class = ProjectPageNumberPagination
-# 
+#
 # def hongbao(request, id):
 #     if id is None:
 #         ad_list = MAdvert_PC.objects.filter(location='10', is_hidden=False)[0:6]
@@ -220,8 +222,8 @@ def index(request):
 #         hongbao.down = F('down') + 1
 #         hongbao.save(update_fields=['down',])
 #     return JsonResponse({})
-# 
-# 
+#
+#
 # def finance(request, id=None):
 #     if id is None:
 #         ad_list = Advertisement.objects.filter(Q(location='0')|Q(location='4'),is_hidden=False)[0:8]
@@ -260,7 +262,7 @@ def index(request):
 #                    'table':table,
 #         }
 #         return render(request, 'detail-finance.html', context)
-# 
+#
 # def task(request, id=None):
 #     if id is None:
 #         ad_list = Advertisement.objects.filter(Q(location='0')|Q(location='3'),is_hidden=False)[0:8]
@@ -322,11 +324,11 @@ def index(request):
 #     except Press.DoesNotExist:
 #         raise Http404(u"该页面不存在")
 #     return render(request, 'detail-press.html',{'press':press})
-# 
+#
 # def aboutus(request):
 #     ad_list = Advertisement.objects.filter(Q(location='0')|Q(location='6'),is_hidden=False).first
 #     return render(request, 'aboutus.html',{'ad_list':ad_list})
-# 
+#
 # # def experience_taskandfinance(request):
 # #     if not request.is_ajax():
 # #         logger.warning("Experience refused no-ajax request!!!")
@@ -394,7 +396,7 @@ def index(request):
 #             logger.info(e)
 #     result = {'code':0, 'suc_num':suc_num, 'exist_num':exist_num, 'exist_phone':exist_phone}   #jzy
 #     return JsonResponse(result)
-# 
+#
 # def expsubmit_task(request):
 #     if not request.is_ajax():
 #         logger.warning("Expsubmit refused no-ajax request!!!")
@@ -452,7 +454,7 @@ def index(request):
 #         record.delete()
 #     result = {'code':code, 'msg':msg}
 #     return JsonResponse(result)
-# 
+#
 # def mall(request):
 #     ad_list = Advertisement.objects.filter(Q(location='0')|Q(location='5'),is_hidden=False)[0:8]
 #     help_list = Press.objects.filter(type='5')[0:10]
@@ -498,7 +500,7 @@ def index(request):
 #     res["recordCount"] = item_list.count()
 #     res["data"] = data
 #     return JsonResponse(res)
-# 
+#
 # #查询订单详情
 # def lookup_order(request):
 #     if not request.is_ajax():
@@ -528,7 +530,7 @@ def index(request):
 #         result['mes'] = record.message
 #         result['code'] = 0
 #     return JsonResponse(result)
-# 
+#
 # def submit_order(request):
 #     if not request.is_ajax():
 #         raise Http404
@@ -563,7 +565,7 @@ def index(request):
 #         logger.debug('Exchanging scores is failed to reduce!!!')
 #         result['code'] = 1
 #     return JsonResponse(result)
-# 
+#
 # def get_finance_page(request):
 #     res={'code':0,}
 #     page = request.GET.get("page", None)
@@ -754,8 +756,8 @@ def index(request):
 #     res["recordCount"] = item_list.count()
 #     res["data"] = data
 #     return JsonResponse(res)
-# 
-# 
+#
+#
 # def business(request, page=None):
 #     if not page:
 #         page = 1
@@ -798,7 +800,7 @@ def index(request):
 #         'hot_wel_list':hot_wel_list,
 #     }
 #     return render(request, "business.html", content)
-# 
+#
 # def information(request, type=None, page=None, id=None):
 #     if not id:
 #         if not page:
@@ -867,7 +869,7 @@ def index(request):
 #         update_view_count(info)
 #         hot_info_list = Information.objects.filter(is_display=True).order_by('-view_count')[0:6]
 #         return render(request, 'detail-information.html',{'info':info, 'hot_info_list':hot_info_list, 'type':'Information'})
-# 
+#
 # @login_required
 # def display_screenshot(request):
 #     id = request.GET.get('id', None)

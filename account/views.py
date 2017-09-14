@@ -284,11 +284,36 @@ def phoneImageV(request):
 def account(request):
     return render(request, 'account/account_index.html',)
 
+@login_required
+def account_setting(request):
+    return render(request, 'account/account_setting.html',)
+
+@login_required
+def account_myproject(request):
+    return render(request, 'account/account_myproject.html',)
+
+@login_required
+def account_submit(request):
+    return render(request, 'account/account_submit.html',)
+
+@login_required
+def account_audited(request):
+    return render(request, 'account/account_audited.html',)
+
+@login_required
+def get_nums(request):
+    coupon_num = Coupon.objects.filter(user=request.user, is_used=False).count()
+    message_num = Message.objects.filter(user=request.user, is_read=False).count()
+    result = {'coupon_num':coupon_num,'message_num':message_num,}
+    return JsonResponse(result)
+
+def my_homepage(request):
+    return render(request, 'account/my_homepage.html',)
 # def signin(request):
-# 
+#
 #     if not request.is_ajax():
 #         raise Http404
-# 
+#
 #     result={'code':-1, 'url':''}
 #     if not request.user.is_authenticated():
 #         result['code'] = -1
@@ -586,7 +611,7 @@ def withdraw(request):
 #                 result['res_msg'] = u'操作失败，请联系客服！'
 #         print result
 #         return JsonResponse(result)
-# 
+#
 # def get_user_invite_page(request):
 #     if not request.is_ajax():
 #         raise Http404
@@ -609,7 +634,7 @@ def withdraw(request):
 #         filter = 0
 #     if not page or size <= 0 or filter < 0 or filter > 2:
 #         raise Http404
-# 
+#
 #     data = []
 #     if filter == 0:
 #         invitees = user.invitees.all()
@@ -669,7 +694,7 @@ def withdraw(request):
 #                 audit_state='0',).extra(select=select)\
 #                 .values('month').annotate(cou=Count('user',distinct=True),sumofwith=Sum('invest_amount')).order_by('-month',)
 #         paginator = Paginator(withdraw_list, size)
-# 
+#
 #         try:
 #             contacts = paginator.page(page)
 #         except PageNotAnInteger:

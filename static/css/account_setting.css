@@ -1,0 +1,132 @@
+.RightCont {
+    background-color: #fff;
+}
+.top-title {
+    margin-left: 30px;
+    line-height: 58px;
+}
+.btn.m-exp {
+    float: right;
+    margin-top: 11px;
+    margin-right: 20px;
+}
+.item {
+    margin-top: 26px;
+}
+.item__name {
+    position: relative;
+    display: inline-block;
+    width: 200px;
+    padding-left: 40px;
+    vertical-align: top;
+}
+.item__name.m-need:after {
+    content: '*';
+    position: absolute;
+    top: 0;
+    left: 70px;
+    color: red;
+}
+.user-img {
+    display: inline-block;
+}
+.notice-box {
+    display: inline-block;
+}
+.input-box {
+    margin-bottom: 10px;
+}
+.add-notice {
+    text-decoration: underline;
+}
+.add-notice,
+.delete-notice {
+    display: inline-block;
+    margin: 0 10px;
+}
+/*体验福利新加样式*/
+.userimg {
+    background-image: url(../images/about03.png);
+}
+.img-up {
+    display: inline-block;
+}
+#choose {display: none;}
+canvas{width: 100%;border: 1px solid #000000;}
+#upload {
+    display: inline-block;
+    margin-top: 8px;
+    width: 110px;
+    text-align: center;
+    text-decoration: underline;
+}
+.img-list{
+    width: 110px;
+    height: 110px;
+    overflow: hidden;
+}
+.img-list .userimg {
+    position: relative;
+    display: inline-block;
+    width: 110px;
+    height: 110px;
+    margin: 5px 5px 20px 5px;
+    border: 1px solid rgb(100, 149, 198);
+    background-position: center;
+    background-repeat:no-repeat;
+    background-size: cover;
+}
+.skin {
+    display: inline-block;
+    font-size: 0;
+}
+.skin__item {
+    position: relative;
+    display: inline-block;
+    padding-top: 70px;
+    margin-right: 20px;
+    width: 104px;
+    height: 84px;
+    background-position: top center;
+    background-size: 104px 64px;
+    background-repeat: no-repeat;
+    /*background: url(../images/01_09.png) top center/104px 64px no-repeat;*/
+    text-align: center;
+    cursor: pointer;
+}
+.skin__item.m-01 {
+    background-image: url(../images/skin_1.jpg);
+}
+.skin__item.m-02 {
+    background-image: url(../images/skin_2.jpg);
+}
+.skin__item.m-03 {
+    background-image: url(../images/skin_3.jpg);
+}
+.skin__item.m-04 {
+    background-image: url(../images/skin_4.jpg);
+}
+.skin__item.m-05 {
+    background-image: url(../images/skin_5.jpg);
+}
+.skin__item.m-06 {
+    background-image: url(../images/skin_6.jpg);
+}
+.skin__item.on:after {
+    content: '';
+    position: absolute;
+    right: -10px;
+    bottom: 10px;
+    width: 22px;
+    height: 22px;
+    background: url(../images/skin-on.png) center center no-repeat;
+}
+.item .item__txt {
+    width: 350px;
+}
+.btnbox {
+    text-align: center;
+}
+.btnbox .btn {
+    margin: 26px 100px;
+}

@@ -1,4 +1,15 @@
 .RightCont {
+    /*background-color: #fff;*/
+}
+.right-top {
+    background-color: #fff;
+}
+.user-info-box {
+    background-color: #fff;
+}
+.notice-info-box {
+    margin-top: 20px;
+    padding-top: 20px;
     background-color: #fff;
 }
 .top-title {
@@ -11,7 +22,7 @@
     margin-right: 20px;
 }
 .item {
-    margin-top: 26px;
+    padding-top: 26px;
 }
 .item__name {
     position: relative;
@@ -129,4 +140,27 @@ canvas{width: 100%;border: 1px solid #000000;}
 }
 .btnbox .btn {
     margin: 26px 100px;
+}
+
+.notice-title {
+    margin-left: 30px;
+}
+.notice-exist-title {
+    margin-top: 20px;
+    margin-left: 30px;
+    font-size: 16px;
+}
+.notice-exist {
+    padding: 20px 30px;
+}
+.notice-item {
+    line-height: 40px;
+}
+.notice-add,
+.notice-change,
+.notice-delete {
+    display: inline-block;
+    margin-left: 10px;
+    text-decoration: underline;
+    cursor: pointer;
 }

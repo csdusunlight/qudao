@@ -16,15 +16,15 @@
 <script type="text/javascript">
 var data1 = '<table width="100%"><thead><tr><th width="25%" height="44">项目</th>' +
 '<th width="30%">福币(个)</th><th width="25%">获取时间</th><th width="20%">备注</th></tr></thead><tbody>'+
-'[data]<tr><td height="48">{item}</td><td>{amount}</td><td>{time}</td><td>{remark}</td></tr>[/data]'+
+'[results]<tr><td height="48">{item}</td><td>{amount}</td><td>{time}</td><td>{remark}</td></tr>[/results]'+
 '</tbody></table>';
 var data2 = '<table width="100%"><thead><tr><th width="25%" height="44">项目</th>' +
 '<th width="30%">福币(个)</th><th width="25%">申请时间</th><th width="20%">提现状态</th></tr></thead><tbody>'+
-'[data]<tr><td height="48">{item}</td><td>{amount}</td><td>{time}</td>' +
-'<td reason="{reason}" class="state_{state_int}">{state}</td></tr>[/data]' + '</tbody></table>';
-var url = "{% url 'get_user_money_page' %}" + "?page={page}&size={pageSize}&filter=";
+'[results]<tr><td height="48">{item}</td><td>{amount}</td><td>{time}</td>' +
+'<td reason="{reason}" class="state_{state_int}">{state}</td></tr>[/results]' + '</tbody></table>';
+var url = "/restapi/projects/" + "?page={page}&size={pageSize}";
 function emptydisplay(obj){
-	pic_url = "{%static 'images/picin.png' %}";
+	pic_url = "/restapi/projects/";
 	obj.html('<div class="Defa-in"><img src="' + pic_url + '">'+
 			'<h2>咦~~ 您还没有相关记录~~</h2></div>');
 }
@@ -34,9 +34,8 @@ $(function(){
     	$(".Listpop").css("display","none")<!--隐藏-->
     });
 	$("#pagedata").ajaxPage({
-	    url:url+0,
+	    url:url,
 	    pageId:$("#page"),
-	    pageSize:6,
 	    run:true,
 	    content:data1,
 	});

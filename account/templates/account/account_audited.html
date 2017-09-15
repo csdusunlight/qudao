@@ -91,10 +91,10 @@
             <div class="search__item">
                 <span class="search__name">审核状态：</span>
                 <select name="select_status" id="state_02">
-                    <option value="0">未审核</option>
-                    <option value="1">已通过</option>
+                    <option value="1">未审核</option>
+                    <option value="0">已通过</option>
                     <option value="2">已拒绝</option>
-                    <option value="3">已删除</option>
+                    <!--<option value="3">已删除</option>-->
                 </select>
             </div>
         </div>
@@ -299,7 +299,8 @@
         '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
         '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zfbname}</td><td>{remark}</td><td>{state}</td></tr>[/results]</table>';
 
-        var url = "/restapi/projects/?page={page}&size={pageSize}";
+        var url = "/restapi/investlogs/?page={page}&size={pageSize}&is_official=true";
+        var url2 = "/restapi/investlogs/?page={page}&size={pageSize}&is_official=false";
         
         $("#pagedata").ajaxPage({
             url: url,
@@ -309,7 +310,7 @@
             content: data,
         });
         $("#pagedata2").ajaxPage({
-            url: url,
+            url: url2,
             pageId: $("#page2"),
             pageSize: 10,
             run: true,
@@ -524,7 +525,7 @@
 //      编辑/删除部分（自建）---end
         
         $(function(){
-            $('.back-a2').toggleClass("on");
+            $('.back-a5').toggleClass("on");
             
             $(".RightCont").on("focus", ".date_picker", function() {
                 $(this).date_input();
@@ -610,24 +611,24 @@
                     telnum_sub = $("#telnum_sub_02").val(),
                     zhifubao = $("#zhifubao_02").val(),
                     state = $("#state_02").val();
-                var newurl = url;
+                var newurl = url2;
                 if(proj_name) {
-                    newurl += "&proj_name=" + proj_name;
+                    newurl += "&project=" + proj_name;
                 }
                 if(invest_date0) {
-                    newurl += "&invest_date0=" + invest_date0;
+                    newurl += "&investtime_0=" + invest_date0;
                 }
                 if(invest_date1) {
-                    newurl += "&invest_date1=" + invest_date1;
+                    newurl += "&investtime_1=" + invest_date1;
                 }
                 if(telnum_sub) {
-                    newurl += "&telnum_sub=" + telnum_sub;
+                    newurl += "&invest_mobile=" + telnum_sub;
                 }
                 if(zhifubao) {
                     newurl += "&zhifubao=" + zhifubao;
                 }
                 if(state) {
-                    newurl += "&state=" + state;
+                    newurl += "&audit_state=" + state;
                 }
                 
                 var search_data = data_user;
@@ -644,7 +645,7 @@
                 console.log(newurl);
                 $("#page").empty();
                 $("#pagedata2").ajaxPage({
-                    url: url,
+                    url: newurl,
                     pageId: $("#page2"),
                     pageSize: 10,
                     run: true,

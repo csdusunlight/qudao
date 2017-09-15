@@ -36,7 +36,7 @@ from transaction import charge_money
 from account.tools import send_mail, get_client_ip
 from django.db import connection, transaction
 from wafuli.data import BANK
-from wafuli.models import TransList, WithdrawLog
+from wafuli.models import TransList, WithdrawLog, Project, SubscribeShip
 @sensitive_post_parameters()
 @csrf_protect
 @never_cache
@@ -300,12 +300,7 @@ def account_submit(request):
 def account_audited(request):
     return render(request, 'account/account_audited.html',)
 
-@login_required
-def get_nums(request):
-    coupon_num = Coupon.objects.filter(user=request.user, is_used=False).count()
-    message_num = Message.objects.filter(user=request.user, is_read=False).count()
-    result = {'coupon_num':coupon_num,'message_num':message_num,}
-    return JsonResponse(result)
+
 
 def my_homepage(request):
     return render(request, 'account/my_homepage.html',)
@@ -724,3 +719,45 @@ def withdraw(request):
 def vip(request):
     return render(request, 'account/account_vip.html')
 
+from django.db.models import Q
+def project_manage(request):
+    if request.method == "GET":
+        user = request.user
+        res={'code':0,}
+        projects = Project.objects.filter(state__in=['10','20'], Q(is_officail=True) | Q(user__id=user.id))
+        subprojects = SubscribeShip.objects.filter(user=user).values('project_id','price','is_recommend')
+        print subprojects
+        page = request.GET.get("page", None)
+        size = request.GET.get("size", 20)
+        try:
+            size = int(size)
+        except ValueError:
+            size = 20
+        if not page or size <= 0:
+            raise Http404
+        item_list = projects
+        paginator = Paginator(item_list, size)
+        try:
+            contacts = paginator.page(page)
+        except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+            contacts = paginator.page(1)
+        except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+            contacts = paginator.page(paginator.num_pages)
+        data = []
+        for con in contacts:
+            is_on = con.id in subprojects
+#             i = {"name":con.title,
+#                  "price":con.price,
+#                  "url":con.url,
+#                  "pic":con.pic.url,
+#                  }
+#             data.append(i)
+        if data:
+            res['code'] = 1
+        res["pageCount"] = paginator.num_pages
+        res["recordCount"] = item_list.count()
+        res["data"] = data
+    else:
+        return render(request, 'account/myproject.html')

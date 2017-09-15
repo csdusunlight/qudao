@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyUser
         fields = ('id', 'mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'type',
-                  'level', 'picture', 'profile', 'balance', 'is_active')
+                  'level', 'picture', 'profile', 'balance', 'is_active', 'color')
         read_only_fields = ('id', 'mobile', 'username', 'balance', 'is_active', 'level', 'type')
         
 class ProjectSerializer(serializers.ModelSerializer):
@@ -44,7 +44,7 @@ class SubscribeShipSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubscribeShip
         fields = '__all__'
-        read_only_fields = ('user', 'project')
+#         read_only_fields = ('user', 'project')
         
 class AnnouncementSerializer(serializers.ModelSerializer):
     class Meta:

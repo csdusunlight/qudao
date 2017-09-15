@@ -20,4 +20,7 @@ urlpatterns = [
     
     url(r'^announcement/$', views.AnnouncementList.as_view()),
     url(r'^announcement/(?P<pk>[0-9]+)/$', views.AnnouncementDetail.as_view(), kwargs={'partial':True}),
+    
+    url(r'^sub/$', views.SubscribeShipList.as_view()),
+    url(r'^sub/(?P<pk>[0-9]+)/$', views.SubscribeShipDetail.as_view(), kwargs={'partial':True}),
 ]

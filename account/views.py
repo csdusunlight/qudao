@@ -727,7 +727,7 @@ def project_manage(request):
         user = request.user
         res={'code':0,}
         projects = Project.objects.filter(state__in=['10','20']).filter(Q(is_official=True) | Q(user__id=user.id))
-        subprojects = SubscribeShip.objects.filter(user=user)
+        subprojects = SubscribeShip.objects.filter(user=user).values('project_id', 'price', 'is_recommend')
         print subprojects
         page = request.GET.get("page", None)
         size = request.GET.get("size", 20)

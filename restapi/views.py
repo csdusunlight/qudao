@@ -95,9 +95,6 @@ class NoticeDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsOwnerOrStaff,)
     
 class SubscribeShipList(BaseViewMixin, generics.ListCreateAPIView):
-    def get_queryset(self):
-        user = self.request.user
-        return Notice.objects.filter(user=user)
     queryset = SubscribeShip.objects.all()
     serializer_class = SubscribeShipSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, )
@@ -105,12 +102,13 @@ class SubscribeShipList(BaseViewMixin, generics.ListCreateAPIView):
     pagination_class = MyPageNumberPagination
 
 class SubscribeShipDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_staff:
-            return InvestLog.objects.all()
-        else:
-            return InvestLog.objects.filter(user=user)
+    queryset = SubscribeShip.objects.all()
+#     def get_queryset(self):
+#         user = self.request.user
+#         if user.is_staff:
+#             return InvestLog.objects.all()
+#         else:
+#             return InvestLog.objects.filter(user=user)
     serializer_class = SubscribeShipSerializer
     permission_classes = (IsOwnerOrStaff,)
     

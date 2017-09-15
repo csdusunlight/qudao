@@ -70,7 +70,7 @@ Project_TYPE = (
     ('3', u'高收益区'),
 )
 class Project(Base):
-    create_user = models.ForeignKey(MyUser, null=True, related_name="created_projects")
+    user = models.ForeignKey(MyUser, null=True, related_name="created_projects")
     is_official = models.BooleanField(u"是否官方项目")
     state = models.CharField(u"项目状态", max_length=1, choices=Project_STATE)
     pic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）")
@@ -141,7 +141,7 @@ class Notice(models.Model):
     time = models.DateTimeField(u"创建时间", default=timezone.now)
     priority = models.IntegerField(u"优先级",default=1)
     def __unicode__(self):
-        return self.title
+        return self.content
     class Meta:
         verbose_name = u"个人主页最新公告"
         verbose_name_plural = u"个人主页最新公告"
@@ -244,3 +244,13 @@ class MAdvert_PC(Base):
             elif self.pic.size > 50000:
                 raise ValidationError({'pic': u'图片大小不能超过50k'})
 
+class Announcement(models.Model):
+    content = models.CharField(u"通知内容", max_length=100)
+    time = models.DateTimeField(u"创建时间", default=timezone.now)
+    priority = models.IntegerField(u"优先级",default=1)
+    def __unicode__(self):
+        return self.content
+    class Meta:
+        verbose_name = u"个人中心的通知"
+        verbose_name_plural = u"个人中心的通知"
+        ordering = ['-priority', '-time']

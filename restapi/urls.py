@@ -17,4 +17,7 @@ urlpatterns = [
     
     url(r'^notice/$', views.NoticeList.as_view()),
     url(r'^notice/(?P<pk>[0-9]+)/$', views.NoticeDetail.as_view()),
+    
+    url(r'^announcement/$', views.AnnouncementList.as_view()),
+    url(r'^announcement/(?P<pk>[0-9]+)/$', views.AnnouncementDetail.as_view()),
 ]

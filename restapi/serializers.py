@@ -5,7 +5,8 @@ Created on 2017年8月10日
 @author: lch
 '''
 from rest_framework import serializers
-from wafuli.models import Project, InvestLog, TransList, Notice
+from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
+    Announcement
 from account.models import MyUser
 
 class UserSerializer(serializers.ModelSerializer):
@@ -37,6 +38,19 @@ class NoticeSerializer(serializers.ModelSerializer):
         model = Notice
         fields = '__all__'
         read_only_fields = ('user', 'time')
+        
+# SubscribeShip
+class SubscribeShipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubscribeShip
+        fields = '__all__'
+        read_only_fields = ('user', 'project')
+        
+class AnnouncementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Announcement
+        fields = '__all__'
+        read_only_fields = ('time',)    
 # class MediaProjectSerializer(serializers.ModelSerializer):
 #     state_des = serializers.CharField(source='get_state_display', read_only=True)
 #     class Meta:

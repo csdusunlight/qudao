@@ -5,7 +5,7 @@ Created on 2017年8月23日
 @author: lch
 '''
 import django_filters
-from wafuli.models import InvestLog, Project
+from wafuli.models import InvestLog, Project, SubscribeShip
 # class ProjectInvestDateFilter(django_filters.rest_framework.FilterSet):
 #     investtime = django_filters.DateFromToRangeFilter(name="invest_time")
 #     audittime = django_filters.DateTimeFromToRangeFilter(name="audit_time")
@@ -20,3 +20,10 @@ class InvestLogFilter(django_filters.rest_framework.FilterSet):
         model = InvestLog
         exclude = ['invest_image', 'invest_date', 'audit_time']
 #         fields = ['event_type','audittime', 'project_title_contains', 'investtime','audit_state', 'invest_account', 'mobile']
+
+class SubscribeShipFilter(django_filters.rest_framework.FilterSet):
+    username = django_filters.CharFilter(name="user", lookup_expr='username')
+    project_title_contains = django_filters.CharFilter(name="project", lookup_expr='title__contains')
+    class Meta:
+        model = SubscribeShip
+        fields = '__all__'

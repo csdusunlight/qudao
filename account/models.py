@@ -40,6 +40,11 @@ class MyUserManager(BaseUserManager):
             return self.get(**{'mobile': username})
         except MyUser.DoesNotExist:
             return self.get(**{'username': username})
+        
+COLORS = (
+    ('1', u'蓝色'),
+    ('2', u'红色'),
+)   
 class MyUser(AbstractBaseUser, PermissionsMixin):
 #     email = models.EmailField('email address', max_length=255)
     mobile = models.CharField('mobile number', max_length=11, unique=True,)
@@ -49,6 +54,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(u'注册时间', default=timezone.now)
     type = models.CharField(u'用户类型', default='agent',max_length=10)
     level = models.SmallIntegerField(u"用户等级", default=2)
+    color = models.CharField(u'个人主页色调', choices=COLORS, default='1', max_length=2)
     picture = models.ImageField(upload_to='photos/user_headphoto', verbose_name=u"个人头像")
     profile = models.TextField(u"个人简介", default=u"~~这个人啥都没写~~")
     qualification = models.CharField(u"资质证明截图", max_length=200)
@@ -154,3 +160,4 @@ class UserToken(models.Model):
 class DBlock(models.Model):
     index = models.CharField("name",max_length=10,primary_key=True)
     description = models.CharField("description",max_length=30)
+

@@ -11,6 +11,8 @@ class IsAdmin(permissions.BasePermission):
 #             return True
 
         # 写的请求只对对象的创建者开放
+        if not request.user.is_authenticated():
+            return False
         return request.user.is_staff
 
     
@@ -28,5 +30,6 @@ class IsOwnerOrStaff(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        
+        if not request.user.is_authenticated():
+            return False
         return request.user.is_staff or obj.user == request.user 

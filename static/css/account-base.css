@@ -105,9 +105,8 @@
 
 /*个人中心*/
 .notice {
-    padding-top: 20px;
-    font-size: 0;
     background-color: #fff;
+    vertical-align: middle;
     
 }
 .notice__title {

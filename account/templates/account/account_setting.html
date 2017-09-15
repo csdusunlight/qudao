@@ -151,7 +151,7 @@ $(function(){
     $(function() {
         $('.qqname').val("{{user.qq_name}}");
         $('.qq').val("{{user.qq_number}}");
-//      $('.qqname')val("{{user.qqname}}");
+        $('.tosign').val("{{user.profile}}");
         
         
         var skin = '';
@@ -228,7 +228,7 @@ $(function(){
         
         $('.skin__item').click(function(){
             $(this).addClass('on').siblings().removeClass('on');
-            skin = 'skin' + $(this).index();
+            skin = $(this).index();
             console.log(skin);
         })
 //      头像处理
@@ -311,11 +311,11 @@ $(function(){
                 console.log('add pic');
                 formdata.append("picture", file_list[0].blob, file_list[0].name);
             }
-            formdata.append('skin', skin);
+            formdata.append('color', skin);
 //          formdata.append('picture', file);
-            formdata.append('qq_number', '22222222');
-            formdata.append('qq_name', '豆腐干');
-            formdata.append('profile', '双方的公司东方古典式风格豆腐干');
+            formdata.append('qq_number', qq);
+            formdata.append('qq_name', qqname);
+            formdata.append('profile', tosign);
             console.log(formdata);
             var userId = {{user.id}};
             xhr.open('put', '/restapi/users/' + userId + '/');
@@ -324,18 +324,18 @@ $(function(){
             xhr.onreadystatechange = function() {
                 $(".img-mask").css("display", "none");
                 if(xhr.readyState == 4 && xhr.status == 200) {
+//                  
+//                  $('.qqname').val(qqname);
+//                  $('.qq').val(qq);
+//                  $('.profile').val(tosign);
                     var ret = JSON.parse(xhr.responseText);
                     if(ret.code == 0) {
-//                      $(".img-mask").css("display", "none");
                         alert("请先登录！")
-//                      window.location.href = ret.url;
 //                      return;
                     }else if(ret.code==1){
                         console.log("任务完成，请耐心等待工作人员审核!")
-//                      popupIn();
                     }else{
                         console.log(ret.msg)
-//                      popupIn()
                     }
                 }
             };

@@ -34,80 +34,119 @@ $(function(){
     	        <h2 class="top-title l">主页资料</h2>
     	        <a class="btn m-yellow m-exp r" href="">参考范例</a>
     	    </div>
-    	    <div class="item">
-    	        <span class="item__name">头像</span>
-    	        <!--<div class="img-up">
-                    <input type="file" name="picfile" id="choose" accept="image/jpeg,image/png">
-                    <ul id="img_list" class="img-list">
-                        <li id="userimg" class="userimg"></li>
+    	    <div class="user-info-box">
+        	    <div class="item">
+        	        <span class="item__name">头像</span>
+        	        <!--<div class="img-up">
+                        <input type="file" name="picfile" id="choose" accept="image/jpeg,image/png">
+                        <ul id="img_list" class="img-list">
+                            <li id="userimg" class="userimg"></li>
+                        </ul>
+                        <a id="upload">更换头像</a>
+                    </div>-->
+                    <div class="uploadimg-container">
+                          <div class="imageBox">
+                            <div class="thumbBox"></div>
+                            <div class="spinner" style="display: none">Loading...</div>
+                          </div>
+                          <div class="action">
+                            <div class="new-contentarea tc">
+                                <a href="javascript:void(0)" class="upload-img">
+                                    <label for="upload-file">上传图像</label>
+                              </a>
+                              <input type="file" class="" name="upload-file" id="upload-file" />
+                            </div>
+                            <input type="button" id="btnCrop"  class="Btnsty_peyton" value="裁切">
+                            <input type="button" id="btnZoomIn" class="Btnsty_peyton" value="+"  >
+                            <input type="button" id="btnZoomOut" class="Btnsty_peyton" value="-" >
+                          </div>
+                          <div class="cropped"></div>
+                    </div>
+        	    </div>
+        	    <div class="item">
+                    <span class="item__name">皮肤</span>
+                    <ul class="skin">
+                    	<li class="skin__item m-01">皮肤1</li>
+                    	<li class="skin__item m-02">皮肤2</li>
+                    	<li class="skin__item m-03 on">皮肤3</li>
+                    	<li class="skin__item m-04">皮肤4</li>
+                    	<li class="skin__item m-05">皮肤5</li>
+                    	<li class="skin__item m-06">皮肤6</li>
                     </ul>
-                    <a id="upload">更换头像</a>
-                </div>-->
-                <div class="uploadimg-container">
-                      <div class="imageBox">
-                        <div class="thumbBox"></div>
-                        <div class="spinner" style="display: none">Loading...</div>
-                      </div>
-                      <div class="action">
-                        <div class="new-contentarea tc">
-                            <a href="javascript:void(0)" class="upload-img">
-                                <label for="upload-file">上传图像</label>
-                          </a>
-                          <input type="file" class="" name="upload-file" id="upload-file" />
-                        </div>
-                        <input type="button" id="btnCrop"  class="Btnsty_peyton" value="裁切">
-                        <input type="button" id="btnZoomIn" class="Btnsty_peyton" value="+"  >
-                        <input type="button" id="btnZoomOut" class="Btnsty_peyton" value="-" >
-                      </div>
-                      <div class="cropped"></div>
+                </div>
+                <div class="item">
+                    <span class="item__name m-need">昵称</span>
+                    <input class="qqname item__txt" type="text" maxlength="12" />
+                    <span>用于显示在个人主页，限12字以内</span>
+                </div>
+                <div class="item">
+                    <span class="item__name m-need">QQ</span>
+                    <input class="qq item__txt" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+                </div>
+                <div class="item">
+                    <span class="item__name">个人签名</span>
+                    <input class="tosign item__txt" type="text" />
+                </div>
+                
+                <div class="btnbox">
+                    <a class="cancle btn m-yellow">取消</a>
+                    <a class="save btn m-green">保存</a>
                 </div>
     	    </div>
-    	    <div class="item">
-                <span class="item__name">皮肤</span>
-                <ul class="skin">
-                	<li class="skin__item m-01">皮肤1</li>
-                	<li class="skin__item m-02">皮肤2</li>
-                	<li class="skin__item m-03 on">皮肤3</li>
-                	<li class="skin__item m-04">皮肤4</li>
-                	<li class="skin__item m-05">皮肤5</li>
-                	<li class="skin__item m-06">皮肤6</li>
-                </ul>
-            </div>
-            <div class="item">
-                <span class="item__name m-need">昵称</span>
-                <input class="qqname item__txt" type="text" maxlength="12" />
-                <span>用于显示在个人主页，限12字以内</span>
-            </div>
-            <div class="item">
-                <span class="item__name m-need">QQ</span>
-                <input class="qq item__txt" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" />
-            </div>
-            <div class="item">
-                <span class="item__name">个人签名</span>
-                <input class="tosign item__txt" type="text" />
-            </div>
             
-            <div class="btnbox">
-                <a class="cancle btn m-yellow">取消</a>
-                <a class="save btn m-green">保存</a>
-            </div>
-            
-            <div class="item">
-                <span class="item__name">编辑公告</span>
-                <div class="notice-box">
-                    <div class="input-box">
-                        <input class="item__txt notice" type="text" /><a class="add-notice">继续添加</a>
-                        <span>最多可添加十条公告</span>
+            <div class="notice-info-box">
+                <h2 class="notice-title">编辑公告</h2>
+                <div class="item">
+                    <span class="item__name"></span>
+                    <div class="notice-box">
+                        <div class="input-box">
+                            <input class="item__txt notice" type="text" /><a class="notice-add">添加</a>
+                            <span>最多可添加十条公告</span>
+                        </div>
+                    </div>
+                    <p class="notice-exist-title">已有公告:</p>
+                    <ul class="notice-exist">
+                    	<!--<li>公告111公告111公告111公告111公告111公告111公告111公告111公告111
+                    	    <span class="notice-change" onclick="noticeChange(this,1)">修改</span>
+                    	    <span class="notice-delete" onclick="noticeDelete(this,1)">删除</span>
+                    	</li>
+                    	<li>公告222公告222公告222公告222公告222公告222公告222公告222公告222公告222
+                    	    <span class="notice-change" onclick="noticeChange(this,1)">修改</span>
+                            <span class="notice-delete" onclick="noticeDelete(this,1)">删除</span>
+                    	</li>
+                    	<li>公告333公告333公告333公告333公告333公告333公告333公告333公告333公告333
+                    	    <span class="notice-change" onclick="noticeChange(this,1)">修改</span>
+                            <span class="notice-delete" onclick="noticeDelete(this,1)">删除</span>
+                    	</li>
+                    	<li>公告444公告444公告444公告444公告444公告444公告444公告444公告444公告444
+                    	    <span class="notice-change" onclick="noticeChange(this,1)">修改</span>
+                            <span class="notice-delete" onclick="noticeDelete(this,1)">删除</span>
+                    	</li>-->
+                    </ul>
+                </div>
+                <!--<div class="btnbox">
+                    <a class="notice-cancle btn m-yellow">取消</a>
+                    <a class="notice-save btn m-green">保存</a>
+                </div>-->
+                
+                <div class="popup m-notice-change">
+                    <div class="popup__content" style="width: 600px;">
+                        <div class="popup__top">
+                            <h2 class="popup__title">修改公告</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+                        </div>
+                        <div class="popup__detail">
+                            <div class="popup__item"><span class="popup__itemname">公告内容</span><input id="notice_detail" type="text" /></div>
+                        </div>
+                        <div class="popup__btnbox">
+                            <a id="notice_change" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="btnbox">
-                <a class="notice-cancle btn m-yellow">取消</a>
-                <a class="notice-save btn m-green">保存</a>
-            </div>
         </div>
     </div>
-		
+	
+	<script src="{% static 'js/wfl-common.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
     $(function() {
         var skin = '';
@@ -199,63 +238,139 @@ $(function(){
             $('.qq').val('342534543');
             $('.tosign').val('阿萨德回家看');
         })
-        $('.notice-save').click(function(){
-            var notice = '';
-            
-            var notice_len = $('.notice').length;
-            if (notice_len == 1) {
-                notice = $('.notice').val();
-            } else{
-                $('.notice').each(function(){
-                    notice += $(this).val() + '&'; 
-                })
+        $('.notice-add').click(function(){
+//          var notice = '';
+//          
+//          var notice_len = $('.notice').length;
+//          if (notice_len == 1) {
+//              notice = $('.notice').val();
+//          } else{
+//              $('.notice').each(function(){
+//                  notice += $(this).val() + '&'; 
+//              })
+//          }
+//          var detail =' notice=' + notice;
+//          console.log(detail);
+            var content = $('.notice').val();
+            console.log(content);
+            if ($('.notice-item').length >= 10) {
+            	alert('最多添加十条公告');
+                return;
             }
-            var detail =' notice=' + notice;
-            console.log(detail);
+            if (!content) {
+            	alert('请输入通知内容');
+            	return;
+            }
             $.ajax({
-            url: '/restapi/users/4/',
+                url: '/restapi/users/',
+                dataType:"json",
+                type:'post',
+                data : {
+                    'content':content,
+                },
+                success:function(ret){
+                    alert(添加公告成功);
+                    var notice_html = '<li class="notice-item"><span class="notice-text">' + ret.results[i].content + '</span>' + 
+                    '<span class="notice-change" onclick="noticeChange(this,' + ret.results[i].id + ')">修改</span>' +
+                    '<span class="notice-delete" onclick="noticeDelete(this,' + ret.results[i].id + ')">删除</span></li>';
+                    $('.notice-exist').append(notice_html);
+                },
+                error:function(){
+                    alert("请检查网络连接");
+                }
+            });
+        })
+//      $('.notice-cancle').click(function(){
+//          var notice_arr = [111,222,333,444,555];
+//          $('.input-box-add').remove();
+//          if (notice_arr.length == 1) {
+//              $('.notice').val(notice_arr[0]);
+//          } else{
+//              for (var i = 0; i<notice_arr.length; i++) {
+//                  if (i == 0) {
+//                      $('.notice')[0].value = notice_arr[0];
+//                  } else {
+//                      var notice_html = '<div class="input-box input-box-add"><input class="item__txt notice-add notice" type="text" value=' + notice_arr[i] + ' />' +
+//                                      '<span class="delete-notice">删除</span></div>';
+//                      $('.notice-box').append(notice_html);
+//                  }
+//              }
+//          }
+//      })
+        $('.add-notice').click(function(){
+//          console.log($('.notice').length);
+//          if ($('.notice').length < 10) {
+//              var notice_html = '<div class="input-box input-box-add"><input class="item__txt notice-add notice" type="text" />' +
+//                                  '<span class="delete-notice">删除</span></div>';
+//              $('.notice-box').append(notice_html);
+//          }
+        })
+//      $('.notice-box').on('click', '.delete-notice', function(){
+//          $(this).parent().remove();
+//      })
+    })
+    
+    $.ajax({
+        url: '/restapi/notice/',
+        dataType:"json",
+        type:'get',
+        success:function(ret){
+            console.log(ret.results);
+            var notice_html = "";
+            for (var i=0; i<ret.results.length; i++) {
+                notice_html += '<li class="notice-item"><span class="notice-text">' + ret.results[i].content + '</span>' + 
+                '<span class="notice-change" onclick="noticeChange(this,' + ret.results[i].id + ')">修改</span>' +
+                '<span class="notice-delete" onclick="noticeDelete(this,' + ret.results[i].id + ')">删除</span></li>';
+            }
+            $('.notice-exist').html(notice_html);
+        },
+        error:function(){
+            console.log("请检查网络连接");
+        }
+    });
+    
+    var notice_item;
+    var notice_id;
+    function noticeChange(obj,id) {
+        notice_id = id;
+        notice_item = $(obj).parent().find('.notice-text');
+        var notice_txt = notice_item.text();
+        $('#notice_detail').val(notice_txt);
+        $('.popup.m-notice-change').addClass('in');
+    }
+    $('#notice_change').click(function(){
+        var content = $('#notice_detail').val();
+        console.log(content);
+        $.ajax({
+            url: '/restapi/notice/' + notice_id + '/',
             dataType:"json",
             type:'put',
             data : {
-                'notice':notice,
-                    },
-                    success:function(ret){
-                        alert(添加公告成功);
-                    },
-                    error:function(){
-                        alert("请检查网络连接");
-                    }
-                });
-        })
-        $('.notice-cancle').click(function(){
-            var notice_arr = [111,222,333,444,555];
-            $('.input-box-add').remove();
-            if (notice_arr.length == 1) {
-                $('.notice').val(notice_arr[0]);
-            } else{
-                for (var i = 0; i<notice_arr.length; i++) {
-                    if (i == 0) {
-                        $('.notice')[0].value = notice_arr[0];
-                    } else {
-                        var notice_html = '<div class="input-box input-box-add"><input class="item__txt notice-add notice" type="text" value=' + notice_arr[i] + ' />' +
-                                        '<span class="delete-notice">删除</span></div>';
-                        $('.notice-box').append(notice_html);
-                    }
-                }
+                'content':content,
+            },
+            success:function(ret){
+                notice_item.html(content);
+                $('.popup.m-notice-change').removeClass('in');
+            },
+            error:function(){
+                console.log("请检查网络连接");
             }
-        })
-        $('.add-notice').click(function(){
-            console.log($('.notice').length);
-            if ($('.notice').length < 10) {
-                var notice_html = '<div class="input-box input-box-add"><input class="item__txt notice-add notice" type="text" />' +
-                                    '<span class="delete-notice">删除</span></div>';
-                $('.notice-box').append(notice_html);
-            }
-        })
-        $('.notice-box').on('click', '.delete-notice', function(){
-            $(this).parent().remove();
-        })
+        });
     })
+    function noticeDelete(obj,id) {
+        console.log(id);
+        $.ajax({
+            url: '/restapi/notice/' + id + '/',
+            dataType:"json",
+            type:'delete',
+            success:function(ret){
+                $(obj).parent().remove();
+            },
+            error:function(){
+                console.log("请检查网络连接");
+            }
+        });
+    }
     </script>
 </body>
 </html>

@@ -126,7 +126,9 @@
 //'<p class="item-year">预计年化收益<span>{revenue}</span></p>'+
 //'<a class="item-btn {end}" href="{url}">立即投资</a>'+
 //'</div>[/data]';
-if (false) {
+var userid = {{user.id}};
+console.log(userid);
+if (userid == '3') {
 	var data='[results]<li class="finance"><div class="finance__content">'+
   '<img class="finance__img" src="{pic}" alt="商家logo">'+
   '<div class="finance__delbox"><h4 class="finance__title">{title}'+

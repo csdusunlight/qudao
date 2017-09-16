@@ -723,11 +723,14 @@ from django.db.models import Q
 
 @login_required
 def project_manage(request):
-    if request.method == "GET":
+    if request.method == "POST":
         user = request.user
         res={'code':0,}
         projects = Project.objects.filter(state__in=['10','20']).filter(Q(is_official=True) | Q(user__id=user.id))
         subprojects = SubscribeShip.objects.filter(user=user).values('project_id', 'price', 'is_recommend')
+        subdic = {}
+        for pro in subprojects:
+            subdic[pro['project_id']] = pro
         print subprojects
         page = request.GET.get("page", None)
         size = request.GET.get("size", 20)
@@ -749,17 +752,21 @@ def project_manage(request):
             contacts = paginator.page(paginator.num_pages)
         data = []
         for con in contacts:
-            is_on = con.id in subprojects
-#             i = {"name":con.title,
-#                  "price":con.price,
-#                  "url":con.url,
-#                  "pic":con.pic.url,
-#                  }
-#             data.append(i)
+            is_on = con.id in subdic.keys()
+            is_recom = False if not is_on else subdic[con.id]['is_recommend']
+            price = '' if not is_on else subdic[con.id]['price'] 
+            i = {"titile":con.title,
+                 "soure":u"官方项目" if con.is_official else u"自建项目",
+                 "state":con.get_state_display(),
+                 "price":price,
+                 "is_on":is_on, #是否主页呈现
+                 "is_recom":con.is_recom,#是否在推荐位
+                 }
+            data.append(i)
         if data:
             res['code'] = 1
         res["pageCount"] = paginator.num_pages
         res["recordCount"] = item_list.count()
         res["data"] = data
     else:
-        return render(request, 'account/myproject.html')
+        return render(request, 'account/account_myproject.html')

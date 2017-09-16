@@ -289,10 +289,6 @@ def account_setting(request):
     return render(request, 'account/account_setting.html',)
 
 @login_required
-def account_myproject(request):
-    return render(request, 'account/account_myproject.html',)
-
-@login_required
 def account_submit(request):
     return render(request, 'account/account_submit.html',)
 
@@ -754,7 +750,7 @@ def project_manage(request):
         for con in contacts:
             is_on = con.id in subdic.keys()
             is_recom = False if not is_on else subdic[con.id]['is_recommend']
-            price = '' if not is_on else subdic[con.id]['price'] 
+            price = '' if not is_on else subdic[con.id]['price']
             i = {"titile":con.title,
                  "soure":u"官方项目" if con.is_official else u"自建项目",
                  "state":con.get_state_display(),

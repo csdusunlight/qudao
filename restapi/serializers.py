@@ -21,6 +21,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = '__all__'
+        read_only_fields = ('user', 'pub_date', 'state', 'is_official')
         
 class InvestLogSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,6 +42,7 @@ class NoticeSerializer(serializers.ModelSerializer):
         
 # SubscribeShip
 class SubscribeShipSerializer(serializers.ModelSerializer):
+    project_title = serializers.CharField(source='project.title', read_only=True)
     project_intro = serializers.CharField(source='project.introduction', read_only=True)
     project_aprice = serializers.CharField(source='project.aprice', read_only=True)
     project_bprice = serializers.CharField(source='project.bprice', read_only=True)

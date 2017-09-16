@@ -110,8 +110,20 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return username
     def has_admin_perms(self, code):
         return self.admin_permissions.filter(code=code).exists()
-    def __unicode__(self):
-        return self.mobile
+    def picture_url(self):
+        """
+        Returns the URL of the image associated with this Object.
+        If an image hasn't been uploaded yet, it returns a stock image
+        
+        :returns: str -- the image url
+        
+        """
+        if self.picture and hasattr(self.picture, 'url'):
+            return self.picture.url
+        else:
+            return '/static/images/user-icon.png'
+        def __unicode__(self):
+            return self.mobile
 
 
 class BankCard(models.Model):

@@ -90,7 +90,6 @@ class Project(models.Model):
     intrest = models.CharField(u"预期年化", max_length=10)
     marks = models.ManyToManyField(Mark, verbose_name=u'标签', related_name="project_set", blank=True)
     subscribers = models.ManyToManyField(MyUser, through='SubscribeShip')
-    user_event = GenericRelation("UserEvent",related_query_name='finance')
     class Meta:
         verbose_name = u"理财项目"
         verbose_name_plural = u"理财项目"

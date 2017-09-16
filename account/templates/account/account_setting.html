@@ -166,12 +166,12 @@ $(function(){
         var tctx = tCanvas.getContext("2d");
         var file;
         var maxsize = 80 * 1024;
-        console.log("{{user.picture}}");
+        console.log("{{user.picture_url}}");
         var options =
         {
             thumbBox: '.thumbBox',
             spinner: '.spinner',
-            imgSrc: "{{user.picture.url}}"
+            imgSrc: "{{user.picture_url}}"
         }
         var cropper = $('.imageBox').cropbox(options);
         $('#upload-file').on('change', function(){

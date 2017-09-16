@@ -19,9 +19,9 @@ $.ajaxSetup({
 });
 var data3 = '<table width="100%"><thead><tr><th>项目名称</th><th>项目来源</th>'+
     '<th>价格</th><th>标期</th><th width="14%">是否主页呈现</th><th width="14%">是否推荐</th><th>操作</th></tr></thead><tbody>'+
-    '[results]<tr><td>{title}</td><td>{is_official}</td><td>{cprice}</td><td>{term}</td>'+
-    '<td><span data-isadd="yes" class="switch true" onclick="isadd(this,{id})"></span></td>'+
-    '<td><span data-isadd="yes" class="switch true" onclick="isadd(this,{id})"></span></td>'+
+    '[results]<tr><td>{project_title}</td><td>{is_official}</td><td>{price}</td><td>{project_term}</td>'+
+    '<td><span data-isadd="{is_on}" class="switch true" onclick="isadd(this,{id})"></span></td>'+
+    '<td><span data-isadd="{is_recommend}" class="switch true" onclick="isadd(this,{id})"></span></td>'+
     '<td class="edit" onclick="edit({id})">编辑</td></tr>[/results]'
     + '</tbody></table>';
 var url = "/restapi/sub/?page={page}&size={pageSize}";

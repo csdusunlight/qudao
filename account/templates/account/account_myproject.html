@@ -24,7 +24,7 @@ var data3 = '<table width="100%"><thead><tr><th>项目名称</th><th>项目来�
     '<td><span data-isadd="yes" class="switch true" onclick="isadd(this,{id})"></span></td>'+
     '<td class="edit" onclick="edit({id})">编辑</td></tr>[/results]'
     + '</tbody></table>';
-var url = "/account/project/?page={page}&size={pageSize}";
+var url = "/restapi/sub/?page={page}&size={pageSize}";
 //function pop(n){
 //	$("#coupon_id").val(n);
 //	$(".Password-modify").css("display","block");
@@ -73,7 +73,7 @@ $(function(){
 //	});
 	$("#pagedata").ajaxPage({
         url:url,
-        type: 'post',
+//      type: 'post',
         pageId:$("#page"),
         pageSize:10,
         run:true,

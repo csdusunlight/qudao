@@ -34,7 +34,7 @@
 							<!-- <h3>选择项目名称</h3>
 						<select id="project_select">
 							<option value="0">-</option>
-							{% for x in flist %}
+							{% for x in plist %}
 							    <option value="{{x.id}}">{{x.title}}</option>
 							{%endfor%}
 						</select> -->
@@ -65,7 +65,7 @@
 										<li class="submit-item item-01">
 											<select class="project_select height-add01" placeholder="选择项目">
 												<option value="0">--</option>
-												{% for x in flist %}
+												{% for x in plist %}
 												<option value="{{x.id}}">{{x.title}}</option>
 												{%endfor%}
 											</select>
@@ -127,7 +127,7 @@
 								<h3 class="project-select-head">选择项目名称</h3>
 								<select id="project_select" class="project-select-common">
 									<option value="0">--</option>
-									{% for x in flist %}
+									{% for x in plist %}
 									<option value="{{x.id}}">{{x.title}}</option>
 									{%endfor%}
 								</select>
@@ -169,7 +169,7 @@
 							<h3 class="project-select-head">选择项目名称</h3>
 							<select id="project_select_out" class="project-select-common">
 								<option value="0">全部</option>
-								{% for x in flist %}
+								{% for x in plist %}
 								<option value="{{x.id}}">{{x.title}}</option>
 								{%endfor%}
 							</select>
@@ -215,7 +215,7 @@
 										<span>项目名称：</span>
 										<select class="invest-project height-add01" placeholder="选择项目">
 											<option value="0">--</option>
-											{% for x in flist %}
+											{% for x in plist %}
 											<option value="{{x.id}}">{{x.title}}</option>
 											{%endfor%}
 										</select>

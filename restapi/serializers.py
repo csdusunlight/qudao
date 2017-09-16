@@ -42,6 +42,7 @@ class NoticeSerializer(serializers.ModelSerializer):
         
 # SubscribeShip
 class SubscribeShipSerializer(serializers.ModelSerializer):
+    project_source = serializers.CharField(source='project.is_official')
     project_title = serializers.CharField(source='project.title', read_only=True)
     project_intro = serializers.CharField(source='project.introduction', read_only=True)
     project_aprice = serializers.CharField(source='project.aprice', read_only=True)

@@ -292,7 +292,8 @@ def account_setting(request):
 
 @login_required
 def account_submit(request):
-    return render(request, 'account/account_submit.html',)
+    plist = list(Project.objects.filter(state__in=['10','20'], is_official=True))    #jzy
+    return render(request, 'account/account_submit.html', {'plist':plist})
 
 @login_required
 def account_audited(request):

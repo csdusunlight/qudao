@@ -1,0 +1,308 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户中心</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
+<script type="text/javascript" >
+$.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
+var data3 = '<table width="100%"><thead><tr><th>项目名称</th><th>项目来源</th>'+
+    '<th>价格</th><th>标期</th><th width="14%">是否主页呈现</th><th width="14%">是否推荐</th><th>操作</th></tr></thead><tbody>'+
+    '[results]<tr><td>{title}</td><td>{is_official}</td><td>{cprice}</td><td>{term}</td>'+
+    '<td><span data-isadd="yes" class="switch true" onclick="isadd(this,{id})"></span></td>'+
+    '<td><span data-isadd="yes" class="switch true" onclick="isadd(this,{id})"></span></td>'+
+    '<td class="edit" onclick="edit({id})">编辑</td></tr>[/results]'
+    + '</tbody></table>';
+var url = "/account/project/?page={page}&size={pageSize}";
+//function pop(n){
+//	$("#coupon_id").val(n);
+//	$(".Password-modify").css("display","block");
+//}
+//function emptydisplay(obj){
+//	pic_url = "{%static 'images/picin.png' %}";
+//	obj.html('<div class="Defa-in"><img src="' + pic_url + '">'+
+//			'<h2>咦~~ 您还没有相关记录~~</h2></div>');
+//}
+function isadd(obj,id) {        //是否主页显示调用函数
+    var flag = $(obj).data('isadd');
+    console.log(flag)
+    if (flag == 'yes') {
+        console.log('关闭');
+    	$(obj).data('isadd', 'no');
+    	$(obj).removeClass('true').addClass('false');
+    } else{
+        console.log('开启');
+    	$(obj).data('isadd', 'yes');
+    	$(obj).removeClass('false').addClass('true');
+    }
+}
+var project_id;
+function edit(id) {     //编辑调用函数
+    project_id = id;
+    console.log(project_id);
+    $.ajax({
+        url: '/restapi/projects/' + project_id + '/',
+        dataType: "json",
+        type:"get",
+        success: function(ret) {
+            console.log()
+            $('#edit_detail').val(ret.introduction);
+            $('#edit_price').val(ret.cprice);
+            $('.popup.m-edit-proj').addClass('in');
+        },
+        error: function() {
+            alert("请检查网络连接");
+        }
+    });
+}
+$(function(){
+	$('.back-a3').toggleClass("on");
+//	$(".None-p button").click(function(){
+//		$(".Password-modify").css("display","none");
+//	});
+	$("#pagedata").ajaxPage({
+        url:url,
+//      type: 'post',
+        pageId:$("#page"),
+        pageSize:10,
+        run:true,
+        content:data3,
+    });
+    
+    $('.create-project').click(function(){      //新建项目调用函数
+        $('#crt_name').val('');
+        $('#crt_link').val('');
+        $('#crt_detail').val('');
+        $('#crt_price').val('');
+        $('#crt_term').val('');
+        $('.popup.m-create-proj').addClass('in');
+        
+    })
+    $('#crt_confirm').click(function(){     //确认新建项目
+        var crt_name = $('#crt_name').val(),
+            crt_link = $('#crt_link').val(),
+            crt_detail = $('#crt_detail').val(),
+            crt_price = $('#crt_price').val(),
+            crt_term = $('#crt_term').val();
+            console.log(' crt_name=' + crt_name +' crt_link=' + crt_link +' crt_detail=' + crt_detail +' crt_price=' + crt_price +' crt_term=' + crt_term);
+        $.ajax({
+            url: '/restapi/projects/',
+            dataType: "json",
+            type: 'POST',
+            data: {
+                'title': crt_name,
+                'strategy': crt_link,
+                'introduction': crt_detail,
+                'cprice': crt_price,
+                'term': crt_term
+            },
+            success: function(ret) {
+                $.prompt({
+                    Content: '新建成功'
+                })
+                $('.popup.m-create-proj').removeClass('in');
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+    })
+    $('#edit_confirm').click(function(){     //确认修改项目
+        var edit_detail = $('#edit_detail').val(),
+            edit_price = $('#edit_price').val();
+            console.log(' project_id=' + project_id +' edit_detail=' + edit_detail +' edit_price=' + edit_price);
+        $.ajax({
+            url: '/restapi/projects/' + project_id + '/',
+            dataType: "json",
+            type: 'put',
+            data: {
+                'project_id': project_id,
+                'introduction': edit_detail,
+                'cprice': edit_price
+            },
+            success: function(ret) {
+                $.prompt({
+                    Content: '编辑成功'
+                })
+                $('.popup.m-edit-proj').removeClass('in');
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+    })
+//	$(".Swi-Top li").click(function(){
+//		if($(this).attr("class")!="on"){
+//			$(this).toggleClass("on").siblings().removeClass("on")
+//			var index = $(this).index();
+//			var data = data0;
+//    if (index==1){
+//      data = data1;
+//    }
+//			if (index==2){
+//				data = data2;
+//			}
+//			$("#page").empty();
+//			$("#pagedata1").ajaxPage({
+//			    url:url+index,
+//			    pageId:$("#page1"),
+//			    pageSize:6,
+//			    run:true,
+//			    content:data,
+//			});
+//		}
+//	});
+//	$('#submit').click(function(){
+//		var telnum = $("#telnum").val();
+//		var remark = $("#remark").val();
+//		var amount = $("#amount").val();
+//		var term = $("#term").val();
+//		var id = $("#coupon_id").val();
+//		telnum = telnum.replace(/(^\s*)|(\s*$)/g, "");
+//		remark = remark.replace(/(^\s*)|(\s*$)/g, "");
+//		term = term.replace(/(^\s*)|(\s*$)/g, "");
+//		amount = amount.replace(/(^\s*)|(\s*$)/g, "");
+//		var re_amount=/^\d+(\.\d+)?$/;
+//		var re=/^1[1,2,3,4,6,5,7,8,9]\d{9}$/;
+//		if(!re.test(telnum)){
+//			alert("手机号格式不正确！")
+//			return;
+//		}
+//		if(!re_amount.test(amount)){
+//			alert("投资金额不能为空且必须为纯数字格式！")
+//			return;
+//		}
+//		if(!re_amount.test(term)){
+//			alert("投资标期不能为空且必须为纯数字格式！")
+//			return;
+//		}
+//		amount = parseFloat(amount);
+//		$.ajax({
+//			url:"",
+//			dataType:"json",
+//			type:"POST",
+//			data : {
+//				'id': id,
+//				'telnum': telnum,
+//				'remark': remark,
+//				'term': term,
+//				'amount': amount
+//			},
+//			success:function(ret){
+//				if(ret.code==-1){
+//					alert("该页面已过期，请重新登录！");
+//					window.location.href = ret.url;
+//				}
+//				else{
+//					alert(ret.msg);
+//				}
+//			},
+//			error:function(){
+//				alert("请检查网络连接");
+//			}
+//		});
+//		$(".Password-modify").css("display","none");
+//	});
+//	$("#pagedata1").on("click", ".open", function(){
+//		var is_mobile = this.getAttribute("mobile");
+//		var pro_id = this.getAttribute("pro_id");
+//		var url = this.getAttribute("url");
+//		if (is_mobile==1){
+//			document.getElementById("erweima").src=url;
+//			$(".popup-box").addClass("in");
+//		}
+//		else{
+//			window.open(url_openwindow + "?id=" + pro_id + "&type=CouponProject");
+//		}
+//	});
+
+  // 二维码部分
+//$(".popup-content ").click(function(){
+//  event.stopPropagation();
+//});
+//$(".popup-box ").click(function(){
+//  $(".popup-box ").removeClass("in ");
+//});
+
+  // 审核拒绝原因弹窗
+//$('.Content').on('click','.state_2',function(){
+//	  var reason = $(this).attr('reason');
+//    alert(reason);
+//});
+
+  //文字提示
+//$('.Swi-info').on("mouseover", ".intro-text",  function() {
+//  this.title = this.innerHTML;
+//});
+});
+</script>
+</head>
+
+<body>
+    	<!--头部-->
+    	{% include "header.html" %}
+    	<!--内容-->
+    	<div class="Content">
+        	{% include "account/left.html" %}
+            <div class="RightCont">
+                <div class="table">
+                    <div class="handle-box clearfix">
+                        <a class="create-project link r">新建项目</a>
+                        <a class="look-projects link r">查看项目库</a>
+                    </div>
+                    <div id="pagedata">
+                    </div>
+                    <div class="changes-p">
+                        <div class="page" id="page">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<div class="popup m-edit-proj">
+    <div class="popup__content" style="width: 600px;">
+        <div class="popup__top">
+            <h2 class="popup__title">编辑项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+        </div>
+        <div class="popup__detail">
+            <div class="popup__item"><span class="popup__itemname">项目简介</span><input id="edit_detail" type="text" /></div>
+            <div class="popup__item"><span class="popup__itemname">价格</span><input id="edit_price" type="text" /></div>
+        </div>
+        <div class="popup__btnbox">
+            <a id="edit_confirm" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
+        </div>
+    </div>
+</div>
+<div class="popup m-create-proj">
+    <div class="popup__content" style="width: 600px;">
+        <div class="popup__top">
+            <h2 class="popup__title">新建项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+        </div>
+        <div class="popup__detail">
+            <div class="popup__item"><span class="popup__itemname">项目名称</span><input id="crt_name" type="text" /></div>
+            <div class="popup__item"><span class="popup__itemname">攻略链接</span><input id="crt_link" type="text" />
+                <p class="link-tip"><a class="link-btn" href="">点击</a>使用石墨创建工具</p>
+            </div>
+            <div class="popup__item"><span class="popup__itemname">项目简介</span><input id="crt_detail" type="text" /></div>
+            <div class="popup__item"><span class="popup__itemname">价格</span><input id="crt_price" type="text" /></div>
+            <div class="popup__item"><span class="popup__itemname">标期</span><input id="crt_term" type="text" /></div>
+        </div>
+        <div class="popup__btnbox">
+            <a id="crt_confirm" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

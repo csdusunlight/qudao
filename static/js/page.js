@@ -6,6 +6,7 @@
 ;(function (a) {
 	var ajaxPage = function (d) {
 		var c=a.extend({
+			type      :  "get",
 			page			: 1,		//当前页
 			pageSize		: 10,		//每页多少个
 			url				: null, //后端 url, {page} 为当前页, 可以为伪静态如:  xl_{page}.html
@@ -14,25 +15,25 @@
 			complete		: false,	//请求后调用
 			pageId			: null, 	//分页容器
 			noData			: "\u6CA1\u6709\u627E\u5230",	//没有数据时提示
-			content			: null,		//处理内容的循环,如 function () { return [list]标签是:{title},内容:{content}[/list] }			
+			content			: null,		//处理内容的循环,如 function () { return [list]标签是:{title},内容:{content}[/list] }
 			/*
 			以上为对外接口;
 			return obj.run();//运行
 			return obj.get(i);//跳页
-			*/			
+			*/
 			pageCount		: null,		//总页
 			recordCount		: null,		//总条数
 			isLoad			: false,	//是否加载过
 			mark			: true		//请求开关, true可请求, false不可
 		},d||{});
-		
+
 		var self = this;
-		
+
 		if (!self.length || !c.url) {
-			return self	
+			return self
 		}
 		var b = {};
-		
+
 		b.r = function (obj,opt) {
 			var str;
 			function fun(str) {
@@ -41,7 +42,7 @@
 						// 字符串截取出新字符串
 						var getStr=str.substring(str.indexOf("["+name+"]")+2+name.length,str.lastIndexOf("[/"+name+"]"));
 						var newStr="";
-						
+
 						for(var i=0;i<opt[name].length;i++) {
 							var newStrP=getStr;
 							for(var s in opt[name][i]) {
@@ -66,37 +67,37 @@
 
 		b.run = function () {
 			if(c.isLoad) {
-				return self;	
+				return self;
 			}
 			c.isLoad = true;
 			b.ajax();
 			return self;
 		}
-		
+
 		b.initUrl = function () {
 			return b.r(c.url,{
 				page:c.page,
 				pageSize: c.pageSize
 			});
 		}
-		
+
 		b.ajax = function ()　{
 			if(!c.isLoad) {
-				return self;	
+				return self;
 			}
 			c.mark = false;
 			a.ajax({
 				beforeSend:c.beforeSend,
 				complete:c.complete,
 				url:b.initUrl(),
-				//type:c.type,
+				type:c.type,
 				dataType:"json",
 				success: function (res) {
 					b.each(res);//返回值 {"code":1,"pageCount":12,"recordCount":120,"data":[]}
 				}
 			});
 		}
-		
+
 		b.each = function (res) {
 			if (res) {
 				if (res.code === 1) {
@@ -105,9 +106,9 @@
 						c.recordCount = res.recordCount;
 						var s = "";
 						if ("function" === typeof c.content) {
-							s = c.content.call(c,c);	
+							s = c.content.call(c,c);
 						} else {
-							s = c.content;	
+							s = c.content;
 						}
 						self.html(b.r(s,res));
 					}
@@ -122,7 +123,7 @@
 					alert("该页面已过期，请重新登录！");
 					window.location.href = res.url;
 				}
-				
+
 				if(c.pageId) {
 					b.toPage();
 					b.toPageBind();
@@ -130,18 +131,18 @@
 				c.mark = true;
 			}
 		}
-		
+
 		b.get = function (i) {
 			if(!c.isLoad || !c.mark || c.pageCount < 1) {
-				return b;	
-			} 
+				return b;
+			}
 			switch (i) {
 				case "pre":
 					c.page --;
-					break;	
+					break;
 				case "next":
 					c.page ++;
-					break;	
+					break;
 				case "first":
 					c.page = 1;
 					break;
@@ -150,40 +151,40 @@
 					break;
 				default :
 					if (isNaN(i)) {
-						break;	
+						break;
 					}
 					i = parseInt(i);
 					if (i > c.pageCount) {
-						i = c.pageCount;	
+						i = c.pageCount;
 					}
 					if (i == c.page ){
-						return false	
+						return false
 					};
-					
+
 					c.page = i;
 					break;
 			}
 			b.ajax();
 			return self;
 		}
-		
+
 		b.toPageBind = function () {
 			var pId = c.pageId;
 			pId.find("a.a_pre").click(function () {
-				b.get("pre");	
-			});	
+				b.get("pre");
+			});
 			pId.find("a.a_next").click(function () {
-				b.get("next");	
-			});	
+				b.get("next");
+			});
 			pId.find("a.a_first").click(function () {
-				b.get("first");	
-			});	
+				b.get("first");
+			});
 			pId.find("a.a_last").click(function () {
-				b.get("last");	
-			});	
+				b.get("last");
+			});
 			pId.find("a.a_href").click(function () {
-				b.get($(this).attr("data-i"));	
-			});	
+				b.get($(this).attr("data-i"));
+			});
 			pId.find('input.a_text').keydown(function (e) {
 				if (e.keyCode === 13){
 				   b.get($.trim($(this).val()));
@@ -193,7 +194,7 @@
 				b.get($.trim(pId.find('input.a_text').val()));
 			});
 		}
-		
+
 		b.toPage = function () {
 			var str="";
 			if(c.recordCount>0) {//如果总共页大小每页多少条则,否则不出现分页码
@@ -237,7 +238,7 @@
 					if(page>(pageCount-5)) {
 						end=pageCount;
 					} else if(page<5){
-						end=8;						
+						end=8;
 					}else {
 						end=page+3;
 					};
@@ -267,11 +268,11 @@
 				};
 				str += '<span class="href"><label for="pageText">\u5230\u7B2C</label><input autocomplete="off" type="text" class="a_text" value="'+ page +'"><label for="pageText">\u9875</label><input type="button" value="\u8F6C\u5230" class="a_button"></span>';
 			};
-			
+
 			c.pageId.html(str);
-			return b;	
+			return b;
 		}
-		
+
 		//对外暴露接口
 		self.run = b.run;
 		self.get = b.get;

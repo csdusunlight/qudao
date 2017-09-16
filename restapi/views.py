@@ -35,7 +35,8 @@ class ProjectList(BaseViewMixin, generics.ListCreateAPIView):
     search_fields = ('title', 'introduction')
     pagination_class = MyPageNumberPagination
     def perform_create(self, serializer):
-        serializer.save(is_official=False)
+        obj = serializer.save(is_official=False, user=self.request.user, state='10')
+        SubscribeShip.objects.create(project=obj, user=self.request.user)
 
 class ProjectDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
@@ -94,7 +95,7 @@ class NoticeDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     serializer_class = NoticeSerializer
     permission_classes = (IsOwnerOrStaff,)
     
-class SubscribeShipList(BaseViewMixin, generics.ListCreateAPIView):
+class SubscribeShipList(BaseViewMixin, generics.ListAPIView):
     queryset = SubscribeShip.objects.all()
     def get_queryset(self):
         user = self.request.user

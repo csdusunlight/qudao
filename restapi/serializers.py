@@ -41,10 +41,17 @@ class NoticeSerializer(serializers.ModelSerializer):
         
 # SubscribeShip
 class SubscribeShipSerializer(serializers.ModelSerializer):
+    project_intro = serializers.CharField(source='project.introduction', read_only=True)
+    project_aprice = serializers.CharField(source='project.aprice', read_only=True)
+    project_bprice = serializers.CharField(source='project.bprice', read_only=True)
+    project_cprice = serializers.CharField(source='project.cprice', read_only=True)
+    project_investrange = serializers.CharField(source='project.investrange', read_only=True)
+    project_intrest = serializers.CharField(source='project.intrest', read_only=True)
+    project_term = serializers.CharField(source='project.term', read_only=True)
     class Meta:
         model = SubscribeShip
         fields = '__all__'
-#         read_only_fields = ('user', 'project')
+        read_only_fields = ('user', 'project')
         
 class AnnouncementSerializer(serializers.ModelSerializer):
     class Meta:

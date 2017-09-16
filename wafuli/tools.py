@@ -6,6 +6,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import F
 import logging
 from hashlib import sha1
+from wafuli.models import SubscribeShip
+from account.models import MyUser
 logger = logging.getLogger('wafuli')
 def createUrl():
     tstr = time.strftime('%Y/%m/%d/')
@@ -87,3 +89,17 @@ def has_permission(code):
                 return HttpResponse(status=403)
         return wrapper
     return decorator
+
+def batch_subscribe(user, is_official, project):
+    if is_official:
+        id_list_list = list(MyUser.objects.all().values_list('id'))
+        id_list = reduce(lambda x,y: x + y, id_list_list)
+        subbulk = []
+        for id in id_list:
+            sub = SubscribeShip(user_id=id, project=project, )
+            subbulk.append(sub)
+        SubscribeShip.objects.bulk_create(subbulk)
+    else:
+        SubscribeShip.objects.create(user=user, project=project)
+def batch_deletesub(project):
+    SubscribeShip.objects.filter(project=project).delete()

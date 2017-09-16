@@ -26,7 +26,7 @@ from django.views.decorators.csrf import csrf_exempt
 from account.vip import vip_judge, get_vip_bonus
 import json
 from django.db import transaction
-from tools import has_permission
+from public.tools import has_permission
 from decimal import Decimal
 # Create your views here.
 logger = logging.getLogger('wafuli')

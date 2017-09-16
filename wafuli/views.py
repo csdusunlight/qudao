@@ -18,8 +18,8 @@
 # from account.models import MyUser, UserSignIn
 # from django.contrib.contenttypes.models import ContentType
 # from django.db import transaction
-# from wafuli.tools import update_view_count
-# from .tools import saveImgAndGenerateUrl
+# from wafuli.public import update_view_count
+# from .public import saveImgAndGenerateUrl
 # from django.contrib.auth.decorators import login_required
 # from rest_framework import generics
 # from wafuli.serializers import HongbaoSerializer
@@ -27,7 +27,7 @@
 # from rest_framework.filters import OrderingFilter, SearchFilter
 # from project_admin.Paginations import ProjectPageNumberPagination
 # logger = logging.getLogger('wafuli')
-# from .tools import listing
+# from .public import listing
 # import re
 #
 from django.shortcuts import render

@@ -756,7 +756,7 @@ def project_manage(request):
                  "state":con.get_state_display(),
                  "price":price,
                  "is_on":is_on, #是否主页呈现
-                 "is_recom":con.is_recom,#是否在推荐位
+                 "is_recom":is_recom,#是否在推荐位
                  }
             data.append(i)
         if data:

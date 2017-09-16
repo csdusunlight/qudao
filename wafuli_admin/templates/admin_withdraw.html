@@ -6,22 +6,22 @@
   $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
   });
-  var data = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th>开户行姓名</th>'+
+  var data = '<table width="100%"><tr><th>QQ</th><th>手机号</th><th>账户余额</th><th>开户行</th><th>开户行姓名</th>'+
   '<th>银行卡号</th><th>申请提现金额</th><th>申请时间</th><th>处理状态</th>'+
   '<th>处理</th><th>备注</th>'+
-  '</tr>[data]<tr><td>{username}</td><td>{mobile}</td><td>{balance}</td><td>{bank}</td>'+
+  '</tr>[results]<tr><td>{username}</td><td>{mobile}</td><td>{balance}</td><td>{bank}</td>'+
   '<td>{real_name}</td><td>{card_number}</td><td>{amount}</td><td>{time}</td>'+
   '<td>{state}</td>'+
   '<td id="item_{id}"><a class="fyin" onclick="pass({id})">接受'+
-  '</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td><td>{remark}</td></tr>[/data]</table>';
-  var data2 = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th>开户行姓名</th>'+
+  '</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td><td>{remark}</td></tr>[/results]</table>';
+  var data2 = '<table width="100%"><tr><th>QQ</th><th>手机号</th><th>账户余额</th><th>开户行</th><th>开户行姓名</th>'+
   '<th>银行卡号</th><th>申请提现金额</th><th>申请时间</th><th>处理状态</th>'+
   '<th>处理人</th><th>处理时间</th><th>备注</th>'+
-  '</tr>[data]<tr><td>{username}</td><td>{mobile}</td><td>{balance}</td><td>{bank}</td>'+
+  '</tr>[results]<tr><td>{username}</td><td>{mobile}</td><td>{balance}</td><td>{bank}</td>'+
   '<td>{real_name}</td><td>{card_number}</td><td>{amount}</td><td>{time}</td>'+
   '<td>{state}</td><td>{admin}</td><td>{time_admin}</td>'+
-  '<td>{remark}</td></tr>[/data]</table>';
-  var url = "{% url 'get_admin_with_page' %}" + "?page={page}&size={pageSize}";
+  '<td>{remark}</td></tr>[/results]</table>';
+  var url = "/restapi/users/" + "?page={page}&size={pageSize}";
   var selected_id = 0;
   function pass(id){
    $(".Deny-y").css("display","block");

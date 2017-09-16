@@ -54,7 +54,7 @@ function edit(id) {     //编辑调用函数
     $.ajax({
         url: '/restapi/projects/' + project_id + '/',
         dataType: "json",
-        type:"post",
+        type:"get",
         success: function(ret) {
             console.log()
             $('#edit_detail').val(ret.introduction);
@@ -73,7 +73,7 @@ $(function(){
 //	});
 	$("#pagedata").ajaxPage({
         url:url,
-        type: 'post',
+//      type: 'post',
         pageId:$("#page"),
         pageSize:10,
         run:true,

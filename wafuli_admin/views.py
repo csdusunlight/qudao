@@ -66,22 +66,29 @@ def index(request):
 #             aggregate(cou=Count('user',distinct=True),sum=Sum('translist__transAmount'))
 #     total['with_count'] = dict_with.get('cou')
 #     total['with_total'] = (dict_with.get('sum') or 0)/100.0
-# 
+#
 #     dict_ret = InvestLog.objects.filter(investlog_type__in=['1','4','5','6','7'],audit_state='0').\
 #             aggregate(cou=Count('user',distinct=True),sum=Sum('translist__transAmount'))
 #     total['ret_count'] = dict_ret.get('cou')
 #     total['ret_total'] = (dict_ret.get('sum') or 0)/100.0
-# 
+#
 #     dict_coupon = InvestLog.objects.filter(investlog_type='4',audit_state='0').\
 #             aggregate(sum=Sum('translist__transAmount'))
 #     total['coupon_total'] = (dict_coupon.get('sum') or 0)/100.0
-# 
+#
 #     dict_score = InvestLog.objects.filter(investlog_type='3',audit_state='0').\
 #             aggregate(sum=Sum('score_translist__transAmount'))
 #     total['ret_count'] = (dict_ret.get('cou') or 0)
 #     total['score_exchange_total'] = dict_score.get('sum')
 #{'num':num,'num_today':num_today,'total':total}
     return render(request,"admin_index.html",)
+
+def admin_apply(request):
+    return render(request,"admin_apply.html",)
+def admin_office(request):
+    return render(request,"admin_office.html",)
+def admin_private(request):
+    return render(request,"admin_private.html",)
 
 
 @transaction.atomic
@@ -117,8 +124,8 @@ def admin_invest(request):
         investlog_user = investlog.user
         card = investlog_user.user_bankcard.first()
 
-        project = investlog.project   
-        project_title = project.title   
+        project = investlog.project
+        project_title = project.title
 
         translist = None
         if type==1:

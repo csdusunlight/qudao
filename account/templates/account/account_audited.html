@@ -247,57 +247,73 @@
 <script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
 <script type="text/javascript" src="{% static 'js/add-img.js' %}"></script>
 <script type="text/javascript">
+    $.ajax({
+        url:"/restapi/investlogs/?is_official=false",
+    	type:"get",
+    	dataType: "json",
+    	success: function(ret) {
+            console.log(ret.results);
+            var option_html = '';
+            for (var i = 0; i < ret.results.length; i++) {
+            	option_html += '<option value="' + ret.results[i].project + '">' + ret.results[i].project + '</option>';
+            }
+            $('.project_02').html(option_html);
+        },
+        error: function() {
+            alert("请检查网络连接");
+        }
+    });
 //  未审核
     var data = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>备注</th><th>审核状态</th><th>操作</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
-        '<td>{invest_amount}</td><td>{remark}</td><td>{state}</td>' +
+        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<td>{invest_amount}</td><td>{remark}</td><td>{audit_state}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData(this,{id})">删除' +
         '</a> │ <a class="jion-s" onclick="editData(this,{id})">编辑' +
         '</a> │ <a class="jion-s" onclick="addImg(this,{id})">提交截图</a></td></tr>[/results]</table>';
 //  已通过
     var data1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>返现金额</th><th>备注</th><th>审核状态</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
-        '<td>{invest_amount}</td><td>{ret_amount}</td><td>{remark}</td><td>{state}</td></tr>[/results]</table>';
+        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<td>{invest_amount}</td><td>{ret_amount}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
 //  已拒绝
     var data2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>拒绝原因</th><th>备注</th><th>审核状态</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
-        '<td>{invest_amount}</td><td>{refuse_reason}</td><td>{remark}</td><td>{state}</td></tr>[/results]</table>';
+        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<td>{invest_amount}</td><td>{refuse_reason}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
 //  已删除
     var data3 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>备注</th><th>审核状态</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
-        '<td>{invest_amount}</td><td>{remark}</td><td>{state}</td></tr>[/results]</table>';
+        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<td>{invest_amount}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
       
 //  未审核
     var data_user = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th><th>操作</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zfbname}</td><td>{remark}</td><td>{state}</td>' +
+        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td><td>{audit_state}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData_02(this,{id})">删除' +
         '</a> │ <a class="jion-s" onclick="editData_02(this,{id})">编辑</a></td></tr>[/results]</table>';
 //  已通过
     var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zfbname}</td><td>{remark}</td><td>{state}</td></tr>[/results]</table>';
+        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
 //  已打款
     var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>返现金额</th><th>备注</th><th>审核状态</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zfbname}</td><td>{ret_amount}</td><td>{remark}</td><td>{state}</td></tr>[/results]</table>';
+        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{ret_amount}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
 //  已拒绝
     var data_user3 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>拒绝原因</th><th>备注</th><th>审核状态</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zfbname}</td><td>{refuse_reason}</td><td>{remark}</td><td>{state}</td></tr>[/results]</table>';
+        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{refuse_reason}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
 //  已删除
     var data_user4 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zfbname}</td><td>{remark}</td><td>{state}</td></tr>[/results]</table>';
+        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
 
         var url = "/restapi/investlogs/?page={page}&size={pageSize}&is_official=true";
         var url2 = "/restapi/investlogs/?page={page}&size={pageSize}&is_official=false";
@@ -319,7 +335,18 @@
         
         //          编辑/删除数据部分(官方)
         function removeData (obj,id) {
-        console.log(id);
+            $.ajax({
+                url:"/restapi/investlogs/" + id + "/",
+                type:"delete",
+                dataType: "json",
+                success: function(ret) {
+                    console.log('删除成功');
+                    $(obj).parent().parent().remove();
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
         }
         function addImg (obj,id) {
             $('.popup.m-add-img').addClass('in');
@@ -389,23 +416,16 @@
                     'remark': remark
                 },
                 success: function(ret) {
-                    if(ret.code == 1) {
-                        alert("请重新登录！")
-                        window.location.href = ret.url;
-                    } else if(ret.code == 0) {
-                        alert("更改数据成功！");
-                        console.log(ret.data);
-                        var parent_dom = $(edit_parent);
-                        parent_dom.find("td").eq(0).text(ret.data.content_object);
-                        parent_dom.find("td").eq(1).text(ret.data.invest_time);
-                        parent_dom.find("td").eq(2).text(ret.data.invest_account);
-                        parent_dom.find("td").eq(3).text(ret.data.invest_term);
-                        parent_dom.find("td").eq(4).text(ret.data.invest_amount);
-                        parent_dom.find("td").eq(5).text(ret.data.remark);
-                        popupOutInfo();
-                    } else {
-                        alert(ret.res_msg);
-                    }
+                    var parent_dom = $(edit_parent);
+                    parent_dom.find("td").eq(0).text(ret.project);
+                    parent_dom.find("td").eq(1).text(ret.invest_date);
+                    parent_dom.find("td").eq(2).text(ret.invest_mobile);
+                    parent_dom.find("td").eq(3).text(ret.invest_term);
+                    parent_dom.find("td").eq(4).text(ret.invest_amount);
+                    parent_dom.find("td").eq(5).text(ret.zhifubao);
+                    parent_dom.find("td").eq(6).text(ret.zhifubao_name);
+                    parent_dom.find("td").eq(7).text(ret.remark);
+                    $('.popup.m-edit-proj_02').removeClass('in');
                 },
                 error: function() {
                     alert("请检查网络连接");
@@ -422,7 +442,18 @@
         }
         
         function removeData_02 (obj,id) {
-        console.log(id);
+            $.ajax({
+                url:"/restapi/investlogs/" + id + "/",
+                type:"delete",
+                dataType: "json",
+                success: function(ret) {
+                    console.log('删除成功');
+                    $(obj).parent().parent().remove();
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
         }
         var project_id_02;
         var edit_parent_02;
@@ -482,40 +513,31 @@
             }
 
             $.ajax({
-                url: url,
+                url: "/restapi/investlogs/" + project_id + "/",
                 dataType: "json",
-                type: 'POST',
+                type: 'put',
                 data: {
-                    'project_id': project_id,
                     'project': project,
-                    'date': date,
-                    'telnum': telnum,
-                    'term': term,
-                    'money': money,
-                    'zfb': zfb,
-                    'zfbname': zfbname,
+                    'invest_date': date,
+                    'invest_mobile': telnum,
+                    'invest_term': term,
+                    'invest_amount': money,
+                    'zhifubao': zfb,
+                    'zhifubao_name': zfbname,
                     'remark': remark
                 },
                 success: function(ret) {
-                    if(ret.code == 1) {
-                        alert("请重新登录！")
-                        window.location.href = ret.url;
-                    } else if(ret.code == 0) {
                         alert("更改数据成功！");
-                        console.log(ret.data);
-                        var parent_dom = $(edit_parent);
-                        parent_dom.find("td").eq(0).text(ret.data.content_object);
-                        parent_dom.find("td").eq(1).text(ret.data.invest_time);
-                        parent_dom.find("td").eq(2).text(ret.data.invest_account);
-                        parent_dom.find("td").eq(3).text(ret.data.invest_term);
-                        parent_dom.find("td").eq(4).text(ret.data.invest_amount);
-                        parent_dom.find("td").eq(5).text(ret.data.zfb);
-                        parent_dom.find("td").eq(6).text(ret.data.zfbname);
-                        parent_dom.find("td").eq(7).text(ret.data.remark);
-                        popupOutInfo();
-                    } else {
-                        alert(ret.res_msg);
-                    }
+                        var parent_dom = $(edit_parent_02);
+                        parent_dom.find("td").eq(0).text(ret.project);
+                        parent_dom.find("td").eq(1).text(ret.invest_date);
+                        parent_dom.find("td").eq(2).text(ret.invest_mobile);
+                        parent_dom.find("td").eq(3).text(ret.invest_term);
+                        parent_dom.find("td").eq(4).text(ret.invest_amount);
+                        parent_dom.find("td").eq(5).text(ret.zhifubao);
+                        parent_dom.find("td").eq(6).text(ret.zhifubao_name);
+                        parent_dom.find("td").eq(7).text(ret.remark);
+                        $('.popup.m-edit-proj_02').removeClass('in');
                 },
                 error: function() {
                     alert("请检查网络连接");

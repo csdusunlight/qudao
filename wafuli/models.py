@@ -69,23 +69,27 @@ Project_TYPE = (
     ('2', u'稳健投资'),
     ('3', u'高收益区'),
 )
-class Project(Base):
+class Project(models.Model):
+    title = models.CharField(max_length=200, verbose_name=u"标题")
+    priority = models.IntegerField(u"优先级",default=3)
+    pub_date = models.DateTimeField(u"创建时间", default=timezone.now)
     user = models.ForeignKey(MyUser, null=True, related_name="created_projects")
     is_official = models.BooleanField(u"是否官方项目")
-    state = models.CharField(u"项目状态", max_length=1, choices=Project_STATE)
+    state = models.CharField(u"项目状态", max_length=2, choices=Project_STATE)
     pic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）")
     strategy = models.URLField(u"攻略链接")
     company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, verbose_name=u"合作平台")
     type = models.CharField(u"项目类别", max_length=1, choices=Project_TYPE)
     is_multisub_allowed = models.BooleanField(u"是否允许同一手机号多次提交", default=False)
-    introduction = models.TextField(u"项目简介",max_length=200)
+    introduction = models.TextField(u"项目简介",max_length=100)
     aprice = models.CharField(u"渠道统一价",max_length=20)
     bprice = models.CharField(u"代理统一价",max_length=20)
     cprice = models.CharField(u"客户指导价",max_length=20)
-    term = models.CharField(u"标期长度", max_length=100)
+    term = models.CharField(u"标期长度", max_length=20)
+    investrange = models.CharField(u"投资额度区间", max_length=20)
+    intrest = models.CharField(u"预期年化", max_length=10)
     marks = models.ManyToManyField(Mark, verbose_name=u'标签', related_name="project_set", blank=True)
     subscribers = models.ManyToManyField(MyUser, through='SubscribeShip')
-    user_event = GenericRelation("UserEvent",related_query_name='finance')
     class Meta:
         verbose_name = u"理财项目"
         verbose_name_plural = u"理财项目"
@@ -103,11 +107,15 @@ class Project(Base):
 class SubscribeShip(models.Model):
     user = models.ForeignKey(MyUser)
     project = models.ForeignKey(Project)
+    introduction = models.CharField(u"客户价",max_length=100)
     price = models.CharField(u"客户价",max_length=20)
-    is_recommend = models.BooleanField(default=False)
+    is_on = models.BooleanField(u"是否在主页显示",default=True)
+    is_recommend = models.BooleanField(u"是否放到推荐位置",default=False)
+    intrest = models.CharField(u"预期年化", max_length=10)
     def __unicode__(self):
         return self.user.mobile + self.project.title
-
+    class Meta:
+        unique_together = (('user', 'project'),)
 
 class InvestLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="investlog_submit")

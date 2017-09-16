@@ -37,6 +37,8 @@ from account.tools import send_mail, get_client_ip
 from django.db import connection, transaction
 from wafuli.data import BANK
 from wafuli.models import TransList, WithdrawLog, Project, SubscribeShip
+from public.tools import login_required_ajax
+
 @sensitive_post_parameters()
 @csrf_protect
 @never_cache
@@ -716,6 +718,7 @@ def vip(request):
 
 from django.db.models import Q
 
+@csrf_exempt
 @login_required
 def project_manage(request):
     if request.method == "POST":
@@ -763,8 +766,18 @@ def project_manage(request):
         res["pageCount"] = paginator.num_pages
         res["recordCount"] = item_list.count()
         res["data"] = data
+        return JsonResponse(res)
     else:
         return render(request, 'account/account_myproject.html')
-# @login_required
-# def subscribe(request):
+
+@csrf_exempt
+@login_required_ajax
+def subscribe(request):
+    user = request.user
+    id = request.POST.get('id')
+    is_on = request.POST.get('is_on')
+    if is_on is True:
+        SubscribeShip.objects.create(user=user, project_id=id,)
+    else:
+        SubscribeShip.objects.filter(user=user, project_id=id).delete()
 

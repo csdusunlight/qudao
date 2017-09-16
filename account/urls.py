@@ -47,5 +47,5 @@ url(r'^account_myproject/$', 'account.views.account_myproject', name='account_my
 url(r'^account_submit/$', 'account.views.account_submit', name='account_submit'),
 url(r'^account_audited/$', 'account.views.account_audited', name='account_audited'),
 url(r'^my_homepage/$', 'account.views.my_homepage', name='my_homepage'),
-url(r'^project$', 'account.views.project_manage', name='project_manage'),
+url(r'^project/$', 'account.views.project_manage', name='project_manage'),
 ]

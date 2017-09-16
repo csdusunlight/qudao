@@ -768,6 +768,7 @@ def project_manage(request):
         res["pageCount"] = paginator.num_pages
         res["recordCount"] = item_list.count()
         res["data"] = data
+        return JsonResponse(res)
     else:
         return render(request, 'account/account_myproject.html')
 

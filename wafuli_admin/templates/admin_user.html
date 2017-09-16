@@ -4,25 +4,25 @@
 $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 });
-var data = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>邮箱</th><th>银行卡号</th>'+
-	'<th>持卡人姓名</th><th>注册时间</th><th>最近登录时间</th><th>推荐人用户名</th><th>推荐人手机号</th>'+
-	'<th>账户余额</th><th width="5%">是否为黑名单</th><th>账户操作</th><th>渠道管理</th>'+
-	'</tr>[data]<tr><td>{username}</td><td>{mobile}</td><td>{email}</td>'+
-	'<td>{card_number}</td><td>{real_name}</td><td>{time}</td><td>{recent_login_time}</td>'+
-	'<td>{inviter_name}</td><td>{inviter_mobile}</td><td>{balance}</td><td id="is_black_{id}">{is_black}</td>'+
+var data = '<table width="100%"><tr><th>渠道等级</th><th>QQ</th><th>QQ昵称</th><th>手机号</th>'+
+	'<th>银行卡号</th><th>持卡人姓名</th><th>申请时间</th><th>最近登陆时间</th><th>账户余额</th>'+
+	'<th width="5%">是否为黑名单</th><th>账户操作</th>'+
+	'</tr>[results]<tr><td>{level}</td><td>{qq_number}</td><td>{qq_name}</td>'+
+	'<td>{mobile}</td><td>{银行卡号}</td><td>{持卡人姓名}</td><td>{申请时间}</td>'+
+	'<td>{最近登陆时间}</td><td>{balance}</td><td id="is_black_{id}">{is_black}</td>'+
 	'<td id="item_{id}"><a class="btn1-x" onclick="addcash({id})">余额</a>│'+
-	'<a class="btn2-x" onclick="addscore({id})">积分</a>│<a id="black_{id}" onclick="addblack({id})" class="btn3-x">{opertype}</a>'+
-	'</td><td><a id="channel_{id}" onclick="addChannel({id})">{opertype_channel}</a></td></tr>[/data]</table>';
-var url = "{% url 'get_admin_user_page' %}" + "?page={page}&size={pageSize}";
+	'<a class="btn2-x" onclick="addblack({id})">加黑</a>'+
+	'</td></tr>[/results]</table>';
+var url = "/restapi/users/" + "?page={page}&size={pageSize}";
 var selected_id = 0;
 function addcash(id){
 	$(".Balance").css("display","block");
 	selected_id = id;
 }
-function addscore(id){
-	$(".Points").css("display","block");
-	selected_id = id;
-}
+//function addscore(id){
+//	$(".Points").css("display","block");
+//	selected_id = id;
+//}
 function addblack(id){
 	selected_id = id;
 	var opertype=$("a#black_"+id).html();
@@ -33,16 +33,16 @@ function addblack(id){
 		$(".Blacklist-none").css("display","block");
 	}
 }
-function addChannel(id){
-	selected_id = id;
-	var opertype=$("a#channel_"+id).html();
-	if(opertype == "赋予渠道权限"){
-		$(".Channel").css("display","block");
-	}
-	else {
-		$(".Channel-none").css("display","block");
-	}
-}
+//function addChannel(id){
+//	selected_id = id;
+//	var opertype=$("a#channel_"+id).html();
+//	if(opertype == "赋予渠道权限"){
+//		$(".Channel").css("display","block");
+//	}
+//	else {
+//		$(".Channel-none").css("display","block");
+//	}
+//}
 
 $(document).ready(function(){
 	$("li.home2").toggleClass("on");
@@ -208,80 +208,80 @@ $(document).ready(function(){
 		$("td#is_black_"+selected_id).html("否");
 		$(".Blacklist-none").css("display","none");
 	});
-	$('.Channel input[type="submit"]').click(function(){
-		var id = selected_id;
-		if (!id){
-			return;
-		}
-		var qq_number = $("input#qq").val();
-		var level = $("input#level").val();
-		if (!level){
-			alert("请输入渠道等级");
-			return;
-		}
-		$.ajax({
-			url:"{%url 'admin_user' %}",
-			dataType:"json",
-			type:"POST",
-			data:{
-				'id':id,
-				'type':5,
-				'qq_number':qq_number,
-				'level':level
-			},
-			success:function(ret){
-				if(ret.code==0){
-					alert("操作成功！");
-				}
-				else if(ret.code==-1){
-					alert("该页面已过期，请重新登录！");
-					window.location.href = ret.url;
-				}
-				else {
-					alert(ret.res_msg);
-				}
-			},
-			error:function(){
-				alert("请检查网络连接");
-			}
-		});
-		$("a#channel_"+selected_id).html("撤销渠道");
-		$("td#is_channel_"+selected_id).html("是");
-		$(".Channel").css("display","none");
-	});
-	$('.Channel-none input[type="submit"]').click(function(){
-		var id = selected_id;
-		if (!id){
-			return;
-		}
-		$.ajax({
-			url:"{%url 'admin_user' %}",
-			dataType:"json",
-			type:"POST",
-			data:{
-				'id':id,
-				'type':6,
-			},
-			success:function(ret){
-				if(ret.code==0){
-					alert("操作成功！");
-				}
-				else if(ret.code==-1){
-					alert("该页面已过期，请重新登录！");
-					window.location.href = ret.url;
-				}
-				else {
-					alert(ret.res_msg);
-				}
-			},
-			error:function(){
-				alert("请检查网络连接");
-			}
-		});
-		$("a#channel_"+selected_id).html("赋予渠道权限");
-		$("td#is_channel_"+selected_id).html("否");
-		$(".Channel-none").css("display","none");
-	});
+//	$('.Channel input[type="submit"]').click(function(){
+//		var id = selected_id;
+//		if (!id){
+//			return;
+//		}
+//		var qq_number = $("input#qq").val();
+//		var level = $("input#level").val();
+//		if (!level){
+//			alert("请输入渠道等级");
+//			return;
+//		}
+//		$.ajax({
+//			url:"{%url 'admin_user' %}",
+//			dataType:"json",
+//			type:"POST",
+//			data:{
+//				'id':id,
+//				'type':5,
+//				'qq_number':qq_number,
+//				'level':level
+//			},
+//			success:function(ret){
+//				if(ret.code==0){
+//					alert("操作成功！");
+//				}
+//				else if(ret.code==-1){
+//					alert("该页面已过期，请重新登录！");
+//					window.location.href = ret.url;
+//				}
+//				else {
+//					alert(ret.res_msg);
+//				}
+//			},
+//			error:function(){
+//				alert("请检查网络连接");
+//			}
+//		});
+//		$("a#channel_"+selected_id).html("撤销渠道");
+//		$("td#is_channel_"+selected_id).html("是");
+//		$(".Channel").css("display","none");
+//	});
+//	$('.Channel-none input[type="submit"]').click(function(){
+//		var id = selected_id;
+//		if (!id){
+//			return;
+//		}
+//		$.ajax({
+//			url:"{%url 'admin_user' %}",
+//			dataType:"json",
+//			type:"POST",
+//			data:{
+//				'id':id,
+//				'type':6,
+//			},
+//			success:function(ret){
+//				if(ret.code==0){
+//					alert("操作成功！");
+//				}
+//				else if(ret.code==-1){
+//					alert("该页面已过期，请重新登录！");
+//					window.location.href = ret.url;
+//				}
+//				else {
+//					alert(ret.res_msg);
+//				}
+//			},
+//			error:function(){
+//				alert("请检查网络连接");
+//			}
+//		});
+//		$("a#channel_"+selected_id).html("赋予渠道权限");
+//		$("td#is_channel_"+selected_id).html("否");
+//		$(".Channel-none").css("display","none");
+//	});
 	$("#search").click(function(){
 		var startTime = $("#startTime").val();
 		var endTime = $("#endTime").val();
@@ -427,7 +427,7 @@ $(document).ready(function(){
         </div>
     </div>
     <!--积分操作-->
-    <div class="Points">
+    <!--<div class="Points">
     	<div class="w570-box">
         	<h3>积分操作</h3>
             <button class="none-x"></button>
@@ -446,7 +446,7 @@ $(document).ready(function(){
                 </div>
             </form>
         </div>
-    </div>
+    </div>-->
     <!--确认加黑-->
     <div class="Blacklist">
     	<div class="w570-box">
@@ -476,7 +476,7 @@ $(document).ready(function(){
         </div>
     </div>
     <!--确认添加渠道-->
-    <div class="Channel">
+    <!--<div class="Channel">
       <div class="w570-box">
           <h3>添加渠道操作</h3>
             <button class="none-x"></button>
@@ -489,9 +489,9 @@ $(document).ready(function(){
                 </div>
             </form>
         </div>
-    </div>
+    </div>-->
     <!--取消添加渠道-->
-    <div class="Channel-none">
+    <!--<div class="Channel-none">
       <div class="w570-box">
           <h3>取消渠道操作</h3>
             <button class="none-x"></button>
@@ -503,6 +503,6 @@ $(document).ready(function(){
                 </div>
             </form>
         </div>
-    </div>
+    </div>-->
     <!--end-->
   {%endblock%}

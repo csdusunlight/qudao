@@ -40,11 +40,15 @@ class MyUserManager(BaseUserManager):
             return self.get(**{'mobile': username})
         except MyUser.DoesNotExist:
             return self.get(**{'username': username})
-        
+
 COLORS = (
-    ('1', u'蓝色'),
-    ('2', u'红色'),
-)   
+    ('0', u'皮肤0'),
+    ('1', u'皮肤1'),
+    ('2', u'皮肤2'),
+    ('3', u'皮肤3'),
+    ('4', u'皮肤4'),
+    ('5', u'皮肤5'),
+)
 class MyUser(AbstractBaseUser, PermissionsMixin):
 #     email = models.EmailField('email address', max_length=255)
     mobile = models.CharField('mobile number', max_length=11, unique=True,)
@@ -68,7 +72,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField('active', default=True,
         help_text=('Designates whether this user should be treated as '
                     'active. Unselect this instead of deleting accounts.'))
-    
+
     invite_balance = models.DecimalField(u'邀请奖励账户余额', default = Decimal(0), max_digits=10, decimal_places=2)
     invite_income = models.DecimalField(u'邀请奖励现金', default = Decimal(0), max_digits=10, decimal_places=2)
     balance = models.DecimalField(u'账户余额', default = Decimal(0), max_digits=10, decimal_places=2)

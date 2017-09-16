@@ -298,8 +298,7 @@ def account_audited(request):
 
 
 
-def my_homepage(request):
-    return render(request, 'account/my_homepage.html',)
+
 # def signin(request):
 #
 #     if not request.is_ajax():
@@ -766,3 +765,6 @@ def project_manage(request):
         res["data"] = data
     else:
         return render(request, 'account/account_myproject.html')
+# @login_required
+# def subscribe(request):
+

@@ -1,8 +1,4 @@
-'''
-Created on 20160222
 
-@author: lch
-'''
 from django.conf.urls import url,include
 from django.views.generic.base import TemplateView
 from wafuli import views
@@ -15,6 +11,5 @@ from wafuli import views
 #     url(r'^statement/$', 'wafuli.views.statement'),
 # ]
 urlpatterns = [
-    url(r'^$', 'wafuli.views.index', name='index'),
-    url(r'^project_all$', 'wafuli.views.project_all', name='project_all'),
+    url(r'^my_homepage/$', 'homepage.views.my_homepage', name='my_homepage'),
 ]

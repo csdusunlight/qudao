@@ -28,21 +28,20 @@
 $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 });
-var data = '<table width="100%"><tr><th>用户手机号</th><th>投资平台</th><th>投资时间</th><th>投资手机号</th>'+
-	'<th>投资金额</th><th>投资期限</th><th>提交时间</th><th>处理状态</th><th>任务截图</th>'+
-	'<th>操作</th><th>备注</th></tr>[results]<tr><td>{mobile}</td><td>{project}</td><td>{invest_time}</td><td>{invest_account}</td>'+
-	'<td>{invest_amount}</td><td>{invest_term}</td><td>{time}</td><td>{state_des}</td>'+
-  '<td><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
+var data = '<table width="100%"><tr><th>QQ</th><th>QQ昵称</th><th>个人简介</th><th>相关截图</th>'+
+	'<th>手机号</th><th>申请时间</th>'+
+	'<th>操作</th></tr>[results]<tr><td>{qq_number}</td><td>{qq_name}</td><td>{profile}</td>'+
+  '<td><a target="_blank" href="?id={id}">' +
 	'<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
-	''+
+	'<td>{mobile}</td><td>{申请时间}</td>'+
 	'<td id="item_{id}"><a class="fyin" onclick="pass({id})">返现'+
-	'</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td><td>{remark}</td></tr>[/results]</table>';
+	'</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td></tr>[/results]</table>';
 var data2 = '<table width="100%"><tr><th>用户手机号</th><th>投资平台</th><th>投资时间</th><th>投资手机号</th>'+
 	'<th>投资金额</th><th>投资期限</th><th>提交时间</th><th>处理状态</th><th>任务截图</th>'+
 	'<th>审核人</th><th>审核时间</th><th width="6%">返现金额</th><th width="6%">返现积分</th>'+
 	'<th>备注</th></tr>[results]<tr><td>{mobile}</td><td>{project}</td><td>{invest_time}</td><td>{invest_account}</td>'+
 	'<td>{invest_amount}</td><td>{invest_term}</td><td>{time}</td><td>{state_des}</td>'+
-  '<td><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
+  '<td><a target="_blank" href="?id={id}">' +
 	'<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
 	'<td>{admin_user}</td><td>{audit_time}</td>'+
 	'<td class="ret-money">{ret_money}</td><td>{ret_score}</td><td>{remark}</td></tr>[/results]</table>';
@@ -51,12 +50,11 @@ var data3 = '<table width="100%"><tr><th>用户手机号</th><th>投资平台</t
     '<th>审核人</th><th>审核时间</th><th width="6%">返现金额</th><th width="6%">返现积分</th>'+
     '<th>拒绝原因</th></tr>[results]<tr><td>{mobile}</td><td>{project}</td><td>{invest_time}</td><td>{invest_account}</td>'+
     '<td>{invest_amount}</td><td>{invest_term}</td><td>{time}</td><td>{state_des}</td>'+
-  '<td><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
+  '<td><a target="_blank" href="?id={id}">' +
     '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
     '<td>{admin_user}</td><td>{audit_time}</td>'+
     '<td class="ret-money">{ret_money}</td><td class="ret-score">{ret_score}</td><td>{refuse_reason}</td></tr>[/results]</table>';
-// var url = "{% url 'get_admin_task_page' %}" + "?page={page}&size={pageSize}";
-var url = '/usereventlist/?event_type=9&page={page}&size={pageSize}';
+var url = '/restapi/users/?event_type=9&page={page}&size={pageSize}';
 function pagecallback(){
     $(".ret-money").each(function(index, el) {
         if ($(this).text() == 'null') {
@@ -104,7 +102,7 @@ $(document).ready(function(){
 			return;
 		}
 		$.ajax({
-			url:"{%url 'admin_media' %}",
+			url:"",
 			dataType:"json",
 			type:"POST",
 			data:{
@@ -138,7 +136,7 @@ $(document).ready(function(){
 			return;
 		}
 		$.ajax({
-			url:"{%url 'admin_media' %}",
+			url:"",
 			dataType:"json",
 			type:"POST",
 			data:{
@@ -221,7 +219,7 @@ $(document).ready(function(){
 	});
 
   $("#export").click(function() {
-    var html = '<form action="' + "{% url 'export_media_excel' %}" + '" method="get" target="_self" id="postData_form">';
+    var html = '<form action="' + "" + '" method="get" target="_self" id="postData_form">';
     var startTime = $("#startTime").val();
     var endTime = $("#endTime").val();
     if(startTime && endTime) {
@@ -282,7 +280,7 @@ $(document).ready(function(){
             return;
         }
         $.ajaxFileUpload({
-            url: "{% url 'import_media_excel'%}",
+            url: "",
             secureuri: false,
             fileElementId: fileElementId, //file标签的id
             dataType: 'json', //返回数据的类型

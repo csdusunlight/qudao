@@ -31,10 +31,36 @@
 # import re
 #
 from django.shortcuts import render
+from wafuli_admin.models import GlobalStatis
+from wafuli.models import MAdvert_PC, Project, Company
 def index(request):
-    return render(request, 'wfl-index.html', )
+    data = {
+        'invest_total':0,#引入资金
+        'invite_total':0,#渠道引入用户数
+        'with_total':0,#提现总额
+        'user_total':0,#累计加入渠道数
+    }
+    global_data = GlobalStatis.objects.first()
+    if global_data:
+        data['invest_total']=global_data.invest_total
+        data['invite_total']=global_data.invite_total
+        data['with_total']=global_data.with_total
+        data['user_total']=global_data.user_total
+        
+    #banner
+    ad_list = MAdvert_PC.objects.filter(location='00', is_hidden=False)[0:6]
+    data.update(ad_list=ad_list)
+    
+    #今日推荐项目
+    recom_projects = Project.objects.filter(state='10')[0:3]
+    data.update(recom_projects=recom_projects)
+    
+    #合作平台
+    platforms = Company.objects.order_by("-priority")
+    data.update(platforms=platforms)
+    return render(request, 'wfl-index.html', data)
 def project_all(request):
-    return render(request, 'finance_all.html', )
+    return render(request, 'finance_all.html',  )
 #     ad_list = Advertisement.objects.filter(Q(location='0')|Q(location='1'),is_hidden=False)[0:8]
 #     announce_list = Press.objects.filter(type='1')[0:5]
 #     hongbao_list = Hongbao.objects.filter(is_display=True,state='1')[0:3]

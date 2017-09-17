@@ -8,6 +8,7 @@ from rest_framework import serializers
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
     Announcement
 from account.models import MyUser
+from wafuli_admin.models import DayStatis
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,6 +52,7 @@ class SubscribeShipSerializer(serializers.ModelSerializer):
     project_investrange = serializers.CharField(source='project.investrange', read_only=True)
     project_intrest = serializers.CharField(source='project.intrest', read_only=True)
     project_term = serializers.CharField(source='project.term', read_only=True)
+    project_strategy = serializers.CharField(source='project.strategy', read_only=True)
     class Meta:
         model = SubscribeShip
         fields = '__all__'
@@ -60,7 +62,12 @@ class AnnouncementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Announcement
         fields = '__all__'
-        read_only_fields = ('time',)    
+        read_only_fields = ('time',)
+        
+class DayStatisSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DayStatis
+        fields = '__all__'
 # class MediaProjectSerializer(serializers.ModelSerializer):
 #     state_des = serializers.CharField(source='get_state_display', read_only=True)
 #     class Meta:

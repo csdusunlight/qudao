@@ -9,12 +9,13 @@ from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
 from permissions import CsrfExemptSessionAuthentication, IsAdmin
 from restapi.serializers import UserSerializer, InvestLogSerializer,\
     TransListSerializer, NoticeSerializer, ProjectSerializer,\
-    SubscribeShipSerializer, AnnouncementSerializer
+    SubscribeShipSerializer, AnnouncementSerializer, DayStatisSerializer
 from account.models import MyUser
 from rest_framework.filters import SearchFilter,OrderingFilter
 from restapi.permissions import IsOwnerOrStaff
 from restapi.Filters import InvestLogFilter, SubscribeShipFilter
 from django.db.models import Q
+from wafuli_admin.models import DayStatis
 # from wafuli.Filters import UserEventFilter
 class BaseViewMixin(object):
     authentication_classes = (CsrfExemptSessionAuthentication,)
@@ -118,3 +119,8 @@ class AnnouncementDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = Announcement.objects.all()
     serializer_class = AnnouncementSerializer
     permission_classes = (IsAdmin,)
+    
+class DayStatisList(BaseViewMixin, generics.ListCreateAPIView):
+    queryset = DayStatis.objects.all()
+    permission_classes = (IsAdmin,)
+    serializer_class = DayStatisSerializer

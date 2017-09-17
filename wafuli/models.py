@@ -28,6 +28,7 @@ class Company(models.Model):
     information = models.CharField(u"公司信息",max_length=200,blank=True)
     logo = models.FileField(u"网站logo（210*100）", upload_to='logo/%Y/%m/%d',default='')
     view_count = models.IntegerField(u"热门度（点击总量，系统自动更新）", default=0)
+    priority = models.IntegerField(u"优先级", default=0)
     class Meta:
         ordering = ['pinyin']
         verbose_name_plural = u"商家"
@@ -227,18 +228,18 @@ class WithdrawLog(models.Model):
 
 
 ADLOCATION_NEW = (
-    ('00', u'首页banner（680*380）'),
-    ('01', u'首页推荐位（200*200），配不超过20字的文字描述'),
-    ('02', u'首页发现位（280*200），配不超过30字的文字描述'),
-    ('03', u'首页中间广告位（1250*110）'),
-    ('04', u'首页下面的广告位（870*110）'),
-    ('10', u'红包页大banner（680*380）'),
-    ('11', u'红包页小banner（275*185）'),
+    ('00', u'首页banner（1250*400）'),
+#     ('01', u'首页推荐位（200*200），配不超过20字的文字描述'),
+#     ('02', u'首页发现位（280*200），配不超过30字的文字描述'),
+#     ('03', u'首页中间广告位（1250*110）'),
+#     ('04', u'首页下面的广告位（870*110）'),
+#     ('10', u'红包页大banner（680*380）'),
+#     ('11', u'红包页小banner（275*185）'),
 )
 class MAdvert_PC(Base):
     pic = models.ImageField(upload_to='photos/%Y/%m/%d', blank=False,
                              verbose_name=u"图片上传", help_text=u"保证图片质量的前提下，越小越好，莉萍负责图片 审核")
-    location = models.CharField(u"位置", max_length=2, choices=ADLOCATION_NEW)
+    location = models.URLField(u"位置", choices=ADLOCATION_NEW)
     description = models.CharField(u"文字描述", max_length=30, blank=True)
     is_hidden = models.BooleanField(u"是否隐藏",default=False)
     class Meta:

@@ -6,21 +6,12 @@ from wafuli.data import AUDIT_STATE
 class DayStatis(models.Model):
     date = models.DateField(u"日期", primary_key=True)
     new_reg_num = models.PositiveIntegerField(u"新注册人数", default=0)
-    active_num = models.PositiveIntegerField(u"活跃人数", default=0)
     with_amount = models.IntegerField(u'提现成功金额', default=0)
     with_num = models.PositiveIntegerField(u"提现成功人数", default=0)
     ret_amount = models.IntegerField(u'返现金额', default=0)
-    ret_scores = models.PositiveIntegerField(u"赠送积分", default=0)
+    invest_amount = models.PositiveIntegerField(u"投资金额", default=0)
     ret_num = models.PositiveIntegerField(u"返现人数", default=0)
-    coupon_amount = models.IntegerField(u'红包兑现金额', default=0)
-    exchange_num = models.PositiveIntegerField(u"兑换人数", default=0)
-    exchange_scores = models.PositiveIntegerField(u"积分兑换", default=0)
-    new_wel_num = models.PositiveIntegerField(u"今日上线福利", default=0)
-    lottery_people = models.PositiveIntegerField(u"今日抽奖人数", default=0)
-    lottery_num = models.PositiveIntegerField(u"今日抽奖次数", default=0)
-    envelope_num = models.PositiveIntegerField(u"今日拆红包个数", default=0)
-    envelope_people = models.PositiveIntegerField(u"今日拆红包人数", default=0)
-    envelope_money = models.PositiveIntegerField(u"今日拆红包奖励", default=0)
+    new_project_num = models.PositiveIntegerField(u"今日上线项目数", default=0)
     def __unicode__(self):
         return self.date.strftime("%Y-%m-%d")
     class Meta:
@@ -39,8 +30,11 @@ class RecommendRank(models.Model):
 
 class GlobalStatis(models.Model):
     time = models.DateTimeField(u"统计时间", auto_now=True)
-    all_wel_num = models.PositiveIntegerField(u"福利总数", default=0)
-    award_total = models.PositiveIntegerField(u'累计奖励金额', default=0)
+    invest_total = models.PositiveIntegerField(u"累计奖励金额", default=0)
+    with_total = models.PositiveIntegerField(u'累计提现金额', default=0)
+    user_total = models.PositiveIntegerField(u'累计加入渠道数量', default=0)
+    invite_total = models.PositiveIntegerField(u'累计渠道引入用户', default=0)
+    all_wel_num = models.PositiveIntegerField(u"累计上线项目", default=0) 
 
 class Dict(models.Model):
     key = models.CharField(max_length=20,primary_key=True)

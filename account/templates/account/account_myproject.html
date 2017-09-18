@@ -196,8 +196,6 @@ $(function(){
             crt_intrest = $('#crt_intrest').val();
             console.log(' crt_name=' + crt_name +' crt_link=' + crt_link +' crt_detail=' + crt_detail +' crt_price=' + crt_price +' crt_term=' + crt_term);
             
-            var url = "{%url 'project_create' %}";
-            console.log(url);
         $.ajax({
             url: "{%url 'project_create' %}",
             dataType: "json",

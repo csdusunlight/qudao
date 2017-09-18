@@ -31,21 +31,23 @@
 			csrfmiddlewaretoken: '{{ csrf_token }}'
 		},
 	});
-	var data = '<table width="100%"><tr><th>用户名</th><th>用户类型</th><th>手机号</th>' +
-		'<th>项目名称</th><th>投资时间</th><th>提交手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>处理状态</th>' +
-		'<th>操作</th><th>备注</th></tr>[results]<tr><td>{username}</td><td>{usertype}</td><td>{mobile}</td>' +
-		'<td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{invest_amount}</td><td>{term}</td>' +
-		'<td>{time_sub}</td><td>{state}</td>' +
-		'<td id="item_{id}"><a class="fyin" onclick="pass({id})">返现' +
-		'</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td><td>{remark}</td></tr>[/results]</table>';
-	var data2 = '<table width="100%"><tr><th>用户名</th><th>用户类型</th><th>手机号</th>' +
-		'<th>项目名称</th><th>投资时间</th><th>提交手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>处理状态</th>' +
-		'<th>审核人</th><th>审核时间</th><th width="6%">返现金额</th><th width="6%">返现积分</th>' +
-		'<th>备注</th></tr>[results]<tr><td>{username}</td><td>{usertype}</td><td>{mobile}</td>' +
-		'<td>{project}</td><td>{invest_time}</td><td>{mobile_sub}</td><td>{invest_amount}</td><td>{term}</td>' +
-		'<td>{time_sub}</td><td>{state}</td><td>{admin}</td><td>{time_admin}</td>' +
-		'<td>{ret_amount}</td><td>{score}</td><td>{remark}</td></tr>[/results]</table>';
-	var url = "/restapi/projects/" + "?page={page}&size={pageSize}";
+	var data1 = '<table width="100%"><tr><th>QQ</th><th>手机号</th><th>项目名称</th>' +
+		'<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>处理状态</th>' +
+		'<th>备注</th><th>操作</th></tr>[results]<tr><td>{qq_number}</td><td>{手机号}</td><td>{project}</td>' +
+		'<td>{invest_mobile}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
+		'<td>{audit_state}</td><td>{remark}</td><td id="item_{id}"><a class="fyin" onclick="pass({id})">返现' +
+		'</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td></tr>[/results]</table>';
+	var data0 = '<table width="100%"><tr><th>QQ</th><th>手机号</th><th>项目名称</th>' +
+        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>处理状态</th>' +
+        '<th>审核人</th><th>审核时间</th><th>返现金额</th><th>备注</th></tr>[results]<tr><td>{qq_number}</td><td>{手机号}</td><td>{project}</td>' +
+        '<td>{invest_mobile}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
+        '<td>{audit_state}<td>{admin_user}</td></td><td>{audit_time}</td><td>{return_amount}</td><td>{remark}</td></tr>[/results]</table>';
+    var data2 = '<table width="100%"><tr><th>QQ</th><th>手机号</th><th>项目名称</th>' +
+        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>处理状态</th>' +
+        '<th>审核人</th><th>审核时间</th><th>拒绝金额</th><th>备注</th></tr>[results]<tr><td>{qq_number}</td><td>{手机号}</td><td>{project}</td>' +
+        '<td>{invest_mobile}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
+        '<td>{audit_state}<td>{admin_user}</td></td><td>{audit_time}</td><td>{audit_reason}</td><td>{remark}</td></tr>[/results]</table>';
+	var url = "/restapi/investlogs/" + "?page={page}&size={pageSize}&is_office=true";
 
 	function pass(id) {
 		$(".BackNow").css("display", "block");
@@ -60,11 +62,11 @@
 		$("li.home4").toggleClass("on");
 		$(".Tin-table tr:even").css("background-color", "#fcfcfc");
 		$("#pagedata").ajaxPage({
-			url: url,
+			url: url + '&audit_state=1',
 			pageId: $("#page"),
 			pageSize: 10,
 			run: true,
-			content: data,
+			content: data1,
 		});
 		$(".none-x").click(function() {
 			$(this).parent().parent().css("display", "none"); <!--隐藏-->
@@ -138,21 +140,21 @@
 			endTime = $("#endTime").val();
 			var newurl = url;
 			if(startTime && endTime) {
-				newurl += "&startTime=" + startTime;
-				newurl += "&endTime=" + endTime;
+				newurl += "&investtime_0=" + startTime;
+				newurl += "&investtime_1=" + endTime;
 			}
 			startTime2 = $("#startTime2").val();
 			endTime2 = $("#endTime2").val();
 			if(startTime2 && endTime2) {
-				newurl += "&startTime2=" + startTime2;
-				newurl += "&endTime2=" + endTime2;
+				newurl += "&audittime_0=" + startTime2;
+				newurl += "&audittime_1=" + endTime2;
 			}
-			username = $("#username").val();
+			qq = $("#qq").val();
 			mobile = $("#mobile").val();
 			mobile_sub = $("#mobile_sub").val();
 
-			if(username) {
-				newurl += "&username=" + username;
+			if(qq) {
+				newurl += "&qq_number=" + qq;
 			}
 			if(mobile) {
 				newurl += "&mobile=" + mobile;
@@ -160,36 +162,29 @@
 			if(mobile_sub) {
 				newurl += "&mobile_sub=" + mobile_sub;
 			}
-			companyname = $("#companyname").val();
 			projectname = $("#projectname").val();
-			if(companyname) {
-				newurl += "&companyname=" + companyname;
-			}
 			if(projectname) {
-				newurl += "&projectname=" + projectname;
+				newurl += "&project_title_contains=" + projectname;
 			}
 			adminname = $("#adminname").val();
 			state = $("#state").val();
 			if(adminname) {
-				newurl += "&adminname=" + adminname;
+				newurl += "&admin_user=" + adminname;
 			}
 			if(state) {
-				newurl += "&state=" + state;
+				newurl += "&audit_state=" + state;
 			}
-			var usertype = $("#usertype").val();
-			if(usertype) {
-				newurl += "&usertype=" + usertype;
+			var level = $("#level").val();
+			if(level) {
+				newurl += "&level=" + level;
 			}
-			if(usertype == '2') {
-				var chalevel = $("#chalevel").val();
-				if(chalevel) {
-					newurl += "&chalevel=" + chalevel;
-				}
+			var newdata = data1;
+			if(state == '0') {
+				newdata = data0;
 			}
-			var newdata = data;
-			if(state != '1') {
-				newdata = data2;
-			}
+			if(state == '2') {
+                newdata = data2;
+            }
 			$("#page").empty();
 			$("#pagedata").ajaxPage({
 				url: newurl,
@@ -204,48 +199,38 @@
 			startTime = $("#startTime").val();
 			endTime = $("#endTime").val();
 			if(startTime && endTime) {
-				html += '<input name="startTime" type="hidden" value="' + startTime + '"/>';
-				html += '<input name="endTime" type="hidden" value="' + endTime + '"/>';
+				html += '<input name="investtime_0" type="hidden" value="' + startTime + '"/>';
+				html += '<input name="investtime_1" type="hidden" value="' + endTime + '"/>';
 			}
 			startTime2 = $("#startTime2").val();
 			endTime2 = $("#endTime2").val();
 			if(startTime2 && endTime2) {
-				html += '<input name="startTime2" type="hidden" value="' + startTime2 + '"/>';
-				html += '<input name="endTime2" type="hidden" value="' + endTime2 + '"/>';
+				html += '<input name="audittime_0" type="hidden" value="' + startTime2 + '"/>';
+				html += '<input name="audittime_1" type="hidden" value="' + endTime2 + '"/>';
 			}
-			username = $("#username").val();
+			qq = $("#qq").val();
 			mobile = $("#mobile").val();
-			if(username) {
-				html += '<input name="username" type="hidden" value="' + username + '"/>';
+			if(qq) {
+				html += '<input name="qq_number" type="hidden" value="' + qq + '"/>';
 			}
 			if(mobile) {
 				html += '<input name="mobile" type="hidden" value="' + mobile + '"/>';
 			}
-			companyname = $("#companyname").val();
 			projectname = $("#projectname").val();
-			if(companyname) {
-				html += '<input name="companyname" type="hidden" value="' + companyname + '"/>';
-			}
 			if(projectname) {
-				html += '<input name="projectname" type="hidden" value="' + projectname + '"/>';
+				html += '<input name="project_title_contains" type="hidden" value="' + projectname + '"/>';
 			}
 			adminname = $("#adminname").val();
 			state = $("#state").val();
 			if(adminname) {
-				html += '<input name="adminname" type="hidden" value="' + adminname + '"/>';
+				html += '<input name="admin_user" type="hidden" value="' + adminname + '"/>';
 			}
 			if(state) {
-				html += '<input name="state" type="hidden" value="' + state + '"/>';
+				html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
 			}
-			var usertype = $("#usertype").val();
-			if(usertype) {
-				html += '<input name="usertype" type="hidden" value="' + usertype + '"/>';
-			}
-			if(usertype == '2') {
-				var chalevel = $("#chalevel").val();
-				if(chalevel) {
-					html += '<input name="chalevel" type="hidden" value="' + chalevel + '"/>';
-				}
+			var level = $("#level").val();
+			if(level) {
+				html += '<input name="level" type="hidden" value="' + level + '"/>';
 			}
 			html += '</form>';
 			var iframe = document.getElementById('myIFrame');
@@ -314,35 +299,28 @@
 				</tr>
 				<tr>
 					<td>
-						<i>用&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</i>
-						<input id="username" type="text" />
+						<i>QQ：</i>
+						<input id="qq" type="text" />
 					</td>
 					<td>
 						<i style="letter-spacing:2px;">用户手机号：</i>
 						<input id="mobile" type="text" />
 					</td>
 					<td>
-						<i style="letter-spacing:4.8px;">公司名称：</i>
-						<input id="companyname" type="text" />
-					</td>
-					<td>
-						<i style="letter-spacing:4.8px;">用户类型</i>
-						<select name="selectAge" id="usertype">
-							<option value="0">全部</option>
-							<option value="1">普通用户</option>
-							<option value="2">渠道用户</option>
+						<i style="letter-spacing:4.8px;">渠道等级</i>
+						<select name="selectAge" id="level">
+							<option value="0">--</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
 						</select>
 					</td>
-					<td>
-						<i style="letter-spacing:4.8px;">渠道级别：</i>
-						<input id="chalevel" type="text" />
-					</td>
-				</tr>
-				<tr>
 					<td>
 						<i style="letter-spacing:4.8px;">提交手机号</i>
 						<input id="mobile_sub" type="text" />
 					</td>
+				</tr>
+				<tr>
 					<td>
 						<i style="letter-spacing:4.8px;">项目名称：</i>
 						<input id="projectname" type="text" />

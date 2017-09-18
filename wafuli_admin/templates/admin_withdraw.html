@@ -125,10 +125,10 @@
      newurl += "&startTime2="+startTime2;
      newurl += "&endTime2="+endTime2;
    }
-   username = $("#username").val();
+   qq = $("#qq").val();
    mobile = $("#mobile").val();
-   if(username){
-     newurl += "&username="+username;
+   if(qq){
+     newurl += "&qq="+qq;
    }
    if(mobile){
      newurl += "&mobile="+mobile;
@@ -180,10 +180,10 @@
      html += '<input name="startTime2" type="hidden" value="'+ startTime2 + '"/>';
      html += '<input name="endTime2" type="hidden" value="'+ endTime2 + '"/>';
    }
-   username = $("#username").val();
+   qq = $("#qq").val();
    mobile = $("#mobile").val();
-   if(username){
-     html += '<input name="username" type="hidden" value="'+ username + '"/>';
+   if(qq){
+     html += '<input name="qq" type="hidden" value="'+ qq + '"/>';
    }
    if(mobile){
      html += '<input name="mobile" type="hidden" value="'+ mobile + '"/>';
@@ -278,8 +278,8 @@
        </tr>
        <tr>
          <td>
-           <i>用&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</i>
-           <input id="username" type="text" />
+           <i>QQ：</i>
+           <input id="qq" type="text" />
          </td>
          <td>
            <i style="letter-spacing:2px;">用户手机号：</i>
@@ -297,12 +297,12 @@
          <i style="letter-spacing:2px;">开户行姓名：</i>
          <input id="real_name" type="text" />
        </td>
+     </tr>
+     <tr>
        <td>
          <i style="letter-spacing:2px;">银行卡号：</i>
          <input id="card_number" type="text" onkeyup="this.value =this.value.replace(/\s/g,'').replace(/[^\d]/g,'').replace(/(\d{4})(?=\d)/g,'$1 ');" />
        </td>
-     </tr>
-     <tr>
        <td>
          <i>处&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人：</i>
          <input id="adminname" type="text" />

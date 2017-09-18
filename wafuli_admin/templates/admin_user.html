@@ -8,7 +8,7 @@ var data = '<table width="100%"><tr><th>渠道等级</th><th>QQ</th><th>QQ昵称
 	'<th>银行卡号</th><th>持卡人姓名</th><th>申请时间</th><th>最近登陆时间</th><th>账户余额</th>'+
 	'<th width="5%">是否为黑名单</th><th>账户操作</th>'+
 	'</tr>[results]<tr><td>{level}</td><td>{qq_number}</td><td>{qq_name}</td>'+
-	'<td>{mobile}</td><td>{银行卡号}</td><td>{持卡人姓名}</td><td>{申请时间}</td>'+
+	'<td>{qqname}</td><td>{银行卡号}</td><td>{持卡人姓名}</td><td>{申请时间}</td>'+
 	'<td>{最近登陆时间}</td><td>{balance}</td><td id="is_black_{id}">{is_black}</td>'+
 	'<td id="item_{id}"><a class="btn1-x" onclick="addcash({id})">余额</a>│'+
 	'<a class="btn2-x" onclick="addblack({id})">加黑</a>'+
@@ -296,21 +296,17 @@ $(document).ready(function(){
 			newurl += "&startTime2="+startTime2;
 			newurl += "&endTime2="+endTime2;
 		}
-		var username = $("#username").val();
-		var mobile = $("#mobile").val();
-		if(username){
-			newurl += "&username="+username;
+		var qq = $("#qq").val();
+		var qqname = $("#qqname").val();
+		if(qq){
+			newurl += "&qq="+qq;
 		}
-		if(mobile){
-			newurl += "&mobile="+mobile;
+		if(qqname){
+			newurl += "&qqname="+qqname;
 		}
-		var inviter_name = $("#inviter_name").val();
-		var inviter_mobile = $("#inviter_mobile").val();
-		if(inviter_name){
-			newurl += "&inviter_name="+inviter_name;
-		}
-		if(inviter_mobile){
-			newurl += "&inviter_mobile="+inviter_mobile;
+		var level = $("#level").val();
+		if(level){
+			newurl += "&level="+level;
 		}
 		var state = $("#state").val();
 		if(state){
@@ -356,23 +352,22 @@ $(document).ready(function(){
                                         </tr>
                                     	<tr>
                                         	<td>
-                                            	<i>用&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</i>
-                                                <input id="username" type="text" />
+                                            	<i>QQ：</i>
+                                                <input id="qq" type="text" />
                                             </td>
                                         	<td>
-                                            	<i style="letter-spacing:2px;">用户手机号：</i>
-                                                <input id="mobile" type="text" />
+                                            	<i style="letter-spacing:2px;">QQ昵称：</i>
+                                                <input id="qqname" type="text" />
                                             </td>
                                         	<td>
-                                            	<i>推荐人用户名：</i>
-                                                <input id="inviter_name" type="text" />
+                                            	<i>渠道等级：</i>
+                                                <select name="selectAge" id="level">
+                                                    <option value="0">--</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                </select>
                                             </td>
-                                        	<td>
-                                            	<i>推荐人手机号：</i>
-                                                <input id="inviter_mobile" type="text" />
-                                            </td>
-                                        </tr>
-                                        <tr>
                                         	<td>
                                             	<i>黑&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;单：</i>
                                                 <select name="selectAge" id="state">
@@ -381,14 +376,17 @@ $(document).ready(function(){
 											        <option value="2">否</option>
 											    </select>
                                             </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                         	<td>
                                             	<div class="Submit-box">
                                                     <input id="search" type="button" value="搜索" />
                                         			<input id="export" type="button" value="导出" />
                                                 </div>
                                             </td>
-                                        	<td> </td>
-                                        	<td></td>
                                         </tr>
                                     </table>
 

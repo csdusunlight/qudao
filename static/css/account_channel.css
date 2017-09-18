@@ -106,39 +106,43 @@ h5 {
 .submit-content {
 	position: relative;
 	box-sizing: content-box;
-	width: 965px;
+	width: 1010px;
 	padding: 10px 0;
 	margin-top: 20px;
 	/*border: 1px dashed #e4e4e4;*/
 }
 
 .item-01 {
-	width: 170px;
+	width: 148px;
 }
 
 .item-02 {
-	width: 170px;
+	width: 120px;
 }
 
 .item-03 {
-	width: 150px;
+	width: 130px;
 }
 
 .item-04 {
-	width: 150px;
+	width: 100px;
 }
 
 .item-05 {
-	width: 150px;
+	width: 100px;
 }
 
 .item-06 {
 	width: 120px;
 }
-
 .item-07 {
+    width: 120px;
+}.item-08 {
+    width: 100px;
+}
+.item-09 {
     float: right;
-	width: 55px;
+	width: 35px;
 	line-height: 1;
 }
 

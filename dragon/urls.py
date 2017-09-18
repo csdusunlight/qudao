@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 #     url(r'^project/', include('project_admin.urls')),
 # #     url(r'^test/$', 'wafuli.views.index', name='captcha-refresh'),
+    # url('^homepage/', include('homepage.urls')),        #jzy
 ]
 
 from django.conf.urls.static import static

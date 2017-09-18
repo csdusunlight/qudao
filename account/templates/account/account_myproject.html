@@ -18,11 +18,11 @@ $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 });
 var data3 = '<table width="100%"><thead><tr><th>项目名称</th><th>项目来源</th>'+
-    '<th>价格</th><th>标期</th><th width="14%">是否主页呈现</th><th width="14%">是否推荐</th><th>操作</th></tr></thead><tbody>'+
-    '[results]<tr><td>{project_title}</td><td>{is_official}</td><td>{price}</td><td>{project_term}</td>'+
-    '<td><span data-isadd="{is_on}" class="switch true" onclick="isadd(this,{id})"></span></td>'+
-    '<td><span data-isadd="{is_recommend}" class="switch true" onclick="isadd(this,{id})"></span></td>'+
-    '<td class="edit" onclick="edit({id})">编辑</td></tr>[/results]'
+    '<th>价格</th><th>标期</th><th>投资区间</th><th>预计年化</th><th width="14%">是否主页呈现</th><th width="14%">是否推荐</th><th>操作</th></tr></thead><tbody>'+
+    '[results]<tr><td>{project_title}</td><td>{project_source}</td><td data-price="{project_cprice}" class="price">{price}</td><td>{project_term}</td>'+
+    '<td>{project_investrange}</td><td data-intrest="{project_intrest}" class="intrest">{intrest}</td><td><span data-isadd="{is_on}" class="switch {is_on}" onclick="isadd(this,{id})"></span></td>'+
+    '<td><span data-isadd="{is_recommend}" class="switch {is_recommend}" onclick="isRecommend(this,{id})"></span></td>'+
+    '<td class="edit" onclick="edit(this, {id})">编辑</td></tr>[/results]'
     + '</tbody></table>';
 var url = "/restapi/sub/?page={page}&size={pageSize}";
 //function pop(n){
@@ -34,31 +34,126 @@ var url = "/restapi/sub/?page={page}&size={pageSize}";
 //	obj.html('<div class="Defa-in"><img src="' + pic_url + '">'+
 //			'<h2>咦~~ 您还没有相关记录~~</h2></div>');
 //}
+function pagecallback() {
+    $('.price').each(function() {
+        if ($(this).text() == "") {
+        	$(this).text($(this).data('price'));
+        }
+    })
+    $('.intrest').each(function() {
+        if ($(this).text() == "") {
+            $(this).text($(this).data('intrest'));
+        }
+    })
+}
 function isadd(obj,id) {        //是否主页显示调用函数
     var flag = $(obj).data('isadd');
     console.log(flag)
-    if (flag == 'yes') {
-        console.log('关闭');
-    	$(obj).data('isadd', 'no');
-    	$(obj).removeClass('true').addClass('false');
+    if (flag == true) {
+        $.ajax({
+            url: '/restapi/sub/' + id + '/',
+            dataType: "json",
+            type:"put",
+            data: {
+                'is_on': false
+            },
+            success: function(ret) {
+                console.log('关闭');
+                $(obj).data('isadd', false);
+                $(obj).removeClass('true').addClass('false');
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+        
     } else{
-        console.log('开启');
-    	$(obj).data('isadd', 'yes');
-    	$(obj).removeClass('false').addClass('true');
+        $.ajax({
+            url: '/restapi/sub/' + id + '/',
+            dataType: "json",
+            type:"put",
+            data: {
+                'is_on': true
+            },
+            success: function(ret) {
+                console.log('开启');
+                $(obj).data('isadd', true);
+                $(obj).removeClass('false').addClass('true');
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+        
+    }
+}
+function isRecommend(obj,id) {        //是否推荐调用函数
+    var flag = $(obj).data('isadd');
+    console.log(flag)
+    if (flag == true) {
+        $.ajax({
+            url: '/restapi/sub/' + id + '/',
+            dataType: "json",
+            type:"put",
+            data: {
+                'is_recommend': false
+            },
+            success: function(ret) {
+                console.log('关闭');
+                $(obj).data('isadd', false);
+                $(obj).removeClass('true').addClass('false');
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+        
+    } else{
+        $.ajax({
+            url: '/restapi/sub/' + id + '/',
+            dataType: "json",
+            type:"put",
+            data: {
+                'is_recommend': true
+            },
+            success: function(ret) {
+                console.log('开启');
+                $(obj).data('isadd', true);
+                $(obj).removeClass('false').addClass('true');
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+        
     }
 }
 var project_id;
-function edit(id) {     //编辑调用函数
+var parent_dom;
+function edit(obj, id) {     //编辑调用函数
     project_id = id;
+    parent_dom = $(obj).parent();
     console.log(project_id);
     $.ajax({
-        url: '/restapi/projects/' + project_id + '/',
+        url: '/restapi/sub/' + project_id + '/',
         dataType: "json",
-        type:"post",
+        type:"put",
         success: function(ret) {
-            console.log()
-            $('#edit_detail').val(ret.introduction);
-            $('#edit_price').val(ret.cprice);
+            if (!ret.introduction) {
+                $('#edit_detail').val(ret.project_intro);
+            } else{
+            	$('#edit_detail').val(ret.introduction);
+            }
+            if (!ret.price) {
+                $('#edit_price').val(ret.project_cprice);
+            } else{
+                $('#edit_price').val(ret.price);
+            }
+            if (!ret.intrest) {
+                $('#edit_intrest').val(ret.project_intrest);
+            } else{
+                $('#edit_intrest').val(ret.intrest);
+            }
             $('.popup.m-edit-proj').addClass('in');
         },
         error: function() {
@@ -78,6 +173,7 @@ $(function(){
         pageSize:10,
         run:true,
         content:data3,
+        complete:pagecallback,
     });
     
     $('.create-project').click(function(){      //新建项目调用函数
@@ -86,6 +182,8 @@ $(function(){
         $('#crt_detail').val('');
         $('#crt_price').val('');
         $('#crt_term').val('');
+        $('#crt_range').val('');
+        $('#crt_intrest').val('');
         $('.popup.m-create-proj').addClass('in');
         
     })
@@ -95,17 +193,21 @@ $(function(){
             crt_detail = $('#crt_detail').val(),
             crt_price = $('#crt_price').val(),
             crt_term = $('#crt_term').val();
+            crt_range = $('#crt_range').val();
+            crt_intrest = $('#crt_intrest').val();
             console.log(' crt_name=' + crt_name +' crt_link=' + crt_link +' crt_detail=' + crt_detail +' crt_price=' + crt_price +' crt_term=' + crt_term);
         $.ajax({
-            url: '/restapi/projects/',
+            url: '/restapi/sub/',
             dataType: "json",
-            type: 'POST',
+            type: 'put',
             data: {
-                'title': crt_name,
-                'strategy': crt_link,
+                'project_title': crt_name,
+                'project_strategy': crt_link,
                 'introduction': crt_detail,
-                'cprice': crt_price,
-                'term': crt_term
+                'price': crt_price,
+                'project_term': crt_term,
+                'project_investrange': crt_range,
+                'intrest': crt_intrest
             },
             success: function(ret) {
                 $.prompt({
@@ -121,20 +223,23 @@ $(function(){
     $('#edit_confirm').click(function(){     //确认修改项目
         var edit_detail = $('#edit_detail').val(),
             edit_price = $('#edit_price').val();
+            edit_intrest = $('#edit_intrest').val();
             console.log(' project_id=' + project_id +' edit_detail=' + edit_detail +' edit_price=' + edit_price);
         $.ajax({
-            url: '/restapi/projects/' + project_id + '/',
+            url: '/restapi/sub/' + project_id + '/',
             dataType: "json",
             type: 'put',
             data: {
-                'project_id': project_id,
                 'introduction': edit_detail,
-                'cprice': edit_price
+                'price': edit_price,
+                'intrest': edit_intrest
             },
             success: function(ret) {
                 $.prompt({
                     Content: '编辑成功'
                 })
+                parent_dom.find('td').eq(2).text(edit_price);
+                parent_dom.find('td').eq(5).text(edit_intrest);
                 $('.popup.m-edit-proj').removeClass('in');
             },
             error: function() {
@@ -278,6 +383,7 @@ $(function(){
         <div class="popup__detail">
             <div class="popup__item"><span class="popup__itemname">项目简介</span><input id="edit_detail" type="text" /></div>
             <div class="popup__item"><span class="popup__itemname">价格</span><input id="edit_price" type="text" /></div>
+            <div class="popup__item"><span class="popup__itemname">预计年化</span><input id="edit_intrest" type="text" /></div>
         </div>
         <div class="popup__btnbox">
             <a id="edit_confirm" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
@@ -297,6 +403,8 @@ $(function(){
             <div class="popup__item"><span class="popup__itemname">项目简介</span><input id="crt_detail" type="text" /></div>
             <div class="popup__item"><span class="popup__itemname">价格</span><input id="crt_price" type="text" /></div>
             <div class="popup__item"><span class="popup__itemname">标期</span><input id="crt_term" type="text" /></div>
+            <div class="popup__item"><span class="popup__itemname">投资区间</span><input id="crt_range" type="text" /></div>
+            <div class="popup__item"><span class="popup__itemname">预计年化</span><input id="crt_intrest" type="text" /></div>
         </div>
         <div class="popup__btnbox">
             <a id="crt_confirm" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>

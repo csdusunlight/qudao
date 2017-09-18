@@ -130,6 +130,7 @@ def register(request):
             result['msg'] = u'创建申请失败！'
         else:
             result['code'] = '0'
+        
         return JsonResponse(result)
     else:
         mobile = request.GET.get('mobile','')

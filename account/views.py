@@ -38,6 +38,7 @@ from django.db import connection, transaction
 from wafuli.data import BANK
 from wafuli.models import TransList, WithdrawLog, Project, SubscribeShip
 from public.tools import login_required_ajax
+from wafuli.tools import saveImgAndGenerateUrl
 
 @sensitive_post_parameters()
 @csrf_protect
@@ -128,9 +129,25 @@ def register(request):
             logger.error(e)
             result['code'] = '4'
             result['msg'] = u'创建申请失败！'
-        else:
-            result['code'] = '0'
-        
+            return JsonResponse(result)
+        imgurl_list = []
+        if len(request.FILES)>6:
+            result = {'code':-2, 'msg':u"上传图片数量不能超过6张"}
+            apply.delete()
+            return JsonResponse(result)
+        for key in request.FILES:
+            block = request.FILES[key]
+            if block.size > 100*1024:
+                result = {'code':-1, 'msg':u"每张图片大小不能超过100k，请重新上传"}
+                apply.delete()
+                return JsonResponse(result)
+        for key in request.FILES:
+            block = request.FILES[key]
+            imgurl = saveImgAndGenerateUrl(key, block)
+            imgurl_list.append(imgurl)
+        invest_image = ';'.join(imgurl_list)
+        apply.qualification = invest_image
+        apply.save(update_fields=['qualification',])
         return JsonResponse(result)
     else:
         mobile = request.GET.get('mobile','')
@@ -744,4 +761,26 @@ def project_manage(request):
         return render(request, 'account/account_myproject.html')
 
 
-
+@csrf_exempt
+@login_required_ajax
+def project_create(request):
+    ret = {}
+    user = request.user
+    title = request.POST.get("title", None)
+    strategy = request.POST.get("strategy", None)
+    introduction = request.POST.get("introduction", None)
+    price = request.POST.get("price", None)
+    term = request.POST.get("term", None)
+    investrange = request.POST.get("investrange", None)
+    intrest = request.POST.get("intrest", None)
+    if not title or not strategy or not introduction:
+        ret['code'] = 1
+        ret['msg'] = u"参数缺失"
+    else:
+        with transaction.atomic():
+            project = Project.objects.create(title=title, strategy=strategy, introduction=introduction,
+                    price=price, is_official=False, user=user, term=term, investrange=investrange,
+                    intrest=intrest)
+            SubscribeShip.objects.create(user=user, project=project, is_official=False, is_on=True)
+        ret['code'] = 0
+    return JsonResponse(ret)

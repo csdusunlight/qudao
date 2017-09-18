@@ -44,7 +44,8 @@ class NoticeSerializer(serializers.ModelSerializer):
 class ApplyLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = ApplyLog
-        excludes = ('password',)
+#         fields = '__all__'
+        exclude = ('password',)
 # SubscribeShip
 class SubscribeShipSerializer(serializers.ModelSerializer):
     project_source = serializers.CharField(source='project.is_official')

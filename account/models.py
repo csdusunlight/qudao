@@ -49,6 +49,11 @@ COLORS = (
     ('4', u'皮肤4'),
     ('5', u'皮肤5'),
 )
+USER_LEVEL = (
+    ('01', u'一级代理'),
+    ('02', u'二级代理'),
+    ('03', u'三级代理'),
+)
 class MyUser(AbstractBaseUser, PermissionsMixin):
 #     email = models.EmailField('email address', max_length=255)
     mobile = models.CharField('mobile number', max_length=11, unique=True,)
@@ -57,24 +62,18 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     qq_name = models.CharField(u"QQ昵称", max_length=20)
     date_joined = models.DateTimeField(u'注册时间', default=timezone.now)
     type = models.CharField(u'用户类型', default='agent',max_length=10)
-    level = models.SmallIntegerField(u"用户等级", default=2)
+    level = models.CharField(u"用户等级", choices=USER_LEVEL, default='03', max_length=2)
     color = models.CharField(u'个人主页色调', choices=COLORS, default='1', max_length=2)
     picture = models.ImageField(upload_to='photos/user_headphoto', verbose_name=u"个人头像")
     profile = models.TextField(u"个人简介", default=u"~~这个人啥都没写~~")
     qualification = models.CharField(u"资质证明截图", max_length=200)
     with_total = models.DecimalField(u'提现总额度', default = Decimal(0), max_digits=10, decimal_places=2)
     accu_income = models.DecimalField(u'累计收入', default = Decimal(0), max_digits=10, decimal_places=2)
-    inviter = models.ForeignKey('self', related_name = 'invitees',
-                                blank=True, null=True, on_delete=models.SET_NULL)
-    invite_code = models.CharField(u"邀请码", unique=True, blank=True, max_length=20)
     is_staff = models.BooleanField('staff status', default=False,
         help_text='Designates whether the user can log into this admin site.')
     is_active = models.BooleanField('active', default=True,
         help_text=('Designates whether this user should be treated as '
                     'active. Unselect this instead of deleting accounts.'))
-
-    invite_balance = models.DecimalField(u'邀请奖励账户余额', default = Decimal(0), max_digits=10, decimal_places=2)
-    invite_income = models.DecimalField(u'邀请奖励现金', default = Decimal(0), max_digits=10, decimal_places=2)
     balance = models.DecimalField(u'账户余额', default = Decimal(0), max_digits=10, decimal_places=2)
     admin_permissions = models.ManyToManyField('AdminPermission',
         verbose_name='admin permissions', blank=True,
@@ -177,3 +176,26 @@ class DBlock(models.Model):
     index = models.CharField("name",max_length=10,primary_key=True)
     description = models.CharField("description",max_length=30)
 
+AUDIT_STATE = (
+    ('0', u'审核通过'),
+    ('1', u'待审核'),
+    ('2', u'审核未通过'),
+)    
+class ApplyLog(models.Model):
+    mobile = models.CharField('mobile number', max_length=11, unique=True,)
+    password = models.CharField('password', max_length=20, blank=False)
+    username = models.CharField('username', max_length=30, unique=True)
+    qq_number = models.CharField(u"QQ号", max_length=20, unique=True)
+    qq_name = models.CharField(u"QQ昵称", max_length=20)
+    profile = models.TextField(u"个人简介", default=u"~~这个人啥都没写~~")
+    qualification = models.CharField(u"资质证明截图", max_length=200)
+    submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
+    audit_time = models.DateTimeField(u'审核时间', null=True, blank=True)
+    admin_user = models.ForeignKey(MyUser, related_name="applylog_admin", null=True)
+    audit_reason = models.CharField(u"审核原因", max_length=30)
+    audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
+    level = models.SmallIntegerField(u"用户等级", choices=USER_LEVEL, default=2)
+    class Meta:
+        ordering = ["submit_time",]
+    def __unicode__(self):
+        return self.mobile

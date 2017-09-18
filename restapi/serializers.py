@@ -7,7 +7,7 @@ Created on 2017年8月10日
 from rest_framework import serializers
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
     Announcement
-from account.models import MyUser
+from account.models import MyUser, ApplyLog
 from wafuli_admin.models import DayStatis
 
 class UserSerializer(serializers.ModelSerializer):
@@ -28,7 +28,7 @@ class InvestLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvestLog
         fields = '__all__'
-        read_only_fields = ('audit_state', 'audit_time','submit_time',
+        read_only_fields = ('audit_time','submit_time',
                              'settle_amount','return_amount', "admin_user", "is_official")
 class TransListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,14 +40,19 @@ class NoticeSerializer(serializers.ModelSerializer):
         model = Notice
         fields = '__all__'
         read_only_fields = ('user', 'time')
-        
+
+class ApplyLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ApplyLog
+        excludes = ('password',)
 # SubscribeShip
 class SubscribeShipSerializer(serializers.ModelSerializer):
     project_source = serializers.CharField(source='project.is_official')
     project_title = serializers.CharField(source='project.title', read_only=True)
     project_intro = serializers.CharField(source='project.introduction', read_only=True)
-    project_aprice = serializers.CharField(source='project.aprice', read_only=True)
-    project_bprice = serializers.CharField(source='project.bprice', read_only=True)
+    project_price01 = serializers.CharField(source='project.price01', read_only=True)
+    project_price02 = serializers.CharField(source='project.price02', read_only=True)
+    project_price03 = serializers.CharField(source='project.price03', read_only=True)
     project_cprice = serializers.CharField(source='project.cprice', read_only=True)
     project_investrange = serializers.CharField(source='project.investrange', read_only=True)
     project_intrest = serializers.CharField(source='project.intrest', read_only=True)
@@ -56,7 +61,7 @@ class SubscribeShipSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubscribeShip
         fields = '__all__'
-        read_only_fields = ('user', 'project')
+        read_only_fields = ('user', 'project', 'myprice')
         
 class AnnouncementSerializer(serializers.ModelSerializer):
     class Meta:

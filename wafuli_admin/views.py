@@ -9,7 +9,7 @@ from django.http.response import JsonResponse, Http404, HttpResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from account.transaction import charge_money
 import logging
-from account.models import MyUser
+from account.models import MyUser, ApplyLog
 from django.db.models import Q,F
 from wafuli_admin.models import DayStatis, Invest_Record
 from django.conf import settings
@@ -84,12 +84,40 @@ def index(request):
     return render(request,"admin_index.html",)
 
 def admin_apply(request):
-    return render(request,"admin_apply.html",)
+    if request.method == "POST":
+        admin_user = request.user
+        res = {}
+        apply_id = request.POST.get('id', None)
+        type = request.POST.get('type', None)
+        type = int(type)
+        if not apply_id or type!=1 and type!=2:
+            res['code'] = -2
+            res['res_msg'] = u'传入参数不足，请联系技术人员！'
+            return JsonResponse(res)
+        apply = ApplyLog.objects.get(apply_id)
+        if type==1:
+            level = request.POST.get('level', '03')
+            with transaction.atomic():
+                user = MyUser(mobile=apply.mobile, username=apply.username, level=level)
+                user.set_password(apply.password)
+                user.save()
+                apply.audit_state = '0'
+                apply.level = level
+                apply.admin_user = admin_user
+                apply.save()
+        elif type==2:
+            reason = request.POST.get('reason', '')
+            apply.audit_state = '0'
+            apply.admin_user = admin_user
+            apply.audit_state = '2'
+            apply.audit_reason = reason
+            apply.save()
+    else:
+        return render(request,"admin_apply.html",)
 def admin_office(request):
     return render(request,"admin_office.html",)
 def admin_private(request):
     return render(request,"admin_private.html",)
-
 
 @transaction.atomic
 @has_permission('002')

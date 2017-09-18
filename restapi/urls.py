@@ -25,4 +25,6 @@ urlpatterns = [
     url(r'^sub/(?P<pk>[0-9]+)/$', views.SubscribeShipDetail.as_view(), kwargs={'partial':True}),
     
     url(r'^daystatis/$', views.DayStatisList.as_view()),
+    
+    url(r'^applylog/$', views.ApplyLogList.as_view()),
 ]

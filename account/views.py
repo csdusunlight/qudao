@@ -26,7 +26,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.contrib.contenttypes.models import ContentType
-from account.models import UserSignIn, BankCard
+from account.models import UserSignIn, BankCard, ApplyLog
 from datetime import date, timedelta, datetime
 import time as ttime
 from django.core.urlresolvers import reverse
@@ -96,12 +96,14 @@ def register(request):
         telcode = request.POST.get('code', None)
         mobile = request.POST.get('mobile', None)
         password = request.POST.get('password', None)
-        invite_code = request.POST.get('invite', None)
-        if not (telcode and mobile and password):
+        qq_number = request.POST.get('qq_number', None)
+        qq_name = request.POST.get('qq_name', '')
+        profile = request.POST.get('profile', '')
+        if not (telcode and mobile and password and qq_number):
             result['code'] = '3'
             result['msg'] = u'传入参数不足！'
             return JsonResponse(result)
-        if MyUser.objects.filter(mobile=mobile).exists():
+        if ApplyLog.objects.filter(mobile=mobile).exists():
             result['code'] = '1'
             result['msg'] = u'该手机号码已被注册，请直接登录！'
             return JsonResponse(result)
@@ -115,50 +117,19 @@ def register(request):
             elif ret == 2:
                 result['msg'] = u'手机验证码已过期，请重新获取'
             return JsonResponse(result)
-        inviter = None
-        if invite_code:
-            try:
-                inviter = MyUser.objects.get(invite_code=invite_code)
-            except MyUser.DoesNotExist:
-                result['code'] = '2'
-                result['msg'] = u'该邀请码不存在，请检查'
-                return JsonResponse(result)
+        
         try:
-            username = 'w' + str(mobile)
-            user = MyUser(mobile=mobile, username=username, inviter=inviter)
-            user.set_password(password)
-            user.save()
-            logger.info('Creating User:' + mobile + ' succeed!')
-            # 注册奖励2元
-#             reg_award = 200
-#             trans = charge_money(user, '0', reg_award, u"注册奖励")
-#             if trans:
-#                 logger.debug('Registering Award money is successfully payed!')
-#             else:
-#                 logger.debug('Registering Award money is failed to pay!!!')
+            username = 'v' + str(mobile)
+            apply = ApplyLog(mobile=mobile, username=username, password=password,
+                            qq_name=qq_name, qq_number=qq_number, profile=profile)
+            apply.save()
+            logger.info('Creating ApplyLog:' + mobile + ' succeed!')
         except Exception,e:
             logger.error(e)
             result['code'] = '4'
-            result['msg'] = u'创建用户失败！'
+            result['msg'] = u'创建申请失败！'
         else:
             result['code'] = '0'
-            # 邀请人奖励10积分
-#             if inviter:
-#                 invite_award_scores = 10
-#                 inviter.invite_scores += invite_award_scores
-#                 translist = charge_score(inviter, '0', invite_award_scores, u"邀请奖励")
-#                 if translist:
-#                     logger.debug('Inviting Award scores is successfully payed!')
-#                     inviter.save(update_fields=['invite_scores'])
-#                 else:
-#                     logger.debug('Inviting Award scores is failed to pay!!!')
-            try:
-                userl = authenticate(username=username, password=password)
-                auth_login(request, userl)
-                user.this_login_time = datetime.now()
-                Userlogin.objects.create(user=userl,)
-            except:
-                pass
         return JsonResponse(result)
     else:
         mobile = request.GET.get('mobile','')
@@ -771,14 +742,5 @@ def project_manage(request):
     else:
         return render(request, 'account/account_myproject.html')
 
-@csrf_exempt
-@login_required_ajax
-def subscribe(request):
-    user = request.user
-    id = request.POST.get('id')
-    is_on = request.POST.get('is_on')
-    if is_on is True:
-        SubscribeShip.objects.create(user=user, project_id=id,)
-    else:
-        SubscribeShip.objects.filter(user=user, project_id=id).delete()
+
 

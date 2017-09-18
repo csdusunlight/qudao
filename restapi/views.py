@@ -9,8 +9,9 @@ from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
 from permissions import CsrfExemptSessionAuthentication, IsAdmin
 from restapi.serializers import UserSerializer, InvestLogSerializer,\
     TransListSerializer, NoticeSerializer, ProjectSerializer,\
-    SubscribeShipSerializer, AnnouncementSerializer, DayStatisSerializer
-from account.models import MyUser
+    SubscribeShipSerializer, AnnouncementSerializer, DayStatisSerializer,\
+    ApplyLogSerializer
+from account.models import MyUser, ApplyLog
 from rest_framework.filters import SearchFilter,OrderingFilter
 from restapi.permissions import IsOwnerOrStaff
 from restapi.Filters import InvestLogFilter, SubscribeShipFilter
@@ -124,3 +125,8 @@ class DayStatisList(BaseViewMixin, generics.ListCreateAPIView):
     queryset = DayStatis.objects.all()
     permission_classes = (IsAdmin,)
     serializer_class = DayStatisSerializer
+    
+class ApplyLogList(BaseViewMixin, generics.ListAPIView):
+    queryset = ApplyLog.objects.all()
+    permission_classes = (IsAdmin,)
+    serializer_class = ApplyLogSerializer

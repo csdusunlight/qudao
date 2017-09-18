@@ -7,10 +7,11 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display = ('title','is_official','state','user')
     list_filter = ['is_official',]
     def save_model(self, request, obj, form, change):
-        super(ProjectAdmin,self).save_model (request, obj, form, change)      
-        if not change and obj.state=='10':
+        super(ProjectAdmin,self).save_model (request, obj, form, change)
+        if not change:
             obj.user = request.user
-            obj.save(update_fields=['user',])
+            obj.save(update_fields=['user',])   
+        if obj.state=='10' or obj.state=='20':
             batch_subscribe(request.user, True, obj)
         elif obj.state=='30':
             batch_deletesub(obj)

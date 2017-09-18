@@ -1,7 +1,7 @@
 .img-up>input {display: none;}
 canvas{width: 100%;border: 1px solid #000000;}
-.img-btn {margin: 10px auto;width: 300px;}
-.img-btn a{display: inline-block;width: 40%;height: 30px;text-align: center;line-height: 30px;border: 1px solid;border-radius: 5px;cursor: pointer;}
+.img-btn {margin: 10px auto;width: 300px;font-size: 0;}
+.img-btn a{display: inline-block;width: 140px;height: 30px;text-align: center;line-height: 30px;border: 1px solid;border-radius: 5px;cursor: pointer;}
 .img-btn a:first-child {margin-right: 20px;}
 .touch{background-color: #ddd;}
 .img-list{width: 550px;margin: 20px auto 10px;}

@@ -44,10 +44,14 @@
                 <input type="text" id="telnum_sub" />
             </div>
             <div class="search__item">
+                <span class="search__name">收款支付宝：</span>
+                <input type="text" id="zhifubao" />
+            </div>
+            <div class="search__item">
                 <span class="search__name">审核状态：</span>
                 <select name="select_status" id="state">
-                    <option value="0">未审核</option>
-                    <option value="1">已通过</option>
+                    <option value="1">未审核</option>
+                    <option value="0">已通过</option>
                     <option value="2">已拒绝</option>
                     <option value="3">已删除</option>
                 </select>
@@ -129,12 +133,6 @@
                 <div class="popup__item">
                     <span class="popup__itemname">项目名称</span>
                     <select class="project" placeholder="选择项目">
-                        <!--{% for x in flist %}
-                        <option value="{{x.id}}">{{x.title}}</option>
-                        {%endfor%}-->
-                        <option value="0">--</option>
-                        <option value="1">小诺理财五期</option>
-                        <option value="2">人人贷一期</option>
                     </select>
                 </div>
                 <div class="popup__item">
@@ -152,6 +150,14 @@
                 <div class="popup__item">
                     <span class="popup__itemname">投资金额：</span>
                     <input type="text" class="money" placeholder="填写投资金额" />
+                </div>
+                <div class="popup__item">
+                    <span class="popup__itemname">收款支付宝：</span>
+                    <input type="text" class="zfb" placeholder="填写投资金额" />
+                </div>
+                <div class="popup__item">
+                    <span class="popup__itemname">支付宝姓名：</span>
+                    <input type="text" class="zfbname" placeholder="填写投资金额" />
                 </div>
                 <div class="popup__item">
                     <span class="popup__itemname">备注：</span>
@@ -173,12 +179,6 @@
                 <div class="popup__item">
                     <span class="popup__itemname">项目名称</span>
                     <select class="project_02" placeholder="选择项目">
-                        <!--<option value="0">--</option>-->
-                        <!--{% for x in flist %}
-                        <option value="{{x.id}}">{{x.title}}</option>
-                        {%endfor%}-->
-                        <option value="1">小诺理财五期</option>
-                        <option value="2">人人贷一期</option>
                     </select>
                 </div>
                 <div class="popup__item">
@@ -219,7 +219,7 @@
     <div class="popup m-add-img">
         <div class="popup__content" style="width: 600px;">
             <div class="popup__top">
-                <h2 class="popup__title">编辑自建项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+                <h2 class="popup__title">上传截图</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
             </div>
             <div class="popup__detail">
                 <div class="img-up">
@@ -248,14 +248,30 @@
 <script type="text/javascript" src="{% static 'js/add-img.js' %}"></script>
 <script type="text/javascript">
     $.ajax({
-        url:"/restapi/investlogs/?is_official=false",
+        url:"/restapi/projects/?is_official=true",
+        type:"get",
+        dataType: "json",
+        success: function(ret) {
+            console.log(ret.results);
+            var option_html = '';
+            for (var i = 0; i < ret.results.length; i++) {
+                option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].id + '</option>';
+            }
+            $('.project').html(option_html);
+        },
+        error: function() {
+            alert("请检查网络连接");
+        }
+    });
+    $.ajax({
+        url:"/restapi/projects/?is_official=false",
     	type:"get",
     	dataType: "json",
     	success: function(ret) {
             console.log(ret.results);
             var option_html = '';
             for (var i = 0; i < ret.results.length; i++) {
-            	option_html += '<option value="' + ret.results[i].project + '">' + ret.results[i].project + '</option>';
+            	option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].id + '</option>';
             }
             $('.project_02').html(option_html);
         },
@@ -264,23 +280,23 @@
         }
     });
 //  未审核
-    var data = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>备注</th><th>审核状态</th><th>操作</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{remark}</td><td>{audit_state}</td>' +
-        '<td id="item_{id}"><a class="fyin" onclick="removeData(this,{id})">删除' +
-        '</a> │ <a class="jion-s" onclick="editData(this,{id})">编辑' +
-        '</a> │ <a class="jion-s" onclick="addImg(this,{id})">提交截图</a></td></tr>[/results]</table>';
-//  已通过
     var data1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>返现金额</th><th>备注</th><th>审核状态</th></tr>[results]' +
+        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th><th>操作</th></tr>[results]' +
         '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{ret_amount}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td><td>{audit_state}</td>' +
+        '<td id="item_{id}"><a class="fyin" onclick="removeData(this,{id})">删除' +
+        '</a>│<a class="jion-s" onclick="editData(this,{id})">编辑' +
+        '</a>│<a class="jion-s" onclick="addImg(this,{id})">提交截图</a></td></tr>[/results]</table>';
+//  已通过
+    var data0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
+        '<th>投资金额</th><th>审核时间</th><th>结算金额</th><th>返现金额</th><th>备注</th></tr>[results]' +
+        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<td>{invest_amount}</td><td>{audit_time}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{remark}</td></tr>[/results]</table>';
 //  已拒绝
     var data2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>拒绝原因</th><th>备注</th><th>审核状态</th></tr>[results]' +
+        '<th>投资金额</th><th>审核状态</th><th>拒绝原因</th><th>备注</th></tr>[results]' +
         '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{refuse_reason}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{audit_state}</td><td>{audit_reason}</td><td>{remark}</td></tr>[/results]</table>';
 //  已删除
     var data3 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>备注</th><th>审核状态</th></tr>[results]' +
@@ -288,27 +304,22 @@
         '<td>{invest_amount}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
       
 //  未审核
-    var data_user = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
+    var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th><th>操作</th></tr>[results]' +
         '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
         '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td><td>{audit_state}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData_02(this,{id})">删除' +
-        '</a> │ <a class="jion-s" onclick="editData_02(this,{id})">编辑</a></td></tr>[/results]</table>';
+        '</a>│<a class="jion-s" onclick="editData_02(this,{id})">编辑</a></td></tr>[/results]</table>';
 //  已通过
-    var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th></tr>[results]' +
+    var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
+        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>结算金额</th><th>返现金额</th><th>备注</th></tr>[results]' +
         '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
-//  已打款
-    var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>返现金额</th><th>备注</th><th>审核状态</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{ret_amount}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{remark}</td></tr>[/results]</table>';
 //  已拒绝
-    var data_user3 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
+    var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>拒绝原因</th><th>备注</th><th>审核状态</th></tr>[results]' +
         '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{refuse_reason}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{audit_reason}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
 //  已删除
     var data_user4 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th></tr>[results]' +
@@ -319,18 +330,18 @@
         var url2 = "/restapi/investlogs/?page={page}&size={pageSize}&is_official=false";
         
         $("#pagedata").ajaxPage({
-            url: url,
+            url: url + '&audit_state=1',
             pageId: $("#page"),
             pageSize: 10,
             run: true,
-            content: data,
+            content: data1,
         });
         $("#pagedata2").ajaxPage({
-            url: url2,
+            url: url2 + '&audit_state=1',
             pageId: $("#page2"),
             pageSize: 10,
             run: true,
-            content: data_user,
+            content: data_user1,
         });
         
         //          编辑/删除数据部分(官方)
@@ -348,7 +359,11 @@
                 }
             });
         }
+        
+        var addimg_id;
         function addImg (obj,id) {
+            addimg_id = id;
+            clearBtn();
             $('.popup.m-add-img').addClass('in');
         }
         var project_id;
@@ -364,7 +379,9 @@
                 children2 = parent_dom.find("td").eq(2).text(),
                 children3 = parent_dom.find("td").eq(3).text(),
                 children4 = parent_dom.find("td").eq(4).text(),
-                children5 = parent_dom.find("td").eq(5).text();
+                children5 = parent_dom.find("td").eq(5).text(),
+                children6 = parent_dom.find("td").eq(6).text(),
+                children7 = parent_dom.find("td").eq(7).text();
                                 console.log(children0+", "+children1+", "+children2+", "+children3+", "+children4+", "+children5+", ");
             var option_val;
             var options = $(".project option");
@@ -380,7 +397,9 @@
             $(".telnum").val(children2);
             $(".term").val(children3);
             $(".money").val(children4);
-            $(".remark").val(children5);
+            $(".zfb").val(children5);
+            $(".zfbname").val(children6);
+            $(".remark").val(children7);
 
         }
 
@@ -390,10 +409,12 @@
                 telnum = $(".telnum").val(),
                 term = $(".term").val(),
                 money = $(".money").val(),
+                zfb = $(".zfb").val(),
+                zfbname = $(".zfbname").val(),
                 remark = $(".remark").val();
             console.log(project);
             console.log(project_id+","+project+","+date+","+telnum+","+term+","+money+","+remark+",");
-            if(!project || !date || !telnum || !term || !money) {
+            if(!project || !date || !telnum || !term || !money || !zfb || !zfbname) {
                 alert("填写项不能为空");
                 return;
             }
@@ -403,16 +424,17 @@
             }
 
             $.ajax({
-                url: url,
+                url: "/restapi/investlogs/" + project_id + "/",
                 dataType: "json",
-                type: 'POST',
+                type: 'put',
                 data: {
-                    'project_id': project_id,
                     'project': project,
-                    'date': date,
-                    'telnum': telnum,
-                    'term': term,
-                    'money': money,
+                    'invest_date': date,
+                    'invest_mobile': telnum,
+                    'invest_term': term,
+                    'invest_amount': money,
+                    'zhifubao': zfb,
+                    'zhifubao_name': zfbname,
                     'remark': remark
                 },
                 success: function(ret) {
@@ -425,7 +447,7 @@
                     parent_dom.find("td").eq(5).text(ret.zhifubao);
                     parent_dom.find("td").eq(6).text(ret.zhifubao_name);
                     parent_dom.find("td").eq(7).text(ret.remark);
-                    $('.popup.m-edit-proj_02').removeClass('in');
+                    $('.popup.m-edit-proj').removeClass('in');
                 },
                 error: function() {
                     alert("请检查网络连接");
@@ -558,25 +580,29 @@
                     invest_date0 = $("#invest_date0").val(),
                     invest_date1 = $("#invest_date1").val(),
                     telnum_sub = $("#telnum_sub").val(),
+                    zhifubao = $("#zhifubao").val(),
                     state = $("#state").val();
                 var newurl = url;
                 if(proj_name) {
-                    newurl += "&proj_name=" + proj_name;
+                    newurl += "&project=" + proj_name;
                 }
                 if(invest_date0) {
-                    newurl += "&invest_date0=" + invest_date0;
+                    newurl += "&investtime_0=" + invest_date0;
                 }
                 if(invest_date1) {
-                    newurl += "&invest_date1=" + invest_date1;
+                    newurl += "&investtime_1=" + invest_date1;
                 }
                 if(telnum_sub) {
-                    newurl += "&telnum_sub=" + telnum_sub;
+                    newurl += "&invest_mobile=" + telnum_sub;
+                }
+                if(zhifubao) {
+                    newurl += "&zhifubao=" + zhifubao;
                 }
                 if(state) {
-                    newurl += "&state=" + state;
+                    newurl += "&audit_state=" + state;
                 }
                 
-                var search_data = data;
+                var search_data = data0;
                 if(state == '1') {
                     search_data = data1;
                 }
@@ -590,7 +616,7 @@
                 console.log(newurl);
                 $("#page").empty();
                 $("#pagedata").ajaxPage({
-                    url: url,
+                    url: newurl,
                     pageId: $("#page"),
                     pageSize: 10,
                     run: true,
@@ -603,6 +629,7 @@
                     invest_date0 = $("#invest_date0").val(),
                     invest_date1 = $("#invest_date1").val(),
                     telnum_sub = $("#telnum_sub").val(),
+                    zhifubao = $("#zhifubao").val(),
                     state = $("#state").val();
                 if(proj_name) {
                     html += '<input name="proj_name" type="hidden" value="' + proj_name + '"/>';
@@ -613,6 +640,9 @@
                 }
                 if(telnum_sub) {
                     html += '<input name="telnum_sub" type="hidden" value="' + telnum_sub + '"/>';
+                }
+                if(zhifubao) {
+                    html += '<input name="zhifubao" type="hidden" value="' + zhifubao + '"/>';
                 }
                 if(state) {
                     html += '<input name="state" type="hidden" value="' + state + '"/>';
@@ -653,7 +683,7 @@
                     newurl += "&audit_state=" + state;
                 }
                 
-                var search_data = data_user;
+                var search_data = data_user0;
                 if(state == '1') {
                     search_data = data_user1;
                 }
@@ -665,7 +695,7 @@
                 }
                 
                 console.log(newurl);
-                $("#page").empty();
+                $("#page2").empty();
                 $("#pagedata2").ajaxPage({
                     url: newurl,
                     pageId: $("#page2"),
@@ -746,17 +776,17 @@
                 }
                 console.log(file_list);
                 for(i in file_list) {
-                    formdata.append(file_list[i].name, file_list[i].blob);
+                    formdata.append('invest_image',file_list[i].name, file_list[i].blob);
                 }
 //              formdata.append('id', id);
-                formdata.append('telnum', telnum);
-                formdata.append('remark', remark);
+//              formdata.append('telnum', telnum);
+//              formdata.append('remark', remark);
 //              formdata.append('csrfmiddlewaretoken', csrfmiddlewaretoken);
-                xhr.open('post', '/restapi/projects/');
+                xhr.open('put', '/restapi/investlogs/' + addimg_id);
                 xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 //              maskIn();
                 xhr.onreadystatechange = function() {
-                    $(".img-mask").css("display", "none");
+//                  $(".img-mask").css("display", "none");
                     if(xhr.readyState == 4 && xhr.status == 200) {
                         var ret = JSON.parse(xhr.responseText);
                         if(ret.code == 0) {

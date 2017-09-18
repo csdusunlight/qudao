@@ -168,7 +168,6 @@ $(function(){
 //	});
 	$("#pagedata").ajaxPage({
         url:url,
-//      type: 'post',
         pageId:$("#page"),
         pageSize:10,
         run:true,
@@ -196,17 +195,20 @@ $(function(){
             crt_range = $('#crt_range').val();
             crt_intrest = $('#crt_intrest').val();
             console.log(' crt_name=' + crt_name +' crt_link=' + crt_link +' crt_detail=' + crt_detail +' crt_price=' + crt_price +' crt_term=' + crt_term);
+            
+            var url = "{%url 'project_create' %}";
+            console.log(url);
         $.ajax({
-            url: '/restapi/sub/',
+            url: "{%url 'project_create' %}",
             dataType: "json",
-            type: 'put',
+            type: 'post',
             data: {
-                'project_title': crt_name,
-                'project_strategy': crt_link,
+                'title': crt_name,
+                'strategy': crt_link,
                 'introduction': crt_detail,
                 'price': crt_price,
-                'project_term': crt_term,
-                'project_investrange': crt_range,
+                'term': crt_term,
+                'investrange': crt_range,
                 'intrest': crt_intrest
             },
             success: function(ret) {

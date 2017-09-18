@@ -152,7 +152,9 @@ $(function(){
         $('.qqname').val("{{user.qq_name}}");
         $('.qq').val("{{user.qq_number}}");
         $('.tosign').val("{{user.profile}}");
-        
+        console.log('{{user.color}}');
+        $('.skin__item').removeClass('on');
+        $('.skin__item').eq({{user.color}}).addClass('on');
         
         var skin = '';
         var img = '';

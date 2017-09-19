@@ -31,23 +31,14 @@
             csrfmiddlewaretoken: '{{ csrf_token }}'
         },
     });
-    var data1 = '<table width="100%"><tr><th>QQ</th><th>手机号</th><th>项目名称</th>' +
-        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>处理状态</th>' +
-        '<th>备注</th><th>操作</th></tr>[results]<tr><td>{qq_number}</td><td>{手机号}</td><td>{project}</td>' +
-        '<td>{invest_mobile}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
-        '<td>{audit_state}</td><td>{remark}</td><td id="item_{id}"><a class="fyin" onclick="pass({id})">返现' +
-        '</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td></tr>[/results]</table>';
-    var data0 = '<table width="100%"><tr><th>QQ</th><th>手机号</th><th>项目名称</th>' +
-        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>处理状态</th>' +
-        '<th>审核人</th><th>审核时间</th><th>返现金额</th><th>备注</th></tr>[results]<tr><td>{qq_number}</td><td>{手机号}</td><td>{project}</td>' +
-        '<td>{invest_mobile}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
-        '<td>{audit_state}<td>{admin_user}</td></td><td>{audit_time}</td><td>{return_amount}</td><td>{remark}</td></tr>[/results]</table>';
-    var data2 = '<table width="100%"><tr><th>QQ</th><th>手机号</th><th>项目名称</th>' +
-        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>处理状态</th>' +
-        '<th>审核人</th><th>审核时间</th><th>拒绝金额</th><th>备注</th></tr>[results]<tr><td>{qq_number}</td><td>{手机号}</td><td>{project}</td>' +
-        '<td>{invest_mobile}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
-        '<td>{audit_state}<td>{admin_user}</td></td><td>{audit_time}</td><td>{audit_reason}</td><td>{remark}</td></tr>[/results]</table>';
-    var url = "/restapi/investlogs/" + "?page={page}&size={pageSize}&is_office=true";
+
+    var data = '<table width="100%"><tr><th>QQ</th><th>QQ昵称</th><th>渠道等级</th><th>手机号</th><th>项目名称</th>' +
+        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>返现金额</th><th>结算金额</th>' +
+        '<th>备注</th></tr>[results]<tr><td>{qq_number}</td><td>{qq_name}</td><td>{level}</td><td>{手机号}</td><td>{project}</td>' +
+        '<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
+        '</td><td>{return_amount}</td><td>{settle_amount}</td><td>{remark}</td></tr>[/results]</table>';
+
+    var url = "/restapi/investlogs/" + "?page={page}&size={pageSize}&is_official=false";
 
     function pass(id) {
         $(".BackNow").css("display", "block");
@@ -59,14 +50,14 @@
         $("input#refuse_event_id").val(id);
     }
     $(document).ready(function() {
-        $("li.home4").toggleClass("on");
+        $("li.home5").toggleClass("on");
         $(".Tin-table tr:even").css("background-color", "#fcfcfc");
         $("#pagedata").ajaxPage({
-            url: url + '&audit_state=1',
+            url: url,
             pageId: $("#page"),
             pageSize: 10,
             run: true,
-            content: data1,
+            content: data,
         });
         $(".none-x").click(function() {
             $(this).parent().parent().css("display", "none"); <!--隐藏-->
@@ -166,25 +157,11 @@
             if(projectname) {
                 newurl += "&project_title_contains=" + projectname;
             }
-            adminname = $("#adminname").val();
-            state = $("#state").val();
-            if(adminname) {
-                newurl += "&admin_user=" + adminname;
-            }
-            if(state) {
-                newurl += "&audit_state=" + state;
-            }
             var level = $("#level").val();
             if(level) {
                 newurl += "&level=" + level;
             }
-            var newdata = data1;
-            if(state == '0') {
-                newdata = data0;
-            }
-            if(state == '2') {
-                newdata = data2;
-            }
+            var newdata = data;
             $("#page").empty();
             $("#pagedata").ajaxPage({
                 url: newurl,
@@ -220,14 +197,6 @@
             if(projectname) {
                 html += '<input name="project_title_contains" type="hidden" value="' + projectname + '"/>';
             }
-            adminname = $("#adminname").val();
-            state = $("#state").val();
-            if(adminname) {
-                html += '<input name="admin_user" type="hidden" value="' + adminname + '"/>';
-            }
-            if(state) {
-                html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
-            }
             var level = $("#level").val();
             if(level) {
                 html += '<input name="level" type="hidden" value="' + level + '"/>';
@@ -239,37 +208,7 @@
             iframe.contentWindow.document.close();
             document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
         });
-        $('#import').click(function() {
-            var fileElementId = 'fileupload1';
-            if(!document.getElementById(fileElementId).value) {
-                alert("请先选择文件");
-                return;
-            }
-            $.ajaxFileUpload({
-                url: "",
-                secureuri: false,
-                fileElementId: fileElementId, //file标签的id
-                dataType: 'json', //返回数据的类型
-                data: {}, //一同上传的数据
-                success: function(data, status) {
-                    if(data.code == 0) {
-                        alert("导入成功！ 数量：" + data.num);
-                    } else {
-                        alert(data.msg + " 成功数量：" + data.num);
-                    }
-                },
-                error: function(data, status, e) {
-                    alert(e);
-                }
-            });
-            //  hint.innerHTML = '无';
-        });
-
-        var choose_file = document.getElementById("input_clone");
-        var hint = document.getElementById("hint");
-        choose_file.onclick = function() {
-            document.getElementById("fileupload1").click();
-        }
+        
 
     });
 </script>
@@ -325,18 +264,6 @@
                         <i style="letter-spacing:4.8px;">项目名称：</i>
                         <input id="projectname" type="text" />
                     </td>
-                    <td>
-                        <i>处&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人：</i>
-                        <input id="adminname" type="text" />
-                    </td>
-                    <td>
-                        <i style="letter-spacing:4.8px;">处理状态：</i>
-                        <select name="selectAge" id="state">
-                            <option value="1">未审核</option>
-                            <option value="0">审核通过</option>
-                            <option value="2">审核拒绝</option>
-                        </select>
-                    </td>
                 </tr>
             </table>
 
@@ -344,12 +271,6 @@
                     <div class="Submit-in">
                         <input id="search" type="button" value="搜索" />
                         <input id="export" type="button" value="导出" />
-                    </div>
-                    <div class="leading-in">
-                        <input id="fileupload1" name="file" type="file" onchange='hint.innerHTML = this.files[0].name;' />
-                        <a id="input_clone" class="input-clone">选择文件</a>
-                        <p class="hint-box">已选择表格：<b id="hint" class="hint">无</b></p>
-                        <input id="import" type="button" value="导入" />
                     </div>
             </div>
 
@@ -359,11 +280,6 @@
 <div>
 
     <div style="clear: both;"></div>
-    <p class="unhandle-box">还存在未审核数据（今天之前提交的）的项目有：
-    {% for item in unaudited_pronames %}
-    <span class="unhandle">{{item}} </span>
-    {%endfor%}
-    </p>
 </div>
 <div class="Tin-table">
     <div id="pagedata">

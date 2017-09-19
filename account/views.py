@@ -118,7 +118,7 @@ def register(request):
             elif ret == 2:
                 result['msg'] = u'手机验证码已过期，请重新获取'
             return JsonResponse(result)
-        
+
         try:
             username = 'v' + str(mobile)
             apply = ApplyLog(mobile=mobile, username=username, password=password,

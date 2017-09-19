@@ -83,12 +83,14 @@ class TranslistList(BaseViewMixin, generics.ListAPIView):
     queryset = TransList.objects.all()
     permission_classes = (IsOwnerOrStaff,)
     serializer_class = TransListSerializer
+    pagination_class = MyPageNumberPagination
     
 class NoticeList(BaseViewMixin, generics.ListCreateAPIView):
     def get_queryset(self):
         user = self.request.user
         return Notice.objects.filter(user=user)
     serializer_class = NoticeSerializer
+    pagination_class = MyPageNumberPagination
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
     
@@ -115,6 +117,7 @@ class SubscribeShipDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
 class AnnouncementList(BaseViewMixin, generics.ListCreateAPIView):
     queryset = Announcement.objects.all()
     serializer_class = AnnouncementSerializer
+    pagination_class = MyPageNumberPagination
     
 class AnnouncementDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = Announcement.objects.all()
@@ -125,8 +128,10 @@ class DayStatisList(BaseViewMixin, generics.ListCreateAPIView):
     queryset = DayStatis.objects.all()
     permission_classes = (IsAdmin,)
     serializer_class = DayStatisSerializer
+    pagination_class = MyPageNumberPagination
     
 class ApplyLogList(BaseViewMixin, generics.ListAPIView):
     queryset = ApplyLog.objects.all()
     permission_classes = (IsAdmin,)
     serializer_class = ApplyLogSerializer
+    pagination_class = MyPageNumberPagination

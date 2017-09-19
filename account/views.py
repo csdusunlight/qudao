@@ -150,6 +150,7 @@ def register(request):
         invest_image = ';'.join(imgurl_list)
         apply.qualification = invest_image
         apply.save(update_fields=['qualification',])
+        result['code'] = 0
         return JsonResponse(result)
     else:
         mobile = request.GET.get('mobile','')

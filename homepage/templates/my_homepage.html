@@ -13,13 +13,15 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 <script type="text/javascript">
-	skin.href="{% static 'css/skin.css' %}";
+    var skin_id = "{{user.color}}";
+    console.log(skin_id);
+	skin.href="/static/css/skin" + skin_id + ".css";
 </script>
 </head>
 <body>
     <div class="user__top">
         <div class="user__info">
-            <img class="user__img" src="{% static 'images/skin_bg_01.png' %}" alt="" />
+            <img class="user__img" src="{{user.picture_url}}" alt="" />
             <div class="user__detail">
                 <h1 class="user__name">鸿记干货行</h1>
                 <p class="user__intro">额外投入刚刚恢复得换个地方</p>
@@ -136,7 +138,8 @@
                     </div>
                 </div>
                 <ul id="pagedata1" class="item-container clearfix">
-                    <li class="project__itembox">
+                    
+                    <!--<li class="project__itembox">
                         <h2 class="project__name">核时代一一期<span class="project__name-small">皮卡三大诉讼法的角色</span></h2>
                         <div class="project__detail">
                             <img class="project__img" src="" alt="" />
@@ -149,35 +152,7 @@
                                 <a class="btn m-green m-project" onclick="submit()">交&nbsp;&nbsp;单</a>
                             </div>
                         </div>
-                    </li>
-                    <li class="project__itembox">
-                        <h2 class="project__name">核时代一一期<span class="project__name-small">皮卡三大诉讼法的角色</span></h2>
-                        <div class="project__detail">
-                            <img class="project__img" src="" alt="" />
-                            <p class="project__profit project__info">预计最高年化<br /><span class="project__profit-num">17%</span></p>
-                            <p class="project__price project__info">返现价格<br /><span class="project__price-num">0.6/万</span></p>
-                            <p class="project__money project__info">投资区间<br />100-10000</p>
-                            <p class="project__term project__info">标期<br />不限</p>
-                            <div class="project-btn-box">
-                                <a href="#" class="btn m-green m-project">查看攻略</a>
-                                <a class="btn m-green m-project" onclick="submit()">交&nbsp;&nbsp;单</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="project__itembox">
-                        <h2 class="project__name">核时代一一期<span class="project__name-small">皮卡三大诉讼法的角色</span></h2>
-                        <div class="project__detail">
-                            <img class="project__img" src="" alt="" />
-                            <p class="project__profit project__info">预计最高年化<br /><span class="project__profit-num">17%</span></p>
-                            <p class="project__price project__info">返现价格<br /><span class="project__price-num">0.6/万</span></p>
-                            <p class="project__money project__info">投资区间<br />100-10000</p>
-                            <p class="project__term project__info">标期<br />不限</p>
-                            <div class="project-btn-box">
-                                <a href="#" class="btn m-green m-project">查看攻略</a>
-                                <a class="btn m-green m-project" onclick="submit()">交&nbsp;&nbsp;单</a>
-                            </div>
-                        </div>
-                    </li>
+                    </li>-->
                 </ul>
                 <div class="changes-p">
                     <div class="page"  id="page1">
@@ -186,7 +161,7 @@
             </div>
         </div>
         <div class="con-right r">
-            <div class="ask">点击咨询我<br /><span class="ask-time">(9:00-20:00)</span></div>
+            <a href="http://wpa.qq.com/msgrd?v=3&uin={{user.qq_number}}&site=qq&menu=yes" target="_blank"><div class="ask">点击咨询我<br /><span class="ask-time">(9:00-20:00)</span></div></a>
             <div class="notice">
                 <h3 class="notice__title">最新公告</h3>
                 <div id="noticeBox" class="notice__box">
@@ -269,47 +244,65 @@
 <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
 <script type="text/javascript">
-    function submit () {
-        console.log('submit');
+    var data='[results]<li class="project__itembox"><h2 class="project__name">{project_title}<span class="project__name-small">{project_intro}</span></h2>'+
+      '<div class="project__detail"><img class="project__img" src="" alt="" />'+
+      '<p class="project__profit project__info">预计最高年化<br /><span class="project__profit-num">17%</span></p>'+
+      '<p class="project__price project__info">返现价格<br /><span class="project__price-num">{price}</span></p>'+
+      '<p class="project__money project__info">投资区间<br />{project_investrange}</p>'+
+      '<p class="project__term project__info">标期<br />{project_term}</p>'+
+      '<div class="project-btn-box"><a href="{project_strategy}" target="_blank" class="btn m-green m-project">查看攻略</a>'+
+      '<a class="btn m-green m-project" onclick="submit({id})">交&nbsp;&nbsp;单</a></div></div></li>[/results]';
+      
+
+
+    $(function(){
+        $("#pagedata1").ajaxPage({
+          url: "/restapi/sub/?page={page}&size={pageSize}",
+          pageId:$("#page1"),
+          run:true,
+          content:data,
+//        complete:pagecallback,
+        });
+    })
+    var project_id;
+    function submit (id) {
+        project_id = id;
         $('.popup.m-submit-proj').addClass('in');
     }
     $(".popup.m-submit-proj").on("focus", ".date_picker", function() {
         $(this).date_input();
     })
-    $("#confirm_edit").click(function() {
+    $("#confirm").click(function() {
         var telnum = $(".telnum").val(),
             term = $(".term").val(),
             money = $(".money").val(),
             date = $(".date").val(),
             zhifubao = $(".zhifubao").val();
-            afbname = $(".afbname").val();
+            zfbname = $(".zfbname").val();
             remark = $(".remark").val();
-        console.log(project);
-        console.log(project_id+","+project+","+date+","+telnum+","+term+","+money+","+remark+",");
-        if(!project || !date || !telnum || !term || !money) {
-            alert("填写项不能为空");
-            return;
-        }
-        if(project == 0) {
-            alert("请选择项目");
+        console.log(project_id+","+date+","+telnum+","+term+","+money+","+remark+",");
+        if( !date || !telnum || !term || !money || !zhifubao || !zfbname ) {
+            alert("必填写项不能为空");
             return;
         }
 
         $.ajax({
-            url: url,
+            url: '/restapi/investlogs/',
             dataType: "json",
-            type: 'POST',
+            type: 'post',
             data: {
-                'project_id': project_id,
-                'project': project,
-                'date': date,
-                'telnum': telnum,
-                'term': term,
-                'money': money,
+                'project': project_id,
+                'invest_mobile': telnum,
+                'invest_term': term,
+                'invest_amount': money,
+                'invest_date': date,
+                'zhifubao': zhifubao,
+                'zhifubao_name': zfbname,
                 'remark': remark
             },
             success: function(ret) {
                 alert('提交成功');
+                $('.popup.m-submit-proj').removeClass('in');
             },
             error: function() {
                 alert("请检查网络连接");

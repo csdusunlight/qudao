@@ -431,7 +431,7 @@
         formdata.append('qqname', qqname);
         formdata.append('intro', intro);
 //      formdata.append('csrfmiddlewaretoken', csrfmiddlewaretoken);
-        xhr.open('post', '/expsubmit/task/');
+        xhr.open('post', register_url);
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 //      maskIn();
         xhr.onreadystatechange = function() {

@@ -122,7 +122,7 @@ STATICFILES_DIRS = (
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), '..', 'media').replace('\\','/')
 # STATIC_ROOT = os.path.join(os.path.dirname(__file__), '..', 'static').replace('\\','/')
-STATIC_DIR = os.path.join(os.path.dirname(__file__), '..', 'static').replace('\\','/')  
+STATIC_DIR = os.path.join(os.path.dirname(__file__), '..', 'static').replace('\\','/')
 MEDIA_URL = '/media/'
 AUTH_USER_MODEL = 'account.MyUser'
 LOGIN_URL = 'login'
@@ -150,7 +150,7 @@ LOGGING = {
                 'default':{
                     'level':'DEBUG',
                     'class':'logging.handlers.RotatingFileHandler',
-                    'filename': os.path.join(BASE_DIR, 'debug.log'), 
+                    'filename': os.path.join(BASE_DIR, 'debug.log'),
                     'maxBytes': 1024*1024*100,
                     'backupCount': 5,
                     'formatter':'verbose',

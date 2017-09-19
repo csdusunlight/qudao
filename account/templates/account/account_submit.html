@@ -591,8 +591,9 @@
 						repeat_num = re_num;
 						repeat_phone = re_phone;
 						var data = Data2.join('$');
+						console.log(data);
 						$.ajax({
-							url: "url",
+							url: "{% url 'submit_itembyitem' %}",
 							dataType: "json",
 							type: "POST",
 							async: false,

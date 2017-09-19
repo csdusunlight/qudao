@@ -38,7 +38,7 @@ urlpatterns = [
     url(r'^channel/$', 'account.channel.channel', name='account_channel'),
 #     url(r'^export/$', 'account.channel.export_audit_result', name='export_audit_result'),
 #
-#     url(r'^submit_itembyitem/$', 'account.channel.submit_itembyitem', name='submit_itembyitem'),
+    url(r'^submit_itembyitem/$', 'account.channel.submit_itembyitem', name='submit_itembyitem'),
 #     url(r'^revise_project/$', 'account.channel.revise_project', name='revise_project'),
 #
 #     url(r'^vip/$', 'account.views.vip', name='account_vip'),
@@ -46,7 +46,7 @@ urlpatterns = [
     url(r'^account_setting/$', 'account.views.account_setting', name='account_setting'),
     url(r'^account_submit/$', 'account.views.account_submit', name='account_submit'),
     url(r'^account_audited/$', 'account.views.account_audited', name='account_audited'),
-    
+
     url(r'^project/$', 'account.views.project_manage', name='project_manage'),
     url(r'^project_create/$', 'account.views.project_create', name='project_create'),
 ]

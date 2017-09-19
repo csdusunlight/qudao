@@ -111,16 +111,16 @@ $(document).ready(function(){
 				'type':1,
 			},
 			success:function(ret){
-				if(ret.code==0){
-					$("#item_"+id).html("审核完成，通过");
-				}
-				else if(ret.code==-1){
-					alert("该页面已过期，请重新登录！");
-					window.location.href = ret.url;
-				}
-				else {
-					alert(ret.res_msg);
-				}
+//				if(ret.code==0){
+//					$("#item_"+id).html("审核完成，通过");
+//				}
+//				else if(ret.code==-1){
+//					alert("该页面已过期，请重新登录！");
+//					window.location.href = ret.url;
+//				}
+//				else {
+//					alert(ret.res_msg);
+//				}
 			},
 			error:function(){
 				alert("请检查网络连接");
@@ -144,16 +144,16 @@ $(document).ready(function(){
 				'type':2,
 			},
 			success:function(ret){
-				if(ret.code==0){
-					$("#item_"+id).html("审核完成，拒绝");
-				}
-				else if(ret.code==-1){
-					alert("该页面已过期，请重新登录！");
-					window.location.href = ret.url;
-				}
-				else {
-					alert(ret.res_msg);
-				}
+//				if(ret.code==0){
+//					$("#item_"+id).html("审核完成，拒绝");
+//				}
+//				else if(ret.code==-1){
+//					alert("该页面已过期，请重新登录！");
+//					window.location.href = ret.url;
+//				}
+//				else {
+//					alert(ret.res_msg);
+//				}
 			},
 			error:function(){
 				alert("请检查网络连接");

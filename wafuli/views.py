@@ -49,15 +49,15 @@ def index(request):
         data['invite_total']=global_data.invite_total
         data['with_total']=global_data.with_total
         data['user_total']=global_data.user_total
-        
+
     #banner
     ad_list = MAdvert_PC.objects.filter(location='00', is_hidden=False)[0:6]
     data.update(ad_list=ad_list)
-    
+
     #今日推荐项目
     recom_projects = Project.objects.filter(state='10')[0:3]
     data.update(recom_projects=recom_projects)
-    
+
     #合作平台
     platforms = Company.objects.order_by("-priority")
     data.update(platforms=platforms)

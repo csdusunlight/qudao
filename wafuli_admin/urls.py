@@ -17,7 +17,7 @@ urlpatterns = [
 
 
     url(r'^admin_charge/$', 'wafuli_admin.views.admin_charge', name='admin_charge'),
-#     url(r'^chargepage/$', 'wafuli_admin.views.get_admin_charge_page', name='get_admin_charge_page'),
+    url(r'^chargepage/$', 'wafuli_admin.views.get_admin_charge_page', name='get_admin_charge_page'),
 
     url(r'^send_multiple_msg/$', 'wafuli_admin.views.send_multiple_msg', name='send_multiple_msg'),
 

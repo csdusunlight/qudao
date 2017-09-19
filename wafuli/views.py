@@ -36,7 +36,7 @@ from wafuli.models import MAdvert_PC, Project, Company
 import logging
 logger = logging.getLogger('wafuli')
 def index(request):
-    logger.error(request.META['HTTP_USERNAME']) 
+    logger.error(request.META.get('HTTP_USERNAME')) 
     data = {
         'invest_total':0,#引入资金
         'invite_total':0,#渠道引入用户数

@@ -89,13 +89,13 @@
         <script type="text/javascript">
             var coderefresh_url = "{% url 'captcha-refresh' %}";
             var phoneimageV_url = "{% url 'phoneImageV' %}";
-            var verifyemail_url = "{% url 'verifyemail' %}";
-            var verifymobile_url = "{% url 'verifymobile' %}";
-            var verifyusername_url = "{% url 'verifyusername' %}";
-            var verifyinviter_url = "{% url 'verifyinviter' %}";
+            var verifyemail_url = "";
+            var verifymobile_url = "";
+            var verifyusername_url = "";
+            var verifyinviter_url = "";
             var get_code_url = "{% url 'phoneImageV' %}";
             var register_url = "{% url 'register' %}";
-            var index_url = "{% url 'freshman_introduction' %}";
+            var index_url = "";
             var login_url = "{% url 'login' %}";
             $.ajaxSetup({
                 data: {
@@ -207,23 +207,12 @@
                 </div>
                 <!--<div class="co-left" style="text-align:left;width:45%">
        		<div class="re-pad"><p style="font-size:16px;color:#111;margin: 0;">已有账号？<span><a href="{%url 'login'%}" class="ljdl">立即登录</a></span></p></div>
-            <a href="{%url 'account_invite'%}"><div class="re-ret"><img src="{% static 'images/register-bg.png' %}" style="margin:3rem;margin-top: 10px;width: 280px;"/></div></a>
+            <a href=""><div class="re-ret"><img src="{% static 'images/register-bg.png' %}" style="margin:3rem;margin-top: 10px;width: 280px;"/></div></a>
         </div>-->
             </div>
 
         </div>
         <div style="clear:both"></div>
-        <!--<div class="bottom-nav">
-  <span class="bottom-nav-item down-app-hover">下载APP</span> &nbsp;|&nbsp;
-  <div class="apk-container">
-    <p>下载APP更有惊喜等着你</p>
-    <img src="{% static 'images/app-download-erweima.png' %}" alt="apk二维码" />
-  </div>
-  <a class="bottom-nav-item" href="{% url 'aboutus' %}">关于我们</a> &nbsp;|&nbsp;
-  <a class="bottom-nav-item" href="{% url 'freshman_introduction' %}">了解挖福利</a> &nbsp;|&nbsp;
-  <span class="link-phone bottom-nav-item">0731-85586375</span>
-</div>
-<div>Copyright&nbsp; &copy; 2015-2024&nbsp; 挖福利 版权所有 备案号：湘ICP备15015815号-2</div>-->
 
 <script type="text/javascript">
 	   var file_list = [];
@@ -442,7 +431,7 @@
         formdata.append('qqname', qqname);
         formdata.append('intro', intro);
 //      formdata.append('csrfmiddlewaretoken', csrfmiddlewaretoken);
-        xhr.open('post', '/expsubmit/task/');
+        xhr.open('post', register_url);
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 //      maskIn();
         xhr.onreadystatechange = function() {

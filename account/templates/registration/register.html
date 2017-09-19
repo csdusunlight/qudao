@@ -427,9 +427,12 @@
         for (i in file_list){
             formdata.append(file_list[i].name, file_list[i].blob);
         }
-        formdata.append('qq', qq);
-        formdata.append('qqname', qqname);
-        formdata.append('intro', intro);
+        formdata.append('qq_number', qq);
+        formdata.append('qq_name', qqname);
+        formdata.append('code', code);
+        formdata.append('mobile', mobile);
+        formdata.append('profile', intro);
+        formdata.append('password', password1);
 //      formdata.append('csrfmiddlewaretoken', csrfmiddlewaretoken);
         xhr.open('post', register_url);
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
@@ -447,7 +450,7 @@
 //                  $("#hint").text("任务完成，请耐心等待工作人员审核!")
 //                  popupIn();
                 }else{
-//                  $("#hint").text(ret.msg)
+                    console.log(ret.msg)
 //                  popupIn()
                 }
             }

@@ -54,7 +54,7 @@ var data3 = '<table width="100%"><tr><th>用户手机号</th><th>投资平台</t
     '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
     '<td>{admin_user}</td><td>{audit_time}</td>'+
     '<td class="ret-money">{ret_money}</td><td class="ret-score">{ret_score}</td><td>{refuse_reason}</td></tr>[/results]</table>';
-var url = '/restapi/users/?event_type=9&page={page}&size={pageSize}';
+var url = '/restapi/applylog/?&page={page}&size={pageSize}';
 function pagecallback(){
     $(".ret-money").each(function(index, el) {
         if ($(this).text() == 'null') {

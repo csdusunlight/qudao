@@ -781,6 +781,6 @@ def project_create(request):
             project = Project.objects.create(title=title, strategy=strategy, introduction=introduction,
                     cprice=price, is_official=False, user=user, term=term, investrange=investrange,
                     intrest=intrest)
-            SubscribeShip.objects.create(user=user, project=project, is_official=False, is_on=True)
+            SubscribeShip.objects.create(user=user, project=project, is_on=True)
         ret['code'] = 0
     return JsonResponse(ret)

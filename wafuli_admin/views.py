@@ -564,6 +564,7 @@ def import_invest_excel(request):
     return JsonResponse(ret)
 
 @transaction.atomic
+@has_permission("005")
 def admin_user(request):
     admin_user = request.user
     if request.method == "GET":
@@ -620,14 +621,11 @@ def admin_user(request):
                 translist = charge_money(obj_user, '0', pcash, reason)
             elif mcash > 0:
                 translist = charge_money(obj_user, '1', mcash, reason)
-            if translist:
-                admin_investlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=reason, investlog_type='4')
-                translist.admin_investlog = admin_investlog
-                translist.save(update_fields=['admin_investlog'])
-                res['code'] = 0
-            else:
-                res['code'] = -4
-                res['res_msg'] = "现金记账失败，请检查输入合法性后再次提交！"
+            adminlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=reason, type='1')
+            translist.adminlog = adminlog
+            translist.save(update_fields=['adminlog'])
+            res['code'] = 0
+            
 
         elif type == 2:
             obj_user.is_active = False

@@ -89,6 +89,8 @@ def login(request, template_name='registration/login.html',
     return TemplateResponse(request, template_name, context)
 import logging
 logger = logging.getLogger('wafuli')
+
+@csrf_exempt
 def register(request):
     if request.method == 'POST':
         if not request.is_ajax():

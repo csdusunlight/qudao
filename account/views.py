@@ -172,7 +172,7 @@ def verifymobile(request):
     users = None
     code = '0' # is used
     if mobilev:
-        users = MyUser.objects.filter(mobile=mobilev)
+        users = ApplyLog.objects.filter(mobile=mobilev)
         if not users.exists():
             code = '1'
     result = {'code':code,}
@@ -182,7 +182,17 @@ def verifyusername(request):
     users = None
     code = '0' # is used
     if namev:
-        users = MyUser.objects.filter(username=namev)
+        users = ApplyLog.objects.filter(username=namev)
+        if not users.exists():
+            code = '1'
+    result = {'code':code,}
+    return JsonResponse(result)
+def verifyqq(request):
+    qqv = request.GET.get('qq_number', None)
+    users = None
+    code = '0' # is used
+    if qqv:
+        users = ApplyLog.objects.filter(qq_number=qqv)
         if not users.exists():
             code = '1'
     result = {'code':code,}

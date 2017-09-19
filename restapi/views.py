@@ -72,7 +72,7 @@ class InvestlogList(BaseViewMixin, generics.ListCreateAPIView):
     def perform_create(self, serializer):
         project = serializer.validated_data['project']
         is_official = project.is_official
-        serializer.save(is_official=is_official)
+        serializer.save(is_official=is_official, audit_state='1')
 
 class InvestlogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = InvestLog.objects.all()

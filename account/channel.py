@@ -153,13 +153,13 @@ def submit_itembyitem(request):
         zhifubao_name = temp[6]
         remark = temp[7]
         try:
-            if not news.is_multisub_allowed and news.user_event.filter(invest_mobile=telnum).exclude(audit_state='2').exists():
+            if not news.is_multisub_allowed and news.investlogs.filter(invest_mobile=telnum).exclude(audit_state='2').exists():
                 exist_num += 1   #jzy
                 exist_phone = exist_phone + telnum + ", "   #jzy
                 raise ValueError('This invest_mobile is repective in project:' + str(news.id))
             else:
-                InvestLog.objects.create(user=request.user, invest_time=time, invest_mobile=telnum, invest_term=term,
-                                 invest_amount=int(amount), content_object=news, audit_state='1',
+                InvestLog.objects.create(user=request.user, project=news, invest_date=time, invest_mobile=telnum, invest_term=term,
+                                 invest_amount=int(amount), audit_state='1', is_official=True,
                                  zhifubao=zhifubao, zhifubao_name=zhifubao_name, remark=remark,)
                 suc_num += 1
         except Exception, e:

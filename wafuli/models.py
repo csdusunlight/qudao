@@ -14,6 +14,7 @@ AUDIT_STATE = (
     ('0', u'审核通过'),
     ('1', u'待审核'),
     ('2', u'审核未通过'),
+    ('3', u'已删除'),
 )    
 class Company(models.Model):
     name = models.CharField(u"平台名称(必填)",max_length=100,unique=True)
@@ -122,7 +123,7 @@ class SubscribeShip(models.Model):
 
 class InvestLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="investlog_submit")
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, related_name="investlogs")
     is_official = models.BooleanField()
     submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
     invest_mobile = models.CharField(u"投资手机号", max_length=11)

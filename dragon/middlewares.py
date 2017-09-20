@@ -11,6 +11,4 @@ class SubdomainMiddleware(object):
         if len(domain_parts) == 3:
             username = domain_parts[0]
             request.user = MyUser.objects.get(username=username)
-        else:
-            raise Http404
         return None

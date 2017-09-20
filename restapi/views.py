@@ -14,7 +14,8 @@ from restapi.serializers import UserSerializer, InvestLogSerializer,\
 from account.models import MyUser, ApplyLog
 from rest_framework.filters import SearchFilter,OrderingFilter
 from restapi.permissions import IsOwnerOrStaff
-from restapi.Filters import InvestLogFilter, SubscribeShipFilter, UserFilter
+from restapi.Filters import InvestLogFilter, SubscribeShipFilter, UserFilter,\
+    ApplyLogFilter, TranslistFilter
 from django.db.models import Q
 from wafuli_admin.models import DayStatis
 # from wafuli.Filters import UserEventFilter
@@ -85,6 +86,8 @@ class TranslistList(BaseViewMixin, generics.ListAPIView):
     permission_classes = (IsOwnerOrStaff,)
     serializer_class = TransListSerializer
     pagination_class = MyPageNumberPagination
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, )
+    filter_class = TranslistFilter
     
 class NoticeList(BaseViewMixin, generics.ListCreateAPIView):
     def get_queryset(self):
@@ -135,4 +138,6 @@ class ApplyLogList(BaseViewMixin, generics.ListAPIView):
     queryset = ApplyLog.objects.all()
     permission_classes = (IsAdmin,)
     serializer_class = ApplyLogSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, )
+    filter_class = ApplyLogFilter
     pagination_class = MyPageNumberPagination

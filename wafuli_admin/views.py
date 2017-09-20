@@ -63,7 +63,7 @@ def admin_apply(request):
             res['code'] = -2
             res['res_msg'] = u'传入参数不足，请联系技术人员！'
             return JsonResponse(res)
-        apply = ApplyLog.objects.get(apply_id)
+        apply = ApplyLog.objects.get(id=apply_id)
         if type==1:
             level = request.POST.get('level', '03')
             with transaction.atomic():
@@ -83,6 +83,8 @@ def admin_apply(request):
             apply.audit_state = '2'
             apply.audit_reason = reason
             apply.save()
+        res['code'] = 0
+        return JsonResponse(res)
     else:
         return render(request,"admin_apply.html",)
 def admin_office(request):

@@ -32,8 +32,11 @@
 #
 from django.shortcuts import render
 from wafuli_admin.models import GlobalStatis
-from wafuli.models import MAdvert_PC, Project, Company
+from wafuli.models import MAdvert_PC, Project, Company, InvestLog
 import logging
+from django.http.response import Http404
+from django.contrib.auth.decorators import login_required
+from account.models import ApplyLog
 logger = logging.getLogger('wafuli')
 def index(request):
     logger.error(request.user.username)
@@ -899,12 +902,12 @@ def project_all(request):
 #         hot_info_list = Information.objects.filter(is_display=True).order_by('-view_count')[0:6]
 #         return render(request, 'detail-information.html',{'info':info, 'hot_info_list':hot_info_list, 'type':'Information'})
 #
-# @login_required
+@login_required
 def display_screenshot(request):
     id = request.GET.get('id', None)
     if not id:
         raise Http404
-    log = UserEvent.objects.get(id=id)
+    log = InvestLog.objects.get(id=id)
     if log.user.id != request.user.id and not request.user.is_staff:
         raise Http404
     url_list = log.invest_image.split(';')
@@ -914,3 +917,17 @@ def display_screenshot(request):
         img_list.append({'name':name,'url':url})
     return render(request, 'screenshot.html', {'img_list':img_list})
 
+@login_required
+def display_qualification(request):
+    id = request.GET.get('id', None)
+    if not id:
+        raise Http404
+    log = ApplyLog.objects.get(id=id)
+    if not request.user.is_staff:
+        raise Http404
+    url_list = log.qualification.split(';')
+    img_list = []
+    for url in url_list:
+        name = url.split('/')[-1]
+        img_list.append({'name':name,'url':url})
+    return render(request, 'screenshot.html', {'img_list':img_list})

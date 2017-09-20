@@ -6,6 +6,7 @@ Created on 2017年8月23日
 '''
 import django_filters
 from wafuli.models import InvestLog, Project, SubscribeShip
+from account.models import MyUser
 # class ProjectInvestDateFilter(django_filters.rest_framework.FilterSet):
 #     investtime = django_filters.DateFromToRangeFilter(name="invest_time")
 #     audittime = django_filters.DateTimeFromToRangeFilter(name="audit_time")
@@ -27,3 +28,10 @@ class SubscribeShipFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = SubscribeShip
         fields = '__all__'
+
+
+class UserFilter(django_filters.rest_framework.FilterSet):
+    join_date = django_filters.DateFromToRangeFilter(name="date_joined")
+    class Meta:
+        model = MyUser
+        fields = ['mobile', 'username', 'qq_name', 'qq_number', 'join_date']

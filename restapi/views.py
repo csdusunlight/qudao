@@ -14,7 +14,7 @@ from restapi.serializers import UserSerializer, InvestLogSerializer,\
 from account.models import MyUser, ApplyLog
 from rest_framework.filters import SearchFilter,OrderingFilter
 from restapi.permissions import IsOwnerOrStaff
-from restapi.Filters import InvestLogFilter, SubscribeShipFilter
+from restapi.Filters import InvestLogFilter, SubscribeShipFilter, UserFilter
 from django.db.models import Q
 from wafuli_admin.models import DayStatis
 # from wafuli.Filters import UserEventFilter
@@ -50,6 +50,7 @@ class UserList(BaseViewMixin, generics.ListCreateAPIView):
     permission_classes = (IsAdmin,)
     serializer_class = UserSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, )
+    filter_class = UserFilter
 #     filter_fields = ['state',]
     pagination_class = MyPageNumberPagination
 

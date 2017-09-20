@@ -90,8 +90,8 @@
             var coderefresh_url = "{% url 'captcha-refresh' %}";
             var phoneimageV_url = "{% url 'phoneImageV' %}";
             var verifyemail_url = "";
-            var verifymobile_url = "";
-            var verifyusername_url = "";
+            var verifymobile_url = "{% url 'verifymobile' %}";
+            var verifyqq_url = "{% url 'verifyqq' %}";
             var verifyinviter_url = "";
             var get_code_url = "{% url 'phoneImageV' %}";
             var register_url = "{% url 'register' %}";
@@ -438,20 +438,14 @@
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 //      maskIn();
         xhr.onreadystatechange = function() {
-//          $(".img-mask").css("display", "none");
             if(xhr.readyState == 4 && xhr.status == 200) {
                 var ret = JSON.parse(xhr.responseText);
                 if(ret.code == 0) {
-//                  $(".img-mask").css("display", "none");
-                    alert("请先登录！")
-                    window.location.href = ret.url;
+                    alert("申请成功！")
+                    window.location.href = "/";
                     return;
-                }else if(ret.code==1){
-//                  $("#hint").text("任务完成，请耐心等待工作人员审核!")
-//                  popupIn();
                 }else{
-                    console.log(ret.msg)
-//                  popupIn()
+                    alert(ret.msg)
                 }
             }
         };

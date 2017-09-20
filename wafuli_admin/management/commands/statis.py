@@ -11,7 +11,7 @@ from django.db.models import Sum, Count,Avg
 from wafuli.models import Project, WithdrawLog, InvestLog
 logger = logging.getLogger("wafuli")
 from django.core.management.base import BaseCommand, CommandError
-from account.models import MyUser, Userlogin
+from account.models import MyUser, Userlogin, ApplyLog
 from wafuli_admin.models import DayStatis, GlobalStatis
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -19,8 +19,9 @@ class Command(BaseCommand):
         begin_time = time.time()
         today = datetime.date.today() 
         yesterday = today - datetime.timedelta(days=1)
-        dict = MyUser.objects.filter(date_joined__gte=today).aggregate(count=Count('id'))
-        new_reg_num = dict.get('count')
+        apply_num = ApplyLog.objects.filter(submit_time__gte=today).count()
+        refuse_num = ApplyLog.objects.filter(audit_time__gte=today,audit_state='2').count()
+        new_reg_num = ApplyLog.objects.filter(audit_time__gte=today,audit_state='0').count()
         dict = WithdrawLog.objects.filter(audit_time__gte=today, audit_state='0').\
                 aggregate(cou=Count('user_id',distinct=True),sum=Sum('amount'))
         with_amount = dict.get('sum') or 0
@@ -34,13 +35,15 @@ class Command(BaseCommand):
         new_project_num = Project.objects.filter(pub_date__gte=today).count()
         
         update_fields = {
-                         'new_reg_num':new_reg_num,
-                         'with_amount':with_amount,
-                         'with_num':with_num,
-                         'ret_amount':ret_amount,
-                         'invest_amount':invest_amount,
-                         'ret_num':ret_num,
-                         'new_project_num':new_project_num,
+                        'apply_num':apply_num,
+                        'refuse_num':refuse_num,
+                        'new_reg_num':new_reg_num,
+                        'with_amount':with_amount,
+                        'with_num':with_num,
+                        'ret_amount':ret_amount,
+                        'invest_amount':invest_amount,
+                        'ret_num':ret_num,
+                        'new_project_num':new_project_num,
         }
         DayStatis.objects.update_or_create(date=today, defaults=update_fields)
         

@@ -25,6 +25,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         read_only_fields = ('user', 'pub_date', 'state', 'is_official')
         
 class InvestLogSerializer(serializers.ModelSerializer):
+    project_title = serializers.CharField(source='project.title', read_only=True)
     class Meta:
         model = InvestLog
         fields = '__all__'

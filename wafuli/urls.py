@@ -17,4 +17,5 @@ from wafuli import views
 urlpatterns = [
     url(r'^$', 'wafuli.views.index', name='index'),
     url(r'^project_all$', 'wafuli.views.project_all', name='project_all'),
+    url(r'^screenshot/$', 'wafuli.views.display_screenshot', name='screenshot'),
 ]

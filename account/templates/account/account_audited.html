@@ -790,19 +790,19 @@
                 xhr.onreadystatechange = function() {
 //                  $(".img-mask").css("display", "none");
                     if(xhr.readyState == 4 && xhr.status == 200) {
-                        var ret = JSON.parse(xhr.responseText);
-                        if(ret.code == 0) {
-                            $(".img-mask").css("display", "none");
-                            alert("请先登录！")
-                            window.location.href = ret.url;
-                            return;
-                        } else if(ret.code == 1) {
-                            $("#hint").text("任务完成，请耐心等待工作人员审核!")
-//                          popupIn();
-                        } else {
-                            $("#hint").text(ret.msg)
-//                          popupIn()
-                        }
+//                      var ret = JSON.parse(xhr.responseText);
+//                      if(ret.code == 0) {
+//                          $(".img-mask").css("display", "none");
+//                          alert("请先登录！")
+//                          window.location.href = ret.url;
+//                          return;
+//                      } else if(ret.code == 1) {
+//                          $("#hint").text("任务完成，请耐心等待工作人员审核!")
+//                      } else {
+//                          $("#hint").text(ret.msg)
+////                          popupIn()
+//                      }
+                        $('.popup.m-add-img').removeClass('in');
                     }
                 };
         

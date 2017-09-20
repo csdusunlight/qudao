@@ -2,12 +2,12 @@
 {% block js %}
 <script type="text/javascript"> 
 var data = '<table width="100%"><tr><th>日期</th><th>新申请用户数</th><th>审核拒绝人数</th><th>审核通过人数</th>'+
-	'<th>活跃用户数</th><th>成功提现金额</th><th>成功提现用户数</th><th>返现金额</th><th>返现用户数</th>'+
-	'[results]<tr><td>{date}</td><td>{new_reg_num}</td><td>{active_num}</td>'+
-	'<td>{with_amount}</td><td>{with_num}</td><td>{ret_amount}</td><td>{ret_scores}</td>'+
-	'<td>{ret_num}</td><td>{coupon_amount}</td>'+
+	'<th>成功提现金额</th><th>成功提现用户数</th><th>返现金额</th><th>返现用户数</th>'+
+	'[results]<tr><td>{date}</td><td>{apply_num}</td><td>{refuse_num}</td>'+
+	'<td>{new_reg_num}</td><td>{with_amount}</td><td>{with_num}</td><td>{ret_amount}</td>'+
+	'<td>{ret_num}</td>'+
 	'</tr>[/results]</table>';
-var url = "/restapi/users/" + "?page={page}&size={pageSize}";
+var url = "/restapi/daystatis/" + "?page={page}&size={pageSize}";
 $(document).ready(function(){
 	$(".ListTable tr:even").css("background-color","#fcfcfc");
 	$("li.home1").toggleClass("on");
@@ -50,28 +50,22 @@ $(document).ready(function(){
                         <div class="Table-in">
                         	<table width="100%">
                             	<tr>
-                                	<th>总注册人数</th>
+                                	<th>总申请人数</th>
+                                	<th>申请同意人数</th>
                                 	<th>现金余额</th>
-                                	<th>积分余额</th>
                                 	<th>总提现金额</th>
                                 	<th>提现成功人数</th>
                                 	<th>总返现金额</th>
                                 	<th>返现处理人数</th>
-                                	<th>红包兑换金额</th>
-                                	<th>总积分支出</th>
-                                	<th>总积分兑换</th>
                                 </tr>
                                 <tr>
                                 	<td>{{total.user_num}}</td>
                                 	<td>{{total.balance}}</td>
-                                	<td>{{total.score}}</td>
                                 	<td>{{total.with_total}}</td>
                                 	<td>{{total.with_count}}</td>
+                                	<td>{{total.coupon_total}}</td>
                                 	<td>{{total.ret_total}}</td>
                                 	<td>{{total.ret_count}}</td>
-                                	<td>{{total.coupon_total}}</td>
-                                	<td>{{total.score_exchange_total}}</td>
-                                	<td>{{total.score_exchange_total}}</td>
                                 </tr>
                             </table>
                         </div>

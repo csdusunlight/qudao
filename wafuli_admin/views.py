@@ -23,7 +23,6 @@ import traceback
 import xlrd
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from account.vip import vip_judge, get_vip_bonus
 import json
 from django.db import transaction
 from public.tools import has_permission
@@ -31,57 +30,27 @@ from decimal import Decimal
 # Create your views here.
 logger = logging.getLogger('wafuli')
 def index(request):
-#     admin_user = request.user
-#     if not ( admin_user.is_authenticated() and admin_user.is_staff):
-#         return redirect(reverse('admin:login') + "?next=" + reverse('admin_index'))
-#     today = datetime.date.today()
-# #     day = datetime.datetime.strptime('2015-01-01','%Y-%m-%d')
-# #     with_num_today = InvestLog.objects.filter(investlog_type='2',time__gte=today,audit_state='1').count()
-# #     with_num = InvestLog.objects.filter(investlog_type='2',audit_state='1').count()
-# #     ret_num_today = InvestLog.objects.filter(investlog_type='1',time__gte=today,audit_state='1').count()
-# #     ret_num = InvestLog.objects.filter(investlog_type='1',audit_state='1').count()
-#     query = InvestLog.objects.filter(audit_state='1').values('investlog_type')\
-#                 .annotate(sum=Count('*')).order_by()
-#     query_today = InvestLog.objects.filter(audit_state='1',time__gte=today).values('investlog_type')\
-#                 .annotate(sum=Count('*')).order_by()
-# #     print query,query_today
-# #     num_today = {'with_num_today':0,'ret_num_today':0,'coupon_num_today':0,'exc_num_today':0,}
-# #     num = {'with_num':0,'ret_num':0,'coupon_num':0,'exc_num':0}
-#     num_today = {'1':0,'2':0,'3':0,'4':0,'6':0}
-#     num = {'1':0,'2':0,'3':0,'4':0,'6':0}
-#     for q in query:
-#         index = q.get('investlog_type')
-#         num[index] = q.get('sum')
-#     for q in query_today:
-#         index = q.get('investlog_type')
-#         num_today[index] = q.get('sum')
-# #     print num,num_today
-#     total = {}
-#     dict1 = MyUser.objects.aggregate(cou=Count('id'), sumb=Sum('balance'),sums=Sum('scores'))
-#     total['user_num'] = dict1.get('cou')
-#     total['balance'] = (dict1.get('sumb') or 0)/100.0
-#     total['score'] = dict1.get('sums')
-# #     print TransList.objects.filter(user_investlog__investlog_type='2',user_investlog__audit_state='0').aggregate(cou=Count('id'),sum=Sum('transAmount'))
-#     dict_with = InvestLog.objects.filter(investlog_type='2',audit_state='0').\
-#             aggregate(cou=Count('user',distinct=True),sum=Sum('translist__transAmount'))
-#     total['with_count'] = dict_with.get('cou')
-#     total['with_total'] = (dict_with.get('sum') or 0)/100.0
-#
-#     dict_ret = InvestLog.objects.filter(investlog_type__in=['1','4','5','6','7'],audit_state='0').\
-#             aggregate(cou=Count('user',distinct=True),sum=Sum('translist__transAmount'))
-#     total['ret_count'] = dict_ret.get('cou')
-#     total['ret_total'] = (dict_ret.get('sum') or 0)/100.0
-#
-#     dict_coupon = InvestLog.objects.filter(investlog_type='4',audit_state='0').\
-#             aggregate(sum=Sum('translist__transAmount'))
-#     total['coupon_total'] = (dict_coupon.get('sum') or 0)/100.0
-#
-#     dict_score = InvestLog.objects.filter(investlog_type='3',audit_state='0').\
-#             aggregate(sum=Sum('score_translist__transAmount'))
-#     total['ret_count'] = (dict_ret.get('cou') or 0)
-#     total['score_exchange_total'] = dict_score.get('sum')
-#{'num':num,'num_today':num_today,'total':total}
-    return render(request,"admin_index.html",)
+    admin_user = request.user
+    if not ( admin_user.is_authenticated() and admin_user.is_staff):
+        return redirect(reverse('admin:login') + "?next=" + reverse('admin_index'))
+
+    total = {}
+    total['apply_num'] = ApplyLog.objects.count()
+    dict1 = MyUser.objects.aggregate(cou=Count('id'), sumb=Sum('balance'))
+    total['user_num'] = dict1.get('cou')
+    total['balance'] = dict1.get('sumb') or 0
+#     print TransList.objects.filter(user_investlog__investlog_type='2',user_investlog__audit_state='0').aggregate(cou=Count('id'),sum=Sum('transAmount'))
+    dict_with = InvestLog.objects.filter(is_official=True,audit_state='0').\
+            aggregate(cou=Count('user',distinct=True),sum=Sum('return_amount'))
+    total['with_count'] = dict_with.get('cou')
+    total['with_total'] = dict_with.get('sum') or 0
+
+    dict_ret = InvestLog.objects.filter(is_official=True,audit_state='0').\
+            aggregate(cou=Count('user',distinct=True),sum=Sum('translist__transAmount'))
+    total['ret_count'] = dict_ret.get('cou')
+    total['ret_total'] = dict_ret.get('sum') or 0
+
+    return render(request,"admin_index.html", {'total':total})
 
 def admin_apply(request):
     if request.method == "POST":
@@ -104,12 +73,13 @@ def admin_apply(request):
                 user.save()
                 apply.audit_state = '0'
                 apply.level = level
+                apply.audit_time = datetime.datetime.now()
                 apply.admin_user = admin_user
                 apply.save()
         elif type==2:
             reason = request.POST.get('reason', '')
-            apply.audit_state = '0'
             apply.admin_user = admin_user
+            apply.audit_time = datetime.datetime.now()
             apply.audit_state = '2'
             apply.audit_reason = reason
             apply.save()

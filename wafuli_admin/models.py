@@ -5,7 +5,9 @@ from django.utils import timezone
 from wafuli.data import AUDIT_STATE
 class DayStatis(models.Model):
     date = models.DateField(u"日期", primary_key=True)
-    new_reg_num = models.PositiveIntegerField(u"新注册人数", default=0)
+    apply_num = models.PositiveIntegerField(u"新申请人数", default=0)
+    refuse_num = models.PositiveIntegerField(u"新拒绝人数", default=0)
+    new_reg_num = models.PositiveIntegerField(u"新成功注册人数", default=0)
     with_amount = models.IntegerField(u'提现成功金额', default=0)
     with_num = models.PositiveIntegerField(u"提现成功人数", default=0)
     ret_amount = models.IntegerField(u'返现金额', default=0)

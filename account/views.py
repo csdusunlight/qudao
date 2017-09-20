@@ -36,7 +36,8 @@ from transaction import charge_money
 from account.tools import send_mail, get_client_ip
 from django.db import connection, transaction
 from wafuli.data import BANK
-from wafuli.models import TransList, WithdrawLog, Project, SubscribeShip
+from wafuli.models import TransList, WithdrawLog, Project, SubscribeShip,\
+    InvestLog
 from public.tools import login_required_ajax
 from wafuli.tools import saveImgAndGenerateUrl
 
@@ -145,7 +146,7 @@ def register(request):
                 return JsonResponse(result)
         for key in request.FILES:
             block = request.FILES[key]
-            imgurl = saveImgAndGenerateUrl(key, block)
+            imgurl = saveImgAndGenerateUrl(key, block, 'qualification')
             imgurl_list.append(imgurl)
         invest_image = ';'.join(imgurl_list)
         apply.qualification = invest_image
@@ -797,3 +798,26 @@ def project_create(request):
             SubscribeShip.objects.create(user=user, project=project, is_on=True)
         ret['code'] = 0
     return JsonResponse(ret)
+
+@login_required_ajax
+def submit_screenshot(request):
+    imgurl_list = []
+    id = request.POST.get('id')
+    investlog = InvestLog.objects.get(id=id)
+    if len(request.FILES)>6:
+        result = {'code':-2, 'msg':u"上传图片数量不能超过3张"}
+        return JsonResponse(result)
+    for key in request.FILES:
+        block = request.FILES[key]
+        if block.size > 100*1024:
+            result = {'code':-1, 'msg':u"每张图片大小不能超过100k，请重新上传"}
+            return JsonResponse(result)
+    for key in request.FILES:
+        block = request.FILES[key]
+        imgurl = saveImgAndGenerateUrl(key, block, 'screenshot')
+        imgurl_list.append(imgurl)
+    invest_image = ';'.join(imgurl_list)
+    investlog.invest_image = invest_image
+    apply.save(update_fields=['invest_image',])
+    result['code'] = 0
+    return JsonResponse(result)

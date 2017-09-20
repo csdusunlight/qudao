@@ -101,47 +101,47 @@ $(document).ready(function(){
 		});
 		$(".Balance").css("display","none");
 	});
-	$('.Points input[type="submit"]').click(function(){
-		id = selected_id;
-		pscore = $("input#plus_score").val();
-		mscore = $("input#minus_score").val();
-		reason = $("#score_reason").val();
-		if (!id || !pscore && !mscore || !reason){
-			return;
-		}
-		if (pscore && mscore){
-			alert("不能同时添加和扣减余额");
-			return;
-		}
-		$.ajax({
-			url:"{%url 'admin_user' %}",
-			dataType:"json",
-			type:"POST",
-			data:{
-				'id':id,
-				'pscore':pscore,
-				'mscore':mscore,
-				'reason':reason,
-				'type':2,
-			},
-			success:function(ret){
-				if(ret.code==0){
-					alert("操作成功！");
-				}
-				else if(ret.code==-1){
-					alert("该页面已过期，请重新登录！");
-					window.location.href = ret.url;
-				}
-				else {
-					alert(ret.res_msg);
-				}
-			},
-			error:function(){
-				alert("请检查网络连接");
-			}
-		});
-		$(".Points").css("display","none");
-	});
+//	$('.Points input[type="submit"]').click(function(){
+//		id = selected_id;
+//		pscore = $("input#plus_score").val();
+//		mscore = $("input#minus_score").val();
+//		reason = $("#score_reason").val();
+//		if (!id || !pscore && !mscore || !reason){
+//			return;
+//		}
+//		if (pscore && mscore){
+//			alert("不能同时添加和扣减余额");
+//			return;
+//		}
+//		$.ajax({
+//			url:"{%url 'admin_user' %}",
+//			dataType:"json",
+//			type:"POST",
+//			data:{
+//				'id':id,
+//				'pscore':pscore,
+//				'mscore':mscore,
+//				'reason':reason,
+//				'type':2,
+//			},
+//			success:function(ret){
+//				if(ret.code==0){
+//					alert("操作成功！");
+//				}
+//				else if(ret.code==-1){
+//					alert("该页面已过期，请重新登录！");
+//					window.location.href = ret.url;
+//				}
+//				else {
+//					alert(ret.res_msg);
+//				}
+//			},
+//			error:function(){
+//				alert("请检查网络连接");
+//			}
+//		});
+//		$(".Points").css("display","none");
+//	});
 	$('.Blacklist input[type="submit"]').click(function(){
 		id = selected_id;
 		if (!id){
@@ -153,6 +153,7 @@ $(document).ready(function(){
 			type:"POST",
 			data:{
 				'id':id,
+				'type': 2,
 			},
 			success:function(ret){
 				if(ret.code==0){

@@ -10,5 +10,8 @@ class SubdomainMiddleware(object):
         domain_parts = request.get_host().split('.')
         if len(domain_parts) == 3:
             username = domain_parts[0]
-            request.user = MyUser.objects.get(username=username)
+            try:
+                request.user = MyUser.objects.get(username=username)
+            except:
+                pass
         return None

@@ -32,16 +32,17 @@ def writeHtml(html,url):
         html_file.write(html)
     return 0
 
-def saveImgAndGenerateUrl(pic_name, block):
+def saveImgAndGenerateUrl(pic_name, block, location='default'):
     tstr = time.strftime('%Y/%m/%d/')
+    location = 'upload/' + location
     save_name = str(int(time.time()*1000))+pic_name
-    save_directory = os.path.join(settings.MEDIA_ROOT, 'upload',  tstr).replace('\\','/')
+    save_directory = os.path.join(settings.MEDIA_ROOT, location,  tstr).replace('\\','/')
     if not os.path.exists(save_directory):
         os.makedirs(save_directory)
     with open(os.path.join(save_directory, save_name), 'wb+') as file:
         for chunk in block.chunks():
             file.write(chunk)
-    url = os.path.join(settings.MEDIA_URL,'upload', tstr, save_name).replace('\\','/')
+    url = os.path.join(settings.MEDIA_URL, location, tstr, save_name).replace('\\','/')
     return url
  
 def weighted_random(items): 

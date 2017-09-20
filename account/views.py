@@ -799,6 +799,7 @@ def project_create(request):
         ret['code'] = 0
     return JsonResponse(ret)
 
+@csrf_exempt
 @login_required_ajax
 def submit_screenshot(request):
     imgurl_list = []

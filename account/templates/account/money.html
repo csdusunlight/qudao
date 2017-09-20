@@ -5,23 +5,41 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>用户中心</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+<style type="text/css">
+	.fubi-box {
+	    margin-bottom: 20px;
+	    height: 80px;
+	    background-color: #fff;
+	}
+	.fubi-item {
+	    display: inline-block;
+	    margin-left: 20px;
+	    min-width: 200px;
+	    height: 80px;
+	    line-height: 80px;
+	    font-size: 18px;
+	}
+	.fubi-num {
+	    display: inline-block;
+	    padding: 0 10px;
+	    color: #FFBE00;
+	    font-size: 24px;
+	}
+	.tixian {
+	    margin-top: 22px;
+	    margin-right: 20px;
+	}
+</style>
 <script type="text/javascript">
-var data1 = '<table width="100%"><thead><tr><th width="25%" height="44">项目</th>' +
-'<th width="30%">福币(个)</th><th width="25%">获取时间</th><th width="20%">备注</th></tr></thead><tbody>'+
-'[results]<tr><td height="48">{item}</td><td>{amount}</td><td>{time}</td><td>{remark}</td></tr>[/results]'+
+var data = '<table width="100%"><thead><tr><th height="44">项目</th>' +
+'<th>金额</th><th>余额</th><th>获取时间</th><th>备注</th></tr></thead><tbody>'+
+'[results]<tr><td>{item}</td><td>{item}</td><td>{amount}</td><td>{time}</td><td>{remark}</td></tr>[/results]'+
 '</tbody></table>';
-var data2 = '<table width="100%"><thead><tr><th width="25%" height="44">项目</th>' +
-'<th width="30%">福币(个)</th><th width="25%">申请时间</th><th width="20%">提现状态</th></tr></thead><tbody>'+
-'[results]<tr><td height="48">{item}</td><td>{amount}</td><td>{time}</td>' +
-'<td reason="{reason}" class="state_{state_int}">{state}</td></tr>[/results]' + '</tbody></table>';
 var url = "/restapi/projects/" + "?page={page}&size={pageSize}";
 function emptydisplay(obj){
 	pic_url = "/restapi/projects/";
@@ -37,32 +55,14 @@ $(function(){
 	    url:url,
 	    pageId:$("#page"),
 	    run:true,
-	    content:data1,
-	});
-	$(".Detail-T li").click(function(){
-		if($(this).attr("class")!="on"){
-			$(this).toggleClass("on").siblings().removeClass("on")
-			var index = $(this).index();
-			var data = data1
-			if (index==1){
-				data = data2
-			}
-			$("#page").empty();
-			$("#pagedata").ajaxPage({
-			    url:url+index,
-			    pageId:$("#page"),
-			    pageSize:6,
-			    run:true,
-			    content:data,
-			});
-		}
+	    content:data,
 	});
 
     // 审核拒绝原因弹窗
-	$('.Content').on('click','.state_2',function(){
-		  var reason = $(this).attr('reason');
-	      alert(reason);
-	  });
+//	$('.Content').on('click','.state_2',function(){
+//		  var reason = $(this).attr('reason');
+//	      alert(reason);
+//	  });
 });
 </script>
 </head>
@@ -74,36 +74,24 @@ $(function(){
     	<!--内容-->
     	{% include "account/left.html" %}
     	<div class="RightCont">
-                <div class="RightCont">
-                	<div class="Integral">
-                    	<span>
-                        	您的累积福币
-                        	<strong class="red-st">{{user.accu_income}}</strong>
-                        </span>
-                    	<span>
-                        	可用福币
-                        	<strong class="red-st">{{user.balance}}</strong>
-                        </span>
-                        <a style="float: right;" href="{%url 'account_withdraw'%}" class="btn m-yellow">提  现</a>
-                    </div>
-                    <div class="Detail">
-                    	<div class="Detail-T">
-                        	<ul>
-                            	<li class="on">收入明细</li>
-                            	<li>支出明细</li>
-                            </ul>
-                        </div>
-                        <div class="Detail-B">
-							<div id="pagedata">
-							</div>
-		                    <div class="changes-p">
-		                    	<div class="page"  id="page">
-		                        </div>
-		                    </div>
-                		</div>
-                    </div>
+        	<div class="fubi-box">
+            	<span class="fubi-item">您的累积收益<strong class="fubi-num">{{user.accu_income}}</strong></span>
+            	<span class="fubi-item">账户余额<strong class="fubi-num">{{user.balance}}</strong></span>
+                <a href="{%url 'account_withdraw'%}" class="tixian btn m-yellow r">提  现</a>
+            </div>
+            <div class="table">
+                <h2 class="table__title">收支详情</h2>
+                        <div id="pagedata">
 
+                        </div>
+
+                <div class="changes-p">
+                    <div class="page" id="page">
+                    </div>
                 </div>
+
+            </div>
+
         </div>
     	<!--底部-->
   {% include "footer.html" %}

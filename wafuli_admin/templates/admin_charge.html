@@ -7,11 +7,11 @@
 	});
 	var data = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>时间</th><th>初始余额</th>' +
 		'<th>变动值</th><th>变动原因</th><th>备注</th><th>操作管理员</th>' +
-		'</tr>[data]<tr><td>{username}</td><td>{mobile}</td><td>{time}</td>' +
-		'<td>{init_amount}</td><td>{charge_amount}</td><td>{reason}</td>' +
-		'<td>{remark}</td><td>{admin_user}</td></tr>[/data]</table>';
+		'</tr>[results]<tr><td>{user}</td><td>{mobile}</td><td>{time}</td>' +
+		'<td>{initAmount}</td><td>{transAmount}</td><td>{reason}</td>' +
+		'<td>{remark}</td><td>{admin_user}</td></tr>[/results]</table>';
 
-	var url = "{% url 'get_admin_charge_page' %}" + "?page={page}&size={pageSize}";
+	var url = "/restapi/translist/" + "?page={page}&size={pageSize}";
 
 	$(document).ready(function() {
 		$("li.home11").toggleClass("on");

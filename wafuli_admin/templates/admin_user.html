@@ -8,13 +8,30 @@ var data = '<table width="100%"><tr><th>渠道等级</th><th>QQ</th><th>QQ昵称
 	'<th>银行卡号</th><th>持卡人姓名</th><th>申请时间</th><th>最近登陆时间</th><th>账户余额</th>'+
 	'<th width="5%">是否为黑名单</th><th>账户操作</th>'+
 	'</tr>[results]<tr><td>{level}</td><td>{qq_number}</td><td>{qq_name}</td>'+
-	'<td>{qqname}</td><td>{银行卡号}</td><td>{持卡人姓名}</td><td>{申请时间}</td>'+
-	'<td>{最近登陆时间}</td><td>{balance}</td><td id="is_black_{id}">{is_black}</td>'+
+	'<td>{mobile}</td><td>{银行卡号}</td><td>{持卡人姓名}</td><td>{date_joined}</td>'+
+	'<td>{最近登陆时间}</td><td>{balance}</td><td class="black" id="is_black_{id}">{is_active}</td>'+
 	'<td id="item_{id}"><a class="btn1-x" onclick="addcash({id})">余额</a>│'+
-	'<a class="btn2-x" onclick="addblack({id})">加黑</a>'+
+	'<a class="btn2-x black_btn" data-isblack="{is_active}" id="black_{id}" onclick="addblack({id})">加黑</a>'+
 	'</td></tr>[/results]</table>';
 var url = "/restapi/users/" + "?page={page}&size={pageSize}";
 var selected_id = 0;
+function pagecallback() {
+    $('.black').each(function() {
+        if ($(this).text() == "false") {
+            $(this).text("是");
+        } else {
+           $(this).text("否"); 
+        }
+    })
+    $('.black_btn').each(function() {
+        if ($(this).data('isblack') == false) {
+            $(this).text("去黑");
+        } else {
+            $(this).text("加黑");
+        }
+    })
+}
+
 function addcash(id){
 	$(".Balance").css("display","block");
 	selected_id = id;
@@ -53,6 +70,7 @@ $(document).ready(function(){
 	    pageSize:10,
 	    run:true,
 	    content:data,
+	    complete:pagecallback,
 	});
 	$(".none-x").click(function(){
 		$(this).parent().parent().css("display","none");<!--隐藏-->
@@ -86,12 +104,7 @@ $(document).ready(function(){
 			success:function(ret){
 				if(ret.code==0){
 					alert("操作成功！");
-				}
-				else if(ret.code==-1){
-					alert("该页面已过期，请重新登录！");
-					window.location.href = ret.url;
-				}
-				else {
+				} else {
 					alert(ret.res_msg);
 				}
 			},
@@ -158,12 +171,7 @@ $(document).ready(function(){
 			success:function(ret){
 				if(ret.code==0){
 					alert("操作成功！");
-				}
-				else if(ret.code==-1){
-					alert("该页面已过期，请重新登录！");
-					window.location.href = ret.url;
-				}
-				else {
+				} else {
 					alert(ret.res_msg);
 				}
 			},
@@ -186,17 +194,12 @@ $(document).ready(function(){
 			type:"POST",
 			data:{
 				'id':id,
-				'type':4,
+				'type':3,
 			},
 			success:function(ret){
 				if(ret.code==0){
 					alert("操作成功！");
-				}
-				else if(ret.code==-1){
-					alert("该页面已过期，请重新登录！");
-					window.location.href = ret.url;
-				}
-				else {
+				} else {
 					alert(ret.res_msg);
 				}
 			},
@@ -287,8 +290,8 @@ $(document).ready(function(){
 		var endTime = $("#endTime").val();
 		var newurl = url;
 		if(startTime && endTime){
-			newurl += "&startTime="+startTime;
-			newurl += "&endTime="+endTime;
+			newurl += "&join_date_0="+startTime;
+			newurl += "&join_date_1="+endTime;
 		}
 		var startTime2 = $("#startTime2").val();
 		var endTime2 = $("#endTime2").val();
@@ -299,10 +302,10 @@ $(document).ready(function(){
 		var qq = $("#qq").val();
 		var qqname = $("#qqname").val();
 		if(qq){
-			newurl += "&qq="+qq;
+			newurl += "&qq_number="+qq;
 		}
 		if(qqname){
-			newurl += "&qqname="+qqname;
+			newurl += "&qq_name="+qqname;
 		}
 		var level = $("#level").val();
 		if(level){
@@ -320,6 +323,7 @@ $(document).ready(function(){
 		    pageSize:10,
 		    run:true,
 		    content:newdata,
+		    complete:pagecallback,
 		});
 	});
 });

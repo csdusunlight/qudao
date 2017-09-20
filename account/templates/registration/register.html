@@ -16,6 +16,13 @@
         <script type="text/javascript" src="{% static 'js/accounts/refresh.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/accounts/send.js' %}"></script>
         <style>
+            .register-title {
+                margin-bottom: 20px;
+                font-size: 18px;
+                color: #222;
+                line-height: 40px;
+                text-align: center;
+            }
             .bottom-nav {
                 position: relative;
                 width: 1100px;
@@ -90,8 +97,8 @@
             var coderefresh_url = "{% url 'captcha-refresh' %}";
             var phoneimageV_url = "{% url 'phoneImageV' %}";
             var verifyemail_url = "";
-            var verifymobile_url = "";
-            var verifyusername_url = "";
+            var verifymobile_url = "{% url 'verifymobile' %}";
+            var verifyqq_url = "{% url 'verifyqq' %}";
             var verifyinviter_url = "";
             var get_code_url = "{% url 'phoneImageV' %}";
             var register_url = "{% url 'register' %}";
@@ -139,6 +146,7 @@
         <div>
             <div class="contant">
                 <div class="reg__box">
+                    <h2 class="register-title">申请成为渠道</h2>
                     <div class="reg">
                         <span class="reg__name">QQ</span>
                         <input type="text" class="re-input" name="qq" placeholder="请输入您的QQ号" /><span class="tips" id="qq"></span>
@@ -438,20 +446,14 @@
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 //      maskIn();
         xhr.onreadystatechange = function() {
-//          $(".img-mask").css("display", "none");
             if(xhr.readyState == 4 && xhr.status == 200) {
                 var ret = JSON.parse(xhr.responseText);
                 if(ret.code == 0) {
-//                  $(".img-mask").css("display", "none");
-                    alert("请先登录！")
-                    window.location.href = ret.url;
+                    alert("申请成功！")
+                    window.location.href = "/";
                     return;
-                }else if(ret.code==1){
-//                  $("#hint").text("任务完成，请耐心等待工作人员审核!")
-//                  popupIn();
                 }else{
-                    console.log(ret.msg)
-//                  popupIn()
+                    alert(ret.msg)
                 }
             }
         };

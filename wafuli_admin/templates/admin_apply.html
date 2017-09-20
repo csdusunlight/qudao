@@ -50,7 +50,7 @@ var data2 = '<table width="100%"><tr><th>QQ</th><th>QQ昵称</th><th>个人简�
     '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
     '<td>{mobile}</td><td>{submit_time}</td>'+
     '<td>{admin_user}</td><td>{audit_time}</td><td>{audit_reason}</td></tr>[/results]</table>';
-var url = '/restapi/applylog/?&page={page}&size={pageSize}';
+var url = '/restapi/applylog/?page={page}&size={pageSize}';
 function pagecallback(){
     $(".ret-money").each(function(index, el) {
         if ($(this).text() == 'null') {
@@ -163,14 +163,14 @@ $(document).ready(function(){
 		endTime = $("#endTime").val();
 		newurl = url;
 		if(startTime && endTime){
-			newurl += "&investtime_0="+startTime;
-			newurl += "&investtime_1="+endTime;
+			newurl += "&submit_date_0="+startTime;
+			newurl += "&submit_date_1="+endTime;
 		}
 		startTime2 = $("#startTime2").val();
 		endTime2 = $("#endTime2").val();
 		if(startTime2 && endTime2){
-			newurl += "&audittime_0="+startTime2;
-			newurl += "&audittime_1="+endTime2;
+			newurl += "&audit_date_0="+startTime2;
+			newurl += "&audit_date_1="+endTime2;
 		}
 		mobile = $("#mobile").val();
 		qq = $("#qq").val();
@@ -178,7 +178,7 @@ $(document).ready(function(){
 			newurl += "&mobile="+mobile;
 		}
 		if(qq){
-			newurl += "&qq="+qq;
+			newurl += "&qq_number="+qq;
 		}
 		// companyname = $("#companyname").val();
 		qqname = $("#qqname").val();
@@ -186,9 +186,9 @@ $(document).ready(function(){
 		// 	newurl += "&companyname="+companyname;
 		// }
 		if(qqname){
-			newurl += "&project_title_contains="+qqname;
+			newurl += "&qq_name="+qqname;
 		}
-		 adminname = $("#adminname").val();
+		 adminname = $("#admin_user_mobile").val();
        if(adminname){
          newurl += "&adminname="+adminname;
        }

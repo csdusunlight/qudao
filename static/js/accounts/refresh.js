@@ -22,9 +22,9 @@ function validateUsedQQ(name, asy, obj) {
     }
     var isUsed = true;
     $.ajax({
-        url: verifyusername_url,
+        url: verifyqq_url,
         data: {
-            'username': name
+            'qq_number': name
         },
         dataType: 'json',
         async: asy,
@@ -33,7 +33,7 @@ function validateUsedQQ(name, asy, obj) {
                 if(data.code == '1') {
                     qq.innerHTML = '<font class="tips_true"></font>';
                 } else {
-                    qq.innerHTML = '<font class="tips_false">该用户名已注册</font>';
+                    qq.innerHTML = '<font class="tips_false">该QQ号已存在</font>';
                 }
             } else {
                 if(data.code == '1') {
@@ -81,6 +81,7 @@ function validateUsedQQ(name, asy, obj) {
             asy = true;
         }
         var isUsed = true;
+        console.log('check mobile')
         $.ajax({
             url: verifymobile_url,
             data: {

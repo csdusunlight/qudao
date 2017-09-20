@@ -290,8 +290,8 @@ $(document).ready(function(){
 		var endTime = $("#endTime").val();
 		var newurl = url;
 		if(startTime && endTime){
-			newurl += "&startTime="+startTime;
-			newurl += "&endTime="+endTime;
+			newurl += "&join_date_0="+startTime;
+			newurl += "&join_date_1="+endTime;
 		}
 		var startTime2 = $("#startTime2").val();
 		var endTime2 = $("#endTime2").val();
@@ -302,10 +302,10 @@ $(document).ready(function(){
 		var qq = $("#qq").val();
 		var qqname = $("#qqname").val();
 		if(qq){
-			newurl += "&qq="+qq;
+			newurl += "&qq_number="+qq;
 		}
 		if(qqname){
-			newurl += "&qqname="+qqname;
+			newurl += "&qq_name="+qqname;
 		}
 		var level = $("#level").val();
 		if(level){
@@ -323,6 +323,7 @@ $(document).ready(function(){
 		    pageSize:10,
 		    run:true,
 		    content:newdata,
+		    complete:pagecallback,
 		});
 	});
 });

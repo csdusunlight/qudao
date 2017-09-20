@@ -554,8 +554,6 @@ def withdraw(request):
                 with transaction.atomic():
                     translist = charge_money(user, '1', withdraw_amount, u'提现')
                     event = WithdrawLog.objects.create(user=user, amount=withdraw_amount, audit_state='1')
-                    translist.user_event = event
-                    translist.save(update_fields=['user_event'])
                     result['code'] = 0
             except:
                 result['code'] = -2
@@ -819,6 +817,6 @@ def submit_screenshot(request):
         imgurl_list.append(imgurl)
     invest_image = ';'.join(imgurl_list)
     investlog.invest_image = invest_image
-    apply.save(update_fields=['invest_image',])
+    investlog.save(update_fields=['invest_image',])
     result['code'] = 0
     return JsonResponse(result)

@@ -83,6 +83,8 @@ def admin_apply(request):
             apply.audit_state = '2'
             apply.audit_reason = reason
             apply.save()
+        res['code'] = 0
+        return JsonResponse(res)
     else:
         return render(request,"admin_apply.html",)
 def admin_office(request):

@@ -125,7 +125,7 @@ def register(request):
         try:
             username = 'v' + str(mobile)
             apply = ApplyLog(mobile=mobile, username=username, password=password,
-                            qq_name=qq_name, qq_number=qq_number, profile=profile)
+                            qq_name=qq_name, qq_number=qq_number, profile=profile, audit_state='1')
             apply.save()
             logger.info('Creating ApplyLog:' + mobile + ' succeed!')
         except Exception,e:

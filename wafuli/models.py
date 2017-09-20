@@ -161,6 +161,7 @@ class Notice(models.Model):
 ADMIN_TYPE = (
     ('1', u'更改现金余额'),
     ('2', u'更改用户状态'),
+    ('3', u'更改用户等级'),
 )   
 class AdminLog(models.Model):
     admin_user = models.ForeignKey(MyUser, related_name="user_admin_history")

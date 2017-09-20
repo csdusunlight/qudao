@@ -574,10 +574,8 @@ def admin_user(request):
                 res['res_msg'] = u'传入参数不足，请联系技术人员！'
                 return JsonResponse(res)
             try:
-                pcash = float(pcash)*100
-                pcash = int(pcash)
-                mcash = float(mcash)*100
-                mcash = int(mcash)
+                pcash = Decimal(pcash)
+                mcash = Decimal(mcash)
             except:
                 res['code'] = -2
                 res['res_msg'] = u"操作失败，输入不合法！"
@@ -601,23 +599,23 @@ def admin_user(request):
             obj_user.is_active = False
             obj_user.save(update_fields=['is_active'])
             auth_logout(request)
-            admin_investlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, investlog_type='6', remark=u"加黑")
+            admin_investlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, type='2', remark=u"加黑")
             res['code'] = 0
         elif type == 3:
             obj_user.is_active = True
             obj_user.save(update_fields=['is_active'])
-            admin_investlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, investlog_type='6', remark=u"去黑")
+            admin_investlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, type='2', remark=u"去黑")
             res['code'] = 0
         elif type == 4:
             level = request.POST.get('level')
             if level:
                 obj_user.channel.level=level
                 obj_user.channel.save(update_fields=['level'])
-                admin_investlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, investlog_type='6', remark=u"修改渠道等级")
+                admin_investlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, type='3', remark=str(level))
                 res['code'] = 0
             else:
                 res['code'] = -6
-                res['res_msg'] = u"没有channel"
+                res['res_msg'] = u"没有level"
         return JsonResponse(res)
 
 def get_admin_user_page(request):

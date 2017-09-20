@@ -776,15 +776,15 @@
                 }
                 console.log(file_list);
                 for(i in file_list) {
-                    formdata.append('invest_image',file_list[i].name, file_list[i].blob);
+                    formdata.append(file_list[i].name, file_list[i].blob);
                 }
-//              formdata.append('id', id);
+                formdata.append('id', addimg_id);
 //              formdata.append('telnum', telnum);
 //              formdata.append('remark', remark);
 //              formdata.append('csrfmiddlewaretoken', csrfmiddlewaretoken);
-                var addimg_url = "/restapi/investlogs/" + addimg_id + "/";
+                var addimg_url = "{%url 'submit_screenshot' %}";
                 console.log(addimg_url);
-                xhr.open('put', addimg_url);
+                xhr.open('post', addimg_url);
                 xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 //              maskIn();
                 xhr.onreadystatechange = function() {

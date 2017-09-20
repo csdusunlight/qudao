@@ -5,7 +5,7 @@ Created on 2017年8月23日
 @author: lch
 '''
 import django_filters
-from wafuli.models import InvestLog, Project, SubscribeShip
+from wafuli.models import InvestLog, Project, SubscribeShip, TransList
 from account.models import MyUser, ApplyLog
 # class ProjectInvestDateFilter(django_filters.rest_framework.FilterSet):
 #     investtime = django_filters.DateFromToRangeFilter(name="invest_time")
@@ -44,3 +44,12 @@ class ApplyLogFilter(django_filters.rest_framework.FilterSet):
         model = ApplyLog
         fields = ['mobile', 'qq_name', 'qq_number', 'submit_date', 'audit_date',
                   'audit_state', 'admin_user_mobile']
+        
+class TranslistFilter(django_filters.rest_framework.FilterSet):
+    trans_date = django_filters.DateFromToRangeFilter(name="time")
+    user_mobile = django_filters.CharFilter('user', lookup_expr='mobile')
+    user_name = django_filters.CharFilter('user', lookup_expr='username')
+    reason_contains = django_filters.CharFilter('reason', lookup_expr='contains')
+    class Meta:
+        model = TransList
+        fields = ['user_mobile', 'user_name', 'reason_contains', 'trans_date']

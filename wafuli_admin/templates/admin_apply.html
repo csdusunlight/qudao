@@ -31,7 +31,7 @@ $.ajaxSetup({
 var data1 = '<table width="100%"><tr><th>QQ</th><th>QQ昵称</th><th>个人简介</th><th>相关截图</th>'+
 	'<th>手机号</th><th>申请时间</th>'+
 	'<th>操作</th></tr>[results]<tr><td>{qq_number}</td><td>{qq_name}</td><td>{profile}</td>'+
-  '<td><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
+  '<td><a target="_blank" href="{% url 'qualification' %}?id={id}">' +
     '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
 	'<td>{mobile}</td><td>{submit_time}</td>'+
 	'<td id="item_{id}"><a class="fyin" onclick="pass({id})">同意'+

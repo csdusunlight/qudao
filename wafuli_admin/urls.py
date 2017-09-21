@@ -13,7 +13,7 @@ urlpatterns = [
     url(r'^admin_user/$', 'wafuli_admin.views.admin_user', name='admin_user'),
 #     url(r'^userpage/$', 'wafuli_admin.views.get_admin_user_page', name='get_admin_user_page'),
     url(r'^admin_withdraw/$', 'wafuli_admin.views.admin_withdraw', name='admin_withdraw'),
-#     url(r'^withpage/$', 'wafuli_admin.views.get_admin_with_page', name='get_admin_with_page'),
+    url(r'^withpage/$', 'wafuli_admin.views.get_admin_with_page', name='get_admin_with_page'),
 
 
     url(r'^admin_charge/$', 'wafuli_admin.views.admin_charge', name='admin_charge'),

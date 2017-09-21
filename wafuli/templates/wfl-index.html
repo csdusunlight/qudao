@@ -25,7 +25,11 @@
                     </ul>
                 </div>
             </div>
-            <div class="banner-mask">行业领先的P2P渠道分发机构</div>
+            <div class="banner-mask">
+                <div>行业领先的P2P渠道分发机构</div>
+                <p>The industry leading Internet financial  channel distribution organization
+</p>
+            </div>
         </div>
         <!--banner-container--end-->
         <ul class="intro wfl-wrap">
@@ -39,30 +43,22 @@
             <div class="wflbox m-total l">
                 <h2 class="wflbox__title m-green">截止至今日</h2>
                 <div class="total__box">
-                    <p class="total__item">累计渠道引入资金：<span class="total__item-num">128299万</span></p>
-                    <p class="total__item">累计渠道引入用户：<span class="total__item-num">128299位</span></p>
-                    <p class="total__item">累计渠道提现金额：<span class="total__item-num">8299万</span></p>
-                    <p class="total__item">累计加入渠道数量：<span class="total__item-num">3123位</span></p>
+                    <p class="total__item">累计渠道引入资金：<span class="total__item-num">{{invest_total}}万</span></p>
+                    <p class="total__item">累计渠道引入用户：<span class="total__item-num">{{invite_total}}位</span></p>
+                    <p class="total__item">累计渠道提现金额：<span class="total__item-num">{{with_total}}万</span></p>
+                    <p class="total__item">累计加入渠道数量：<span class="total__item-num">{{user_total}}位</span></p>
                 </div>
             </div>
             <div class="wflbox m-today r">
                 <h2 class="wflbox__title m-green">今日推荐</h2>
                 <ul class="today">
-                    <li class="today__item">
-                        <img class="today__img" src=""/>
-                        <h2 class="today__title oneline">美易理财美易理财美易理财</h2>
-                        <a class="today__btn btn m-green" href="">查看攻略</a>
-                    </li>
-                    <li class="today__item">
-                        <img class="today__img" src=""/>
-                        <h2 class="today__title oneline">美易理财</h2>
-                        <a class="today__btn btn m-green" href="">查看攻略</a>
-                    </li>
-                    <li class="today__item">
-                        <img class="today__img" src=""/>
-                        <h2 class="today__title oneline">美易理财</h2>
-                        <a class="today__btn btn m-green" href="">查看攻略</a>
-                    </li>
+                    {% for item in recom_projects %}
+                        <li class="today__item">
+                            <img class="today__img" src="{{item.pic.url}}"/>
+                            <h2 class="today__title oneline">{{item.title}}</h2>
+                            <a class="today__btn btn m-green" href="{{item.strategy}}" target="_blank">查看攻略</a>
+                        </li>
+                    {%endfor%}
                 </ul>
             </div>
         </div>
@@ -74,6 +70,10 @@
                 <h1 class="wflbox__title m-business m-center">优质合作平台</h1>
                 <div class="business clearfix">
                     <ul class="business-box fs-0 l">
+                        {% for item in platforms %}
+                            <li class="business__item"><img class="business__img" src="{{item.logo.url}}" alt="平台logo" /></li>
+                        {%endfor%}
+                        <!--<li class="business__item"><img class="business__img" src="" alt="" /></li>
                         <li class="business__item"><img class="business__img" src="" alt="" /></li>
                         <li class="business__item"><img class="business__img" src="" alt="" /></li>
                         <li class="business__item"><img class="business__img" src="" alt="" /></li>
@@ -87,8 +87,7 @@
                         <li class="business__item"><img class="business__img" src="" alt="" /></li>
                         <li class="business__item"><img class="business__img" src="" alt="" /></li>
                         <li class="business__item"><img class="business__img" src="" alt="" /></li>
-                        <li class="business__item"><img class="business__img" src="" alt="" /></li>
-                        <li class="business__item"><img class="business__img" src="" alt="" /></li>
+                        <li class="business__item"><img class="business__img" src="" alt="" /></li>-->
                     </ul>
                 </div>
             </div>

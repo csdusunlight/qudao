@@ -10,6 +10,7 @@
 }
 .fiter-content {
 	padding: 14px;
+	padding-bottom: 0;
 	background-color: #fff;
 }
 .filter-box-company {
@@ -118,9 +119,14 @@
 .finance {
     display: inline-block;
     padding: 10px;
+    margin-bottom: 20px;
     width: 615px;
     height: 216px;
     background-color: #fff;
+    transition: box-shadow 0.4s ease;
+}
+.finance:hover {
+    box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
 }
 .finance:nth-of-type(2n) {
     margin-left: 20px;

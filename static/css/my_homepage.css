@@ -113,6 +113,10 @@
     display: block;
     width: 120px;
     height: 120px;
+    line-height: 120px;
+    color: #fff;
+    text-align: center;
+    font-size: 60px;
 }
 .hot__info {
     margin-left: 62px;
@@ -188,7 +192,11 @@
     display: inline-block;
     width: 120px;
     height: 120px;
+    line-height: 120px;
     vertical-align: top;
+    color: #fff;
+    text-align: center;
+    font-size: 60px;
 }
 .project__info {
     margin-top: 6px;

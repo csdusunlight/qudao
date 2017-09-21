@@ -74,7 +74,7 @@ $(function(){
 			        img.attr("src", new_cptch_image);
 				}
 				else{
-					$("p#hint_text").text("您填写的帐号尚未注册挖福利，请检查后重新输入！");
+					$("p#hint_text").text("您填写的帐号尚未注册，请检查后重新输入！");
 					$("p#hint_text").css("display","block");
 				}
 			},
@@ -84,7 +84,6 @@ $(function(){
 		});
 	});
 	$('#get_code_button').click(function(){
-		alert('sdd');
 		var hashkey = $("#id_hashkey").val();
 		var response = $("#x_yanzhengma").val();
 		sendTelVerifyCodeImageV(mobile, "forgot_passwd", get_code_url, hashkey, response);

@@ -213,10 +213,14 @@ $(function(){
                 'intrest': crt_intrest
             },
             success: function(ret) {
-                $.prompt({
-                    Content: '新建成功'
-                })
-                $('.popup.m-create-proj').removeClass('in');
+                if (ret.code == 0) {
+                    $.prompt({
+                        Content: '新建成功'
+                    })
+                    $('.popup.m-create-proj').removeClass('in');
+                } else {
+                    alert(ret.msg);
+                }
             },
             error: function() {
                 alert("请检查网络连接");

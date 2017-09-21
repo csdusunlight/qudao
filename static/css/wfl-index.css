@@ -49,16 +49,16 @@ h1,h2,h3,h4,h5,h6 {line-height: 1;}
     margin-right: 0;
 }
 .intro__item.m-01 {
-    background-image: url(../images/box_pic.png);
+    background-image: url(../images/index-icon-1.png);
 }
 .intro__item.m-02 {
-    background-image: url(../images/box_pic.png);
+    background-image: url(../images/index-icon-2.png);
 }
 .intro__item.m-03 {
-    background-image: url(../images/box_pic.png);
+    background-image: url(../images/index-icon-3.png);
 }
 .intro__item.m-04 {
-    background-image: url(../images/box_pic.png);
+    background-image: url(../images/index-icon-4.png);
 }
 
 
@@ -74,7 +74,7 @@ h1,h2,h3,h4,h5,h6 {line-height: 1;}
     right: 0;
     width: 2px;
     height: 100%;
-    background: linear-gradient(#fff,  #91c11d 50%,#fff);
+    background: linear-gradient(#fff 20%,  #91c11d 60%,#fff);
 }
 .wflbox.m-today {
     width: 965px;

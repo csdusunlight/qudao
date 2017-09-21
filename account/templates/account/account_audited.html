@@ -53,7 +53,7 @@
                     <option value="1">未审核</option>
                     <option value="0">已通过</option>
                     <option value="2">已拒绝</option>
-                    <option value="3">已删除</option>
+                    <!--<option value="3">已删除</option>-->
                 </select>
             </div>
         </div>
@@ -72,7 +72,7 @@
                             
 
     </div>
-    <div class="table">
+    <div class="table" style="margin-top: 20px;">
         <h2 class="table__title">自建数据</h2>
         <div class="search">
             <div class="search__item">
@@ -216,6 +216,20 @@
             </div>
         </div>
     </div>
+    <div class="popup m-del-proj">
+        <div class="popup__content" style="width: 600px;">
+            <div class="popup__top">
+                <h2 class="popup__title">删除项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+            </div>
+            <div class="popup__detail">
+                该操作会彻底在数据库中删除项目，请慎重操作！
+            </div>
+            <div class="popup__btnbox">
+                <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
+                <a id="confirm_delete" class="btn m-green popup__close-btn">确认</a>
+            </div>
+        </div>
+    </div>
     <div class="popup m-add-img">
         <div class="popup__content" style="width: 600px;">
             <div class="popup__top">
@@ -255,7 +269,7 @@
             console.log(ret.results);
             var option_html = '';
             for (var i = 0; i < ret.results.length; i++) {
-                option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].id + '</option>';
+                option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
             }
             $('.project').html(option_html);
         },
@@ -271,7 +285,7 @@
             console.log(ret.results);
             var option_html = '';
             for (var i = 0; i < ret.results.length; i++) {
-            	option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].id + '</option>';
+            	option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
             }
             $('.project_02').html(option_html);
         },
@@ -282,7 +296,7 @@
 //  未审核
     var data1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th><th>操作</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
         '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td><td>{audit_state}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData(this,{id})">删除' +
         '</a>│<a class="jion-s" onclick="editData(this,{id})">编辑' +
@@ -290,40 +304,40 @@
 //  已通过
     var data0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>审核时间</th><th>结算金额</th><th>返现金额</th><th>备注</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
         '<td>{invest_amount}</td><td>{audit_time}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{remark}</td></tr>[/results]</table>';
 //  已拒绝
     var data2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>审核状态</th><th>拒绝原因</th><th>备注</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
         '<td>{invest_amount}</td><td>{audit_state}</td><td>{audit_reason}</td><td>{remark}</td></tr>[/results]</table>';
 //  已删除
     var data3 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>备注</th><th>审核状态</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
         '<td>{invest_amount}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
       
 //  未审核
     var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th><th>操作</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
         '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td><td>{audit_state}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData_02(this,{id})">删除' +
         '</a>│<a class="jion-s" onclick="editData_02(this,{id})">编辑</a></td></tr>[/results]</table>';
 //  已通过
     var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>结算金额</th><th>返现金额</th><th>备注</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
         '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{remark}</td></tr>[/results]</table>';
 //  已拒绝
     var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>拒绝原因</th><th>备注</th><th>审核状态</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
         '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{audit_reason}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
 //  已删除
     var data_user4 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th></tr>[results]' +
-        '<tr><td>{project}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
         '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
 
         var url = "/restapi/investlogs/?page={page}&size={pageSize}&is_official=true";
@@ -344,20 +358,13 @@
             content: data_user1,
         });
         
+        var delete_id;
+        var parent_del;
         //          编辑/删除数据部分(官方)
         function removeData (obj,id) {
-            $.ajax({
-                url:"/restapi/investlogs/" + id + "/",
-                type:"delete",
-                dataType: "json",
-                success: function(ret) {
-                    console.log('删除成功');
-                    $(obj).parent().parent().remove();
-                },
-                error: function() {
-                    alert("请检查网络连接");
-                }
-            });
+            parent_del = $(obj);
+            delete_id = id;
+            $('.popup.m-del-proj').addClass('in');
         }
         
         var addimg_id;
@@ -464,19 +471,27 @@
         }
         
         function removeData_02 (obj,id) {
+            delete_id = id;
+            parent_del = $(obj);
+            $('.popup.m-del-proj').addClass('in');
+        }
+        $('#confirm_delete').click(function(){
             $.ajax({
-                url:"/restapi/investlogs/" + id + "/",
+                url:"/restapi/investlogs/" + delete_id + "/",
                 type:"delete",
                 dataType: "json",
                 success: function(ret) {
                     console.log('删除成功');
-                    $(obj).parent().parent().remove();
+                    parent_del.parent().parent().remove();
+                    $('.popup.m-del-proj').removeClass('in');
                 },
                 error: function() {
                     alert("请检查网络连接");
                 }
             });
-        }
+        })
+        
+        
         var project_id_02;
         var edit_parent_02;
         function editData_02(obj, id) {

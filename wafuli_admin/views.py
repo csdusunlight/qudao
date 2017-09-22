@@ -850,7 +850,7 @@ def get_admin_with_page(request):
              "bank":bank,
              "real_name":real_name,
              "card_number":card_number,
-             "amount":con.invest_amount,
+             "amount":con.amount,
              "time":con.time.strftime("%Y-%m-%d %H:%M"),
              "state":con.get_audit_state_display(),
              "admin":u'无' if con.audit_state=='1' or not con.audited_logs.exists() else con.audited_logs.first().user.username,

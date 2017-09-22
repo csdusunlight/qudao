@@ -111,7 +111,7 @@ class Project(models.Model):
         
         """
         if self.pic and hasattr(self.pic, 'url'):
-            return self.picture.url
+            return self.pic.url
         else:
             return ''
         def __unicode__(self):

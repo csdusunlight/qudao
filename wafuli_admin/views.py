@@ -162,8 +162,8 @@ def admin_invest(request):
 
         if res['code'] == 0:
             investlog.audit_time = datetime.datetime.now()
-            investlog.admin_user = investlog
-            investlog.save(update_fields=['audit_state','audit_time','settle_amount','admin_user'])
+            investlog.admin_user = admin_user
+            investlog.save()
         return JsonResponse(res)
 
 

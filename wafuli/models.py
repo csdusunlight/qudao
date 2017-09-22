@@ -105,6 +105,8 @@ class Project(models.Model):
         return days == 0
     def is_hot(self):
         return self.view_count > 1000
+    def __unicode__(self):
+        return self.title
     
 class SubscribeShip(models.Model):
     user = models.ForeignKey(MyUser)

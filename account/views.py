@@ -37,7 +37,7 @@ from account.tools import send_mail, get_client_ip
 from django.db import connection, transaction
 from wafuli.data import BANK
 from wafuli.models import TransList, WithdrawLog, Project, SubscribeShip,\
-    InvestLog
+    InvestLog, Announcement
 from public.tools import login_required_ajax
 from wafuli.tools import saveImgAndGenerateUrl
 
@@ -287,7 +287,8 @@ def phoneImageV(request):
 
 @login_required
 def account(request):
-    return render(request, 'account/account_index.html',)
+    announce_list = Announcement.objects.all()
+    return render(request, 'account/account_index.html',{'announce_list':announce_list})
 
 @login_required
 def account_setting(request):

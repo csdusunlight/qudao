@@ -17,4 +17,5 @@ class ProjectAdmin(admin.ModelAdmin):
             batch_deletesub(obj)
 admin.site.register(Project, ProjectAdmin)  
 admin.site.register(Company)
-admin.site.register(SubscribeShip)          
+admin.site.register(MAdvert_PC)
+admin.site.register(Announcement)

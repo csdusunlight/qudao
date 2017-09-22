@@ -41,7 +41,7 @@ class Base(models.Model):
     pub_date = models.DateTimeField(u"创建时间", default=timezone.now)
     view_count = models.IntegerField(u"浏览量", default=0)
     change_user = models.CharField(u"上次修改用户", max_length=200, blank=True)
-    url = models.CharField(u"本页面地址",max_length=200)
+    url = models.URLField(u"本页面地址",max_length=200)
     def is_new(self):
         now = datetime.datetime.now()
         days = (now-self.pub_date).days
@@ -243,7 +243,7 @@ ADLOCATION_NEW = (
 class MAdvert_PC(Base):
     pic = models.ImageField(upload_to='photos/%Y/%m/%d', blank=False,
                              verbose_name=u"图片上传", help_text=u"保证图片质量的前提下，越小越好，莉萍负责图片 审核")
-    location = models.URLField(u"位置", choices=ADLOCATION_NEW)
+    location = models.CharField(u"位置", choices=ADLOCATION_NEW, max_length=100)
     description = models.CharField(u"文字描述", max_length=30, blank=True)
     is_hidden = models.BooleanField(u"是否隐藏",default=False)
     class Meta:

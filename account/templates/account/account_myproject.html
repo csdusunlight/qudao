@@ -225,7 +225,9 @@ $(function(){
                     $.prompt({
                         Content: '新建成功'
                     })
-                    $('.popup.m-create-proj').removeClass('in');
+                    alert('新建成功');
+//                  $('.popup.m-create-proj').removeClass('in');
+                    history.go(0);
                 } else {
                     alert(ret.msg);
                 }
@@ -379,7 +381,7 @@ $(function(){
                 <div class="table">
                     <div class="handle-box clearfix">
                         <a class="create-project link r">新建项目</a>
-                        <a class="look-projects link r">查看项目库</a>
+                        <a href="{% url 'project_all' %}" target="_blank" class="look-projects link r">查看项目库</a>
                     </div>
                     <div id="pagedata">
                     </div>

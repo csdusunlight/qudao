@@ -330,15 +330,14 @@ $(function(){
 //                  $('.qqname').val(qqname);
 //                  $('.qq').val(qq);
 //                  $('.profile').val(tosign);
-                    var ret = JSON.parse(xhr.responseText);
-                    if(ret.code == 0) {
-                        alert("请先登录！")
-//                      return;
-                    }else if(ret.code==1){
-                        console.log("任务完成，请耐心等待工作人员审核!")
-                    }else{
-                        console.log(ret.msg)
-                    }
+                    alert("修改成功!")
+//                  var ret = JSON.parse(xhr.responseText);
+//                  if(ret.code == 0) {
+//                      alert("请先登录！")
+//                  }else if(ret.code=='1'){
+//                  }else{
+//                      console.log(ret.msg)
+//                  }
                 }
             };
 

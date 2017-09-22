@@ -54,7 +54,7 @@ function validateUserName(str){
 }
 /******************** QQ校验规则********************8*/
 function validateQQ(str){
-    var reQQ = /^[1-9]\d{4,9}$/; 
+    var reQQ = /^[1-9]\d{4,15}$/; 
     if(!reQQ.test(str)){
         return false;
     }else{

@@ -21,7 +21,7 @@
   '<td>{real_name}</td><td>{card_number}</td><td>{amount}</td><td>{time}</td>'+
   '<td>{state}</td><td>{admin}</td><td>{time_admin}</td>'+
   '<td>{remark}</td></tr>[/results]</table>';
-  var url = "/restapi/users/" + "?page={page}&size={pageSize}";
+  var url = "{%url 'get_admin_with_page' %}" + "?page={page}&size={pageSize}";
   var selected_id = 0;
   function pass(id){
    $(".Deny-y").css("display","block");
@@ -35,7 +35,7 @@
    $("li.home3").toggleClass("on");
    $(".Tin-table-box tr:even").css("background-color","#fcfcfc");
    $("#pagedata").ajaxPage({
-     url:url+"&state=1",
+     url:url,
      pageId:$("#page"),
      pageSize:10,
      run:true,

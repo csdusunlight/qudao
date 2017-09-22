@@ -27,7 +27,7 @@
                     <div id="noticeBox" class="notice__box">
                         <ul id="con1">
                             {%for notice in announce_list%}
-                                <li><a class="notice__txt oneline">{{notice.content}}</a></li>
+                                <li><a class="notice__txt oneline">{{forloop.counter}}、{{notice.content}}</a></li>
                             {%endfor%}
                             <!--<li><a class="notice__txt oneline">1、这里是通知11111111111111111111这里是通知11111111111111111111这里是通知11111111111111111111这里是通知11111111111111111111这里是通知11111111111111111111这里是通知11111111111111111111</a></li>
                             <li><a class="notice__txt oneline">2、这里是通知22222222222222222222这里是通知222222222222222222这里是通知2222222222222222222</a></li>

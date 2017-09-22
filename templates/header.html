@@ -3,7 +3,7 @@
 <div class="header">
     <div class="bgc-333">
         <div class="headertop color-fff clearfix">
-            <p class="headertop__welcome l">欢迎来到挖福利，全国首家综合性互联网产品体验超市！客服热线：0731-85586375&nbsp;&nbsp;<a href="#">切换到触屏版</a></p>
+            <p class="headertop__welcome l">欢迎来到福利联盟！客服热线：0731-85586375&nbsp;&nbsp;</p>
             <ul class="r fs-0">
 
                 {% if not user.is_authenticated %}
@@ -16,12 +16,12 @@
                     }
                 }
                 </script>
-                <li class="d-ib"><a class="headertop__navitem link" href="{% url 'register' %}">注册</a></li>
+                <li class="d-ib"><a class="headertop__navitem link" href="{% url 'register' %}">申请</a></li>
                 {% else %}
                 <li class="d-ib"><font>您好，<a class="headertop__navitem link" href="{% url 'account_index' %}">{{user.mobile}}</a></li>
-                    {%if user.level > 0 %}
+                    <!--{%if user.level > 0 %}
                      （VIP{{user.level}}）
-                    {%endif%}
+                    {%endif%}-->
                 </font>
                 <li class="d-ib"><a class="headertop__navitem link" href="{%url 'logout' %}">退出</a></li>
                 {% endif %}

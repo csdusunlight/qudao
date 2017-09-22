@@ -793,7 +793,7 @@ def project_create(request):
         with transaction.atomic():
             project = Project.objects.create(title=title, strategy=strategy, introduction=introduction,
                     cprice=price, is_official=False, user=user, term=term, investrange=investrange,
-                    intrest=intrest)
+                    intrest=intrest, pic='')
             SubscribeShip.objects.create(user=user, project=project, is_on=True)
         ret['code'] = 0
     return JsonResponse(ret)

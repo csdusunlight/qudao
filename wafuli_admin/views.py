@@ -1,7 +1,7 @@
 #coding:utf-8
 from django.shortcuts import render, redirect
 from wafuli.models import InvestLog, WithdrawLog, TransList, Company, Project,\
-    AdminLog
+    AdminLog, SubscribeShip
 import datetime
 from django.db.models import Sum, Count
 from django.core.urlresolvers import reverse
@@ -71,6 +71,13 @@ def admin_apply(request):
                               qq_name=apply.qq_name, qq_number=apply.qq_number, qualification=apply.qualification)
                 user.set_password(apply.password)
                 user.save()
+                id_list_list= list(Project.objects.filter(is_official=True, state__in=['10','20']).values_list('id'))
+                id_list = reduce(lambda x,y: x + y, id_list_list)
+                subbulk = []
+                for id in id_list:
+                    sub = SubscribeShip(user=user, project_id=id)
+                    subbulk.append(sub)
+                SubscribeShip.objects.bulk_create(subbulk)
                 apply.audit_state = '0'
                 apply.level = level
                 apply.audit_time = datetime.datetime.now()

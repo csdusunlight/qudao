@@ -60,7 +60,9 @@ class SubscribeShipSerializer(serializers.ModelSerializer):
     project_intrest = serializers.CharField(source='project.intrest', read_only=True)
     project_term = serializers.CharField(source='project.term', read_only=True)
     project_strategy = serializers.CharField(source='project.strategy', read_only=True)
-    is_official = serializers.BooleanField(source='project.is_official', read_only=True)
+    project_introduction = serializers.CharField(source='project.introduction', read_only=True)
+    
+    project_cprice = serializers.CharField(source='project.cprice', read_only=True)
     class Meta:
         model = SubscribeShip
         fields = '__all__'

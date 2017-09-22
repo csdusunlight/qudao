@@ -102,8 +102,20 @@ class Project(models.Model):
         now = datetime.datetime.now()
         days = (now-self.pub_date).days
         return days == 0
-    def is_hot(self):
-        return self.view_count > 1000
+    def picture_url(self):
+        """
+        Returns the URL of the image associated with this Object.
+        If an image hasn't been uploaded yet, it returns a stock image
+        
+        :returns: str -- the image url
+        
+        """
+        if self.pic and hasattr(self.pic, 'url'):
+            return self.pic.url
+        else:
+            return ''
+        def __unicode__(self):
+            return self.mobile
     def __unicode__(self):
         return self.title
     
@@ -252,10 +264,10 @@ class MAdvert_PC(Base):
         verbose_name_plural = u"PC端广告位（新）"
     def clean(self):
         if self.pic:
-#             if self.location in ['00', '10', '03'] and self.pic.size > 100000:
-#                 raise ValidationError({'pic': u'图片大小不能超过100k'})
-            if self.pic and self.pic.size > 100000:
+            if self.location in ['00', '10', '03'] and self.pic.size > 100000:
                 raise ValidationError({'pic': u'图片大小不能超过100k'})
+            elif self.pic.size > 50000:
+                raise ValidationError({'pic': u'图片大小不能超过50k'})
 
 class Announcement(models.Model):
     content = models.CharField(u"通知内容", max_length=100)

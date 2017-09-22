@@ -208,12 +208,6 @@ class WithdrawLog(models.Model):
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
     class Meta:
         ordering = ["submit_time",]
-    def get_bank(self):
-        return self.user.user_bankcard.first().bank
-    def get_cardnumber(self):
-        return self.user.user_bankcard.first().card_number
-    def get_realname(self):
-        return self.user.user_bankcard.first().real_name
     def __unicode__(self):
         return u"%s申请提现：%s" % (self.user, self.amount)
 # class Press(Base):

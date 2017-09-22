@@ -26,6 +26,9 @@ class InvestLogFilter(django_filters.rest_framework.FilterSet):
 class SubscribeShipFilter(django_filters.rest_framework.FilterSet):
     username = django_filters.CharFilter(name="user", lookup_expr='username')
     project_title_contains = django_filters.CharFilter(name="project", lookup_expr='title__contains')
+    project_futou = django_filters.BooleanFilter(name="project", lookup_expr='is_multisub_allowed')
+    project_type = django_filters.CharFilter(name="project", lookup_expr='type')
+    project_state = django_filters.CharFilter(name="project", lookup_expr='state')
     class Meta:
         model = SubscribeShip
         fields = '__all__'

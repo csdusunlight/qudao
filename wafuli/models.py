@@ -96,7 +96,6 @@ class Project(models.Model):
         verbose_name = u"理财项目"
         verbose_name_plural = u"理财项目"
         ordering = ["-priority", "-pub_date"]
-    
     def is_expired(self):
         return self.state != '10'
     def is_new(self):

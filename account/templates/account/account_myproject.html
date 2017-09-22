@@ -37,7 +37,7 @@ var url = "/restapi/sub/?page={page}&size={pageSize}";
 function pagecallback() {
     $('.price').each(function() {
         if ($(this).text() == "") {
-        	$(this).text($(this).data('price'));
+        	$(this).text('无');
         }
     })
     $('.intrest').each(function() {

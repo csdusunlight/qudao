@@ -11,10 +11,13 @@ from account.models import MyUser, ApplyLog
 from wafuli_admin.models import DayStatis
 
 class UserSerializer(serializers.ModelSerializer):
+    real_name = serializers.CharField(source="user.user_bankcard.first.real_name")
+    bank = serializers.CharField(source="user.user_bankcard.first.get_bank_display")
+    card_number = serializers.CharField(source="user.user_bankcard.first.card_number")
     class Meta:
         model = MyUser
         fields = ('id', 'mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'type',
-                  'level', 'picture', 'profile', 'balance', 'is_active', 'color')
+                  'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number')
         read_only_fields = ('id', 'mobile', 'username', 'balance', 'is_active', 'level', 'type')
         
 class ProjectSerializer(serializers.ModelSerializer):

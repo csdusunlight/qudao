@@ -19,7 +19,7 @@ $.ajaxSetup({
 });
 var data3 = '<table width="100%"><thead><tr><th>项目名称</th><th>项目来源</th>'+
     '<th>价格</th><th>标期</th><th>投资区间</th><th>预计年化</th><th width="14%">是否主页呈现</th><th width="14%">是否推荐</th><th>操作</th></tr></thead><tbody>'+
-    '[results]<tr><td>{project_title}</td><td>{project_source}</td><td data-price="{project_cprice}" class="price">{price}</td><td>{project_term}</td>'+
+    '[results]<tr><td>{project_title}</td><td class="project_source">{project_source}</td><td data-price="{project_cprice}" class="price">{price}</td><td>{project_term}</td>'+
     '<td>{project_investrange}</td><td data-intrest="{project_intrest}" class="intrest">{intrest}</td><td><span data-isadd="{is_on}" class="switch {is_on}" onclick="isadd(this,{id})"></span></td>'+
     '<td><span data-isadd="{is_recommend}" class="switch {is_recommend}" onclick="isRecommend(this,{id})"></span></td>'+
     '<td class="edit" onclick="edit(this, {id})">编辑</td></tr>[/results]'
@@ -45,6 +45,14 @@ function pagecallback() {
             $(this).text($(this).data('intrest'));
         }
     })
+    $('.project_source').each(function() {
+        if ($(this).text() == "True") {
+            $(this).text('官方');
+        }else {
+            $(this).text('自建');
+        }
+    })
+    
 }
 function isadd(obj,id) {        //是否主页显示调用函数
     var flag = $(obj).data('isadd');
@@ -405,7 +413,7 @@ $(function(){
         <div class="popup__detail">
             <div class="popup__item"><span class="popup__itemname">项目名称</span><input id="crt_name" type="text" /></div>
             <div class="popup__item"><span class="popup__itemname">攻略链接</span><input id="crt_link" type="text" />
-                <p class="link-tip"><a class="link-btn" href="">点击</a>使用石墨创建工具</p>
+                <p class="link-tip"><a class="link-btn" target="_blank" href="https://shimo.im/">点击</a>使用石墨创建工具</p>
             </div>
             <div class="popup__item"><span class="popup__itemname">项目简介</span><input id="crt_detail" type="text" /></div>
             <div class="popup__item"><span class="popup__itemname">价格</span><input id="crt_price" type="text" /></div>

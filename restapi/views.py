@@ -13,7 +13,7 @@ from restapi.serializers import UserSerializer, InvestLogSerializer,\
     ApplyLogSerializer, WithdrawLogSerializer
 from account.models import MyUser, ApplyLog
 from rest_framework.filters import SearchFilter,OrderingFilter
-from restapi.permissions import IsOwnerOrStaff
+from restapi.permissions import IsOwnerOrStaff, IsSelfOrStaff
 from restapi.Filters import InvestLogFilter, SubscribeShipFilter, UserFilter,\
     ApplyLogFilter, TranslistFilter, WithdrawLogFilter
 from django.db.models import Q
@@ -29,7 +29,7 @@ class ProjectList(BaseViewMixin, generics.ListCreateAPIView):
         if user.is_staff:
             return queryset
         else:
-            return queryset.filter(Q(is_officail=True) | Q(user__id=user.id))
+            return queryset.filter(Q(is_official=True) | Q(user__id=user.id))
         
     serializer_class = ProjectSerializer
     filter_backends = (SearchFilter, django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
@@ -58,7 +58,7 @@ class UserList(BaseViewMixin, generics.ListCreateAPIView):
 class UserDetail(BaseViewMixin,generics.RetrieveUpdateDestroyAPIView):
     queryset = MyUser.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (IsOwnerOrStaff,)
+    permission_classes = (IsSelfOrStaff,)
     
 class InvestlogList(BaseViewMixin, generics.ListCreateAPIView):
     def get_queryset(self):

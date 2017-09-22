@@ -33,3 +33,13 @@ class IsOwnerOrStaff(permissions.BasePermission):
         if not request.user.is_authenticated():
             return False
         return request.user.is_staff or obj.user == request.user 
+class IsSelfOrStaff(permissions.BasePermission):
+    """
+    Object-level permission to only allow owners of an object to edit it.
+    Assumes the model instance has an `owner` attribute.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        if not request.user.is_authenticated():
+            return False
+        return request.user.is_staff or obj == request.user

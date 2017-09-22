@@ -934,7 +934,7 @@ def export_withdraw_excel(request):
             result = u'否'
             if con.audited_logs.exists():
                 reason = con.audited_logs.first().reason
-        data.append([id, username, mobile, user_type, balance, bank, real_name, card_number, amount,
+        data.append([id, username, mobile, user_level, balance, bank, real_name, card_number, amount,
                      time, result, reason])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表

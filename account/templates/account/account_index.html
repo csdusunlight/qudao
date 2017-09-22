@@ -26,10 +26,13 @@
                     <h3 class="notice__title">通知栏</h3>
                     <div id="noticeBox" class="notice__box">
                         <ul id="con1">
-                            <li><a class="notice__txt oneline">1、这里是通知11111111111111111111这里是通知11111111111111111111这里是通知11111111111111111111这里是通知11111111111111111111这里是通知11111111111111111111这里是通知11111111111111111111</a></li>
+                            {%for notice in announce_list%}
+                                <li><a class="notice__txt oneline">{{notice.content}}</a></li>
+                            {%endfor%}
+                            <!--<li><a class="notice__txt oneline">1、这里是通知11111111111111111111这里是通知11111111111111111111这里是通知11111111111111111111这里是通知11111111111111111111这里是通知11111111111111111111这里是通知11111111111111111111</a></li>
                             <li><a class="notice__txt oneline">2、这里是通知22222222222222222222这里是通知222222222222222222这里是通知2222222222222222222</a></li>
                             <li><a class="notice__txt oneline">3、这里是通知33333333333333333这里是通知33333333333333333333333这里是通知33333333333333333</a></li>
-                            <li><a class="notice__txt oneline">4、这里是通知4444444444444444这里是通知4444444444444444444444444这里是通知4444</a></li>
+                            <li><a class="notice__txt oneline">4、这里是通知4444444444444444这里是通知4444444444444444444444444这里是通知4444</a></li>-->
                         </ul>
                         <ul id="con2">
                         </ul>
@@ -41,9 +44,9 @@
                 </div>
                 
                 <ul class="benefit">
-                    <li class="benefit__item">累计收益（元）<br /><span class="benefit__item-txt">19999</span></li>
+                    <li class="benefit__item">累计收益（元）<br /><span class="benefit__item-txt">{{user.accu_income}}</span></li>
                     <!--<li class="benefit__item">昨日收益（元）<br /><span class="benefit__item-txt">19999</span></li>-->
-                    <li class="benefit__item">账户余额（元）<br /><span class="benefit__item-txt">19999</span></li>
+                    <li class="benefit__item">账户余额（元）<br /><span class="benefit__item-txt">{{user.balance}}</span></li>
                     <li class="benefit__withdraw"><a href="" class="btn m-green">提现</a></li>
                     <!--<div id="main" class="chart" style="width: 600px;height:400px;"></div>-->
                 </ul>

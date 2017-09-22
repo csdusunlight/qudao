@@ -810,15 +810,6 @@ def get_admin_with_page(request):
     if mobile:
         item_list = item_list.filter(user__mobile=mobile)
 
-    usertype = request.GET.get("usertype",0)
-    usertype= int(usertype)
-    if usertype == 1:
-        item_list = item_list.filter(user__is_channel=False)
-    elif usertype == 2:
-        item_list = item_list.filter(user__is_channel=True)
-        chalevel = request.GET.get("chalevel","")
-        if chalevel:
-            item_list = item_list.filter(user__channel__level=chalevel)
     card_number = request.GET.get("card_number", None)
     if card_number:
         item_list = item_list.filter(user__user_bankcard__card_number=card_number)
@@ -854,7 +845,7 @@ def get_admin_with_page(request):
             real_name = card.real_name
         i = {"username":obj_user.username,
              "mobile":obj_user.mobile,
-             "usertype":u"普通用户" if not con.user.is_channel else u"渠道："+ con.user.channel.level,
+             "userlevel":con.user.level,
              "balance":obj_user.balance/100.0,
              "bank":bank,
              "real_name":real_name,
@@ -901,15 +892,6 @@ def export_withdraw_excel(request):
     if mobile:
         item_list = item_list.filter(user__mobile=mobile)
 
-    usertype = request.GET.get("usertype",0)
-    usertype= int(usertype)
-    if usertype == 1:
-        item_list = item_list.filter(user__is_channel=False)
-    elif usertype == 2:
-        item_list = item_list.filter(user__is_channel=True)
-        chalevel = request.GET.get("chalevel","")
-        if chalevel:
-            item_list = item_list.filter(user__channel__level=chalevel)
     card_number = request.GET.get("card_number", None)
     if card_number:
         item_list = item_list.filter(user__user_bankcard__card_number=card_number)
@@ -942,8 +924,8 @@ def export_withdraw_excel(request):
         remark= con.remark
         amount= con.invest_amount/100.0
         state=con.get_audit_state_display()
-        user_mobile = obj_user.mobile if not obj_user.is_channel else obj_user.channel.qq_number
-        user_type = u"普通用户" if not obj_user.is_channel else u"渠道："+ obj_user.channel.level
+        user_mobile = obj_user.qq_number
+        user_level = obj_user.level
         result = ''
         reason = ''
         if con.audit_state=='0':

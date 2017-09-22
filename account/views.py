@@ -801,6 +801,7 @@ def project_create(request):
 @login_required_ajax
 def submit_screenshot(request):
     imgurl_list = []
+    result = {}
     id = request.POST.get('id')
     investlog = InvestLog.objects.get(id=id)
     if len(request.FILES)>6:

@@ -5,17 +5,17 @@ from rest_framework import generics, permissions
 import django_filters
 from Paginations import MyPageNumberPagination
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
-    Announcement
+    Announcement, WithdrawLog
 from permissions import CsrfExemptSessionAuthentication, IsAdmin
 from restapi.serializers import UserSerializer, InvestLogSerializer,\
     TransListSerializer, NoticeSerializer, ProjectSerializer,\
     SubscribeShipSerializer, AnnouncementSerializer, DayStatisSerializer,\
-    ApplyLogSerializer
+    ApplyLogSerializer, WithdrawLogSerializer
 from account.models import MyUser, ApplyLog
 from rest_framework.filters import SearchFilter,OrderingFilter
 from restapi.permissions import IsOwnerOrStaff
 from restapi.Filters import InvestLogFilter, SubscribeShipFilter, UserFilter,\
-    ApplyLogFilter, TranslistFilter
+    ApplyLogFilter, TranslistFilter, WithdrawLogFilter
 from django.db.models import Q
 from wafuli_admin.models import DayStatis
 # from wafuli.Filters import UserEventFilter
@@ -141,3 +141,22 @@ class ApplyLogList(BaseViewMixin, generics.ListAPIView):
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, )
     filter_class = ApplyLogFilter
     pagination_class = MyPageNumberPagination
+    
+    
+class WithdrawLogList(BaseViewMixin, generics.ListCreateAPIView):
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return WithdrawLog.objects.all()
+        else:
+            return WithdrawLog.objects.filter(user=user)
+    serializer_class = WithdrawLogSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, )
+    filter_class = WithdrawLogFilter
+    pagination_class = MyPageNumberPagination
+
+# class WithdrawLogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
+#     queryset = InvestLog.objects.all()
+#     permission_classes = (IsOwnerOrStaff,)
+#     serializer_class = InvestLogSerializer
+    

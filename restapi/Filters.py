@@ -5,7 +5,8 @@ Created on 2017年8月23日
 @author: lch
 '''
 import django_filters
-from wafuli.models import InvestLog, Project, SubscribeShip, TransList
+from wafuli.models import InvestLog, Project, SubscribeShip, TransList,\
+    WithdrawLog
 from account.models import MyUser, ApplyLog
 # class ProjectInvestDateFilter(django_filters.rest_framework.FilterSet):
 #     investtime = django_filters.DateFromToRangeFilter(name="invest_time")
@@ -54,3 +55,15 @@ class TranslistFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = TransList
         fields = ['user_mobile', 'user_name', 'reason_contains', 'trans_date']
+        
+class WithdrawLogFilter(django_filters.rest_framework.FilterSet):
+    submit_date = django_filters.DateFromToRangeFilter(name="submit_time")
+    audit_date = django_filters.DateFromToRangeFilter(name="audit_time")
+    user_mobile = django_filters.CharFilter('user', lookup_expr='mobile')
+    user_name = django_filters.CharFilter('user', lookup_expr='username')
+    user_level = django_filters.CharFilter('user', lookup_expr='level')
+    admin_mobile = django_filters.CharFilter('admin_user', lookup_expr='mobile')
+#     bank = django_filters.CharFilter('user.user_bank', lookup_expr='bank')
+    class Meta:
+        model = WithdrawLog
+        fields = ['submit_date', 'audit_date', 'user_mobile', 'user_name', 'audit_state', ]

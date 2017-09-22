@@ -788,7 +788,7 @@ def get_admin_with_page(request):
     if not page or size <= 0:
         raise Http404
 
-    item_list = InvestLog.objects.filter(investlog_type='2', audit_state=state).select_related('user').order_by('time','invest_amount')
+    item_list = WithdrawLog.objects.filter(audit_state=state).select_related('user').order_by('time','amount')
     startTime = request.GET.get("startTime", None)
     endTime = request.GET.get("endTime", None)
     startTime2 = request.GET.get("startTime2", None)

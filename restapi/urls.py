@@ -27,4 +27,6 @@ urlpatterns = [
     url(r'^daystatis/$', views.DayStatisList.as_view()),
     
     url(r'^applylog/$', views.ApplyLogList.as_view()),
+    
+    url(r'^withdrawlog/$', views.WithdrawLogList.as_view()),
 ]

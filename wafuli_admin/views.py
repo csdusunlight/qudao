@@ -851,12 +851,12 @@ def get_admin_with_page(request):
              "real_name":real_name,
              "card_number":card_number,
              "amount":con.amount,
-             "time":con.time.strftime("%Y-%m-%d %H:%M"),
+             "time":con.submit_time.strftime("%Y-%m-%d %H:%M"),
              "state":con.get_audit_state_display(),
-             "admin":u'无' if con.audit_state=='1' or not con.audited_logs.exists() else con.audited_logs.first().user.username,
+             "admin":u'无' if not con.admin_user else admin_user.username,
              "time_admin":u'无' if con.audit_state=='1' or not con.audit_time else con.audit_time.strftime("%Y-%m-%d %H:%M"),
              "id":con.id,
-             "remark": con.remark or u'无' if con.audit_state!='2' or not con.audited_logs.exists() else con.audited_logs.first().reason,
+             "reason": con.audit_reason,
              }
         data.append(i)
     if data:

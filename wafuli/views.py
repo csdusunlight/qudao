@@ -62,7 +62,7 @@ def index(request):
     data.update(recom_projects=recom_projects)
 
     #合作平台
-    platforms = Company.objects.order_by("-priority")
+    platforms = Company.objects.order_by("-priority")[0:20]
     data.update(platforms=platforms)
     return render(request, 'wfl-index.html', data)
 def project_all(request):

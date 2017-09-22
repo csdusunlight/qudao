@@ -246,6 +246,7 @@
 }
 .notice__box {
     height: 290px;
+    padding-left: 10px;
     overflow: hidden;
 }
 .notice__txt {
@@ -263,6 +264,7 @@
     color: #91C11D;
 }
 .rank__box {
+    margin-left: 10px;
     height: 272px;
     overflow: hidden;
 }

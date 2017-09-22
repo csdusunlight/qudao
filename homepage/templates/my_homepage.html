@@ -64,9 +64,9 @@
                         <input class="search-input" name="key" type="text">
                         <input class="search-submit" type="submit" value="">
                     </div>
-                    <div class="search__right r">
+                    <!--<div class="search__right r">
                         <a class="search__right-item">预计最高年化</a><a class="search__right-item">返现价格</a>
-                    </div>
+                    </div>-->
                 </div>
                 <ul id="pagedata1" class="item-container clearfix">
                     
@@ -110,7 +110,7 @@
                 </div>
             </div>
             <div class="rank">
-                <h3 class="rank__title">最新公告</h3>
+                <h3 class="rank__title">大家都在</h3>
                 <div id="rankBox" class="rank__box">
                     <ul id="rank_con1">
                         <li><a class="rank__txt oneline">1、152****2344体验了<span class="rank__project">核时代一期</span></a></li>
@@ -213,6 +213,68 @@
             console.log(imgtxt);
             var num = parseInt(Math.random()*6);
             $(this).text(imgtxt).css('background-color', colors[num]);
+        }
+    })
+
+
+    var rankarea = document.getElementById('rankBox');
+    var rank_con1 = document.getElementById('rank_con1');
+    var rank_con2 = document.getElementById('rank_con2');
+    var rank_speed = 50;
+    rankarea.scrollTop = 0;
+    function scrollUpRank(){
+        if(rankarea.scrollTop >= rank_con1.scrollHeight) {
+            rankarea.scrollTop = 0;
+            }else{
+               rankarea.scrollTop ++;
+            }
+    }
+    $.ajax({
+    	url:"/restapi/investlogs/?page=1&size=8",
+    	type: 'get',
+    	dataType: "json",
+    	success: function(ret) {
+            console.log(ret.results);
+            var notice_html='';
+            for (var i=0; i<ret.results.length; i++) {
+            	notice_html += '<li><a class="rank__txt oneline">' + (i+1) + '、' + ret.results[i].invest_mobile +
+            	'体验了<span class="rank__project">' + ret.results[i].project_title + '</span></a></li>';
+            }
+            console.log(notice_html);
+            $('#rank_con1').html(notice_html);
+            
+            
+            console.log(rankarea.clientHeight);
+            console.log(rank_con1.clientHeight);
+            if (rankarea.clientHeight >= rank_con1.clientHeight) {
+            } else {    
+                rank_con2.innerHTML = rank_con1.innerHTML;
+                
+                var myScroll_rank = setInterval("scrollUpRank()",rank_speed);
+                rankarea.onmouseover = function(){
+                    clearInterval(myScroll_rank);
+                }
+                rankarea.onmouseout = function(){
+                    myScroll_rank = setInterval("scrollUpRank()",rank_speed);
+                }
+            }
+        },
+        error: function() {
+            alert("请检查网络连接");
+        }
+    });
+    
+    $('.search-submit').click(function(){
+        var search_key = $('.search-input').val();
+        console.log(search_key);
+        if (search_key) {
+            $("#pagedata1").ajaxPage({
+              url: "/restapi/projects/?page={page}&size={pageSize}&project_title_contains="+search_key,
+              pageId:$("#page1"),
+              run:true,
+              content:data,
+              complete:pagecallback,
+            });
         }
     })
 
@@ -341,31 +403,31 @@
         }
     }
     
-    var rankarea = document.getElementById('rankBox');
-    var rank_con1 = document.getElementById('rank_con1');
-    var rank_con2 = document.getElementById('rank_con2');
-    var rank_speed = 50;
-    rankarea.scrollTop = 0;
-    console.log(rankarea.clientHeight);
-    console.log(rank_con1.clientHeight);
-    if (rankarea.clientHeight >= rank_con1.clientHeight) {
-    } else {    
-        rank_con2.innerHTML = rank_con1.innerHTML;
-        function scrollUpRank(){
-            if(rankarea.scrollTop >= rank_con1.scrollHeight) {
-                rankarea.scrollTop = 0;
-                }else{
-                   rankarea.scrollTop ++;
-                }
-        }
-        var myScroll_rank = setInterval("scrollUpRank()",rank_speed);
-        rankarea.onmouseover = function(){
-            clearInterval(myScroll_rank);
-        }
-        rankarea.onmouseout = function(){
-            myScroll_rank = setInterval("scrollUpRank()",rank_speed);
-        }
-    }
+//  var rankarea = document.getElementById('rankBox');
+//  var rank_con1 = document.getElementById('rank_con1');
+//  var rank_con2 = document.getElementById('rank_con2');
+//  var rank_speed = 50;
+//  rankarea.scrollTop = 0;
+//  console.log(rankarea.clientHeight);
+//  console.log(rank_con1.clientHeight);
+//  if (rankarea.clientHeight >= rank_con1.clientHeight) {
+//  } else {    
+//      rank_con2.innerHTML = rank_con1.innerHTML;
+//      function scrollUpRank(){
+//          if(rankarea.scrollTop >= rank_con1.scrollHeight) {
+//              rankarea.scrollTop = 0;
+//              }else{
+//                 rankarea.scrollTop ++;
+//              }
+//      }
+//      var myScroll_rank = setInterval("scrollUpRank()",rank_speed);
+//      rankarea.onmouseover = function(){
+//          clearInterval(myScroll_rank);
+//      }
+//      rankarea.onmouseout = function(){
+//          myScroll_rank = setInterval("scrollUpRank()",rank_speed);
+//      }
+//  }
 //  滚动部分---end 
 </script>
 </body>

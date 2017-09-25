@@ -149,7 +149,9 @@
 .finance__price {
     float: left;
     font-size: 14px;
-    color: #91C11D;
+}
+.finance__price-num {
+    color: #ff9501;
 }
 .finance__term {
     float: right;

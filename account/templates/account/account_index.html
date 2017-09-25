@@ -50,34 +50,56 @@
                     <li class="benefit__withdraw"><a href="" class="btn m-green">提现</a></li>
                     <div id="main" class="chart" style="width: 600px;height:400px;"></div>
                 </ul>
-                <!--<div class="recommend">
+                <div class="recommend">
                     <div class="recommend__titlebox clearfix">
                         <h2 class="recommend__title l">热门推荐</h2>
-                        <a class="recommend__more r" href="#">查看更多>></a>
+                        <a class="recommend__more r" href="{% url 'project_all' %}" target="_blank">查看更多>></a>
                     </div>
                     <ul class="recommend__itembox">
-                        <li class="recommend__item"><a href="#">
+                        <li class="recommend__item">
                             <img class="recommend__img" src="" alt="" />
                             <h4 class="recommend__name oneline">这里是标题</h4>
                             <p class="recommend__detail oneline">这里是介绍这里是介绍这里是介绍这里是介绍这里是介绍</p>
-                        </a></li>
-                        <li class="recommend__item"><a href="#">
+                            <div class="btn-box m-account">
+                                <a href="{{recom.strategy}}" class="btn m-green">查看攻略</a>
+                            </div>
+                        </li>
+                        <li class="recommend__item">
                             <img class="recommend__img" src="" alt="" />
                             <h4 class="recommend__name oneline">这里是标题</h4>
                             <p class="recommend__detail oneline">这里是介绍这里是介绍这里是介绍这里是介绍这里是介绍</p>
-                        </a></li>
-                        <li class="recommend__item"><a href="#">
+                            <div class="btn-box m-account">
+                                <a href="{{recom.strategy}}" class="btn m-green">查看攻略</a>
+                            </div>
+                        </li>
+                        <li class="recommend__item">
                             <img class="recommend__img" src="" alt="" />
                             <h4 class="recommend__name oneline">这里是标题</h4>
                             <p class="recommend__detail oneline">这里是介绍这里是介绍这里是介绍这里是介绍这里是介绍</p>
-                        </a></li>
-                        <li class="recommend__item"><a href="#">
+                            <div class="btn-box m-account">
+                                <a href="{{recom.strategy}}" class="btn m-green">查看攻略</a>
+                            </div>
+                        </li>
+                        <li class="recommend__item">
                             <img class="recommend__img" src="" alt="" />
                             <h4 class="recommend__name oneline">这里是标题</h4>
                             <p class="recommend__detail oneline">这里是介绍这里是介绍这里是介绍这里是介绍这里是介绍</p>
-                        </a></li>
+                            <div class="btn-box m-account">
+                                <a href="{{recom.strategy}}" class="btn m-green">查看攻略</a>
+                            </div>
+                        </li>
+                    <!--{% for recom in recom_list %}
+                            <li class="recommend__item">
+                                <img class="recommend__img" src="{{recom.pic}}" alt="" />
+                                <h4 class="recommend__name oneline">{{recom.title}}</h4>
+                                <p class="recommend__detail oneline">这里是介绍这里是介绍这里是介绍这里是介绍这里是介绍</p>
+                                <div class="btn-box">
+                                    <a href="{{recom.strategy}}" class="btn m-green">查看攻略</a>
+                                </div>
+                            </li>
+                    {%endfor%}-->
                     </ul>
-                </div>-->
+                </div>
                 
                 
             </div>

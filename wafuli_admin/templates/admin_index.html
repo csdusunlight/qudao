@@ -18,24 +18,24 @@ $(document).ready(function(){
 	    run:true,
 	    content:data,
 	});
-	$("#search").click(function(){
-		startTime = $("#startTime").val();
-		endTime = $("#endTime").val();
-		newurl = url;
-		if(startTime && endTime){
-			newurl += "&startTime="+startTime;
-			newurl += "&endTime="+endTime;
-		}
-		var newdata = data;
-		$("#page").empty();
-		$("#pagedata").ajaxPage({
-		    url:newurl, 
-		    pageId:$("#page"),
-		    pageSize:10,
-		    run:true,
-		    content:newdata,
-		});
-	});
+//	$("#search").click(function(){
+//		startTime = $("#startTime").val();
+//		endTime = $("#endTime").val();
+//		newurl = url;
+//		if(startTime && endTime){
+//			newurl += "&startTime="+startTime;
+//			newurl += "&endTime="+endTime;
+//		}
+//		var newdata = data;
+//		$("#page").empty();
+//		$("#pagedata").ajaxPage({
+//		    url:newurl, 
+//		    pageId:$("#page"),
+//		    pageSize:10,
+//		    run:true,
+//		    content:newdata,
+//		});
+//	});
 });
 </script>
 {% endblock js %}
@@ -74,11 +74,11 @@ $(document).ready(function(){
                             <div class="Date-box">
                             	<div class="Date-Form">
                                 	<form>
-                                    	时间：&nbsp;
+                                    	<!--时间：&nbsp;
                                         <input id="startTime" type="date" />
                                         &nbsp; 至 &nbsp;
-                                        <input id="endTime" type="date" />
-                                        <input id="search" type="button" value="搜索" />
+                                        <input id="endTime" type="date" />-->
+                                        <!--<input id="search" type="button" value="搜索" />-->
                                         <input id="export" type="button" value="导出" />
                                     </form>
                                 </div>

@@ -296,9 +296,9 @@
     });
 //  未审核
     var data1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th><th>操作</th></tr>[results]' +
+        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td><td>{audit_state}</td>' +
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData(this,{id})">删除' +
         '</a>│<a class="jion-s" onclick="editData(this,{id})">编辑' +
         '</a>│<a class="jion-s" onclick="addImg(this,{id})">提交截图</a></td></tr>[/results]</table>';
@@ -309,20 +309,20 @@
         '<td>{invest_amount}</td><td>{audit_time}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{remark}</td></tr>[/results]</table>';
 //  已拒绝
     var data2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>审核状态</th><th>拒绝原因</th><th>备注</th></tr>[results]' +
+        '<th>投资金额</th><th>拒绝原因</th><th>备注</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{audit_state}</td><td>{audit_reason}</td><td>{remark}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{audit_reason}</td><td>{remark}</td></tr>[/results]</table>';
 //  已删除
     var data3 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>备注</th><th>审核状态</th></tr>[results]' +
+        '<th>投资金额</th><th>备注</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{remark}</td></tr>[/results]</table>';
       
 //  未审核
     var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th><th>操作</th></tr>[results]' +
+        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td><td>{audit_state}</td>' +
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData_02(this,{id})">删除' +
         '</a>│<a class="jion-s" onclick="editData_02(this,{id})">编辑</a></td></tr>[/results]</table>';
 //  已通过
@@ -332,14 +332,14 @@
         '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{remark}</td></tr>[/results]</table>';
 //  已拒绝
     var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>拒绝原因</th><th>备注</th><th>审核状态</th></tr>[results]' +
+        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>拒绝原因</th><th>备注</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{audit_reason}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{audit_reason}</td><td>{remark}</td></tr>[/results]</table>';
 //  已删除
     var data_user4 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>审核状态</th></tr>[results]' +
+        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td><td>{audit_state}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td></tr>[/results]</table>';
 
         var url = "/restapi/investlogs/?page={page}&size={pageSize}&is_official=true";
         var url2 = "/restapi/investlogs/?page={page}&size={pageSize}&is_official=false";

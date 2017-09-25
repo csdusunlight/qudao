@@ -33,7 +33,7 @@
 	});
 	var data1 = '<table width="100%"><tr><th>QQ</th><th>手机号</th><th>项目名称</th>' +
 		'<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>处理状态</th>' +
-		'<th>备注</th><th>操作</th></tr>[results]<tr><td>{qq_number}</td><td>{手机号}</td><td>{project_title}</td>' +
+		'<th>备注</th><th>操作</th></tr>[results]<tr><td>{qq_number}</td><td>{user_mobile}</td><td>{project_title}</td>' +
 		'<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
 		'<td>{audit_state}</td><td>{remark}</td><td id="item_{id}"><a class="fyin" onclick="pass({id})">返现' +
 		'</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td></tr>[/results]</table>';
@@ -41,7 +41,7 @@
         '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>处理状态</th>' +
         '<th>审核人</th><th>审核时间</th><th>返现金额</th><th>备注</th></tr>[results]<tr><td>{qq_number}</td><td>{手机号}</td><td>{project_title}</td>' +
         '<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
-        '<td>{audit_state}<td>{admin_user}</td></td><td>{audit_time}</td><td>{return_amount}</td><td>{remark}</td></tr>[/results]</table>';
+        '<td>{audit_state}<td>{admin_user}</td></td><td>{audit_time}</td><td>{settle_amount}</td><td>{remark}</td></tr>[/results]</table>';
     var data2 = '<table width="100%"><tr><th>QQ</th><th>手机号</th><th>项目名称</th>' +
         '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>处理状态</th>' +
         '<th>审核人</th><th>审核时间</th><th>拒绝金额</th><th>备注</th></tr>[results]<tr><td>{qq_number}</td><td>{手机号}</td><td>{project_title}</td>' +
@@ -74,8 +74,8 @@
 		$('.Finnow input[type="submit"]').click(function() {
 			id = $("input#ret_event_id").val();
 			cash = $("input#add_cash").val();
-			score = $("input#add_score").val();
-			if(!id || !cash || !score) {
+//			score = $("input#add_score").val();
+			if(!id || !cash) {
 				return;
 			}
 			console.log(id + ', ' + cash)
@@ -86,7 +86,7 @@
 				data: {
 					'id': id,
 					'cash': cash,
-					'score': score,
+//					'score': score,
 					'type': 1,
 				},
 				success: function(ret) {
@@ -384,8 +384,8 @@
 			<input id="ret_event_id" type="hidden" />
 			<span>添加现金：</span>
 			<input id="add_cash" type="text" />
-			<span>添加积分：</span>
-			<input id="add_score" type="text" />
+			<!--<span>添加积分：</span>
+			<input id="add_score" type="text" />-->
 			<div class="Finnow-Sub">
 				<input type="submit" value="确认" onclick="return false;" />
 				<input type="button" value="取消" class="none-x-s" />

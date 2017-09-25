@@ -90,7 +90,7 @@ class WithdrawLogSerializer(serializers.ModelSerializer):
     real_name = serializers.CharField(source="user.user_bankcard.first.real_name")
     bank = serializers.CharField(source="user.user_bankcard.first.get_bank_display")
     card_number = serializers.CharField(source="user.user_bankcard.first.card_number")
-#     username = serializers.CharField(source='user.username', read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
     mobile = serializers.CharField(source='user.mobile', read_only=True)
     admin_mobile = serializers.CharField(source='admin_user.mobile', read_only=True)
 #     balance = serializers.CharField(source='user.banlance', read_only=True)

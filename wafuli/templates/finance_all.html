@@ -316,14 +316,29 @@ $(function(){
         var newurl2 = url + "&project_title_contains=" + searchValue;
         
         $("#pagedata1").ajaxPage({
-        url:newurl2,
-        pageId:$("#page1"),
-        pageSize:12,
-        run:true,
-        content:data,
-        complete:pagecallback,
-    });
+            url:newurl2,
+            pageId:$("#page1"),
+            pageSize:12,
+            run:true,
+            content:data,
+            complete:pagecallback,
+        });
     })
+    $('.hongbao-input').on('keypress',function(e){
+        if(e.keyCode == 13) {
+            var searchValue = $('.hongbao-input').val();
+            var newurl2 = url + "&project_title_contains=" + searchValue;
+            
+            $("#pagedata1").ajaxPage({
+                url:newurl2,
+                pageId:$("#page1"),
+                pageSize:12,
+                run:true,
+                content:data,
+                complete:pagecallback,
+            });
+        }
+    });
     
 
 });

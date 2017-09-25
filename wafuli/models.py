@@ -98,6 +98,11 @@ class Project(models.Model):
         ordering = ["-priority", "-pub_date"]
     def is_expired(self):
         return self.state != '10'
+    def marks_list(self):
+        mark_list = []
+        for mark in self.marks.all():
+            mark_list.append(mark.name)
+        return '|'.join(mark_list)
     def is_new(self):
         now = datetime.datetime.now()
         days = (now-self.pub_date).days

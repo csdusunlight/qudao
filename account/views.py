@@ -40,6 +40,7 @@ from wafuli.models import TransList, WithdrawLog, Project, SubscribeShip,\
     InvestLog, Announcement
 from public.tools import login_required_ajax
 from wafuli.tools import saveImgAndGenerateUrl
+from decimal import Decimal
 
 @sensitive_post_parameters()
 @csrf_protect
@@ -527,12 +528,12 @@ def withdraw(request):
             result['res_msg'] = u'传入参数不足！'
             return JsonResponse(result)
         try:
-            withdraw_amount = int(withdraw_amount)
+            withdraw_amount = Decimal(withdraw_amount)
         except ValueError:
             result['code'] = -1
             result['res_msg'] = u'参数不合法！'
             return JsonResponse(result)
-        if withdraw_amount < 1000 or withdraw_amount > user.balance:
+        if withdraw_amount < 10 or withdraw_amount > user.balance:
             result['code'] = -1
             result['res_msg'] = u'提现金额错误！'
             return JsonResponse(result)

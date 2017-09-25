@@ -113,7 +113,7 @@ def channel(request):
                     duplicate_mobile_list.append(mob)
                 else:
                     item = rtable[i]
-                    obj = InvestLog(user=request.user, invest_mobile=mob, project=project, is_official=True,
+                    obj = InvestLog(user=request.user, invest_mobile=mob, project=project, is_official=True,is_selfsub=True,
                                     invest_amount=item[3],invest_term=item[2],invest_date=item[0],
                                     audit_state='1',zhifubao=item[5],zhifubao_name=item[6],remark=item[6])
                     log_list.append(obj)
@@ -157,7 +157,7 @@ def submit_itembyitem(request):
                 raise ValueError('This invest_mobile is repective in project:' + str(news.id))
             else:
                 InvestLog.objects.create(user=request.user, project=news, invest_date=time, invest_mobile=telnum, invest_term=term,
-                                 invest_amount=int(amount), audit_state='1', is_official=True,
+                                 invest_amount=int(amount), audit_state='1', is_official=True, is_selfsub=True,
                                  zhifubao=zhifubao, zhifubao_name=zhifubao_name, remark=remark,)
                 suc_num += 1
         except Exception, e:

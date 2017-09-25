@@ -137,7 +137,8 @@ class SubscribeShip(models.Model):
 class InvestLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="investlog_submit")
     project = models.ForeignKey(Project, related_name="investlogs")
-    is_official = models.BooleanField()
+    is_official = models.BooleanField(u'是否官方项目',)
+    is_selfsub = models.BooleanField(u'是否渠道用户自己提交的',default=False)
     submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
     invest_mobile = models.CharField(u"投资手机号", max_length=11)
     invest_name = models.CharField(u"投资用户名", max_length=11, blank=True)

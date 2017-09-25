@@ -84,7 +84,12 @@ class InvestlogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     serializer_class = InvestLogSerializer
     
 class TranslistList(BaseViewMixin, generics.ListAPIView):
-    queryset = TransList.objects.all()
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return TransList.objects.all()
+        else:
+            return TransList.objects.filter(user=user)
     permission_classes = (IsOwnerOrStaff,)
     serializer_class = TransListSerializer
     pagination_class = MyPageNumberPagination
@@ -166,6 +171,8 @@ class UserDetailStatisList(BaseViewMixin, generics.ListCreateAPIView):
             return UserDetailStatis.objects.filter(user=user)
     serializer_class = UserDetailStatisSerializer
     pagination_class = MyPageNumberPagination
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, )
+    filter_fields = ('user', 'date')
     
 class UserAverageStatisList(BaseViewMixin, generics.ListCreateAPIView):
     def get_queryset(self):
@@ -176,4 +183,6 @@ class UserAverageStatisList(BaseViewMixin, generics.ListCreateAPIView):
             return UserAverageStatis.objects.filter(user=user)
     serializer_class = UserAverageStatisSerializer
     pagination_class = MyPageNumberPagination
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, )
+    filter_fields = ('user')
     

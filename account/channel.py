@@ -26,8 +26,6 @@ logger = logging.getLogger("wafuli")
 @login_required
 @csrf_exempt
 def channel(request):
-    if not request.user.is_channel:
-        raise Http404
     if request.method == 'POST':
         fid = request.POST.get('fid')
         ret = {'code':-1}
@@ -41,7 +39,7 @@ def channel(request):
         table = data.sheets()[0]
         nrows = table.nrows
         ncols = table.ncols
-        if ncols!=5:
+        if ncols!=7:
             ret['msg'] = u"文件格式与模板不符，请下载最新模板填写！"
             return JsonResponse(ret)
         rtable = []
@@ -89,8 +87,8 @@ def channel(request):
                             raise Exception(u"投资金额必须为数字")
                         temp.append(amount)
                     else:
-                        remark = cell.value
-                        temp.append(remark)
+                        value = cell.value
+                        temp.append(value)
                 if duplic:
                     duplic = False
                 else:
@@ -106,8 +104,8 @@ def channel(request):
         log_list = []
         duplicate_mobile_list = []
         with transaction.atomic():
-            db_key = DBlock.objects.select_for_update().get(index='event_key')
-            temp = InvestLog.objects.filter(event_type='1',project=project).exclude(audit_state='2').values('invest_mobile')
+            db_key = DBlock.objects.select_for_update().get(index='investlog')
+            temp = InvestLog.objects.filter(project=project).exclude(audit_state='2').values('invest_mobile')
             db_mobile_list = map(lambda x: x['invest_mobile'], temp)
             for i in range(len(mobile_list)):
                 mob = mobile_list[i]
@@ -115,9 +113,9 @@ def channel(request):
                     duplicate_mobile_list.append(mob)
                 else:
                     item = rtable[i]
-                    obj = InvestLog(user=request.user, invest_mobile=mob, project=project,
-                                    invest_amount=item[3],invest_term=item[2],invest_time=item[0],
-                                    audit_state='1',remark=item[4])
+                    obj = InvestLog(user=request.user, invest_mobile=mob, project=project, is_official=True,
+                                    invest_amount=item[3],invest_term=item[2],invest_date=item[0],
+                                    audit_state='1',zhifubao=item[5],zhifubao_name=item[6],remark=item[6])
                     log_list.append(obj)
             InvestLog.objects.bulk_create(log_list)
         succ_num = len(log_list)
@@ -127,8 +125,8 @@ def channel(request):
         ret.update(code=0,sun=succ_num, dup1=duplic_num1, dup2=duplic_num2, anum=nrows-1, dupstr=duplic_mobile_list_str)
         return JsonResponse(ret)
     else:
-        flist = list(Project.objects.filter(state='1', level__in=['channel','all']).order_by('title'))      #jzy
-        return render(request, 'account/account_channel.html', {'flist':flist})
+        plist = list(Project.objects.filter(state__in=['10','20'], is_official=True))    #jzy
+        return render(request, 'account/account_submit.html', {'plist':plist})
 
 @login_required
 def submit_itembyitem(request):
@@ -203,7 +201,7 @@ def export_audit_result(request):
     fid = request.GET.get("fid")
     if fid == '0':      #jzy
         project = Project.objects.all()
-        item_list = InvestLog.objects.filter(user=user, project=Project).order_by("-time")
+        item_list = InvestLog.objects.filter(user=user, project=Project, is_official=True).order_by("-time")
     else:
         project = Project.objects.get(id=fid)
         item_list = InvestLog.objects.filter(user=user, project=Project).order_by("-time")

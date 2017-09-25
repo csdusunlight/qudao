@@ -60,7 +60,9 @@ $(function(){
                             <input type="button" id="btnZoomIn" class="Btnsty_peyton" value="+"  >
                             <input type="button" id="btnZoomOut" class="Btnsty_peyton" value="-" >
                           </div>
-                          <div class="cropped"></div>
+                          <div class="cropped">
+                              <span style="display: inline-block;margin-bottom: 84px;">*请先上传后进行裁切</span>
+                          </div>
                     </div>
         	    </div>
         	    <div class="item">
@@ -192,9 +194,10 @@ $(function(){
         })
         $('#btnCrop').on('click', function(){
             img2 = cropper.getDataURL();
-            $('.cropped').html('');
-            $('.cropped').append('<img src="'+img2+'" align="absmiddle" style="width:64px;margin-top:4px;border-radius:64px;box-shadow:0px 0px 12px #7E7E7E;" ><p>64px*64px</p>');
-            $('.cropped').append('<img src="'+img2+'" align="absmiddle" style="width:128px;margin-top:4px;border-radius:128px;box-shadow:0px 0px 12px #7E7E7E;"><p>128px*128px</p>');
+            console.log(img2);
+            $('.cropped').html('<span style="display: inline-block;margin-bottom: 84px;">*请先上传后进行裁切</span>');
+//          $('.cropped').append('<img src="'+img2+'" align="absmiddle" style="width:64px;margin-top:4px;border-radius:64px;box-shadow:0px 0px 12px #7E7E7E;" ><p>64px*64px</p>');
+//          $('.cropped').append('<img src="'+img2+'" align="absmiddle" style="width:128px;margin-top:4px;border-radius:128px;box-shadow:0px 0px 12px #7E7E7E;"><p>128px*128px</p>');
             $('.cropped').append('<img src="'+img2+'" align="absmiddle" style="width:180px;margin-top:4px;border-radius:180px;box-shadow:0px 0px 12px #7E7E7E;"><p>180px*180px</p>');
             
             var result = img2;
@@ -202,6 +205,12 @@ $(function(){
             img.src = result;
 //              $(li).css("background-image", "url(" + result + ")");
             //如果图片大小小于100kb，则直接上传
+            if(!file) {
+                file={
+                    
+                }
+            }
+            
             if(result.length <= maxsize) {
                 img = null;
                 process(result, file.name, file.type);
@@ -213,7 +222,7 @@ $(function(){
             } else {
                 img.onload = callback;
             }
-
+            
             function callback() {
                 var data = compress(img);
                 process(data, file.name, file.type);

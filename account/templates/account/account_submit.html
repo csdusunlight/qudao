@@ -525,7 +525,8 @@
 							data_list = [project_select, time, telnum, amount, term, zhifubao, zfbname, remark];
 
 						var re = /^1[1,2,3,4,6,5,7,8,9]\d{9}$/, //验证手机号
-							re_amount = /^\d+(\.\d+)?$/; //验证数字格式
+							re_amount = /^\d+(\.\d+)?$/, //验证数字格式
+							re_date = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;  //验证日期
 
 						var is_repeat = 0; //是否重复参数
 
@@ -541,6 +542,9 @@
 						if(time == "") {
 							promptNumber++;
 							time01.css("border", "2px solid #ff6767");
+						}else if(!re_date.test(time)){
+						    promptNumber++;
+                            time01.css("border", "2px solid #ff6767");
 						} else {
 							time01.css("border", "1px solid #c1c1c1");
 						}

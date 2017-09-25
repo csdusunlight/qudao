@@ -144,10 +144,10 @@
     padding: 0 20px;
     font-size: 18px;
     line-height: 38px;
+    height: 38px;
 }
 .finance__price {
-    float: right;
-    margin-right: 40px;
+    float: left;
     font-size: 14px;
     color: #91C11D;
 }

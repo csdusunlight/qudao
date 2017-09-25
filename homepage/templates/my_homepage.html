@@ -42,11 +42,11 @@
                                 <div data-pic="{{recom.pic}}" data-imgtxt="{{recom.title}}" class="hot__img"></div>
                                 <p class="hot__name hot__info">{{recom.title}}</p>
                                 <p class="hot__profit hot__info">预计最高年化：<span class="hot__profit-num">{{recom.intrest}}</span></p>
-                                <p class="hot__price hot__info">返现价格：<span class="hot__price-num">{{recom.price}}</span></p>
+                                <p class="hot__price hot__info">返现价格：<span class="price-rem hot__price-num">{{recom.price}}</span></p>
                                 <p class="hot__money hot__info">投资区间：{{recom.investrange}}</p>
                                 <p class="hot__term hot__info">标期：{{recom.term}}</p>
                                 <div class="btn-box">
-                                    <a href="#" class="btn m-green m-hot">查看攻略</a>
+                                    <a href="{{recom.strategy}}" class="btn m-green m-hot">查看攻略</a>
                                     <a class="btn m-green m-hot" projectid="{{recom.id}}" onclick="submit({{recom.id}})">交&nbsp;&nbsp;单</a>
                                 </div>
                             </li>
@@ -131,7 +131,7 @@
     <div class="popup m-submit-proj">
         <div class="popup__content" style="width: 600px;">
             <div class="popup__top">
-                <h2 class="popup__title">新建项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+                <h2 class="popup__title">项目交单</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
             </div>
             <div class="popup__detail">
                 <div class="popup__item">
@@ -176,18 +176,18 @@
 <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
 <script type="text/javascript">
-    var data='[results]<li class="project__itembox"><h2 class="project__name">{title}<span class="project__name-small">{introduction}</span></h2>'+
+    var data='[results]<li class="project__itembox"><h2 class="project__name">{project_title}<span class="project__name-small">{introduction}</span></h2>'+
       '<div class="project__detail">'+
 //    '<img class="project__img" src="" alt="" />'+
-      '<div data-pic="{pic}" data-imgtxt="{title}" class="project__img"></div>'+
-      '<p class="project__profit project__info">预计最高年化<br /><span class="project__profit-num">{intrest}</span></p>'+
-      '<p class="project__price project__info">返现价格<br /><span class="project__price-num">{cprice}</span></p>'+
-      '<p class="project__money project__info">投资区间<br />{investrange}</p>'+
-      '<p class="project__term project__info">标期<br />{term}</p>'+
-      '<div class="project-btn-box"><a href="{strategy}" target="_blank" class="btn m-green m-project">查看攻略</a>'+
+      '<div data-pic="{project_picture}" data-imgtxt="{project_title}" class="project__img"></div>'+
+      '<p class="project__profit project__info">预计最高年化<br /><span data-intrest="{project_intrest}" class="intrest project__profit-num">{intrest}</span></p>'+
+      '<p class="project__price project__info">返现价格<br /><span data-price="{project_cprice}" class="price project__price-num">{price}</span></p>'+
+      '<p class="project__money project__info">投资区间<br />{project_investrange}</p>'+
+      '<p class="project__term project__info">标期<br />{project_term}</p>'+
+      '<div class="project-btn-box"><a href="{project_strategy}" target="_blank" class="btn m-green m-project">查看攻略</a>'+
       '<a class="btn m-green m-project" onclick="submit({id})">交&nbsp;&nbsp;单</a></div></div></li>[/results]';
       
-    var colors = ['red','blue','green','yellow','black','indianred'];
+    var colors = ['#8cd9f1','#a0a2cf','#a6d7b9','#f7bbd1','#feb8a6','#99badf','#d0aea1','#a0d6d6','#ff9a8c'];
     function pagecallback (){
         $('.project__img').each(function(){
             var imgurl = $(this).data('pic');
@@ -197,15 +197,25 @@
             } else{
                 var imgtxt = ''+$(this).data('imgtxt');
                 imgtxt = imgtxt.substr(0, 1);
-                var num = parseInt(Math.random()*6);
+                var num = parseInt(Math.random()*9);
                 $(this).text(imgtxt).css('background-color', colors[num]);
+            }
+        })
+        $('.price').each(function() {
+            if ($(this).text() == "") {
+                $(this).text($(this).data('price'));
+            }
+        })
+        $('.intrest').each(function() {
+            if ($(this).text() == "") {
+                $(this).text($(this).data('intrest'));
             }
         })
     }
     $('.hot__img').each(function(){
         var imgurl = $(this).data('pic');
         console.log(imgurl);
-        if (!imgurl) {
+        if (imgurl) {
             $(this).css('background', 'url('+imgurl+') center center/120px 120px no-repeat');
         } else{
             var imgtxt = ''+$(this).data('imgtxt');
@@ -213,6 +223,12 @@
             console.log(imgtxt);
             var num = parseInt(Math.random()*6);
             $(this).text(imgtxt).css('background-color', colors[num]);
+        }
+    })
+    
+    $('.price-rem').each(function() {
+        if ($(this).text() == "") {
+            $(this).text('无');
         }
     })
 
@@ -269,7 +285,7 @@
         console.log(search_key);
         if (search_key) {
             $("#pagedata1").ajaxPage({
-              url: "/restapi/projects/?page={page}&size={pageSize}&project_title_contains="+search_key,
+              url: "/restapi/sub/?page={page}&size={pageSize}&is_on=true&project_title_contains="+search_key,
               pageId:$("#page1"),
               run:true,
               content:data,
@@ -280,7 +296,7 @@
 
     $(function(){
         $("#pagedata1").ajaxPage({
-          url: "/restapi/projects/?page={page}&size={pageSize}",
+          url: "/restapi/sub/?page={page}&size={pageSize}&is_on=true",
           pageId:$("#page1"),
           run:true,
           content:data,

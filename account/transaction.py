@@ -33,6 +33,6 @@ def charge_money(user, type, amount, reason, reverse=False):
             user.balance = F('balance') - amount
             if reverse:
                 user.accu_income = F('accu_income') - amount
-        user.save(update_fields=['accu_income','balance'])
+            user.save(update_fields=['accu_income','balance'])
 
         return trans

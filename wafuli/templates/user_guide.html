@@ -1,0 +1,81 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>挖福利-专业的互联网福利体验平台！</title>
+        <meta name="keywords" content="挖福利，我要挖福利，p2p理财平台，p2p投资理财，p2p投资理财平台，小额投资理财，个人投资理财，互联网理财产品，互联网理财平台，互联网金融平台，互联网金融产品，网络理财产品，网赚" />
+        <meta name="description" content="挖福利从用户角度出发，致力于对整合对用户有价值的互联网福利产品，打造全国首家专业的互联网福利产品体验平台。" />
+        <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/wfl-common.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/wfl-flesslider.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/user-guide.css"/>
+    </head>
+    <body>
+        {% include "header.html" %}
+        
+        <div class="guide__box">
+            <h1 class="guide__title">福利联盟新人指南</h2>
+            <div class="guide__item clearfix">
+            	<img class="l" src="{% static 'images/user-guide-1.png' %}"/>
+            	<div class="guide__detail r">
+            	    <h1 class="guide__itemtitle"><span class="guide__sort">1</span>申请成为渠道</h1>
+            	    <p class="guide__txt">点击网站上方的“申请成为渠道”按钮，进入申请页面，填写相应的信息，提交。随后福利联盟的工作人员进行审核，审核通过之后即可成为福利联盟渠道用户。</p>
+            	</div>
+            </div>
+            <div class="guide__item clearfix">
+                <img class="r" src="{% static 'images/user-guide-2.png' %}"/>
+                <div class="guide__detail l">
+                    <h1 class="guide__itemtitle"><span class="guide__sort">2</span>个人主页</h1>
+                    <p class="guide__txt">每一位申请通过的渠道都会自动生成对应的个人主页，渠道用户可以对个人主页进行编辑，包括：新建项目、推荐项目、发布公告等，各自渠道下的用户也可通过该页面进行交单，提交后数据会自动显示在各自对应的渠道数据列表中。</p>
+                </div>
+            </div>
+            <div class="guide__item clearfix">
+                <img class="l" src="{% static 'images/user-guide-3.png' %}"/>
+                <div class="guide__detail r">
+                    <h1 class="guide__itemtitle"><span class="guide__sort">3</span>项目库</h1>
+                    <p class="guide__txt">项目库网罗福利联盟所有在推项目，该页面可以查看攻略、复制攻略，亦可将项目添加至个人主页。</p>
+                </div>
+            </div>
+            <div class="guide__item clearfix">
+                <img class="r" src="{% static 'images/user-guide-4.png' %}"/>
+                <div class="guide__detail l">
+                    <h1 class="guide__itemtitle"><span class="guide__sort">4</span>自建项目</h1>
+                    <p class="guide__txt">渠道用户除了可以在项目库添加官方项目之外，还可以自己创建项目，点击 个人中心-我的项目-新建项目，弹出新建项目窗口，按要求填写，点击确定，即可在个人主页的页面展示，让用户交单。</p>
+                </div>
+            </div>
+            <div class="guide__item clearfix">
+                <img class="l" src="{% static 'images/user-guide-5.png' %}"/>
+                <div class="guide__detail r">
+                    <h1 class="guide__itemtitle"><span class="guide__sort">5</span>我的项目</h1>
+                    <p class="guide__txt">我的项目页面是对所有个人主页的项目进行管理的页面，可以编辑项目信息，对相关内容进行修改调整，也可调整该项目是否展示在个人主页页面及热门推荐位置。</p>
+                </div>
+            </div>
+            <div class="guide__item clearfix">
+                <img class="r" src="{% static 'images/user-guide-6.png' %}"/>
+                <div class="guide__detail l">
+                    <h1 class="guide__itemtitle"><span class="guide__sort">6</span>自助交单</h1>
+                    <p class="guide__txt">渠道用户也可将用户提交的数据统一在页面提交，点击 个人中心-自助交单，可以选择逐条提交或者表格提交。</p>
+                </div>
+            </div>
+            <div class="guide__item clearfix">
+                <img class="l" src="{% static 'images/user-guide-7.png' %}"/>
+                <div class="guide__detail r">
+                    <h1 class="guide__itemtitle"><span class="guide__sort">7</span>数据管理</h1>
+                    <p class="guide__txt">数据管理是展示所有渠道用户以及渠道下的用户提交的数据，包括官方数据以及自建数据。</p>
+                </div>
+            </div>
+            <div class="guide-download">查看详细攻略，点击下载<a class="download-btn" href="">《福利联盟新人攻略》</a></div>
+        </div>
+        
+        {% include "footer.html" %}
+
+        <script src="/static/js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('.nav__item:eq(2)').addClass('active');
+            });
+        </script>
+
+    </body>
+</html>

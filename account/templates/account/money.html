@@ -52,7 +52,7 @@ $(function(){
     	$(".Listpop").css("display","none")<!--隐藏-->
     });
 	$("#pagedata").ajaxPage({
-	    url:url,
+	    url:url + '&user_mobile={{user.mobile}}',
 	    pageId:$("#page"),
 	    run:true,
 	    content:data,

@@ -341,8 +341,8 @@
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
         '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td></tr>[/results]</table>';
 
-        var url = "/restapi/investlogs/?page={page}&size={pageSize}&is_official=true";
-        var url2 = "/restapi/investlogs/?page={page}&size={pageSize}&is_official=false";
+        var url = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=true&user={{user.id}}";
+        var url2 = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=false&user={{user.id}}";
         
         $("#pagedata").ajaxPage({
             url: url + '&audit_state=1',
@@ -600,7 +600,7 @@
                     state = $("#state").val();
                 var newurl = url;
                 if(proj_name) {
-                    newurl += "&project=" + proj_name;
+                    newurl += "&project_title_contains=" + proj_name;
                 }
                 if(invest_date0) {
                     newurl += "&investtime_0=" + invest_date0;
@@ -681,7 +681,7 @@
                     state = $("#state_02").val();
                 var newurl = url2;
                 if(proj_name) {
-                    newurl += "&project=" + proj_name;
+                    newurl += "&project_title_contains=" + proj_name;
                 }
                 if(invest_date0) {
                     newurl += "&investtime_0=" + invest_date0;

@@ -1,0 +1,53 @@
+body {
+    background: url(../images/user-guide-bottom.png) center bottom 100px/100% auto no-repeat #ffbf5d;
+}
+.guide__title {
+    margin: 70px auto;
+    font-size: 30px;
+    line-height: 50px;
+    text-align: center;
+    color: #fff;
+}
+.guide__box {
+    padding: 0 40px;
+    width: 1250px;
+    margin: 20px auto;
+}
+.guide__detail {
+    width: 620px;
+    margin-top: 60px;
+}
+.guide__itemtitle {
+    
+    font-size: 22px;
+    color: #fff;
+}
+.guide__sort {
+    position: relative;
+    left: -10px;
+    top: -20px;
+}
+.guide__sort:after {
+    position: relative;
+    left: 6px;
+    top: 18px;
+    display: inline-block;
+    content: '';
+    width: 2px;
+    height: 40px;
+    background-color: #fff;
+    transform: rotate(30deg);
+}
+.guide__txt {
+    margin-top: 30px;
+    font-size: 18px;
+    line-height: 30px;
+    color: #fff;
+}
+.guide-download {
+    margin-top: 30px;
+    color: #fff;
+}
+.download-btn {
+    text-decoration: underline;
+}

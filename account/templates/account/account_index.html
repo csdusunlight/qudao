@@ -56,48 +56,16 @@
                         <a class="recommend__more r" href="{% url 'project_all' %}" target="_blank">查看更多>></a>
                     </div>
                     <ul class="recommend__itembox">
-                        <li class="recommend__item">
-                            <img class="recommend__img" src="" alt="" />
-                            <h4 class="recommend__name oneline">这里是标题</h4>
-                            <p class="recommend__detail oneline">这里是介绍这里是介绍这里是介绍这里是介绍这里是介绍</p>
-                            <div class="btn-box m-account">
-                                <a href="{{recom.strategy}}" class="btn m-green">查看攻略</a>
-                            </div>
-                        </li>
-                        <li class="recommend__item">
-                            <img class="recommend__img" src="" alt="" />
-                            <h4 class="recommend__name oneline">这里是标题</h4>
-                            <p class="recommend__detail oneline">这里是介绍这里是介绍这里是介绍这里是介绍这里是介绍</p>
-                            <div class="btn-box m-account">
-                                <a href="{{recom.strategy}}" class="btn m-green">查看攻略</a>
-                            </div>
-                        </li>
-                        <li class="recommend__item">
-                            <img class="recommend__img" src="" alt="" />
-                            <h4 class="recommend__name oneline">这里是标题</h4>
-                            <p class="recommend__detail oneline">这里是介绍这里是介绍这里是介绍这里是介绍这里是介绍</p>
-                            <div class="btn-box m-account">
-                                <a href="{{recom.strategy}}" class="btn m-green">查看攻略</a>
-                            </div>
-                        </li>
-                        <li class="recommend__item">
-                            <img class="recommend__img" src="" alt="" />
-                            <h4 class="recommend__name oneline">这里是标题</h4>
-                            <p class="recommend__detail oneline">这里是介绍这里是介绍这里是介绍这里是介绍这里是介绍</p>
-                            <div class="btn-box m-account">
-                                <a href="{{recom.strategy}}" class="btn m-green">查看攻略</a>
-                            </div>
-                        </li>
-                    <!--{% for recom in recom_list %}
+                    {% for recom in recom_projects %}
                             <li class="recommend__item">
-                                <img class="recommend__img" src="{{recom.pic}}" alt="" />
+                                <img class="recommend__img" src="{{recom.pic.url}}" alt="" />
                                 <h4 class="recommend__name oneline">{{recom.title}}</h4>
-                                <p class="recommend__detail oneline">这里是介绍这里是介绍这里是介绍这里是介绍这里是介绍</p>
-                                <div class="btn-box">
-                                    <a href="{{recom.strategy}}" class="btn m-green">查看攻略</a>
+                                <p class="recommend__detail oneline">{{recom.introduction}}</p>
+                                <div class="btn-box m-account">
+                                    <a href="{{recom.strategy}}" target="_blank" class="btn m-green">查看攻略</a>
                                 </div>
                             </li>
-                    {%endfor%}-->
+                    {%endfor%}
                     </ul>
                 </div>
                 
@@ -138,87 +106,114 @@ $(function(){
 //  });
 
 //  图表部分
-    // 基于准备好的dom，初始化echarts实例
-    var myChart = echarts.init(document.getElementById('main'));
-    var data_x = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
-    // 指定图表的配置项和数据
-    var option = {
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'cross',
-            crossStyle: {
-                color: '#999'
-            }
-        }
-    },
-    toolbox: {
-        feature: {
-            dataView: {show: true, readOnly: false},
-            magicType: {show: true, type: ['line', 'bar']},
-            restore: {show: true},
-            saveAsImage: {show: true}
-        }
-    },
-    legend: {
-        data:['蒸发量','降水量','平均温度']
-    },
-    xAxis: [
-        {
-            type: 'category',
-            data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
-            axisPointer: {
-                type: 'shadow'
-            }
-        }
-    ],
-    yAxis: [
-        {
-            type: 'value',
-            name: '水量',
-            min: 0,
-            max: 250,
-            interval: 50,
-            axisLabel: {
-                formatter: '{value} ml'
-            }
+//  获取图表数据
+    var chartdata_01;
+    var data_x = [];
+    var data_y = [];
+    $.ajax({
+        url:"/restapi/userstatis/?page=1&pageSize=14&user_mobile={{user.mobile}}",
+    	type:"get",
+    	dataType: "json",
+    	success: function(ret) {
+    	    chartdata_01 = ret.results;
+    	    console.log(ret.results[0].date);
+    	    for (var i = 0; i<ret.results.length; i++) {
+    	    	data_x[i] = ret.results[i].date.slice(5);
+    	    	data_y[i] = ret.results[i].settle_amount;
+    	    	console.log('ret.results[i].date')
+    	    }
+    	    console.log(data_x);
+    	    console.log(data_y);
+    	    //  获取图表数据---end
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('main'));
+        //  var data_x = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+            // 指定图表的配置项和数据
+            var option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+            toolbox: {
+                feature: {
+                    dataView: {show: true, readOnly: false},
+                    magicType: {show: true, type: ['line', 'bar']},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            legend: {
+                data:['结算数']
+            },
+            xAxis: [
+                {
+                    type: 'category',
+//                  data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+                    data: data_x,
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    name: '结算金额',
+//                  min: 0,
+//                  max: 250,
+//                  interval: 50,
+                    axisLabel: {
+                        formatter: '{value} 元'
+                    }
+                }
+//              {
+//                  type: 'value',
+//                  name: '温度',
+//                  min: 0,
+//                  max: 25,
+//                  interval: 5,
+//                  axisLabel: {
+//                      formatter: '{value} °C'
+//                  }
+//              }
+            ],
+            color:['#61a0a8', '#2f4554', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'],
+            series: [
+                {
+                    name:'蒸发量',
+                    type:'bar',
+                    bgcolor: '#ffbe00',
+//                  data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
+                    data: data_y
+                }
+        //      {
+        //          name:'降水量',
+        //          type:'bar',
+        //          data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
+        //      },
+//              {
+//                  name:'平均温度',
+//                  type:'line',
+//                  yAxisIndex: 1,
+//                  data:[2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+//              }
+            ]
+        };
+        
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        //  图表部分---end
         },
-        {
-            type: 'value',
-            name: '温度',
-            min: 0,
-            max: 25,
-            interval: 5,
-            axisLabel: {
-                formatter: '{value} °C'
-            }
+        error: function() {
+            alert("请检查网络连接");
         }
-    ],
-    color:['#61a0a8', '#2f4554', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'],
-    series: [
-        {
-            name:'蒸发量',
-            type:'bar',
-            bgcolor: '#ffbe00',
-            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
-        },
-//      {
-//          name:'降水量',
-//          type:'bar',
-//          data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
-//      },
-        {
-            name:'平均温度',
-            type:'line',
-            yAxisIndex: 1,
-            data:[2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
-        }
-    ]
-};
+    });
 
-    // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
-//  图表部分---end
 
 });
 //  滚动部分

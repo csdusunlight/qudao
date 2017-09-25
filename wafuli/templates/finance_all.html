@@ -170,7 +170,7 @@ if (userlevel == '01') {
   '<a class="copy-link btn m-green m-finance state{project_state}" target="_blank" data-clipboard-text="{project_strategy}">复制攻略</a>'+
   '<a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a></div></li>[/results]';
 }
-var url = "/restapi/sub/?page={page}&size={pageSize}&is_official=2";
+var url = "/restapi/sub/?page={page}&pageSize={pageSize}&is_official=2";
 function pagecallback(){
 //  $(".lc-h2.new").append('<img src="/static/images/new_cont.png" class="new_cont2">');
 //  $(".end").text("已结束");

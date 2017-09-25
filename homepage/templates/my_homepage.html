@@ -11,6 +11,12 @@
 <link id="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
+<style type="text/css">
+	.state10 {
+	    pointer-events: none;
+	    background-color: #e4e4e4;
+	}
+</style>
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 <script type="text/javascript">
     var skin_id = "{{user.color}}";
@@ -46,7 +52,7 @@
                                 <p class="hot__money hot__info">投资区间：{{recom.investrange}}</p>
                                 <p class="hot__term hot__info">标期：{{recom.term}}</p>
                                 <div class="btn-box">
-                                    <a href="{{recom.strategy}}" class="btn m-green m-hot">查看攻略</a>
+                                    <a href="{{recom.strategy}}" class="btn m-green m-hot state{{recom.state}}">查看攻略</a>
                                     <a class="btn m-green m-hot" projectid="{{recom.id}}" onclick="submit({{recom.id}})">交&nbsp;&nbsp;单</a>
                                 </div>
                             </li>
@@ -184,7 +190,7 @@
       '<p class="project__price project__info">返现价格<br /><span data-price="{project_cprice}" class="price project__price-num">{price}</span></p>'+
       '<p class="project__money project__info">投资区间<br />{project_investrange}</p>'+
       '<p class="project__term project__info">标期<br />{project_term}</p>'+
-      '<div class="project-btn-box"><a href="{project_strategy}" target="_blank" class="btn m-green m-project">查看攻略</a>'+
+      '<div class="project-btn-box"><a href="{project_strategy}" target="_blank" class="btn m-green m-project state{project_state}">查看攻略</a>'+
       '<a class="btn m-green m-project" onclick="submit({project})">交&nbsp;&nbsp;单</a></div></div></li>[/results]';
       
     var colors = ['#8cd9f1','#a0a2cf','#a6d7b9','#f7bbd1','#feb8a6','#99badf','#d0aea1','#a0d6d6','#ff9a8c'];

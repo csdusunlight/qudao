@@ -9,7 +9,12 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/project_all.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
-
+<style type="text/css">
+    .state20 {
+        pointer-events: none;
+        background-color: #e4e4e4 !important;    
+    }
+</style>
 
 </head>
 <body>
@@ -139,8 +144,8 @@ if (userlevel == '01') {
   '<p class="finance__price02">客户指导价：<span class="finance__price02-txt">{project_cprice}</span></p>'+
   '<p class="finance__intro oneline">{project_introduction}</p>'+
   '</div><div class="finance__btnbox">'+
-  '<a class="btn m-green m-finance" href="{project_strategy}" target="_blank">查看攻略</a>'+
-  '<a class="copy-link btn m-green m-finance" target="_blank" data-clipboard-text="{project_strategy}">复制攻略</a>'+
+  '<a class="btn m-green m-finance state{project_state}" href="{project_strategy}" target="_blank">查看攻略</a>'+
+  '<a class="copy-link btn m-green m-finance state{project_state}" target="_blank" data-clipboard-text="{project_strategy}">复制攻略</a>'+
   '<a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a></div></li>[/results]';
 } else if (userlevel == '02') {
 	var data='[results]<li class="finance"><div class="finance__content">'+
@@ -150,8 +155,8 @@ if (userlevel == '01') {
   '<p class="finance__price02">客户指导价：<span class="finance__price02-txt">{project_cprice}</span></p>'+
   '<p class="finance__intro oneline">{project_introduction}</p>'+
   '</div><div class="finance__btnbox">'+
-  '<a class="btn m-green m-finance" href="{project_strategy}" target="_blank">查看攻略</a>'+
-  '<a class="copy-link btn m-green m-finance" target="_blank" data-clipboard-text="{project_strategy}">复制攻略</a>'+
+  '<a class="btn m-green m-finance state{project_state}" href="{project_strategy}" target="_blank">查看攻略</a>'+
+  '<a class="copy-link btn m-green m-finance state{project_state}" target="_blank" data-clipboard-text="{project_strategy}">复制攻略</a>'+
   '<a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a></div></li>[/results]';
 } else if (userlevel == '03') {
     var data='[results]<li class="finance"><div class="finance__content">'+
@@ -161,8 +166,8 @@ if (userlevel == '01') {
   '<p class="finance__price02">客户指导价：<span class="finance__price02-txt">{project_cprice}</span></p>'+
   '<p class="finance__intro oneline">{project_introduction}</p>'+
   '</div><div class="finance__btnbox">'+
-  '<a class="btn m-green m-finance" href="{project_strategy}" target="_blank">查看攻略</a>'+
-  '<a class="copy-link btn m-green m-finance" target="_blank" data-clipboard-text="{project_strategy}">复制攻略</a>'+
+  '<a class="btn m-green m-finance state{project_state}" href="{project_strategy}" target="_blank">查看攻略</a>'+
+  '<a class="copy-link btn m-green m-finance state{project_state}" target="_blank" data-clipboard-text="{project_strategy}">复制攻略</a>'+
   '<a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a></div></li>[/results]';
 }
 var url = "/restapi/sub/?page={page}&size={pageSize}&is_official=2";

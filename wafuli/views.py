@@ -69,7 +69,6 @@ def index(request):
 @login_required
 def project_all(request):
     return render(request, 'finance_all.html',  )
-@login_required
 def user_guide(request):
     return render(request, 'user_guide.html',  )
 #     ad_list = Advertisement.objects.filter(Q(location='0')|Q(location='1'),is_hidden=False)[0:8]

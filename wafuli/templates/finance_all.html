@@ -140,7 +140,7 @@ if (userlevel == '01') {
 	var data='[results]<li class="finance"><div class="finance__content">'+
   '<img class="finance__img" src="{project_picture}" alt="商家logo">'+
   '<div class="finance__delbox"><h4 class="finance__title">{project_title}'+
-  '<span class="finance__term">{project_term}</span><span class="finance__price">{project_price01}</span></h4>'+
+  '<span class="finance__term">投资标期：{project_term}</span><span class="finance__price">结算价格：{project_price01}</span></h4>'+
   '<p class="finance__price02">客户指导价：<span class="finance__price02-txt">{project_cprice}</span></p>'+
   '<p class="finance__intro oneline">{project_introduction}</p>'+
   '</div><div class="finance__btnbox">'+
@@ -151,7 +151,7 @@ if (userlevel == '01') {
 	var data='[results]<li class="finance"><div class="finance__content">'+
   '<img class="finance__img" src="{project_picture}" alt="商家logo">'+
   '<div class="finance__delbox"><h4 class="finance__title">{project_title}'+
-  '<span class="finance__term">{project_term}</span><span class="finance__price">{project_price02}</span></h4>'+
+  '<span class="finance__term">投资标期：{project_term}</span><span class="finance__price">结算价格：{project_price02}</span></h4>'+
   '<p class="finance__price02">客户指导价：<span class="finance__price02-txt">{project_cprice}</span></p>'+
   '<p class="finance__intro oneline">{project_introduction}</p>'+
   '</div><div class="finance__btnbox">'+
@@ -162,7 +162,7 @@ if (userlevel == '01') {
     var data='[results]<li class="finance"><div class="finance__content">'+
   '<img class="finance__img" src="{project_picture}" alt="商家logo">'+
   '<div class="finance__delbox"><h4 class="finance__title">{project_title}'+
-  '<span class="finance__term">{project_term}</span><span class="finance__price">{project_price03}</span></h4>'+
+  '<span class="finance__term">投资标期：{project_term}</span><span class="finance__price">结算价格：{project_price03}</span></h4>'+
   '<p class="finance__price02">客户指导价：<span class="finance__price02-txt">{project_cprice}</span></p>'+
   '<p class="finance__intro oneline">{project_introduction}</p>'+
   '</div><div class="finance__btnbox">'+
@@ -177,6 +177,7 @@ function pagecallback(){
     $('.add-project.true').each(function() {
         this.innerText = '已添加';
     })
+    $('.state20').text('已结束');
     $('.oneline').each(function(index, el) {        //单行
         if ($(this).height() > 30) {
             $(this).addClass('one-line')

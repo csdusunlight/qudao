@@ -207,6 +207,10 @@
 .recommend__name {
     margin: 20px 0 10px 0;
 }
+.btn-box.m-account {
+    margin: 20px 0;
+    text-align: center;
+}
 /*个人中心---end*/
 /*我的项目*/
 .look-projects,

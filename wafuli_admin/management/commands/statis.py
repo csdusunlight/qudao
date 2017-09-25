@@ -51,15 +51,15 @@ class Command(BaseCommand):
         
         with_total = MyUser.objects.aggregate(sum=Sum('with_total'))
         invest_total = InvestLog.objects.filter(audit_state='0').aggregate(sum=Sum('invest_amount'),
-                            count=Count('invest_mobile',distinct=True))
+                            count=Count('*'))
         global_statis = GlobalStatis.objects.first()
         if not global_statis:
             global_statis = GlobalStatis()
         global_statis.all_wel_num = Project.objects.count()
-        global_statis.with_total = with_total.get('sum') or 0
-        global_statis.invest_total = invest_total.get('sum') or 0
-        global_statis.user_total = MyUser.objects.count()
-        global_statis.invite_total = invest_total.get('count') or 0
+        global_statis.with_total = ((with_total.get('sum') or 0) + 91630000)/10000
+        global_statis.invest_total = ((invest_total.get('sum') or 0) + 4836240000)/10000
+        global_statis.user_total = MyUser.objects.count() + 300
+        global_statis.invite_total = (invest_total.get('count') or 0) + 4180000
         global_statis.save()
         
         end_time = time.time()

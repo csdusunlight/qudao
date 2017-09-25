@@ -37,12 +37,11 @@ class Command(BaseCommand):
             item = UserDetailStatis(user_id=id, item_count=item_count, settle_amount=settle_amount, 
                                     invest_amount=invest_amount, project_count=project_count)
             bulk_list.append(item)
-#         UserDetailStatis.objects.bulk_create(bulk_list)
+        UserDetailStatis.objects.bulk_create(bulk_list)
         delta = datetime.timedelta(days=29)
         dayt = today - delta
-        print dayt
-#         
-        cursor.execute("truncate table statistic_useraveragestatis;")
+        
+        UserAverageStatis.objects.all().delete() 
         cursor.execute("select t.user_id, sum(t.settle_amount)/30.0, sum(t.item_count)/30.0 \
                 from statistic_userdetailstatis t where t.date>='%s'  group by t.user_id"  % str(dayt) )
 # 

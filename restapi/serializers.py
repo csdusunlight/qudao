@@ -9,6 +9,7 @@ from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
     Announcement, WithdrawLog
 from account.models import MyUser, ApplyLog
 from wafuli_admin.models import DayStatis
+from statistic.models import UserDetailStatis, UserAverageStatis
 
 class UserSerializer(serializers.ModelSerializer):
     real_name = serializers.CharField(source="user_bankcard.first.real_name")
@@ -101,3 +102,12 @@ class WithdrawLogSerializer(serializers.ModelSerializer):
         fields = '__all__'
 #         read_only_fields = ('audit_time','submit_time','user','audit_state',
 #                              'settle_amount','return_amount', "admin_user", "is_official"), 'time', 'content_type', 'object_id', 'user', 'username', 'project')
+
+class UserDetailStatisSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserDetailStatis
+        fields = '__all__'
+class UserAverageStatisSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAverageStatis
+        fields = '__all__'

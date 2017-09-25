@@ -17,6 +17,7 @@ class UserDetailStatis(models.Model):
         return self.date.strftime("%Y-%m-%d") + self.user.username
     class Meta:
         unique_together = (('user', 'date'),)
+        ordering = ['-date',]
     
 class UserAverageStatis(models.Model):
     user = models.ForeignKey(MyUser, related_query_name="user_avag_statis")

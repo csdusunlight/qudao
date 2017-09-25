@@ -28,5 +28,6 @@ urlpatterns = [
     
     url(r'^applylog/$', views.ApplyLogList.as_view()),
     
-    url(r'^withdrawlog/$', views.WithdrawLogList.as_view()),
+    url(r'^userstatis/$', views.UserDetailStatisList.as_view()),
+    url(r'^useravgstatis/$', views.UserAverageStatisList.as_view()),
 ]

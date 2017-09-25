@@ -10,7 +10,8 @@ from permissions import CsrfExemptSessionAuthentication, IsAdmin
 from restapi.serializers import UserSerializer, InvestLogSerializer,\
     TransListSerializer, NoticeSerializer, ProjectSerializer,\
     SubscribeShipSerializer, AnnouncementSerializer, DayStatisSerializer,\
-    ApplyLogSerializer, WithdrawLogSerializer
+    ApplyLogSerializer, WithdrawLogSerializer, UserDetailStatisSerializer,\
+    UserAverageStatisSerializer
 from account.models import MyUser, ApplyLog
 from rest_framework.filters import SearchFilter,OrderingFilter
 from restapi.permissions import IsOwnerOrStaff, IsSelfOrStaff
@@ -18,6 +19,7 @@ from restapi.Filters import InvestLogFilter, SubscribeShipFilter, UserFilter,\
     ApplyLogFilter, TranslistFilter, WithdrawLogFilter
 from django.db.models import Q
 from wafuli_admin.models import DayStatis
+from statistic.models import UserDetailStatis, UserAverageStatis
 # from wafuli.Filters import UserEventFilter
 class BaseViewMixin(object):
     authentication_classes = (CsrfExemptSessionAuthentication,)
@@ -155,8 +157,23 @@ class WithdrawLogList(BaseViewMixin, generics.ListCreateAPIView):
     filter_class = WithdrawLogFilter
     pagination_class = MyPageNumberPagination
 
-# class WithdrawLogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
-#     queryset = InvestLog.objects.all()
-#     permission_classes = (IsOwnerOrStaff,)
-#     serializer_class = InvestLogSerializer
+class UserDetailStatisList(BaseViewMixin, generics.ListCreateAPIView):
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return UserDetailStatis.objects.all()
+        else:
+            return UserDetailStatis.objects.filter(user=user)
+    serializer_class = UserDetailStatisSerializer
+    pagination_class = MyPageNumberPagination
+    
+class UserAverageStatisList(BaseViewMixin, generics.ListCreateAPIView):
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return UserAverageStatis.objects.all()
+        else:
+            return UserAverageStatis.objects.filter(user=user)
+    serializer_class = UserAverageStatisSerializer
+    pagination_class = MyPageNumberPagination
     

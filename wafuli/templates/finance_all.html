@@ -139,7 +139,7 @@ if (userlevel == '01') {
   '<p class="finance__price02">客户指导价：<span class="finance__price02-txt">{project_cprice}</span></p>'+
   '<p class="finance__intro oneline">{project_introduction}</p>'+
   '</div><div class="finance__btnbox">'+
-  '<a class="btn m-green m-finance" href="{project_strategy}" target="_blank">查看攻略</a>'+
+  '<a class="btn m-green m-finance state{project_state}" href="{project_strategy}" target="_blank">查看攻略</a>'+
   '<a class="copy-link btn m-green m-finance" target="_blank" data-clipboard-text="{project_strategy}">复制攻略</a>'+
   '<a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a></div></li>[/results]';
 } else if (userlevel == '02') {

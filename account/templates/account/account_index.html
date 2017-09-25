@@ -108,19 +108,21 @@ $(function(){
 //  图表部分
 //  获取图表数据
     var chartdata_01;
-    var data_x = [];
-    var data_y = [];
+    var data_x = [0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    var data_y = [0,0,0,0,0,0,0,0,0,0,0,0,0,0];
     $.ajax({
         url:"/restapi/userstatis/?page=1&pageSize=14&user_mobile={{user.mobile}}",
     	type:"get",
     	dataType: "json",
     	success: function(ret) {
     	    chartdata_01 = ret.results;
-    	    console.log(ret.results[0].date);
-    	    for (var i = 0; i<ret.results.length; i++) {
-    	    	data_x[i] = ret.results[i].date.slice(5);
-    	    	data_y[i] = ret.results[i].settle_amount;
-    	    	console.log('ret.results[i].date')
+    	    console.log(ret.results.length);
+    	    if (ret.results.length > 0) {
+    	        for (var i = 0; i<ret.results.length; i++) {
+    	        	data_x[i] = ret.results[i].date.slice(5);
+    	        	data_y[i] = ret.results[i].settle_amount;
+    	        	console.log('ret.results[i].date')
+    	        }
     	    }
     	    console.log(data_x);
     	    console.log(data_y);

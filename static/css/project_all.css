@@ -161,8 +161,9 @@
 .finance__price02 {
     line-height: 54px;
 }
+.finance__term-txt,
 .finance__price02-txt {
-    color: #91C11D;
+    color: #ff9501;
 }
 .finance__btnbox {
     padding: 0 20px;

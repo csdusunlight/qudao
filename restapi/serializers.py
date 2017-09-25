@@ -72,6 +72,7 @@ class SubscribeShipSerializer(serializers.ModelSerializer):
     project_strategy = serializers.CharField(source='project.strategy', read_only=True)
     project_introduction = serializers.CharField(source='project.introduction', read_only=True)
     project_picture = serializers.CharField(source='project.picture_url', read_only=True)
+    project_marks = serializers.CharField(source='project.marks_list', read_only=True)
     class Meta:
         model = SubscribeShip
         fields = '__all__'

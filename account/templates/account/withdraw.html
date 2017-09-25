@@ -12,6 +12,8 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
 <link rel="stylesheet" type="text/css" href="{% static 'css/dialog.css' %}" />
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/accounts/refresh.js' %}"></script>
 <script type="text/javascript" >
 var coderefresh_url = "{% url 'captcha-refresh' %}";
@@ -23,19 +25,20 @@ $(function(){
 	$("#submit").click(function(){
 		varicode = $("#input_varicode").val();
 		amount = $("#withdraw_amount").val();
-		amount = parseInt(amount,0)
-		if (isNaN(amount) || (amount%1000 != 0)){
-			alert("提现福币数量必须为1000的整数倍！");
+		amount = parseFloat(amount,0)
+		if (isNaN(amount) || (amount<10)){
+			alert("提现金额最小为10元！");
 			return;
 		}
 		if (!varicode){
 			alert("验证码不能为空");
 			return;
 		}
-		$("#rmb_with").text(amount/100.0)
-		$(".popup1").css("display","block");
+		$("#rmb_with").text(amount)
+//		$(".popup1").css("display","block");
+        $('.popup.m-withdraw').addClass('in');
 	});
-    $('.confirm_withdraw').click(function(){
+    $('#edit_confirm').click(function(){
     	$(".popup1").hide();
     	varicode = $("#input_varicode").val();
 		amount = $("#withdraw_amount").val();
@@ -53,6 +56,7 @@ $(function(){
 			success:function(ret){
 				if(ret.code==0){
 					alert("提现申请提交成功！");
+					$('.popup.m-withdraw').removeClass('in');
 					window.location.href = "{% url 'account_money' %}";
 				}
 				else {
@@ -96,7 +100,7 @@ $(function(){
                         	<h2>提现</h2>
                         </div>
                         <div class="Cash-box">
-                        	<div class="Cash-info"><span>可提现福币：</span><i>{{user.balance}}</i>&nbsp;&nbsp;（每100福币可兑换1元现金）</div>
+                        	<div class="Cash-info"><span>可提现金额：</span><i>{{user.balance}}</i>&nbsp;&nbsp;（每100福币可兑换1元现金）</div>
 
                             	<div class="Cash-input">
                                 	<span>提现福币：</span>
@@ -134,7 +138,7 @@ $(function(){
                 </div>
         </div>
         <!-- 提现弹窗部分 -->
-        <div class="popup1" style="display:none;">
+        <!--<div class="popup1" style="display:none;">
             <div class="w698_box">
                 <div class="pop_left">
                     <h2>温馨提示</h2>
@@ -146,7 +150,22 @@ $(function(){
                 </div>
                 <div class="btn_x"><button></button></div>
             </div>
-          </div>
+          </div>-->
+        <div class="popup m-withdraw">
+            <div class="popup__content" style="width: 600px;">
+                <div class="popup__top">
+                    <h2 class="popup__title">温馨提示</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+                </div>
+                <div class="popup__detail">
+                    <div class="popup__item">
+                        <p>您好，您本次兑换现金为<font id="rmb_with"></font>元，并将在24小时内提现到您的银行卡</p>
+                    </div>
+                </div>
+                <div class="popup__btnbox">
+                    <a id="edit_confirm" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
+                </div>
+            </div>
+        </div>
     	<!--底部-->
   <div style="clear: both;"></div>
   </div>

@@ -209,7 +209,7 @@
 
                     </div>
                     <div class="reg" style="padding-left: 80px;">
-                        <input type="button" class="g-btn-reg2 re-liji" id="btnSubmit" name='registSubmit' value="立即注册" />
+                        <input type="button" class="g-btn-reg2 re-liji" id="btnSubmit" name='registSubmit' value="立即申请" />
                     </div>
 
                 </div>
@@ -449,7 +449,7 @@
             if(xhr.readyState == 4 && xhr.status == 200) {
                 var ret = JSON.parse(xhr.responseText);
                 if(ret.code == 0) {
-                    alert("申请成功！")
+                    alert("已申请，请等待审核！")
                     window.location.href = "/";
                     return;
                 }else{

@@ -72,7 +72,7 @@ def admin_apply(request):
                 user.set_password(apply.password)
                 user.save()
                 id_list_list= list(Project.objects.filter(is_official=True, state__in=['10','20']).values_list('id'))
-                id_list_list = []
+                id_list = []
                 if id_list_list:
                     id_list = reduce(lambda x,y: x + y, id_list_list)
                 subbulk = []

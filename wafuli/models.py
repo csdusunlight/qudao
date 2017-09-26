@@ -140,7 +140,7 @@ class SubscribeShip(models.Model):
         return self.user.mobile + self.project.title
     class Meta:
         unique_together = (('user', 'project'),)
-        ordering = ["-project__pub_date"]
+        ordering = ["-project__priority", "-project__pub_date",]
 
 class InvestLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="investlog_submit")

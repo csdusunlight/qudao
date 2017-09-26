@@ -62,7 +62,7 @@
                 <input style="display: none;" id="fileupload" name="file" type="file" onchange='hint.innerHTML = this.files[0].name;' />
                 <a id="input_clone" class="btn m-green m-choose">选择文件</a>
                 <p class="hint-box">已选择表格：<b id="hint" class="hint">无</b></p>
-                <a id="import" class="btn m-green m-import">导入</a>
+                <a id="import" class="btn m-green m-import">返现金额导入</a>
             </div>
             <div class="handle__out r">
                 <a id="search" class="btn m-green m-search">搜索</a>
@@ -113,7 +113,7 @@
                 <input style="display: none;" id="fileupload2" name="file" type="file" onchange='hint_02.innerHTML = this.files[0].name;' />
                 <a id="input_clone_02" class="btn m-green m-choose">选择文件</a>
                 <p class="hint-box">已选择表格：<b id="hint_02" class="hint">无</b></p>
-                <a id="import_02" class="btn m-green m-import">导入</a>
+                <a id="import_02" class="btn m-green m-import">审核结果导入</a>
             </div>
             <div class="handle__out r">
                 <a id="search_02" class="btn m-green m-search">搜索</a>
@@ -690,6 +690,37 @@
                 iframe.contentWindow.document.close();
                 document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
             });
+            $('#import').click(function() {
+                var fileElementId = 'fileupload';
+                if(!document.getElementById(fileElementId).value) {
+                    alert("请先选择文件");
+                    return;
+                }
+                $.ajaxFileUpload({
+                    url: "{% url 'import_investlog' %}",
+                    secureuri: false,
+                    fileElementId: fileElementId, //file标签的id
+                    dataType: 'json', //返回数据的类型
+                    data: {}, //一同上传的数据
+                    success: function(data, status) {
+                        if(data.code == 0) {
+                            alert("导入成功！ 数量：" + data.num);
+                        } else {
+                            alert(data.msg + " 成功数量：" + data.num);
+                        }
+                    },
+                    error: function(data, status, e) {
+                        alert(e);
+                    }
+                });
+                //  hint.innerHTML = '无';
+            });
+    
+            var choose_file = document.getElementById("input_clone");
+            var hint = document.getElementById("hint");
+            choose_file.onclick = function() {
+                document.getElementById("fileupload1").click();
+            }
 //          官方数据---end
             $("#search_02").click(function() {
                 var proj_name = $("#proj_name_02").val(),

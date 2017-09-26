@@ -41,6 +41,7 @@ class InvestLogSerializer(serializers.ModelSerializer):
                              'user_mobile', 'settle_amount','return_amount', "admin_user", "is_official")
 class TransListSerializer(serializers.ModelSerializer):
     mobile = serializers.CharField(source='user.mobile', read_only=True)
+    user_balance = serializers.CharField(source='balance', read_only=True)
     class Meta:
         model = TransList
         fields = '__all__'

@@ -54,6 +54,7 @@ class NoticeSerializer(serializers.ModelSerializer):
         read_only_fields = ('user', 'time')
 
 class ApplyLogSerializer(serializers.ModelSerializer):
+    admin_mobile = serializers.CharField(source='admin_user.mobile')
     class Meta:
         model = ApplyLog
 #         fields = '__all__'

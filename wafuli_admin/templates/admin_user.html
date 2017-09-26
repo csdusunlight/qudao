@@ -11,7 +11,8 @@ var data = '<table width="100%"><tr><th>渠道等级</th><th>QQ</th><th>QQ昵称
 	'<td>{mobile}</td><td>{card_number}</td><td>{bank}</td><td>{date_joined}</td>'+
 	'<td>{balance}</td><td class="black" id="is_black_{id}">{is_active}</td>'+
 	'<td id="item_{id}"><a class="btn1-x" onclick="addcash({id})">余额</a>│'+
-	'<a class="btn2-x black_btn" data-isblack="{is_active}" id="black_{id}" onclick="addblack({id})">加黑</a>'+
+	'<a class="btn2-x black_btn" data-isblack="{is_active}" id="black_{id}" onclick="addblack({id})">加黑</a>|'+
+	'<a onclick="change_level({id})">修改级别</a>'+
 	'</td></tr>[/results]</table>';
 var url = "/restapi/users/" + "?page={page}&pageSize={pageSize}";
 var selected_id = 0;
@@ -35,6 +36,10 @@ function pagecallback() {
 function addcash(id){
 	$(".Balance").css("display","block");
 	selected_id = id;
+}
+function change_level(id){
+    $(".Change-level").css("display","block");
+    selected_id = id;
 }
 function addblack(id){
 	selected_id = id;
@@ -100,6 +105,32 @@ $(document).ready(function(){
 		});
 		$(".Balance").css("display","none");
 	});
+	$('.change-level-btn').click(function(){
+        id = selected_id;
+        level = $("#level_choose").val();
+        if (!id || !level){
+            return;
+        }
+        $.ajax({
+            url:"/restapi/users/7/" + id + "/",
+            dataType:"json",
+            type:"put",
+            data:{
+                'pcash':level,
+            },
+            success:function(ret){
+                if(ret.code==0){
+                    alert("操作成功！");
+                } else {
+                    alert(ret.res_msg);
+                }
+            },
+            error:function(){
+                alert("请检查网络连接");
+            }
+        });
+        $(".Balance").css("display","none");
+    });
 	$('.Blacklist input[type="submit"]').click(function(){
 		id = selected_id;
 		if (!id){
@@ -316,6 +347,25 @@ $(document).ready(function(){
                 </div>
                 <div class="Finnow-Sub">
                 <input type="submit" value="确认" onclick="return false;"/>
+                <input type="button" value="取消" class="none-x-s" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--修改等级-->
+    <div class="Change-level">
+        <div class="w570-box">
+            <h3>修改渠道等级</h3>
+            <button class="none-x"></button>
+            <form class="Finnow">
+                <span>渠道等级：</span>
+                <select id="level_choose" name="level">
+                	<option value="01">01</option>
+                	<option value="02">02</option>
+                	<option value="03">03</option>
+                </select>
+                <div class="Finnow-Sub">
+                <input class="change-level-btn" type="submit" value="确认" onclick="return false;"/>
                 <input type="button" value="取消" class="none-x-s" />
                 </div>
             </form>

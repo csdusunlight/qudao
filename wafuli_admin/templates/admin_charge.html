@@ -25,15 +25,15 @@
 		});
 
 		$("#search").click(function() {
-			startTime = $("#startTime").val();
-			endTime = $("#endTime").val();
-			newurl = url;
+			var startTime = $("#startTime").val();
+			var endTime = $("#endTime").val();
+			var newurl = url;
 			if(startTime && endTime) {
 				newurl += "&trans_date_0=" + startTime;
 				newurl += "&trans_date_1=" + endTime;
 			}
-			username = $("#username").val();
-			mobile = $("#mobile").val();
+			var username = $("#username").val();
+			var mobile = $("#mobile").val();
 			if(username) {
 				newurl += "&user_name=" + username;
 			}
@@ -41,7 +41,7 @@
 				newurl += "&user_mobile=" + mobile;
 			}
 
-			charge_reason = $("#charge_reason").val();
+			var charge_reason = $("#charge_reason").val();
 			if(charge_reason) {
 				newurl += "&reason_contains=" + charge_reason;
 			}
@@ -57,14 +57,14 @@
 		
 		$("#export").click(function() {
 			var html = '<form action="' + "{% url 'export_charge_excel' %}" + '" method="get" target="_self" id="postData_form">';
-			startTime = $("#startTime").val();
-			endTime = $("#endTime").val();
+			var startTime = $("#startTime").val();
+			var endTime = $("#endTime").val();
 			if(startTime && endTime) {
-				html += '<input name="startTime" type="hidden" value="' + startTime + '"/>';
-				html += '<input name="endTime" type="hidden" value="' + endTime + '"/>';
+				html += '<input name="trans_date_0" type="hidden" value="' + startTime + '"/>';
+				html += '<input name="trans_date_1" type="hidden" value="' + endTime + '"/>';
 			}
-			username = $("#username").val();
-			mobile = $("#mobile").val();
+			var username = $("#username").val();
+			var mobile = $("#mobile").val();
 			if(username) {
 				html += '<input name="user_name" type="hidden" value="' + username + '"/>';
 			}
@@ -72,7 +72,7 @@
 				html += '<input name="user_mobile" type="hidden" value="' + mobile + '"/>';
 			}
 			
-			charge_reason = $("#charge_reason").val();
+			var charge_reason = $("#charge_reason").val();
 			if(charge_reason) {
 				html += '<input name="reason_contains" type="hidden" value="' + charge_reason + '"/>';
 			}

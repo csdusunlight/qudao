@@ -20,6 +20,7 @@ class InvestLogFilter(django_filters.rest_framework.FilterSet):
     audittime = django_filters.DateFromToRangeFilter(name="audit_time")
     project_title_contains = django_filters.CharFilter(name="project", lookup_expr='title__contains')
     user_mobile = django_filters.CharFilter(name="user", lookup_expr='mobile')
+    user_level = django_filters.CharFilter(name="user", lookup_expr='level')
     class Meta:
         model = InvestLog
         exclude = ['invest_image', 'invest_date', 'audit_time']

@@ -37,6 +37,7 @@ urlpatterns = [
 #
     url(r'^channel/$', 'account.channel.channel', name='account_channel'),
     url(r'^export_investlog/$', 'account.channel.export_investlog', name='export_investlog'),
+    url(r'^import_investlog/$', 'account.channel.import_investlog', name='import_investlog'),
 #
     url(r'^submit_itembyitem/$', 'account.channel.submit_itembyitem', name='submit_itembyitem'),
 #     url(r'^revise_project/$', 'account.channel.revise_project', name='revise_project'),

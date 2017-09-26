@@ -21,6 +21,8 @@ from xlwt.Workbook import Workbook
 import logging
 import datetime
 from django.contrib.contenttypes.models import ContentType
+import time
+from decimal import Decimal
 logger = logging.getLogger("wafuli")
 
 @login_required
@@ -233,8 +235,10 @@ def export_investlog(request):
     if userlevel:
         item_list = item_list.filter(user__level=userlevel)
     is_official = request.GET.get("is_official",None)
-    if is_official:
-        item_list = item_list.filter(is_official=is_official)
+    if is_official == "true":
+        item_list = item_list.filter(is_official=True)
+    elif is_official == "false":
+        item_list = item_list.filter(is_official=False)
     companyname = request.GET.get("companyname", None)
     if companyname:
         item_list = item_list.filter(project__company__name__contains=companyname)
@@ -299,3 +303,100 @@ def export_investlog(request):
     response['Content-Disposition'] = 'attachment; filename=投资记录表.xls'
     response.write(sio.getvalue())
     return response
+
+@login_required
+def import_investlog(request):
+    user = request.user
+    ret = {'code':-1}
+    file = request.FILES.get('file')
+#     print file.name
+    tempfile = './out' + str(int(time.time)) + '.xls'
+    with open(tempfile, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+    data = xlrd.open_workbook(tempfile)
+    table = data.sheets()[0]
+    nrows = table.nrows
+    ncols = table.ncols
+    if ncols!=11:
+        ret['msg'] = u"文件格式与模板不符，请在导出的投资记录表中更新后将文件导入！"
+        return JsonResponse(ret)
+    rtable = []
+    mobile_list = []
+    try:
+        for i in range(1,nrows):
+            temp = []
+            duplic = False
+            for j in range(ncols):
+                cell = table.cell(i,j)
+                if j==0:
+                    id = int(cell.value)
+                    temp.append(id)
+                elif j==1:
+                    project = cell.value
+                    temp.append(project)
+                elif j==7:
+                    result = cell.value.strip()
+                    if result == u"是":
+                        result = True
+                        temp.append(True)
+                    elif result == u"否":
+                        result = False
+                        temp.append(False)
+                    else:
+                        raise Exception(u"审核结果必须为是或否。")
+                elif j==8:
+                    settle_amount = 0
+                    if cell.value:
+                        settle_amount = Decimal(cell.value)
+                    elif result:
+                        raise Exception(u"审核结果为是时，结算金额不能为空或零。")
+                    temp.append(settle_amount)
+                elif j==9:
+                    return_amount = 0
+                    if cell.value:
+                        return_amount = Decimal(cell.value)
+                    elif result:
+                        raise Exception(u"审核结果为是时，结算金额不能为空或零。")
+                    temp.append(return_amount)
+                elif j==10:
+                    reason = cell.value
+                    temp.append(reason)
+                else:
+                    continue;
+            rtable.append(temp)
+    except Exception, e:
+        traceback.print_exc()
+        ret['msg'] = unicode(e)
+        ret['num'] = 0
+        return JsonResponse(ret)
+    admin_user = request.user
+    suc_num = 0
+    try:
+        for row in rtable:
+            with transaction.atomic():
+                id = row[0]
+                result = row[2]
+                reason = row[5]
+                investlog = InvestLog.objects.filter(user=user, is_official=False).get(id=id)
+                if not investlog.is_official:
+                    if result:
+                        investlog.audit_state = '0'
+                        settle_amount = row[3]
+                        return_amount = row[4]
+                    else:
+                        investlog.audit_state = '2'
+                        investlog.audit_reason = reason
+                    investlog.audit_time = datetime.datetime.now()
+                    investlog.save(update_fields=['audit_state','audit_time','settle_amount','return_amount','reason'])
+                else:
+                    investlog.return_amount = return_amount
+                    investlog.save(update_fields=['return_amount',])
+                suc_num += 1
+        ret['code'] = 0
+    except Exception as e:
+        traceback.print_exc()
+        ret['code'] = 1
+        ret['msg'] = unicode(e)
+    ret['num'] = suc_num
+    return JsonResponse(ret)

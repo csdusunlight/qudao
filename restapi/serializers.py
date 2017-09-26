@@ -19,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = MyUser
         fields = ('id', 'mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'with_total','accu_income',
                   'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number')
-        read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level', 'type')
+        read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level',)
         
 class ProjectSerializer(serializers.ModelSerializer):
 #     subscribers = UserSerializer(many=True)
@@ -34,6 +34,7 @@ class InvestLogSerializer(serializers.ModelSerializer):
     qq_name = serializers.CharField(source='user.qq_name', read_only=True)
     user_level = serializers.CharField(source='user.level', read_only=True)
     user_mobile = serializers.CharField(source='user.mobile', read_only=True)
+    audit_state_des = serializers.CharField(source='get_audit_state_display', read_only=True)
     class Meta:
         model = InvestLog
         fields = '__all__'
@@ -41,6 +42,7 @@ class InvestLogSerializer(serializers.ModelSerializer):
                              'user_mobile', 'settle_amount','return_amount', "admin_user", "is_official")
 class TransListSerializer(serializers.ModelSerializer):
     mobile = serializers.CharField(source='user.mobile', read_only=True)
+    user_balance = serializers.CharField(source='balance', read_only=True)
     class Meta:
         model = TransList
         fields = '__all__'
@@ -95,6 +97,7 @@ class WithdrawLogSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     mobile = serializers.CharField(source='user.mobile', read_only=True)
     admin_mobile = serializers.CharField(source='admin_user.mobile', read_only=True)
+    qq_number = serializers.CharField(source='user.qq_number', read_only=True)
 #     balance = serializers.CharField(source='user.banlance', read_only=True)
 #     username = serializers.CharField(source='user.username', read_only=True)
 #     username = serializers.CharField(source='user.username', read_only=True)

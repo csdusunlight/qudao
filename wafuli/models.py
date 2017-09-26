@@ -218,6 +218,12 @@ class TransList(models.Model):
                                        self.user_event.time if self.user_event else "")
     class Meta:
         ordering = ["-time",]
+    
+    def balance(self):
+        if self.transType == '0':
+            return self.initAmount + self.transAmount
+        else:
+            return self.initAmount - self.transAmount
 
 class WithdrawLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="withdrawlog")

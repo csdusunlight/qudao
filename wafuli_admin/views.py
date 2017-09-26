@@ -292,7 +292,7 @@ def get_admin_project_page(request):
     return JsonResponse(res)
 
 @login_required
-def export_invest_excel(request):
+def export_investlog(request):
     user = request.user
     item_list = []
     item_list = InvestLog.objects

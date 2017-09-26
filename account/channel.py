@@ -196,35 +196,89 @@ def revise_project(request):
         result['data'] = {'content_object':news.title, 'invest_time':invest_time, 'invest_mobile':invest_tel, 'invest_term':invest_days, 'invest_amount':invest_money, 'remark':invest_remarks}
     return JsonResponse(result)
 
-def export_audit_result(request):
+@login_required
+def export_investlog(request):
     user = request.user
-    fid = request.GET.get("fid")
-    if fid == '0':      #jzy
-        project = Project.objects.all()
-        item_list = InvestLog.objects.filter(user=user, project=Project, is_official=True).order_by("-time")
-    else:
-        project = Project.objects.get(id=fid)
-        item_list = InvestLog.objects.filter(user=user, project=Project).order_by("-time")
+    item_list = []
+    item_list = InvestLog.objects
+    item_list = item_list.filter(user=user)
+    investtime_0 = request.GET.get("investtime_0", None)
+    investtime_1 = request.GET.get("investtime_1", None)
+    submittime_0 = request.GET.get("submittime_0", None)
+    submittime_1 = request.GET.get("submittime_1", None)
+    audittime_0 = request.GET.get("audittime_0", None)
+    audittime_1 = request.GET.get("audittime_1", None)
+    state = request.GET.get("audit_state",'1')
+    if not investtime_0 or not investtime_1 or (investtime_1 - investtime_0).days > 5:
+        raise Http404
+    s = datetime.datetime.strptime(investtime_0,'%Y-%m-%d')
+    e = datetime.datetime.strptime(investtime_1,'%Y-%m-%d')
+    item_list = item_list.filter(invest_date__range=(s,e))
+    if submittime_0 and submittime_1:
+        s = datetime.datetime.strptime(submittime_0,'%Y-%m-%d')
+        e = datetime.datetime.strptime(submittime_1,'%Y-%m-%d')
+        item_list = item_list.filter(submit_time__range=(s,e))
+    if audittime_0 and audittime_1:
+        s = datetime.datetime.strptime(audittime_0,'%Y-%m-%d')
+        e = datetime.datetime.strptime(audittime_1,'%Y-%m-%d')
+        item_list = item_list.filter(audit_time__range=(s,e))
+    qq_number = request.GET.get("qq_number", None)
+    if qq_number:
+        item_list = item_list.filter(user__qq_number=qq_number)
+    mobile = request.GET.get("mobile", None)
+    if mobile:
+        item_list = item_list.filter(user__mobile=mobile)
+    userlevel = request.GET.get("level",None)
+    if userlevel:
+        item_list = item_list.filter(user__level=userlevel)
+    is_official = request.GET.get("is_official",None)
+    if is_official:
+        item_list = item_list.filter(is_official=is_official)
+    companyname = request.GET.get("companyname", None)
+    if companyname:
+        item_list = item_list.filter(project__company__name__contains=companyname)
+    invest_mobile = request.GET.get("mobile_sub", None)
+    if invest_mobile:
+        item_list = item_list.filter(invest_mobile=invest_mobile)    
+    projectname = request.GET.get("project_title_contains", None)
+    if projectname:
+        item_list = item_list.filter(project__title__contains=projectname)
+    adminname = request.GET.get("admin_user", None)
+    if adminname:
+        item_list = item_list.filter(admin_user__username=adminname)
+    zhifubao = request.GET.get("zhifubao", None)
+    if zhifubao:
+        item_list = item_list.filter(zhifubao=zhifubao)
+    item_list = item_list.filter(audit_state=state).select_related('project').order_by('submit_time')
     data = []
     for con in item_list:
-        # project_name=Project.title
-        project = con.content_object        #jzy
-        project_name=project.title          #jzy
-
-        mobile_sub=con.invest_mobile
-        # time_sub=con.time
-        time_sub=con.invest_time            #jzy
+        project = con.project
+        project_name=project.title
+        invest_mobile=con.invest_mobile
+        invest_date=con.invest_date
         id=con.id
         remark= con.remark
         invest_amount= con.invest_amount
         term=con.invest_term
-        result = con.get_audit_state_display(),
-        return_amount = '' if con.audit_state!='0' or not con.translist.exists() else str(con.translist.first().transAmount/100.0),
-        reason = '' if con.audit_state!='2' or not con.audited_logs.exists() else con.audited_logs.first().reason,
-        data.append([id, project_name, time_sub, mobile_sub, term, invest_amount, remark, result, return_amount, reason])
+        qq_number = con.user.qq_number
+        user_level = con.user.level
+        result = ''
+        return_amount = ''
+        settle_amount = ''
+        reason = ''
+        if con.audit_state=='0':
+            result = u'是'
+            settle_amount = str(con.settle_amount)
+            settle_amount = str(con.return_amount)
+        elif con.audit_state=='2':
+            result = u'否'
+            reason = con.audit_reason
+        data.append([id, project_name, invest_date, invest_mobile, term,
+                     invest_amount, remark, result, settle_amount, return_amount, reason])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
-    title_row = [u'记录ID',u'项目名称',u'投资日期', u'注册手机号' ,u'投资期限' ,u'投资金额', u'备注', u'审核结果',u'返现金额',u'拒绝原因']
+    title_row = [u'记录ID',u'项目名称',u'投资日期', u'投资手机号' ,u'投资期限' ,u'投资金额', u'备注',
+                 u'是否审核通过',u'结算金额',u'返现金额',u'拒绝原因']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
     row = len(data)
@@ -241,7 +295,6 @@ def export_audit_result(request):
     w.save(sio)
     sio.seek(0)
     response = HttpResponse(sio.getvalue(), content_type='application/vnd.ms-excel')
-    response['Content-Disposition'] = 'attachment; filename=审核结果.xls'
+    response['Content-Disposition'] = 'attachment; filename=投资记录表.xls'
     response.write(sio.getvalue())
-
     return response

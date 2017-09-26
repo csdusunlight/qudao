@@ -23,7 +23,7 @@ urlpatterns = [
 
 #     url(r'^parse_excel/$', 'wafuli_admin.channel.parse_excel', name='parse_excel'),
     url(r'^import/$', 'wafuli_admin.views.import_invest_excel', name='import_invest_excel'),
-    url(r'^export/$', 'wafuli_admin.views.export_invest_excel', name='export_invest_excel'),
+    url(r'^export_investlog/$', 'wafuli_admin.views.export_investlog', name='export_investlog'),
 
 
     url(r'^export_withdraw/$', 'wafuli_admin.views.export_withdraw_excel', name='export_withdraw_excel'),

@@ -108,16 +108,12 @@ $(document).ready(function(){
 				'type':1,
 			},
 			success:function(ret){
-//				if(ret.code==0){
-//					$("#item_"+id).html("审核完成，通过");
-//				}
-//				else if(ret.code==-1){
-//					alert("该页面已过期，请重新登录！");
-//					window.location.href = ret.url;
-//				}
-//				else {
-//					alert(ret.res_msg);
-//				}
+				if(ret.code==0){
+				    alert('操作成功，通过');
+					$("#item_"+id).html("审核完成，通过");
+				}else {
+				    console.log(ret.code);
+				}
 			},
 			error:function(){
 				alert("请检查网络连接");
@@ -141,16 +137,12 @@ $(document).ready(function(){
 				'type':2,
 			},
 			success:function(ret){
-//				if(ret.code==0){
-//					$("#item_"+id).html("审核完成，拒绝");
-//				}
-//				else if(ret.code==-1){
-//					alert("该页面已过期，请重新登录！");
-//					window.location.href = ret.url;
-//				}
-//				else {
-//					alert(ret.res_msg);
-//				}
+                if(ret.code==0){
+                    alert('操作成功,拒绝');
+                    $("#item_"+id).html("审核完成，拒绝");
+                }else {
+                    console.log(ret.code);
+                }
 			},
 			error:function(){
 				alert("请检查网络连接");
@@ -159,40 +151,36 @@ $(document).ready(function(){
 		$(".Audit").css("display","none");
 	});
 	$("#search").click(function(){
-		startTime = $("#startTime").val();
-		endTime = $("#endTime").val();
-		newurl = url;
+		var startTime = $("#startTime").val();
+		var endTime = $("#endTime").val();
+		var newurl = url;
 		if(startTime && endTime){
 			newurl += "&submit_date_0="+startTime;
 			newurl += "&submit_date_1="+endTime;
 		}
-		startTime2 = $("#startTime2").val();
-		endTime2 = $("#endTime2").val();
+		var startTime2 = $("#startTime2").val();
+		var endTime2 = $("#endTime2").val();
 		if(startTime2 && endTime2){
 			newurl += "&audit_date_0="+startTime2;
 			newurl += "&audit_date_1="+endTime2;
 		}
-		mobile = $("#mobile").val();
-		qq = $("#qq").val();
+		var mobile = $("#mobile").val();
+		var qq = $("#qq").val();
 		if(mobile){
 			newurl += "&mobile="+mobile;
 		}
 		if(qq){
 			newurl += "&qq_number="+qq;
 		}
-		// companyname = $("#companyname").val();
-		qqname = $("#qqname").val();
-		// if(companyname){
-		// 	newurl += "&companyname="+companyname;
-		// }
+		var qqname = $("#qqname").val();
 		if(qqname){
 			newurl += "&qq_name="+qqname;
 		}
-		 adminname = $("#admin_user_mobile").val();
+		var adminname = $("#adminname").val();
        if(adminname){
-         newurl += "&adminname="+adminname;
+         newurl += "&admin_user_mobile="+adminname;
        }
-		state = $("#state").val();
+		var state = $("#state").val();
 		if(state){
 			newurl += "&audit_state="+state;
 		}
@@ -236,11 +224,7 @@ $(document).ready(function(){
     if(qq) {
       html += '<input name="qq_number" type="hidden" value="' + qq + '"/>';
     }
-    // companyname = $("#companyname").val();
     var qqname = $("#qqname").val();
-    // if(companyname) {
-    //   html += '<input name="companyname" type="hidden" value="' + companyname + '"/>';
-    // }
     if(qqname) {
       html += '<input name="qq_name" type="hidden" value="' + qqname + '"/>';
     }
@@ -252,16 +236,6 @@ $(document).ready(function(){
     if(state) {
       html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
     }
-    // var usertype = $("#usertype").val();
-    // if(usertype) {
-    //   html += '<input name="usertype" type="hidden" value="' + usertype + '"/>';
-    // }
-    // if(usertype == '2') {
-    //   var chalevel = $("#chalevel").val();
-    //   if(chalevel) {
-    //     html += '<input name="chalevel" type="hidden" value="' + chalevel + '"/>';
-    //   }
-    // }
     html += '</form>';
     var iframe = document.getElementById('myIFrame');
     iframe.contentWindow.document.open();
@@ -306,10 +280,6 @@ $(document).ready(function(){
                                             	<i style="letter-spacing:2px;">QQ：</i>
                                                 <input id="qq" type="text" />
                                             </td>
-                                        	<!-- <td>
-                                            	<i style="letter-spacing:4.8px;">公司名称：</i>
-                                                <input id="companyname" type="text" />
-                                            </td> -->
                                         	<td>
                                             	<i style="letter-spacing:4.8px;">QQ昵称：</i>
                                                 <input id="qqname" type="text" />

@@ -658,6 +658,12 @@
                     alert('请先选择投资日期区间，再进行导出');
                     return;
                 }
+                var date_diff = DateDiff(invest_date1,invest_date0);
+                console.log(date_diff);
+                if (date_diff<0 || date_diff>5) {
+                	alert('选择的投资日期区间不能超过5天');
+                	return;
+                }
                 if(proj_name) {
                     html += '<input name="project_title_contains" type="hidden" value="' + proj_name + '"/>';
                 }
@@ -732,7 +738,7 @@
                 });
             });
             $("#export_02").click(function() {
-                var html = '<form action="' + "export_finance_excel" + '" method="get" target="_self" id="postData_form">';
+                var html = '<form action="' + "{% url 'export_investlog' %}" + '" method="get" target="_self" id="postData_form">';
                 var proj_name = $("#proj_name_02").val(),
                     invest_date0 = $("#invest_date0_02").val(),
                     invest_date1 = $("#invest_date1_02").val(),
@@ -742,6 +748,12 @@
                     
                 if(!invest_date0 || !invest_date1) {
                     alert('请先选择投资日期区间，再进行导出');
+                    return;
+                }
+                var date_diff = DateDiff(invest_date1,invest_date0);
+                console.log(date_diff);
+                if (date_diff<0 || date_diff>5) {
+                    alert('选择的投资日期区间不能超过5天');
                     return;
                 }
                 if(proj_name) {
@@ -836,6 +848,17 @@
             })
     //      图片上传部分---end
         })
+        
+        //计算天数差的函数，通用  
+        function DateDiff(sDate1, sDate2) { //sDate1和sDate2是2002-12-18格式  
+            var aDate, oDate1, oDate2, iDays
+            aDate = sDate1.split("-")
+            oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]) //转换为12-18-2002格式  
+            aDate = sDate2.split("-")
+            oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])
+            iDays = parseInt((oDate1 - oDate2) / 1000 / 60 / 60 / 24) //把相差的毫秒数转换为天数  
+            return iDays
+        }
 </script>
 </body>
 </html>

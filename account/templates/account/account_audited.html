@@ -471,11 +471,7 @@
 //      编辑/删除部分（官方）---end
 
         //          编辑/删除数据部分(自建)
-        var choose_file = document.getElementById("input_clone_02");
-        var hint = document.getElementById("hint_02");
-        choose_file.onclick = function() {
-            document.getElementById("fileupload2").click();
-        }
+        
         
         function removeData_02 (obj,id) {
             delete_id = id;
@@ -719,7 +715,7 @@
             var choose_file = document.getElementById("input_clone");
             var hint = document.getElementById("hint");
             choose_file.onclick = function() {
-                document.getElementById("fileupload1").click();
+                document.getElementById("fileupload").click();
             }
 //          官方数据---end
             $("#search_02").click(function() {
@@ -822,7 +818,7 @@
                     return;
                 }
                 $.ajaxFileUpload({
-                    url: "import_finance_excel",
+                    url: "{% url 'import_investlog' %}",
                     secureuri: false,
                     fileElementId: fileElementId, //file标签的id
                     dataType: 'json', //返回数据的类型
@@ -840,7 +836,11 @@
                 });
                 //  hint.innerHTML = '无';
             });
-            
+            var choose_file_02 = document.getElementById("input_clone_02");
+            var hint_02 = document.getElementById("hint_02");
+            choose_file_02.onclick = function() {
+                document.getElementById("fileupload2").click();
+            }
             
     //      图片上传部分
             $('#confirm_add-img').click(function(){

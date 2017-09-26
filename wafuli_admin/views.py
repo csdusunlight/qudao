@@ -810,6 +810,14 @@ def get_admin_with_page(request):
     username = request.GET.get("username", None)
     if username:
         item_list = item_list.filter(user__username=username)
+        
+    userlevel = request.GET.get("userlevel", None)
+    if username:
+        item_list = item_list.filter(user__level=userlevel)
+    
+    qq_number = request.GET.get("qq_number", None)
+    if qq_number:
+        item_list = item_list.filter(user__qq_number=qq_number)
 
     mobile = request.GET.get("mobile", None)
     if mobile:
@@ -849,6 +857,7 @@ def get_admin_with_page(request):
             card_number = card.card_number
             real_name = card.real_name
         i = {"username":obj_user.username,
+             "qq_name":obj_user.qq_name,
              "mobile":obj_user.mobile,
              "userlevel":con.user.level,
              "balance":obj_user.balance,

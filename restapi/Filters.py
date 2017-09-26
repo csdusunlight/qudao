@@ -64,10 +64,11 @@ class WithdrawLogFilter(django_filters.rest_framework.FilterSet):
     submit_date = django_filters.DateFromToRangeFilter(name="submit_time")
     audit_date = django_filters.DateFromToRangeFilter(name="audit_time")
     user_mobile = django_filters.CharFilter('user', lookup_expr='mobile')
+    qq_number = django_filters.CharFilter('user', lookup_expr='qq_number')
     user_name = django_filters.CharFilter('user', lookup_expr='username')
     user_level = django_filters.CharFilter('user', lookup_expr='level')
     admin_mobile = django_filters.CharFilter('admin_user', lookup_expr='mobile')
-#     bank = django_filters.CharFilter('user.user_bank', lookup_expr='bank')
+    bank = django_filters.CharFilter('user.user_bank', lookup_expr='bank')
     class Meta:
         model = WithdrawLog
-        fields = ['submit_date', 'audit_date', 'user_mobile', 'user_name', 'audit_state', ]
+        fields = ['submit_date', 'audit_date', 'user_mobile', 'qq_number','user_name', 'audit_state', ]

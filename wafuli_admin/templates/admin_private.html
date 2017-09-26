@@ -127,39 +127,39 @@
             $(".Audit").css("display", "none");
         });
         $("#search").click(function() {
-            startTime = $("#startTime").val();
-            endTime = $("#endTime").val();
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();
             var newurl = url;
             if(startTime && endTime) {
                 newurl += "&investtime_0=" + startTime;
                 newurl += "&investtime_1=" + endTime;
             }
-            startTime2 = $("#startTime2").val();
-            endTime2 = $("#endTime2").val();
+            var startTime2 = $("#startTime2").val();
+            var endTime2 = $("#endTime2").val();
             if(startTime2 && endTime2) {
                 newurl += "&audittime_0=" + startTime2;
                 newurl += "&audittime_1=" + endTime2;
             }
-            qq = $("#qq").val();
-            mobile = $("#mobile").val();
-            mobile_sub = $("#mobile_sub").val();
+            var qq = $("#qq").val();
+            var mobile = $("#mobile").val();
+            var mobile_sub = $("#mobile_sub").val();
 
             if(qq) {
                 newurl += "&qq_number=" + qq;
             }
             if(mobile) {
-                newurl += "&mobile=" + mobile;
+                newurl += "&user_mobile=" + mobile;
             }
             if(mobile_sub) {
-                newurl += "&mobile_sub=" + mobile_sub;
+                newurl += "&invest_mobile=" + mobile_sub;
             }
-            projectname = $("#projectname").val();
+            var projectname = $("#projectname").val();
             if(projectname) {
                 newurl += "&project_title_contains=" + projectname;
             }
             var level = $("#level").val();
             if(level) {
-                newurl += "&level=" + level;
+                newurl += "&user_level=" + level;
             }
             var newdata = data;
             $("#page").empty();
@@ -172,34 +172,36 @@
             });
         });
         $("#export").click(function() {
-            var html = '<form action="' + "" + '" method="get" target="_self" id="postData_form">';
-            startTime = $("#startTime").val();
-            endTime = $("#endTime").val();
+            var html = '<form action="' + "{% url 'admin_export_investlog' %}" + '" method="get" target="_self" id="postData_form">';
+            
+            html += '<input name="is_official" type="hidden" value="false"/>';
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();
             if(startTime && endTime) {
                 html += '<input name="investtime_0" type="hidden" value="' + startTime + '"/>';
                 html += '<input name="investtime_1" type="hidden" value="' + endTime + '"/>';
             }
-            startTime2 = $("#startTime2").val();
-            endTime2 = $("#endTime2").val();
+            var startTime2 = $("#startTime2").val();
+            var endTime2 = $("#endTime2").val();
             if(startTime2 && endTime2) {
                 html += '<input name="audittime_0" type="hidden" value="' + startTime2 + '"/>';
                 html += '<input name="audittime_1" type="hidden" value="' + endTime2 + '"/>';
             }
-            qq = $("#qq").val();
-            mobile = $("#mobile").val();
+            var qq = $("#qq").val();
+            var mobile = $("#mobile").val();
             if(qq) {
                 html += '<input name="qq_number" type="hidden" value="' + qq + '"/>';
             }
             if(mobile) {
-                html += '<input name="mobile" type="hidden" value="' + mobile + '"/>';
+                html += '<input name="user_mobile" type="hidden" value="' + mobile + '"/>';
             }
-            projectname = $("#projectname").val();
+            var projectname = $("#projectname").val();
             if(projectname) {
                 html += '<input name="project_title_contains" type="hidden" value="' + projectname + '"/>';
             }
             var level = $("#level").val();
             if(level) {
-                html += '<input name="level" type="hidden" value="' + level + '"/>';
+                html += '<input name="user_level" type="hidden" value="' + level + '"/>';
             }
             html += '</form>';
             var iframe = document.getElementById('myIFrame');
@@ -248,10 +250,10 @@
                     <td>
                         <i style="letter-spacing:4.8px;">渠道等级</i>
                         <select name="selectAge" id="level">
-                            <option value="0">--</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
+                            <option value="">--</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
                         </select>
                     </td>
                     <td>

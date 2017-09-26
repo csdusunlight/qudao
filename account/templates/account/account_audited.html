@@ -664,6 +664,8 @@
                 	alert('选择的投资日期区间不能超过5天');
                 	return;
                 }
+                
+                html += '<input name="is_official" type="hidden" value="true"/>';
                 if(proj_name) {
                     html += '<input name="project_title_contains" type="hidden" value="' + proj_name + '"/>';
                 }
@@ -756,6 +758,8 @@
                     alert('选择的投资日期区间不能超过5天');
                     return;
                 }
+                
+                html += '<input name="is_official" type="hidden" value="false"/>';
                 if(proj_name) {
                     html += '<input name="project_title_contains" type="hidden" value="' + proj_name + '"/>';
                 }

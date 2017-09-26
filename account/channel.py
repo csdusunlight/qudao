@@ -105,7 +105,7 @@ def channel(request):
         duplicate_mobile_list = []
         with transaction.atomic():
             db_key = DBlock.objects.select_for_update().get(index='investlog')
-            temp = InvestLog.objects.filter(project=project).exclude(audit_state='2').values('invest_mobile')
+            temp = InvestLog.objects.filter(project__company_id=project.company_id).exclude(audit_state='2').values('invest_mobile')
             db_mobile_list = map(lambda x: x['invest_mobile'], temp)
             for i in range(len(mobile_list)):
                 mob = mobile_list[i]
@@ -151,7 +151,7 @@ def submit_itembyitem(request):
         zhifubao_name = temp[6]
         remark = temp[7]
         try:
-            if not news.is_multisub_allowed and news.investlogs.filter(invest_mobile=telnum).exclude(audit_state='2').exists():
+            if not news.is_multisub_allowed and InvestLog.objects.filter(invest_mobile=telnum, project__company_id=news.company_id).exclude(audit_state='2').exists():
                 exist_num += 1   #jzy
                 exist_phone = exist_phone + telnum + ", "   #jzy
                 raise ValueError('This invest_mobile is repective in project:' + str(news.id))
@@ -209,6 +209,7 @@ def export_investlog(request):
     audittime_0 = request.GET.get("audittime_0", None)
     audittime_1 = request.GET.get("audittime_1", None)
     state = request.GET.get("audit_state",'1')
+    print (investtime_1 - investtime_0).days
     if not investtime_0 or not investtime_1 or (investtime_1 - investtime_0).days > 5:
         raise Http404
     s = datetime.datetime.strptime(investtime_0,'%Y-%m-%d')

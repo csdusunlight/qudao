@@ -451,7 +451,7 @@ def export_charge_excel(request):
 
 @csrf_exempt
 @has_permission('002')
-def import_invest_excel(request):
+def import_investlog(request):
     admin_user = request.user
     ret = {'code':-1}
     file = request.FILES.get('file')
@@ -524,21 +524,15 @@ def import_invest_excel(request):
                 if result:
                     amount = row[3]
                     translist = charge_money(investlog_user, '0', amount, row[1])
-                    if translist:
-                        investlog.audit_state = '0'
-                        investlog.settle_amount = amount
-                        translist.user_investlog = investlog
-                        translist.save(update_fields=['investlog'])
-                    else:
-                        logger.error(u"Charging cash is failed!!!")
-                        logger.error("InvestLog:" + str(id) + u" 现金记账失败，请检查原因！！！！")
-                        continue
+                    investlog.audit_state = '0'
+                    investlog.settle_amount = amount
+                    translist.investlog = investlog
+                    translist.save(update_fields=['investlog'])
                 else:
                     investlog.audit_state = '2'
                     investlog.audit_reason = reason
                 investlog.audit_time = datetime.datetime.now()
-                investlog.admin_user = admin_user
-                investlog.save(update_fields=['audit_state','audit_time','settle_amount','admin_user'])
+                investlog.save(update_fields=['audit_state','audit_time','settle_amount','audit_reason'])
                 suc_num += 1
         ret['code'] = 0
     except Exception as e:
@@ -776,6 +770,8 @@ def admin_withdraw(request):
             withdrawlog.audit_state = '2'
             withdrawlog.audit_reason = reason
             translist = charge_money(withdrawlog.user, '0', withdrawlog.amount, u'冲账', reverse=True)
+            translist.remark = reason
+            translist.save(update_fields=['reason',])
             res['code'] = 0
         withdrawlog.audit_time = datetime.datetime.now()
         withdrawlog.admin_user = admin_user

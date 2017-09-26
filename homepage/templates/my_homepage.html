@@ -3,35 +3,35 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>个人主页</title>
-<meta name="keywords" content="P2P理财,P2P网贷,投资理财,网络理财,网络投资,小额投资理财,如何投资理财,个人理财,家庭理财,挖福利" />
-<meta name="description" content="挖福利是一个优质的互联网理财平台！让你感受到不一样的金融理财。" />
+<meta name="keywords" content="P2P理财,P2P网贷,投资理财,网络理财,网络投资,小额投资理财,如何投资理财,个人理财,家庭理财" />
+<meta name="description" content="福利联盟是行业领先的P2P渠道分发机构。" />
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/my_homepage.css' %}" />
-<link id="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin.css' %}" />
+<link id="skin" rel="stylesheet" type="text/css" href="{% static 'css/skin0.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
 <style type="text/css">
-	.state10 {
+	.state20 {
 	    pointer-events: none;
-	    background-color: #e4e4e4;
+	    background-color: #e4e4e4 !important;
 	}
 </style>
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 <script type="text/javascript">
     var skin_id = "{{user.color}}";
-    console.log(skin_id);
 	skin.href="/static/css/skin" + skin_id + ".css";
 </script>
 </head>
 <body>
     <div class="user__top">
-        <div class="user__info">
+        <div class="user__info" style="position: relative;">
             <img class="user__img" src="{{user.picture_url}}" alt="" />
             <div class="user__detail">
-                <h1 class="user__name">{{user.qq_name}}</h1>
+                <h1 class="user__name">{{user.username}}</h1>
                 <p class="user__intro">{{user.profile}}</p>
             </div>
+            <p style="position: absolute;right: 0;color: #fff;bottom: 64px;">投资有风险，入市需谨慎！</p>
         </div>
     </div>
     <div class="content clearfix">
@@ -102,7 +102,7 @@
             </div>
         </div>
         <div class="con-right r">
-            <a href="http://wpa.qq.com/msgrd?v=3&uin={{user.qq_number}}&site=qq&menu=yes" target="_blank"><div class="ask">点击咨询我<br /><span class="ask-time">(9:00-20:00)</span></div></a>
+            <a href="http://wpa.qq.com/msgrd?v=3&uin={{user.qq_number}}&site=qq&menu=yes" target="_blank"><div class="ask">点击咨询我</div></a>
             <div class="notice">
                 <h3 class="notice__title">最新公告</h3>
                 <div id="noticeBox" class="notice__box">
@@ -119,14 +119,6 @@
                 <h3 class="rank__title">大家都在</h3>
                 <div id="rankBox" class="rank__box">
                     <ul id="rank_con1">
-                        <li><a class="rank__txt oneline">1、152****2344体验了<span class="rank__project">核时代一期</span></a></li>
-                        <li><a class="rank__txt oneline">2、152****2344体验了<span class="rank__project">核时代一期</span></a></li>
-                        <li><a class="rank__txt oneline">3、152****2344体验了<span class="rank__project">核时代一期</span></a></li>
-                        <li><a class="rank__txt oneline">4、152****2344体验了<span class="rank__project">核时代一期</span></a></li>
-                        <li><a class="rank__txt oneline">5、152****2344体验了<span class="rank__project">核时代一期</span></a></li>
-                        <li><a class="rank__txt oneline">6、152****2344体验了<span class="rank__project">核时代一期</span></a></li>
-                        <li><a class="rank__txt oneline">7、152****2344体验了<span class="rank__project">核时代一期</span></a></li>
-                        <li><a class="rank__txt oneline">8、152****2344体验了<span class="rank__project">核时代一期</span></a></li>
                     </ul>
                     <ul id="rank_con2">
                     </ul>
@@ -146,11 +138,11 @@
                 </div>
                 <div class="popup__item">
                     <span class="popup__itemname">投资标期：</span>
-                    <input type="text" class="term" placeholder="填写投资标期" />
+                    <input type="text" class="term" placeholder="填写投资标期，数字" />
                 </div>
                 <div class="popup__item">
                     <span class="popup__itemname">投资金额：</span>
-                    <input type="text" class="money" placeholder="填写投资金额" />
+                    <input type="text" class="money" placeholder="填写投资金额，数字" />
                 </div>
                 <div class="popup__item">
                     <span class="popup__itemname">投资日期：</span>
@@ -182,7 +174,7 @@
 <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
 <script type="text/javascript">
-    var data='[results]<li class="project__itembox"><h2 class="project__name">{project_title}<span class="project__name-small">{introduction}</span></h2>'+
+    var data='[results]<li class="project__itembox"><h2 class="project__name">{project_title}<span class="project__name-small oneline">{project_introduction}</span></h2>'+
       '<div class="project__detail">'+
 //    '<img class="project__img" src="" alt="" />'+
       '<div data-pic="{project_picture}" data-imgtxt="{project_title}" class="project__img"></div>'+
@@ -217,6 +209,7 @@
                 $(this).text($(this).data('intrest'));
             }
         })
+        $('.state20').text('已结束');
     }
     $('.hot__img').each(function(){
         var imgurl = $(this).data('pic');
@@ -259,7 +252,9 @@
             console.log(ret.results);
             var notice_html='';
             for (var i=0; i<ret.results.length; i++) {
-            	notice_html += '<li><a class="rank__txt oneline">' + (i+1) + '、' + ret.results[i].invest_mobile +
+                var phone = ret.results[i].invest_mobile;
+                var phone2 = phone.substr(0, 3) + '****' + phone.substr(7, 11);
+            	notice_html += '<li><a class="rank__txt oneline">' + (i+1) + '、' + phone2 +
             	'体验了<span class="rank__project">' + ret.results[i].project_title + '</span></a></li>';
             }
             console.log(notice_html);
@@ -314,6 +309,8 @@
     });
 
     $(function(){
+        $('.state20').text('已结束');
+        
         $("#pagedata1").ajaxPage({
           url: "/restapi/sub/?page={page}&size={pageSize}&is_on=true",
           pageId:$("#page1"),
@@ -357,7 +354,18 @@
         } else { 
             alert('日期格式不符合规范'); 
             return;
-        } 
+        }
+        var re = /^1[1,2,3,4,6,5,7,8,9]\d{9}$/, //验证手机号
+            re_amount = /^\d+(\.\d+)?$/; //验证数字格式
+        if(!re.test(telnum)) {
+            alert('手机号格式不正确');
+        }
+        if(!re_amount.test(term)) {
+            alert('标期必须为纯数字格式');
+        }
+        if(!re_amount.test(money)) {
+            alert('金额必须为纯数字格式');
+        }
 
         $.ajax({
             url: '/restapi/investlogs/',
@@ -377,8 +385,12 @@
                 alert('提交成功');
                 $('.popup.m-submit-proj').removeClass('in');
             },
-            error: function() {
-                alert("请检查网络连接");
+            error: function(ret) {
+                if (ret.detail) {
+                	alert(ret.detail);
+                } else{
+                    alert("请检查网络连接");
+                }
             }
         });
     });

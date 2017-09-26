@@ -9,7 +9,7 @@
   var data = '<table width="100%"><tr><th>QQ</th><th>手机号</th><th>账户余额</th><th>开户行</th><th>开户行姓名</th>'+
   '<th>银行卡号</th><th>申请提现金额</th><th>申请时间</th><th>处理状态</th>'+
   '<th>处理</th><th>拒绝原因</th>'+
-  '</tr>[data]<tr><td>{username}</td><td>{mobile}</td><td>{balance}</td><td>{bank}</td>'+
+  '</tr>[data]<tr><td>{qq_number}</td><td>{mobile}</td><td>{balance}</td><td>{bank}</td>'+
   '<td>{real_name}</td><td>{card_number}</td><td>{amount}</td><td>{time}</td>'+
   '<td>{state}</td>'+
   '<td id="item_{id}"><a class="fyin" onclick="pass({id})">接受'+
@@ -17,7 +17,7 @@
   var data2 = '<table width="100%"><tr><th>QQ</th><th>手机号</th><th>账户余额</th><th>开户行</th><th>开户行姓名</th>'+
   '<th>银行卡号</th><th>申请提现金额</th><th>申请时间</th><th>处理状态</th>'+
   '<th>处理人</th><th>处理时间</th><th>拒绝原因</th>'+
-  '</tr>[data]<tr><td>{username}</td><td>{mobile}</td><td>{balance}</td><td>{bank}</td>'+
+  '</tr>[data]<tr><td>{qq_number}</td><td>{mobile}</td><td>{balance}</td><td>{bank}</td>'+
   '<td>{real_name}</td><td>{card_number}</td><td>{amount}</td><td>{time}</td>'+
   '<td>{state}</td><td>{admin}</td><td>{time_admin}</td>'+
   '<td>{reason}</td></tr>[/data]</table>';
@@ -112,43 +112,43 @@
    $(".Audit").css("display","none");
  });
    $("#search").click(function(){
-    startTime = $("#startTime").val();
-    endTime = $("#endTime").val();
-    newurl = url;
+    var startTime = $("#startTime").val();
+    var endTime = $("#endTime").val();
+    var newurl = url;
     if(startTime && endTime){
      newurl += "&startTime="+startTime;
      newurl += "&endTime="+endTime;
    }
-   startTime2 = $("#startTime2").val();
-   endTime2 = $("#endTime2").val();
+   var startTime2 = $("#startTime2").val();
+   var endTime2 = $("#endTime2").val();
    if(startTime2 && endTime2){
      newurl += "&startTime2="+startTime2;
      newurl += "&endTime2="+endTime2;
    }
-   qq = $("#qq").val();
-   mobile = $("#mobile").val();
+   var qq = $("#qq").val();
+   var mobile = $("#mobile").val();
    if(qq){
-     newurl += "&qq="+qq;
+     newurl += "&qq_number="+qq;
    }
    if(mobile){
      newurl += "&mobile="+mobile;
    }
-   card_number = $("#card_number").val();
-   real_name = $("#real_name").val();
+   var card_number = $("#card_number").val();
+   var real_name = $("#real_name").val();
    if(card_number){
      newurl += "&card_number="+card_number;
    }
    if(real_name){
      newurl += "&real_name="+real_name;
    }
-   adminname = $("#adminname").val();
-   usertype = $("#usertype").val();
-   state = $("#state").val();
+   var adminname = $("#adminname").val();
+   var usertype = $("#usertype").val();
+   var state = $("#state").val();
    if(adminname){
      newurl += "&adminname="+adminname;
    }
    if(usertype){
-     newurl += "&usertype="+usertype;
+     newurl += "&userlevel="+usertype;
    }
    if(state){
      newurl += "&state="+state;
@@ -168,42 +168,42 @@
  });
    $("#export").click(function(){
     var html = '<form action="'+"{% url 'export_withdraw_excel' %}"+'" method="get" target="_self" id="postData_form">';
-    startTime = $("#startTime").val();
-    endTime = $("#endTime").val();
+    var startTime = $("#startTime").val();
+    var endTime = $("#endTime").val();
     if(startTime && endTime){
      html += '<input name="startTime" type="hidden" value="'+ startTime + '"/>';
      html += '<input name="endTime" type="hidden" value="'+ endTime + '"/>';
    }
-   startTime2 = $("#startTime2").val();
-   endTime2 = $("#endTime2").val();
+   var startTime2 = $("#startTime2").val();
+   var endTime2 = $("#endTime2").val();
    if(startTime2 && endTime2){
      html += '<input name="startTime2" type="hidden" value="'+ startTime2 + '"/>';
      html += '<input name="endTime2" type="hidden" value="'+ endTime2 + '"/>';
    }
-   qq = $("#qq").val();
-   mobile = $("#mobile").val();
+   var qq = $("#qq").val();
+   var mobile = $("#mobile").val();
    if(qq){
-     html += '<input name="qq" type="hidden" value="'+ qq + '"/>';
+     html += '<input name="qq_number" type="hidden" value="'+ qq + '"/>';
    }
    if(mobile){
      html += '<input name="mobile" type="hidden" value="'+ mobile + '"/>';
    }
-   card_number = $("#card_number").val();
-   real_name = $("#real_name").val();
+   var card_number = $("#card_number").val();
+   var real_name = $("#real_name").val();
    if(card_number){
      html += '<input name="card_number" type="hidden" value="'+ card_number + '"/>';
    }
    if(real_name){
      html += '<input name="real_name" type="hidden" value="'+ real_name + '"/>';
    }
-   adminname = $("#adminname").val();
-   usertype = $("#usertype").val();
-   state = $("#state").val();
+   var adminname = $("#adminname").val();
+   var usertype = $("#usertype").val();
+   var state = $("#state").val();
    if(adminname){
      html += '<input name="adminname" type="hidden" value="'+ adminname + '"/>';
    }
    if(usertype){
-     html += '<input name="usertype" type="hidden" value="'+ usertype + '"/>';
+     html += '<input name="userlevel" type="hidden" value="'+ usertype + '"/>';
    }
    if(state){
      html += '<input name="state" type="hidden" value="'+ state + '"/>';
@@ -286,11 +286,12 @@
            <input id="mobile" type="text" />
          </td>
          <td>
-          <i style="letter-spacing:4.8px;">用户类型</i>
+          <i style="letter-spacing:4.8px;">渠道等级</i>
           <select name="selectAge" id="usertype">
-           <option value="0">全部</option>
-           <option value="1">普通用户</option>
-           <option value="2">渠道用户</option>
+           <option value="">--</option>
+           <option value="01">01</option>
+           <option value="02">02</option>
+           <option value="03">03</option>
          </select>
        </td>
        <td>

@@ -37,16 +37,16 @@ def index(request):
     total = {}
     total['apply_num'] = ApplyLog.objects.count()
     dict1 = MyUser.objects.aggregate(cou=Count('id'), sumb=Sum('balance'))
-    total['user_num'] = dict1.get('cou')
+    total['user_num'] = ApplyLog.objects.filter(audit_state='0').count()
     total['balance'] = dict1.get('sumb') or 0
 #     print TransList.objects.filter(user_investlog__investlog_type='2',user_investlog__audit_state='0').aggregate(cou=Count('id'),sum=Sum('transAmount'))
-    dict_with = InvestLog.objects.filter(is_official=True,audit_state='0').\
-            aggregate(cou=Count('user',distinct=True),sum=Sum('return_amount'))
+    dict_with = WithdrawLog.objects.filter(audit_state='0').\
+            aggregate(cou=Count('user',distinct=True),sum=Sum('amount'))
     total['with_count'] = dict_with.get('cou')
     total['with_total'] = dict_with.get('sum') or 0
 
     dict_ret = InvestLog.objects.filter(is_official=True,audit_state='0').\
-            aggregate(cou=Count('user',distinct=True),sum=Sum('translist__transAmount'))
+            aggregate(cou=Count('user',distinct=True),sum=Sum('settle_amount'))
     total['ret_count'] = dict_ret.get('cou')
     total['ret_total'] = dict_ret.get('sum') or 0
 
@@ -320,7 +320,7 @@ def export_investlog(request):
     qq_number = request.GET.get("qq_number", None)
     if qq_number:
         item_list = item_list.filter(user__qq_number=qq_number)
-    mobile = request.GET.get("mobile", None)
+    mobile = request.GET.get("user_mobile", None)
     if mobile:
         item_list = item_list.filter(user__mobile=mobile)
     userlevel = request.GET.get("level",None)
@@ -618,8 +618,8 @@ def admin_user(request):
         elif type == 4:
             level = request.POST.get('level')
             if level:
-                obj_user.channel.level=level
-                obj_user.channel.save(update_fields=['level'])
+                obj_user.level=level
+                obj_user.save(update_fields=['level'])
                 admin_investlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, type='3', remark=str(level))
                 res['code'] = 0
             else:

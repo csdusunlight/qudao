@@ -290,22 +290,32 @@ def get_admin_project_page(request):
     res["recordCount"] = item_list.count()
     res["data"] = data
     return JsonResponse(res)
+
+@login_required
 def export_invest_excel(request):
     user = request.user
     item_list = []
     item_list = InvestLog.objects
-    startTime = request.GET.get("submittime_0", None)
-    endTime = request.GET.get("submittime_1", None)
-    startTime2 = request.GET.get("audittime_0", None)
-    endTime2 = request.GET.get("audittime_1", None)
+    if not user.is_staff:
+        raise Http404
+    investtime_0 = request.GET.get("investtime_0", None)
+    investtime_1 = request.GET.get("investtime_1", None)
+    submittime_0 = request.GET.get("submittime_0", None)
+    submittime_1 = request.GET.get("submittime_1", None)
+    audittime_0 = request.GET.get("audittime_0", None)
+    audittime_1 = request.GET.get("audittime_1", None)
     state = request.GET.get("audit_state",'1')
-    if startTime and endTime:
-        s = datetime.datetime.strptime(startTime,'%Y-%m-%d')
-        e = datetime.datetime.strptime(endTime,'%Y-%m-%d')
+    if investtime_0 and investtime_1:
+        s = datetime.datetime.strptime(investtime_0,'%Y-%m-%d')
+        e = datetime.datetime.strptime(investtime_1,'%Y-%m-%d')
+        item_list = item_list.filter(invest_date__range=(s,e))
+    if submittime_0 and submittime_1:
+        s = datetime.datetime.strptime(submittime_0,'%Y-%m-%d')
+        e = datetime.datetime.strptime(submittime_1,'%Y-%m-%d')
         item_list = item_list.filter(submit_time__range=(s,e))
-    if startTime2 and endTime2:
-        s = datetime.datetime.strptime(startTime2,'%Y-%m-%d')
-        e = datetime.datetime.strptime(endTime2,'%Y-%m-%d')
+    if audittime_0 and audittime_1:
+        s = datetime.datetime.strptime(audittime_0,'%Y-%m-%d')
+        e = datetime.datetime.strptime(audittime_1,'%Y-%m-%d')
         item_list = item_list.filter(audit_time__range=(s,e))
     qq_number = request.GET.get("qq_number", None)
     if qq_number:
@@ -331,31 +341,29 @@ def export_invest_excel(request):
     adminname = request.GET.get("admin_user", None)
     if adminname:
         item_list = item_list.filter(admin_user__username=adminname)
-    item_list = item_list.filter(investlog_type='1', audit_state=state).select_related('user').order_by('time')
+    item_list = item_list.filter(audit_state=state).select_related('user', 'project').order_by('submit_time')
     data = []
     for con in item_list:
-        project = con.content_object
+        project = con.project
         project_name=project.title
-        mobile_sub=con.invest_account
-        invest_time=con.invest_time
+        invest_mobile=con.invest_mobile
+        invest_date=con.invest_date
         id=con.id
         remark= con.remark
         invest_amount= con.invest_amount
         term=con.invest_term
-        user_mobile = con.user.mobile if not con.user.is_channel else con.user.channel.qq_number
-        user_type = u"普通用户" if not con.user.is_channel else u"渠道："+ con.user.channel.level
+        qq_number = con.user.qq_number
+        user_level = con.user.level
         result = ''
         return_amount = ''
         reason = ''
         if con.audit_state=='0':
             result = u'是'
-            if con.translist.exists():
-                return_amount = str(con.translist.first().transAmount/100.0)
+            return_amount = str(con.settle_amount)
         elif con.audit_state=='2':
             result = u'否'
-            if con.audited_logs.exists():
-                reason = con.audited_logs.first().reason
-        data.append([id, project_name, invest_time, user_mobile,user_type, mobile_sub, term,
+            reason = con.audit_reason
+        data.append([id, project_name, invest_date, qq_number,user_level, invest_mobile, term,
                      invest_amount, remark, result, return_amount, reason])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
@@ -377,7 +385,7 @@ def export_invest_excel(request):
     w.save(sio)
     sio.seek(0)
     response = HttpResponse(sio.getvalue(), content_type='application/vnd.ms-excel')
-    response['Content-Disposition'] = 'attachment; filename=待审核记录.xls'
+    response['Content-Disposition'] = 'attachment; filename=投资记录表.xls'
     response.write(sio.getvalue())
     return response
 
@@ -856,7 +864,7 @@ def get_admin_with_page(request):
             bank = card.get_bank_display()
             card_number = card.card_number
             real_name = card.real_name
-        i = {"username":obj_user.username,
+        i = {"qq_number":obj_user.qq_number,
              "qq_name":obj_user.qq_name,
              "mobile":obj_user.mobile,
              "userlevel":con.user.level,

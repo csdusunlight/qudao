@@ -180,7 +180,7 @@ a { cursor:pointer;}
 .Deny-y { position:fixed; width:100%; height:100%; background:url(../images/back-in.png); display:none;}
 .w570-box h5 { font-size:25px; color:#666666; font-weight:400; text-align:center; line-height:60px;}
 
-.Balance { position:fixed; width:100%; height:100%; background:url(../images/back-in.png); display:none;}
+.Balance,.Change-level { position:fixed; width:100%; height:100%; background:url(../images/back-in.png); display:none;}
 
 .Balance-in { float:left; width:100%; height:auto; padding:20px 20px 0; box-sizing:border-box; }
 .Balance-in textarea { width:406px; height:80px; line-height:20px; resize:none; box-sizing:border-box; outline:none; border:1px solid #cdcdcd}

@@ -112,11 +112,13 @@ $(document).ready(function(){
             return;
         }
         $.ajax({
-            url:"/restapi/users/7/" + id + "/",
+            url:"{%url 'admin_user' %}",
             dataType:"json",
-            type:"put",
+            type:"POST",
             data:{
-                'pcash':level,
+                'id':id,
+                'level':level,
+                'type':4,
             },
             success:function(ret){
                 if(ret.code==0){
@@ -129,7 +131,7 @@ $(document).ready(function(){
                 alert("请检查网络连接");
             }
         });
-        $(".Balance").css("display","none");
+        $(".Change-level").css("display","none");
     });
 	$('.Blacklist input[type="submit"]').click(function(){
 		id = selected_id;

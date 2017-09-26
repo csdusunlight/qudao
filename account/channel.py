@@ -233,8 +233,10 @@ def export_investlog(request):
     if userlevel:
         item_list = item_list.filter(user__level=userlevel)
     is_official = request.GET.get("is_official",None)
-    if is_official:
-        item_list = item_list.filter(is_official=is_official)
+    if is_official == "true":
+        item_list = item_list.filter(is_official=True)
+    elif is_official == "false":
+        item_list = item_list.filter(is_official=False)
     companyname = request.GET.get("companyname", None)
     if companyname:
         item_list = item_list.filter(project__company__name__contains=companyname)

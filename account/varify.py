@@ -155,7 +155,7 @@ def sendmsg_bydhst(phone):
                      'msgid':'2c92825934837c4d0134837dcba00150',
                      'phones':phone,
                      'content':content,
-                     'sign':'【福利联盟】',
+                     'sign':'【挖福利】',
                      'subcode':'',
                      'sendtime':'',
     }

@@ -294,47 +294,43 @@ def export_invest_excel(request):
     user = request.user
     item_list = []
     item_list = InvestLog.objects
-    startTime = request.GET.get("startTime", None)
-    endTime = request.GET.get("endTime", None)
-    startTime2 = request.GET.get("startTime2", None)
-    endTime2 = request.GET.get("endTime2", None)
-    state = request.GET.get("state",'1')
+    startTime = request.GET.get("submittime_0", None)
+    endTime = request.GET.get("submittime_1", None)
+    startTime2 = request.GET.get("audittime_0", None)
+    endTime2 = request.GET.get("audittime_1", None)
+    state = request.GET.get("audit_state",'1')
     if startTime and endTime:
-        s = datetime.datetime.strptime(startTime,'%Y-%m-%dT%H:%M')
-        e = datetime.datetime.strptime(endTime,'%Y-%m-%dT%H:%M')
-        item_list = item_list.filter(time__range=(s,e))
+        s = datetime.datetime.strptime(startTime,'%Y-%m-%d')
+        e = datetime.datetime.strptime(endTime,'%Y-%m-%d')
+        item_list = item_list.filter(submit_time__range=(s,e))
     if startTime2 and endTime2:
-        s = datetime.datetime.strptime(startTime2,'%Y-%m-%dT%H:%M')
-        e = datetime.datetime.strptime(endTime2,'%Y-%m-%dT%H:%M')
+        s = datetime.datetime.strptime(startTime2,'%Y-%m-%d')
+        e = datetime.datetime.strptime(endTime2,'%Y-%m-%d')
         item_list = item_list.filter(audit_time__range=(s,e))
-    username = request.GET.get("username", None)
-    if username:
-        item_list = item_list.filter(user__username=username)
+    qq_number = request.GET.get("qq_number", None)
+    if qq_number:
+        item_list = item_list.filter(user__qq_number=qq_number)
     mobile = request.GET.get("mobile", None)
     if mobile:
         item_list = item_list.filter(user__mobile=mobile)
-    usertype = request.GET.get("usertype",0)
-    usertype= int(usertype)
-    if usertype == 1:
-        item_list = item_list.filter(user__is_channel=False)
-    elif usertype == 2:
-        item_list = item_list.filter(user__is_channel=True)
-        chalevel = request.GET.get("chalevel","")
-        print usertype,chalevel
-        if chalevel:
-            item_list = item_list.filter(user__channel__level=chalevel)
+    userlevel = request.GET.get("level",None)
+    if userlevel:
+        item_list = item_list.filter(user__level=userlevel)
+    is_official = request.GET.get("is_official",None)
+    if is_official:
+        item_list = item_list.filter(is_official=is_official)
     companyname = request.GET.get("companyname", None)
     if companyname:
         item_list = item_list.filter(project__company__name__contains=companyname)
-
-    projectname = request.GET.get("projectname", None)
+    invest_mobile = request.GET.get("mobile_sub", None)
+    if invest_mobile:
+        item_list = item_list.filter(invest_mobile=invest_mobile)    
+    projectname = request.GET.get("project_title_contains", None)
     if projectname:
         item_list = item_list.filter(project__title__contains=projectname)
-    adminname = request.GET.get("adminname", None)
+    adminname = request.GET.get("admin_user", None)
     if adminname:
-        item_list = item_list.filter(audited_logs__user__username=adminname)
-    task_type = ContentType.objects.get_for_model(Project)
-    item_list = item_list.filter(content_type = task_type.id)
+        item_list = item_list.filter(admin_user__username=adminname)
     item_list = item_list.filter(investlog_type='1', audit_state=state).select_related('user').order_by('time')
     data = []
     for con in item_list:

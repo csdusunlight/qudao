@@ -200,8 +200,7 @@ def revise_project(request):
 def export_investlog(request):
     user = request.user
     item_list = []
-    item_list = InvestLog.objects
-    item_list = item_list.filter(user=user)
+    item_list = InvestLog.objects.filter(user=user)
     investtime_0 = request.GET.get("investtime_0", None)
     investtime_1 = request.GET.get("investtime_1", None)
     submittime_0 = request.GET.get("submittime_0", None)
@@ -209,11 +208,12 @@ def export_investlog(request):
     audittime_0 = request.GET.get("audittime_0", None)
     audittime_1 = request.GET.get("audittime_1", None)
     state = request.GET.get("audit_state",'1')
-    print (investtime_1 - investtime_0).days
-    if not investtime_0 or not investtime_1 or (investtime_1 - investtime_0).days > 5:
+    if not investtime_0 or not investtime_1:
         raise Http404
     s = datetime.datetime.strptime(investtime_0,'%Y-%m-%d')
     e = datetime.datetime.strptime(investtime_1,'%Y-%m-%d')
+    if (e - s).days > 5:
+        raise Http404
     item_list = item_list.filter(invest_date__range=(s,e))
     if submittime_0 and submittime_1:
         s = datetime.datetime.strptime(submittime_0,'%Y-%m-%d')
@@ -270,7 +270,7 @@ def export_investlog(request):
         if con.audit_state=='0':
             result = u'是'
             settle_amount = str(con.settle_amount)
-            settle_amount = str(con.return_amount)
+            return_amount = str(con.return_amount)
         elif con.audit_state=='2':
             result = u'否'
             reason = con.audit_reason

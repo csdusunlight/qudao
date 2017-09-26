@@ -58,6 +58,9 @@ class Mark(models.Model):
                                 blank=True, null=True, on_delete=models.SET_NULL)
     def __unicode__(self):
         return self.name
+    class Meta:
+        verbose_name = u"标签"
+        verbose_name_plural = u"标签"
 
 Project_STATE = (
     ('00', u'即将开始'),

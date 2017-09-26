@@ -142,8 +142,8 @@
 			endTime = $("#endTime").val();
 			var newurl = url;
 			if(startTime && endTime) {
-				newurl += "&investtime_0=" + startTime;
-				newurl += "&investtime_1=" + endTime;
+				newurl += "&submittime_0=" + startTime;
+				newurl += "&submittime_1=" + endTime;
 			}
 			startTime2 = $("#startTime2").val();
 			endTime2 = $("#endTime2").val();
@@ -201,8 +201,8 @@
 			startTime = $("#startTime").val();
 			endTime = $("#endTime").val();
 			if(startTime && endTime) {
-				html += '<input name="investtime_0" type="hidden" value="' + startTime + '"/>';
-				html += '<input name="investtime_1" type="hidden" value="' + endTime + '"/>';
+				html += '<input name="submittime_0" type="hidden" value="' + startTime + '"/>';
+				html += '<input name="submittime_1" type="hidden" value="' + endTime + '"/>';
 			}
 			startTime2 = $("#startTime2").val();
 			endTime2 = $("#endTime2").val();
@@ -212,11 +212,15 @@
 			}
 			qq = $("#qq").val();
 			mobile = $("#mobile").val();
+			mobile_sub = $("#mobile_sub").val();
 			if(qq) {
 				html += '<input name="qq_number" type="hidden" value="' + qq + '"/>';
 			}
 			if(mobile) {
 				html += '<input name="mobile" type="hidden" value="' + mobile + '"/>';
+			}
+			if(mobile_sub) {
+				html += '<input name="mobile_sub" type="hidden" value="' + mobile_sub + '"/>';
 			}
 			projectname = $("#projectname").val();
 			if(projectname) {

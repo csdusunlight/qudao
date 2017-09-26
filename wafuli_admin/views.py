@@ -532,7 +532,8 @@ def import_investlog(request):
                     investlog.audit_state = '2'
                     investlog.audit_reason = reason
                 investlog.audit_time = datetime.datetime.now()
-                investlog.save(update_fields=['audit_state','audit_time','settle_amount','audit_reason'])
+                investlog.admin_user = admin_user
+                investlog.save(update_fields=['audit_state','audit_time','settle_amount','audit_reason','admin_user'])
                 suc_num += 1
         ret['code'] = 0
     except Exception as e:

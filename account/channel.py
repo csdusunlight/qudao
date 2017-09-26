@@ -303,7 +303,7 @@ def export_investlog(request):
     response['Content-Disposition'] = 'attachment; filename=投资记录表.xls'
     response.write(sio.getvalue())
     return response
-
+@csrf_exempt
 @login_required
 def import_investlog(request):
     user = request.user
@@ -388,7 +388,7 @@ def import_investlog(request):
                         investlog.audit_state = '2'
                         investlog.audit_reason = reason
                     investlog.audit_time = datetime.datetime.now()
-                    investlog.save(update_fields=['audit_state','audit_time','settle_amount','return_amount','reason'])
+                    investlog.save(update_fields=['audit_state','audit_time','settle_amount','return_amount','audit_reason'])
                 else:
                     investlog.return_amount = return_amount
                     investlog.save(update_fields=['return_amount',])

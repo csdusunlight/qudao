@@ -200,8 +200,7 @@ def revise_project(request):
 def export_investlog(request):
     user = request.user
     item_list = []
-    item_list = InvestLog.objects
-    item_list = item_list.filter(user=user)
+    item_list = InvestLog.objects.filter(user=user)
     investtime_0 = request.GET.get("investtime_0", None)
     investtime_1 = request.GET.get("investtime_1", None)
     submittime_0 = request.GET.get("submittime_0", None)

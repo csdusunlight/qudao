@@ -310,7 +310,7 @@ def import_investlog(request):
     ret = {'code':-1}
     file = request.FILES.get('file')
 #     print file.name
-    tempfile = './out' + str(int(time.time)) + '.xls'
+    tempfile = './out' + str(int(time.time())) + '.xls'
     with open(tempfile, 'wb+') as destination:
         for chunk in file.chunks():
             destination.write(chunk)
@@ -398,5 +398,7 @@ def import_investlog(request):
         traceback.print_exc()
         ret['code'] = 1
         ret['msg'] = unicode(e)
+    finally:
+        os.remove(tempfile)
     ret['num'] = suc_num
     return JsonResponse(ret)

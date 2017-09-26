@@ -378,7 +378,7 @@ def import_investlog(request):
                 id = row[0]
                 result = row[2]
                 reason = row[5]
-                investlog = InvestLog.objects.filter(user=user, is_official=False).get(id=id)
+                investlog = InvestLog.objects.filter(user=user).get(id=id)
                 if not investlog.is_official:
                     if result:
                         investlog.audit_state = '0'

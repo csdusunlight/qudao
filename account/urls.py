@@ -46,7 +46,6 @@ urlpatterns = [
     url(r'^account_setting/$', 'account.views.account_setting', name='account_setting'),
     url(r'^account_submit/$', 'account.channel.channel', name='account_submit'),
     url(r'^account_audited/$', 'account.views.account_audited', name='account_audited'),
-    url(r'^account_audited/export_finance_excel/$', 'account.channel.export_audit_result', ),
 
     url(r'^project/$', 'account.views.project_manage', name='project_manage'),
     url(r'^project_create/$', 'account.views.project_create', name='project_create'),

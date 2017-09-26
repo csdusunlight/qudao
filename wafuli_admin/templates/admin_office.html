@@ -47,7 +47,7 @@
         '<th>审核人</th><th>审核时间</th><th>拒绝金额</th><th>备注</th></tr>[results]<tr><td>{qq_number}</td><td>{手机号}</td><td>{project_title}</td>' +
         '<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
         '<td>{audit_state}<td>{admin_user}</td></td><td>{audit_time}</td><td>{audit_reason}</td><td>{remark}</td></tr>[/results]</table>';
-	var url = "/restapi/investlogs/" + "?page={page}&size={pageSize}&is_official=true";
+	var url = "/restapi/investlogs/" + "?page={page}&pageSize={pageSize}&is_official=true";
 
 	function pass(id) {
 		$(".BackNow").css("display", "block");

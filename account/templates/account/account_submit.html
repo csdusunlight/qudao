@@ -297,7 +297,7 @@
 					},
 				});
 				$("#pagedata").ajaxPage({
-					url: "/restapi/investlogs/?page={page}&size={pageSize}",
+					url: "/restapi/investlogs/?page={page}&pageSize={pageSize}&user={{user.id}}",
 					pageId: $("#page"),
 					pageSize: 10,
 					run: true,

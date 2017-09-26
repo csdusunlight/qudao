@@ -219,14 +219,14 @@ $(document).ready(function(){
     var startTime = $("#startTime").val();
     var endTime = $("#endTime").val();
     if(startTime && endTime) {
-      html += '<input name="investtime_0" type="hidden" value="' + startTime + '"/>';
-      html += '<input name="audittime_1" type="hidden" value="' + endTime + '"/>';
+      html += '<input name="submit_date_0" type="hidden" value="' + startTime + '"/>';
+      html += '<input name="submit_date_1" type="hidden" value="' + endTime + '"/>';
     }
     var startTime2 = $("#startTime2").val();
     var endTime2 = $("#endTime2").val();
     if(startTime2 && endTime2) {
-      html += '<input name="audittime_0" type="hidden" value="' + startTime2 + '"/>';
-      html += '<input name="audittime_1" type="hidden" value="' + endTime2 + '"/>';
+      html += '<input name="audit_date_0" type="hidden" value="' + startTime2 + '"/>';
+      html += '<input name="audit_date_1" type="hidden" value="' + endTime2 + '"/>';
     }
     var mobile = $("#mobile").val();
     var qq = $("#qq").val();
@@ -234,7 +234,7 @@ $(document).ready(function(){
       html += '<input name="mobile" type="hidden" value="' + mobile + '"/>';
     }
     if(qq) {
-      html += '<input name="qq" type="hidden" value="' + qq + '"/>';
+      html += '<input name="qq_number" type="hidden" value="' + qq + '"/>';
     }
     // companyname = $("#companyname").val();
     var qqname = $("#qqname").val();
@@ -242,12 +242,12 @@ $(document).ready(function(){
     //   html += '<input name="companyname" type="hidden" value="' + companyname + '"/>';
     // }
     if(qqname) {
-      html += '<input name="project_title_contains" type="hidden" value="' + qqname + '"/>';
+      html += '<input name="qq_name" type="hidden" value="' + qqname + '"/>';
     }
        adminname = $("#adminname").val();
     var state = $("#state").val();
        if(adminname) {
-         html += '<input name="adminname" type="hidden" value="' + adminname + '"/>';
+         html += '<input name="admin_user_mobile" type="hidden" value="' + adminname + '"/>';
        }
     if(state) {
       html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
@@ -315,7 +315,7 @@ $(document).ready(function(){
                                                 <input id="qqname" type="text" />
                                             </td>
                                             <td>
-                                                <i>处&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人：</i>
+                                                <i>处理人手机号：</i>
                                                 <input id="adminname" type="text" />
                                             </td>
                                         </tr>

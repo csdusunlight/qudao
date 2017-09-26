@@ -58,6 +58,12 @@
             </div>
         </div>
         <div class="handle clearfix">
+            <div class="handle__in l">
+                <input style="display: none;" id="fileupload" name="file" type="file" onchange='hint.innerHTML = this.files[0].name;' />
+                <a id="input_clone" class="btn m-green m-choose">选择文件</a>
+                <p class="hint-box">已选择表格：<b id="hint" class="hint">无</b></p>
+                <a id="import" class="btn m-green m-import">导入</a>
+            </div>
             <div class="handle__out r">
                 <a id="search" class="btn m-green m-search">搜索</a>
                 <a id="export" class="btn m-green m-export">导出</a>
@@ -104,7 +110,7 @@
         </div>
         <div class="handle clearfix">
             <div class="handle__in l">
-                <input style="display: none;" id="fileupload2" name="file" type="file" onchange='hint.innerHTML = this.files[0].name;' />
+                <input style="display: none;" id="fileupload2" name="file" type="file" onchange='hint_02.innerHTML = this.files[0].name;' />
                 <a id="input_clone_02" class="btn m-green m-choose">选择文件</a>
                 <p class="hint-box">已选择表格：<b id="hint_02" class="hint">无</b></p>
                 <a id="import_02" class="btn m-green m-import">导入</a>
@@ -647,21 +653,26 @@
                     telnum_sub = $("#telnum_sub").val(),
                     zhifubao = $("#zhifubao").val(),
                     state = $("#state").val();
+                    
+                if(!invest_date0 || !invest_date1) {
+                    alert('请先选择投资日期区间，再进行导出');
+                    return;
+                }
                 if(proj_name) {
-                    html += '<input name="proj_name" type="hidden" value="' + proj_name + '"/>';
+                    html += '<input name="project_title_contains" type="hidden" value="' + proj_name + '"/>';
                 }
                 if(invest_date0 && invest_date1) {
-                    html += '<input name="invest_date0" type="hidden" value="' + invest_date0 + '"/>';
-                    html += '<input name="invest_date1" type="hidden" value="' + invest_date1 + '"/>';
+                    html += '<input name="investtime_0" type="hidden" value="' + invest_date0 + '"/>';
+                    html += '<input name="investtime_1" type="hidden" value="' + invest_date1 + '"/>';
                 }
                 if(telnum_sub) {
-                    html += '<input name="telnum_sub" type="hidden" value="' + telnum_sub + '"/>';
+                    html += '<input name="invest_mobile" type="hidden" value="' + telnum_sub + '"/>';
                 }
                 if(zhifubao) {
                     html += '<input name="zhifubao" type="hidden" value="' + zhifubao + '"/>';
                 }
                 if(state) {
-                    html += '<input name="state" type="hidden" value="' + state + '"/>';
+                    html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
                 }
                 
                 html += '</form>';
@@ -728,21 +739,26 @@
                     telnum_sub = $("#telnum_sub_02").val(),
                     zhifubao = $("#zhifubao_02").val(),
                     state = $("#state_02").val();
+                    
+                if(!invest_date0 || !invest_date1) {
+                    alert('请先选择投资日期区间，再进行导出');
+                    return;
+                }
                 if(proj_name) {
-                    html += '<input name="proj_name" type="hidden" value="' + proj_name + '"/>';
+                    html += '<input name="project_title_contains" type="hidden" value="' + proj_name + '"/>';
                 }
                 if(invest_date0 && invest_date1) {
-                    html += '<input name="invest_date0" type="hidden" value="' + invest_date0 + '"/>';
-                    html += '<input name="invest_date1" type="hidden" value="' + invest_date1 + '"/>';
+                    html += '<input name="investtime_0" type="hidden" value="' + invest_date0 + '"/>';
+                    html += '<input name="investtime_1" type="hidden" value="' + invest_date1 + '"/>';
                 }
                 if(telnum_sub) {
-                    html += '<input name="telnum_sub" type="hidden" value="' + telnum_sub + '"/>';
+                    html += '<input name="invest_mobile" type="hidden" value="' + telnum_sub + '"/>';
                 }
                 if(zhifubao) {
                     html += '<input name="zhifubao" type="hidden" value="' + zhifubao + '"/>';
                 }
                 if(state) {
-                    html += '<input name="state" type="hidden" value="' + state + '"/>';
+                    html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
                 }
                 
                 html += '</form>';

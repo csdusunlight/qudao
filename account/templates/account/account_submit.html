@@ -114,13 +114,13 @@
 								</div>
 								<div class="popup-box popup-box-04">
 									<div class="popup-content">
-										<h3>数据提交反馈</h3>
+										<h3>数据提交结果</h3>
+										<p style="color: #ff6767;font-size: 20px;">有效提交：<span class="data-item-valid"></span>项</p>
 										<p>本次提交数据：<span class="data-item-submit"></span>项</p>
 										<!-- <p class="repeat-list">提交重复数据：<span class="data-item-repeat"></span>项</p> -->
 										<p class="repeat-phonenumber">重复数据：<span class="data-item-repeat-phone"></span></p>
 										<!-- <p>已存在的数据：<span class="data-item-exist"></span>项</p> -->
 										<p class="exist-phonenumber">无效数据：<span class="data-item-exist-phone"></span></p>
-										<p style="color: #ff6767;">有效提交：<span class="data-item-valid"></span>项</p>
 										<p style="text-align: left;padding-left: 38px;">注：<br/> 提交重复数据：提交中的重复项
 											<br /> 已存在的数据：挖福利数据库中已存在，其他用户或自己之前提交过的数据
 										</p>
@@ -256,11 +256,11 @@
 
 						<div class="popup-box popup-box-02">
 							<div class="popup-content">
-								<h3>数据提交成功</h3>
+								<h3>数据提交结果</h3>
+								<p>有效提交：<span class="data-valid"></span>项</p>
 								<p>提交数据：<span class="data-submit"></span>项</p>
 								<p class="repeat-list">表格重复数据：<span class="data-repeat"></span>项</p>
 								<p>已存在的数据：<span class="data-exist"></span>项</p>
-								<p>有效提交：<span class="data-valid"></span>项</p>
 								<p style="text-align: left;padding-left: 38px;">已存在的数据：<br /><span class="submit-phonenumber"></span></p>
 								<p style="text-align: left;padding-left: 38px;">注：<br/> 已存在的数据：挖福利数据库中已存在，其他用户或自己之前提交过的数据
 									<br /> 表格重复数据：提交的表格中的重复项
@@ -280,9 +280,9 @@
 			<script type="text/javascript">
 			    $('.back-a4').toggleClass("on");
 				var data = '<table width="100%"><tr><th width="12%">项目名称</th><th>投资日期</th><th>提交手机号</th>' +
-					'<th>投资金额</th><th>投资标期</th><th>备注</th>' +
+					'<th>投资金额</th><th>投资标期</th><th>支付宝</th><th>支付宝名称</th><th>备注</th>' +
 					'</tr>[results]<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
-					'<td>{invest_amount}</td><td>{invest_term}</td><td>{remark}</td>' +
+					'<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td>' +
 					'</tr>[/results]</table>';
 //				var data2 = '<table width="100%"><tr><th width="12%">项目</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
 //					'<th>投资金额</th><th width="15%">备注</th><th>审核结果</th><th>返现福币</th><th width="12%">操作</th>' +

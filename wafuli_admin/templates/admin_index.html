@@ -7,7 +7,7 @@ var data = '<table width="100%"><tr><th>日期</th><th>新申请用户数</th><t
 	'<td>{new_reg_num}</td><td>{with_amount}</td><td>{with_num}</td><td>{ret_amount}</td>'+
 	'<td>{ret_num}</td>'+
 	'</tr>[/results]</table>';
-var url = "/restapi/daystatis/" + "?page={page}&size={pageSize}";
+var url = "/restapi/daystatis/" + "?page={page}&pageSize={pageSize}";
 $(document).ready(function(){
 	$(".ListTable tr:even").css("background-color","#fcfcfc");
 	$("li.home1").toggleClass("on");
@@ -79,7 +79,7 @@ $(document).ready(function(){
                                         &nbsp; 至 &nbsp;
                                         <input id="endTime" type="date" />-->
                                         <!--<input id="search" type="button" value="搜索" />-->
-                                        <input id="export" type="button" value="导出" />
+                                        <!--<input id="export" type="button" value="导出" />-->
                                     </form>
                                 </div>
                                 <div class="ListTable">

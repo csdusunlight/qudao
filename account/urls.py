@@ -36,7 +36,7 @@ urlpatterns = [
     url(r'^forgot_validate_telcode/$', 'account.forgot_passwd.validate_telcode', name='forgot-validate-telcode'),
 #
     url(r'^channel/$', 'account.channel.channel', name='account_channel'),
-#     url(r'^export/$', 'account.channel.export_audit_result', name='export_audit_result'),
+    url(r'^export_investlog/$', 'account.channel.export_investlog', name='export_investlog'),
 #
     url(r'^submit_itembyitem/$', 'account.channel.submit_itembyitem', name='submit_itembyitem'),
 #     url(r'^revise_project/$', 'account.channel.revise_project', name='revise_project'),

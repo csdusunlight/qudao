@@ -1,3 +1,4 @@
+#coding:utf-8
 from django.shortcuts import render
 
 # Create your views here.
@@ -20,6 +21,7 @@ from restapi.Filters import InvestLogFilter, SubscribeShipFilter, UserFilter,\
 from django.db.models import Q
 from wafuli_admin.models import DayStatis
 from statistic.models import UserDetailStatis, UserAverageStatis
+from rest_framework.exceptions import ValidationError
 # from wafuli.Filters import UserEventFilter
 class BaseViewMixin(object):
     authentication_classes = (CsrfExemptSessionAuthentication,)
@@ -82,6 +84,13 @@ class InvestlogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = InvestLog.objects.all()
     permission_classes = (IsOwnerOrStaff,)
     serializer_class = InvestLogSerializer
+    def perform_update(self, serializer):
+        project = serializer.validated_data['project']
+        invest_mobile = serializer.validated_data['invest_mobile']
+        if not project.is_multisub_allowed:
+            if InvestLog.objects.filter(invest_mobile=invest_mobile).exclude(audit_state='2').exists():
+                raise ValidationError({'detail':u"投资手机号重复"})
+        serializer.save()
     
 class TranslistList(BaseViewMixin, generics.ListAPIView):
     def get_queryset(self):

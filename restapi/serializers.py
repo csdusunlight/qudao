@@ -19,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = MyUser
         fields = ('id', 'mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'with_total','accu_income',
                   'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number')
-        read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level', 'type')
+        read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level',)
         
 class ProjectSerializer(serializers.ModelSerializer):
 #     subscribers = UserSerializer(many=True)

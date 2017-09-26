@@ -40,7 +40,7 @@ class UserFilter(django_filters.rest_framework.FilterSet):
     join_date = django_filters.DateFromToRangeFilter(name="date_joined")
     class Meta:
         model = MyUser
-        fields = ['mobile', 'username', 'qq_name', 'qq_number', 'join_date']
+        fields = ['mobile', 'username', 'qq_name', 'qq_number', 'join_date', 'level', 'is_active']
         
 class ApplyLogFilter(django_filters.rest_framework.FilterSet):
     submit_date = django_filters.DateFromToRangeFilter(name="submit_time")

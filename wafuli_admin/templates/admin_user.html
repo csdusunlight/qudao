@@ -5,11 +5,11 @@ $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 });
 var data = '<table width="100%"><tr><th>渠道等级</th><th>QQ</th><th>QQ昵称</th><th>手机号</th>'+
-	'<th>银行卡号</th><th>持卡人姓名</th><th>申请时间</th><th>最近登陆时间</th><th>账户余额</th>'+
+	'<th>银行卡号</th><th>持卡人姓名</th><th>申请时间</th><th>账户余额</th>'+
 	'<th width="5%">是否为黑名单</th><th>账户操作</th>'+
 	'</tr>[results]<tr><td>{level}</td><td>{qq_number}</td><td>{qq_name}</td>'+
-	'<td>{mobile}</td><td>{银行卡号}</td><td>{持卡人姓名}</td><td>{date_joined}</td>'+
-	'<td>{最近登陆时间}</td><td>{balance}</td><td class="black" id="is_black_{id}">{is_active}</td>'+
+	'<td>{mobile}</td><td>{card_number}</td><td>{bank}</td><td>{date_joined}</td>'+
+	'<td>{balance}</td><td class="black" id="is_black_{id}">{is_active}</td>'+
 	'<td id="item_{id}"><a class="btn1-x" onclick="addcash({id})">余额</a>│'+
 	'<a class="btn2-x black_btn" data-isblack="{is_active}" id="black_{id}" onclick="addblack({id})">加黑</a>'+
 	'</td></tr>[/results]</table>';

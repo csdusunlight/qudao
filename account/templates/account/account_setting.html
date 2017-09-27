@@ -82,20 +82,20 @@ $(function(){
                 </div>
                 <div class="item">
                     <span class="item__name m-need">用户名</span>
-                    <input class="username item__txt" type="text" maxlength="12" />
+                    <input class="username item__txt" type="text" maxlength="12" value="{{user.username}}" />
                     <span>用于显示在个人主页，限12字以内</span>
                 </div>
                 <div class="item">
                     <span class="item__name m-need">QQ昵称</span>
-                    <input class="qqname item__txt" type="text" />
+                    <input class="qqname item__txt" type="text" value="{{user.qq_name}}" />
                 </div>
                 <div class="item">
                     <span class="item__name m-need">QQ</span>
-                    <input class="qq item__txt" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+                    <input class="qq item__txt" type="text" value="{{user.qq_number}}" onkeyup="this.value=this.value.replace(/\D/g,'')" />
                 </div>
                 <div class="item">
                     <span class="item__name">个人签名</span>
-                    <input class="tosign item__txt" type="text" />
+                    <input class="tosign item__txt" type="text" value="{{user.profile}}" onkeyup="this.value=this.value.replace(/[\r\n]/g,'')" />
                 </div>
                 
                 <div class="btnbox">

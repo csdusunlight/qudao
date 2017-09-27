@@ -269,7 +269,7 @@
 <script type="text/javascript" src="{% static 'js/add-img.js' %}"></script>
 <script type="text/javascript">
     $.ajax({
-        url:"/restapi/projects/?is_official=true",
+        url:"/restapi/projects/?is_official=true&pageSize=999",
         type:"get",
         dataType: "json",
         success: function(ret) {

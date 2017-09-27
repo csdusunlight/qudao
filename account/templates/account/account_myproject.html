@@ -23,7 +23,7 @@ var data = '<table width="100%"><thead><tr><th>项目名称</th><th>项目来源
     '[results]<tr><td>{project_title}</td><td class="project_source">{project_source}</td><td data-price="{project_cprice}" class="price">{price}</td><td>{project_term}</td>'+
     '<td>{project_investrange}</td><td data-intrest="{project_intrest}" class="intrest">{intrest}</td><td><span data-isadd="{is_on}" class="home switch {is_on}" onclick="isadd(this,{id})"></span></td>'+
     '<td><span data-isadd="{is_recommend}" class="recom switch {is_recommend}" onclick="isRecommend(this,{id})"></span></td>'+
-    '<td class="edit" onclick="edit(this, {id}, {project}, {project_is_official})">编辑</td></tr>[/results]'
+    '<td data-isofficial="{project_is_official}" class="edit" onclick="edit(this, {id}, {project})">编辑</td></tr>[/results]'
     + '</tbody></table>';
 var url = "/restapi/sub/?page={page}&pageSize={pageSize}";
 //function pop(n){
@@ -160,19 +160,21 @@ function isRecommend(obj,id) {        //是否推荐调用函数
 var project_souse;
 var project_id;
 var parent_dom;
-function edit(obj, id, project, project_type) {     //编辑调用函数
-    console.log(project_type);
+function edit(obj, id, project) {     //编辑调用函数
+//  console.log(project_type);
     project_souse = project;
-    console.log(project);
+//  console.log(project);
     project_id = id;
     parent_dom = $(obj).parent();
     console.log(project_id);
+    var project_type = $(obj).data('isofficial');
+    console.log(project_type);
     $.ajax({
         url: '/restapi/sub/' + project_id + '/',
         dataType: "json",
         type:"get",
         success: function(ret) {
-            if (project_type == 2) {
+            if (project_type == 'True') {
                 if (!ret.introduction) {
                     $('#edit_detail').val(ret.project_intro);
                 } else{
@@ -190,7 +192,7 @@ function edit(obj, id, project, project_type) {     //编辑调用函数
                 }
                 
                 $('.popup.m-edit-proj').addClass('in');
-            } else if (project_type == 3){
+            } else if(project_type == 'False') {
                 if (!ret.introduction) {
                     $('#edit_detail_02').val(ret.project_intro);
                 } else{

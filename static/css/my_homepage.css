@@ -16,6 +16,7 @@
     vertical-align: top;
 }
 .user__detail {
+    width: 950px;
     display: inline-block;
 }
 .user__name {
@@ -26,8 +27,8 @@
     color: #fff;
 }
 .user__intro {
-    font-size: 20px;
-    line-height: 1;
+    font-size: 18px;
+    line-height: 1.2;
     color: #fff;
 }
 .content {

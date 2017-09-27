@@ -70,7 +70,8 @@ class WithdrawLogFilter(django_filters.rest_framework.FilterSet):
     user_name = django_filters.CharFilter('user', lookup_expr='username')
     user_level = django_filters.CharFilter('user', lookup_expr='level')
     admin_mobile = django_filters.CharFilter('admin_user', lookup_expr='mobile')
-    bank = django_filters.CharFilter('user.user_bank', lookup_expr='bank')
+    card_number = django_filters.CharFilter('user', lookup_expr='user_bankcard__card_number')
+    real_name = django_filters.CharFilter('user', lookup_expr='user_bankcard__real_name')
     class Meta:
         model = WithdrawLog
-        fields = ['submit_date', 'audit_date', 'user_mobile', 'qq_number','user_name', 'audit_state', ]
+        fields = ['submit_date', 'audit_date', 'user_mobile', 'qq_number','user_name', 'audit_state', 'card_number', 'real_name']

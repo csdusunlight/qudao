@@ -13,7 +13,7 @@ from django.db.models import F
 from decimal import Decimal
 logger = logging.getLogger('wafuli')
 
-def charge_money(user, type, amount, reason, reverse=False):
+def charge_money(user, type, amount, reason, reverse=False, remark=''):
     if not (isinstance(user, MyUser) and reason) or type !='0' and type != '1':
         raise Exception('Charge_money Parameters ERROR!!!')
     amount = Decimal(amount)
@@ -21,7 +21,7 @@ def charge_money(user, type, amount, reason, reverse=False):
         raise Exception('Charge_money amount can not be less or equal to 0')
     with transaction.atomic():
         trans = TransList.objects.create(user=user, transType=type, initAmount = user.balance, 
-                          transAmount=amount, reason=reason)
+                          transAmount=amount, reason=reason, remark=remark)
         if type == '0':
             user.balance = F('balance') + amount
             if not reverse:

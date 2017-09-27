@@ -13,6 +13,8 @@ urlpatterns = [
     url(r'^investlogs/$', views.InvestlogList.as_view()),
     url(r'^investlogs/(?P<pk>[0-9]+)/$', views.InvestlogDetail.as_view(), kwargs={'partial':True}),
     
+    url(r'^withdrawlogs/$', views.WithdrawLogList.as_view()),
+    
     url(r'^translist/$', views.TranslistList.as_view()),
     
     url(r'^notice/$', views.NoticeList.as_view()),

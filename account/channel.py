@@ -385,6 +385,8 @@ def import_investlog(request):
                         settle_amount = row[3]
                         return_amount = row[4]
                     else:
+                        investlog.settle_amount = settle_amount
+                        investlog.return_amount = return_amount
                         investlog.audit_state = '2'
                         investlog.audit_reason = reason
                     investlog.audit_time = datetime.datetime.now()

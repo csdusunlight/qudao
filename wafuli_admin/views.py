@@ -770,9 +770,7 @@ def admin_withdraw(request):
                 return JsonResponse(res)
             withdrawlog.audit_state = '2'
             withdrawlog.audit_reason = reason
-            translist = charge_money(withdrawlog.user, '0', withdrawlog.amount, u'冲账', reverse=True)
-            translist.remark = reason
-            translist.save(update_fields=['reason',])
+            charge_money(withdrawlog.user, '0', withdrawlog.amount, u'冲账', True, reason)
             res['code'] = 0
         withdrawlog.audit_time = datetime.datetime.now()
         withdrawlog.admin_user = admin_user
@@ -884,30 +882,33 @@ def get_admin_with_page(request):
     res["recordCount"] = item_list.count()
     res["data"] = data
     return JsonResponse(res)
-def export_withdraw_excel(request):
+
+@login_required
+def export_withdrawlog(request):
     user = request.user
-    if not ( user.is_authenticated() and user.is_staff):
+    if not user.is_staff:
         raise Http404
     state = request.GET.get("state",'1')
-    item_list = InvestLog.objects.filter(investlog_type='2', audit_state=state).select_related('user').order_by('time','invest_amount')
-    startTime = request.GET.get("startTime", None)
-    endTime = request.GET.get("endTime", None)
-    startTime2 = request.GET.get("startTime2", None)
-    endTime2 = request.GET.get("endTime2", None)
-    if startTime and endTime:
-        s = datetime.datetime.strptime(startTime,'%Y-%m-%dT%H:%M')
-        e = datetime.datetime.strptime(endTime,'%Y-%m-%dT%H:%M')
-        item_list = item_list.filter(time__range=(s,e))
-    if startTime2 and endTime2:
-        s = datetime.datetime.strptime(startTime2,'%Y-%m-%dT%H:%M')
-        e = datetime.datetime.strptime(endTime2,'%Y-%m-%dT%H:%M')
+    item_list = WithdrawLog.objects.filter(audit_state=state).select_related('user').order_by('submit_time','amount')
+    submit_date_0 = request.GET.get("submit_date_0", None)
+    submit_date_1 = request.GET.get("submit_date", None)
+    audit_date_0 = request.GET.get("audit_date_0", None)
+    audit_date_1 = request.GET.get("audit_date_1", None)
+    state = request.GET.get("audit_state",'1')
+    if submit_date_0 and submit_date_1:
+        s = datetime.datetime.strptime(submit_date_0,'%Y-%m-%d')
+        e = datetime.datetime.strptime(submit_date_1,'%Y-%m-%d')
+        item_list = item_list.filter(submit_time__range=(s,e))
+    if audit_date_0 and audit_date_1:
+        s = datetime.datetime.strptime(audit_date_0,'%Y-%m-%d')
+        e = datetime.datetime.strptime(audit_date_1,'%Y-%m-%d')
         item_list = item_list.filter(audit_time__range=(s,e))
 
-    username = request.GET.get("username", None)
-    if username:
-        item_list = item_list.filter(user__username=username)
+    qq_number = request.GET.get("qq_number", None)
+    if qq_number:
+        item_list = item_list.filter(user__qq_number=qq_number)
 
-    mobile = request.GET.get("mobile", None)
+    mobile = request.GET.get("user_mobile", None)
     if mobile:
         item_list = item_list.filter(user__mobile=mobile)
 
@@ -921,7 +922,7 @@ def export_withdraw_excel(request):
 
     adminname = request.GET.get("adminname", None)
     if adminname:
-        item_list = item_list.filter(audited_logs__user__username=adminname)
+        item_list = item_list.filter(admin_user__username=adminname)
 
     data = []
 
@@ -935,13 +936,12 @@ def export_withdraw_excel(request):
             bank = card.get_bank_display()
             real_name = card.real_name
             card_number = card.card_number
-        username = obj_user.username
+        qq_number = obj_user.qq_number
         mobile = obj_user.mobile
-        balance = obj_user.balance/100.0
-        time=con.time
+        balance = obj_user.balance
+        time=con.submit_time
         id=con.id
-        remark= con.remark
-        amount= con.invest_amount/100.0
+        amount= con.amount
         state=con.get_audit_state_display()
         user_mobile = obj_user.qq_number
         user_level = obj_user.level
@@ -951,14 +951,13 @@ def export_withdraw_excel(request):
             result = u'是'
         elif con.audit_state=='2':
             result = u'否'
-            if con.audited_logs.exists():
-                reason = con.audited_logs.first().reason
-        data.append([id, username, mobile, user_level, balance, bank, real_name, card_number, amount,
+            reason = con.audit_reason
+        data.append([id, qq_number, mobile, user_level, balance, bank, real_name, card_number, amount,
                      time, result, reason])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
-    title_row = [u'记录ID',u'用户名',u'手机号', u'用户类型', u'账户余额', u'开户行', u'实名' ,u'银行卡号' ,u'申请提现金额', u'申请时间',
-                 u'审核结果',u'拒绝原因']
+    title_row = [u'记录ID',u'qq号',u'手机号', u'用户级别', u'账户余额', u'开户行', u'实名' ,u'银行卡号' ,u'申请提现金额', u'申请时间',
+                 u'是否审核通过',u'拒绝原因']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
     row = len(data)
@@ -982,10 +981,9 @@ def export_withdraw_excel(request):
 
 @csrf_exempt
 @has_permission('004')
-def import_withdraw_excel(request):
+def import_withdrawlog(request):
     admin_user = request.user
-    if not ( admin_user.is_authenticated() and admin_user.is_staff):
-        raise Http404
+
     ret = {'code':-1}
     file = request.FILES.get('file')
 #     print file.name
@@ -1049,7 +1047,7 @@ def import_withdraw_excel(request):
                         raise Exception(u"拒绝原因缺失")
                     withdrawlog.audit_state = '2'
                     withdrawlog.audit_reason = reason
-                    translist = charge_money(withdrawlog.user, '0', withdrawlog.amount, u'冲账', reverse=True)
+                    charge_money(withdrawlog.user, '0', withdrawlog.amount, u'冲账', True, reason)
                 withdrawlog.audit_time = datetime.datetime.now()
                 withdrawlog.admin_user = admin_user
                 withdrawlog.save(update_fields=['audit_state','audit_time','audit_reason','admin_user'])

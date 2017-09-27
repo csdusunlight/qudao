@@ -33,6 +33,7 @@ $(function(){
     	    <div class="right-top clearfix">
     	        <h2 class="top-title l">主页资料</h2>
     	        <a class="btn m-yellow m-exp r" href="http://{{user.qq_number}}.51fanshu.com" target="_blank">进入主页</a>
+    	        <!--<a class="btn m-yellow m-exp r" href="/homepage/" target="_blank">进入主页</a>-->
     	    </div>
     	    <div class="user-info-box">
         	    <div class="item">
@@ -234,6 +235,8 @@ $(function(){
                 process(data, file.name, file.type);
                 img = null;
             }
+            
+            submit();
         })
         $('#btnZoomIn').on('click', function(){
             cropper.zoomIn();
@@ -289,7 +292,7 @@ $(function(){
                 ctx.drawImage(img, 0, 0, width, height);
             }
             //进行最小压缩
-            var ndata = canvas.toDataURL('image/jpeg', 0.5);
+            var ndata = canvas.toDataURL('image/jpeg', 0.9);
             console.log('压缩前：' + initSize);
             console.log('压缩后：' + ndata.length);
             console.log('压缩率：' + ~~(100 * (initSize - ndata.length) / initSize) + "%");
@@ -314,27 +317,27 @@ $(function(){
             var xhr = new XMLHttpRequest();
             var formdata = new FormData();
 
-            var username = $('.username').val();
-            var qqname = $('.qqname').val();
-            var qq = $('.qq').val();
-            var tosign = $('.tosign').val();
-            if (!qq || !qqname) {
-                alert('qq号和qq昵称不能为空');
-                return;
-            }
+//          var username = $('.username').val();
+//          var qqname = $('.qqname').val();
+//          var qq = $('.qq').val();
+//          var tosign = $('.tosign').val();
+//          if (!qq || !qqname) {
+//              alert('qq号和qq昵称不能为空');
+//              return;
+//          }
             
-            var detail = 'skin=' + skin + ' username=' + username + ' qqname=' + qqname + ' qq=' + qq + ' tosign=' + tosign;
-            console.log(detail);
+//          var detail = 'skin=' + skin + ' username=' + username + ' qqname=' + qqname + ' qq=' + qq + ' tosign=' + tosign;
+//          console.log(detail);
             if (file_list.length!=0){
                 console.log('add pic');
                 formdata.append("picture", file_list[0].blob, file_list[0].name);
             }
-            formdata.append('color', skin);
-            formdata.append('username', username);
-            formdata.append('qq_number', qq);
-            formdata.append('qq_name', qqname);
-            formdata.append('profile', tosign);
-            console.log(formdata);
+//          formdata.append('color', skin);
+//          formdata.append('username', username);
+//          formdata.append('qq_number', qq);
+//          formdata.append('qq_name', qqname);
+//          formdata.append('profile', tosign);
+//          console.log(formdata);
             var userId = {{user.id}};
             xhr.open('put', '/restapi/users/' + userId + '/');
             xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
@@ -369,7 +372,39 @@ $(function(){
         
 //      头像处理---end
         $('.save').click(function(){
-            submit();
+            var username = $('.username').val();
+            var qqname = $('.qqname').val();
+            var qq = $('.qq').val();
+            var tosign = $('.tosign').val();
+            if (!qq || !qqname) {
+                alert('qq号和qq昵称不能为空');
+                return;
+            }
+            
+            var detail = 'skin=' + skin + ' username=' + username + ' qqname=' + qqname + ' qq=' + qq + ' tosign=' + tosign;
+            console.log(detail);
+
+            var userId = {{user.id}};
+//          submit();
+            $.ajax({
+                url: '/restapi/users/' + userId + '/',
+                type: 'put',
+                dataType: "json",
+                data: {
+                    'color': skin,
+                    'username': username,
+                    'qq_number': qq,
+                    'qq_name': qqname,
+                    'profile': tosign
+                },
+                success: function(ret) {
+                    alert("修改成功!");
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
+                    alert("数据错误");
+                }
+            });
         })
         
     })

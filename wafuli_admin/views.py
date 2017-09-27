@@ -334,7 +334,7 @@ def export_investlog(request):
         item_list = item_list.filter(project__company__name__contains=companyname)
     invest_mobile = request.GET.get("mobile_sub", None)
     if invest_mobile:
-        item_list = item_list.filter(invest_mobile=invest_mobile)    
+        item_list = item_list.filter(invest_mobile=invest_mobile)
     projectname = request.GET.get("project_title_contains", None)
     if projectname:
         item_list = item_list.filter(project__title__contains=projectname)
@@ -603,7 +603,7 @@ def admin_user(request):
             translist.adminlog = adminlog
             translist.save(update_fields=['adminlog'])
             res['code'] = 0
-            
+
 
         elif type == 2:
             obj_user.is_active = False
@@ -813,11 +813,11 @@ def get_admin_with_page(request):
     username = request.GET.get("username", None)
     if username:
         item_list = item_list.filter(user__username=username)
-        
+
     userlevel = request.GET.get("userlevel", None)
     if username:
         item_list = item_list.filter(user__level=userlevel)
-    
+
     qq_number = request.GET.get("qq_number", None)
     if qq_number:
         item_list = item_list.filter(user__qq_number=qq_number)
@@ -888,7 +888,7 @@ def export_withdrawlog(request):
     user = request.user
     if not user.is_staff:
         raise Http404
-    state = request.GET.get("state",'1')
+    state = request.GET.get("audit_state",'1')
     item_list = WithdrawLog.objects.filter(audit_state=state).select_related('user').order_by('submit_time','amount')
     submit_date_0 = request.GET.get("submit_date_0", None)
     submit_date_1 = request.GET.get("submit_date", None)
@@ -920,9 +920,9 @@ def export_withdrawlog(request):
     if real_name:
         item_list = item_list.filter(user__user_bankcard__real_name=real_name)
 
-    adminname = request.GET.get("adminname", None)
-    if adminname:
-        item_list = item_list.filter(admin_user__username=adminname)
+    admin_mobile = request.GET.get("admin_mobile", None)
+    if admin_mobile:
+        item_list = item_list.filter(admin_user__mobile=admin_mobile)
 
     data = []
 

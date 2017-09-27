@@ -55,8 +55,8 @@ $(function(){
 			},
 			success:function(ret){
 				if(ret.code==0){
+				    $('.popup.m-withdraw').removeClass('in');
 					alert("提现申请提交成功！");
-					$('.popup.m-withdraw').removeClass('in');
 					window.location.href = "{% url 'account_money' %}";
 				}
 				else {

@@ -289,7 +289,7 @@ def phoneImageV(request):
 @login_required
 def account(request):
     announce_list = Announcement.objects.all()
-    recom_projects = Project.objects.filter(state='10')[0:4]
+    recom_projects = Project.objects.filter(state='10', is_official=True)[0:4]
     return render(request, 'account/account_index.html',{'announce_list':announce_list, 'recom_projects':recom_projects})
 
 @login_required

@@ -159,23 +159,24 @@ $(function(){
 	{% include "footer.html" %}
 	<script src="{% static 'js/wfl-common.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
+    var skin = '';
+    var img = '';
+    var img2;
+    var file_list = [];
+    //    用于压缩图片的canvas
+    var canvas = document.createElement("canvas");
+    var ctx = canvas.getContext('2d');
+    //    瓦片canvas
+    var tCanvas = document.createElement("canvas");
+    var tctx = tCanvas.getContext("2d");
+    var file;
+    var maxsize = 80 * 1024;
     $(function() {
         console.log('{{user.color}}');
         $('.skin__item').removeClass('on');
         $('.skin__item').eq({{user.color}}).addClass('on');
         
-        var skin = '';
-        var img = '';
-        var img2;
-        var file_list = [];
-        //    用于压缩图片的canvas
-        var canvas = document.createElement("canvas");
-        var ctx = canvas.getContext('2d');
-        //    瓦片canvas
-        var tCanvas = document.createElement("canvas");
-        var tctx = tCanvas.getContext("2d");
-        var file;
-        var maxsize = 80 * 1024;
+        
         console.log("{{user.picture_url}}");
         var options =
         {
@@ -212,28 +213,22 @@ $(function(){
             img.src = result;
 //              $(li).css("background-image", "url(" + result + ")");
             //如果图片大小小于100kb，则直接上传
-            if(!file) {
-                file={
-                    
+            if(result.length <= maxsize) {
+                process(result, file.name, file.type);
+            }
+            else{
+            	if(img.complete) {
+                    callback();
+                } else {
+                    img.onload = callback;
                 }
             }
-            
-            if(result.length <= maxsize) {
-                img = null;
-                process(result, file.name, file.type);
-                return;
-            }
             //      图片加载完毕之后进行压缩，然后上传
-            if(img.complete) {
-                callback();
-            } else {
-                img.onload = callback;
-            }
+            
             
             function callback() {
                 var data = compress(img);
                 process(data, file.name, file.type);
-                img = null;
             }
             
             submit();
@@ -337,7 +332,7 @@ $(function(){
 //          formdata.append('qq_number', qq);
 //          formdata.append('qq_name', qqname);
 //          formdata.append('profile', tosign);
-//          console.log(formdata);
+          console.log(formdata);
             var userId = {{user.id}};
             xhr.open('put', '/restapi/users/' + userId + '/');
             xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");

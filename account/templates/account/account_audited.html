@@ -159,11 +159,11 @@
                 </div>
                 <div class="popup__item">
                     <span class="popup__itemname">收款支付宝：</span>
-                    <input type="text" class="zfb" placeholder="填写投资金额" />
+                    <input type="text" class="zfb" placeholder="填写收款支付宝" />
                 </div>
                 <div class="popup__item">
                     <span class="popup__itemname">支付宝姓名：</span>
-                    <input type="text" class="zfbname" placeholder="填写投资金额" />
+                    <input type="text" class="zfbname" placeholder="填写支付宝姓名" />
                 </div>
                 <div class="popup__item">
                     <span class="popup__itemname">备注：</span>
@@ -428,12 +428,38 @@
                 remark = $(".remark").val();
             console.log(project);
             console.log(project_id+","+project+","+date+","+telnum+","+term+","+money+","+remark+",");
-            if(!project || !date || !telnum || !term || !money || !zfb || !zfbname) {
+            if(!project || !date || !telnum || !term || !money) {
                 alert("填写项不能为空");
                 return;
             }
             if(project == 0) {
                 alert("请选择项目");
+                return;
+            }
+            
+//          if(date.match(/^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/)) { 
+//              console.log('日期格式正确');
+//          } else { 
+//              alert('日期格式不符合规范'); 
+//              return;
+//          }
+            var re_date = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/, //验证日期
+                re_phone = /^1[1,2,3,4,6,5,7,8,9]\d{9}$/, //验证手机号
+                re_amount = /^\d+(\.\d+)?$/; //验证数字格式
+            if(!re_date.test(date)) {
+                alert('日期格式不正确，请重新选择');
+                return;
+            }
+            if(!re_phone.test(telnum)) {
+                alert('手机号格式不正确');
+                return;
+            }
+            if(!re_amount.test(term)) {
+                alert('标期必须为纯数字格式');
+                return;
+            }
+            if(!re_amount.test(money)) {
+                alert('金额必须为纯数字格式');
                 return;
             }
 
@@ -453,7 +479,7 @@
                 },
                 success: function(ret) {
                     var parent_dom = $(edit_parent);
-                    parent_dom.find("td").eq(0).text(ret.project);
+                    parent_dom.find("td").eq(0).text(ret.project_title);
                     parent_dom.find("td").eq(1).text(ret.invest_date);
                     parent_dom.find("td").eq(2).text(ret.invest_mobile);
                     parent_dom.find("td").eq(3).text(ret.invest_term);
@@ -463,8 +489,9 @@
                     parent_dom.find("td").eq(7).text(ret.remark);
                     $('.popup.m-edit-proj').removeClass('in');
                 },
-                error: function() {
-                    alert("请检查网络连接");
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
+                    alert("数据错误");
                 }
             });
         });

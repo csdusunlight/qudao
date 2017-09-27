@@ -99,8 +99,8 @@ $(function(){
                 </div>
                 
                 <div class="btnbox">
-                    <a class="cancle btn m-yellow">取消</a>
-                    <a class="save btn m-green">保存</a>
+                    <!--<a class="cancle btn m-yellow">取消</a>-->
+                    <a style="margin-left: -160px;" class="save btn m-green">保存</a>
                 </div>
     	    </div>
             
@@ -370,15 +370,6 @@ $(function(){
 //      头像处理---end
         $('.save').click(function(){
             submit();
-        })
-        $('.cancle').click(function(){
-            $('.username').val("{{user.username}}");
-            $('.qqname').val("{{user.qq_name}}");
-            $('.qq').val("{{user.qq_number}}");
-            $('.tosign').val("{{user.profile}}");
-            console.log('{{user.color}}');
-            $('.skin__item').removeClass('on');
-            $('.skin__item').eq({{user.color}}).addClass('on');
         })
         
     })

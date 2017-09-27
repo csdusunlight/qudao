@@ -93,6 +93,7 @@
     padding-left: 42px;
     font-size: 24px;
     line-height: 72px;
+    background: url(../images/bg-icon-hot.png) left center no-repeat;
 }
 .hot__box {
     height: 300px;
@@ -103,10 +104,11 @@
 .hot__itembox {
     display: inline-block;
     width: 245px;
+    vertical-align: top;
     transition: transform 0.4s ease;
 }
 .hot__itembox:hover {
-    transform: translateY(-64px);
+    transform: translateY(-80px);
 }
 .hot__img {
     margin: 16px auto 10px;
@@ -137,6 +139,7 @@
     padding-left: 42px;
     font-size: 24px;
     line-height: 84px;
+    background: url(../images/bg-icon-list.png) left center no-repeat;
 }
 .search__left {
     position: relative;
@@ -208,6 +211,7 @@
 .project__profit-num,
 .project__price-num {
     display: inline-block;
+    margin-top: 16px;
     font-size: 20px;
     color: #ffbe00;
     line-height: 24px;
@@ -226,14 +230,13 @@
 }
 
 .ask {
-    padding-top: 12px;
     width: 250px;
     height: 100px;
-    background-color: #91C11D;
     font-size: 20px;
-    line-height: 38px;
+    line-height: 100px;
     text-align: center;
     color: #fff;
+    background: url(../images/bg-icon-qq.png) 20px center no-repeat #91C11D;
 }
 .ask-time {
     font-size: 14px;

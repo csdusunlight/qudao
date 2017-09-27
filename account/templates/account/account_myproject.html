@@ -13,16 +13,17 @@
 <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/wfl-tab.js' %}"></script>
 <script type="text/javascript" >
 $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 });
-var data3 = '<table width="100%"><thead><tr><th>项目名称</th><th>项目来源</th>'+
+var data = '<table width="100%"><thead><tr><th>项目名称</th><th>项目来源</th>'+
     '<th>客户指导价</th><th>标期</th><th>投资区间</th><th>预计年化</th><th width="14%">是否主页呈现</th><th width="14%">是否推荐</th><th>操作</th></tr></thead><tbody>'+
     '[results]<tr><td>{project_title}</td><td class="project_source">{project_source}</td><td data-price="{project_cprice}" class="price">{price}</td><td>{project_term}</td>'+
     '<td>{project_investrange}</td><td data-intrest="{project_intrest}" class="intrest">{intrest}</td><td><span data-isadd="{is_on}" class="home switch {is_on}" onclick="isadd(this,{id})"></span></td>'+
     '<td><span data-isadd="{is_recommend}" class="recom switch {is_recommend}" onclick="isRecommend(this,{id})"></span></td>'+
-    '<td class="edit" onclick="edit(this, {id})">编辑</td></tr>[/results]'
+    '<td class="edit" onclick="edit(this, {id}, {project}, {project_is_official})">编辑</td></tr>[/results]'
     + '</tbody></table>';
 var url = "/restapi/sub/?page={page}&pageSize={pageSize}";
 //function pop(n){
@@ -156,33 +157,65 @@ function isRecommend(obj,id) {        //是否推荐调用函数
         
     }
 }
+var project_souse;
 var project_id;
 var parent_dom;
-function edit(obj, id) {     //编辑调用函数
+function edit(obj, id, project, project_type) {     //编辑调用函数
+    console.log(project_type);
+    project_souse = project;
+    console.log(project);
     project_id = id;
     parent_dom = $(obj).parent();
     console.log(project_id);
     $.ajax({
         url: '/restapi/sub/' + project_id + '/',
         dataType: "json",
-        type:"put",
+        type:"get",
         success: function(ret) {
-            if (!ret.introduction) {
-                $('#edit_detail').val(ret.project_intro);
-            } else{
-            	$('#edit_detail').val(ret.introduction);
+            if (project_type == 2) {
+                if (!ret.introduction) {
+                    $('#edit_detail').val(ret.project_intro);
+                } else{
+                	$('#edit_detail').val(ret.introduction);
+                }
+                if (!ret.price) {
+                    $('#edit_price').val(ret.project_cprice);
+                } else{
+                    $('#edit_price').val(ret.price);
+                }
+                if (!ret.intrest) {
+                    $('#edit_intrest').val(ret.project_intrest);
+                } else{
+                    $('#edit_intrest').val(ret.intrest);
+                }
+                
+                $('.popup.m-edit-proj').addClass('in');
+            } else if (project_type == 3){
+                if (!ret.introduction) {
+                    $('#edit_detail_02').val(ret.project_intro);
+                } else{
+                    $('#edit_detail_02').val(ret.introduction);
+                }
+                if (!ret.price) {
+                    $('#edit_price_02').val(ret.project_cprice);
+                } else{
+                    $('#edit_price_02').val(ret.price);
+                }
+                if (!ret.intrest) {
+                    $('#edit_intrest_02').val(ret.project_intrest);
+                } else{
+                    $('#edit_intrest_02').val(ret.intrest);
+                }
+                
+                $('#edit_link_02').val(ret.project_strategy);
+//              $('#edit_detail_02').val(ret.introduction);
+//              $('#edit_price_02').val(ret.price);
+                $('#edit_term_02').val(ret.project_term);
+                $('#edit_range_02').val(ret.project_investrange);
+//              $('#edit_intrest_02').val(ret.intrest);
+                
+            	$('.popup.m-edit-proj-02').addClass('in');
             }
-            if (!ret.price) {
-                $('#edit_price').val(ret.project_cprice);
-            } else{
-                $('#edit_price').val(ret.price);
-            }
-            if (!ret.intrest) {
-                $('#edit_intrest').val(ret.project_intrest);
-            } else{
-                $('#edit_intrest').val(ret.intrest);
-            }
-            $('.popup.m-edit-proj').addClass('in');
         },
         error: function() {
             alert("请检查网络连接");
@@ -194,12 +227,39 @@ $(function(){
 //	$(".None-p button").click(function(){
 //		$(".Password-modify").css("display","none");
 //	});
+    $('.project-box').tab({
+        tabActiveClass: 'on',
+        tabType: 'click '
+    });
+    $('.navitem').click(function(){
+        console.log($(this).index());
+        if ($(this).index() == 0) {
+        	$("#pagedata").ajaxPage({
+            url:url + '&is_official=2',
+            pageId:$("#page"),
+            pageSize:10,
+            run:true,
+            content:data,
+            complete:pagecallback,
+    });
+        } else if ($(this).index() == 1){
+        	$("#pagedata2").ajaxPage({
+            url:url + '&is_official=3',
+            pageId:$("#page2"),
+            pageSize:10,
+            run:true,
+            content:data,
+            complete:pagecallback,
+    });
+        }
+    })
+
 	$("#pagedata").ajaxPage({
-        url:url,
+        url:url + '&is_official=2',
         pageId:$("#page"),
         pageSize:10,
         run:true,
-        content:data3,
+        content:data,
         complete:pagecallback,
     });
     
@@ -257,9 +317,9 @@ $(function(){
             }
         });
     })
-    $('#edit_confirm').click(function(){     //确认修改项目
+    $('#edit_confirm').click(function(){     //确认修改官方项目
         var edit_detail = $('#edit_detail').val(),
-            edit_price = $('#edit_price').val();
+            edit_price = $('#edit_price').val(),
             edit_intrest = $('#edit_intrest').val();
             console.log(' project_id=' + project_id +' edit_detail=' + edit_detail +' edit_price=' + edit_price);
         $.ajax({
@@ -278,6 +338,60 @@ $(function(){
                 parent_dom.find('td').eq(2).text(edit_price);
                 parent_dom.find('td').eq(5).text(edit_intrest);
                 $('.popup.m-edit-proj').removeClass('in');
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+    })
+    $('#edit_confirm_02').click(function(){     //确认修改自建项目
+        var edit_link_02 = $('#edit_link_02').val(),
+            edit_detail_02 = $('#edit_detail_02').val(),
+            edit_price_02 = $('#edit_price_02').val(),
+            edit_term_02 = $('#edit_term_02').val(),
+            edit_range_02 = $('#edit_range_02').val(),
+            edit_intrest_02 = $('#edit_intrest_02').val();
+            
+            console.log(' project_id=' + project_id +' edit_detail=' + edit_detail +' edit_price=' + edit_price);
+        $.ajax({
+            url: '/restapi/sub/' + project_id + '/',
+            dataType: "json",
+            type: 'put',
+            data: {
+                'project_strategy': edit_link_02,
+                'introduction': edit_detail_02,
+                'price': edit_price_02,
+                'project_term': edit_term_02,
+                'project_investrange': edit_range_02,
+                'intrest': edit_intrest_02
+            },
+            success: function(ret) {
+                $.ajax({
+                    url: '/restapi/projects/' + project_souse + '/',
+                    dataType: "json",
+                    type: 'put',
+                    data: {
+                        'strategy': edit_link_02,
+                        'introduction': edit_detail_02,
+                        'cprice': edit_price_02,
+                        'term': edit_term_02,
+                        'investrange': edit_range_02,
+                        'intrest': edit_intrest_02
+                    },
+                    success: function(ret) {
+                        $.prompt({
+                            Content: '编辑成功'
+                        })
+                        parent_dom.find('td').eq(2).text(edit_price_02);
+                        parent_dom.find('td').eq(3).text(edit_term_02);
+                        parent_dom.find('td').eq(4).text(edit_range_02);
+                        parent_dom.find('td').eq(5).text(edit_intrest_02);
+                        $('.popup.m-edit-proj-02').removeClass('in');
+                    },
+                    error: function() {
+                        alert("请检查网络连接");
+                    }
+                });
             },
             error: function() {
                 alert("请检查网络连接");
@@ -398,15 +512,35 @@ $(function(){
     	<div class="Content">
         	{% include "account/left.html" %}
             <div class="RightCont">
-                <div class="table">
-                    <div class="handle-box clearfix">
-                        <a class="create-project link r">新建项目</a>
-                        <a href="{% url 'project_all' %}" target="_blank" class="look-projects link r">查看项目库</a>
-                    </div>
-                    <div id="pagedata">
-                    </div>
-                    <div class="changes-p">
-                        <div class="page" id="page">
+                <div class="project-box">
+                    <ul class="myproj-nav-box">
+                    	<li class="navitem on myproj-nav">官方项目</li>
+                    	<li class="navitem myproj-nav">自建项目</li>
+                    </ul>
+                    <div>
+                        <div class="table conitem" style="display: block;">
+                            <div class="handle-box clearfix">
+                                <!--<a class="create-project link r">新建项目</a>-->
+                                <a href="{% url 'project_all' %}" target="_blank" class="look-projects link r">查看项目库</a>
+                            </div>
+                            <div id="pagedata">
+                            </div>
+                            <div class="changes-p">
+                                <div class="page" id="page">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table conitem">
+                            <div class="handle-box clearfix">
+                                <a class="create-project link r">新建项目</a>
+                                <!--<a href="{% url 'project_all' %}" target="_blank" class="look-projects link r">查看项目库</a>-->
+                            </div>
+                            <div id="pagedata2">
+                            </div>
+                            <div class="changes-p">
+                                <div class="page" id="page2">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -415,7 +549,7 @@ $(function(){
 <div class="popup m-edit-proj">
     <div class="popup__content" style="width: 600px;">
         <div class="popup__top">
-            <h2 class="popup__title">编辑项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+            <h2 class="popup__title">编辑官方项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
         </div>
         <div class="popup__detail">
             <div class="popup__item"><span class="popup__itemname">项目简介</span><input id="edit_detail" type="text" /></div>
@@ -424,6 +558,24 @@ $(function(){
         </div>
         <div class="popup__btnbox">
             <a id="edit_confirm" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
+        </div>
+    </div>
+</div>
+<div class="popup m-edit-proj-02">
+    <div class="popup__content" style="width: 600px;">
+        <div class="popup__top">
+            <h2 class="popup__title">编辑自建项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+        </div>
+        <div class="popup__detail">
+            <div class="popup__item"><span class="popup__itemname">攻略链接</span><input id="edit_link_02" type="text" /></div>
+            <div class="popup__item"><span class="popup__itemname">项目简介</span><input id="edit_detail_02" type="text" /></div>
+            <div class="popup__item"><span class="popup__itemname">价格</span><input id="edit_price_02" type="text" /></div>
+            <div class="popup__item"><span class="popup__itemname">标期</span><input id="edit_term_02" type="text" /></div>
+            <div class="popup__item"><span class="popup__itemname">投资区间</span><input id="edit_range_02" type="text" /></div>
+            <div class="popup__item"><span class="popup__itemname">预计年化</span><input id="edit_intrest_02" type="text" /></div>
+        </div>
+        <div class="popup__btnbox">
+            <a id="edit_confirm_02" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
         </div>
     </div>
 </div>

@@ -10,10 +10,11 @@ class ProjectAdmin(admin.ModelAdmin):
         super(ProjectAdmin,self).save_model (request, obj, form, change)
         if not change:
             obj.user = request.user
-            obj.save(update_fields=['user',])   
-        if obj.state=='10' or obj.state=='20':
-            batch_subscribe(request.user, True, obj)
-        elif obj.state=='30':
+            obj.save(update_fields=['user',])
+        if obj.is_addedto_repo:
+            if obj.state=='10' or obj.state=='20':
+                batch_subscribe(request.user, True, obj)
+        if obj.state=='30' or not obj.is_addedto_repo:
             batch_deletesub(obj)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Company)

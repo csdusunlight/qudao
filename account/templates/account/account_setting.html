@@ -215,6 +215,7 @@ $(function(){
             //如果图片大小小于100kb，则直接上传
             if(result.length <= maxsize) {
                 process(result, file.name, file.type);
+                submit();
             }
             else{
             	if(img.complete) {
@@ -229,9 +230,10 @@ $(function(){
             function callback() {
                 var data = compress(img);
                 process(data, file.name, file.type);
+                submit();
             }
             
-            submit();
+            
         })
         $('#btnZoomIn').on('click', function(){
             cropper.zoomIn();

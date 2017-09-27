@@ -47,7 +47,6 @@
     height: auto;
 }
 .table {
-    display: none;
     padding: 0 20px;
     background-color: #fff;
 }
@@ -236,6 +235,9 @@
 .myproj-nav.on {
     color: #fff;
     background-color: #ffbe00;
+}
+.project-box .conitem {
+    display: none;
 }
 .look-projects,
 .create-project {

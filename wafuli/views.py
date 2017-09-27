@@ -39,7 +39,6 @@ from django.contrib.auth.decorators import login_required
 from account.models import ApplyLog
 logger = logging.getLogger('wafuli')
 def index(request):
-    logger.error(request.user.username)
     data = {
         'invest_total':0,#引入资金
         'invite_total':0,#渠道引入用户数

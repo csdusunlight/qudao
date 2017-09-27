@@ -80,7 +80,7 @@ class Project(models.Model):
     user = models.ForeignKey(MyUser, null=True, related_name="created_projects")
     is_official = models.BooleanField(u"是否官方项目", default=True)
     is_addedto_repo = models.BooleanField(u"是否加入项目库", default=True)
-    state = models.CharField(u"项目状态", max_length=2, choices=Project_STATE)
+    state = models.CharField(u"项目状态", max_length=2, choices=Project_STATE, default='10')
     pic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）")
     strategy = models.URLField(u"攻略链接")
     company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, verbose_name=u"合作平台")

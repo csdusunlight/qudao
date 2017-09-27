@@ -46,10 +46,10 @@
                             <li class="hot__itembox">
                                 <!--<img class="hot__img" src="{{recom.pic}}" alt="" />-->
                                 <div data-pic="{{recom.pic}}" data-imgtxt="{{recom.title}}" class="hot__img"></div>
-                                <p class="hot__name hot__info">{{recom.title}}</p>
-                                <p class="hot__profit hot__info">预计最高年化：<span class="hot__profit-num">{{recom.intrest}}</span></p>
-                                <p class="hot__price hot__info">返现价格：<span class="price-rem hot__price-num">{{recom.price}}</span></p>
-                                <p class="hot__money hot__info">投资区间：{{recom.investrange}}</p>
+                                <p class="hot__name hot__info oneline">{{recom.title}}</p>
+                                <p class="hot__profit hot__info oneline">预计最高年化：<span class="hot__profit-num">{{recom.intrest}}</span></p>
+                                <p class="hot__price hot__info oneline">返现价格：<span class="price-rem hot__price-num">{{recom.price}}</span></p>
+                                <p class="hot__money hot__info oneline">投资区间：{{recom.investrange}}</p>
                                 <p class="hot__term hot__info">标期：{{recom.term}}</p>
                                 <div class="btn-box">
                                     <a href="{{recom.strategy}}" class="btn m-green m-hot state{{recom.state}}">查看攻略</a>
@@ -385,11 +385,14 @@
                 alert('提交成功');
                 $('.popup.m-submit-proj').removeClass('in');
             },
-            error: function(ret) {
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
                 if (ret.detail) {
                 	alert(ret.detail);
                 } else{
-                    alert("请检查网络连接");
+                    alert("数据错误");
                 }
             }
         });

@@ -47,8 +47,12 @@
     height: auto;
 }
 .table {
+    display: none;
     padding: 0 20px;
     background-color: #fff;
+}
+.table.on {
+    /*display: block;*/
 }
 .table__title {
     line-height: 60px;
@@ -213,6 +217,26 @@
 }
 /*个人中心---end*/
 /*我的项目*/
+.myproj-nav-box {
+    margin-bottom: 10px;
+    width: 200px;
+    box-sizing: content-box;
+    font-size: 0;
+    border: 1px solid #ffbe00;
+}
+.myproj-nav {
+    display: inline-block;
+    width: 100px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    color: #ffbe00;
+    background-color: #fff;
+}
+.myproj-nav.on {
+    color: #fff;
+    background-color: #ffbe00;
+}
 .look-projects,
 .create-project {
     display: inline-block;

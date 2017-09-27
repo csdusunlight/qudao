@@ -26,8 +26,8 @@ urlpatterns = [
     url(r'^export_investlog/$', 'wafuli_admin.views.export_investlog', name='admin_export_investlog'),
 
 
-    url(r'^export_withdraw/$', 'wafuli_admin.views.export_withdraw_excel', name='export_withdraw_excel'),
-    url(r'^import_withdraw/$', 'wafuli_admin.views.import_withdraw_excel', name='import_withdraw_excel'),
+    url(r'^export_withdraw/$', 'wafuli_admin.views.export_withdrawlog', name='export_withdraw_excel'),
+    url(r'^import_withdraw/$', 'wafuli_admin.views.import_withdrawlog', name='import_withdraw_excel'),
     url(r'^export_charge/$', 'wafuli_admin.views.export_charge_excel', name='export_charge_excel'),
 
 ]

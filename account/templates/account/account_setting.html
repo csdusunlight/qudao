@@ -159,10 +159,6 @@ $(function(){
 	<script src="{% static 'js/wfl-common.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
     $(function() {
-//      $('.username').val("{{user.username}}");
-//      $('.qqname').val("{{user.qq_name}}");
-//      $('.qq').val("{{user.qq_number}}");
-//      $('.tosign').val("{{user.profile}}");
         console.log('{{user.color}}');
         $('.skin__item').removeClass('on');
         $('.skin__item').eq({{user.color}}).addClass('on');
@@ -342,22 +338,10 @@ $(function(){
             var userId = {{user.id}};
             xhr.open('put', '/restapi/users/' + userId + '/');
             xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-//          maskIn();
             xhr.onreadystatechange = function() {
                 $(".img-mask").css("display", "none");
                 if(xhr.readyState == 4 && xhr.status == 200) {
-//                  
-//                  $('.qqname').val(qqname);
-//                  $('.qq').val(qq);
-//                  $('.profile').val(tosign);
                     alert("修改成功!")
-//                  var ret = JSON.parse(xhr.responseText);
-//                  if(ret.code == 0) {
-//                      alert("请先登录！")
-//                  }else if(ret.code=='1'){
-//                  }else{
-//                      console.log(ret.msg)
-//                  }
                 }
             };
 

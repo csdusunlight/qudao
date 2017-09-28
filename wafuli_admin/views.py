@@ -352,7 +352,7 @@ def export_investlog(request):
         remark= con.remark
         invest_amount= con.invest_amount
         term=con.invest_term
-        qq_number = con.user.qq_number
+        qq_number = con.user.qq_number + '/' +  con.user.qq_name
         user_level = con.user.level
         result = ''
         settle_amount = ''
@@ -367,7 +367,7 @@ def export_investlog(request):
                      invest_amount, remark, result, settle_amount, reason])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
-    title_row = [u'记录ID',u'项目名称',u'投资日期', u'挖福利账号', u'用户类型', u'注册手机号' ,u'投资期限' ,u'投资金额', u'备注',
+    title_row = [u'记录ID',u'项目名称',u'投资日期', u'QQ', u'用户类型', u'注册手机号' ,u'投资期限' ,u'投资金额', u'备注',
                  u'审核通过',u'结算金额',u'拒绝原因']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])

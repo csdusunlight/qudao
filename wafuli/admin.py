@@ -6,6 +6,7 @@ class ProjectAdmin(admin.ModelAdmin):
     readonly_fields = ('user','pub_date',)
     list_display = ('title','is_official','state','user','id')
     list_filter = ['is_official',]
+    search_fields = ['title',]
     def save_model(self, request, obj, form, change):
         super(ProjectAdmin,self).save_model (request, obj, form, change)
         if not change:

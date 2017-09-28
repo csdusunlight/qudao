@@ -1,0 +1,320 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <!-- 添加到主屏后的标题（iOS 6 新增） -->
+    <meta name="apple-mobile-web-app-title" content="">
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <!-- 添加智能 App 广告条 Smart App Banner（iOS 6+ Safari） -->
+    <meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <title>挖福利-首页</title>
+    <link href="{% static 'css/mui.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/m_common.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/m_index.css' %}" rel="stylesheet"/>
+</head>
+<body>
+<!--<div id="pullrefresh" class="mui-scroll-wrapper">-->
+<div class="tabcon">
+    <div class="header">
+        <div class="user">
+            <img class="user__img l" src="../../static/images/m-skin-1.png"/>
+            <div class="user__detail clearfix">
+                <h2 class="user__title">爱德华舞女</h2>
+                <p class="user__intro">价单啊飒飒的分公司豆腐干豆腐干让地方换个地方价单啊飒飒的分公司豆腐干豆腐干让地方换个地方价单啊飒飒的分公司豆腐干豆腐干让地方换个地方</p>
+            </div>
+        </div>
+        <div id="noticeBox" class="notice__box">
+            <ul id="con1">
+                <li class="notice__item">1、公告1111111、公告1111111、公告1111111、公告1111111、公告1111111、公告1111111、公告111111</li>
+                <li class="notice__item">2、公告222222222</li>
+                <li class="notice__item">3、公告33333333333</li>
+                <li class="notice__item">4、公告44444444444</li>
+            </ul>
+            <ul id="con2">
+            </ul>
+        </div>
+        <div id="rankBox" class="rank__box">
+            <ul id="rank_con1">
+                <li class="rank__item">1、<span class="rank__phone">15233445551</span>体验了<span class="rank__proj">111反对恢复对话</span></li>
+                <li class="rank__item">2、<span class="rank__phone">15233445552</span>体验了<span class="rank__proj">222反对恢复对话</span></li>
+                <li class="rank__item">3、<span class="rank__phone">15233445553</span>体验了<span class="rank__proj">333反对恢复对话</span></li>
+                <li class="rank__item">4、<span class="rank__phone">15233445554</span>体验了<span class="rank__proj">444反对恢复对话</span></li>
+            </ul>
+            <ul id="rank_con2">
+            </ul>
+        </div>
+    </div>
+    <div class="mui-content">
+        <ul class="mui-table-view" style="margin-bottom: 70px;">
+            <li class="mui-table-view-cell proj">
+                <h2 class="proj__title">核时代一期</h2>
+                <div class="proj__info">
+                    <img class="proj__img" src="../../static/images/skin_bg_5.png"/>
+                    <p class="proj__intrest"><span class="proj__intrest-num">12.43%</span><br />预计最高年化</p>
+                    <div class="proj__detail">
+                        <p><span class="proj__detail-name">返现价格：</span><span class="proj__detail-val">投资金额*2.0%</span></p>
+                        <p class="proj__detail-item m-mt"><span class="proj__detail-name">投标区间：</span><span class="proj__detail-val">1万/2.5万/3万</span></p>
+                        <p class="proj__detail-item m-mt"><span class="proj__detail-name">投资标期：</span><span class="proj__detail-val">30天</span></p>
+                    </div>
+                </div>
+                <div class="proj__btnbox">
+                    <a class="proj__btn">查看攻略</a>
+                    <a class="proj__btn">交单</a>
+                </div>
+            </li>
+            <li class="mui-table-view-cell proj">
+                <h2 class="proj__title">核时代一期</h2>
+                <div class="proj__info">
+                    <img class="proj__img" src="../../static/images/skin_bg_5.png"/>
+                    <p class="proj__intrest"><span class="proj__intrest-num">12.43%</span><br />预计最高年化</p>
+                    <div class="proj__detail">
+                        <p><span class="proj__detail-name">返现价格：</span><span class="proj__detail-val">投资金额*2.0%</span></p>
+                        <p class="proj__detail-item m-mt"><span class="proj__detail-name">投标区间：</span><span class="proj__detail-val">1万/2.5万/3万</span></p>
+                        <p class="proj__detail-item m-mt"><span class="proj__detail-name">投资标期：</span><span class="proj__detail-val">30天</span></p>
+                    </div>
+                </div>
+                <div class="proj__btnbox">
+                    <a class="proj__btn">查看攻略</a>
+                    <a class="proj__btn">交单</a>
+                </div>
+            </li>
+            <li class="mui-table-view-cell proj">
+                <h2 class="proj__title">核时代一期</h2>
+                <div class="proj__info">
+                    <img class="proj__img" src="../../static/images/skin_bg_5.png"/>
+                    <p class="proj__intrest"><span class="proj__intrest-num">12.43%</span><br />预计最高年化</p>
+                    <div class="proj__detail">
+                        <p><span class="proj__detail-name">返现价格：</span><span class="proj__detail-val">投资金额*2.0%</span></p>
+                        <p class="proj__detail-item m-mt"><span class="proj__detail-name">投标区间：</span><span class="proj__detail-val">1万/2.5万/3万</span></p>
+                        <p class="proj__detail-item m-mt"><span class="proj__detail-name">投资标期：</span><span class="proj__detail-val">30天</span></p>
+                    </div>
+                </div>
+                <div class="proj__btnbox">
+                    <a class="proj__btn">查看攻略</a>
+                    <a class="proj__btn">交单</a>
+                </div>
+            </li>
+            <li class="mui-table-view-cell proj">
+                <h2 class="proj__title">核时代一期</h2>
+                <div class="proj__info">
+                    <img class="proj__img" src="../../static/images/skin_bg_5.png"/>
+                    <p class="proj__intrest"><span class="proj__intrest-num">12.43%</span><br />预计最高年化</p>
+                    <div class="proj__detail">
+                        <p><span class="proj__detail-name">返现价格：</span><span class="proj__detail-val">投资金额*2.0%</span></p>
+                        <p class="proj__detail-item m-mt"><span class="proj__detail-name">投标区间：</span><span class="proj__detail-val">1万/2.5万/3万</span></p>
+                        <p class="proj__detail-item m-mt"><span class="proj__detail-name">投资标期：</span><span class="proj__detail-val">30天</span></p>
+                    </div>
+                </div>
+                <div class="proj__btnbox">
+                    <a class="proj__btn">查看攻略</a>
+                    <a class="proj__btn">交单</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="tabcon" style="position: absolute; width: 100%; height: 100%; display: none;">
+    <div id="pullrefresh" class="mui-scroll-wrapper">
+        <div class="mui-content">
+            <ul class="mui-table-view project-all-box">
+                <!--<li class="mui-table-view-cell proj">
+                    <h2 class="proj__title">核时代一期</h2>
+                    <div class="proj__info">
+                        <img class="proj__img" src="../../static/images/skin_bg_5.png"/>
+                        <p class="proj__intrest"><span class="proj__intrest-num">12.43%</span><br />预计最高年化</p>
+                        <div class="proj__detail">
+                            <p><span class="proj__detail-name">返现价格：</span><span class="proj__detail-val">投资金额*2.0%</span></p>
+                            <p class="proj__detail-item m-mt"><span class="proj__detail-name">投标区间：</span><span class="proj__detail-val">1万/2.5万/3万</span></p>
+                            <p class="proj__detail-item m-mt"><span class="proj__detail-name">投资标期：</span><span class="proj__detail-val">30天</span></p>
+                        </div>
+                    </div>
+                    <div class="proj__btnbox">
+                        <a class="proj__btn">查看攻略</a>
+                        <a class="proj__btn">交单</a>
+                    </div>
+                </li>-->
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    <!--测试-->
+<!--</div>-->
+    <!--回到顶部部分-->
+<!--<a id="scrollToTop" class="backTop hide"><i class="icon iconfont">&#xe623;</i></a>-->
+<!--底部导航-->
+
+<ul class="footer clearfix tc">
+	<li class="tabnav footer__item on">热门推荐</li>
+	<li class="tabnav footer__item">项目列表</li>
+</ul>
+
+
+    <script src="{% static 'js/mui.min.js' %}"></script>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					up: {
+						auto:true,
+						contentrefresh: '正在加载...',
+						contentnomore:'—— 我可是有底线的 ——',//可选，请求完毕若没有更多数据时显示的提醒内容；
+						callback: pullupRefresh
+					}
+				}
+		});
+		/**
+		 * 上拉加载具体业务实现
+		 */
+		var count = 1;
+		var get_wel_url = "/restapi/sub/?is_on=true";
+		function get_wel_list(n){
+		    console.log(n);
+			mui.ajax(get_wel_url,{
+				data:{
+					'page':n,
+					'pageSize': 5,
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'get',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+//				headers:{'Content-Type':'application/json'},
+				success:function(data){
+				    console.log(data.results);
+					if (!data.results.length){
+						mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+					}
+					else {
+						mui('#pullrefresh').pullRefresh().endPullupToRefresh(false); //参数为true代表没有更多数据了。
+						var table = document.body.querySelector('.project-all-box');
+//						var cells = document.body.querySelectorAll('.mui-table-view-cell');
+						for (var i in data.results) {
+							var item = data.results[i];
+							var li = document.createElement('li');
+							li.className = 'mui-table-view-cell proj';
+							var str_block = '<li class="mui-table-view-cell proj"><h2 class="proj__title">核时代一期</h2>'+
+                            '<div class="proj__info"><img class="proj__img" src="../../static/images/skin_bg_5.png"/>' +
+                            '<p class="proj__intrest"><span class="proj__intrest-num">12.43%</span><br />预计最高年化</p>'+
+                            '<div class="proj__detail"><p><span class="proj__detail-name">返现价格：</span><span class="proj__detail-val">投资金额*2.0%</span></p>'+
+                            '<p class="proj__detail-item m-mt"><span class="proj__detail-name">投标区间：</span><span class="proj__detail-val">1万/2.5万/3万</span></p>'+
+                            '<p class="proj__detail-item m-mt"><span class="proj__detail-name">投资标期：</span><span class="proj__detail-val">30天</span></p>'+
+                            '</div></div>'+
+                            '<div class="proj__btnbox"><a class="proj__btn">查看攻略</a><a class="proj__btn">交单</a></div></li>';
+							li.innerHTML = str_block;
+							table.appendChild(li);
+						}
+					}
+
+				},
+				error:function(xhr,type,errorThrown){
+				    mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+					console.log(xhr.responseText);
+				}
+			});
+		}
+		function pullupRefresh() {
+		    console.log('ss');
+			if (count == 1){
+				mui('#pullrefresh').pullRefresh().scrollTo(0,0);
+			}
+			get_wel_list(count++);
+		}
+		
+
+
+    </script>
+    <script type="text/javascript">
+//      var scrollToTopBox = document.getElementById('scrollToTop'); //返回按钮tap
+//      scrollToTopBox.addEventListener('tap', function(e) {
+//          e.stopPropagation();
+//          mui('#pullrefresh').pullRefresh().scrollTo(0, 0, 500);//滚动到顶部
+//      });
+//      document.getElementById('pullrefresh').addEventListener('scrollend', function() {
+//          if (mui('#pullrefresh').pullRefresh().y <= window.innerHeight * (-0.5) && scrollToTopBox.classList.contains('hide'))
+//              scrollToTopBox.classList.remove('hide');
+//          else if (mui('#pullrefresh').pullRefresh().y > window.innerHeight * (-0.5) && !scrollToTopBox.classList.contains('hide'))
+//              scrollToTopBox.classList.add('hide');
+//      });
+        
+        //  滚动部分
+        var area = document.getElementById('noticeBox');
+        var con1 = document.getElementById('con1');
+        var con2 = document.getElementById('con2');
+        var speed = 100;
+        area.scrollTop = 0;
+        console.log(area.scrollTop);
+        console.log(con1.scrollTop);
+        if (area.clientHeight > con1.clientHeight) {
+        } else {    
+            con2.innerHTML = con1.innerHTML;
+            function scrollUp(){
+                if(area.scrollTop >= con1.scrollHeight) {
+                    area.scrollTop = 0;
+                    }else{
+                       area.scrollTop ++;
+                    }
+            }
+            var myScroll = setInterval("scrollUp()",speed);
+            area.onmouseover = function(){
+                clearInterval(myScroll);
+            }
+            area.onmouseout = function(){
+                myScroll = setInterval("scrollUp()",speed);
+            }
+        }
+        
+        var rankarea = document.getElementById('rankBox');
+        var rank_con1 = document.getElementById('rank_con1');
+        var rank_con2 = document.getElementById('rank_con2');
+        var rank_speed = 100;
+        rankarea.scrollTop = 0;
+        function scrollUpRank(){
+            if(rankarea.scrollTop >= rank_con1.scrollHeight) {
+                rankarea.scrollTop = 0;
+                }else{
+                   rankarea.scrollTop ++;
+                }
+        }
+        if (rankarea.clientHeight >= rank_con1.clientHeight) {
+        } else {    
+            rank_con2.innerHTML = rank_con1.innerHTML;
+            
+            var myScroll_rank = setInterval("scrollUpRank()",rank_speed);
+            rankarea.onmouseover = function(){
+                clearInterval(myScroll_rank);
+            }
+            rankarea.onmouseout = function(){
+                myScroll_rank = setInterval("scrollUpRank()",rank_speed);
+            }
+        }
+        
+        mui('.rank__phone').each(function(){
+            this.innerHTML = this.innerHTML.substr(0, 3) + '****' + this.innerHTML.substr(7, 11);
+        })
+        
+//      tab切换
+        var nav = mui('.tabnav');  
+        var con = mui('.tabcon');
+        for(i=0;i<nav.length;i++){
+            nav[i].index = i;
+            nav[i].addEventListener("tap",function () {
+                for(var n = 0; n < con.length; n++) {
+                    con[n].style.display = "none";
+                    nav[n].className = "footer__item";
+                }
+                con[this.index].style.display = "block"
+                nav[this.index].className = "cur footer__item";
+            });
+        }
+    </script>
+
+</body>
+</html>

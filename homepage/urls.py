@@ -11,5 +11,6 @@ from homepage import views
 #     url(r'^statement/$', 'wafuli.views.statement'),
 # ]
 urlpatterns = [
-    url(r'^$', 'homepage.views.index', name='index'),
+    url(r'^$', 'homepage.views.index', name='hm_index'),
+    url(r'^m_proj/$', 'homepage.views.m_proj', name='m_proj'),
 ]

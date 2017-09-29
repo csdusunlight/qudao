@@ -32,8 +32,9 @@ $(function(){
     	<div class="RightCont">
     	    <div class="right-top clearfix">
     	        <h2 class="top-title l">主页资料</h2>
-    	        <a class="btn m-yellow m-exp r" href="http://{{user.qq_number}}.51fanshu.com" target="_blank">进入主页</a>
+    	        <!--<a class="btn m-yellow m-exp r" href="http://{{user.qq_number}}.51fanshu.com" target="_blank">进入主页</a>-->
     	        <!--<a class="btn m-yellow m-exp r" href="/homepage/" target="_blank">进入主页</a>-->
+    	        <a class="btn m-yellow m-exp r" href="{% url 'm_proj' %}" target="_blank">进入主页</a>
     	    </div>
     	    <div class="user-info-box">
         	    <div class="item">
@@ -96,11 +97,10 @@ $(function(){
                 </div>
                 <div class="item">
                     <span class="item__name">个人签名</span>
-                    <input class="tosign item__txt" type="text" value="{{user.profile}}" onkeyup="this.value=this.value.replace(/[\r\n]/g,'')" />
+                    <input class="tosign item__txt" type="text" value="{{user.profile}}" />
                 </div>
                 
                 <div class="btnbox">
-                    <!--<a class="cancle btn m-yellow">取消</a>-->
                     <a style="margin-left: -160px;" class="save btn m-green">保存</a>
                 </div>
     	    </div>
@@ -117,28 +117,8 @@ $(function(){
                     </div>
                     <p class="notice-exist-title">已有公告:</p>
                     <ul class="notice-exist">
-                    	<!--<li>公告111公告111公告111公告111公告111公告111公告111公告111公告111
-                    	    <span class="notice-change" onclick="noticeChange(this,1)">修改</span>
-                    	    <span class="notice-delete" onclick="noticeDelete(this,1)">删除</span>
-                    	</li>
-                    	<li>公告222公告222公告222公告222公告222公告222公告222公告222公告222公告222
-                    	    <span class="notice-change" onclick="noticeChange(this,1)">修改</span>
-                            <span class="notice-delete" onclick="noticeDelete(this,1)">删除</span>
-                    	</li>
-                    	<li>公告333公告333公告333公告333公告333公告333公告333公告333公告333公告333
-                    	    <span class="notice-change" onclick="noticeChange(this,1)">修改</span>
-                            <span class="notice-delete" onclick="noticeDelete(this,1)">删除</span>
-                    	</li>
-                    	<li>公告444公告444公告444公告444公告444公告444公告444公告444公告444公告444
-                    	    <span class="notice-change" onclick="noticeChange(this,1)">修改</span>
-                            <span class="notice-delete" onclick="noticeDelete(this,1)">删除</span>
-                    	</li>-->
                     </ul>
                 </div>
-                <!--<div class="btnbox">
-                    <a class="notice-cancle btn m-yellow">取消</a>
-                    <a class="notice-save btn m-green">保存</a>
-                </div>-->
                 
                 <div class="popup m-notice-change">
                     <div class="popup__content" style="width: 600px;">
@@ -314,26 +294,12 @@ $(function(){
             var xhr = new XMLHttpRequest();
             var formdata = new FormData();
 
-//          var username = $('.username').val();
-//          var qqname = $('.qqname').val();
-//          var qq = $('.qq').val();
-//          var tosign = $('.tosign').val();
-//          if (!qq || !qqname) {
-//              alert('qq号和qq昵称不能为空');
-//              return;
-//          }
-            
-//          var detail = 'skin=' + skin + ' username=' + username + ' qqname=' + qqname + ' qq=' + qq + ' tosign=' + tosign;
-//          console.log(detail);
+
             if (file_list.length!=0){
                 console.log('add pic');
                 formdata.append("picture", file_list[0].blob, file_list[0].name);
             }
-//          formdata.append('color', skin);
-//          formdata.append('username', username);
-//          formdata.append('qq_number', qq);
-//          formdata.append('qq_name', qqname);
-//          formdata.append('profile', tosign);
+
           console.log(formdata);
             var userId = {{user.id}};
             xhr.open('put', '/restapi/users/' + userId + '/');
@@ -372,7 +338,8 @@ $(function(){
             var username = $('.username').val();
             var qqname = $('.qqname').val();
             var qq = $('.qq').val();
-            var tosign = $('.tosign').val();
+            var tosign = $('.tosign').val().replace(/[\r\n]/g,'');
+            $('.tosign').val(tosign);
             if (!qq || !qqname) {
                 alert('qq号和qq昵称不能为空');
                 return;
@@ -382,7 +349,6 @@ $(function(){
             console.log(detail);
 
             var userId = {{user.id}};
-//          submit();
             $.ajax({
                 url: '/restapi/users/' + userId + '/',
                 type: 'put',

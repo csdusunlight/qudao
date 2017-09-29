@@ -1,0 +1,430 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <!-- 添加到主屏后的标题（iOS 6 新增） -->
+    <meta name="apple-mobile-web-app-title" content="">
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <!-- 添加智能 App 广告条 Smart App Banner（iOS 6+ Safari） -->
+    <meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <title>挖福利-首页</title>
+    <link href="{% static 'css/mui.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/m_common.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/m_index.css' %}" rel="stylesheet"/>
+    <link id="skin" href="/static/css/m-skin1.css" rel="stylesheet" />
+    <script type="text/javascript">
+    	var skin_id = "{{user.color}}";
+    	console.log(skin_id);
+        document.getElementById('skin').setAttribute('href', '/static/css/m-skin' + skin_id + '.css');
+    </script>
+</head>
+<body>
+<!--<div id="pullrefresh" class="mui-scroll-wrapper">-->
+<div class="tabcon">
+    <div class="header">
+        <div class="user">
+            <img class="user__img l" src="{{user.picture_url}}"/>
+            <div class="user__detail clearfix">
+                <h2 class="user__title">{{user.username}}</h2>
+                <p class="user__intro">{{user.profile}}</p>
+            </div>
+        </div>
+        <div id="noticeBox" class="notice__box">
+            <ul id="con1">
+                {%for notice in notice_list%}
+                    <li class="notice__item one-line">{{forloop.counter}}、{{notice.content}}</li>
+                {%endfor%}
+            </ul>
+            <ul id="con2">
+            </ul>
+        </div>
+        <div id="rankBox" class="rank__box">
+            <ul id="rank_con1">
+            
+            </ul>
+            <ul id="rank_con2">
+            </ul>
+        </div>
+    </div>
+    <div class="mui-content">
+        <ul class="mui-table-view" style="margin-bottom: 70px;">
+            {% for recom in recom_list %}
+                <li class="mui-table-view-cell proj">
+                    <h2 class="proj__title">{{recom.title}}</h2>
+                    <div class="proj__info">
+                        <div data-pic="{{recom.pic}}" data-imgtxt="{{recom.title}}" class="proj__img"></div>
+                        <p class="proj__intrest"><span class="proj__intrest-num">{{recom.intrest}}</span><br />预计最高年化</p>
+                        <div class="proj__detail">
+                            <p><span class="proj__detail-name">返现价格：</span><span class="proj__detail-val">{{recom.price}}</span></p>
+                            <p class="proj__detail-item m-mt"><span class="proj__detail-name">投标区间：</span><span class="proj__detail-val">{{recom.investrange}}</span></p>
+                            <p class="proj__detail-item m-mt"><span class="proj__detail-name">投资标期：</span><span class="proj__detail-val">{{recom.term}}</span></p>
+                        </div>
+                    </div>
+                    <div class="proj__btnbox">
+                        <a href="{{recom.strategy}}" target="_blank" class="proj__btn state{{recom.state}}">查看攻略</a>
+                        <a data-projectid="{{recom.id}}" class="proj__btn proj__btn-submit">交单</a>
+                    </div>
+                </li>
+            {%endfor%}
+        </ul>
+    </div>
+</div>
+<div class="tabcon" style="position: absolute; width: 100%; height: 100%; display: none;">
+    <div id="pullrefresh" class="mui-scroll-wrapper">
+        <div class="mui-content">
+            <ul class="mui-table-view project-all-box">
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    <!--测试-->
+<!--</div>-->
+    <!--回到顶部部分-->
+<!--<a id="scrollToTop" class="backTop hide"><i class="icon iconfont">&#xe623;</i></a>-->
+<!--底部导航-->
+<div class="popup m-submit-proj">
+    <div class="popup__content">
+        <div class="popup__top">
+            <h2 class="popup__title">项目交单</h2><span class="popup__close popup__close-btn" onclick="canclePopup(this)">×</span>
+        </div>
+        <div class="popup__detail">
+            <div class="popup__item">
+                <span class="popup__itemname">提交手机号：</span>
+                <input type="text" class="telnum popup__input" placeholder="填写提交手机号" />
+            </div>
+            <div class="popup__item">
+                <span class="popup__itemname">投资标期：</span>
+                <input type="text" class="term popup__input" placeholder="填写投资标期，数字" />
+            </div>
+            <div class="popup__item">
+                <span class="popup__itemname">投资金额：</span>
+                <input type="text" class="money popup__input" placeholder="填写投资金额，数字" />
+            </div>
+            <div class="popup__item">
+                <span class="popup__itemname">投资日期：</span>
+                <input type="date" class="date popup__input" placeholder="选择投资日期" />
+            </div>
+            <div class="popup__item">
+                <span class="popup__itemname">支付宝账号：</span>
+                <input type="text" class="zhifubao popup__input" placeholder="填写支付宝账号" />
+            </div>
+            <div class="popup__item">
+                <span class="popup__itemname">支付宝姓名：</span>
+                <input type="text" class="zfbname popup__input" placeholder="填写支付宝姓名" />
+            </div>
+            <div class="popup__item">
+                <span class="popup__itemname">备注：</span>
+                <input type="text" class="remark popup__input" placeholder="填写备注" />
+            </div>
+        </div>
+        <div class="popup__btnbox">
+            <button id="cancel" class="cancel mui-btn mui-btn-yellow m-right" onclick="canclePopup(this)">取消</button>
+            <button id="confirm" class="mui-btn mui-btn-yellow m-popup popup-confirm popup__close-btn">确认</button>
+        </div>
+    </div>
+</div>
+
+<ul class="footer clearfix tc">
+	<li class="tabnav footer__item on">热门推荐</li>
+	<li class="tabnav footer__item">项目列表</li>
+</ul>
+
+
+    <script src="{% static 'js/mui.min.js' %}"></script>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					up: {
+						auto:true,
+						contentrefresh: '正在加载...',
+						contentnomore:'—— 我可是有底线的 ——',//可选，请求完毕若没有更多数据时显示的提醒内容；
+						callback: pullupRefresh
+					}
+				}
+		});
+		/**
+		 * 上拉加载具体业务实现
+		 */
+		var count = 1;
+		var get_proj_url = "/restapi/sub/?is_on=true";
+		function get_wel_list(n){
+		    console.log(n);
+			mui.ajax(get_proj_url,{
+				data:{
+					'page':n,
+					'pageSize': 4,
+				},
+				dataType:'json',//服务器返回json格式数据
+				type:'get',//HTTP请求类型
+				timeout:10000,//超时时间设置为10秒；
+//				headers:{'Content-Type':'application/json'},
+				success:function(data){
+				    console.log(data.results);
+					if (!data.results.length){
+						mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+					}
+					else {
+						mui('#pullrefresh').pullRefresh().endPullupToRefresh(false); //参数为true代表没有更多数据了。
+						var table = document.body.querySelector('.project-all-box');
+//						var cells = document.body.querySelectorAll('.mui-table-view-cell');
+						for (var i in data.results) {
+							var item = data.results[i];
+							var li = document.createElement('li');
+							li.className = 'mui-table-view-cell proj';
+							var str_block = '<h2 class="proj__title">'+ item.project_title +'</h2><div class="proj__info">';
+							if (item.project_picture) {
+							    str_block += '<div style="background-image:url('+ item.project_picture +')" class="proj__img"></div>';
+							} else{
+							    var colors = ['#8cd9f1','#a0a2cf','#a6d7b9','#f7bbd1','#feb8a6','#99badf','#d0aea1','#a0d6d6','#ff9a8c'];
+							    var num = parseInt(Math.random()*6);
+								str_block += '<div style="background-color: '+ colors[num] +';" class="proj__img">'+ item.project_title.substr(0, 1) +'</div>';
+							}
+                            str_block += '<p class="proj__intrest"><span class="proj__intrest-num">'+ (item.intrest ? item.intrest : item.project_intrest) +'</span><br />预计最高年化</p>'+
+                            '<div class="proj__detail"><p><span class="proj__detail-name">返现价格：</span><span class="proj__detail-val">'+ (item.price?item.price:item.project_cprice) +'</span></p>'+
+                            '<p class="proj__detail-item m-mt"><span class="proj__detail-name">投标区间：</span><span class="proj__detail-val">'+ item.project_investrange +'</span></p>'+
+                            '<p class="proj__detail-item m-mt"><span class="proj__detail-name">投资标期：</span><span class="proj__detail-val">'+ item.project_term +'</span></p>'+
+                            '</div></div>'+
+                            '<div class="proj__btnbox"><a href="'+ item.project_strategy +'" target="_blank" class="proj__btn state'+ item.project_state +'">查看攻略</a>'+
+                            '<a data-projectid="'+ item.project +'" class="proj__btn proj_btn-submit">交单</a></div>';
+
+							li.innerHTML = str_block;
+							table.appendChild(li);
+						}
+					}
+
+				},
+				error:function(xhr,type,errorThrown){
+				    mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+					console.log(xhr.responseText);
+				}
+			});
+		}
+		function pullupRefresh() {
+		    console.log('ss');
+			if (count == 1){
+				mui('#pullrefresh').pullRefresh().scrollTo(0,0);
+			}
+			get_wel_list(count++);
+		}
+		
+
+
+    </script>
+    <script type="text/javascript">
+//      var scrollToTopBox = document.getElementById('scrollToTop'); //返回按钮tap
+//      scrollToTopBox.addEventListener('tap', function(e) {
+//          e.stopPropagation();
+//          mui('#pullrefresh').pullRefresh().scrollTo(0, 0, 500);//滚动到顶部
+//      });
+//      document.getElementById('pullrefresh').addEventListener('scrollend', function() {
+//          if (mui('#pullrefresh').pullRefresh().y <= window.innerHeight * (-0.5) && scrollToTopBox.classList.contains('hide'))
+//              scrollToTopBox.classList.remove('hide');
+//          else if (mui('#pullrefresh').pullRefresh().y > window.innerHeight * (-0.5) && !scrollToTopBox.classList.contains('hide'))
+//              scrollToTopBox.classList.add('hide');
+//      });
+        
+        //  滚动部分
+        var area = document.getElementById('noticeBox');
+        var con1 = document.getElementById('con1');
+        var con2 = document.getElementById('con2');
+        var iliHeight = 20;//单行滚动的高度
+        var speed = 50;//滚动的速度
+        var time;
+        var delay= 2000;
+        area.scrollTop = 0;
+        con2.innerHTML = con1.innerHTML;
+        function startScroll(){
+            time=setInterval("scrollUp()",speed);
+            area.scrollTop++;
+        }
+        function scrollUp(){
+            if(area.scrollTop % iliHeight==0){
+                    clearInterval(time);
+                    setTimeout(startScroll,delay);
+                }else{
+                    area.scrollTop++;
+                    if(area.scrollTop >= area.scrollHeight/2){
+                        area.scrollTop =0;
+                    }
+                }
+        }
+        setTimeout(startScroll,delay);
+        
+        var rankarea = document.getElementById('rankBox');
+        var rank_con1 = document.getElementById('rank_con1');
+        var rank_con2 = document.getElementById('rank_con2');
+        var rank_speed = 100;
+        rankarea.scrollTop = 0;
+        function scrollUpRank(){
+            if(rankarea.scrollTop >= rank_con1.scrollHeight) {
+                rankarea.scrollTop = 0;
+                }else{
+                   rankarea.scrollTop ++;
+                }
+        }
+        mui.ajax("/restapi/investlogs/?page=1&pageSize=8",{
+            type: 'get',
+            dataType: "json",
+            success: function(ret) {
+                console.log(ret.results);
+                var notice_html='';
+                for (var i=0; i<ret.results.length; i++) {
+                    var phone = ret.results[i].invest_mobile;
+                    var phone2 = phone.substr(0, 3) + '****' + phone.substr(7, 11);
+                    notice_html += '<li class="rank__item one-line">' + (i+1) + '、<span class="rank__phone">' + phone2 +
+                    '</span>体验了<span class="rank__proj">' + ret.results[i].project_title + '</span></li>';
+                }
+                console.log(notice_html);
+                document.getElementById('rank_con1').innerHTML = notice_html;
+                
+                
+                console.log(rankarea.clientHeight);
+                console.log(rank_con1.clientHeight);
+                if (rankarea.clientHeight >= rank_con1.clientHeight) {
+                } else {    
+                    rank_con2.innerHTML = rank_con1.innerHTML;
+                    
+                    var myScroll_rank = setInterval("scrollUpRank()",rank_speed);
+                    rankarea.onmouseover = function(){
+                        clearInterval(myScroll_rank);
+                    }
+                    rankarea.onmouseout = function(){
+                        myScroll_rank = setInterval("scrollUpRank()",rank_speed);
+                    }
+                }
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+//      mui('.rank__phone').each(function(){
+//          this.innerHTML = this.innerHTML.substr(0, 3) + '****' + this.innerHTML.substr(7, 11);
+//      })
+        
+//      tab切换
+        var nav = mui('.tabnav');  
+        var con = mui('.tabcon');
+        for(i=0;i<nav.length;i++){
+            nav[i].index = i;
+            nav[i].addEventListener("tap",function () {
+                for(var n = 0; n < con.length; n++) {
+                    con[n].style.display = "none";
+                    nav[n].className = "footer__item";
+                }
+                con[this.index].style.display = "block"
+                nav[this.index].className = "on footer__item";
+            });
+        }
+        
+        var colors = ['#8cd9f1','#a0a2cf','#a6d7b9','#f7bbd1','#feb8a6','#99badf','#d0aea1','#a0d6d6','#ff9a8c'];
+        mui('.proj__img').each(function(){
+            var imgurl = this.getAttribute('data-pic');
+            console.log(imgurl);
+            if (imgurl) {
+                console.log('gdfg');
+                this.style.backgroundImage = 'url('+ imgurl +')';
+            } else{
+                var imgtxt = ''+this.getAttribute('data-imgtxt');
+                imgtxt = imgtxt.substr(0, 1);
+                console.log(imgtxt);
+                var num = parseInt(Math.random()*6);
+                console.log(this);
+                this.innerText = imgtxt;
+                this.style.backgroundColor = colors[num];
+            }
+        })
+        
+        var canclePopup = function(obj) {       //取消自定义弹窗
+            obj.parentNode.parentNode.parentNode.className = "popup m-submit-proj";
+        }
+        
+//      function submitProj (id) {
+//          project_id = id;
+//          mui('.popup.m-submit-proj')[0].className = 'popup m-submit-proj in';
+//          console.log(id);
+//      }
+        mui('.tabcon').on('tap', '.proj__btn.state10', function(){
+            var url = this.getAttribute('href');
+            mui.openWindow({
+                url: url, 
+            });
+        })
+
+        var project_id;
+        mui('.tabcon').on('tap', '.proj__btn-submit', function(){
+            project_id = this.getAttribute('data-projectid');console.log(project_id);
+            mui('.popup.m-submit-proj')[0].className = 'popup m-submit-proj in';
+        })
+        
+        document.getElementById('confirm').addEventListener('tap', function(){
+            var telnum = mui(".telnum")[0].value,
+                term = mui(".term")[0].value,
+                money = mui(".money")[0].value,
+                date = mui(".date")[0].value,
+                zhifubao = mui(".zhifubao")[0].value;
+                zfbname = mui(".zfbname")[0].value;
+                remark = mui(".remark")[0].value;
+            console.log(project_id+","+telnum+","+term+","+money+","+date+","+zhifubao+","+zfbname+","+remark+",");
+            if(!telnum || !term || !money || !date ||  !zhifubao || !zfbname ) {
+                mui.alert("必填写项不能为空");
+                return;
+            }
+            var re_date = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/, //验证日期
+                re_phone = /^1[1,2,3,4,6,5,7,8,9]\d{9}$/, //验证手机号
+                re_amount = /^\d+(\.\d+)?$/; //验证数字格式
+            if(!re_date.test(date)) {
+                mui.alert('日期格式不正确，请重新选择');
+                return;
+            }
+            if(!re_phone.test(telnum)) {
+                mui.alert('手机号格式不正确');
+                return;
+            }
+            if(!re_amount.test(term)) {
+                mui.alert('标期必须为纯数字格式');
+                return;
+            }
+            if(!re_amount.test(money)) {
+                mui.alert('金额必须为纯数字格式');
+                return;
+            }
+            
+            mui.ajax('/restapi/investlogs/',{
+                data: {
+                    'project': project_id,
+                    'invest_mobile': telnum,
+                    'invest_term': term,
+                    'invest_amount': money,
+                    'invest_date': date,
+                    'zhifubao': zhifubao,
+                    'zhifubao_name': zfbname,
+                    'remark': remark
+                },
+                dataType:'json',//服务器返回json格式数据
+                type:'post',//HTTP请求类型
+                timeout:10000,//超时时间设置为10秒；
+                success:function(data){
+                    alert('提交成功');
+                    mui('.popup.m-submit-proj')[0].className = 'popup m-submit-proj';
+
+                },
+                error:function(xhr,type,errorThrown){
+                    console.log(xhr.responseText);
+                    mui.alert('数据错误');
+                }
+            });
+        })
+    </script>
+
+</body>
+</html>

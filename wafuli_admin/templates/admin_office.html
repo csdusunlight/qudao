@@ -36,7 +36,7 @@
 		'<th>备注</th><th>操作</th></tr>[results]<tr><td>{qq_number}</td><td>{qq_name}</td><td>{user_mobile}</td><td>{project_title}</td>' +
 		'<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
 		'<td>{audit_state_des}</td>'+
-		'<td><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
+		'<td data-isimg="{invest_image}" class="is-img"><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
         '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
 		'<td>{remark}</td><td id="item_{id}"><a class="fyin" onclick="pass({id})">返现' +
 		'</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td></tr>[/results]</table>';
@@ -45,7 +45,7 @@
         '<th>审核人</th><th>审核时间</th><th>返现金额</th><th>上传截图</th><th>备注</th></tr>[results]<tr><td>{qq_number}</td><td>{qq_name}</td><td>{user_mobile}</td><td>{project_title}</td>' +
         '<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
         '<td>{audit_state_des}<td>{admin_user}</td></td><td>{audit_time}</td><td>{settle_amount}</td>'+
-        '<td><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
+        '<td data-isimg="{invest_image}" class="is-img"><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
         '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
         '<td>{remark}</td></tr>[/results]</table>';
     var data2 = '<table width="100%"><tr><th>QQ</th><th>QQ昵称</th><th>手机号</th><th>项目名称</th>' +
@@ -53,11 +53,18 @@
         '<th>审核人</th><th>审核时间</th><th>拒绝金额</th><th>上传截图</th><th>备注</th></tr>[results]<tr><td>{qq_number}</td><td>{qq_name}</td><td>{user_mobile}</td><td>{project_title}</td>' +
         '<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
         '<td>{audit_state_des}<td>{admin_user}</td></td><td>{audit_time}</td><td>{audit_reason}</td>'+
-        '<td><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
+        '<td data-isimg="{invest_image}" class="is-img"><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
         '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
         '<td>{remark}</td></tr>[/results]</table>';
 	var url = "/restapi/investlogs/" + "?page={page}&pageSize={pageSize}&is_official=true";
-
+    
+    function pagecallback() {
+        $('.is-img').each(function() {
+            if ($(this).data('isimg') == "") {
+                $(this).html('无');
+            }
+        })
+    }
 	function pass(id) {
 		$(".BackNow").css("display", "block");
 		$("input#ret_event_id").val(id);
@@ -76,6 +83,7 @@
 			pageSize: 10,
 			run: true,
 			content: data1,
+			complete:pagecallback,
 		});
 		$(".none-x").click(function() {
 			$(this).parent().parent().css("display", "none"); <!--隐藏-->
@@ -203,6 +211,7 @@
 				pageSize: 10,
 				run: true,
 				content: newdata,
+				complete:pagecallback,
 			});
 		});
 		$("#export").click(function() {
@@ -299,19 +308,19 @@
 				<tr>
 					<td>
 						<i>申请开始时间：</i>
-						<input id="startTime" type="datetime-local" />
+						<input id="startTime" type="date" />
 					</td>
 					<td>
 						<i>申请结束时间：</i>
-						<input id="endTime" type="datetime-local" />
+						<input id="endTime" type="date" />
 					</td>
 					<td>
 						<i>操作开始时间：</i>
-						<input id="startTime2" type="datetime-local" />
+						<input id="startTime2" type="date" />
 					</td>
 					<td>
 						<i>操作结束时间：</i>
-						<input id="endTime2" type="datetime-local" />
+						<input id="endTime2" type="date" />
 					</td>
 				</tr>
 				<tr>

@@ -29,7 +29,7 @@
             <img class="user__img" src="{{user.picture_url}}" alt="" />
             <div class="user__detail">
                 <h1 class="user__name">{{user.username}}</h1>
-                <p class="user__intro oneline">分公司的法规规定股东股份的法规的时光的规定股东股份反攻倒算法规的时光发动反攻公司股东法规的法规的法规的法规的股份数</p>
+                <p class="user__intro oneline">{{user.profile}}</p>
             </div>
             <p style="position: absolute;right: 0;color: #fff;bottom: 64px;">投资有风险，入市需谨慎！</p>
         </div>
@@ -245,7 +245,7 @@
             }
     }
     $.ajax({
-    	url:"/restapi/investlogs/?page=1&size=8",
+    	url:"/restapi/investlogs/?page=1&pageSize=8",
     	type: 'get',
     	dataType: "json",
     	success: function(ret) {

@@ -237,53 +237,28 @@
         var area = document.getElementById('noticeBox');
         var con1 = document.getElementById('con1');
         var con2 = document.getElementById('con2');
-        var speed = 100;
+        var iliHeight = 20;//单行滚动的高度
+        var speed = 50;//滚动的速度
+        var time;
+        var delay= 2000;
         area.scrollTop = 0;
-        console.log(area.scrollTop);
-        console.log(con1.scrollTop);
-        if (area.clientHeight > con1.clientHeight) {
-        } else {    
-            con2.innerHTML = con1.innerHTML;
-            function scrollUp(){
-                if(area.scrollTop >= con1.scrollHeight) {
-                    area.scrollTop = 0;
-                    }else{
-                       area.scrollTop ++;
-                    }
-            }
-            var myScroll = setInterval("scrollUp()",speed);
-            area.onmouseover = function(){
-                clearInterval(myScroll);
-            }
-            area.onmouseout = function(){
-                myScroll = setInterval("scrollUp()",speed);
-            }
+        con2.innerHTML = con1.innerHTML;
+        function startScroll(){
+            time=setInterval("scrollUp()",speed);
+            area.scrollTop++;
         }
-        
-        var rankarea = document.getElementById('rankBox');
-        var rank_con1 = document.getElementById('rank_con1');
-        var rank_con2 = document.getElementById('rank_con2');
-        var rank_speed = 100;
-        rankarea.scrollTop = 0;
-        function scrollUpRank(){
-            if(rankarea.scrollTop >= rank_con1.scrollHeight) {
-                rankarea.scrollTop = 0;
+        function scrollUp(){
+            if(area.scrollTop % iliHeight==0){
+                    clearInterval(time);
+                    setTimeout(startScroll,delay);
                 }else{
-                   rankarea.scrollTop ++;
+                    area.scrollTop++;
+                    if(area.scrollTop >= area.scrollHeight/2){
+                        area.scrollTop =0;
+                    }
                 }
         }
-        if (rankarea.clientHeight >= rank_con1.clientHeight) {
-        } else {    
-            rank_con2.innerHTML = rank_con1.innerHTML;
-            
-            var myScroll_rank = setInterval("scrollUpRank()",rank_speed);
-            rankarea.onmouseover = function(){
-                clearInterval(myScroll_rank);
-            }
-            rankarea.onmouseout = function(){
-                myScroll_rank = setInterval("scrollUpRank()",rank_speed);
-            }
-        }
+        setTimeout(startScroll,delay);
         
         var rankarea = document.getElementById('rankBox');
         var rank_con1 = document.getElementById('rank_con1');

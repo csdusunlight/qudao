@@ -268,38 +268,7 @@
 <script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
 <script type="text/javascript" src="{% static 'js/add-img.js' %}"></script>
 <script type="text/javascript">
-    $.ajax({
-        url:"/restapi/projects/?is_official=true&pageSize=999",
-        type:"get",
-        dataType: "json",
-        success: function(ret) {
-            console.log(ret.results);
-            var option_html = '';
-            for (var i = 0; i < ret.results.length; i++) {
-                option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
-            }
-            $('.project').html(option_html);
-        },
-        error: function() {
-            alert("请检查网络连接");
-        }
-    });
-    $.ajax({
-        url:"/restapi/projects/?is_official=false",
-    	type:"get",
-    	dataType: "json",
-    	success: function(ret) {
-            console.log(ret.results);
-            var option_html = '';
-            for (var i = 0; i < ret.results.length; i++) {
-            	option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
-            }
-            $('.project_02').html(option_html);
-        },
-        error: function() {
-            alert("请检查网络连接");
-        }
-    });
+    
 //  未审核
     var data1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>操作</th></tr>[results]' +
@@ -619,6 +588,42 @@
             $(".RightCont").on("focus", ".date_picker", function() {
                 $(this).date_input();
             })
+            
+            $.ajax({
+                url:"/restapi/projects/?is_official=true&pageSize=999",
+                type:"get",
+                dataType: "json",
+                success: function(ret) {
+                    console.log(ret.results);
+                    var option_html = '';
+                    for (var i = 0; i < ret.results.length; i++) {
+                        option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
+                    }
+                    $('.project').html(option_html);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
+                    console.log("数据错误22");
+                }
+            });
+            $.ajax({
+                url:"/restapi/projects/?is_official=false&pageSize=999",
+                type:"get",
+                dataType: "json",
+                success: function(ret) {
+                    console.log(ret.results);
+                    var option_html = '';
+                    for (var i = 0; i < ret.results.length; i++) {
+                        option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
+                    }
+                    $('.project_02').html(option_html);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
+                    console.log("数据错误11");
+                }
+            });
+            
 //          官方数据
             $("#search").click(function() {
                 var proj_name = $("#proj_name").val(),

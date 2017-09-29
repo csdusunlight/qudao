@@ -4,8 +4,8 @@ from wafuli.tools import batch_subscribe, batch_deletesub
 from wafuli.models import *
 class ProjectAdmin(admin.ModelAdmin):
     readonly_fields = ('user','pub_date',)
-    list_display = ('title','is_official','state','user','id')
-    list_filter = ['is_official',]
+    list_display = ('title','is_official','is_addedto_repo','state','user','id')
+    list_filter = ['is_official', 'is_addedto_repo']
     search_fields = ['title',]
     def save_model(self, request, obj, form, change):
         super(ProjectAdmin,self).save_model (request, obj, form, change)

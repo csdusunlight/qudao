@@ -3,7 +3,11 @@
     position: relative;
     padding-top: 60px;
     padding-bottom: 14px;
-    background: url(../images/skin_bg_1.png) top center/auto 130px no-repeat #fff;
+    background-position: top center;
+    background-size: auto 130px;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    /*background: url(../images/skin_bg_1.png) top center/auto 130px no-repeat #fff;*/
 }
 .user {
     /*position: absolute;
@@ -27,10 +31,11 @@
     color: #fff;
 }
 .user__intro {
-    height: 40px;
+    margin-top: 6px;
+    height: 28px;
     color: #222;
-    font-size: 9px;
-    line-height: 20px;
+    font-size: 10px;
+    line-height: 14px;
     overflow : hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -48,7 +53,7 @@
     background: url(../images/m-bg-notice.png) 4px center/auto 12px no-repeat;
 }
 .notice__item {
-    font-size: 9px;
+    font-size: 10px;
     line-height: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -66,11 +71,12 @@
     text-align: center;
 }
 .rank__item {
-    font-size: 9px;
+    font-size: 10px;
     line-height: 20px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: #222;
 }
 .rank__proj {
     color: #109ab7;
@@ -88,6 +94,7 @@
     font-size: 12px;
     line-height: 26px;
     border-bottom: 1px solid #f5f5f5;
+    color: #222;
 }
 .proj__info {
     display: flex;
@@ -99,27 +106,50 @@
 .proj__img {
     width: 5.5rem;
     height: 5.5rem;
+    font-size: 2.5rem;
+    color: #fff;
+    line-height: 5.5rem;
+    text-align: center;
+    background-size: 100% 100%;
+    background-origin: center center;
+    background-repeat: no-repeat;
 }
 .proj__intrest {
     width: 26%;
+    font-size: 10px;
     line-height: 28px;
     text-align: center;
 }
 .proj__intrest-num {
+    display: inline-block;
     font-size: 14px;
+    line-height: 20px;
     color: #91c11d;
 }
 .proj__detail {
     width: 40%;
 }
+.proj__detail-item {
+    height: 28px;
+    font-size: 10px;
+}
 .proj__detail-item.m-mt {
     margin-top: 4px;
 }
-.proj__detail-val {
+.proj__detail-item.m-term {
+    height: 14px;
+}
+.proj__detail-name {
     display: inline-block;
-    width: 46%;
-    line-height: 14px;
+    width: 40%;
     vertical-align: top;
+    line-height: 14px;
+}
+.proj__detail-val {
+    width: 60%;
+    display: inline-block;
+    line-height: 14px;
+    /*vertical-align: top;*/
 }
 .proj__btnbox {
     margin-top: 10px;
@@ -129,15 +159,26 @@
     display: inline-block;
     width: 50%;
     text-align: center;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 28px;
     color: #222;
+}
+.proj__btn:active {
+    background-color: #f5f5f5 !important;
+    color: #222;
+}
+.proj__btn.state20:active {
+    background-color: #e4e4e4;
 }
 .proj__btn:first-child {
     background: url(../images/m-bg-look.png) 20% center/auto 20px no-repeat;
 }
 .proj__btn:last-child {
     background: url(../images/m-bg-submit.png) 30% center/auto 20px no-repeat;
+}
+.proj__btn.state20 {
+    color: #e4e4e4;
+    background-image: url(../images/m-bg-look-02.png);
 }
 /*footer*/
 .footer {
@@ -147,21 +188,29 @@
     height: 50px;
     font-size: 0;
     background-color: #fff;
-    box-shadow: 0 -1px 5px rgba(0,0,0,0.3);
+    box-shadow: 0 -1px 6px rgba(0,0,0,0.2);
     z-index: 10;
 }
 .footer__item {
-    padding-top: 32px;
+    padding-top: 34px;
     width: 50%;
+    height: 100%;
     display: inline-block;
-    font-size: 9px;
+    font-size: 10px;
+    color: #222;
     text-align: center;
 }
 .footer__item:first-child {
-    background: url(../images/m-bg-recom.png) center 8px/auto 20px no-repeat;
+    background: url(../images/m-bg-recom-02.png) center 6px/auto 20px no-repeat;
+}
+.footer__item.on:first-child {
+    background: url(../images/m-bg-recom.png) center 6px/auto 20px no-repeat;
 }
 .footer__item:last-child {
-    background: url(../images/m-bg-list.png) center 8px/auto 20px no-repeat;
+    background: url(../images/m-bg-list-02.png) center 6px/auto 20px no-repeat;
+}
+.footer__item.on:last-child {
+    background: url(../images/m-bg-list.png) center 6px/auto 20px no-repeat;
 }
 /*样式重置*/
 .mui-content>.project-all-box:first-child {
@@ -180,3 +229,104 @@
 .mui-table-view:before {
     display: none;
 }
+/*弹窗部分*/
+.popup {
+    position: fixed;
+    visibility: hidden;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.3);
+    opacity: 0;
+    z-index: 11;
+    transition: all 0.4s ease;
+}
+.popup.in {
+    visibility: visible;
+    opacity: 1;
+}
+.popup__content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    padding: 8px 8px;
+    margin-top: -100px;
+    width: 80%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 5px 5px 13px 2px rgba(0,0,0,0.4);
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+.popup.in .popup__content {
+    opacity: 1;
+    margin-top: 0px;
+}
+.popup__title {
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 20px;
+}
+.popup__close {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    float: right;
+    height: 30px;
+    width: 30px;
+    color: #000;
+    font-size: 20px;
+    line-height: 30px;
+    text-shadow: 0 1px 0 #fff;
+    background: none;
+    opacity: 0.4;
+    border: 0;
+    cursor: pointer;
+    text-align: center;
+}
+.popup__detail {
+    line-height: 20px;
+}
+.popup__item {
+    margin-bottom: 10px;
+}
+.popup__itemname {
+    display: inline-block;
+    width: 60px;
+    font-size: 10px;
+    text-align: right;
+    vertical-align: middle;
+}
+.popup__item .popup__input {
+    display: inline-block;
+    padding: 0 4px;
+    margin-bottom: 0;
+    width: 60%;
+    height: 30px;
+    font-size: 10px;
+}
+.popup__item .popup__input::-webkit-input-placeholder{
+    font-size: 10px;
+}
+.popup__btnbox {
+    margin-top: 10px;
+    text-align: center;
+}
+.popup__btnbox .btn:hover {
+    transform: translateY(0);
+}
+.mui-btn {
+    padding: 8px 10px;
+    display: inline-block;
+    width: 20%;
+    font-size: 10px;
+    line-height: 1;
+    vertical-align: middle;
+}
+.mui-btn.m-right {
+    margin-right: 30px;
+}
+/*弹窗部分---end*/

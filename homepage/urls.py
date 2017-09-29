@@ -1,7 +1,7 @@
 
 from django.conf.urls import url,include
 from django.views.generic.base import TemplateView
-from homepage import views
+import homepage.views
 # url_about = [
 #     url(r'^aboutus/$', 'wafuli.views.aboutus', name="about"),
 #     url(r'^report/$', 'wafuli.views.report'),
@@ -11,6 +11,6 @@ from homepage import views
 #     url(r'^statement/$', 'wafuli.views.statement'),
 # ]
 urlpatterns = [
-    url(r'^$', 'homepage.views.index', name='hm_index'),
-    url(r'^m_proj/$', 'homepage.views.m_proj', name='m_proj'),
+    url(r'^$', homepage.views.index, name='hm_index'),
+    url(r'^mobile/$', homepage.views.m_index, name='hm_index_mobile'),
 ]

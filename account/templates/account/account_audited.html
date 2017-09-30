@@ -258,6 +258,44 @@
             </div>
         </div>
     </div>
+    <div class="popup m-pass-proj-02">
+        <div class="popup__content" style="width: 600px;">
+            <div class="popup__top">
+                <h2 class="popup__title">审核通过</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+            </div>
+            <div class="popup__detail">
+                <div class="popup__item">
+                    <span class="popup__itemname">结算金额：</span>
+                    <input type="text" class="settle_amount_02" placeholder="填写投资金额" />
+                </div>
+                <div class="popup__item">
+                    <span class="popup__itemname">返现金额：</span>
+                    <input type="text" class="return_amount_02" placeholder="填写投资金额" />
+                </div>
+            </div>
+            <div class="popup__btnbox">
+                <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
+                <a id="confirm_pass_02" class="btn m-green popup__close-btn">确认</a>
+            </div>
+        </div>
+    </div>
+    <div class="popup m-refuse-proj-02">
+        <div class="popup__content" style="width: 600px;">
+            <div class="popup__top">
+                <h2 class="popup__title">审核拒绝</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+            </div>
+            <div class="popup__detail">
+                <div class="popup__item">
+                    <span class="popup__itemname">拒绝原因：</span>
+                    <input type="text" class="refuse_reason_02" placeholder="填写拒绝原因" />
+                </div>
+            </div>
+            <div class="popup__btnbox">
+                <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
+                <a id="confirm_refuse_02" class="btn m-green popup__close-btn">确认</a>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 <iframe id="myIFrame" scrolling="yes" src="abount:blank" style="display:none" frameborder=1></iframe>
@@ -268,38 +306,7 @@
 <script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
 <script type="text/javascript" src="{% static 'js/add-img.js' %}"></script>
 <script type="text/javascript">
-    $.ajax({
-        url:"/restapi/projects/?is_official=true&pageSize=999",
-        type:"get",
-        dataType: "json",
-        success: function(ret) {
-            console.log(ret.results);
-            var option_html = '';
-            for (var i = 0; i < ret.results.length; i++) {
-                option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
-            }
-            $('.project').html(option_html);
-        },
-        error: function() {
-            alert("请检查网络连接");
-        }
-    });
-    $.ajax({
-        url:"/restapi/projects/?is_official=false",
-    	type:"get",
-    	dataType: "json",
-    	success: function(ret) {
-            console.log(ret.results);
-            var option_html = '';
-            for (var i = 0; i < ret.results.length; i++) {
-            	option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
-            }
-            $('.project_02').html(option_html);
-        },
-        error: function() {
-            alert("请检查网络连接");
-        }
-    });
+    
 //  未审核
     var data1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>操作</th></tr>[results]' +
@@ -330,7 +337,10 @@
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
         '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData_02(this,{id})">删除' +
-        '</a>│<a class="jion-s" onclick="editData_02(this,{id})">编辑</a></td></tr>[/results]</table>';
+        '</a>│<a class="jion-s" onclick="editData_02(this,{id})">编辑'+
+        '</a>│<a class="jion-s" onclick="pass_02(this,{id})">返现'+
+        '</a>│<a class="jion-s" onclick="refuse_02(this,{id})">拒绝'+
+        '</td></tr>[/results]</table>';
 //  已通过
     var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>结算金额</th><th>返现金额</th><th>备注</th></tr>[results]' +
@@ -521,6 +531,78 @@
             });
         })
         
+        var pass_id;
+        function pass_02 (obj,id) {
+            pass_id = id;
+            $(".settle_amount_02").val('');
+            $(".return_amount_02").val('');
+            $('.popup.m-pass-proj-02').addClass('in');
+        }
+        $('#confirm_pass_02').click(function() {
+            var settle_amount = $(".settle_amount_02").val();
+            var return_amount = $(".return_amount_02").val();
+            if(!settle_amount || !return_amount) {
+                alert('填写项不能为空')
+                return;
+            }
+            console.log(settle_amount + ', ' + return_amount)
+            $.ajax({
+                url: "/account/admin_invest/" + pass_id + "/",
+                dataType: "json",
+                type: "post",
+                data: {
+                    'settle_amount': settle_amount,
+                    'return_amount': return_amount,
+                    'audit_state': 0,
+                },
+                success: function(ret) {
+                    if(ret.code == 0) {
+                        alert('操作成功');
+                        $('.popup.m-pass-proj-02').removeClass('in');
+                    } else {
+                        console.log(ret.res_msg);
+                    }
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
+        });
+        
+        var refuse_id;
+        function refuse_02 (obj,id) {
+            refuse_id = id;
+            $(".refuse_reason_02").val('');
+            $('.popup.m-refuse-proj-02').addClass('in');
+        }
+        $('#confirm_refuse_02').click(function() {
+            var refuse_reason = $(".refuse_reason_02").val();
+            if(!refuse_reason) {
+                alert('拒绝原因不能为空')
+                return;
+            }
+            console.log(refuse_reason);
+            $.ajax({
+                url: "/account/admin_invest/" + refuse_id + "/",
+                dataType: "json",
+                type: "post",
+                data: {
+                    'audit_reason': refuse_reason,
+                    'audit_state': 2,
+                },
+                success: function(ret) {
+                    if(ret.code == 0) {
+                        alert('操作成功');
+                        $('.popup.m-refuse-proj-02').removeClass('in');
+                    } else {
+                        console.log(ret.res_msg);
+                    }
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
+        });
         
         var project_id_02;
         var edit_parent_02;
@@ -619,6 +701,42 @@
             $(".RightCont").on("focus", ".date_picker", function() {
                 $(this).date_input();
             })
+            
+            $.ajax({
+                url:"/restapi/projects/?is_official=true&pageSize=999",
+                type:"get",
+                dataType: "json",
+                success: function(ret) {
+                    console.log(ret.results);
+                    var option_html = '';
+                    for (var i = 0; i < ret.results.length; i++) {
+                        option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
+                    }
+                    $('.project').html(option_html);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
+                    console.log("数据错误is_official=true");
+                }
+            });
+            $.ajax({
+                url:"/restapi/projects/?is_official=false&pageSize=999",
+                type:"get",
+                dataType: "json",
+                success: function(ret) {
+                    console.log(ret.results);
+                    var option_html = '';
+                    for (var i = 0; i < ret.results.length; i++) {
+                        option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
+                    }
+                    $('.project_02').html(option_html);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
+                    console.log("数据错误is_official=false");
+                }
+            });
+            
 //          官方数据
             $("#search").click(function() {
                 var proj_name = $("#proj_name").val(),

@@ -90,12 +90,13 @@ class InvestlogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsOwnerOrStaff,)
     serializer_class = InvestLogSerializer
     def perform_update(self, serializer):
-        project = serializer.validated_data['project']
-        id = serializer.instance.id
-        invest_mobile = serializer.validated_data['invest_mobile']
-        if not project.is_multisub_allowed:
-            if InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id).exclude(id=id).exclude(audit_state='2').exists():
-                raise ValidationError({'detail':u"投资手机号重复"})
+        if serializer.validated_data.has_key('project'):
+            project = serializer.validated_data['project']
+            id = serializer.instance.id
+            invest_mobile = serializer.validated_data['invest_mobile']
+            if not project.is_multisub_allowed:
+                if InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id).exclude(id=id).exclude(audit_state='2').exists():
+                    raise ValidationError({'detail':u"投资手机号重复"})
         serializer.save()
     
 class TranslistList(BaseViewMixin, generics.ListAPIView):

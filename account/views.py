@@ -824,3 +824,18 @@ def submit_screenshot(request):
     investlog.save(update_fields=['invest_image',])
     result['code'] = 0
     return JsonResponse(result)
+
+@csrf_exempt
+@login_required_ajax
+def admin_investlog(request, id):
+    log = InvestLog.objects.filter(is_official=False).get(id=id)
+    audit_state = request.POST['audit_state']
+    log.audit_state = request.POST['audit_state']
+    if audit_state == '0':
+        log.settle_amount = request.POST['settle_amount']
+        log.return_amount = request.POST['return_amount']
+        
+    else:
+        log.audit_reason = request.POST['audit_reason']
+    log.save()
+        

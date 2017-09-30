@@ -549,7 +549,7 @@
             $.ajax({
                 url: "/account/admin_invest/" + pass_id + "/",
                 dataType: "json",
-                type: "put",
+                type: "post",
                 data: {
                     'settle_amount': settle_amount,
                     'return_amount': return_amount,
@@ -585,7 +585,7 @@
             $.ajax({
                 url: "/account/admin_invest/" + refuse_id + "/",
                 dataType: "json",
-                type: "put",
+                type: "post",
                 data: {
                     'audit_reason': refuse_reason,
                     'audit_state': 2,

@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from wafuli.models import SubscribeShip, Notice
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
-
+@login_required
 def index(request):
     recoms = list(SubscribeShip.objects.filter(user=request.user, is_recommend=True, is_on=True)[0:10])
     if len(recoms)==0:
@@ -26,7 +27,8 @@ def index(request):
     notice_list = Notice.objects.filter(user=request.user)
     return render(request, 'my_homepage.html',{'recom_list':recom_list, 'notice_list':notice_list})
 
-def m_proj(request):
+@login_required
+def m_index(request):
     recoms = list(SubscribeShip.objects.filter(user=request.user, is_recommend=True, is_on=True)[0:10])
     if len(recoms)==0:
         recoms = list(SubscribeShip.objects.filter(user=request.user, is_on=True)[0:4])

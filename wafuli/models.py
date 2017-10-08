@@ -100,6 +100,9 @@ class Project(models.Model):
         QQ号(5)，支付宝账号(6)，支付宝姓名(7)，用户预期返现金额(8)，字段以英文逗号隔开，如0,1,5,8")
     marks = models.ManyToManyField(Mark, verbose_name=u'标签', related_name="project_set", blank=True)
     subscribers = models.ManyToManyField(MyUser, through='SubscribeShip')
+    def clean(self):
+        if self.pic and self.pic.size > 30000:
+                raise ValidationError({'pic': u'图片大小不能超过30k'})
     class Meta:
         verbose_name = u"理财项目"
         verbose_name_plural = u"理财项目"

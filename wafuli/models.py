@@ -168,7 +168,7 @@ class InvestLog(models.Model):
     def __unicode__(self):
         return u"来自渠道用户：%s 的投资数据提交：%s" % (self.user, self.invest_amount)
     class Meta:
-        ordering = ["-submit_time",]
+        ordering = ["submit_time",]
     
 class Notice(models.Model):
     user = models.ForeignKey(MyUser, related_name="user_notice")

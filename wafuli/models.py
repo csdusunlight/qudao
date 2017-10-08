@@ -94,6 +94,10 @@ class Project(models.Model):
     term = models.CharField(u"标期长度", max_length=20)
     investrange = models.CharField(u"投资额度区间", max_length=20)
     intrest = models.CharField(u"预期年化", max_length=10)
+    necessary_fields = models.CharField(u"必填字段", max_length=30,help_text=u"投资用户名(0)，投资金额(1)，投资标期(2)，投资日期(3)，投资截图(4)，\
+        QQ号(5)，支付宝账号(6)，支付宝姓名(7)，用户预期返现金额(8)，字段以英文逗号隔开，如0,1,5,8")
+    optional_fields = models.CharField(u"可选年化", max_length=30,help_text=u"投资用户名(0)，投资金额(1)，投资标期(2)，投资日期(3)，投资截图(4)，\
+        QQ号(5)，支付宝账号(6)，支付宝姓名(7)，用户预期返现金额(8)，字段以英文逗号隔开，如0,1,5,8")
     marks = models.ManyToManyField(Mark, verbose_name=u'标签', related_name="project_set", blank=True)
     subscribers = models.ManyToManyField(MyUser, through='SubscribeShip')
     class Meta:
@@ -142,6 +146,8 @@ class SubscribeShip(models.Model):
     class Meta:
         unique_together = (('user', 'project'),)
         ordering = ['project__state', "-project__priority", "-project__pub_date",]
+    def get_sub_invest_num(self):
+        return InvestLog.objects.filter(user=self.user, project=self.project).count()
 
 class InvestLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="investlog_submit")
@@ -150,14 +156,15 @@ class InvestLog(models.Model):
     is_selfsub = models.BooleanField(u'是否渠道用户自己提交的',default=False)
     submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
     invest_mobile = models.CharField(u"投资手机号", max_length=11)
-    invest_name = models.CharField(u"投资用户名", max_length=11, blank=True)
-    invest_amount = models.DecimalField(u'投资金额', max_digits=10, decimal_places=2)
-    invest_term = models.IntegerField(u"投资标期")
-    invest_image = models.CharField(u"投资截图", max_length=1000, blank=True)
-    invest_date = models.DateField(u'投资日期', default=get_today)
-    qq_number = models.CharField(u"QQ号", max_length=20, blank=True)
-    zhifubao = models.CharField(u'支付宝账号', max_length=64, blank=True)
-    zhifubao_name = models.CharField(u'支付宝姓名', max_length=30, blank=True)
+    invest_name = models.CharField(u"投资用户名(0)", max_length=11, blank=True)
+    invest_amount = models.DecimalField(u'投资金额(1)', max_digits=10, decimal_places=2, blank=True)
+    invest_term = models.IntegerField(u"投资标期(2)", blank=True)
+    invest_date = models.DateField(u'投资日期(3)', default=get_today, blank=True)
+    invest_image = models.CharField(u"投资截图(4)", max_length=1000, blank=True)
+    qq_number = models.CharField(u"QQ号(5)", max_length=20, blank=True)
+    zhifubao = models.CharField(u'支付宝账号(6)', max_length=64, blank=True)
+    zhifubao_name = models.CharField(u'支付宝姓名(7)', max_length=30, blank=True)
+    expect_amount = models.DecimalField(u'用户预期返现金额(8)', max_digits=10, decimal_places=2, default=0)
     admin_user = models.ForeignKey(MyUser, related_name="investlog_admin", null=True)
     audit_time = models.DateTimeField(u'审核时间', null=True, blank=True)
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
@@ -168,7 +175,8 @@ class InvestLog(models.Model):
     def __unicode__(self):
         return u"来自渠道用户：%s 的投资数据提交：%s" % (self.user, self.invest_amount)
     class Meta:
-        ordering = ["-submit_time",]
+        ordering = ["submit_time",]
+
     
 class Notice(models.Model):
     user = models.ForeignKey(MyUser, related_name="user_notice")

@@ -1,0 +1,146 @@
+.RightCont {
+    /*background-color: #fff;*/
+}
+.right-top {
+    background-color: #fff;
+}
+.user-info-box {
+    background-color: #fff;
+}
+.notice-info-box {
+    margin-top: 20px;
+    padding-top: 20px;
+    background-color: #fff;
+}
+.top-title {
+    margin-left: 30px;
+    line-height: 58px;
+}
+.btn.m-exp {
+    float: right;
+    margin-top: 11px;
+    margin-right: 20px;
+}
+.item {
+    padding-top: 26px;
+}
+.item__name {
+    position: relative;
+    display: inline-block;
+    width: 200px;
+    padding-left: 40px;
+    vertical-align: top;
+    line-height: 42px;
+}
+.item__name.m-need:after {
+    content: '*';
+    position: absolute;
+    top: -4px;
+    left: 32px;
+    color: red;
+}
+.user-img {
+    display: inline-block;
+}
+.notice-box {
+    display: inline-block;
+}
+.input-box {
+    margin-bottom: 10px;
+}
+.add-notice {
+    text-decoration: underline;
+}
+.add-notice,
+.delete-notice {
+    display: inline-block;
+    margin: 0 10px;
+}
+/*体验福利新加样式*/
+.userimg {
+    background-image: url(../images/about03.png);
+}
+.img-up {
+    display: inline-block;
+}
+#choose {display: none;}
+canvas{width: 100%;border: 1px solid #000000;}
+#upload {
+    display: inline-block;
+    margin-top: 8px;
+    width: 110px;
+    text-align: center;
+    text-decoration: underline;
+}
+.img-list{
+    width: 110px;
+    height: 110px;
+    overflow: hidden;
+}
+.img-list .userimg {
+    position: relative;
+    display: inline-block;
+    width: 110px;
+    height: 110px;
+    margin: 5px 5px 20px 5px;
+    border: 1px solid rgb(100, 149, 198);
+    background-position: center;
+    background-repeat:no-repeat;
+    background-size: cover;
+}
+
+.item .item__txt {
+    width: 424px;
+    height: 42px;
+    border-radius: 4px;
+}
+.btnbox {
+    text-align: center;
+}
+.btnbox .btn {
+    margin: 26px 100px;
+}
+
+.is_futou {
+    width: 20px;
+    height: 20px;
+}
+.need-box {
+    margin-left: 30px;
+}
+.need-icon {
+    display: inline-block;
+    margin: 10px 10px 10px 38px;
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+    border: 1px solid #e4e4e4;
+    vertical-align: middle;
+    cursor: pointer;
+}
+.need-icon.m-left {
+    margin-left: 0;
+}
+.need,
+.is_futou {
+    opacity: 0;
+    position: absolute;
+}
+.is_futou:checked + .need-icon {
+    background: url(../images/bg-checked.png) center center no-repeat;
+}
+.need:checked + .need-icon {
+    background: url(../images/bg-checked.png) center center no-repeat;
+}
+
+/*样式覆盖*/
+/*.imageBox {
+    width: 140px;
+    height: 140px;
+}*/
+.imageBox .thumbBox {
+    top: 60px;
+    left: 60px;
+    width: 120px;
+    height: 120px;
+}

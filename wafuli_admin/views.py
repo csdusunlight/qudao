@@ -313,9 +313,10 @@ def export_investlog(request):
         s = datetime.datetime.strptime(submittime_0,'%Y-%m-%d')
         e = datetime.datetime.strptime(submittime_1,'%Y-%m-%d')
         item_list = item_list.filter(submit_time__range=(s,e))
+    print audittime_0,audittime_1
     if audittime_0 and audittime_1:
-        s = datetime.datetime.strptime(audittime_0,'%Y-%m-%d')
-        e = datetime.datetime.strptime(audittime_1,'%Y-%m-%d')
+        s = datetime.datetime.strptime(audittime_0,'%Y-%m-%dT%H:%M')
+        e = datetime.datetime.strptime(audittime_1,'%Y-%m-%dT%H:%M')
         item_list = item_list.filter(audit_time__range=(s,e))
     qq_number = request.GET.get("qq_number", None)
     if qq_number:
@@ -900,8 +901,8 @@ def export_withdrawlog(request):
         e = datetime.datetime.strptime(submit_date_1,'%Y-%m-%d')
         item_list = item_list.filter(submit_time__range=(s,e))
     if audit_date_0 and audit_date_1:
-        s = datetime.datetime.strptime(audit_date_0,'%Y-%m-%d')
-        e = datetime.datetime.strptime(audit_date_1,'%Y-%m-%d')
+        s = datetime.datetime.strptime(audit_date_0,'%Y-%m-%dT%H:%M')
+        e = datetime.datetime.strptime(audit_date_1,'%Y-%m-%dT%H:%M')
         item_list = item_list.filter(audit_time__range=(s,e))
 
     qq_number = request.GET.get("qq_number", None)

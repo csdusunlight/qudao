@@ -144,3 +144,7 @@ canvas{width: 100%;border: 1px solid #000000;}
     width: 120px;
     height: 120px;
 }
+.cropped {
+    left: 530px;
+    height: 240px;
+}

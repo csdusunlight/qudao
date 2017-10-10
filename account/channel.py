@@ -127,7 +127,7 @@ def channel(request):
         ret.update(code=0,sun=succ_num, dup1=duplic_num1, dup2=duplic_num2, anum=nrows-1, dupstr=duplic_mobile_list_str)
         return JsonResponse(ret)
     else:
-        plist = list(Project.objects.filter(state__in=['10','20'], is_official=True))    #jzy
+        plist = list(Project.objects.filter(state__in=['10','20'], ))    #jzy
         return render(request, 'account/account_submit.html', {'plist':plist})
 
 @login_required
@@ -150,7 +150,7 @@ def submit_itembyitem(request):
         amount = temp[3]
         term = temp[4]
         zhifubao = temp[5]
-        zhifubao_name = temp[6]
+        invest_name = temp[6]
         remark = temp[7]
         try:
             if not news.is_multisub_allowed and InvestLog.objects.filter(invest_mobile=telnum, project__company_id=news.company_id).exclude(audit_state='2').exists():
@@ -159,8 +159,8 @@ def submit_itembyitem(request):
                 raise ValueError('This invest_mobile is repective in project:' + str(news.id))
             else:
                 InvestLog.objects.create(user=request.user, project=news, invest_date=time, invest_mobile=telnum, invest_term=term,
-                                 invest_amount=int(amount), audit_state='1', is_official=True, is_selfsub=True,
-                                 zhifubao=zhifubao, zhifubao_name=zhifubao_name, remark=remark,)
+                                 invest_amount=int(amount), audit_state='1', is_official=news.is_official, is_selfsub=True,
+                                 zhifubao=zhifubao, invest_name=invest_name, remark=remark,)
                 suc_num += 1
         except Exception, e:
             logger.info(e)

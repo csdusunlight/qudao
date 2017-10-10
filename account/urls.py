@@ -51,6 +51,7 @@ urlpatterns = [
     url(r'^project/$', 'account.views.project_manage', name='project_manage'),
     url(r'^project_create/$', 'account.views.project_create', name='project_create'),
     url(r'^submit_screenshot/$', 'account.views.submit_screenshot', name='submit_screenshot'),
-    
+
     url(r'^admin_invest/(?P<id>[0-9]+)/$', 'account.views.admin_investlog', name='admin_investlog'),
+    url(r'^project_add/(?:(?P<id>[0-9]+)/)?$', 'account.views.project_add', name='project_add'),
 ]

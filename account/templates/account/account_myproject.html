@@ -25,6 +25,13 @@ var data = '<table width="100%"><thead><tr><th>项目名称</th><th>项目来源
     '<td><span data-isadd="{is_recommend}" class="recom switch {is_recommend}" onclick="isRecommend(this,{id})"></span></td>'+
     '<td data-isofficial="{project_is_official}" class="edit" onclick="edit(this, {id}, {project})">编辑</td></tr>[/results]'
     + '</tbody></table>';
+var data2 = '<table width="100%"><thead><tr><th>项目名称</th><th>项目来源</th>'+
+    '<th>客户指导价</th><th>标期</th><th>投资区间</th><th>预计年化</th><th width="14%">是否主页呈现</th><th width="14%">是否推荐</th><th>操作</th></tr></thead><tbody>'+
+    '[results]<tr><td>{project_title}</td><td class="project_source">{project_source}</td><td data-price="{project_cprice}" class="price">{price}</td><td>{project_term}</td>'+
+    '<td>{project_investrange}</td><td data-intrest="{project_intrest}" class="intrest">{intrest}</td><td><span data-isadd="{is_on}" class="home switch {is_on}" onclick="isadd(this,{id})"></span></td>'+
+    '<td><span data-isadd="{is_recommend}" class="recom switch {is_recommend}" onclick="isRecommend(this,{id})"></span></td>'+
+    '<td data-isofficial="{project_is_official}" class="edit"><a target="_blank" href="/account/project_add/{project}">编辑2</a></td></tr>[/results]'
+    + '</tbody></table>';
 var url = "/restapi/sub/?page={page}&pageSize={pageSize}";
 //function pop(n){
 //	$("#coupon_id").val(n);
@@ -250,7 +257,7 @@ $(function(){
             pageId:$("#page2"),
             pageSize:10,
             run:true,
-            content:data,
+            content:data2,
             complete:pagecallback,
     });
         }
@@ -265,17 +272,17 @@ $(function(){
         complete:pagecallback,
     });
     
-    $('.create-project').click(function(){      //新建项目调用函数
-        $('#crt_name').val('');
-        $('#crt_link').val('');
-        $('#crt_detail').val('');
-        $('#crt_price').val('');
-        $('#crt_term').val('');
-        $('#crt_range').val('');
-        $('#crt_intrest').val('');
-        $('.popup.m-create-proj').addClass('in');
-        
-    })
+//  $('.create-project').click(function(){      //新建项目调用函数
+//      $('#crt_name').val('');
+//      $('#crt_link').val('');
+//      $('#crt_detail').val('');
+//      $('#crt_price').val('');
+//      $('#crt_term').val('');
+//      $('#crt_range').val('');
+//      $('#crt_intrest').val('');
+//      $('.popup.m-create-proj').addClass('in');
+//      
+//  })
     $('#crt_confirm').click(function(){     //确认新建项目
         var crt_name = $('#crt_name').val(),
             crt_link = $('#crt_link').val(),
@@ -534,8 +541,7 @@ $(function(){
                         </div>
                         <div class="table conitem">
                             <div class="handle-box clearfix">
-                                <a class="create-project link r">新建项目</a>
-                                <!--<a href="{% url 'project_all' %}" target="_blank" class="look-projects link r">查看项目库</a>-->
+                                <a href="{% url 'project_add' %}" class="create-project link r">新建项目</a>
                             </div>
                             <div id="pagedata2">
                             </div>

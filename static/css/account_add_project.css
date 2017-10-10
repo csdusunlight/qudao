@@ -127,7 +127,7 @@ canvas{width: 100%;border: 1px solid #000000;}
     position: absolute;
 }
 .is_futou:checked + .need-icon {
-    background: url(../images/bg-checked.png) center center no-repeat;
+    background: url(../images/bg-checked-choose.png) center center no-repeat;
 }
 .need:checked + .need-icon {
     background: url(../images/bg-checked.png) center center no-repeat;

@@ -200,6 +200,10 @@ $(document).ready(function(){
 		}
 		var qq = $("#qq").val();
 		var qqname = $("#qqname").val();
+		var mobile = $("#mobile").val();
+		if(mobile){
+            newurl += "&mobile="+mobile;
+        }
 		if(qq){
 			newurl += "&qq_number="+qq;
 		}
@@ -232,11 +236,15 @@ $(document).ready(function(){
             qq = $("#qq").val(),
             qqname = $("#qqname").val(),
             level = $("#level").val(),
-            state = $("#state").val();
+            state = $("#state").val(),
+            mobile = $("#mobile").val();
             
         if(startTime && endTime) {
             html += '<input name="join_date_0" type="hidden" value="' + startTime + '"/>';
             html += '<input name="join_date_1" type="hidden" value="' + endTime + '"/>';
+        }
+        if(mobile) {
+            html += '<input name="mobile" type="hidden" value="' + mobile + '"/>';
         }
         if(qq) {
             html += '<input name="qq_number" type="hidden" value="' + qq + '"/>';
@@ -304,6 +312,10 @@ $(document).ready(function(){
 					        <option value="false">是</option>
 					        <option value="true">否</option>
 					    </select>
+                    </td>
+                    <td>
+                        <i style="letter-spacing:2px;">用户手机号：</i>
+                        <input id="mobile" type="text" />
                     </td>
                 </tr>
                 <tr>

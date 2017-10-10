@@ -1,5 +1,6 @@
 .Content {
     width: 1250px;
+    min-height: 600px;
     margin: 24px auto;
     overflow: hidden;
 }

@@ -228,6 +228,10 @@ $(function(){
         })
         var result;
         $('#btnCrop').on('click', function(){
+            if (!file) {
+                alert('请先上传图片');
+            	return false;
+            }
             img2 = cropper.getDataURL();
             console.log(img2);
             $('.cropped').html('<span style="display: inline-block;margin-bottom: 30px;">*请先上传后进行裁切</span>');
@@ -397,7 +401,8 @@ $(function(){
             xhr.onreadystatechange = function() {
                 $(".img-mask").css("display", "none");
                 if(xhr.readyState == 4 && xhr.status == 200) {
-                    alert("修改成功!")
+                    alert("修改成功!");
+                    window.history.back();
                 }
             };
 

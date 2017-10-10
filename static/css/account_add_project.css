@@ -132,6 +132,9 @@ canvas{width: 100%;border: 1px solid #000000;}
 .need:checked + .need-icon {
     background: url(../images/bg-checked.png) center center no-repeat;
 }
+.need.m-choose:checked + .need-icon {
+    background: url(../images/bg-checked-choose.png) center center no-repeat;
+}
 
 /*样式覆盖*/
 /*.imageBox {
@@ -139,10 +142,11 @@ canvas{width: 100%;border: 1px solid #000000;}
     height: 140px;
 }*/
 .imageBox .thumbBox {
-    top: 60px;
-    left: 60px;
-    width: 120px;
-    height: 120px;
+    top: 58px;
+    left: 58px;
+    width: 122px;
+    height: 122px;
+    /*border: none;*/
 }
 .cropped {
     left: 530px;

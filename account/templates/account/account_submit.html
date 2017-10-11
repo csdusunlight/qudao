@@ -57,10 +57,10 @@
 										<li class="item-01">项目名称</li>
 										<li class="item-02">投资日期</li>
 										<li class="item-03">注册手机号</li>
+										<li class="item-07">投资姓名</li>
 										<li class="item-04">投资金额(元)</li>
 										<li class="item-05">投资标期(天)</li>
 										<li class="item-06">支付宝</li>
-										<li class="item-07">支付宝名称</li>
 										<li class="item-08">备注</li>
 									</ul>
 									<ul class="submit-item-box">
@@ -76,14 +76,14 @@
 										</li>
 										<li class="submit-item item-03"><input type="text" maxlength=11 class="telnum" id="telnum" placeholder="填写正确的手机号">
 										</li>
+										<li class="submit-item item-07"><input type="text" class="invest_name" id="invest_name" placeholder="填写投资姓名">
+										</li>
 										<li class="submit-item item-04"><input type="text" class="amount" id="amount" placeholder="仅限纯数字">
 										</li>
 										<li class="submit-item item-05"><input type="text" class="term" id="term" placeholder="仅限纯数字">
 										</li>
                                         <li class="submit-item item-06"><input type="text" class="zhifubao" id="zhifubao" placeholder="选填">
                                         </li>
-										<li class="submit-item item-07"><input type="text" class="zfbname" id="zfbname" placeholder="选填">
-										</li>
 										<li class="submit-item item-08"><input type="text" class="remark" id="remark" placeholder="选填">
                                         </li>
 										<li class="item-09"><a class="delete-item">删除</a><a class="copy-item">复制</a></li>
@@ -297,7 +297,7 @@
 					},
 				});
 				$("#pagedata").ajaxPage({
-					url: "/restapi/investlogs/?page={page}&pageSize={pageSize}&user={{user.id}}",
+					url: "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_selfsub=true&user={{user.id}}",
 					pageId: $("#page"),
 					pageSize: 10,
 					run: true,
@@ -463,10 +463,10 @@
 						'</select></li>' +
 						'<li class="submit-item item-02"><input type="text" class="height-add02 time date_picker"></li>' +
 						'<li class="submit-item item-03"><input type="text" maxlength=11 class="telnum"></li>' +
+						'<li class="submit-item item-07"><input type="text" class="invest_name"></li>' +
 						'<li class="submit-item item-04"><input type="text" class="amount"></li>' +
 						'<li class="submit-item item-05"><input type="text" class="term"></li>' +
 						'<li class="submit-item item-06"><input type="text" class="zhifubao"></li>' +
-						'<li class="submit-item item-07"><input type="text" class="zfbname"></li>' +
 						'<li class="submit-item item-08"><input type="text" class="remark"></li>' +
 						'<li class="item-09"><a class="delete-item">删除</a><a class="copy-item">复制</a></li>';
 					submit_data_container.appendChild(ul);
@@ -511,7 +511,7 @@
 							amount01 = $(this).find(".amount"),
 							term01 = $(this).find(".term"),
 							zhifubao01 = $(this).find(".zhifubao");
-							zfbname01 = $(this).find(".zfbname");
+							invest_name01 = $(this).find(".invest_name");
 							remark01 = $(this).find(".remark");
 
 						var project_select = $(this).find(".project_select option:selected").val(),
@@ -520,9 +520,9 @@
 							amount = amount01.val(),
 							term = term01.val(),
 							zhifubao = zhifubao01.val(),
-							zfbname = zfbname01.val(),
+							invest_name = invest_name01.val(),
 							remark = remark01.val(),
-							data_list = [project_select, time, telnum, amount, term, zhifubao, zfbname, remark];
+							data_list = [project_select, time, telnum, amount, term, zhifubao, invest_name, remark];
 
 						var re = /^1[1,2,3,4,6,5,7,8,9]\d{9}$/, //验证手机号
 							re_amount = /^\d+(\.\d+)?$/, //验证数字格式
@@ -554,6 +554,10 @@
 						} else {
 							telnum01.css("border", "1px solid #c1c1c1");
 						}
+						if(invest_name == "") {
+                            promptNumber++;
+                            invest_name01.css("border", "2px solid #ff6767");
+                        }
 						if(!re_amount.test(amount)) {
 							promptNumber++;
 							amount01.css("border", "2px solid #ff6767");

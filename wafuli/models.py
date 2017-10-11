@@ -177,6 +177,15 @@ class InvestLog(models.Model):
         return u"来自渠道用户：%s 的投资数据提交：%s" % (self.user, self.invest_amount)
     class Meta:
         ordering = ["submit_time",]
+    def get_other_and_remark(self):
+        ret = []
+        if self.qq_number:
+            ret.append(u"QQ：" + self.qq_number)
+        if self.expect_amount:
+            ret.append(u"预期返现：" + self.expect_amount)
+        if self.remark:
+            ret.append(u"备注：" + self.remark)
+        return '|'.join(ret)
 
     
 class Notice(models.Model):

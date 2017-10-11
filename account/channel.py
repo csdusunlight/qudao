@@ -261,6 +261,7 @@ def export_investlog(request):
         project = con.project
         project_name=project.title
         invest_mobile=con.invest_mobile
+        invest_name = con.invest_name
         invest_date=con.invest_date
         id=con.id
         remark= con.remark
@@ -279,11 +280,11 @@ def export_investlog(request):
         elif con.audit_state=='2':
             result = u'否'
             reason = con.audit_reason
-        data.append([id, project_name, invest_date, invest_mobile, term,
-                     invest_amount, remark, result, settle_amount, return_amount, reason])
+        data.append([id, project_name, invest_date, invest_mobile, invest_name,invest_amount,
+                     term, remark, result, settle_amount, return_amount, reason])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
-    title_row = [u'记录ID',u'项目名称',u'投资日期', u'投资手机号' ,u'投资标期' ,u'投资金额', u'备注',
+    title_row = [u'记录ID',u'项目名称',u'投资日期', u'投资手机号', u'投资姓名',u'投资金额' ,u'投资标期', u'备注',
                  u'是否审核通过',u'结算金额',u'返现金额',u'拒绝原因']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
@@ -319,7 +320,7 @@ def import_investlog(request):
     table = data.sheets()[0]
     nrows = table.nrows
     ncols = table.ncols
-    if ncols!=11:
+    if ncols!=12:
         ret['msg'] = u"文件格式与模板不符，请在导出的投资记录表中更新后将文件导入！"
         return JsonResponse(ret)
     rtable = []
@@ -336,7 +337,7 @@ def import_investlog(request):
                 elif j==1:
                     project = cell.value
                     temp.append(project)
-                elif j==7:
+                elif j==8:
                     result = cell.value.strip()
                     if result == u"是":
                         result = True
@@ -346,21 +347,21 @@ def import_investlog(request):
                         temp.append(False)
                     else:
                         raise Exception(u"审核结果必须为是或否。")
-                elif j==8:
+                elif j==9:
                     settle_amount = 0
                     if cell.value:
                         settle_amount = Decimal(cell.value)
                     elif result:
                         raise Exception(u"审核结果为是时，结算金额不能为空或零。")
                     temp.append(settle_amount)
-                elif j==9:
+                elif j==10:
                     return_amount = 0
                     if cell.value:
                         return_amount = Decimal(cell.value)
                     elif result:
                         raise Exception(u"审核结果为是时，结算金额不能为空或零。")
                     temp.append(return_amount)
-                elif j==10:
+                elif j==11:
                     reason = cell.value
                     temp.append(reason)
                 else:
@@ -375,7 +376,6 @@ def import_investlog(request):
     suc_num = 0
     try:
         for row in rtable:
-            print row
             with transaction.atomic():
                 id = row[0]
                 result = row[2]

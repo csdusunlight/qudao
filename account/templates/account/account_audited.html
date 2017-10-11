@@ -44,7 +44,7 @@
                 <input type="text" id="telnum_sub" />
             </div>
             <div class="search__item">
-                <span class="search__name">收款支付宝：</span>
+                <span class="search__name">支付宝信息：</span>
                 <input type="text" id="zhifubao" />
             </div>
             <div class="search__item">
@@ -95,7 +95,7 @@
                 <input type="text" id="telnum_sub_02" />
             </div>
             <div class="search__item">
-                <span class="search__name">收款支付宝：</span>
+                <span class="search__name">支付宝信息：</span>
                 <input type="text" id="zhifubao_02" />
             </div>
             <div class="search__item">
@@ -158,12 +158,12 @@
                     <input type="text" class="money" placeholder="填写投资金额" />
                 </div>
                 <div class="popup__item">
-                    <span class="popup__itemname">收款支付宝：</span>
+                    <span class="popup__itemname">支付宝信息：</span>
                     <input type="text" class="zfb" placeholder="填写收款支付宝" />
                 </div>
                 <div class="popup__item">
-                    <span class="popup__itemname">支付宝姓名：</span>
-                    <input type="text" class="zfbname" placeholder="填写支付宝姓名" />
+                    <span class="popup__itemname">投资姓名：</span>
+                    <input type="text" class="zfbname" placeholder="填写投资姓名" />
                 </div>
                 <div class="popup__item">
                     <span class="popup__itemname">备注：</span>
@@ -204,12 +204,12 @@
                     <input type="text" class="money_02" placeholder="填写投资金额" />
                 </div>
                 <div class="popup__item">
-                    <span class="popup__itemname">收款支付宝：</span>
+                    <span class="popup__itemname">支付宝信息：</span>
                     <input type="text" class="zfb_02" placeholder="填写投资金额" />
                 </div>
                 <div class="popup__item">
-                    <span class="popup__itemname">支付宝姓名：</span>
-                    <input type="text" class="zfbname_02" placeholder="填写投资金额" />
+                    <span class="popup__itemname">投资姓名：</span>
+                    <input type="text" class="zfbname_02" placeholder="填写投资姓名" />
                 </div>
                 <div class="popup__item">
                     <span class="popup__itemname">备注：</span>
@@ -309,9 +309,9 @@
     
 //  未审核
     var data1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>操作</th></tr>[results]' +
+        '<th>投资金额</th><th>支付宝信息</th><th>投资姓名</th><th>备注</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td>' +
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{invest_name}</td><td>{remark}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData(this,{id})">删除' +
         '</a>│<a class="jion-s" onclick="editData(this,{id})">编辑' +
         '</a>│<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
@@ -335,9 +335,9 @@
       
 //  未审核
     var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th><th>操作</th></tr>[results]' +
+        '<th>投资金额</th><th>支付宝信息</th><th>投资姓名</th><th>备注</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td>' +
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{invest_name}</td><td>{remark}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData_02(this,{id})">删除' +
         '</a>│<a class="jion-s" onclick="editData_02(this,{id})">编辑'+
         '</a>│<a class="jion-s" onclick="pass_02(this,{id})">返现'+
@@ -345,19 +345,19 @@
         '</td></tr>[/results]</table>';
 //  已通过
     var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>结算金额</th><th>返现金额</th><th>备注</th></tr>[results]' +
+        '<th>投资金额</th><th>支付宝信息</th><th>投资姓名</th><th>结算金额</th><th>返现金额</th><th>备注</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{remark}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{invest_name}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{remark}</td></tr>[/results]</table>';
 //  已拒绝
     var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>拒绝原因</th><th>备注</th></tr>[results]' +
+        '<th>投资金额</th><th>支付宝信息</th><th>投资姓名</th><th>拒绝原因</th><th>备注</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{audit_reason}</td><td>{remark}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{invest_name}</td><td>{audit_reason}</td><td>{remark}</td></tr>[/results]</table>';
 //  已删除
     var data_user4 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-        '<th>投资金额</th><th>收款方支付宝</th><th>支付宝姓名</th><th>备注</th></tr>[results]' +
+        '<th>投资金额</th><th>支付宝信息</th><th>投资姓名</th><th>备注</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_term}</td>' +
-        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{zhifubao}</td><td>{invest_name}</td><td>{remark}</td></tr>[/results]</table>';
 
         var url = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=true&user={{user.id}}";
         var url2 = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=false&user={{user.id}}";
@@ -498,7 +498,7 @@
                     'invest_term': term,
                     'invest_amount': money,
                     'zhifubao': zfb,
-                    'zhifubao_name': zfbname,
+                    'invest_name': zfbname,
                     'remark': remark
                 },
                 success: function(ret) {
@@ -509,7 +509,7 @@
                     parent_dom.find("td").eq(3).text(ret.invest_term);
                     parent_dom.find("td").eq(4).text(ret.invest_amount);
                     parent_dom.find("td").eq(5).text(ret.zhifubao);
-                    parent_dom.find("td").eq(6).text(ret.zhifubao_name);
+                    parent_dom.find("td").eq(6).text(ret.invest_name);
                     parent_dom.find("td").eq(7).text(ret.remark);
                     $('.popup.m-edit-proj').removeClass('in');
                 },
@@ -686,7 +686,7 @@
                     'invest_term': term,
                     'invest_amount': money,
                     'zhifubao': zfb,
-                    'zhifubao_name': zfbname,
+                    'invest_name': zfbname,
                     'remark': remark
                 },
                 success: function(ret) {
@@ -698,7 +698,7 @@
                         parent_dom.find("td").eq(3).text(ret.invest_term);
                         parent_dom.find("td").eq(4).text(ret.invest_amount);
                         parent_dom.find("td").eq(5).text(ret.zhifubao);
-                        parent_dom.find("td").eq(6).text(ret.zhifubao_name);
+                        parent_dom.find("td").eq(6).text(ret.invest_name);
                         parent_dom.find("td").eq(7).text(ret.remark);
                         $('.popup.m-edit-proj_02').removeClass('in');
                 },

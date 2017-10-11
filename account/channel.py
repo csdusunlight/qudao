@@ -82,10 +82,7 @@ def channel(request):
                     elif j==3:
                         amount = cell.value
                         try:
-                            if float(amount) == int(amount):
-                                amount = int(amount)
-                            else:
-                                amount = float(amount)
+                            amount = Decimal(amount)
                         except:
                             raise Exception(u"投资金额必须为数字")
                         temp.append(amount)
@@ -108,7 +105,10 @@ def channel(request):
         duplicate_mobile_list = []
         with transaction.atomic():
             db_key = DBlock.objects.select_for_update().get(index='investlog')
-            temp = InvestLog.objects.filter(project__company_id=project.company_id).exclude(audit_state='2').values('invest_mobile')
+            if project.company is None:
+                temp = InvestLog.objects.filter(project=project).exclude(audit_state='2').values('invest_mobile')
+            else:
+                temp = InvestLog.objects.filter(project__company_id=project.company_id).exclude(audit_state='2').values('invest_mobile')
             db_mobile_list = map(lambda x: x['invest_mobile'], temp)
             for i in range(len(mobile_list)):
                 mob = mobile_list[i]
@@ -145,22 +145,25 @@ def submit_itembyitem(request):
     exist_phone = ""   #jzy
     for row in table:
         temp = row.split('|')
-        news = Project.objects.get(id=temp[0])
+        project = Project.objects.get(id=temp[0])
         time = datetime.datetime.strptime(temp[1],'%Y-%m-%d')
-        telnum = temp[2]
+        invest_mobile = temp[2]
         amount = temp[3]
         term = temp[4]
         zhifubao = temp[5]
         invest_name = temp[6]
         remark = temp[7]
         try:
-            if not news.is_multisub_allowed and InvestLog.objects.filter(invest_mobile=telnum, project__company_id=news.company_id).exclude(audit_state='2').exists():
-                exist_num += 1   #jzy
-                exist_phone = exist_phone + telnum + ", "   #jzy
-                raise ValueError('This invest_mobile is repective in project:' + str(news.id))
+            if not project.is_multisub_allowed:
+                if project.company is None:
+                    queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project=project)
+                else:
+                    queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id)
+                if queryset.exclude(audit_state='2').exists():
+                    raise ValueError('This invest_mobile is repective in project:' + str(project.id))
             else:
-                InvestLog.objects.create(user=request.user, project=news, invest_date=time, invest_mobile=telnum, invest_term=term,
-                                 invest_amount=int(amount), audit_state='1', is_official=news.is_official, is_selfsub=True,
+                InvestLog.objects.create(user=request.user, project=project, invest_date=time, invest_mobile=invest_mobile, invest_term=term,
+                                 invest_amount=Decimal(amount), audit_state='1', is_official=project.is_official, is_selfsub=True,
                                  zhifubao=zhifubao, invest_name=invest_name, remark=remark,)
                 suc_num += 1
         except Exception, e:

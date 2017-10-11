@@ -1,6 +1,6 @@
 .Content {
     width: 1250px;
-    min-height: 600px;
+    min-height: 670px;
     margin: 24px auto;
     overflow: hidden;
 }
@@ -232,6 +232,7 @@
     text-align: center;
     color: #ffbe00;
     background-color: #fff;
+    cursor: pointer;
 }
 .myproj-nav.on {
     color: #fff;

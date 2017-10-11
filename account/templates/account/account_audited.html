@@ -314,7 +314,9 @@
         '<td>{invest_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData(this,{id})">删除' +
         '</a>│<a class="jion-s" onclick="editData(this,{id})">编辑' +
-        '</a>│<a class="jion-s" onclick="addImg(this,{id})">提交截图</a></td></tr>[/results]</table>';
+        '</a>│<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
+        '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span>'+
+        '</td></tr>[/results]</table>';
 //  已通过
     var data0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
         '<th>投资金额</th><th>审核时间</th><th>结算金额</th><th>返现金额</th><th>备注</th></tr>[results]' +
@@ -360,12 +362,22 @@
         var url = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=true&user={{user.id}}";
         var url2 = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=false&user={{user.id}}";
         
+        function pagecallback() {
+            $('.is-img').each(function() {
+                if ($(this).data('isimg') == "") {
+                    $(this).find('.img-have').hide();
+                } else {
+                    $(this).find('.img-submit').hide();
+                }
+            })
+        }
         $("#pagedata").ajaxPage({
             url: url + '&audit_state=1',
             pageId: $("#page"),
             pageSize: 10,
             run: true,
             content: data1,
+            complete:pagecallback,
         });
         $("#pagedata2").ajaxPage({
             url: url2 + '&audit_state=1',
@@ -385,7 +397,9 @@
         }
         
         var addimg_id;
+        var addimg_parent;
         function addImg (obj,id) {
+            addimg_parent = $(obj).parent();
             addimg_id = id;
             clearBtn();
             $('.popup.m-add-img').addClass('in');
@@ -784,6 +798,7 @@
                     pageSize: 10,
                     run: true,
                     content: search_data,
+                    complete:pagecallback,
                 });
             });
             $("#export").click(function() {
@@ -1018,6 +1033,8 @@
                         if(ret.code == 0) {
                             alert('上传截图成功');
                             $('.popup.m-add-img').removeClass('in');
+                            addimg_parent.find('.img-submit').hide();
+                            addimg_parent.find('.img-have').show();
                         } else {
                             alert(ret.msg)
                         }

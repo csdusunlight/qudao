@@ -375,6 +375,12 @@ $(function(){
                 alert('填写项不能为空');
                 return;
             }
+            var reg_url= /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
+            if(!reg_url.test(strategy)){
+                alert("输入的链接不是正确的网址");
+                return;
+            }
+            
             
             var xhr = new XMLHttpRequest();
             var formdata = new FormData();
@@ -400,9 +406,9 @@ $(function(){
             xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
             xhr.onreadystatechange = function() {
                 $(".img-mask").css("display", "none");
-                if(xhr.readyState == 4 && xhr.status == 200) {
-                    alert("修改成功!");
-                    window.history.back();
+                if(xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201)) {
+                    alert("操作成功!");
+                    window.location.href="/account/project?tab=2"
                 }
             };
 

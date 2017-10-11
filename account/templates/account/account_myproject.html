@@ -244,24 +244,30 @@ $(function(){
         console.log($(this).index());
         if ($(this).index() == 0) {
         	$("#pagedata").ajaxPage({
-            url:url + '&is_official=2',
-            pageId:$("#page"),
-            pageSize:10,
-            run:true,
-            content:data,
-            complete:pagecallback,
-    });
+                url:url + '&is_official=2',
+                pageId:$("#page"),
+                pageSize:10,
+                run:true,
+                content:data,
+                complete:pagecallback,
+            });     
         } else if ($(this).index() == 1){
         	$("#pagedata2").ajaxPage({
-            url:url + '&is_official=3',
-            pageId:$("#page2"),
-            pageSize:10,
-            run:true,
-            content:data2,
-            complete:pagecallback,
-    });
+                url:url + '&is_official=3',
+                pageId:$("#page2"),
+                pageSize:10,
+                run:true,
+                content:data2,
+                complete:pagecallback,
+            });
         }
     })
+    
+    var page_url = window.location.href;
+    console.log(page_url.substr(page_url.length-1,1));
+    if (page_url.substr(page_url.length-1,1) == 2) {
+        $('.navitem').eq(1).click();
+    }
 
 	$("#pagedata").ajaxPage({
         url:url + '&is_official=2',

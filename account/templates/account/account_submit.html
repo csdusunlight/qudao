@@ -60,7 +60,7 @@
 										<li class="item-07">投资姓名</li>
 										<li class="item-04">投资金额(元)</li>
 										<li class="item-05">投资标期(天)</li>
-										<li class="item-06">支付宝</li>
+										<li class="item-06">支付宝信息</li>
 										<li class="item-08">备注</li>
 									</ul>
 									<ul class="submit-item-box">
@@ -100,7 +100,7 @@
 								<div class="popup-box popup-box-01">
 									<div class="popup-content">
 										<h3>删除提示</h3>
-										<p id="hint_delete">确定删除该条数据？</p>
+										<p id="hint_delete" style="margin-bottom: 20px;">确定删除该条数据？</p>
 										<a id="cancel" class="cancel confirm" onclick="popupOutInfo()">取&nbsp;&nbsp;&nbsp;&nbsp;消</a>
 										<a id="confirm_delete" class="confirm">确认删除</a>
 									</div>
@@ -280,9 +280,9 @@
 			<script type="text/javascript">
 			    $('.back-a4').toggleClass("on");
 				var data = '<table width="100%"><tr><th width="12%">项目名称</th><th>投资日期</th><th>提交手机号</th>' +
-					'<th>投资金额</th><th>投资标期</th><th>支付宝</th><th>支付宝名称</th><th>备注</th>' +
+					'<th>投资姓名</th><th>投资金额</th><th>投资标期</th><th>支付宝信息</th><th>备注</th>' +
 					'</tr>[results]<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
-					'<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td>' +
+					'<td>{invest_name}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{remark}</td>' +
 					'</tr>[/results]</table>';
 //				var data2 = '<table width="100%"><tr><th width="12%">项目</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
 //					'<th>投资金额</th><th width="15%">备注</th><th>审核结果</th><th>返现福币</th><th width="12%">操作</th>' +

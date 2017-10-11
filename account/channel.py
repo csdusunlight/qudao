@@ -130,7 +130,8 @@ def channel(request):
     else:
         plist = list(Project.objects.filter(state__in=['10','20']).filter(Q(is_official=True)|Q(user=request.user)))    #jzy
         for p in plist:
-            p.title = u"自建：" + p.title
+            if not p.is_official:
+                p.title = u"自建：" + p.title
         return render(request, 'account/account_submit.html', {'plist':plist})
 
 @login_required

@@ -342,6 +342,8 @@
         '</a>│<a class="jion-s" onclick="editData_02(this,{id})">编辑'+
         '</a>│<a class="jion-s" onclick="pass_02(this,{id})">返现'+
         '</a>│<a class="jion-s" onclick="refuse_02(this,{id})">拒绝'+
+        '</a>│<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
+        '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span>'+
         '</td></tr>[/results]</table>';
 //  已通过
     var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
@@ -385,6 +387,7 @@
             pageSize: 10,
             run: true,
             content: data_user1,
+            complete:pagecallback,
         });
         
         var delete_id;
@@ -924,6 +927,7 @@
                     pageSize: 10,
                     run: true,
                     content: search_data,
+                    complete:pagecallback,
                 });
             });
             $("#export_02").click(function() {

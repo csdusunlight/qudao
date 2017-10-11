@@ -315,7 +315,7 @@ def export_investlog(request):
         item_list = item_list.filter(submit_time__range=(s,e))
     if audittime_0 and audittime_1:
         s = datetime.datetime.strptime(audittime_0,'%Y-%m-%d')
-        e = datetime.datetime.strptime(audittime_1,'%Y-%m-%d')
+        e = datetime.datetime.strptime(audittime_1,'%Y-%m-%d') + datetime.timedelta(days=1)
         item_list = item_list.filter(audit_time__range=(s,e))
     qq_number = request.GET.get("qq_number", None)
     if qq_number:

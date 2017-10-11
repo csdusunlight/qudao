@@ -20,6 +20,7 @@ from xlwt.Style import easyxf
 from xlwt.Workbook import Workbook
 import logging
 import datetime
+from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 import time
 from decimal import Decimal
@@ -127,7 +128,7 @@ def channel(request):
         ret.update(code=0,sun=succ_num, dup1=duplic_num1, dup2=duplic_num2, anum=nrows-1, dupstr=duplic_mobile_list_str)
         return JsonResponse(ret)
     else:
-        plist = list(Project.objects.filter(state__in=['10','20'], ))    #jzy
+        plist = list(Project.objects.filter(state__in=['10','20'], Q(is_official=True)|Q(user=request.user)))    #jzy
         return render(request, 'account/account_submit.html', {'plist':plist})
 
 @login_required

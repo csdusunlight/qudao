@@ -761,6 +761,9 @@ def admin_withdraw(request):
         if type==1:
             withdrawlog.audit_state = '0'
             res['code'] = 0
+            withuser = withdrawlog.user
+            withuser.with_total = F('with_total')+withdrawlog.amount
+            withuser.save(update_fields=['with_total'])
 
         elif type == 2:
             reason = request.POST.get('reason', '')

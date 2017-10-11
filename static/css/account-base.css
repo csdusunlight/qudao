@@ -215,6 +215,12 @@
     margin: 20px 0;
     text-align: center;
 }
+.w-remark {
+    width: 160px;
+}
+.w-zfb {
+    width: 160px;
+}
 /*个人中心---end*/
 /*我的项目*/
 .myproj-nav-box {

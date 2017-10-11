@@ -309,7 +309,7 @@
     
 //  未审核
     var data1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>支付宝信息</th><th>备注</th><th>操作</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">支付宝信息</th><th class="w-remark">备注及其他</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{remark}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData(this,{id})">删除' +
@@ -319,23 +319,23 @@
         '</td></tr>[/results]</table>';
 //  已通过
     var data0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>审核时间</th><th>结算金额</th><th>返现金额</th><th>备注</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th>审核时间</th><th>结算金额</th><th>返现金额</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{audit_time}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{remark}</td></tr>[/results]</table>';
 //  已拒绝
     var data2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>拒绝原因</th><th>备注</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{audit_reason}</td><td>{remark}</td></tr>[/results]</table>';
 //  已删除
     var data3 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><td>{invest_term}</td>' +
-        '<th>投资金额</th><th>投资标期</th><th>备注</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{remark}</td></tr>[/results]</table>';
       
 //  未审核
     var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>支付宝信息</th><th>备注</th><th>操作</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">支付宝信息</th><th class="w-remark">备注及其他</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{remark}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData_02(this,{id})">删除' +
@@ -345,17 +345,17 @@
         '</td></tr>[/results]</table>';
 //  已通过
     var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>支付宝信息</th><th>结算金额</th><th>返现金额</th><th>备注</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">支付宝信息</th><th>结算金额</th><th>返现金额</th><th>备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{remark}</td></tr>[/results]</table>';
 //  已拒绝
     var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>支付宝信息</th><th>拒绝原因</th><th>备注</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">支付宝信息</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{audit_reason}</td><td>{remark}</td></tr>[/results]</table>';
 //  已删除
     var data_user4 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>支付宝信息</th><th>备注</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">支付宝信息</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{remark}</td></tr>[/results]</table>';
 

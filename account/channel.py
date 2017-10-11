@@ -163,11 +163,10 @@ def submit_itembyitem(request):
                     exist_num += 1   #jzy
                     exist_phone = exist_phone + project.title + invest_mobile + ";"   #jzy
                     raise ValueError('This invest_mobile is repective in project:' + str(project.id))
-            else:
-                InvestLog.objects.create(user=request.user, project=project, invest_date=time, invest_mobile=invest_mobile, invest_term=term,
-                                 invest_amount=Decimal(amount), audit_state='1', is_official=project.is_official, is_selfsub=True,
-                                 zhifubao=zhifubao, invest_name=invest_name, remark=remark,)
-                suc_num += 1
+            InvestLog.objects.create(user=request.user, project=project, invest_date=time, invest_mobile=invest_mobile, invest_term=term,
+                             invest_amount=Decimal(amount), audit_state='1', is_official=project.is_official, is_selfsub=True,
+                             zhifubao=zhifubao, invest_name=invest_name, remark=remark,)
+            suc_num += 1
         except Exception, e:
             logger.info(e)
     result = {'code':0, 'suc_num':suc_num, 'exist_num':exist_num, 'exist_phone':exist_phone}   #jzy

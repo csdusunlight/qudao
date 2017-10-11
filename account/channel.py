@@ -160,6 +160,8 @@ def submit_itembyitem(request):
                 else:
                     queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id)
                 if queryset.exclude(audit_state='2').exists():
+                    exist_num += 1   #jzy
+                    exist_phone = exist_phone + project.title + invest_mobile + ";"   #jzy
                     raise ValueError('This invest_mobile is repective in project:' + str(project.id))
             else:
                 InvestLog.objects.create(user=request.user, project=project, invest_date=time, invest_mobile=invest_mobile, invest_term=term,

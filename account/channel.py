@@ -73,7 +73,7 @@ def channel(request):
                             break;
                         else:
                             mobile_list.append(mobile)
-                    elif j==2:
+                    elif j==4:
                         try:
                             term = str(int(float(cell.value)))
                         except Exception,e:
@@ -117,8 +117,8 @@ def channel(request):
                 else:
                     item = rtable[i]
                     obj = InvestLog(user=request.user, invest_mobile=mob, project=project, is_official=True,is_selfsub=True,
-                                    invest_amount=item[3],invest_term=item[2],invest_date=item[0],
-                                    audit_state='1',zhifubao=item[4],zhifubao_name=item[5],remark=item[6])
+                                    invest_amount=item[3],invest_term=item[4],invest_date=item[0],invest_name=temp[2],
+                                    audit_state='1',zhifubao=item[5],remark=item[6])
                     log_list.append(obj)
             InvestLog.objects.bulk_create(log_list)
         succ_num = len(log_list)
@@ -128,7 +128,7 @@ def channel(request):
         ret.update(code=0,sun=succ_num, dup1=duplic_num1, dup2=duplic_num2, anum=nrows-1, dupstr=duplic_mobile_list_str)
         return JsonResponse(ret)
     else:
-        plist = list(Project.objects.filter(state__in=['10','20'], Q(is_official=True)|Q(user=request.user)))    #jzy
+        plist = list(Project.objects.filter(state__in=['10','20']).filter(Q(is_official=True)|Q(user=request.user)))    #jzy
         return render(request, 'account/account_submit.html', {'plist':plist})
 
 @login_required
@@ -254,7 +254,7 @@ def export_investlog(request):
         item_list = item_list.filter(admin_user__username=adminname)
     zhifubao = request.GET.get("zhifubao", None)
     if zhifubao:
-        item_list = item_list.filter(zhifubao=zhifubao)
+        item_list = item_list.filter(zhifubao__contains=zhifubao)
     item_list = item_list.filter(audit_state=state).select_related('project').order_by('submit_time')
     data = []
     for con in item_list:
@@ -283,7 +283,7 @@ def export_investlog(request):
                      invest_amount, remark, result, settle_amount, return_amount, reason])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
-    title_row = [u'记录ID',u'项目名称',u'投资日期', u'投资手机号' ,u'投资期限' ,u'投资金额', u'备注',
+    title_row = [u'记录ID',u'项目名称',u'投资日期', u'投资手机号' ,u'投资标期' ,u'投资金额', u'备注',
                  u'是否审核通过',u'结算金额',u'返现金额',u'拒绝原因']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])

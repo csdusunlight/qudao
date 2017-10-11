@@ -116,7 +116,7 @@ def channel(request):
                     duplicate_mobile_list.append(mob)
                 else:
                     item = rtable[i]
-                    obj = InvestLog(user=request.user, invest_mobile=mob, project=project, is_official=True,is_selfsub=True,
+                    obj = InvestLog(user=request.user, invest_mobile=mob, project=project, is_official=project.is_official,is_selfsub=True,
                                     invest_amount=item[3],invest_term=item[4],invest_date=item[0],invest_name=temp[2],
                                     audit_state='1',zhifubao=item[5],remark=item[6])
                     log_list.append(obj)

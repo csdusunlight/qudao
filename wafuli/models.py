@@ -96,7 +96,7 @@ class Project(models.Model):
     intrest = models.CharField(u"预期年化", max_length=10)
     necessary_fields = models.CharField(u"必填字段", max_length=50,help_text=u"投资用户名(0)，投资金额(1)，投资标期(2)，投资日期(3)，\
                 支付宝信息(4)，投资手机号(5)，QQ号(6)，预期返现金额(7)，投资截图(8)，字段以英文逗号隔开，如0,1,2,3,4,5", default = '0,1,2,3,4,5')
-    marks = models.ManyToManyField(Mark, verbose_name=u'标签', related_name="project_set", blank=True)
+#     marks = models.ManyToManyField(Mark, verbose_name=u'标签',  blank=True)
     subscribers = models.ManyToManyField(MyUser, through='SubscribeShip')
     def clean(self):
         if self.pic and self.pic.size > 30000:
@@ -107,11 +107,11 @@ class Project(models.Model):
         ordering = ["-priority", "-pub_date"]
     def is_expired(self):
         return self.state != '10'
-    def marks_list(self):
-        mark_list = []
-        for mark in self.marks.all():
-            mark_list.append(mark.name)
-        return '|'.join(mark_list)
+#     def marks_list(self):
+#         mark_list = []
+#         for mark in self.marks.all():
+#             mark_list.append(mark.name)
+#         return '|'.join(mark_list)
     def is_new(self):
         now = datetime.datetime.now()
         days = (now-self.pub_date).days

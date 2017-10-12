@@ -81,7 +81,7 @@ class Project(models.Model):
     is_official = models.BooleanField(u"是否官方项目", default=False)
     is_addedto_repo = models.BooleanField(u"是否加入项目库", default=True)
     state = models.CharField(u"项目状态", max_length=2, choices=Project_STATE, default='10')
-    pic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）")
+    pic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）", blank=True)
     strategy = models.URLField(u"攻略链接")
     company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, verbose_name=u"合作平台")
     type = models.CharField(u"项目类别", max_length=1, choices=Project_TYPE, blank=True)
@@ -99,8 +99,10 @@ class Project(models.Model):
 #     marks = models.ManyToManyField(Mark, verbose_name=u'标签',  blank=True)
     subscribers = models.ManyToManyField(MyUser, through='SubscribeShip')
     def clean(self):
-        if self.pic and self.pic.size > 30000:
-                raise ValidationError({'pic': u'图片大小不能超过30k'})
+        if not self.pic:
+            raise ValidationError({'pic': u'图片大小不能超过30k'})
+        elif self.pic.size > 30000:
+            raise ValidationError({'pic': u'图片大小不能超过30k'})
     class Meta:
         verbose_name = u"理财项目"
         verbose_name_plural = u"理财项目"

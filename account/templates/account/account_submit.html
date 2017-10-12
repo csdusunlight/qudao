@@ -74,7 +74,7 @@
 										</li>
 										<li class="submit-item item-03"><input type="text" maxlength=11 class="telnum" id="telnum" placeholder="填写正确的手机号">
 										</li>
-										<li class="submit-item item-07"><input type="text" class="invest_name" id="invest_name" placeholder="填写投资姓名">
+										<li class="submit-item item-07"><input type="text" class="invest_name" id="invest_name" placeholder="选填">
 										</li>
 										<li class="submit-item item-04"><input type="text" class="amount" id="amount" placeholder="仅限纯数字">
 										</li>
@@ -552,10 +552,10 @@
 						} else {
 							telnum01.css("border", "1px solid #c1c1c1");
 						}
-						if(invest_name == "") {
-                            promptNumber++;
-                            invest_name01.css("border", "2px solid #ff6767");
-                        }
+//						if(invest_name == "") {
+//                          promptNumber++;
+//                          invest_name01.css("border", "2px solid #ff6767");
+//                      }
 						if(!re_amount.test(amount)) {
 							promptNumber++;
 							amount01.css("border", "2px solid #ff6767");

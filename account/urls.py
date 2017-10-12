@@ -45,6 +45,7 @@ urlpatterns = [
 #     url(r'^vip/$', 'account.views.vip', name='account_vip'),
 # url(r'^get_nums$', 'account.views.get_nums', name='get_nums'),
     url(r'^account_setting/$', 'account.views.account_setting', name='account_setting'),
+    url(r'^account_notice/$', 'account.views.account_notice', name='account_notice'),
     url(r'^account_submit/$', 'account.channel.channel', name='account_submit'),
     url(r'^account_audited/$', 'account.views.account_audited', name='account_audited'),
 

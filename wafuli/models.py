@@ -148,7 +148,7 @@ class SubscribeShip(models.Model):
         unique_together = (('user', 'project'),)
         ordering = ['project__state', "-project__priority", "-project__pub_date",]
     def get_sub_invest_num(self):
-        return InvestLog.objects.filter(user=self.user, project=self.project).count()
+        return InvestLog.objects.filter(project=self.project).count()
 
 class InvestLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="investlog_submit")

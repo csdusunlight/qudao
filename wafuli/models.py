@@ -152,9 +152,14 @@ class SubscribeShip(models.Model):
     def get_sub_invest_num(self):
         return InvestLog.objects.filter(project=self.project).count()
 
+SUB_TYPE = (
+    ('1', u'首投'),
+    ('2', u'复投'),
+)
 class InvestLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="investlog_submit")
     project = models.ForeignKey(Project, related_name="investlogs")
+    submit_type = models.CharField(max_length=10, choices=SUB_TYPE, verbose_name=u"首投/复投")
     is_official = models.BooleanField(u'是否官方项目',)
     is_selfsub = models.BooleanField(u'是否渠道用户自己提交的',default=False)
     submit_time = models.DateTimeField(u'提交时间', default=timezone.now)

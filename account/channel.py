@@ -156,8 +156,9 @@ def submit_itembyitem(request):
         zhifubao = temp[5]
         invest_name = temp[6]
         remark = temp[7]
+        submit_type = temp[8] or '1'
         try:
-            if not project.is_multisub_allowed:
+            if not project.is_multisub_allowed or submit_type=='1':
                 if project.company is None:
                     queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project=project)
                 else:
@@ -168,7 +169,7 @@ def submit_itembyitem(request):
                     raise ValueError('This invest_mobile is repective in project:' + str(project.id))
             InvestLog.objects.create(user=request.user, project=project, invest_date=time, invest_mobile=invest_mobile, invest_term=term,
                              invest_amount=Decimal(amount), audit_state='1', is_official=project.is_official, is_selfsub=True,
-                             zhifubao=zhifubao, invest_name=invest_name, remark=remark,)
+                             zhifubao=zhifubao, invest_name=invest_name, remark=remark, submit_type=submit_type,)
             suc_num += 1
         except Exception, e:
             logger.info(e)

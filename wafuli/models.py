@@ -308,7 +308,6 @@ class Announcement(models.Model):
     content = models.CharField(u"通知内容", max_length=100)
     time = models.DateTimeField(u"创建时间", default=timezone.now)
     priority = models.IntegerField(u"优先级",default=1)
-    istop = models.BooleanField(u"是否置顶",default=False)
     def __unicode__(self):
         return self.content
     class Meta:

@@ -71,7 +71,7 @@ $(function(){
     })
     
     $.ajax({
-        url: '/restapi/notice/',
+        url: '/restapi/notice/?ordering=state',
         dataType:"json",
         type:'get',
         success:function(ret){
@@ -79,10 +79,10 @@ $(function(){
             var notice_html = "";
             for (var i=0; i<ret.results.length; i++) {
                 notice_html += '<li class="notice-item"><span class="notice-text">' + ret.results[i].content + '</span>'; 
-                if (true) {
-                    notice_html +='<span class="notice-istop"  data-istop="true" onclick="noticeIstop(this,' + ret.results[i].id + ')">取消置顶</span>'; 
+                if (ret.results[i].state == '0') {
+                    notice_html +='<span class="notice-istop"  data-istop="0" onclick="noticeIstop(this,' + ret.results[i].id + ')">取消置顶</span>'; 
                 } else{
-                    notice_html +='<span class="notice-istop"  data-istop="false" onclick="noticeIstop(this,' + ret.results[i].id + ')">置顶</span>'; 
+                    notice_html +='<span class="notice-istop"  data-istop="1" onclick="noticeIstop(this,' + ret.results[i].id + ')">置顶</span>'; 
                 }
                 notice_html +='<span class="notice-change" onclick="noticeChange(this,' + ret.results[i].id + ')">修改</span>';
                 notice_html +='<span class="notice-delete" onclick="noticeDelete(this,' + ret.results[i].id + ')">删除</span></li>';
@@ -116,7 +116,7 @@ $(function(){
             success:function(ret){
                 alert('添加公告成功');
                 var notice_html = '<li class="notice-item"><span class="notice-text">' + ret.content + '</span>' + 
-                '<span class="notice-istop" data-istop="false" onclick="noticeIstop(this,' + ret.id + ')">置顶</span>' +
+                '<span class="notice-istop" data-istop="1" onclick="noticeIstop(this,' + ret.id + ')">置顶</span>' +
                 '<span class="notice-change" onclick="noticeChange(this,' + ret.id + ')">修改</span>' +
                 '<span class="notice-delete" onclick="noticeDelete(this,' + ret.id + ')">删除</span></li>';
                 $('.notice-exist').append(notice_html);
@@ -130,24 +130,30 @@ $(function(){
     var notice_id;
     function noticeIstop(obj,id) {
         notice_id = id;
-        var istop = $(obj).data('istop');
-        
+        var istop = '' + $(obj).data('istop');
+        var state;
+        console.log(istop);
+        console.log(typeof(istop));
+        if (istop == '0') {
+            state = '1';
+        } else if (istop == '1') {
+            state = '0';
+        }
+        console.log(state);
         $.ajax({
             url: '/restapi/notice/' + notice_id + '/',
             dataType:"json",
             type:'put',
             data : {
-                'istop':istop,
+                'state':state,
             },
             success:function(ret){
                 alert('操作成功');
-                console.log(istop);
-                console.log(typeof(istop));
-                if (istop == true) {
-                    $(obj).data('istop', false);
+                if (state == '1') {
+                    $(obj).data('istop', '1');
                     $(obj).text('置顶');
-                } else if (istop == false) {
-                    $(obj).data('istop', true);
+                } else if (state == '0') {
+                    $(obj).data('istop', '0');
                     $(obj).text('取消置顶');
                 } else {
                     console.log('不是布尔值')

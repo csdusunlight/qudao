@@ -58,7 +58,7 @@
 										<li class="item-07">投资姓名</li>
 										<li class="item-04">投资金额(元)</li>
 										<li class="item-05">投资标期(天)</li>
-										<li class="item-06">支付宝信息</li>
+										<li class="item-06">收款信息</li>
 										<li class="item-08">备注</li>
 									</ul>
 									<ul class="submit-item-box">
@@ -278,7 +278,7 @@
 			<script type="text/javascript">
 			    $('.back-a4').toggleClass("on");
 				var data = '<table width="100%"><tr><th width="12%">项目名称</th><th>投资日期</th><th>提交手机号</th>' +
-					'<th>投资姓名</th><th>投资金额</th><th>投资标期</th><th class="w-zfb">支付宝信息</th><th class="w-remark">备注及其他</th>' +
+					'<th>投资姓名</th><th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th>' +
 					'</tr>[results]<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
 					'<td>{invest_name}</td><td>{invest_amount}</td><td>{invest_term}</td><td class="w-zfb">{zhifubao}</td><td class="w-remark">{other_remark}</td>' +
 					'</tr>[/results]</table>';
@@ -422,7 +422,7 @@
                     var item_parent = $(this).parent().parent().clone();
                     $(this).parent().parent().parent().append(item_parent);
                     item_parent.find('.searchable-select').remove();
-                    item_parent.find('.telnum').val(''); 
+                    item_parent.find('.telnum').val('');
                     var value = $(this).parent().parent().find('.project_select').val();
                     item_parent.find('.project_select').val(value);
                     item_parent.find('.project_select').searchableSelect();

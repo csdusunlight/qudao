@@ -297,6 +297,10 @@ def account_setting(request):
     return render(request, 'account/account_setting.html',)
 
 @login_required
+def account_notice(request):
+    return render(request, 'account/account_notice.html',)
+
+@login_required
 def account_submit(request):
     plist = list(Project.objects.filter(state__in=['10','20'], is_official=True))    #jzy
     return render(request, 'account/account_submit.html', {'plist':plist})

@@ -82,8 +82,8 @@ $(function(){
                 </div>
                 <div class="item">
                     <span class="item__name m-need">用户名</span>
-                    <input class="username item__txt" type="text" maxlength="12" value="{{user.username}}" />
-                    <span>用于显示在个人主页，限12字以内</span>
+                    <input class="username item__txt" type="text" maxlength="8" value="{{user.username}}" />
+                    <span>用于显示在个人主页，限8个字符</span>
                 </div>
                 <div class="item">
                     <span class="item__name m-need">QQ昵称</span>
@@ -95,7 +95,7 @@ $(function(){
                 </div>
                 <div class="item">
                     <span class="item__name">个人签名</span>
-                    <input class="tosign item__txt" type="text" value="{{user.profile}}" />
+                    <input class="tosign item__txt" type="text" value="{{user.profile}}" maxlength="30" placeholder="限30个字符" />
                 </div>
                 
                 <div class="btnbox">

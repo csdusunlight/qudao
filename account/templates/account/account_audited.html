@@ -49,7 +49,7 @@
             </div>
             <div class="search__item">
                 <span class="search__name">审核状态：</span>
-                <select name="select_status" id="state">
+                <select name="select_status" id="state" onchange="$('#search').click()">
                     <option value="1">未审核</option>
                     <option value="0">已通过</option>
                     <option value="2">已拒绝</option>
@@ -100,7 +100,7 @@
             </div>
             <div class="search__item">
                 <span class="search__name">审核状态：</span>
-                <select name="select_status" id="state_02">
+                <select name="select_status" id="state_02" onchange="$('#search_02').click()">
                     <option value="1">未审核</option>
                     <option value="0">已通过</option>
                     <option value="2">已拒绝</option>
@@ -309,7 +309,7 @@
     
 //  未审核
     var data1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">支付宝信息</th><th class="w-remark">备注及其他</th><th>操作</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">支付宝信息</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{other_remark}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData(this,{id})">删除' +
@@ -335,7 +335,7 @@
       
 //  未审核
     var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">支付宝信息</th><th class="w-remark">备注及其他</th><th>操作</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">支付宝信息</th><th class="w-remark">备注及其他</th><th style="width:210px">操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{other_remark}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData_02(this,{id})">删除' +

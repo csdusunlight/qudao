@@ -100,7 +100,7 @@ class Project(models.Model):
     subscribers = models.ManyToManyField(MyUser, through='SubscribeShip')
     def clean(self):
         if not self.pic:
-            raise ValidationError({'pic': u'图片大小不能超过30k'})
+            raise ValidationError({'pic': u'图片不能为空'})
         elif self.pic.size > 30000:
             raise ValidationError({'pic': u'图片大小不能超过30k'})
     class Meta:
@@ -308,6 +308,7 @@ class Announcement(models.Model):
     content = models.CharField(u"通知内容", max_length=100)
     time = models.DateTimeField(u"创建时间", default=timezone.now)
     priority = models.IntegerField(u"优先级",default=1)
+    istop = models.BooleanField(u"是否置顶",default=False)
     def __unicode__(self):
         return self.content
     class Meta:

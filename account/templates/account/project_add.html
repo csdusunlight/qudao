@@ -18,7 +18,7 @@
 $(function(){
     $('.back-a3').toggleClass("on");
     $(window).load(function() {
-        
+
     });
 });
 </script>
@@ -115,7 +115,7 @@ $(function(){
                     <label><input class="is_futou" type="radio" value="false" name="is_futou" /><i class="need-icon"></i>否</label>
                 </div>
     	    </div>
-    	    
+
             <div class="right-top clearfix">
                 <h2 class="top-title l">用户交单项</h2>
             </div>
@@ -126,19 +126,19 @@ $(function(){
                         <label><input data-type="1" class="need" type="checkbox" value="1" checked="checked" disabled="disabled" name="amount" /><i class="need-icon"></i>投资金额</label>
                         <label><input data-type="2" class="need" type="checkbox" value="2" checked="checked" disabled="disabled" name="term" /><i class="need-icon"></i>投资标期</label>
                         <label><input data-type="3" class="need" type="checkbox" value="3" checked="checked" disabled="disabled" name="date" /><i class="need-icon"></i>投资日期</label>
-                        <label><input data-type="4" class="need" type="checkbox" value="4" checked="checked" disabled="disabled" name="zfb" /><i class="need-icon"></i>支付宝信息</label>
+                        <label><input data-type="4" class="need" type="checkbox" value="4" checked="checked" disabled="disabled" name="zfb" /><i class="need-icon"></i>收款信息</label>
                         <label><input data-type="5" class="need" type="checkbox" value="5" checked="checked" disabled="disabled" name="invest-name" /><i class="need-icon"></i>投资姓名</label><br />
                         <label><input data-type="6" class="need m-choose" type="checkbox" value="6" name="return-amount" /><i class="need-icon"></i>用户预期返现金额</label>
                         <label><input data-type="7" class="need m-choose" type="checkbox" value="7" name="qq" /><i class="need-icon"></i>QQ</label>
                         <label><input data-type="8" class="need m-choose" type="checkbox" value="8" name="pic" /><i class="need-icon"></i>投资截图</label>
                     </div>
                 </div>
-                
+
                 <div class="btnbox">
                     <a style="margin-left: -160px;" class="save btn m-green">保存</a>
                 </div>
             </div>
-            
+
         </div>
     </div>
 	{% include "footer.html" %}
@@ -164,7 +164,7 @@ $(function(){
             success: function(ret) {
                 options.imgSrc = ret.pic;
                 cropper = $('.imageBox').cropbox(options);
-                    
+
                 $('.title').val(ret.title);
                 $('.strategy').val(ret.strategy);
                 $('.introduction').val(ret.introduction);
@@ -173,8 +173,8 @@ $(function(){
                 $('.investrange').val(ret.investrange);
                 $('.intrest').val(ret.intrest);
                 var radio_dom = 'input[value="'+ ret.is_multisub_allowed +'"]'
-                $(radio_dom).prop("checked",true); 
-                
+                $(radio_dom).prop("checked",true);
+
                 var need_str = ret.necessary_fields;
                 var need_set = need_str.split(',');
                 var need_id;
@@ -208,17 +208,17 @@ $(function(){
     var file;
     var maxsize = 80 * 1024;
     $(function() {
-        
+
 
 //      var cropper = $('.imageBox').cropbox(options);
         $('#upload-file').on('change', function(){
             file_list = [];
             var reader = new FileReader();
-            
+
             if(!this.files.length) return;
             file = this.files[0];
             console.log(file);
-            
+
             reader.onload = function(e) {
                 options.imgSrc = e.target.result;
                 cropper = $('.imageBox').cropbox(options);
@@ -259,8 +259,8 @@ $(function(){
                 }
             }
             //      图片加载完毕之后进行压缩，然后上传
-            
-            
+
+
             function callback() {
                 var data = compress(img);
                 if (file) {
@@ -271,8 +271,8 @@ $(function(){
                 }
 //              submit();
             }
-            
-            
+
+
         })
         $('#btnZoomIn').on('click', function(){
             if (options.imgSrc) {
@@ -282,15 +282,15 @@ $(function(){
             }
         })
         $('#btnZoomOut').on('click', function(){
-            
+
             if (options.imgSrc) {
                 cropper.zoomOut();
             } else{
                 alert('请先上传图片');
             }
         })
-        
-        
+
+
 
 //      头像处理
 
@@ -361,7 +361,7 @@ $(function(){
             })
             var necessary_fields = need_arr.join(',');
             console.log(necessary_fields);
-            
+
             var title = $('.title').val();
             var strategy = $('.strategy').val();
             var introduction = $('.introduction').val();
@@ -380,8 +380,8 @@ $(function(){
                 alert("输入的链接不是正确的网址");
                 return;
             }
-            
-            
+
+
             var xhr = new XMLHttpRequest();
             var formdata = new FormData();
 
@@ -390,7 +390,7 @@ $(function(){
                 console.log('add pic');
                 formdata.append("pic", file_list[0].blob, file_list[0].name);
             }
-            
+
             formdata.append('title', title);
             formdata.append('strategy', strategy);
             formdata.append('introduction', introduction);
@@ -433,7 +433,7 @@ $(function(){
                 return bb.getBlob(format);
             }
         }
-        
+
 //      头像处理---end
 
         $('.save').click(function(){
@@ -445,7 +445,7 @@ $(function(){
 //          var necessary_fields = need_arr.join(',');
 //          console.log(necessary_fields);
 //
-//          
+//
 //          var title = $('.title').val();
 //          var strategy = $('.strategy').val();
 //          var introduction = $('.introduction').val();
@@ -459,7 +459,7 @@ $(function(){
 //              alert('填写项不能为空');
 //              return;
 //          }
-            
+
 //          $.ajax({
 //              url: url,
 //              type: type,
@@ -484,15 +484,15 @@ $(function(){
 //              }
 //          });
         })
-        
+
     })
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     </script>
 </body>
 </html>

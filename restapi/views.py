@@ -117,15 +117,18 @@ class TranslistList(BaseViewMixin, generics.ListAPIView):
     permission_classes = (IsOwnerOrStaff,)
     serializer_class = TransListSerializer
     pagination_class = MyPageNumberPagination
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, )
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
     filter_class = TranslistFilter
     
+    
 class NoticeList(BaseViewMixin, generics.ListCreateAPIView):
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
+    ordering_fields = ('state', 'priority')
+    serializer_class = NoticeSerializer
+    pagination_class = MyPageNumberPagination
     def get_queryset(self):
         user = self.request.user
         return Notice.objects.filter(user=user)
-    serializer_class = NoticeSerializer
-    pagination_class = MyPageNumberPagination
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
     
@@ -150,6 +153,8 @@ class SubscribeShipDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsOwnerOrStaff,)
     
 class AnnouncementList(BaseViewMixin, generics.ListCreateAPIView):
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
+    ordering_fields = ('state', 'priority')
     queryset = Announcement.objects.all()
     serializer_class = AnnouncementSerializer
     pagination_class = MyPageNumberPagination

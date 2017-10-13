@@ -255,7 +255,7 @@ class WithdrawLog(models.Model):
     audit_reason = models.CharField(u"审核原因", max_length=30)
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
     class Meta:
-        ordering = ["submit_time",]
+        ordering = ["submit_time","-amount"]
     def __unicode__(self):
         return u"%s申请提现：%s" % (self.user, self.amount)
 # class Press(Base):

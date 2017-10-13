@@ -78,14 +78,14 @@ $(function(){
             console.log(ret.results);
             var notice_html = "";
             for (var i=0; i<ret.results.length; i++) {
-                notice_html += '<li class="notice-item"><span class="notice-text">' + ret.results[i].content + '</span>' +
+                notice_html += '<li class="notice-item"><span class="notice-text">' + ret.results[i].content + '</span>'; 
                 if (true) {
-                    '<span class="notice-istop"  data-istop="true" onclick="noticeIstop(this,' + ret.results[i].id + ')">取消置顶</span>' +
+                    notice_html +='<span class="notice-istop"  data-istop="true" onclick="noticeIstop(this,' + ret.results[i].id + ')">取消置顶</span>'; 
                 } else{
-                    '<span class="notice-istop"  data-istop="false" onclick="noticeIstop(this,' + ret.results[i].id + ')">置顶</span>' +
+                    notice_html +='<span class="notice-istop"  data-istop="false" onclick="noticeIstop(this,' + ret.results[i].id + ')">置顶</span>'; 
                 }
-                '<span class="notice-change" onclick="noticeChange(this,' + ret.results[i].id + ')">修改</span>' +
-                '<span class="notice-delete" onclick="noticeDelete(this,' + ret.results[i].id + ')">删除</span></li>';
+                notice_html +='<span class="notice-change" onclick="noticeChange(this,' + ret.results[i].id + ')">修改</span>';
+                notice_html +='<span class="notice-delete" onclick="noticeDelete(this,' + ret.results[i].id + ')">删除</span></li>';
             }
             $('.notice-exist').html(notice_html);
         },

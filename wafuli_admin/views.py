@@ -71,7 +71,7 @@ def admin_apply(request):
                               qq_name=apply.qq_name, qq_number=apply.qq_number, qualification=apply.qualification)
                 user.set_password(apply.password)
                 user.save()
-                id_list_list= list(Project.objects.filter(is_official=True, state__in=['10','20']).values_list('id'))
+                id_list_list= list(Project.objects.filter(is_official=True, state='10', is_addedto_repo=True).values_list('id'))
                 id_list = []
                 if id_list_list:
                     id_list = reduce(lambda x,y: x + y, id_list_list)
@@ -96,8 +96,8 @@ def admin_apply(request):
         return JsonResponse(res)
     else:
         return render(request,"admin_apply.html",)
-def admin_office(request):
-    return render(request,"admin_office.html",)
+# def admin_office(request):
+#     return render(request,"admin_office.html",)
 def admin_private(request):
     return render(request,"admin_private.html",)
 
@@ -108,7 +108,8 @@ def admin_invest(request):
     if request.method == "GET":
         if not ( admin_user.is_authenticated() and admin_user.is_staff):
             return redirect(reverse('admin:login') + "?next=" + reverse('admin_project'))
-        item_list = InvestLog.objects.filter(is_official=True, time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
+        item_list = InvestLog.objects.filter(is_official=True, submit_time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
+        print item_list
         project_list = ()
         for item in item_list:
             project_list += item
@@ -116,7 +117,7 @@ def admin_invest(request):
         unaudited_pronames = []
         for project in projects:
             unaudited_pronames.append(project.title)
-        return render(request,"admin_project.html", {'unaudited_pronames':unaudited_pronames})
+        return render(request,"admin_office.html", {'unaudited_pronames':unaudited_pronames})
     if request.method == "POST":
         res = {}
         if not request.is_ajax():

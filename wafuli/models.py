@@ -81,7 +81,7 @@ class Project(models.Model):
     is_official = models.BooleanField(u"是否官方项目", default=False)
     is_addedto_repo = models.BooleanField(u"是否加入项目库", default=True)
     state = models.CharField(u"项目状态", max_length=2, choices=Project_STATE, default='10')
-    pic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）")
+    pic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）", blank=True)
     strategy = models.URLField(u"攻略链接")
     company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, verbose_name=u"合作平台")
     type = models.CharField(u"项目类别", max_length=1, choices=Project_TYPE, blank=True)
@@ -95,12 +95,14 @@ class Project(models.Model):
     investrange = models.CharField(u"投资额度区间", max_length=20)
     intrest = models.CharField(u"预期年化", max_length=10)
     necessary_fields = models.CharField(u"必填字段", max_length=50,help_text=u"投资用户名(0)，投资金额(1)，投资标期(2)，投资日期(3)，\
-                支付宝信息(4)，投资手机号(5)，QQ号(6)，预期返现金额(7)，投资截图(8)，字段以英文逗号隔开，如0,1,2,3,4,5", default = '0,1,2,3,4,5')
+                支付宝信息(4)，投资手机号(5)，预期返现金额(6)，QQ号(7)，投资截图(8)，字段以英文逗号隔开，如0,1,2,3,4,5", default = '0,1,2,3,4,5')
 #     marks = models.ManyToManyField(Mark, verbose_name=u'标签',  blank=True)
     subscribers = models.ManyToManyField(MyUser, through='SubscribeShip')
     def clean(self):
-        if self.pic and self.pic.size > 30000:
-                raise ValidationError({'pic': u'图片大小不能超过30k'})
+        if not self.pic:
+            raise ValidationError({'pic': u'图片不能为空'})
+        elif self.pic.size > 30000:
+            raise ValidationError({'pic': u'图片大小不能超过30k'})
     class Meta:
         verbose_name = u"理财项目"
         verbose_name_plural = u"理财项目"
@@ -148,7 +150,7 @@ class SubscribeShip(models.Model):
         unique_together = (('user', 'project'),)
         ordering = ['project__state', "-project__priority", "-project__pub_date",]
     def get_sub_invest_num(self):
-        return InvestLog.objects.filter(user=self.user, project=self.project).count()
+        return InvestLog.objects.filter(project=self.project).count()
 
 class InvestLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="investlog_submit")
@@ -306,6 +308,7 @@ class Announcement(models.Model):
     content = models.CharField(u"通知内容", max_length=100)
     time = models.DateTimeField(u"创建时间", default=timezone.now)
     priority = models.IntegerField(u"优先级",default=1)
+    istop = models.BooleanField(u"是否置顶",default=False)
     def __unicode__(self):
         return self.content
     class Meta:

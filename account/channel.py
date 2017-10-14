@@ -117,8 +117,8 @@ def channel(request):
                 else:
                     item = rtable[i]
                     obj = InvestLog(user=request.user, invest_mobile=mob, project=project, is_official=project.is_official,is_selfsub=True,
-                                    invest_amount=item[3],invest_term=item[4],invest_date=item[0],invest_name=temp[2],
-                                    audit_state='1',zhifubao=item[5],remark=item[6])
+                                    invest_amount=item[3],invest_term=item[4],invest_date=item[0],invest_name=item[2],
+                                    audit_state='1',zhifubao=item[5],remark=item[6],submit_type='1')
                     log_list.append(obj)
             InvestLog.objects.bulk_create(log_list)
         succ_num = len(log_list)

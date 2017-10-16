@@ -187,12 +187,16 @@
 			}
 			var adminname = $("#adminname").val();
 			var state = $("#state").val();
+			var invest_type = $("#invest_type").val();
 			if(adminname) {
 				newurl += "&admin_user=" + adminname;
 			}
 			if(state) {
 				newurl += "&audit_state=" + state;
 			}
+			if(invest_type) {
+                newurl += "&submit_type=" + invest_type;
+            }
 			var level = $("#level").val();
 			if(level) {
 				newurl += "&user_level=" + level;
@@ -248,12 +252,16 @@
 			}
 			var adminname = $("#adminname").val();
 			var state = $("#state").val();
+			var invest_type = $("#invest_type").val();
 			if(adminname) {
 				html += '<input name="admin_user" type="hidden" value="' + adminname + '"/>';
 			}
 			if(state) {
 				html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
 			}
+			if(invest_type) {
+                html += '<input name="submit_type" type="hidden" value="' + invest_type + '"/>';
+            }
 			var level = $("#level").val();
 			if(level) {
 				html += '<input name="user_level" type="hidden" value="' + level + '"/>';
@@ -363,6 +371,14 @@
 							<option value="2">审核拒绝</option>
 						</select>
 					</td>
+					<td>
+                        <i style="letter-spacing:4.8px;">投资类型：</i>
+                        <select name="selectAge" id="invest_type">
+                            <option value="">不限</option>
+                            <option value="1">首投</option>
+                            <option value="2">复投</option>
+                        </select>
+                    </td>
 				</tr>
 			</table>
 

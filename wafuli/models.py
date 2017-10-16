@@ -93,7 +93,7 @@ class Project(models.Model):
     cprice = models.CharField(u"客户指导价",max_length=20)
     term = models.CharField(u"标期长度", max_length=20)
     investrange = models.CharField(u"投资额度区间", max_length=20)
-    intrest = models.CharField(u"预期年化", max_length=10)
+    intrest = models.CharField(u"预期年化", max_length=20)
     necessary_fields = models.CharField(u"必填字段", max_length=50,help_text=u"投资用户名(0)，投资金额(1)，投资标期(2)，投资日期(3)，\
                 支付宝信息(4)，投资手机号(5)，预期返现金额(6)，QQ号(7)，投资截图(8)，字段以英文逗号隔开，如0,1,2,3,4,5", default = '0,1,2,3,4,5')
 #     marks = models.ManyToManyField(Mark, verbose_name=u'标签',  blank=True)
@@ -140,10 +140,10 @@ class SubscribeShip(models.Model):
     project = models.ForeignKey(Project)
     introduction = models.CharField(u"项目简介",max_length=100)
     myprice = models.CharField(u"保留字段",max_length=20)
-    price = models.CharField(u"客户价",max_length=50)
+    price = models.CharField(u"客户价",max_length=20)
     is_on = models.BooleanField(u"是否在主页显示",default=True)
     is_recommend = models.BooleanField(u"是否放到推荐位置",default=False)
-    intrest = models.CharField(u"预期年化", max_length=10)
+    intrest = models.CharField(u"预期年化", max_length=20)
     def __unicode__(self):
         return self.user.mobile + self.project.title
     class Meta:
@@ -264,7 +264,7 @@ class WithdrawLog(models.Model):
     audit_reason = models.CharField(u"审核原因", max_length=30)
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
     class Meta:
-        ordering = ["submit_time",]
+        ordering = ["submit_time","-amount"]
     def __unicode__(self):
         return u"%s申请提现：%s" % (self.user, self.amount)
 # class Press(Base):

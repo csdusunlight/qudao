@@ -311,7 +311,7 @@
     var data1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{other_remark}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td data-remark="{remark}">{other_remark}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData(this,{id})">删除' +
         '</a>│<a class="jion-s" onclick="editData(this,{id})">编辑' +
         '</a>│<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
@@ -337,7 +337,7 @@
     var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th><th style="width:210px">操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{other_remark}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td data-remark="{remark}">{other_remark}</td>' +
         '<td id="item_{id}"><a class="fyin" onclick="removeData_02(this,{id})">删除' +
         '</a>│<a class="jion-s" onclick="editData_02(this,{id})">编辑'+
         '</a>│<a class="jion-s" onclick="pass_02(this,{id})">返现'+
@@ -349,7 +349,7 @@
     var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>结算金额</th><th>返现金额</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{other_remark}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{settle_amount}</td><td>{return_amount}</td><td data-remark="{remark}">{other_remark}</td></tr>[/results]</table>';
 //  已拒绝
     var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
@@ -422,7 +422,7 @@
                 children4 = parent_dom.find("td").eq(4).text(),
                 children5 = parent_dom.find("td").eq(5).text(),
                 children6 = parent_dom.find("td").eq(6).text(),
-                children7 = parent_dom.find("td").eq(7).text();
+                children7 = parent_dom.find("td").eq(7).data('remark');
                                 console.log(children0+", "+children1+", "+children2+", "+children3+", "+children4+", "+children5+", ");
             var option_val;
             var options = $(".project option");
@@ -509,16 +509,16 @@
                     parent_dom.find("td").eq(0).text(ret.project_title);
                     parent_dom.find("td").eq(1).text(ret.invest_date);
                     parent_dom.find("td").eq(2).text(ret.invest_mobile);
-                    parent_dom.find("td").eq(3).text(ret.invest_term);
+                    parent_dom.find("td").eq(3).text(ret.invest_name);
                     parent_dom.find("td").eq(4).text(ret.invest_amount);
-                    parent_dom.find("td").eq(5).text(ret.zhifubao);
-                    parent_dom.find("td").eq(6).text(ret.invest_name);
-                    parent_dom.find("td").eq(7).text(ret.remark);
+                    parent_dom.find("td").eq(5).text(ret.invest_term);
+                    parent_dom.find("td").eq(6).text(ret.zhifubao);
+                    parent_dom.find("td").eq(7).text(ret.other_remark);
                     $('.popup.m-edit-proj').removeClass('in');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR.responseText);
-                    alert("数据错误");
+                    alert(jqXHR.responseText);
                 }
             });
         });
@@ -636,7 +636,7 @@
                 children4 = parent_dom.find("td").eq(4).text(),
                 children5 = parent_dom.find("td").eq(5).text(),
                 children6 = parent_dom.find("td").eq(6).text(),
-                children7 = parent_dom.find("td").eq(7).text();
+                children7 = parent_dom.find("td").eq(7).data('remark');
                                 console.log(children0+", "+children1+", "+children2+", "+children3+", "+children4+", "+children5+", "+children6+", "+children7+", ");
             var option_val;
             var options = $(".project_02 option");
@@ -695,14 +695,14 @@
                 success: function(ret) {
                         alert("更改数据成功！");
                         var parent_dom = $(edit_parent_02);
-                        parent_dom.find("td").eq(0).text(ret.project);
+                        parent_dom.find("td").eq(0).text(ret.project_title);
                         parent_dom.find("td").eq(1).text(ret.invest_date);
                         parent_dom.find("td").eq(2).text(ret.invest_mobile);
-                        parent_dom.find("td").eq(3).text(ret.invest_term);
+                        parent_dom.find("td").eq(3).text(ret.invest_name);
                         parent_dom.find("td").eq(4).text(ret.invest_amount);
-                        parent_dom.find("td").eq(5).text(ret.zhifubao);
-                        parent_dom.find("td").eq(6).text(ret.invest_name);
-                        parent_dom.find("td").eq(7).text(ret.remark);
+                        parent_dom.find("td").eq(5).text(ret.invest_term);
+                        parent_dom.find("td").eq(6).text(ret.zhifubao);
+                        parent_dom.find("td").eq(7).text(ret.other_remark);
                         $('.popup.m-edit-proj_02').removeClass('in');
                 },
                 error: function() {

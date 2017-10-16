@@ -108,7 +108,7 @@ def admin_invest(request):
     if request.method == "GET":
         if not ( admin_user.is_authenticated() and admin_user.is_staff):
             return redirect(reverse('admin:login') + "?next=" + reverse('admin_project'))
-        item_list = InvestLog.objects.filter(is_official=True, submit_time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
+        item_list = InvestLog.objects.filter(is_official=True, audit_state='1', submit_time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
         print item_list
         project_list = ()
         for item in item_list:

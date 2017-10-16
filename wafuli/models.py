@@ -152,9 +152,14 @@ class SubscribeShip(models.Model):
     def get_sub_invest_num(self):
         return InvestLog.objects.filter(project=self.project).count()
 
+SUB_TYPE = (
+    ('1', u'首投'),
+    ('2', u'复投'),
+)
 class InvestLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="investlog_submit")
     project = models.ForeignKey(Project, related_name="investlogs")
+    submit_type = models.CharField(max_length=10, choices=SUB_TYPE, verbose_name=u"首投/复投")
     is_official = models.BooleanField(u'是否官方项目',)
     is_selfsub = models.BooleanField(u'是否渠道用户自己提交的',default=False)
     submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
@@ -189,12 +194,16 @@ class InvestLog(models.Model):
             ret.append(u"备注：" + self.remark)
         return '|'.join(ret)
 
-    
+STATE = (
+    ('0', u'置顶'),
+    ('1', u'普通'),
+)     
 class Notice(models.Model):
     user = models.ForeignKey(MyUser, related_name="user_notice")
     content = models.CharField(u"通知内容", max_length=100)
     time = models.DateTimeField(u"创建时间", default=timezone.now)
     priority = models.IntegerField(u"优先级",default=1)
+    state = models.CharField(u"状态", choices=STATE, default='1', max_length=1)
     def __unicode__(self):
         return self.content
     class Meta:
@@ -308,6 +317,7 @@ class Announcement(models.Model):
     content = models.CharField(u"通知内容", max_length=100)
     time = models.DateTimeField(u"创建时间", default=timezone.now)
     priority = models.IntegerField(u"优先级",default=1)
+    state = models.CharField(u"状态", choices=STATE, default='1', max_length=1)
     def __unicode__(self):
         return self.content
     class Meta:

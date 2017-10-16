@@ -306,6 +306,7 @@ def export_investlog(request):
     audittime_0 = request.GET.get("audittime_0", None)
     audittime_1 = request.GET.get("audittime_1", None)
     state = request.GET.get("audit_state",'1')
+    submit_type = request.GET.get('submit_type', '0')
     if investtime_0 and investtime_1:
         s = datetime.datetime.strptime(investtime_0,'%Y-%m-%d')
         e = datetime.datetime.strptime(investtime_1,'%Y-%m-%d')
@@ -342,6 +343,8 @@ def export_investlog(request):
     adminname = request.GET.get("admin_user", None)
     if adminname:
         item_list = item_list.filter(admin_user__username=adminname)
+    if submit_type=='1' or submit_type=='2':
+        item_list = item_list.filter(submit_type=submit_type)
     item_list = item_list.filter(audit_state=state).select_related('user', 'project').order_by('submit_time')
     data = []
     for con in item_list:
@@ -359,6 +362,7 @@ def export_investlog(request):
         result = ''
         settle_amount = ''
         reason = ''
+        submit_type = con.get_submit_type_display()
         if con.audit_state=='0':
             result = u'是'
             settle_amount = str(con.settle_amount)
@@ -366,10 +370,10 @@ def export_investlog(request):
             result = u'否'
             reason = con.audit_reason
         data.append([id, project_name, invest_date, qq_number,user_level, invest_mobile, invest_name, term,
-                     invest_amount, remark, result, settle_amount, reason])
+                     invest_amount, submit_type, remark, result, settle_amount, reason])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
-    title_row = [u'记录ID',u'项目名称',u'投资日期', u'QQ', u'用户类型', u'投资手机号', u'投资姓名' ,u'投资期限' ,u'投资金额', u'备注',
+    title_row = [u'记录ID',u'项目名称',u'投资日期', u'QQ', u'用户类型', u'投资手机号', u'投资姓名' ,u'投资期限' ,u'投资金额',u'投资类型', u'备注',
                  u'审核通过',u'结算金额',u'拒绝原因']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
@@ -465,7 +469,7 @@ def import_investlog(request):
     table = data.sheets()[0]
     nrows = table.nrows
     ncols = table.ncols
-    if ncols!=13:
+    if ncols!=14:
         ret['msg'] = u"文件格式与模板不符，请在导出的待审核记录表中更新后将文件导入！"
         return JsonResponse(ret)
     rtable = []
@@ -482,7 +486,7 @@ def import_investlog(request):
                 elif j==1:
                     project = cell.value
                     temp.append(project)
-                elif j==10:
+                elif j==11:
                     result = cell.value.strip()
                     if result == u"是":
                         result = True
@@ -492,14 +496,14 @@ def import_investlog(request):
                         temp.append(False)
                     else:
                         raise Exception(u"审核结果必须为是或否。")
-                elif j==11:
+                elif j==12:
                     return_amount = 0
                     if cell.value:
                         return_amount = Decimal(cell.value)
                     elif result:
                         raise Exception(u"审核结果为是时，返现金额不能为空或零。")
                     temp.append(return_amount)
-                elif j==12:
+                elif j==13:
                     reason = cell.value
                     temp.append(reason)
                 else:

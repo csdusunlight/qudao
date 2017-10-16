@@ -93,7 +93,7 @@ class Project(models.Model):
     cprice = models.CharField(u"客户指导价",max_length=20)
     term = models.CharField(u"标期长度", max_length=20)
     investrange = models.CharField(u"投资额度区间", max_length=20)
-    intrest = models.CharField(u"预期年化", max_length=10)
+    intrest = models.CharField(u"预期年化", max_length=20)
     necessary_fields = models.CharField(u"必填字段", max_length=50,help_text=u"投资用户名(0)，投资金额(1)，投资标期(2)，投资日期(3)，\
                 支付宝信息(4)，投资手机号(5)，预期返现金额(6)，QQ号(7)，投资截图(8)，字段以英文逗号隔开，如0,1,2,3,4,5", default = '0,1,2,3,4,5')
 #     marks = models.ManyToManyField(Mark, verbose_name=u'标签',  blank=True)
@@ -140,10 +140,10 @@ class SubscribeShip(models.Model):
     project = models.ForeignKey(Project)
     introduction = models.CharField(u"项目简介",max_length=100)
     myprice = models.CharField(u"保留字段",max_length=20)
-    price = models.CharField(u"客户价",max_length=50)
+    price = models.CharField(u"客户价",max_length=20)
     is_on = models.BooleanField(u"是否在主页显示",default=True)
     is_recommend = models.BooleanField(u"是否放到推荐位置",default=False)
-    intrest = models.CharField(u"预期年化", max_length=10)
+    intrest = models.CharField(u"预期年化", max_length=20)
     def __unicode__(self):
         return self.user.mobile + self.project.title
     class Meta:
@@ -152,9 +152,14 @@ class SubscribeShip(models.Model):
     def get_sub_invest_num(self):
         return InvestLog.objects.filter(project=self.project).count()
 
+SUB_TYPE = (
+    ('1', u'首投'),
+    ('2', u'复投'),
+)
 class InvestLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="investlog_submit")
     project = models.ForeignKey(Project, related_name="investlogs")
+    submit_type = models.CharField(max_length=10, choices=SUB_TYPE, verbose_name=u"首投/复投")
     is_official = models.BooleanField(u'是否官方项目',)
     is_selfsub = models.BooleanField(u'是否渠道用户自己提交的',default=False)
     submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
@@ -189,12 +194,16 @@ class InvestLog(models.Model):
             ret.append(u"备注：" + self.remark)
         return '|'.join(ret)
 
-    
+STATE = (
+    ('0', u'置顶'),
+    ('1', u'普通'),
+)     
 class Notice(models.Model):
     user = models.ForeignKey(MyUser, related_name="user_notice")
     content = models.CharField(u"通知内容", max_length=100)
     time = models.DateTimeField(u"创建时间", default=timezone.now)
     priority = models.IntegerField(u"优先级",default=1)
+    state = models.CharField(u"状态", choices=STATE, default='1', max_length=1)
     def __unicode__(self):
         return self.content
     class Meta:
@@ -308,6 +317,7 @@ class Announcement(models.Model):
     content = models.CharField(u"通知内容", max_length=100)
     time = models.DateTimeField(u"创建时间", default=timezone.now)
     priority = models.IntegerField(u"优先级",default=1)
+    state = models.CharField(u"状态", choices=STATE, default='1', max_length=1)
     def __unicode__(self):
         return self.content
     class Meta:

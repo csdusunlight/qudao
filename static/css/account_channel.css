@@ -117,11 +117,11 @@ h5 {
 }
 
 .item-02 {
-	width: 120px;
+	width: 100px;
 }
 
 .item-03 {
-	width: 130px;
+	width: 110px;
 }
 
 .item-04 {
@@ -136,9 +136,12 @@ h5 {
 	width: 120px;
 }
 .item-07 {
-    width: 120px;
+    width: 100px;
 }.item-08 {
     width: 100px;
+}
+.item-10 {
+    width: 80px;
 }
 .item-09 {
     float: right;

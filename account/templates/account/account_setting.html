@@ -103,7 +103,7 @@ $(function(){
                 </div>
     	    </div>
             
-            <div class="notice-info-box">
+            <!--<div class="notice-info-box">
                 <h2 class="notice-title">编辑公告</h2>
                 <div class="item">
                     <span class="item__name"></span>
@@ -131,7 +131,7 @@ $(function(){
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
     </div>
 	{% include "footer.html" %}
@@ -370,98 +370,98 @@ $(function(){
         
     })
     
-    $.ajax({
-        url: '/restapi/notice/',
-        dataType:"json",
-        type:'get',
-        success:function(ret){
-            console.log(ret.results);
-            var notice_html = "";
-            for (var i=0; i<ret.results.length; i++) {
-                notice_html += '<li class="notice-item"><span class="notice-text">' + ret.results[i].content + '</span>' + 
-                '<span class="notice-change" onclick="noticeChange(this,' + ret.results[i].id + ')">修改</span>' +
-                '<span class="notice-delete" onclick="noticeDelete(this,' + ret.results[i].id + ')">删除</span></li>';
-            }
-            $('.notice-exist').html(notice_html);
-        },
-        error:function(){
-            console.log("请检查网络连接");
-        }
-    });
+//  $.ajax({
+//      url: '/restapi/notice/',
+//      dataType:"json",
+//      type:'get',
+//      success:function(ret){
+//          console.log(ret.results);
+//          var notice_html = "";
+//          for (var i=0; i<ret.results.length; i++) {
+//              notice_html += '<li class="notice-item"><span class="notice-text">' + ret.results[i].content + '</span>' + 
+//              '<span class="notice-change" onclick="noticeChange(this,' + ret.results[i].id + ')">修改</span>' +
+//              '<span class="notice-delete" onclick="noticeDelete(this,' + ret.results[i].id + ')">删除</span></li>';
+//          }
+//          $('.notice-exist').html(notice_html);
+//      },
+//      error:function(){
+//          console.log("请检查网络连接");
+//      }
+//  });
     
     
-    $('.notice-add').click(function(){
-        var content = $('.notice').val();
-        console.log(content);
-        if ($('.notice-item').length >= 10) {
-            alert('最多添加十条公告');
-            return;
-        }
-        if (!content) {
-            alert('请输入通知内容');
-            return;
-        }
-        $.ajax({
-            url: '/restapi/notice/',
-            dataType:"json",
-            type:'post',
-            data : {
-                'content':content,
-            },
-            success:function(ret){
-                alert('添加公告成功');
-                var notice_html = '<li class="notice-item"><span class="notice-text">' + ret.content + '</span>' + 
-                '<span class="notice-change" onclick="noticeChange(this,' + ret.id + ')">修改</span>' +
-                '<span class="notice-delete" onclick="noticeDelete(this,' + ret.id + ')">删除</span></li>';
-                $('.notice-exist').append(notice_html);
-            },
-            error:function(){
-                alert("请检查网络连接");
-            }
-        });
-    })
-    var notice_item;
-    var notice_id;
-    function noticeChange(obj,id) {
-        notice_id = id;
-        notice_item = $(obj).parent().find('.notice-text');
-        var notice_txt = notice_item.text();
-        $('#notice_detail').val(notice_txt);
-        $('.popup.m-notice-change').addClass('in');
-    }
-    $('#notice_change').click(function(){
-        var content = $('#notice_detail').val();
-        console.log(content);
-        $.ajax({
-            url: '/restapi/notice/' + notice_id + '/',
-            dataType:"json",
-            type:'put',
-            data : {
-                'content':content,
-            },
-            success:function(ret){
-                notice_item.html(content);
-                $('.popup.m-notice-change').removeClass('in');
-            },
-            error:function(){
-                console.log("请检查网络连接");
-            }
-        });
-    })
-    function noticeDelete(obj,id) {
-        console.log(id);
-        $.ajax({
-            url: '/restapi/notice/' + id + '/',
-            dataType:"json",
-            type:'delete',
-            success:function(ret){
-                $(obj).parent().remove();
-            },
-            error:function(){
-                console.log("请检查网络连接");
-            }
-        });
-    }
+//  $('.notice-add').click(function(){
+//      var content = $('.notice').val();
+//      console.log(content);
+//      if ($('.notice-item').length >= 10) {
+//          alert('最多添加十条公告');
+//          return;
+//      }
+//      if (!content) {
+//          alert('请输入通知内容');
+//          return;
+//      }
+//      $.ajax({
+//          url: '/restapi/notice/',
+//          dataType:"json",
+//          type:'post',
+//          data : {
+//              'content':content,
+//          },
+//          success:function(ret){
+//              alert('添加公告成功');
+//              var notice_html = '<li class="notice-item"><span class="notice-text">' + ret.content + '</span>' + 
+//              '<span class="notice-change" onclick="noticeChange(this,' + ret.id + ')">修改</span>' +
+//              '<span class="notice-delete" onclick="noticeDelete(this,' + ret.id + ')">删除</span></li>';
+//              $('.notice-exist').append(notice_html);
+//          },
+//          error:function(){
+//              alert("请检查网络连接");
+//          }
+//      });
+//  })
+//  var notice_item;
+//  var notice_id;
+//  function noticeChange(obj,id) {
+//      notice_id = id;
+//      notice_item = $(obj).parent().find('.notice-text');
+//      var notice_txt = notice_item.text();
+//      $('#notice_detail').val(notice_txt);
+//      $('.popup.m-notice-change').addClass('in');
+//  }
+//  $('#notice_change').click(function(){
+//      var content = $('#notice_detail').val();
+//      console.log(content);
+//      $.ajax({
+//          url: '/restapi/notice/' + notice_id + '/',
+//          dataType:"json",
+//          type:'put',
+//          data : {
+//              'content':content,
+//          },
+//          success:function(ret){
+//              notice_item.html(content);
+//              $('.popup.m-notice-change').removeClass('in');
+//          },
+//          error:function(){
+//              console.log("请检查网络连接");
+//          }
+//      });
+//  })
+//  function noticeDelete(obj,id) {
+//      console.log(id);
+//      $.ajax({
+//          url: '/restapi/notice/' + id + '/',
+//          dataType:"json",
+//          type:'delete',
+//          success:function(ret){
+//              $(obj).parent().remove();
+//          },
+//          error:function(){
+//              console.log("请检查网络连接");
+//          }
+//      });
+//  }
     </script>
 </body>
 </html>

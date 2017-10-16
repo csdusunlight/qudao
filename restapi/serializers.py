@@ -41,6 +41,7 @@ class InvestLogSerializer(serializers.ModelSerializer):
         return 'dffd'
     admin_user = serializers.CharField(source='admin_user.username', read_only=True)
     other_remark = serializers.CharField(source='get_other_and_remark', read_only=True)
+    audit_date = serializers.CharField(source='get_audit_date', read_only=True)
     submit_type_des = serializers.CharField(source='get_submit_type_display', read_only=True)
     class Meta:
         model = InvestLog

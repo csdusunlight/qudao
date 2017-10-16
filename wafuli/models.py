@@ -193,6 +193,8 @@ class InvestLog(models.Model):
         if self.remark:
             ret.append(u"备注：" + self.remark)
         return '|'.join(ret)
+    def get_audit_date(self):
+        return str(self.audit_time.date) if self.audit_time else ''
 
 STATE = (
     ('0', u'置顶'),

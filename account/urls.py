@@ -45,12 +45,14 @@ urlpatterns = [
 #     url(r'^vip/$', 'account.views.vip', name='account_vip'),
 # url(r'^get_nums$', 'account.views.get_nums', name='get_nums'),
     url(r'^account_setting/$', 'account.views.account_setting', name='account_setting'),
+    url(r'^account_notice/$', 'account.views.account_notice', name='account_notice'),
     url(r'^account_submit/$', 'account.channel.channel', name='account_submit'),
     url(r'^account_audited/$', 'account.views.account_audited', name='account_audited'),
 
     url(r'^project/$', 'account.views.project_manage', name='project_manage'),
     url(r'^project_create/$', 'account.views.project_create', name='project_create'),
     url(r'^submit_screenshot/$', 'account.views.submit_screenshot', name='submit_screenshot'),
-    
+
     url(r'^admin_invest/(?P<id>[0-9]+)/$', 'account.views.admin_investlog', name='admin_investlog'),
+    url(r'^project_add/(?:(?P<id>[0-9]+)/)?$', 'account.views.project_add', name='project_add'),
 ]

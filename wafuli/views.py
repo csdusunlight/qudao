@@ -57,7 +57,7 @@ def index(request):
     data.update(ad_list=ad_list)
 
     #今日推荐项目
-    recom_projects = Project.objects.filter(state='10', is_official=True)[0:3]
+    recom_projects = Project.objects.filter(state='10', is_official=True, is_addedto_repo=True)[0:3]
     data.update(recom_projects=recom_projects)
 
     #合作平台

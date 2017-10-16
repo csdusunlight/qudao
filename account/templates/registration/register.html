@@ -169,7 +169,7 @@
                                     <a id="clear_img" onclick="clearBtn()">清除截图</a>
                                     <a id="upload">上传截图</a>
                             </div>
-                            <span class="img-tips">图片格式限jpg和png，最多可上传6张</span>
+                            <span class="img-tips">截图可以为推单的返现记录，群主/管理员身份的所有群</span>
                         </div>
                     </div>
                     <div class="reg">
@@ -535,6 +535,11 @@
                 oldSend.call(this, val);
             }
         };
+    }
+    function clearBtn () {
+        $(".img-list").html('');
+        file_list = [];
+        document.getElementById("upload").value = "";
     }
 </script>
     </body>

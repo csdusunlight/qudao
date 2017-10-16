@@ -18,8 +18,6 @@
 		<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
 		<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
 		<script type="text/javascript" src="{% static 'js/jquery.searchableSelect.js' %}"></script>
-		<script>
-		</script>
 	</head>
 
 	<body>
@@ -57,10 +55,11 @@
 										<li class="item-01">项目名称</li>
 										<li class="item-02">投资日期</li>
 										<li class="item-03">注册手机号</li>
+										<li class="item-07">投资姓名</li>
 										<li class="item-04">投资金额(元)</li>
 										<li class="item-05">投资标期(天)</li>
-										<li class="item-06">支付宝</li>
-										<li class="item-07">支付宝名称</li>
+										<li class="item-10">类型</li>
+										<li class="item-06">收款信息</li>
 										<li class="item-08">备注</li>
 									</ul>
 									<ul class="submit-item-box">
@@ -74,16 +73,22 @@
 										</li>
 										<li class="submit-item item-02"><input type="text" class="height-add02 time date_picker" id="date_picker" placeholder="选择日期">
 										</li>
-										<li class="submit-item item-03"><input type="text" maxlength=11 class="telnum" id="telnum" placeholder="填写正确的手机号">
+										<li class="submit-item item-03"><input type="text" maxlength=11 class="telnum" id="telnum" placeholder="正确格式手机号">
+										</li>
+										<li class="submit-item item-07"><input type="text" class="invest_name" id="invest_name" placeholder="选填">
 										</li>
 										<li class="submit-item item-04"><input type="text" class="amount" id="amount" placeholder="仅限纯数字">
 										</li>
 										<li class="submit-item item-05"><input type="text" class="term" id="term" placeholder="仅限纯数字">
 										</li>
+										<li class="submit-item item-10">
+										    <select class="is_futou " placeholder="选择投资类型">
+                                                <option selected="selected" value="1">首投</option>
+                                                <option value="2">复投</option>
+                                            </select>
+										</li>
                                         <li class="submit-item item-06"><input type="text" class="zhifubao" id="zhifubao" placeholder="选填">
                                         </li>
-										<li class="submit-item item-07"><input type="text" class="zfbname" id="zfbname" placeholder="选填">
-										</li>
 										<li class="submit-item item-08"><input type="text" class="remark" id="remark" placeholder="选填">
                                         </li>
 										<li class="item-09"><a class="delete-item">删除</a><a class="copy-item">复制</a></li>
@@ -100,7 +105,7 @@
 								<div class="popup-box popup-box-01">
 									<div class="popup-content">
 										<h3>删除提示</h3>
-										<p id="hint_delete">确定删除该条数据？</p>
+										<p id="hint_delete" style="margin-bottom: 20px;">确定删除该条数据？</p>
 										<a id="cancel" class="cancel confirm" onclick="popupOutInfo()">取&nbsp;&nbsp;&nbsp;&nbsp;消</a>
 										<a id="confirm_delete" class="confirm">确认删除</a>
 									</div>
@@ -121,8 +126,8 @@
 										<p class="repeat-phonenumber">重复数据：<span class="data-item-repeat-phone"></span></p>
 										<!-- <p>已存在的数据：<span class="data-item-exist"></span>项</p> -->
 										<p class="exist-phonenumber">无效数据：<span class="data-item-exist-phone"></span></p>
-										<p style="text-align: left;padding-left: 38px;">注：<br/> 提交重复数据：提交中的重复项
-											<br /> 已存在的数据：挖福利数据库中已存在，其他用户或自己之前提交过的数据
+										<p style="text-align: left;padding-left: 38px;">注：<br/> 重复数据：提交中的重复项
+											<br /> 无效数据：挖福利数据库中已存在，其他用户或自己之前提交过的数据
 										</p>
 										<a id="upload_again" class="upload-again table-btn" onclick="popupOutItem()">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
 									</div>
@@ -259,11 +264,11 @@
 								<h3>数据提交结果</h3>
 								<p>有效提交：<span class="data-valid"></span>项</p>
 								<p>提交数据：<span class="data-submit"></span>项</p>
-								<p class="repeat-list">表格重复数据：<span class="data-repeat"></span>项</p>
-								<p>已存在的数据：<span class="data-exist"></span>项</p>
-								<p style="text-align: left;padding-left: 38px;">已存在的数据：<br /><span class="submit-phonenumber"></span></p>
-								<p style="text-align: left;padding-left: 38px;">注：<br/> 已存在的数据：挖福利数据库中已存在，其他用户或自己之前提交过的数据
-									<br /> 表格重复数据：提交的表格中的重复项
+								<p class="repeat-list">重复数据：<span class="data-repeat"></span>项</p>
+								<p>无效数据：<span class="data-exist"></span>项</p>
+								<p style="text-align: left;padding-left: 38px;">无效手机号：<br /><span class="submit-phonenumber"></span></p>
+								<p style="text-align: left;padding-left: 38px;">注：<br/> 重复数据：提交的表格中的重复项
+									<br /> 无效数据：挖福利数据库中已存在，其他用户或自己之前提交过的数据
 								</p>
 								<a id="upload_again" class="upload-again table-btn" onclick="popupOutMistake()">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
 							</div>
@@ -280,9 +285,9 @@
 			<script type="text/javascript">
 			    $('.back-a4').toggleClass("on");
 				var data = '<table width="100%"><tr><th width="12%">项目名称</th><th>投资日期</th><th>提交手机号</th>' +
-					'<th>投资金额</th><th>投资标期</th><th>支付宝</th><th>支付宝名称</th><th>备注</th>' +
+					'<th>投资姓名</th><th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th>' +
 					'</tr>[results]<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
-					'<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{remark}</td>' +
+					'<td>{invest_name}</td><td>{invest_amount}</td><td>{invest_term}</td><td class="w-zfb">{zhifubao}</td><td class="w-remark">{other_remark}</td>' +
 					'</tr>[/results]</table>';
 //				var data2 = '<table width="100%"><tr><th width="12%">项目</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
 //					'<th>投资金额</th><th width="15%">备注</th><th>审核结果</th><th>返现福币</th><th width="12%">操作</th>' +
@@ -297,7 +302,7 @@
 					},
 				});
 				$("#pagedata").ajaxPage({
-					url: "/restapi/investlogs/?page={page}&pageSize={pageSize}&user={{user.id}}",
+					url: "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_selfsub=true&user={{user.id}}&ordering=-submit_time",
 					pageId: $("#page"),
 					pageSize: 10,
 					run: true,
@@ -424,7 +429,7 @@
                     var item_parent = $(this).parent().parent().clone();
                     $(this).parent().parent().parent().append(item_parent);
                     item_parent.find('.searchable-select').remove();
-                    item_parent.find('.telnum').val(''); 
+                    item_parent.find('.telnum').val('');
                     var value = $(this).parent().parent().find('.project_select').val();
                     item_parent.find('.project_select').val(value);
                     item_parent.find('.project_select').searchableSelect();
@@ -463,10 +468,12 @@
 						'</select></li>' +
 						'<li class="submit-item item-02"><input type="text" class="height-add02 time date_picker"></li>' +
 						'<li class="submit-item item-03"><input type="text" maxlength=11 class="telnum"></li>' +
+						'<li class="submit-item item-07"><input type="text" class="invest_name"></li>' +
 						'<li class="submit-item item-04"><input type="text" class="amount"></li>' +
 						'<li class="submit-item item-05"><input type="text" class="term"></li>' +
-						'<li class="submit-item item-06"><input type="text" class="zhifubao"></li>' +
-						'<li class="submit-item item-07"><input type="text" class="zfbname"></li>' +
+						'<li class="submit-item item-10"><select class="is_futou " placeholder="选择投资类型">' +
+                        '<option selected="selected" value="1">首投</option><option value="2">复投</option></select></li>' +                  
+                        '<li class="submit-item item-06"><input type="text" class="zhifubao"></li>' +
 						'<li class="submit-item item-08"><input type="text" class="remark"></li>' +
 						'<li class="item-09"><a class="delete-item">删除</a><a class="copy-item">复制</a></li>';
 					submit_data_container.appendChild(ul);
@@ -510,9 +517,10 @@
 							telnum01 = $(this).find(".telnum"),
 							amount01 = $(this).find(".amount"),
 							term01 = $(this).find(".term"),
-							zhifubao01 = $(this).find(".zhifubao");
-							zfbname01 = $(this).find(".zfbname");
-							remark01 = $(this).find(".remark");
+							zhifubao01 = $(this).find(".zhifubao"),
+							invest_name01 = $(this).find(".invest_name"),
+							remark01 = $(this).find(".remark"),
+							is_futou01 = $(this).find(".is_futou");
 
 						var project_select = $(this).find(".project_select option:selected").val(),
 							time = time01.val(),
@@ -520,9 +528,10 @@
 							amount = amount01.val(),
 							term = term01.val(),
 							zhifubao = zhifubao01.val(),
-							zfbname = zfbname01.val(),
+							invest_name = invest_name01.val(),
 							remark = remark01.val(),
-							data_list = [project_select, time, telnum, amount, term, zhifubao, zfbname, remark];
+							is_futou = $(this).find(".is_futou option:selected").val(),
+							data_list = [project_select, time, telnum, amount, term, zhifubao, invest_name, remark, is_futou];
 
 						var re = /^1[1,2,3,4,6,5,7,8,9]\d{9}$/, //验证手机号
 							re_amount = /^\d+(\.\d+)?$/, //验证数字格式
@@ -554,6 +563,10 @@
 						} else {
 							telnum01.css("border", "1px solid #c1c1c1");
 						}
+//						if(invest_name == "") {
+//                          promptNumber++;
+//                          invest_name01.css("border", "2px solid #ff6767");
+//                      }
 						if(!re_amount.test(amount)) {
 							promptNumber++;
 							amount01.css("border", "2px solid #ff6767");

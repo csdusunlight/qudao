@@ -71,7 +71,7 @@ def admin_apply(request):
                               qq_name=apply.qq_name, qq_number=apply.qq_number, qualification=apply.qualification)
                 user.set_password(apply.password)
                 user.save()
-                id_list_list= list(Project.objects.filter(is_official=True, state__in=['10','20']).values_list('id'))
+                id_list_list= list(Project.objects.filter(is_official=True, state='10', is_addedto_repo=True).values_list('id'))
                 id_list = []
                 if id_list_list:
                     id_list = reduce(lambda x,y: x + y, id_list_list)
@@ -96,8 +96,8 @@ def admin_apply(request):
         return JsonResponse(res)
     else:
         return render(request,"admin_apply.html",)
-def admin_office(request):
-    return render(request,"admin_office.html",)
+# def admin_office(request):
+#     return render(request,"admin_office.html",)
 def admin_private(request):
     return render(request,"admin_private.html",)
 
@@ -108,7 +108,8 @@ def admin_invest(request):
     if request.method == "GET":
         if not ( admin_user.is_authenticated() and admin_user.is_staff):
             return redirect(reverse('admin:login') + "?next=" + reverse('admin_project'))
-        item_list = InvestLog.objects.filter(is_official=True, time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
+        item_list = InvestLog.objects.filter(is_official=True, audit_state='1', submit_time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
+        print item_list
         project_list = ()
         for item in item_list:
             project_list += item
@@ -116,7 +117,7 @@ def admin_invest(request):
         unaudited_pronames = []
         for project in projects:
             unaudited_pronames.append(project.title)
-        return render(request,"admin_project.html", {'unaudited_pronames':unaudited_pronames})
+        return render(request,"admin_office.html", {'unaudited_pronames':unaudited_pronames})
     if request.method == "POST":
         res = {}
         if not request.is_ajax():
@@ -305,6 +306,7 @@ def export_investlog(request):
     audittime_0 = request.GET.get("audittime_0", None)
     audittime_1 = request.GET.get("audittime_1", None)
     state = request.GET.get("audit_state",'1')
+    submit_type = request.GET.get('submit_type', '0')
     if investtime_0 and investtime_1:
         s = datetime.datetime.strptime(investtime_0,'%Y-%m-%d')
         e = datetime.datetime.strptime(investtime_1,'%Y-%m-%d')
@@ -315,7 +317,7 @@ def export_investlog(request):
         item_list = item_list.filter(submit_time__range=(s,e))
     if audittime_0 and audittime_1:
         s = datetime.datetime.strptime(audittime_0,'%Y-%m-%d')
-        e = datetime.datetime.strptime(audittime_1,'%Y-%m-%d')
+        e = datetime.datetime.strptime(audittime_1,'%Y-%m-%d') + datetime.timedelta(days=1)
         item_list = item_list.filter(audit_time__range=(s,e))
     qq_number = request.GET.get("qq_number", None)
     if qq_number:
@@ -341,33 +343,37 @@ def export_investlog(request):
     adminname = request.GET.get("admin_user", None)
     if adminname:
         item_list = item_list.filter(admin_user__username=adminname)
+    if submit_type=='1' or submit_type=='2':
+        item_list = item_list.filter(submit_type=submit_type)
     item_list = item_list.filter(audit_state=state).select_related('user', 'project').order_by('submit_time')
     data = []
     for con in item_list:
         project = con.project
         project_name=project.title
         invest_mobile=con.invest_mobile
+        invest_name=con.invest_name
         invest_date=con.invest_date
         id=con.id
         remark= con.remark
         invest_amount= con.invest_amount
         term=con.invest_term
-        qq_number = con.user.qq_number
+        qq_number = con.user.qq_number + '/' +  con.user.qq_name
         user_level = con.user.level
         result = ''
         settle_amount = ''
         reason = ''
+        submit_type = con.get_submit_type_display()
         if con.audit_state=='0':
             result = u'是'
             settle_amount = str(con.settle_amount)
         elif con.audit_state=='2':
             result = u'否'
             reason = con.audit_reason
-        data.append([id, project_name, invest_date, qq_number,user_level, invest_mobile, term,
-                     invest_amount, remark, result, settle_amount, reason])
+        data.append([id, project_name, invest_date, qq_number,user_level, invest_mobile, invest_name, term,
+                     invest_amount, submit_type, remark, result, settle_amount, reason])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
-    title_row = [u'记录ID',u'项目名称',u'投资日期', u'挖福利账号', u'用户类型', u'注册手机号' ,u'投资期限' ,u'投资金额', u'备注',
+    title_row = [u'记录ID',u'项目名称',u'投资日期', u'QQ', u'用户类型', u'投资手机号', u'投资姓名' ,u'投资期限' ,u'投资金额',u'投资类型', u'备注',
                  u'审核通过',u'结算金额',u'拒绝原因']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
@@ -463,7 +469,7 @@ def import_investlog(request):
     table = data.sheets()[0]
     nrows = table.nrows
     ncols = table.ncols
-    if ncols!=12:
+    if ncols!=14:
         ret['msg'] = u"文件格式与模板不符，请在导出的待审核记录表中更新后将文件导入！"
         return JsonResponse(ret)
     rtable = []
@@ -480,7 +486,7 @@ def import_investlog(request):
                 elif j==1:
                     project = cell.value
                     temp.append(project)
-                elif j==9:
+                elif j==11:
                     result = cell.value.strip()
                     if result == u"是":
                         result = True
@@ -490,14 +496,14 @@ def import_investlog(request):
                         temp.append(False)
                     else:
                         raise Exception(u"审核结果必须为是或否。")
-                elif j==10:
+                elif j==12:
                     return_amount = 0
                     if cell.value:
                         return_amount = Decimal(cell.value)
                     elif result:
                         raise Exception(u"审核结果为是时，返现金额不能为空或零。")
                     temp.append(return_amount)
-                elif j==11:
+                elif j==13:
                     reason = cell.value
                     temp.append(reason)
                 else:
@@ -761,6 +767,9 @@ def admin_withdraw(request):
         if type==1:
             withdrawlog.audit_state = '0'
             res['code'] = 0
+            withuser = withdrawlog.user
+            withuser.with_total = F('with_total')+withdrawlog.amount
+            withuser.save(update_fields=['with_total'])
 
         elif type == 2:
             reason = request.POST.get('reason', '')

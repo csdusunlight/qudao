@@ -39,6 +39,9 @@ class InvestLogSerializer(serializers.ModelSerializer):
     wwwww = serializers.CharField(source='what')
     def what(self):
         return 'dffd'
+    admin_user = serializers.CharField(source='admin_user.username', read_only=True)
+    other_remark = serializers.CharField(source='get_other_and_remark', read_only=True)
+    submit_type_des = serializers.CharField(source='get_submit_type_display', read_only=True)
     class Meta:
         model = InvestLog
         fields = '__all__'
@@ -82,6 +85,11 @@ class SubscribeShipSerializer(serializers.ModelSerializer):
     project_picture = serializers.CharField(source='project.picture_url', read_only=True)
     project_marks = serializers.CharField(source='project.marks_list', read_only=True)
     project_is_official = serializers.CharField(source='project.is_official', read_only=True)
+    submit_num = serializers.IntegerField(source='get_sub_invest_num', read_only=True)
+    necessary_fields = serializers.CharField(source='project.necessary_fields', read_only=True)
+    optional_fields = serializers.CharField(source='project.optional_fields', read_only=True)
+    project_is_multisub_allowed = serializers.BooleanField(source='project.is_multisub_allowed', read_only=True)
+    
     class Meta:
         model = SubscribeShip
         fields = '__all__'

@@ -5,7 +5,7 @@ from django.views.generic.base import TemplateView
 urlpatterns = [
     url(r'^$', 'wafuli_admin.views.index', name='admin_index'),
     url(r'^admin_apply/$', 'wafuli_admin.views.admin_apply', name='admin_apply'),
-    url(r'^admin_office/$', 'wafuli_admin.views.admin_office', name='admin_office'),
+    url(r'^admin_office/$', 'wafuli_admin.views.admin_invest', name='admin_office'),
     url(r'^admin_private/$', 'wafuli_admin.views.admin_private', name='admin_private'),
 #     url(r'^indexpage/$', 'wafuli_admin.views.get_admin_index_page', name='get_admin_index_page'),
     url(r'^admin_invest/$', 'wafuli_admin.views.admin_invest', name='admin_invest'),

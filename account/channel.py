@@ -20,6 +20,7 @@ from xlwt.Style import easyxf
 from xlwt.Workbook import Workbook
 import logging
 import datetime
+from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 import time
 from decimal import Decimal
@@ -72,7 +73,7 @@ def channel(request):
                             break;
                         else:
                             mobile_list.append(mobile)
-                    elif j==2:
+                    elif j==4:
                         try:
                             term = str(int(float(cell.value)))
                         except Exception,e:
@@ -81,10 +82,7 @@ def channel(request):
                     elif j==3:
                         amount = cell.value
                         try:
-                            if float(amount) == int(amount):
-                                amount = int(amount)
-                            else:
-                                amount = float(amount)
+                            amount = Decimal(amount)
                         except:
                             raise Exception(u"投资金额必须为数字")
                         temp.append(amount)
@@ -107,7 +105,10 @@ def channel(request):
         duplicate_mobile_list = []
         with transaction.atomic():
             db_key = DBlock.objects.select_for_update().get(index='investlog')
-            temp = InvestLog.objects.filter(project__company_id=project.company_id).exclude(audit_state='2').values('invest_mobile')
+            if project.company is None:
+                temp = InvestLog.objects.filter(project=project).exclude(audit_state='2').values('invest_mobile')
+            else:
+                temp = InvestLog.objects.filter(project__company_id=project.company_id).exclude(audit_state='2').values('invest_mobile')
             db_mobile_list = map(lambda x: x['invest_mobile'], temp)
             for i in range(len(mobile_list)):
                 mob = mobile_list[i]
@@ -115,9 +116,9 @@ def channel(request):
                     duplicate_mobile_list.append(mob)
                 else:
                     item = rtable[i]
-                    obj = InvestLog(user=request.user, invest_mobile=mob, project=project, is_official=True,is_selfsub=True,
-                                    invest_amount=item[3],invest_term=item[2],invest_date=item[0],
-                                    audit_state='1',zhifubao=item[4],zhifubao_name=item[5],remark=item[6])
+                    obj = InvestLog(user=request.user, invest_mobile=mob, project=project, is_official=project.is_official,is_selfsub=True,
+                                    invest_amount=item[3],invest_term=item[4],invest_date=item[0],invest_name=item[2],
+                                    audit_state='1',zhifubao=item[5],remark=item[6],submit_type='1')
                     log_list.append(obj)
             InvestLog.objects.bulk_create(log_list)
         succ_num = len(log_list)
@@ -127,7 +128,10 @@ def channel(request):
         ret.update(code=0,sun=succ_num, dup1=duplic_num1, dup2=duplic_num2, anum=nrows-1, dupstr=duplic_mobile_list_str)
         return JsonResponse(ret)
     else:
-        plist = list(Project.objects.filter(state__in=['10','20'], is_official=True))    #jzy
+        plist = list(Project.objects.filter(state__in=['10','20']).filter(Q(is_official=True)|Q(user=request.user)))    #jzy
+        for p in plist:
+            if not p.is_official:
+                p.title = u"自建：" + p.title
         return render(request, 'account/account_submit.html', {'plist':plist})
 
 @login_required
@@ -144,24 +148,29 @@ def submit_itembyitem(request):
     exist_phone = ""   #jzy
     for row in table:
         temp = row.split('|')
-        news = Project.objects.get(id=temp[0])
+        project = Project.objects.get(id=temp[0])
         time = datetime.datetime.strptime(temp[1],'%Y-%m-%d')
-        telnum = temp[2]
+        invest_mobile = temp[2]
         amount = temp[3]
         term = temp[4]
         zhifubao = temp[5]
-        zhifubao_name = temp[6]
+        invest_name = temp[6]
         remark = temp[7]
+        submit_type = temp[8] or '1'
         try:
-            if not news.is_multisub_allowed and InvestLog.objects.filter(invest_mobile=telnum, project__company_id=news.company_id).exclude(audit_state='2').exists():
-                exist_num += 1   #jzy
-                exist_phone = exist_phone + telnum + ", "   #jzy
-                raise ValueError('This invest_mobile is repective in project:' + str(news.id))
-            else:
-                InvestLog.objects.create(user=request.user, project=news, invest_date=time, invest_mobile=telnum, invest_term=term,
-                                 invest_amount=int(amount), audit_state='1', is_official=True, is_selfsub=True,
-                                 zhifubao=zhifubao, zhifubao_name=zhifubao_name, remark=remark,)
-                suc_num += 1
+            if not project.is_multisub_allowed or submit_type=='1':
+                if project.company is None:
+                    queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project=project)
+                else:
+                    queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id)
+                if queryset.exclude(audit_state='2').exists():
+                    exist_num += 1   #jzy
+                    exist_phone = exist_phone + project.title + invest_mobile + ";"   #jzy
+                    raise ValueError('This invest_mobile is repective in project:' + str(project.id))
+            InvestLog.objects.create(user=request.user, project=project, invest_date=time, invest_mobile=invest_mobile, invest_term=term,
+                             invest_amount=Decimal(amount), audit_state='1', is_official=project.is_official, is_selfsub=True,
+                             zhifubao=zhifubao, invest_name=invest_name, remark=remark, submit_type=submit_type,)
+            suc_num += 1
         except Exception, e:
             logger.info(e)
     result = {'code':0, 'suc_num':suc_num, 'exist_num':exist_num, 'exist_phone':exist_phone}   #jzy
@@ -253,16 +262,17 @@ def export_investlog(request):
         item_list = item_list.filter(admin_user__username=adminname)
     zhifubao = request.GET.get("zhifubao", None)
     if zhifubao:
-        item_list = item_list.filter(zhifubao=zhifubao)
+        item_list = item_list.filter(zhifubao__contains=zhifubao)
     item_list = item_list.filter(audit_state=state).select_related('project').order_by('submit_time')
     data = []
     for con in item_list:
         project = con.project
         project_name=project.title
         invest_mobile=con.invest_mobile
+        invest_name = con.invest_name
         invest_date=con.invest_date
         id=con.id
-        remark= con.remark
+        other_remark= con.get_other_and_remark()
         invest_amount= con.invest_amount
         term=con.invest_term
         qq_number = con.user.qq_number
@@ -278,11 +288,11 @@ def export_investlog(request):
         elif con.audit_state=='2':
             result = u'否'
             reason = con.audit_reason
-        data.append([id, project_name, invest_date, invest_mobile, term,
-                     invest_amount, remark, result, settle_amount, return_amount, reason])
+        data.append([id, project_name, invest_date, invest_mobile, invest_name,invest_amount,
+                     term, other_remark, result, settle_amount, return_amount, reason])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
-    title_row = [u'记录ID',u'项目名称',u'投资日期', u'投资手机号' ,u'投资期限' ,u'投资金额', u'备注',
+    title_row = [u'记录ID',u'项目名称',u'投资日期', u'投资手机号', u'投资姓名',u'投资金额' ,u'投资标期', u'备注及其他',
                  u'是否审核通过',u'结算金额',u'返现金额',u'拒绝原因']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
@@ -318,7 +328,7 @@ def import_investlog(request):
     table = data.sheets()[0]
     nrows = table.nrows
     ncols = table.ncols
-    if ncols!=11:
+    if ncols!=12:
         ret['msg'] = u"文件格式与模板不符，请在导出的投资记录表中更新后将文件导入！"
         return JsonResponse(ret)
     rtable = []
@@ -335,7 +345,7 @@ def import_investlog(request):
                 elif j==1:
                     project = cell.value
                     temp.append(project)
-                elif j==7:
+                elif j==8:
                     result = cell.value.strip()
                     if result == u"是":
                         result = True
@@ -345,21 +355,21 @@ def import_investlog(request):
                         temp.append(False)
                     else:
                         raise Exception(u"审核结果必须为是或否。")
-                elif j==8:
+                elif j==9:
                     settle_amount = 0
                     if cell.value:
                         settle_amount = Decimal(cell.value)
                     elif result:
                         raise Exception(u"审核结果为是时，结算金额不能为空或零。")
                     temp.append(settle_amount)
-                elif j==9:
+                elif j==10:
                     return_amount = 0
                     if cell.value:
                         return_amount = Decimal(cell.value)
                     elif result:
                         raise Exception(u"审核结果为是时，结算金额不能为空或零。")
                     temp.append(return_amount)
-                elif j==10:
+                elif j==11:
                     reason = cell.value
                     temp.append(reason)
                 else:
@@ -374,7 +384,6 @@ def import_investlog(request):
     suc_num = 0
     try:
         for row in rtable:
-            print row
             with transaction.atomic():
                 id = row[0]
                 result = row[2]

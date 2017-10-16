@@ -1,0 +1,209 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户中心</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/account_setting.css' %}" />
+<link rel="stylesheet" href="{% static 'css/cropbox.css' %}" type="text/css" />
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/cropbox.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'js/page.js' %}"></script>-->
+<script type="text/javascript">
+
+
+$(function(){
+    $('.back-a10').toggleClass("on");
+    $(window).load(function() {
+        
+    });
+});
+</script>
+</head>
+
+<body>
+	{% include "header.html" %}
+	<!--内容-->
+	<div class="Content">
+    	{% include "account/left.html" %}
+    	<div class="RightCont">
+            <div class="notice-info-box" style="margin-top: 0;">
+                <h2 class="notice-title">主页公告</h2>
+                <div class="item">
+                    <span class="item__name"></span>
+                    <div class="notice-box">
+                        <div class="input-box">
+                            <input class="item__txt notice" maxlength="100" type="text" /><a class="notice-add">添加</a>
+                            <span>最多可添加十条公告</span>
+                        </div>
+                    </div>
+                    <p class="notice-exist-title">已有公告:</p>
+                    <ul class="notice-exist">
+                    </ul>
+                </div>
+                
+                <div class="popup m-notice-change">
+                    <div class="popup__content" style="width: 600px;">
+                        <div class="popup__top">
+                            <h2 class="popup__title">修改公告</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+                        </div>
+                        <div class="popup__detail">
+                            <div class="popup__item"><span class="popup__itemname">公告内容</span><input id="notice_detail" type="text" /></div>
+                        </div>
+                        <div class="popup__btnbox">
+                            <a id="notice_change" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	{% include "footer.html" %}
+	<script src="{% static 'js/wfl-common.js' %}" type="text/javascript"></script>
+    <script type="text/javascript">
+    
+    $(function() {
+        
+        
+    })
+    
+    $.ajax({
+        url: '/restapi/notice/?ordering=state',
+        dataType:"json",
+        type:'get',
+        success:function(ret){
+            console.log(ret.results);
+            var notice_html = "";
+            for (var i=0; i<ret.results.length; i++) {
+                notice_html += '<li class="notice-item"><span class="notice-text">' + ret.results[i].content + '</span>'; 
+                if (ret.results[i].state == '0') {
+                    notice_html +='<span class="notice-istop"  data-istop="0" onclick="noticeIstop(this,' + ret.results[i].id + ')">取消置顶</span>'; 
+                } else{
+                    notice_html +='<span class="notice-istop"  data-istop="1" onclick="noticeIstop(this,' + ret.results[i].id + ')">置顶</span>'; 
+                }
+                notice_html +='<span class="notice-change" onclick="noticeChange(this,' + ret.results[i].id + ')">修改</span>';
+                notice_html +='<span class="notice-delete" onclick="noticeDelete(this,' + ret.results[i].id + ')">删除</span></li>';
+            }
+            $('.notice-exist').html(notice_html);
+        },
+        error:function(){
+            console.log("请检查网络连接");
+        }
+    });
+    
+    
+    $('.notice-add').click(function(){
+        var content = $('.notice').val();
+        console.log(content);
+        if ($('.notice-item').length >= 10) {
+            alert('最多添加十条公告');
+            return;
+        }
+        if (!content) {
+            alert('请输入通知内容');
+            return;
+        }
+        $.ajax({
+            url: '/restapi/notice/',
+            dataType:"json",
+            type:'post',
+            data : {
+                'content':content,
+            },
+            success:function(ret){
+                alert('添加公告成功');
+                var notice_html = '<li class="notice-item"><span class="notice-text">' + ret.content + '</span>' + 
+                '<span class="notice-istop" data-istop="1" onclick="noticeIstop(this,' + ret.id + ')">置顶</span>' +
+                '<span class="notice-change" onclick="noticeChange(this,' + ret.id + ')">修改</span>' +
+                '<span class="notice-delete" onclick="noticeDelete(this,' + ret.id + ')">删除</span></li>';
+                $('.notice-exist').append(notice_html);
+            },
+            error:function(){
+                alert("请检查网络连接");
+            }
+        });
+    })
+    var notice_item;
+    var notice_id;
+    function noticeIstop(obj,id) {
+        notice_id = id;
+        var istop = '' + $(obj).data('istop');
+        var state;
+        console.log(istop);
+        console.log(typeof(istop));
+        if (istop == '0') {
+            state = '1';
+        } else if (istop == '1') {
+            state = '0';
+        }
+        console.log(state);
+        $.ajax({
+            url: '/restapi/notice/' + notice_id + '/',
+            dataType:"json",
+            type:'put',
+            data : {
+                'state':state,
+            },
+            success:function(ret){
+                alert('操作成功');
+                if (state == '1') {
+                    $(obj).data('istop', '1');
+                    $(obj).text('置顶');
+                } else if (state == '0') {
+                    $(obj).data('istop', '0');
+                    $(obj).text('取消置顶');
+                } else {
+                    console.log('不是布尔值')
+                }
+            },
+            error:function(){
+                console.log("请检查网络连接");
+            }
+        });
+    }
+    function noticeChange(obj,id) {
+        notice_id = id;
+        notice_item = $(obj).parent().find('.notice-text');
+        var notice_txt = notice_item.text();
+        $('#notice_detail').val(notice_txt);
+        $('.popup.m-notice-change').addClass('in');
+    }
+    $('#notice_change').click(function(){
+        var content = $('#notice_detail').val();
+        console.log(content);
+        $.ajax({
+            url: '/restapi/notice/' + notice_id + '/',
+            dataType:"json",
+            type:'put',
+            data : {
+                'content':content,
+            },
+            success:function(ret){
+                notice_item.html(content);
+                $('.popup.m-notice-change').removeClass('in');
+            },
+            error:function(){
+                console.log("请检查网络连接");
+            }
+        });
+    })
+    function noticeDelete(obj,id) {
+        console.log(id);
+        $.ajax({
+            url: '/restapi/notice/' + id + '/',
+            dataType:"json",
+            type:'delete',
+            success:function(ret){
+                $(obj).parent().remove();
+            },
+            error:function(){
+                console.log("请检查网络连接");
+            }
+        });
+    }
+    </script>
+</body>
+</html>

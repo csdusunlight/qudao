@@ -32,27 +32,27 @@
 		},
 	});
 	var data1 = '<table width="100%"><tr><th>QQ</th><th>QQ昵称</th><th>手机号</th><th>项目名称</th>' +
-		'<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>处理状态</th><th>上传截图</th>' +
+		'<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>投资类型</th><th>处理状态</th><th>上传截图</th>' +
 		'<th>备注</th><th>操作</th></tr>[results]<tr><td>{qq_number}</td><td>{qq_name}</td><td>{user_mobile}</td><td>{project_title}</td>' +
 		'<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
-		'<td>{audit_state_des}</td>'+
+		'<td>{submit_type_des}</td><td>{audit_state_des}</td>'+
 		'<td data-isimg="{invest_image}" class="is-img"><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
         '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
 		'<td>{remark}</td><td id="item_{id}"><a class="fyin" onclick="pass({id})">返现' +
 		'</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td></tr>[/results]</table>';
 	var data0 = '<table width="100%"><tr><th>QQ</th><th>QQ昵称</th><th>手机号</th><th>项目名称</th>' +
-        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>处理状态</th>' +
+        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>投资类型</th><th>处理状态</th>' +
         '<th>审核人</th><th>审核时间</th><th>返现金额</th><th>上传截图</th><th>备注</th></tr>[results]<tr><td>{qq_number}</td><td>{qq_name}</td><td>{user_mobile}</td><td>{project_title}</td>' +
         '<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
-        '<td>{audit_state_des}<td>{admin_user}</td></td><td>{audit_time}</td><td>{settle_amount}</td>'+
+        '<td>{submit_type_des}</td><td>{audit_state_des}<td>{admin_user}</td></td><td>{audit_time}</td><td>{settle_amount}</td>'+
         '<td data-isimg="{invest_image}" class="is-img"><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
         '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
         '<td>{remark}</td></tr>[/results]</table>';
     var data2 = '<table width="100%"><tr><th>QQ</th><th>QQ昵称</th><th>手机号</th><th>项目名称</th>' +
-        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>处理状态</th>' +
+        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>投资类型</th><th>处理状态</th>' +
         '<th>审核人</th><th>审核时间</th><th>拒绝金额</th><th>上传截图</th><th>备注</th></tr>[results]<tr><td>{qq_number}</td><td>{qq_name}</td><td>{user_mobile}</td><td>{project_title}</td>' +
         '<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
-        '<td>{audit_state_des}<td>{admin_user}</td></td><td>{audit_time}</td><td>{audit_reason}</td>'+
+        '<td>{submit_type_des}</td><td>{audit_state_des}<td>{admin_user}</td></td><td>{audit_time}</td><td>{audit_reason}</td>'+
         '<td data-isimg="{invest_image}" class="is-img"><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
         '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
         '<td>{remark}</td></tr>[/results]</table>';
@@ -187,12 +187,16 @@
 			}
 			var adminname = $("#adminname").val();
 			var state = $("#state").val();
+			var invest_type = $("#invest_type").val();
 			if(adminname) {
 				newurl += "&admin_user=" + adminname;
 			}
 			if(state) {
 				newurl += "&audit_state=" + state;
 			}
+			if(invest_type) {
+                newurl += "&submit_type=" + invest_type;
+            }
 			var level = $("#level").val();
 			if(level) {
 				newurl += "&user_level=" + level;
@@ -248,12 +252,16 @@
 			}
 			var adminname = $("#adminname").val();
 			var state = $("#state").val();
+			var invest_type = $("#invest_type").val();
 			if(adminname) {
 				html += '<input name="admin_user" type="hidden" value="' + adminname + '"/>';
 			}
 			if(state) {
 				html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
 			}
+			if(invest_type) {
+                html += '<input name="submit_type" type="hidden" value="' + invest_type + '"/>';
+            }
 			var level = $("#level").val();
 			if(level) {
 				html += '<input name="user_level" type="hidden" value="' + level + '"/>';
@@ -315,11 +323,11 @@
 						<input id="endTime" type="date" />
 					</td>
 					<td>
-						<i>操作开始时间：</i>
+						<i>审核开始时间：</i>
 						<input id="startTime2" type="date" />
 					</td>
 					<td>
-						<i>操作结束时间：</i>
+						<i>审核结束时间：</i>
 						<input id="endTime2" type="date" />
 					</td>
 				</tr>
@@ -342,9 +350,9 @@
 						</select>
 					</td>
 					<td>
-						<i style="letter-spacing:4.8px;">提交手机号</i>
-						<input id="mobile_sub" type="text" />
-					</td>
+                        <i>处&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人：</i>
+                        <input id="adminname" type="text" />
+                    </td>
 				</tr>
 				<tr>
 					<td>
@@ -352,9 +360,9 @@
 						<input id="projectname" type="text" />
 					</td>
 					<td>
-						<i>处&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;人：</i>
-						<input id="adminname" type="text" />
-					</td>
+                        <i style="letter-spacing:4.8px;">提交手机号</i>
+                        <input id="mobile_sub" type="text" />
+                    </td>
 					<td>
 						<i style="letter-spacing:4.8px;">处理状态：</i>
 						<select name="selectAge" id="state">
@@ -363,6 +371,14 @@
 							<option value="2">审核拒绝</option>
 						</select>
 					</td>
+					<td>
+                        <i style="letter-spacing:4.8px;">投资类型：</i>
+                        <select name="selectAge" id="invest_type">
+                            <option value="">不限</option>
+                            <option value="1">首投</option>
+                            <option value="2">复投</option>
+                        </select>
+                    </td>
 				</tr>
 			</table>
 

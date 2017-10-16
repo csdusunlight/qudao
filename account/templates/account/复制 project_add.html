@@ -3,12 +3,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>用户中心</title>
+<title>创建修改项目</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/account_setting.css' %}" />
 <link rel="stylesheet" href="{% static 'css/cropbox.css' %}" type="text/css" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/account_add_project.css' %}" />
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/cropbox.js' %}"></script>
 <!--<script type="text/javascript" src="{% static 'js/page.js' %}"></script>-->
@@ -16,7 +16,7 @@
 
 
 $(function(){
-    $('.back-a2').toggleClass("on");
+    $('.back-a3').toggleClass("on");
     $(window).load(function() {
         
     });
@@ -31,12 +31,11 @@ $(function(){
     	{% include "account/left.html" %}
     	<div class="RightCont">
     	    <div class="right-top clearfix">
-    	        <h2 class="top-title l">主页资料</h2>
-    	        <a class="btn m-yellow m-exp r" href="http://{{user.qq_number}}.51fanshu.com" target="_blank">进入主页</a>
+    	        <h2 class="top-title add-title l">新建项目</h2>
     	    </div>
     	    <div class="user-info-box">
         	    <div class="item">
-        	        <span class="item__name">头像</span>
+        	        <span class="item__name">项目logo</span>
         	        <!--<div class="img-up">
                         <input type="file" name="picfile" id="choose" accept="image/jpeg,image/png">
                         <ul id="img_list" class="img-list">
@@ -69,7 +68,7 @@ $(function(){
                           </div>-->
                     </div>
         	    </div>
-        	    <div class="item">
+        	    <!--<div class="item">
                     <span class="item__name">皮肤</span>
                     <ul class="skin">
                     	<li class="skin__item m-01">皮肤1</li>
@@ -79,65 +78,124 @@ $(function(){
                     	<li class="skin__item m-05">皮肤5</li>
                     	<li class="skin__item m-06">皮肤6</li>
                     </ul>
+                </div>-->
+                <div class="item">
+                    <span class="item__name">项目名称</span>
+                    <input class="title item__txt" type="text" maxlength="12" />
                 </div>
                 <div class="item">
-                    <span class="item__name m-need">用户名</span>
-                    <input class="username item__txt" type="text" maxlength="8" value="{{user.username}}" />
-                    <span>用于显示在个人主页，限8个字符</span>
+                    <span class="item__name">攻略链接</span>
+                    <input class="strategy item__txt" type="text" />
+                    <span><a class="link-btn" target="_blank" href="https://shimo.im/">点击</a>使用石墨创建工具</span>
                 </div>
                 <div class="item">
-                    <span class="item__name m-need">QQ昵称</span>
-                    <input class="qqname item__txt" type="text" value="{{user.qq_name}}" />
+                    <span class="item__name">项目简介</span>
+                    <input class="introduction item__txt" type="text" />
                 </div>
                 <div class="item">
-                    <span class="item__name m-need">QQ</span>
-                    <input class="qq item__txt" type="text" value="{{user.qq_number}}" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+                    <span class="item__name">价格</span>
+                    <input class="cprice item__txt" type="text" />
                 </div>
                 <div class="item">
-                    <span class="item__name">个人签名</span>
-                    <input class="tosign item__txt" type="text" value="{{user.profile}}" maxlength="30" placeholder="限30个字符" />
+                    <span class="item__name">标期</span>
+                    <input class="term item__txt" type="text" />
+                </div>
+                <div class="item">
+                    <span class="item__name">投资区间</span>
+                    <input class="investrange item__txt" type="text" />
+                </div>
+                <div class="item">
+                    <span class="item__name">预计年化</span>
+                    <input class="intrest item__txt" type="text" />
+                </div>
+                <div class="item">
+                    <span class="item__name">是否复投</span>
+                    <!--<input class="is_futou" name="is_futou" type="checkbox" />-->
+                    <label><input class="is_futou" type="radio" value="true" name="is_futou" /><i class="need-icon m-left"></i>是</label>
+                    <label><input class="is_futou" type="radio" value="false" name="is_futou" /><i class="need-icon"></i>否</label>
+                </div>
+    	    </div>
+    	    
+            <div class="right-top clearfix">
+                <h2 class="top-title l">用户交单项</h2>
+            </div>
+            <div class="user-info-box">
+                <div class="">
+                    <div class="need-box">
+                        <label><input data-type="0" class="need" type="checkbox" value="0" name="invest-account" /><i class="need-icon"></i>投资用户名</label>
+                        <label><input data-type="1" class="need" type="checkbox" value="1" name="amount" /><i class="need-icon"></i>投资金额</label>
+                        <label><input data-type="2" class="need" type="checkbox" value="2" name="term" /><i class="need-icon"></i>投资标期</label>
+                        <label><input data-type="3" class="need" type="checkbox" value="3" name="date" /><i class="need-icon"></i>投资日期</label>
+                        <label><input data-type="4" class="need" type="checkbox" value="4" name="pic" /><i class="need-icon"></i>投资截图</label>
+                        <label><input data-type="5" class="need" type="checkbox" value="5" name="qq" /><i class="need-icon"></i>QQ</label>
+                        <label><input data-type="6" class="need" type="checkbox" value="6" name="zfb" /><i class="need-icon"></i>支付宝信息</label>
+                        <label><input data-type="7" class="need" type="checkbox" value="7" name="return-amount" /><i class="need-icon"></i>用户预期返现金额</label>
+                        <label><input data-type="8" class="need" type="checkbox" value="8" name="invest-name" /><i class="need-icon"></i>投资姓名</label>
+                    </div>
                 </div>
                 
                 <div class="btnbox">
                     <a style="margin-left: -160px;" class="save btn m-green">保存</a>
                 </div>
-    	    </div>
+            </div>
             
-            <!--<div class="notice-info-box">
-                <h2 class="notice-title">编辑公告</h2>
-                <div class="item">
-                    <span class="item__name"></span>
-                    <div class="notice-box">
-                        <div class="input-box">
-                            <input class="item__txt notice" type="text" /><a class="notice-add">添加</a>
-                            <span>最多可添加十条公告</span>
-                        </div>
-                    </div>
-                    <p class="notice-exist-title">已有公告:</p>
-                    <ul class="notice-exist">
-                    </ul>
-                </div>
-                
-                <div class="popup m-notice-change">
-                    <div class="popup__content" style="width: 600px;">
-                        <div class="popup__top">
-                            <h2 class="popup__title">修改公告</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
-                        </div>
-                        <div class="popup__detail">
-                            <div class="popup__item"><span class="popup__itemname">公告内容</span><input id="notice_detail" type="text" /></div>
-                        </div>
-                        <div class="popup__btnbox">
-                            <a id="notice_change" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
-                        </div>
-                    </div>
-                </div>
-            </div>-->
         </div>
     </div>
 	{% include "footer.html" %}
 	<script src="{% static 'js/wfl-common.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
-    var skin = '';
+    var options =
+    {
+        thumbBox: '.thumbBox',
+        spinner: '.spinner',
+        imgSrc: ""
+    }
+    var cropper;
+    var project_id = "{{id}}";
+    if (project_id) {
+        var url = '/restapi/projects/' + project_id + '/';
+        var type = 'put';
+        $('.add-title').text('修改项目');
+        console.log(project_id)
+        $.ajax({
+            url: url,
+            dataType: "json",
+            type:"get",
+            success: function(ret) {
+                options.imgSrc = ret.pic;
+                cropper = $('.imageBox').cropbox(options);
+                    
+                $('.title').val(ret.title);
+                $('.strategy').val(ret.strategy);
+                $('.introduction').val(ret.introduction);
+                $('.cprice').val(ret.cprice);
+                $('.term').val(ret.term);
+                $('.investrange').val(ret.investrange);
+                $('.intrest').val(ret.intrest);
+                var radio_dom = 'input[value="'+ ret.is_multisub_allowed +'"]'
+                $(radio_dom).prop("checked",true); 
+                
+                var need_str = ret.necessary_fields;
+                var need_set = need_str.split(',');
+                var need_id;
+                console.log(need_set);
+                for (need_id in need_set) {
+                    var dom = 'input[value="'+ need_set[need_id].replace(/(^\s*)|(\s*$)/g, "") +'"]';
+                    console.log(dom);
+                    $(dom).prop("checked", true);
+                }
+
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+    } else {
+        var url = '/restapi/projects/';
+        var type = 'post';
+        $('.add-title').text('新建项目');
+        console.log('xinjian');
+    }
     var img = '';
     var img2;
     var file_list = [];
@@ -150,19 +208,9 @@ $(function(){
     var file;
     var maxsize = 80 * 1024;
     $(function() {
-        console.log('{{user.color}}');
-        $('.skin__item').removeClass('on');
-        $('.skin__item').eq({{user.color}}).addClass('on');
         
-        
-        console.log("{{user.picture_url}}");
-        var options =
-        {
-            thumbBox: '.thumbBox',
-            spinner: '.spinner',
-            imgSrc: "{{user.picture_url}}"
-        }
-        var cropper = $('.imageBox').cropbox(options);
+
+//      var cropper = $('.imageBox').cropbox(options);
         $('#upload-file').on('change', function(){
             file_list = [];
             var reader = new FileReader();
@@ -181,18 +229,21 @@ $(function(){
         $('#btnCrop').on('click', function(){
             img2 = cropper.getDataURL();
             console.log(img2);
-            $('.cropped').html('<span style="display: inline-block;margin-bottom: 84px;">*请先上传后进行裁切</span>');
-//          $('.cropped').append('<img src="'+img2+'" align="absmiddle" style="width:64px;margin-top:4px;border-radius:64px;box-shadow:0px 0px 12px #7E7E7E;" ><p>64px*64px</p>');
-//          $('.cropped').append('<img src="'+img2+'" align="absmiddle" style="width:128px;margin-top:4px;border-radius:128px;box-shadow:0px 0px 12px #7E7E7E;"><p>128px*128px</p>');
-            $('.cropped').append('<img src="'+img2+'" align="absmiddle" style="width:180px;margin-top:4px;border-radius:180px;box-shadow:0px 0px 12px #7E7E7E;"><p>180px*180px</p>');
-            
+//          $('.cropped').html('<span style="display: inline-block;margin-bottom: 84px;">*请先上传后进行裁切</span>');
+//          $('.cropped').append('<img src="'+img2+'" align="absmiddle" style="width:180px;margin-top:4px;border-radius:180px;box-shadow:0px 0px 12px #7E7E7E;"><p>180px*180px</p>');
+
             var result = img2;
             var img = new Image();
             img.src = result;
 //              $(li).css("background-image", "url(" + result + ")");
             //如果图片大小小于100kb，则直接上传
             if(result.length <= maxsize) {
-                process(result, file.name, file.type);
+                if (file) {
+                    process(result, file.name, file.type);
+                } else{
+                    alert('请先上传图片');
+                    return;
+                }
                 submit();
             }
             else{
@@ -207,25 +258,35 @@ $(function(){
             
             function callback() {
                 var data = compress(img);
-                process(data, file.name, file.type);
+                if (file) {
+                    process(data, file.name, file.type);
+                } else{
+                	alert('请先上传图片');
+                	return;
+                }
                 submit();
             }
             
             
         })
         $('#btnZoomIn').on('click', function(){
-            cropper.zoomIn();
+            if (options.imgSrc) {
+                cropper.zoomIn();
+            } else{
+            	alert('请先上传图片');
+            }
         })
         $('#btnZoomOut').on('click', function(){
-            cropper.zoomOut();
+            
+            if (options.imgSrc) {
+                cropper.zoomOut();
+            } else{
+                alert('请先上传图片');
+            }
         })
         
         
-        $('.skin__item').click(function(){
-            $(this).addClass('on').siblings().removeClass('on');
-            skin = $(this).index();
-            console.log(skin);
-        })
+
 //      头像处理
 
         //    使用canvas对大图片进行压缩
@@ -295,12 +356,11 @@ $(function(){
 
             if (file_list.length!=0){
                 console.log('add pic');
-                formdata.append("picture", file_list[0].blob, file_list[0].name);
+                formdata.append("pic", file_list[0].blob, file_list[0].name);
             }
 
           console.log(formdata);
-            var userId = {{user.id}};
-            xhr.open('put', '/restapi/users/' + userId + '/');
+            xhr.open('put', '/restapi/projects/' + project_id + '/');
             xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
             xhr.onreadystatechange = function() {
                 $(".img-mask").css("display", "none");
@@ -332,31 +392,45 @@ $(function(){
         }
         
 //      头像处理---end
+
         $('.save').click(function(){
-            var username = $('.username').val();
-            var qqname = $('.qqname').val();
-            var qq = $('.qq').val();
-            var tosign = $('.tosign').val().replace(/[\r\n]/g,'');
-            $('.tosign').val(tosign);
-            if (!qq || !qqname) {
-                alert('qq号和qq昵称不能为空');
+            var need_arr = [];
+            $('input[type="checkbox"]:checked').each(function() {
+                need_arr.push($(this).val())
+            })
+            var necessary_fields = need_arr.join(',');
+            console.log(necessary_fields);
+
+            
+            var title = $('.title').val();
+            var strategy = $('.strategy').val();
+            var introduction = $('.introduction').val();
+            var cprice = $('.cprice').val();
+            var term = $('.term').val();
+            var investrange = $('.investrange').val();
+            var intrest = $('.intrest').val();
+            var is_futou = $('input[name="is_futou"]:checked').val();
+            console.log(is_futou);
+//          var tosign = $('.tosign').val().replace(/[\r\n]/g,'');
+            if (!title || !strategy || !introduction || !cprice || !term || !investrange || !intrest || !is_futou) {
+                alert('填写项不能为空');
                 return;
             }
             
-            var detail = 'skin=' + skin + ' username=' + username + ' qqname=' + qqname + ' qq=' + qq + ' tosign=' + tosign;
-            console.log(detail);
-
-            var userId = {{user.id}};
             $.ajax({
-                url: '/restapi/users/' + userId + '/',
-                type: 'put',
+                url: url,
+                type: type,
                 dataType: "json",
                 data: {
-                    'color': skin,
-                    'username': username,
-                    'qq_number': qq,
-                    'qq_name': qqname,
-                    'profile': tosign
+                    'title': title,
+                    'strategy': strategy,
+                    'introduction': introduction,
+                    'cprice': cprice,
+                    'term': term,
+                    'investrange': investrange,
+                    'intrest': intrest,
+                    'is_multisub_allowed': is_futou,
+                    'necessary_fields': necessary_fields
                 },
                 success: function(ret) {
                     alert("修改成功!");
@@ -370,98 +444,12 @@ $(function(){
         
     })
     
-//  $.ajax({
-//      url: '/restapi/notice/',
-//      dataType:"json",
-//      type:'get',
-//      success:function(ret){
-//          console.log(ret.results);
-//          var notice_html = "";
-//          for (var i=0; i<ret.results.length; i++) {
-//              notice_html += '<li class="notice-item"><span class="notice-text">' + ret.results[i].content + '</span>' + 
-//              '<span class="notice-change" onclick="noticeChange(this,' + ret.results[i].id + ')">修改</span>' +
-//              '<span class="notice-delete" onclick="noticeDelete(this,' + ret.results[i].id + ')">删除</span></li>';
-//          }
-//          $('.notice-exist').html(notice_html);
-//      },
-//      error:function(){
-//          console.log("请检查网络连接");
-//      }
-//  });
     
     
-//  $('.notice-add').click(function(){
-//      var content = $('.notice').val();
-//      console.log(content);
-//      if ($('.notice-item').length >= 10) {
-//          alert('最多添加十条公告');
-//          return;
-//      }
-//      if (!content) {
-//          alert('请输入通知内容');
-//          return;
-//      }
-//      $.ajax({
-//          url: '/restapi/notice/',
-//          dataType:"json",
-//          type:'post',
-//          data : {
-//              'content':content,
-//          },
-//          success:function(ret){
-//              alert('添加公告成功');
-//              var notice_html = '<li class="notice-item"><span class="notice-text">' + ret.content + '</span>' + 
-//              '<span class="notice-change" onclick="noticeChange(this,' + ret.id + ')">修改</span>' +
-//              '<span class="notice-delete" onclick="noticeDelete(this,' + ret.id + ')">删除</span></li>';
-//              $('.notice-exist').append(notice_html);
-//          },
-//          error:function(){
-//              alert("请检查网络连接");
-//          }
-//      });
-//  })
-//  var notice_item;
-//  var notice_id;
-//  function noticeChange(obj,id) {
-//      notice_id = id;
-//      notice_item = $(obj).parent().find('.notice-text');
-//      var notice_txt = notice_item.text();
-//      $('#notice_detail').val(notice_txt);
-//      $('.popup.m-notice-change').addClass('in');
-//  }
-//  $('#notice_change').click(function(){
-//      var content = $('#notice_detail').val();
-//      console.log(content);
-//      $.ajax({
-//          url: '/restapi/notice/' + notice_id + '/',
-//          dataType:"json",
-//          type:'put',
-//          data : {
-//              'content':content,
-//          },
-//          success:function(ret){
-//              notice_item.html(content);
-//              $('.popup.m-notice-change').removeClass('in');
-//          },
-//          error:function(){
-//              console.log("请检查网络连接");
-//          }
-//      });
-//  })
-//  function noticeDelete(obj,id) {
-//      console.log(id);
-//      $.ajax({
-//          url: '/restapi/notice/' + id + '/',
-//          dataType:"json",
-//          type:'delete',
-//          success:function(ret){
-//              $(obj).parent().remove();
-//          },
-//          error:function(){
-//              console.log("请检查网络连接");
-//          }
-//      });
-//  }
+    
+    
+    
+    
     </script>
 </body>
 </html>

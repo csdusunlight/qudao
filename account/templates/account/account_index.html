@@ -137,7 +137,7 @@ $(function(){
     var data_x = [0,0,0,0,0,0,0,0,0,0,0,0,0,0];
     var data_y = [0,0,0,0,0,0,0,0,0,0,0,0,0,0];
     $.ajax({
-        url:"/restapi/userstatis/?page=1&pageSize=14&user_mobile={{user.mobile}}",
+        url:"/restapi/userstatis/?page=1&pageSize=14&user={{user.id}}",
     	type:"get",
     	dataType: "json",
     	success: function(ret) {

@@ -32,4 +32,7 @@ urlpatterns = [
     
     url(r'^userstatis/$', views.UserDetailStatisList.as_view()),
     url(r'^useravgstatis/$', views.UserAverageStatisList.as_view()),
+    
+    url(r'^marks/$', views.MarkList.as_view()),
+    url(r'^marks/(?P<pk>[0-9]+)/$', views.MarkDetail.as_view()),
 ]

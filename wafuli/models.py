@@ -51,17 +51,6 @@ class Base(models.Model):
     def __unicode__(self):
         return self.title
 
-
-class Mark(models.Model):
-    name = models.CharField(max_length=10, verbose_name=u"标签名", unique=True)
-    inviter = models.ForeignKey('self', related_name = 'child_marks', verbose_name=u"父标签",
-                                blank=True, null=True, on_delete=models.SET_NULL)
-    def __unicode__(self):
-        return self.name
-    class Meta:
-        verbose_name = u"标签"
-        verbose_name_plural = u"标签"
-
 Project_STATE = (
     ('00', u'即将开始'),
     ('10', u'正在进行'),
@@ -96,7 +85,6 @@ class Project(models.Model):
     intrest = models.CharField(u"预期年化", max_length=20)
     necessary_fields = models.CharField(u"必填字段", max_length=50,help_text=u"投资用户名(0)，投资金额(1)，投资标期(2)，投资日期(3)，\
                 支付宝信息(4)，投资手机号(5)，预期返现金额(6)，QQ号(7)，投资截图(8)，字段以英文逗号隔开，如0,1,2,3,4,5", default = '0,1,2,3,4,5')
-#     marks = models.ManyToManyField(Mark, verbose_name=u'标签',  blank=True)
     subscribers = models.ManyToManyField(MyUser, through='SubscribeShip')
     def clean(self):
         if not self.pic:
@@ -151,7 +139,16 @@ class SubscribeShip(models.Model):
         ordering = ['project__state', "-project__priority", "-project__pub_date",]
     def get_sub_invest_num(self):
         return InvestLog.objects.filter(project=self.project).count()
-
+class Mark(models.Model):
+    user = models.ForeignKey(MyUser, null=True, related_name="created_marks")
+    name = models.CharField(max_length=4, verbose_name=u"标签名",)
+    subids = models.ManyToManyField(SubscribeShip, related_name="marks", verbose_name=u"sub ids", blank=True)
+    def __unicode__(self):
+        return self.name
+    class Meta:
+        verbose_name = u"标签"
+        verbose_name_plural = u"标签"
+        unique_together = (('user', 'name'),)
 SUB_TYPE = (
     ('1', u'首投'),
     ('2', u'复投'),
@@ -193,6 +190,8 @@ class InvestLog(models.Model):
         if self.remark:
             ret.append(u"备注：" + self.remark)
         return '|'.join(ret)
+    def get_audit_date(self):
+        return self.audit_time.strftime("%Y-%m-%d") if self.audit_time else ''
 
 STATE = (
     ('0', u'置顶'),

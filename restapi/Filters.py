@@ -61,7 +61,7 @@ class TranslistFilter(django_filters.rest_framework.FilterSet):
     reason_contains = django_filters.CharFilter('reason', lookup_expr='contains')
     class Meta:
         model = TransList
-        fields = ['user_mobile', 'user_name', 'reason_contains', 'trans_date']
+        fields = ['user_mobile', 'user_name', 'reason_contains', 'trans_date', 'transType']
         
 class WithdrawLogFilter(django_filters.rest_framework.FilterSet):
     submit_date = django_filters.DateFromToRangeFilter(name="submit_time")

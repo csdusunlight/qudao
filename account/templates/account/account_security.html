@@ -48,35 +48,6 @@ $(function(){
 	$(".login-modify").click(function(){
 		$(".Password-modify").css("display","block");
 	});
-//	$("#acti2").click(function(){
-//		$(".Password-modify2").css("display","block");
-//	});
-	// $("#acti1").click(function(){
-	// 	var post_url = "";
-	// 	$.ajax({
-	// 		url: post_url,
-	// 		dataType:"json",
-	// 		type:'GET',
-	// 		success:function(ret){
-	// 			if(ret.code==1){
-	// 				alert("请重新登录！")
-	// 				window.location.href = ret.url;
-	// 			}
-	// 			else if(ret.code==2){
-	// 				alert("发送验证邮件失败，邮箱地址不存在！");
-	// 			}
-	// 			else if(ret.code==0){
-	// 				$(".Password-modify3").css("display","block");
-	// 			}
-	// 		},
-	// 		error:function(){
-	// 			alert("请检查网络连接");
-	// 		}
-	// 	});
-	// });
-//	$(".Pay-modify").click(function(){
-//		$(".Password-modify4").css("display","block")
-//	});
 	$("#submit").click(function(){
 		initp = $("#initial_password").val();
 		newp = $("#new_password").val();
@@ -235,11 +206,6 @@ $(function(){
                             </div>
                         </div>
                         <div class="bin-more-info">
-<!--               <script type="text/javascript">
-  							$(document).ready(function(){
-  							  $(".bin-more-info li:odd").css("border-right","none")
-  							});
-							</script> -->
                         	<ul>
                             	<li>
                                 	<div class="bing-top-li">
@@ -281,26 +247,6 @@ $(function(){
                                     </div>
                                     <div class="Bing-note"><p style="margin-left: 90px;">登陆用户账户是需要输入的密码</p></div>
                                 </li>
-                                <!--<li>
-                                {% if user.pay_password %}
-                                	<div class="bing-top-li">
-                                    	<div class="Bin-img"><div class="Bin-mi"><img style="width: 32px" src="{% static 'images/pic7.png' %}" /></div></div>
-                                        <div class="Bin-right">
-                                        	<strong>支付密码</strong>
-                                            <span>已设置</span><a class="Pay-modify">修改</a>
-                                        </div>
-                                    </div>
-                                 {% else %}
-                                	<div class="bing-top-li">
-                                    	<div class="Bin-img"><div class="Bin-mi ons"><img style="width: 32px" src="{% static 'images/pic7.png' %}" /></div></div>
-                                        <div class="Bin-right">
-                                        	<strong>支付密码</strong>
-                                            <a class="acti-jump" id="acti2">我要设置</a>
-                                        </div>
-                                    </div>
-                                 {% endif %}
-                                    <div class="Bing-note"><p style="margin-left: 90px;">在账户资金变动时需要输入的密码</p></div>
-                                </li>-->
                             </ul>
                         </div>
                     </div>
@@ -339,47 +285,6 @@ $(function(){
             </div>
         </div>
 
-        <!--支付密码设置弹窗-->
-        <!--<div class="Password-modify2" style="display:none;">
-        	<div class="Passbox">
-            	<div class="Passinfo">
-                	<h2>支付密码修改</h2>
-
-                    	<div class="Input-in">
-                        	<span>登陆密码：</span>
-                            <input id="initial_password2" type="text" />
-                        </div>
-                    	<div class="Input-in">
-                        	<span>新支付密码：</span>
-                            <input id="new_password2" type="text" />
-                        </div>
-                    	<div class="Input-in">
-                        	<span>再次确认新支付密码：</span>
-                            <input id="new_password_again2" type="text" />
-                        </div>
-
-                        <div class="Submit-box">
-                        	<input id="submit2" type="submit"  value="提  交" />
-                        </div>
-
-                </div>
-                <div class="None-p">
-            	<button></button>
-            </div>
-            </div>
-        </div>-->
-        <!--支付密码设置弹窗-->
-        <!--<div class="Password-modify3" style="display:none;">
-        	<div class="Passbox">
-            	<div class="Passinfo" style="height:200px;">
-                	<h2>温馨提示</h2>
-                	<p>挖福利给您发送了一封激活邮件，<a target='_blank' id='goto'>请速查看！</a></p>
-              </div>
-                <div class="None-p">
-            	<button></button>
-            </div>
-            </div>
-        </div>-->
         <div class="Password-modify4" style="display:none;">
         	<div class="Passbox">
             	<div class="Passinfo">

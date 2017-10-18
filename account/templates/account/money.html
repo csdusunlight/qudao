@@ -8,8 +8,10 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
 <style type="text/css">
 	.fubi-box {
 	    margin-bottom: 20px;
@@ -39,7 +41,7 @@
 var data = '<table width="100%"><thead><tr><th height="44">项目</th>' +
 '<th>金额</th><th>余额</th><th>获取时间</th><th>备注</th></tr></thead><tbody>'+
 '[results]<tr><td>{reason}</td><td class="shouzhi" data-shouzhi="{transType}">{transAmount}</td>'+
-'<td>{user_balance}</td><td>{time}</td><td>{remark}</td></tr>[/results]'+
+'<td>{user_balance}</td><td class="submit-time">{time}</td><td>{remark}</td></tr>[/results]'+
 '</tbody></table>';
 var url = "/restapi/translist/" + "?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}";
 //function emptydisplay(obj){
@@ -56,19 +58,55 @@ function pagecallback(){
             $(this).text('-' + $(this).text());
         }
     })
+    $('.submit-time').each(function(){
+        var submit_time = $(this).text().split('T');
+        $(this).text(submit_time[0]);
+    })
 }
+
+
 $(function(){
 	$('.back-a8').toggleClass("on");
     $(".Close").click(function(){
     	$(".Listpop").css("display","none")<!--隐藏-->
     });
 	$("#pagedata").ajaxPage({
-	    url:url + '&user_mobile={{user.mobile}}',
+	    url:url,
 	    pageId:$("#page"),
 	    run:true,
 	    content:data,
 	    complete:pagecallback,
 	});
+	
+	$(".RightCont").on("focus", ".date_picker", function() {
+        $(this).date_input();
+    })
+	
+	$("#search").click(function() {
+        var trans_date_0 = $("#trans_date_0").val(),
+            trans_date_1 = $("#trans_date_1").val(),
+            transType = $("#transType").val();
+        var newurl = url;
+        if(trans_date_0) {
+            newurl += "&trans_date_0=" + trans_date_0;
+        }
+        if(trans_date_1) {
+            newurl += "&trans_date_1=" + trans_date_1;
+        }
+        if(transType) {
+            newurl += "&transType=" + transType;
+        }
+    
+        console.log(newurl);
+        $("#page").empty();
+        $("#pagedata").ajaxPage({
+            url: newurl,
+            pageId: $("#page"),
+            run: true,
+            content: data,
+            complete:pagecallback,
+        });
+    });
 
     // 审核拒绝原因弹窗
 //	$('.Content').on('click','.state_2',function(){
@@ -93,9 +131,30 @@ $(function(){
             </div>
             <div class="table">
                 <h2 class="table__title">收支详情</h2>
-                        <div id="pagedata">
+                <div class="search">
+                    <div class="search__item">
+                        <span class="search__name">获取时间：</span>
+                        <div class="time-input-box"><input type="text" class="date_picker time-input" id="trans_date_0" /></div> ——
+                        <div class="time-input-box"><input type="text" class="date_picker time-input" id="trans_date_1" /></div>
+                    </div>
+                    <div class="search__item">
+                        <span class="search__name">收支类型：</span>
+                        <select name="select_status" id="transType" onchange="$('#search').click()">
+                            <option value="">全部</option>
+                            <option value="0">收入</option>
+                            <option value="1">支出</option>
+                            <!--<option value="3">已删除</option>-->
+                        </select>
+                    </div>
+                </div>
+                <div class="handle clearfix">
+                    <div class="handle__out r">
+                        <a id="search" class="btn m-green m-search">搜索</a>
+                    </div>
+                </div>
+                <div id="pagedata">
 
-                        </div>
+                </div>
 
                 <div class="changes-p">
                     <div class="page" id="page">

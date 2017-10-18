@@ -27,7 +27,7 @@ class Command(BaseCommand):
         with_amount = dict.get('sum') or 0
         with_num = dict.get('cou')
         dict = InvestLog.objects.filter(audit_time__gte=today,audit_state='0').\
-                aggregate(cou=Count('user_id',distinct=True),sum1=Sum('return_amount'),sum2=Sum('invest_amount'))
+                aggregate(cou=Count('user_id',distinct=True),sum1=Sum('settle_amount'),sum2=Sum('invest_amount'))
         ret_amount = dict.get('sum1') or 0
         invest_amount = dict.get('sum2') or 0
         ret_num = dict.get('cou')

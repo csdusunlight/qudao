@@ -6,7 +6,7 @@ Created on 2017年8月10日
 '''
 from rest_framework import serializers
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
-    Announcement, WithdrawLog
+    Announcement, WithdrawLog, Mark
 from account.models import MyUser, ApplyLog
 from wafuli_admin.models import DayStatis
 from statistic.models import UserDetailStatis, UserAverageStatis
@@ -65,7 +65,7 @@ class ApplyLogSerializer(serializers.ModelSerializer):
         exclude = ('password',)
 # SubscribeShip
 class SubscribeShipSerializer(serializers.ModelSerializer):
-    project_source = serializers.CharField(source='project.is_official')
+    project_source = serializers.CharField(source='project.is_official', read_only=True)
     project_title = serializers.CharField(source='project.title', read_only=True)
     project_intro = serializers.CharField(source='project.introduction', read_only=True)
     project_price01 = serializers.CharField(source='project.price01', read_only=True)
@@ -75,7 +75,7 @@ class SubscribeShipSerializer(serializers.ModelSerializer):
     project_investrange = serializers.CharField(source='project.investrange', read_only=True)
     project_intrest = serializers.CharField(source='project.intrest', read_only=True)
     project_term = serializers.CharField(source='project.term', read_only=True)
-    project_state = serializers.CharField(source='project.state')
+    project_state = serializers.CharField(source='project.state', read_only=True)
     project_strategy = serializers.CharField(source='project.strategy', read_only=True)
     project_introduction = serializers.CharField(source='project.introduction', read_only=True)
     project_picture = serializers.CharField(source='project.picture_url', read_only=True)
@@ -85,7 +85,7 @@ class SubscribeShipSerializer(serializers.ModelSerializer):
     necessary_fields = serializers.CharField(source='project.necessary_fields', read_only=True)
     optional_fields = serializers.CharField(source='project.optional_fields', read_only=True)
     project_is_multisub_allowed = serializers.BooleanField(source='project.is_multisub_allowed', read_only=True)
-    
+    marks = serializers.PrimaryKeyRelatedField(many=True, queryset=Mark.objects.all())
     class Meta:
         model = SubscribeShip
         fields = '__all__'
@@ -125,4 +125,9 @@ class UserDetailStatisSerializer(serializers.ModelSerializer):
 class UserAverageStatisSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAverageStatis
+        fields = '__all__'
+        
+class MarkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Mark
         fields = '__all__'

@@ -55,4 +55,6 @@ urlpatterns = [
 
     url(r'^admin_invest/(?P<id>[0-9]+)/$', 'account.views.admin_investlog', name='admin_investlog'),
     url(r'^project_add/(?:(?P<id>[0-9]+)/)?$', 'account.views.project_add', name='project_add'),
+    url(r'^create_update_selfproject/(?:(?P<id>[0-9]+)/)?$', 'account.project.create_update_selfproject', name='create_update_selfproject'),
+    url(r'^update_offiproject/(?P<id>[0-9]+)/$', 'account.project.update_offiproject', name='update_offiproject'),
 ]

@@ -34,6 +34,7 @@ class SubscribeShipFilter(django_filters.rest_framework.FilterSet):
     project_type = django_filters.CharFilter(name="project", lookup_expr='type')
     project_state = django_filters.CharFilter(name="project", lookup_expr='state')
     is_official = django_filters.BooleanFilter(name='project', lookup_expr='is_official')
+    mark = django_filters.CharFilter(name='marks', )
     class Meta:
         model = SubscribeShip
         fields = '__all__'

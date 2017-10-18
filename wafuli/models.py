@@ -26,7 +26,7 @@ class Company(models.Model):
     trusteeship = models.CharField(u"托管情况",max_length=100,blank=True)
     background = models.CharField(u"平台背景",max_length=100,blank=True)
     information = models.CharField(u"公司信息",max_length=200,blank=True)
-    logo = models.FileField(u"网站logo（210*100）", upload_to='logo/%Y/%m/%d',default='')
+    logo = models.ImageField(u"网站logo（120*50）", upload_to='logo/%Y/%m/%d')
     view_count = models.IntegerField(u"热门度（点击总量，系统自动更新）", default=0)
     priority = models.IntegerField(u"优先级", default=0)
     class Meta:
@@ -114,7 +114,9 @@ class Project(models.Model):
         :returns: str -- the image url
         
         """
-        if self.pic and hasattr(self.pic, 'url'):
+        if self.company and self.company.logo:
+            return self.company.logo.url
+        elif self.pic and hasattr(self.pic, 'url'):
             return self.pic.url
         else:
             return ''

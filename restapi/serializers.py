@@ -9,6 +9,7 @@ from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
     Announcement, WithdrawLog, Mark
 from account.models import MyUser, ApplyLog
 from wafuli_admin.models import DayStatis
+from wafuli.models import Company
 from statistic.models import UserDetailStatis, UserAverageStatis
 
 class UserSerializer(serializers.ModelSerializer):
@@ -87,7 +88,7 @@ class SubscribeShipSerializer(serializers.ModelSerializer):
     necessary_fields = serializers.CharField(source='project.necessary_fields', read_only=True)
     optional_fields = serializers.CharField(source='project.optional_fields', read_only=True)
     project_is_multisub_allowed = serializers.BooleanField(source='project.is_multisub_allowed', read_only=True)
-    marks = serializers.PrimaryKeyRelatedField(many=True, queryset=Mark.objects.all())
+    marks = serializers.StringRelatedField(many=True, read_only=True)
     class Meta:
         model = SubscribeShip
         fields = '__all__'
@@ -132,4 +133,9 @@ class UserAverageStatisSerializer(serializers.ModelSerializer):
 class MarkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mark
+        fields = '__all__'
+        
+class CompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
         fields = '__all__'

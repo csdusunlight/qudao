@@ -6,13 +6,13 @@ from rest_framework import generics, permissions
 import django_filters
 from Paginations import MyPageNumberPagination
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
-    Announcement, WithdrawLog, Mark
+    Announcement, WithdrawLog, Mark, Company
 from permissions import CsrfExemptSessionAuthentication, IsAdmin
 from restapi.serializers import UserSerializer, InvestLogSerializer,\
     TransListSerializer, NoticeSerializer, ProjectSerializer,\
     SubscribeShipSerializer, AnnouncementSerializer, DayStatisSerializer,\
     ApplyLogSerializer, WithdrawLogSerializer, UserDetailStatisSerializer,\
-    UserAverageStatisSerializer, MarkSerializer
+    UserAverageStatisSerializer, MarkSerializer, CompanySerializer
 from account.models import MyUser, ApplyLog
 from rest_framework.filters import SearchFilter,OrderingFilter
 from restapi.permissions import IsOwnerOrStaff, IsSelfOrStaff
@@ -225,3 +225,7 @@ class MarkDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
         return Mark.objects.filter(user=self.request.user)
     serializer_class = Mark
     permission_classes = (IsOwnerOrStaff,)
+class CompanyList(BaseViewMixin, generics.ListAPIView):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
+    pagination_class = MyPageNumberPagination

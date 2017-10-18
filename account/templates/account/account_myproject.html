@@ -14,6 +14,34 @@
 <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/wfl-tab.js' %}"></script>
+<style type="text/css">
+	.mark-box {
+	    font-size: 0;
+	}
+	.mark {
+	    position: relative;
+	    display: inline-block;
+	    margin: 4px 8px;
+	    padding: 5px 6px;
+	    font-size: 12px;
+	    line-height: 1;
+	    border-radius: 4px;
+	    color: #fff;
+	    background-color: #ffbe00;
+	}
+	.mark__del {
+	    position: absolute;
+	    top: -5px;
+        right: -5px;
+        width: 16px;
+        height: 16px;
+        text-align: center;
+        line-height: 16px;
+        border-radius: 50%;
+        background-color: rgba(0,0,0,0.3);
+        cursor: pointer;
+	}
+</style>
 <script type="text/javascript" >
 $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
@@ -167,6 +195,7 @@ function isRecommend(obj,id) {        //是否推荐调用函数
 var project_souse;
 var project_id;
 var parent_dom;
+var mark_list;
 function edit(obj, id, project) {     //编辑调用函数
 //  console.log(project_type);
     project_souse = project;
@@ -197,6 +226,8 @@ function edit(obj, id, project) {     //编辑调用函数
                 } else{
                     $('#edit_intrest').val(ret.intrest);
                 }
+                mark_list = ret.marks;
+                console.log(mark_list);
                 
                 $('.popup.m-edit-proj').addClass('in');
             } else if(project_type == 'False') {
@@ -236,6 +267,46 @@ $(function(){
 //	$(".None-p button").click(function(){
 //		$(".Password-modify").css("display","none");
 //	});
+    $.ajax({        //获取标签数据
+        url: "/restapi/marks/",
+        dataType: "json",
+        type: 'get',
+        success: function(ret) {
+            console.log(ret.results);
+            var mark_detail = '';
+            for (var i=0; i<ret.results.length; i++) {
+            	mark_detail += '<li data-id="'+ ret.results[i].id +'" class="mark">'+ ret.results[i].name +'<span class="mark__del">x<span></li>'
+            }
+            $('.mark-box').html(mark_detail);
+            $('.mark-box2').html(mark_detail);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR.responseText);
+            alert("数据错误");
+        }
+    });
+    var mark_id;
+    $('.mark-box').on('click', '.mark__del', function(){        //监听删除标签按钮
+        mark_id = $(this).parent().data('id');
+        console.log(mark_id);
+        $('.popup.m-del-mark').addClass('in');
+    })
+    $('#del_mark').click(function(){        //确认删除标签
+        $.ajax({        //获取标签数据
+            url: "/restapi/marks/" + mark_id +'/',
+            dataType: "json",
+            type: 'delete',
+            success: function(ret) {
+                alert('操作成功');
+                $('.popup.m-del-mark').removeClass('in');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+                alert("数据错误");
+            }
+        });
+    })
+    
     $('.project-box').tab({
         tabActiveClass: 'on',
         tabType: 'click '
@@ -413,109 +484,7 @@ $(function(){
             }
         });
     })
-//	$(".Swi-Top li").click(function(){
-//		if($(this).attr("class")!="on"){
-//			$(this).toggleClass("on").siblings().removeClass("on")
-//			var index = $(this).index();
-//			var data = data0;
-//    if (index==1){
-//      data = data1;
-//    }
-//			if (index==2){
-//				data = data2;
-//			}
-//			$("#page").empty();
-//			$("#pagedata1").ajaxPage({
-//			    url:url+index,
-//			    pageId:$("#page1"),
-//			    pageSize:6,
-//			    run:true,
-//			    content:data,
-//			});
-//		}
-//	});
-//	$('#submit').click(function(){
-//		var telnum = $("#telnum").val();
-//		var remark = $("#remark").val();
-//		var amount = $("#amount").val();
-//		var term = $("#term").val();
-//		var id = $("#coupon_id").val();
-//		telnum = telnum.replace(/(^\s*)|(\s*$)/g, "");
-//		remark = remark.replace(/(^\s*)|(\s*$)/g, "");
-//		term = term.replace(/(^\s*)|(\s*$)/g, "");
-//		amount = amount.replace(/(^\s*)|(\s*$)/g, "");
-//		var re_amount=/^\d+(\.\d+)?$/;
-//		var re=/^1[1,2,3,4,6,5,7,8,9]\d{9}$/;
-//		if(!re.test(telnum)){
-//			alert("手机号格式不正确！")
-//			return;
-//		}
-//		if(!re_amount.test(amount)){
-//			alert("投资金额不能为空且必须为纯数字格式！")
-//			return;
-//		}
-//		if(!re_amount.test(term)){
-//			alert("投资标期不能为空且必须为纯数字格式！")
-//			return;
-//		}
-//		amount = parseFloat(amount);
-//		$.ajax({
-//			url:"",
-//			dataType:"json",
-//			type:"POST",
-//			data : {
-//				'id': id,
-//				'telnum': telnum,
-//				'remark': remark,
-//				'term': term,
-//				'amount': amount
-//			},
-//			success:function(ret){
-//				if(ret.code==-1){
-//					alert("该页面已过期，请重新登录！");
-//					window.location.href = ret.url;
-//				}
-//				else{
-//					alert(ret.msg);
-//				}
-//			},
-//			error:function(){
-//				alert("请检查网络连接");
-//			}
-//		});
-//		$(".Password-modify").css("display","none");
-//	});
-//	$("#pagedata1").on("click", ".open", function(){
-//		var is_mobile = this.getAttribute("mobile");
-//		var pro_id = this.getAttribute("pro_id");
-//		var url = this.getAttribute("url");
-//		if (is_mobile==1){
-//			document.getElementById("erweima").src=url;
-//			$(".popup-box").addClass("in");
-//		}
-//		else{
-//			window.open(url_openwindow + "?id=" + pro_id + "&type=CouponProject");
-//		}
-//	});
 
-  // 二维码部分
-//$(".popup-content ").click(function(){
-//  event.stopPropagation();
-//});
-//$(".popup-box ").click(function(){
-//  $(".popup-box ").removeClass("in ");
-//});
-
-  // 审核拒绝原因弹窗
-//$('.Content').on('click','.state_2',function(){
-//	  var reason = $(this).attr('reason');
-//    alert(reason);
-//});
-
-  //文字提示
-//$('.Swi-info').on("mouseover", ".intro-text",  function() {
-//  this.title = this.innerHTML;
-//});
 });
 </script>
 </head>
@@ -532,6 +501,13 @@ $(function(){
                     	<li class="navitem on myproj-nav">官方项目</li>
                     	<li class="navitem myproj-nav">自建项目</li>
                     </ul>
+                    <div>
+                        <h4>项目标签：</h4>
+                        <ul class="mark-box">
+                            <li data-id="1" class="mark">标签1</li>
+                            <li class="mark">标签2</li>
+                        </ul>
+                    </div>
                     <div>
                         <div class="table conitem" style="display: block;">
                             <div class="handle-box clearfix">
@@ -569,6 +545,7 @@ $(function(){
             <div class="popup__item"><span class="popup__itemname">项目简介</span><input id="edit_detail" type="text" /></div>
             <div class="popup__item"><span class="popup__itemname">价格</span><input id="edit_price" type="text" /></div>
             <div class="popup__item"><span class="popup__itemname">预计年化</span><input id="edit_intrest" type="text" /></div>
+            <div class="mark-box2"></div>
         </div>
         <div class="popup__btnbox">
             <a id="edit_confirm" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
@@ -611,6 +588,20 @@ $(function(){
         </div>
         <div class="popup__btnbox">
             <a id="crt_confirm" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
+        </div>
+    </div>
+</div>
+<div class="popup m-del-mark">
+    <div class="popup__content" style="width: 600px;">
+        <div class="popup__top">
+            <h2 class="popup__title">删除标签</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+        </div>
+        <div class="popup__detail">
+                        确认删除该标签？
+        </div>
+        <div class="popup__btnbox">
+            <a class="btn m-green m-popup m-right" onclick="canclePopup(this)">取消</a>
+            <a id="del_mark" class="btn m-green m-popup popup-confirm">确认</a>
         </div>
     </div>
 </div>

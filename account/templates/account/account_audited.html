@@ -557,6 +557,7 @@
                     parent_dom.find("td").eq(5).text(ret.invest_term);
                     parent_dom.find("td").eq(6).text(ret.zhifubao);
                     parent_dom.find("td").eq(7).text(ret.other_remark);
+                    alert('操作成功');
                     $('.popup.m-edit-proj').removeClass('in');
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -582,7 +583,7 @@
                 dataType: "json",
                 success: function(ret) {
                     console.log('删除成功');
-                    parent_del.parent().parent().remove();
+                    parent_del.parent().parent().parent().remove();
                     $('.popup.m-del-proj').removeClass('in');
                 },
                 error: function() {

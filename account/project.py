@@ -67,20 +67,24 @@ def create_update_selfproject(request, id=None):
 def update_offiproject(request, id):
     ret = {}
     introduction = request.POST.get('introduction', '')
-    price = request.POST.get('cprice', '')
+    price = request.POST.get('price', '')
     intrest = request.POST.get('intrest', '')
-    marks = request.POST.get('necessary_fields', '')
+    marks = request.POST.get('marks', '')
+    print marks
     if not (introduction and price and intrest):
         ret['code'] = 1
         ret['msg'] = u'缺少必填字段'
         return JsonResponse(ret)
     
     try:
-        marks = marks.split(',')
+        print marks
+        marks = [ int(x) for x in marks.split(',') if x ]
+        print marks
     except:
         ret['code'] = 2
         ret['msg'] = u'字段不合法'
         return JsonResponse(ret)
+    
     with transaction.atomic():
         sub = SubscribeShip.objects.get(id=id)
         sub.introduction=introduction

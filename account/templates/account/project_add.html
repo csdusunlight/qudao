@@ -126,7 +126,11 @@ $(function(){
             <div class="right-top clearfix">
                 <h2 class="top-title l">项目标签</h2>
             </div>
-            <div class="mark-box"></div>
+            <div class="mark-box">
+                {% for item in marks %}
+                    <li data-id="{{item.id}}" class="mark">{{item.name}}</li>
+                  {%endfor%}
+            </div>
                 <div class="btnbox">
                     <a style="margin-left: -160px;" class="save btn m-green">保存</a>
                 </div>
@@ -136,6 +140,7 @@ $(function(){
 	{% include "footer.html" %}
 	<script src="{% static 'js/wfl-common.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
+    
     var options =
     {
         thumbBox: '.thumbBox',
@@ -176,24 +181,24 @@ $(function(){
                     console.log(dom);
                     $(dom).prop("checked", true);
                 }
-                $.ajax({        //获取标签数据
-                    url: "/restapi/marks/",
-                    dataType: "json",
-                    type: 'get',
-                    success: function(ret) {
-                        console.log(ret.results);
-                        var mark_detail = '';
-                        for (var i=0; i<ret.results.length; i++) {
-                            mark_detail += '<li data-id="'+ ret.results[i].id +'" class="mark"><span class="mark-name">'+ ret.results[i].name +'</span><span class="mark__del">x<span></li>'
-                        }
-                        $('.mark-box').html(mark_detail);
-                        
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR.responseText);
-                        alert("数据错误");
-                    }
-                });
+//              $.ajax({        //获取标签数据
+//                  url: "/restapi/marks/",
+//                  dataType: "json",
+//                  type: 'get',
+//                  success: function(ret) {
+//                      console.log(ret.results);
+//                      var mark_detail = '';
+//                      for (var i=0; i<ret.results.length; i++) {
+//                          mark_detail += '<li data-id="'+ ret.results[i].id +'" class="mark"><span class="mark-name">'+ ret.results[i].name +'</span><span class="mark__del">x<span></li>'
+//                      }
+//                      $('.mark-box').html(mark_detail);
+//                      
+//                  },
+//                  error: function(jqXHR, textStatus, errorThrown) {
+//                      console.log(jqXHR.responseText);
+//                      alert("数据错误");
+//                  }
+//              });
             },
             error: function() {
                 alert("请检查网络连接");
@@ -204,24 +209,24 @@ $(function(){
         var type = 'post';
         $('.add-title').text('新建项目');
         console.log('xinjian');
-        $.ajax({        //获取标签数据
-            url: "/restapi/marks/",
-            dataType: "json",
-            type: 'get',
-            success: function(ret) {
-                console.log(ret.results);
-                var mark_detail = '';
-                for (var i=0; i<ret.results.length; i++) {
-                    mark_detail += '<li data-id="'+ ret.results[i].id +'" class="mark"><span class="mark-name">'+ ret.results[i].name +'</span><span class="mark__del">x<span></li>'
-                }
-                $('.mark-box').html(mark_detail);
-                
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText);
-                alert("数据错误");
-            }
-        });
+//      $.ajax({        //获取标签数据
+//          url: "/restapi/marks/",
+//          dataType: "json",
+//          type: 'get',
+//          success: function(ret) {
+//              console.log(ret.results);
+//              var mark_detail = '';
+//              for (var i=0; i<ret.results.length; i++) {
+//                  mark_detail += '<li data-id="'+ ret.results[i].id +'" class="mark"><span class="mark-name">'+ ret.results[i].name +'</span><span class="mark__del">x<span></li>'
+//              }
+//              $('.mark-box').html(mark_detail);
+//              
+//          },
+//          error: function(jqXHR, textStatus, errorThrown) {
+//              console.log(jqXHR.responseText);
+//              alert("数据错误");
+//          }
+//      });
     }
     
     $('.mark-box').on('click', '.mark', function(){        //选择标签
@@ -240,6 +245,17 @@ $(function(){
     var file;
     var maxsize = 80 * 1024;
     $(function() {
+        var checked_marks = {{checked_marks}};
+        console.log(typeof(checked_marks));
+        $('.mark-box .mark').each(function(){
+            var i;
+            for (i in checked_marks) {
+                console.log(checked_marks[i]);
+                if ($(this).data('id') == checked_marks[i]) {
+                    $(this).addClass('on');
+                }
+            }
+        })
         
         $.ajax({        //平台数据
             url: "/restapi/company/",

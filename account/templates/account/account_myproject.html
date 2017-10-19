@@ -218,15 +218,8 @@ function edit(obj, id, project) {     //编辑调用函数
     parent_dom = $(obj).parent();
     console.log(project_id);
     var project_type = $(obj).data('isofficial');
-    var marks = $(obj).data('marks');
-    $('.mark-box2 .mark-name').each(function(){
-        var i;
-        for (i in marks) {
-            if ($(this).text() == marks[i]) {
-                $(this).parent().addClass('on');
-            }
-        }
-    })
+//  var marks = $(obj).data('marks');
+    
     $.ajax({
         url: '/restapi/sub/' + project_id + '/',
         dataType: "json",
@@ -250,6 +243,14 @@ function edit(obj, id, project) {     //编辑调用函数
                 }
                 mark_list = ret.marks;
                 console.log(mark_list);
+                $('.mark-box2 .mark-name').each(function(){
+                    var i;
+                    for (i in mark_list) {
+                        if ($(this).text() == mark_list[i]) {
+                            $(this).parent().addClass('on');
+                        }
+                    }
+                })
                 
                 $('.popup.m-edit-proj').addClass('in');
             } else if(project_type == 'False') {
@@ -471,12 +472,12 @@ $(function(){
         $.ajax({
             url: '/account/update_offiproject/' + project_id + '/',
             dataType: "json",
-            type: 'put',
+            type: 'post',
             data: {
                 'introduction': edit_detail,
                 'price': edit_price,
                 'intrest': edit_intrest,
-                'necessary_fields': mark_str
+                'marks': mark_str
             },
             success: function(ret) {
                 $.prompt({

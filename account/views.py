@@ -855,6 +855,7 @@ def project_add(request, id=None):
     checked_marks = []
     if not id is None:
         id = int(id)
+        kwargs.update(id=id)
         sub = SubscribeShip.objects.get(project_id=id, user=request.user)
         checked_marks = [ x.id for x in sub.marks.all() ]
     kwargs.update(checked_marks=checked_marks)

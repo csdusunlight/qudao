@@ -81,9 +81,12 @@ def update_offiproject(request, id):
         ret['code'] = 2
         ret['msg'] = u'字段不合法'
         return JsonResponse(ret)
-    sub = SubscribeShip.objects.get(id=id)
-    sub.introduction=introduction
-    sub.price=price
-    sub.intrest=intrest
-    sub.save(update_fields=['introduction','price','intrest'])
-    sub.marks = marks
+    with transaction.atomic():
+        sub = SubscribeShip.objects.get(id=id)
+        sub.introduction=introduction
+        sub.price=price
+        sub.intrest=intrest
+        sub.save(update_fields=['introduction','price','intrest'])
+        sub.marks = marks
+    ret['code'] = 0
+    return JsonResponse(ret)

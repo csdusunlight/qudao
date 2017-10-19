@@ -39,6 +39,17 @@
     left: 32px;
     color: red;
 }
+.item.m-company {
+    position: relative;
+}
+.company-logo {
+    position: absolute;
+    top: 10px;
+    left: 630px;
+    width: 120px;
+    height: 50px;
+}
+
 .user-img {
     display: inline-block;
 }
@@ -141,14 +152,30 @@ canvas{width: 100%;border: 1px solid #000000;}
     width: 140px;
     height: 140px;
 }*/
-.imageBox .thumbBox {
+/*.imageBox .thumbBox {
     top: 58px;
     left: 58px;
     width: 122px;
     height: 122px;
-    /*border: none;*/
 }
 .cropped {
     left: 530px;
     height: 240px;
+}*/
+.mark {
+    position: relative;
+    display: inline-block;
+    margin: 4px 8px;
+    padding: 5px 6px;
+    font-size: 12px;
+    line-height: 1;
+    border-radius: 4px;
+    border: 1px solid #ffbe00;
+    background-color: #fff;
+    color: #ffbe00;
+    cursor: pointer;
+}
+.mark-box .mark.on {
+    background-color: #ffbe00;
+    color: #fff;
 }

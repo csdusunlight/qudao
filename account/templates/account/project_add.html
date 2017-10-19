@@ -34,15 +34,8 @@ $(function(){
     	        <h2 class="top-title add-title l">新建项目</h2>
     	    </div>
     	    <div class="user-info-box">
-        	    <div class="item">
+        	    <!--<div class="item">
         	        <span class="item__name">项目logo（非必选）</span>
-        	        <!--<div class="img-up">
-                        <input type="file" name="picfile" id="choose" accept="image/jpeg,image/png">
-                        <ul id="img_list" class="img-list">
-                            <li id="userimg" class="userimg"></li>
-                        </ul>
-                        <a id="upload">更换头像</a>
-                    </div>-->
                     <div class="uploadimg-container">
                           <div class="imageBox">
                             <div class="thumbBox"></div>
@@ -67,18 +60,13 @@ $(function(){
                               <span style="display: inline-block;margin-bottom: 84px;">*请先上传后进行裁切</span>
                           </div>
                     </div>
-        	    </div>
-        	    <!--<div class="item">
-                    <span class="item__name">皮肤</span>
-                    <ul class="skin">
-                    	<li class="skin__item m-01">皮肤1</li>
-                    	<li class="skin__item m-02">皮肤2</li>
-                    	<li class="skin__item m-03 on">皮肤3</li>
-                    	<li class="skin__item m-04">皮肤4</li>
-                    	<li class="skin__item m-05">皮肤5</li>
-                    	<li class="skin__item m-06">皮肤6</li>
-                    </ul>
-                </div>-->
+        	    </div>-->
+        	    <div class="item m-company">
+                    <span class="item__name">选择平台</span>
+                    <select class="company" name="choose_company">
+                    </select>
+                    <img class="company-logo" src="" alt="平台logo" />
+                </div>
                 <div class="item">
                     <span class="item__name">项目名称</span>
                     <input class="title item__txt" type="text" maxlength="8" placeholder="限8个字符" />
@@ -134,10 +122,14 @@ $(function(){
                     </div>
                 </div>
 
+            </div>
+            <div class="right-top clearfix">
+                <h2 class="top-title l">项目标签</h2>
+            </div>
+            <div class="mark-box"></div>
                 <div class="btnbox">
                     <a style="margin-left: -160px;" class="save btn m-green">保存</a>
                 </div>
-            </div>
 
         </div>
     </div>
@@ -184,7 +176,24 @@ $(function(){
                     console.log(dom);
                     $(dom).prop("checked", true);
                 }
-
+                $.ajax({        //获取标签数据
+                    url: "/restapi/marks/",
+                    dataType: "json",
+                    type: 'get',
+                    success: function(ret) {
+                        console.log(ret.results);
+                        var mark_detail = '';
+                        for (var i=0; i<ret.results.length; i++) {
+                            mark_detail += '<li data-id="'+ ret.results[i].id +'" class="mark"><span class="mark-name">'+ ret.results[i].name +'</span><span class="mark__del">x<span></li>'
+                        }
+                        $('.mark-box').html(mark_detail);
+                        
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR.responseText);
+                        alert("数据错误");
+                    }
+                });
             },
             error: function() {
                 alert("请检查网络连接");
@@ -195,7 +204,30 @@ $(function(){
         var type = 'post';
         $('.add-title').text('新建项目');
         console.log('xinjian');
+        $.ajax({        //获取标签数据
+            url: "/restapi/marks/",
+            dataType: "json",
+            type: 'get',
+            success: function(ret) {
+                console.log(ret.results);
+                var mark_detail = '';
+                for (var i=0; i<ret.results.length; i++) {
+                    mark_detail += '<li data-id="'+ ret.results[i].id +'" class="mark"><span class="mark-name">'+ ret.results[i].name +'</span><span class="mark__del">x<span></li>'
+                }
+                $('.mark-box').html(mark_detail);
+                
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+                alert("数据错误");
+            }
+        });
     }
+    
+    $('.mark-box').on('click', '.mark', function(){        //选择标签
+        $(this).toggleClass('on');
+    })
+    
     var img = '';
     var img2;
     var file_list = [];
@@ -208,7 +240,32 @@ $(function(){
     var file;
     var maxsize = 80 * 1024;
     $(function() {
-
+        
+        $.ajax({        //平台数据
+            url: "/restapi/company/",
+            dataType: "json",
+            type: 'get',
+            success: function(ret) {
+                console.log(ret.results);
+                var company_html = '<option data-logo="" value="0">--</option>';
+                for (var i=0; i<ret.results.length; i++) {
+                    company_html += '<option data-logo="'+ ret.results[i].logo +'" value="'+ ret.results[i].id +'">'+ ret.results[i].name +'</option>'
+                }
+                $('.company').html(company_html);
+                
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+                alert("数据错误");
+            }
+        });
+        $(".company").change(function(){
+            var opt=$(".company").val();
+            console.log(opt);
+            var option_dom = '.company option[value=' + opt + ']'
+            console.log($(option_dom).data('logo'));
+            $('.company-logo').attr('src', $(option_dom).data('logo'));
+        });
 
 //      var cropper = $('.imageBox').cropbox(options);
         $('#upload-file').on('change', function(){
@@ -361,7 +418,7 @@ $(function(){
             })
             var necessary_fields = need_arr.join(',');
             console.log(necessary_fields);
-
+            var company = $('.company').val();
             var title = $('.title').val();
             var strategy = $('.strategy').val();
             var introduction = $('.introduction').val();
@@ -370,7 +427,16 @@ $(function(){
             var investrange = $('.investrange').val();
             var intrest = $('.intrest').val();
             var is_futou = $('input[name="is_futou"]:checked').val();
-            console.log(is_futou);
+            var mark_str = '';
+            $('.mark.on').each(function(){
+                mark_str += $(this).data('id') + ',';
+            })
+            console.log(mark_str);
+            
+            if (company == 0){
+                alert('请选择项目平台');
+                return;
+            }
             if (!title || !strategy || !introduction || !cprice || !term || !investrange || !intrest || !is_futou) {
                 alert('填写项不能为空');
                 return;
@@ -390,7 +456,7 @@ $(function(){
                 console.log('add pic');
                 formdata.append("pic", file_list[0].blob, file_list[0].name);
             }
-
+            formdata.append('company', company);
             formdata.append('title', title);
             formdata.append('strategy', strategy);
             formdata.append('introduction', introduction);
@@ -400,6 +466,7 @@ $(function(){
             formdata.append('intrest', intrest);
             formdata.append('is_multisub_allowed', is_futou);
             formdata.append('necessary_fields', necessary_fields);
+            formdata.append('mark_str', mark_str);
 
           console.log(formdata);
             xhr.open(type, url);

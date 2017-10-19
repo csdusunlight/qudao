@@ -41,6 +41,19 @@
         background-color: rgba(0,0,0,0.3);
         cursor: pointer;
 	}
+	.mark-box2 .mark__del {
+	    display: none;
+	}
+	.mark-box2 .mark {
+	    border: 1px solid #ffbe00;
+	    background-color: #fff;
+	    color: #ffbe00;
+	    cursor: pointer;
+	}
+	.mark-box2 .mark.on {
+	    background-color: #ffbe00;
+	    color: #fff;
+	}
 </style>
 <script type="text/javascript" >
 $.ajaxSetup({
@@ -51,7 +64,7 @@ var data = '<table width="100%"><thead><tr><th>项目名称</th><th>项目来源
     '[results]<tr><td>{project_title}</td><td class="project_source">{project_source}</td><td data-price="{project_cprice}" class="price">{price}</td><td>{project_term}</td>'+
     '<td>{project_investrange}</td><td data-intrest="{project_intrest}" class="intrest">{intrest}</td><td><span data-isadd="{is_on}" class="home switch {is_on}" onclick="isadd(this,{id})"></span></td>'+
     '<td><span data-isadd="{is_recommend}" class="recom switch {is_recommend}" onclick="isRecommend(this,{id})"></span></td>'+
-    '<td data-isofficial="{project_is_official}" class="edit" onclick="edit(this, {id}, {project})">编辑</td></tr>[/results]'
+    '<td data-isofficial="{project_is_official}" data-marks="{marks}" class="edit" onclick="edit(this, {id}, {project})">编辑</td></tr>[/results]'
     + '</tbody></table>';
 var data2 = '<table width="100%"><thead><tr><th>项目名称</th><th>项目来源</th>'+
     '<th>客户指导价</th><th>标期</th><th>投资区间</th><th>预计年化</th><th width="14%">是否主页呈现</th><th width="14%">是否推荐</th><th>操作</th></tr></thead><tbody>'+
@@ -197,6 +210,7 @@ var project_id;
 var parent_dom;
 var mark_list;
 function edit(obj, id, project) {     //编辑调用函数
+    $('.mark-box2').html($('.mark-box').html());
 //  console.log(project_type);
     project_souse = project;
 //  console.log(project);
@@ -204,7 +218,15 @@ function edit(obj, id, project) {     //编辑调用函数
     parent_dom = $(obj).parent();
     console.log(project_id);
     var project_type = $(obj).data('isofficial');
-    console.log(project_type);
+    var marks = $(obj).data('marks');
+    $('.mark-box2 .mark-name').each(function(){
+        var i;
+        for (i in marks) {
+            if ($(this).text() == marks[i]) {
+                $(this).parent().addClass('on');
+            }
+        }
+    })
     $.ajax({
         url: '/restapi/sub/' + project_id + '/',
         dataType: "json",
@@ -275,10 +297,10 @@ $(function(){
             console.log(ret.results);
             var mark_detail = '';
             for (var i=0; i<ret.results.length; i++) {
-            	mark_detail += '<li data-id="'+ ret.results[i].id +'" class="mark">'+ ret.results[i].name +'<span class="mark__del">x<span></li>'
+            	mark_detail += '<li data-id="'+ ret.results[i].id +'" class="mark"><span class="mark-name">'+ ret.results[i].name +'</span><span class="mark__del">x<span></li>'
             }
             $('.mark-box').html(mark_detail);
-            $('.mark-box2').html(mark_detail);
+            
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(jqXHR.responseText);
@@ -286,7 +308,9 @@ $(function(){
         }
     });
     var mark_id;
+    var del_dom;
     $('.mark-box').on('click', '.mark__del', function(){        //监听删除标签按钮
+        del_dom = $(this).parent();
         mark_id = $(this).parent().data('id');
         console.log(mark_id);
         $('.popup.m-del-mark').addClass('in');
@@ -298,7 +322,35 @@ $(function(){
             type: 'delete',
             success: function(ret) {
                 alert('操作成功');
+                del_dom.hide();
                 $('.popup.m-del-mark').removeClass('in');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+                alert("数据错误");
+            }
+        });
+    })
+    $('.mark-box2').on('click', '.mark', function(){        //选择标签
+        $(this).toggleClass('on');
+    })
+    $('.add-mark').click(function(){        //新建标签
+        $('.popup.m-add-mark').addClass('in');
+    })
+    $('#add_mark').click(function(){
+        var markname = $('#markname').val();
+        $.ajax({        //获取标签数据
+            url: "/restapi/marks/",
+            dataType: "json",
+            type: 'post',
+            data: {
+                'user': {{user.id}},
+                'name': markname
+            },
+            success: function(ret) {
+                alert('操作成功');
+                $('.popup.m-add-mark').removeClass('in');
+                history.go(0);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText);
@@ -403,11 +455,19 @@ $(function(){
             }
         });
     })
+    
+    
     $('#edit_confirm').click(function(){     //确认修改官方项目
         var edit_detail = $('#edit_detail').val(),
             edit_price = $('#edit_price').val(),
             edit_intrest = $('#edit_intrest').val();
-            console.log(' project_id=' + project_id +' edit_detail=' + edit_detail +' edit_price=' + edit_price);
+        var mark_str = '';
+        
+        $('.mark.on').each(function(){
+            mark_str += $(this).data('id') + ',';
+        })
+        console.log(mark_str);
+        console.log(' project_id=' + project_id +' edit_detail=' + edit_detail +' edit_price=' + edit_price);
         $.ajax({
             url: '/restapi/sub/' + project_id + '/',
             dataType: "json",
@@ -415,7 +475,8 @@ $(function(){
             data: {
                 'introduction': edit_detail,
                 'price': edit_price,
-                'intrest': edit_intrest
+                'intrest': edit_intrest,
+                'marks': mark_str
             },
             success: function(ret) {
                 $.prompt({
@@ -504,9 +565,8 @@ $(function(){
                     <div>
                         <h4>项目标签：</h4>
                         <ul class="mark-box">
-                            <li data-id="1" class="mark">标签1</li>
-                            <li class="mark">标签2</li>
                         </ul>
+                        <span class="add-mark">添加标签</span>
                     </div>
                     <div>
                         <div class="table conitem" style="display: block;">
@@ -545,7 +605,10 @@ $(function(){
             <div class="popup__item"><span class="popup__itemname">项目简介</span><input id="edit_detail" type="text" /></div>
             <div class="popup__item"><span class="popup__itemname">价格</span><input id="edit_price" type="text" /></div>
             <div class="popup__item"><span class="popup__itemname">预计年化</span><input id="edit_intrest" type="text" /></div>
-            <div class="mark-box2"></div>
+            <div class="popup__item">
+                <span class="popup__itemname">项目标签：</span>               
+                <div class="mark-box2"></div>
+            </div>
         </div>
         <div class="popup__btnbox">
             <a id="edit_confirm" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
@@ -602,6 +665,20 @@ $(function(){
         <div class="popup__btnbox">
             <a class="btn m-green m-popup m-right" onclick="canclePopup(this)">取消</a>
             <a id="del_mark" class="btn m-green m-popup popup-confirm">确认</a>
+        </div>
+    </div>
+</div>
+<div class="popup m-add-mark">
+    <div class="popup__content" style="width: 600px;">
+        <div class="popup__top">
+            <h2 class="popup__title">添加标签</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+        </div>
+        <div class="popup__detail">
+            <div class="popup__item"><span class="popup__itemname">标签名称</span><input id="markname" type="text" /></div>
+        </div>
+        <div class="popup__btnbox">
+            <a class="btn m-green m-popup m-right" onclick="canclePopup(this)">取消</a>
+            <a id="add_mark" class="btn m-green m-popup popup-confirm">确认</a>
         </div>
     </div>
 </div>

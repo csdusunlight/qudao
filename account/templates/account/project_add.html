@@ -64,6 +64,10 @@ $(function(){
         	    <div class="item m-company">
                     <span class="item__name">选择平台</span>
                     <select class="company" name="choose_company">
+                        <option data-logo="" value="0">--</option>
+                        {% for item in companies %}
+                        <option data-logo="{{item.logo.url}}" value="{{item.id}}">{{item.name}}</option>
+                      {%endfor%}
                     </select>
                     <img class="company-logo" src="" alt="平台logo" />
                 </div>
@@ -151,6 +155,7 @@ $(function(){
     var project_id = "{{id}}";
     var company_id;
     if (project_id) {
+        $('.company').attr('disabled', true);
         var url = '/account/create_update_selfproject/' + project_id + '/';
         var type = 'post';
         $('.add-title').text('修改项目');
@@ -161,6 +166,11 @@ $(function(){
             type:"get",
             success: function(ret) {
                 company_id = ret.company;
+                var opt_dom = 'option[value="'+ ret.company +'"]';
+                console.log($(opt_dom).data('logo'));
+                $(opt_dom).prop("selected", true);
+                $('.company-logo').attr('src', $(opt_dom).data('logo'));
+                
                 options.imgSrc = ret.pic;
                 cropper = $('.imageBox').cropbox(options);
 
@@ -259,24 +269,24 @@ $(function(){
             }
         })
         
-        $.ajax({        //平台数据
-            url: "/restapi/company/",
-            dataType: "json",
-            type: 'get',
-            success: function(ret) {
-                console.log(ret.results);
-                var company_html = '<option data-logo="" value="0">--</option>';
-                for (var i=0; i<ret.results.length; i++) {
-                    company_html += '<option data-logo="'+ ret.results[i].logo +'" value="'+ ret.results[i].id +'">'+ ret.results[i].name +'</option>'
-                }
-                $('.company').html(company_html);
-                
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText);
-                alert("数据错误");
-            }
-        });
+//      $.ajax({        //平台数据
+//          url: "/restapi/company/",
+//          dataType: "json",
+//          type: 'get',
+//          success: function(ret) {
+//              console.log(ret.results);
+//              var company_html = '<option data-logo="" value="0">--</option>';
+//              for (var i=0; i<ret.results.length; i++) {
+//                  company_html += '<option data-logo="'+ ret.results[i].logo +'" value="'+ ret.results[i].id +'">'+ ret.results[i].name +'</option>'
+//              }
+//              $('.company').html(company_html);
+//              
+//          },
+//          error: function(jqXHR, textStatus, errorThrown) {
+//              console.log(jqXHR.responseText);
+//              alert("数据错误");
+//          }
+//      });
         $(".company").change(function(){
             var opt=$(".company").val();
             console.log(opt);

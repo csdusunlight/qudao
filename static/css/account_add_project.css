@@ -162,6 +162,10 @@ canvas{width: 100%;border: 1px solid #000000;}
     left: 530px;
     height: 240px;
 }*/
+.mark-box {
+    padding: 0 0 10px 40px;
+    background-color: #fff;
+}
 .mark {
     position: relative;
     display: inline-block;

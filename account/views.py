@@ -37,7 +37,7 @@ from account.tools import send_mail, get_client_ip
 from django.db import connection, transaction
 from wafuli.data import BANK
 from wafuli.models import TransList, WithdrawLog, Project, SubscribeShip,\
-    InvestLog, Announcement
+    InvestLog, Announcement, Mark
 from public.tools import login_required_ajax
 from wafuli.tools import saveImgAndGenerateUrl
 from decimal import Decimal
@@ -850,8 +850,12 @@ def admin_investlog(request, id):
 @csrf_exempt
 @login_required_ajax
 def project_add(request, id=None):
-    if id is None:
-        return render(request, 'account/project_add.html')
-    else:
+    marks = Mark.objects.filter(user=request.user)
+    kwargs = {'marks':marks}
+    checked_marks = []
+    if not id is None:
         id = int(id)
-        return render(request, 'account/project_add.html', {'id': id})
+        sub = SubscribeShip.objects.get(project_id=id, user=request.user)
+        checked_marks = [ x.id for x in sub.marks.all() ]
+    kwargs.update(checked_marks=checked_marks)
+    return render(request, 'account/project_add.html', kwargs)

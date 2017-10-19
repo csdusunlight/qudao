@@ -469,14 +469,14 @@ $(function(){
         console.log(mark_str);
         console.log(' project_id=' + project_id +' edit_detail=' + edit_detail +' edit_price=' + edit_price);
         $.ajax({
-            url: '/restapi/sub/' + project_id + '/',
+            url: '/account/update_offiproject/' + project_id + '/',
             dataType: "json",
             type: 'put',
             data: {
                 'introduction': edit_detail,
                 'price': edit_price,
                 'intrest': edit_intrest,
-                'marks': mark_str
+                'necessary_fields': mark_str
             },
             success: function(ret) {
                 $.prompt({

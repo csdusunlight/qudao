@@ -37,7 +37,7 @@ from account.tools import send_mail, get_client_ip
 from django.db import connection, transaction
 from wafuli.data import BANK
 from wafuli.models import TransList, WithdrawLog, Project, SubscribeShip,\
-    InvestLog, Announcement, Mark
+    InvestLog, Announcement, Mark, Company
 from public.tools import login_required_ajax
 from wafuli.tools import saveImgAndGenerateUrl
 from decimal import Decimal
@@ -859,4 +859,6 @@ def project_add(request, id=None):
         sub = SubscribeShip.objects.get(project_id=id, user=request.user)
         checked_marks = [ x.id for x in sub.marks.all() ]
     kwargs.update(checked_marks=checked_marks)
+    companies = Company.objects.all()
+    kwargs.update(companies=companies)
     return render(request, 'account/project_add.html', kwargs)

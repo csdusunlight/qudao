@@ -149,16 +149,18 @@ $(function(){
     }
     var cropper;
     var project_id = "{{id}}";
+    var company_id;
     if (project_id) {
-        var url = '/restapi/projects/' + project_id + '/';
-        var type = 'put';
+        var url = '/account/create_update_selfproject/' + project_id + '/';
+        var type = 'post';
         $('.add-title').text('修改项目');
         console.log(project_id)
         $.ajax({
-            url: url,
+            url: '/restapi/projects/' + project_id + '/',
             dataType: "json",
             type:"get",
             success: function(ret) {
+                company_id = ret.company;
                 options.imgSrc = ret.pic;
                 cropper = $('.imageBox').cropbox(options);
 
@@ -205,7 +207,7 @@ $(function(){
             }
         });
     } else {
-        var url = '/restapi/projects/';
+        var url = '/account/create_update_selfproject/';
         var type = 'post';
         $('.add-title').text('新建项目');
         console.log('xinjian');
@@ -463,39 +465,69 @@ $(function(){
                 return;
             }
 
-
-            var xhr = new XMLHttpRequest();
-            var formdata = new FormData();
-
-
-            if (file_list.length!=0){
-                console.log('add pic');
-                formdata.append("pic", file_list[0].blob, file_list[0].name);
-            }
-            formdata.append('company', company);
-            formdata.append('title', title);
-            formdata.append('strategy', strategy);
-            formdata.append('introduction', introduction);
-            formdata.append('cprice', cprice);
-            formdata.append('term', term);
-            formdata.append('investrange', investrange);
-            formdata.append('intrest', intrest);
-            formdata.append('is_multisub_allowed', is_futou);
-            formdata.append('necessary_fields', necessary_fields);
-            formdata.append('mark_str', mark_str);
-
-          console.log(formdata);
-            xhr.open(type, url);
-            xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-            xhr.onreadystatechange = function() {
-                $(".img-mask").css("display", "none");
-                if(xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201)) {
-                    alert("操作成功!");
-                    window.location.href="/account/project?tab=2"
+            $.ajax({        //获取标签数据
+                url: url,
+                dataType: "json",
+                type: 'post',
+                data: {
+                    'company' : company,
+                    'title' : title,
+                    'strategy' : strategy,
+                    'introduction' : introduction,
+                    'cprice' : cprice,
+                    'term' : term,
+                    'investrange' : investrange,
+                    'intrest' : intrest,
+                    'is_multisub_allowed' : is_futou,
+                    'necessary_fields' : necessary_fields,
+                    'marks' : mark_str,
+                },
+                success: function(ret) {
+                    if(ret.code == 0) {
+                        alert("操作成功!");
+//                  window.location.href="/account/project?tab=2"
+                    } else {
+                        console.log(ret.msg)
+                    }
+                    
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
+                    alert("数据错误");
                 }
-            };
-
-            xhr.send(formdata);
+            });
+//          var xhr = new XMLHttpRequest();
+//          var formdata = new FormData();
+//
+//
+//          if (file_list.length!=0){
+//              console.log('add pic');
+//              formdata.append("pic", file_list[0].blob, file_list[0].name);
+//          }
+//          formdata.append('company', company);
+//          formdata.append('title', title);
+//          formdata.append('strategy', strategy);
+//          formdata.append('introduction', introduction);
+//          formdata.append('cprice', cprice);
+//          formdata.append('term', term);
+//          formdata.append('investrange', investrange);
+//          formdata.append('intrest', intrest);
+//          formdata.append('is_multisub_allowed', is_futou);
+//          formdata.append('necessary_fields', necessary_fields);
+//          formdata.append('mark_str', mark_str);
+//
+//        console.log(formdata);
+//          xhr.open(type, url);
+//          xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+//          xhr.onreadystatechange = function() {
+//              $(".img-mask").css("display", "none");
+//              if(xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 201)) {
+//                  alert("操作成功!");
+//                  window.location.href="/account/project?tab=2"
+//              }
+//          };
+//
+//          xhr.send(formdata);
         }
         /**
          * 获取blob对象的兼容性写法

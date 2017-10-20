@@ -266,7 +266,7 @@ def export_investlog(request):
     zhifubao = request.GET.get("zhifubao", None)
     if zhifubao:
         item_list = item_list.filter(zhifubao__contains=zhifubao)
-    if not state:
+    if state:
         item_list = item_list.filter(audit_state=state)
     item_list = item_list.select_related('project').order_by('submit_time')
     data = []

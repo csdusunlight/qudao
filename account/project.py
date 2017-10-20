@@ -91,7 +91,7 @@ def update_offiproject(request, id):
         sub.price=price
         sub.intrest=intrest
         sub.shortprice = shortprice
-        sub.save(update_fields=['introduction','price','intrest'])
+        sub.save(update_fields=['introduction','price','intrest','shortprice'])
         sub.marks = marks
     ret['code'] = 0
     return JsonResponse(ret)

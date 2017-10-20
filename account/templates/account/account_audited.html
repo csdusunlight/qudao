@@ -54,10 +54,15 @@
                 <span class="search__name">项目名称：</span>
                 <input type="text" id="proj_name" />
             </div>
-            <div class="search__item">
+            <div class="search__item" style="display: none;">
                 <span class="search__name">投资日期：</span>
                 <div class="time-input-box"><input type="text" class="date_picker time-input" id="invest_date0" /></div> ——
                 <div class="time-input-box"><input type="text" class="date_picker time-input" id="invest_date1" /></div>
+            </div>
+            <div class="search__item">
+                <span class="search__name">提交日期：</span>
+                <div class="time-input-box"><input type="text" class="date_picker time-input" id="submit_date0" /></div> ——
+                <div class="time-input-box"><input type="text" class="date_picker time-input" id="submit_date1" /></div>
             </div>
             <div class="search__item">
                 <span class="search__name">提交手机号：</span>
@@ -67,14 +72,11 @@
                 <span class="search__name">收款信息：</span>
                 <input type="text" id="zhifubao" />
             </div>
-            <div class="search__item">
-                <span class="search__name">提交时间：</span>
-                <div class="time-input-box"><input type="text" class="date_picker time-input" id="submit_date0" /></div> ——
-                <div class="time-input-box"><input type="text" class="date_picker time-input" id="submit_date1" /></div>
-            </div>
+            
             <div class="search__item">
                 <span class="search__name">审核状态：</span>
                 <select name="select_status" id="state" onchange="$('#search').click()">
+                    <option value="">全部</option>
                     <option value="1">未审核</option>
                     <option value="0">已通过</option>
                     <option value="2">已拒绝</option>
@@ -131,6 +133,7 @@
             <div class="search__item">
                 <span class="search__name">审核状态：</span>
                 <select name="select_status" id="state_02" onchange="$('#search_02').click()">
+                    <option value="">全部</option>
                     <option value="1">未审核</option>
                     <option value="0">已通过</option>
                     <option value="2">已拒绝</option>
@@ -336,12 +339,18 @@
 <script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
 <script type="text/javascript" src="{% static 'js/add-img.js' %}"></script>
 <script type="text/javascript">
-    
+
+//  全部
+    var data = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
+        '<th>投资金额</th><th>投资标期</th><th>审核状态</th><th>结算金额</th><th>返现金额</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{audit_state_des}</td><td>{settle_amount}</td>'+
+        '<td>{return_amount}</td><td>{zhifubao}</td><td>{other_remark}</td></tr>[/results]</table>';
 //  未审核
-    var data1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th><th>提交时间</th><th style="width:130px">操作</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td data-remark="{remark}">{other_remark}</td><td class="submit-time">{submit_time}</td>' +
+    var data1 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td data-remark="{remark}">{other_remark}</td>' +
 //      '<td id="item_{id}"><a class="fyin" onclick="removeData(this,{id})">删除' +
 //      '</a>│<a class="jion-s" onclick="editData(this,{id})">编辑' +
 //      '</a>│<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
@@ -352,27 +361,32 @@
         '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span></div></td>'+
         '</tr>[/results]</table>';
 //  已通过
-    var data0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
-
-        '<th>投资金额</th><th>投资标期</th><th>审核时间</th><th>结算金额</th><th>返现金额</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th><th>提交时间</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{audit_date}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{zhifubao}</td><td>{other_remark}</td><td class="submit-time">{submit_time}</td></tr>[/results]</table>';
+    var data0 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
+        '<th>投资金额</th><th>投资标期</th><th>审核时间</th><th>结算金额</th><th>返现金额</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{audit_date}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{zhifubao}</td><td>{other_remark}</td></tr>[/results]</table>';
 //  已拒绝
-    var data2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>拒绝原因</th><th class="w-remark">备注及其他</th><th>提交时间</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{audit_reason}</td><td>{other_remark}</td><td class="submit-time">{submit_time}</td></tr>[/results]</table>';
+    var data2 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
+        '<th>投资金额</th><th>投资标期</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
 //  已删除
-    var data3 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><td>{invest_term}</td>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-remark">备注及其他</th><th>提交时间</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+    var data3 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><td>{invest_term}</td>' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{other_remark}</td></tr>[/results]</table>';
-      
+    
+//  全部
+    var data_user = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
+        '<th>投资金额</th><th>投资标期</th><th>审核状态</th><th>结算金额</th><th>返现金额</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{audit_state_des}</td><td>{settle_amount}</td>'+
+        '<td>{return_amount}</td><td>{zhifubao}</td><td>{other_remark}</td></tr>[/results]</table>';    
 //  未审核
-    var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th><th>提交时间</th><th>操作</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td data-remark="{remark}">{other_remark}</td><td class="submit-time">{submit_time}</td>' +
+    var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th><th>操作</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td data-remark="{remark}">{other_remark}</td>' +
 //      '<td id="item_{id}"><a class="fyin" onclick="removeData_02(this,{id})">删除' +
 //      '</a>│<a class="jion-s" onclick="editData_02(this,{id})">编辑'+
 //      '</a>│<a class="jion-s" onclick="pass_02(this,{id})">返现'+
@@ -386,20 +400,20 @@
         '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span></div></td>'+
         '</tr>[/results]</table>';
 //  已通过
-    var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>结算金额</th><th>返现金额</th><th class="w-remark">备注及其他</th><th>提交时间</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{settle_amount}</td><td>{return_amount}</td><td data-remark="{remark}">{other_remark}</td><td class="submit-time">{submit_time}</td></tr>[/results]</table>';
+    var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>结算金额</th><th>返现金额</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{settle_amount}</td><td>{return_amount}</td><td data-remark="{remark}">{other_remark}</td></tr>[/results]</table>';
 //  已拒绝
-    var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>拒绝原因</th><th class="w-remark">备注及其他</th><th>提交时间</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{audit_reason}</td><td>{other_remark}</td><td class="submit-time">{submit_time}</td></tr>[/results]</table>';
+    var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
 //  已删除
-    var data_user4 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th><th>提交时间</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{other_remark}</td><td class="submit-time">{submit_time}</td></tr>[/results]</table>';
+    var data_user4 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{other_remark}</td></tr>[/results]</table>';
 
         var url = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=true&user={{user.id}}";
         var url2 = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=false&user={{user.id}}";
@@ -418,19 +432,19 @@
             })
         }
         $("#pagedata").ajaxPage({
-            url: url + '&audit_state=1',
+            url: url,
             pageId: $("#page"),
             pageSize: 10,
             run: true,
-            content: data1,
+            content: data,
             complete:pagecallback,
         });
         $("#pagedata2").ajaxPage({
-            url: url2 + '&audit_state=1',
+            url: url2,
             pageId: $("#page2"),
             pageSize: 10,
             run: true,
-            content: data_user1,
+            content: data_user,
             complete:pagecallback,
         });
         
@@ -454,37 +468,59 @@
         var project_id;
         var edit_parent;
         function editData(obj, id) {
-            $('.popup.m-edit-proj').addClass('in');
             project_id = id;
-            edit_parent = $(obj).parent().parent().parent();
-            var parent_dom = $(edit_parent);
-            console.log(parent_dom);
-            var children0 = parent_dom.find("td").eq(0).text(),
-                children1 = parent_dom.find("td").eq(1).text(),
-                children2 = parent_dom.find("td").eq(2).text(),
-                children3 = parent_dom.find("td").eq(3).text(),
-                children4 = parent_dom.find("td").eq(4).text(),
-                children5 = parent_dom.find("td").eq(5).text(),
-                children6 = parent_dom.find("td").eq(6).text(),
-                children7 = parent_dom.find("td").eq(7).data('remark');
-                                console.log(children0+", "+children1+", "+children2+", "+children3+", "+children4+", "+children5+", ");
-            var option_val;
-            var options = $(".project option");
-            for(var i = 0; i < options.length; i++) {
-                if($(options)[i].text == children0) {
-                    option_val = options[i].value;
+            $.ajax({
+                url: "/restapi/investlogs/" + project_id + "/",
+                dataType: "json",
+                type: 'get',
+                success: function(ret) {
+                    $(".project").val(ret.project);
+                    $(".date").val(ret.invest_date);
+                    $(".telnum").val(ret.invest_mobile);
+                    $(".zfbname").val(ret.invest_name);
+                    $(".money").val(ret.invest_amount);
+                    $(".term").val(ret.invest_term);
+                    $(".zfb").val(ret.zhifubao);
+                    $(".remark").val(ret.remark);
+                    $('.popup.m-edit-proj').addClass('in');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
+                    alert(jqXHR.responseText);
                 }
-
-            }
-            console.log(option_val);
-            $(".project").val(option_val);
-            $(".date").val(children1);
-            $(".telnum").val(children2);
-            $(".zfbname").val(children3);
-            $(".money").val(children4);
-            $(".term").val(children5);
-            $(".zfb").val(children6);
-            $(".remark").val(children7);
+            });
+            
+//          $('.popup.m-edit-proj').addClass('in');
+//          project_id = id;
+//          edit_parent = $(obj).parent().parent().parent();
+//          var parent_dom = $(edit_parent);
+//          console.log(parent_dom);
+//          var children0 = parent_dom.find("td").eq(0).text(),
+//              children1 = parent_dom.find("td").eq(1).text(),
+//              children2 = parent_dom.find("td").eq(2).text(),
+//              children3 = parent_dom.find("td").eq(3).text(),
+//              children4 = parent_dom.find("td").eq(4).text(),
+//              children5 = parent_dom.find("td").eq(5).text(),
+//              children6 = parent_dom.find("td").eq(6).text(),
+//              children7 = parent_dom.find("td").eq(7).data('remark');
+//                              console.log(children0+", "+children1+", "+children2+", "+children3+", "+children4+", "+children5+", ");
+//          var option_val;
+//          var options = $(".project option");
+//          for(var i = 0; i < options.length; i++) {
+//              if($(options)[i].text == children0) {
+//                  option_val = options[i].value;
+//              }
+//
+//          }
+//          console.log(option_val);
+//          $(".project").val(option_val);
+//          $(".date").val(children1);
+//          $(".telnum").val(children2);
+//          $(".zfbname").val(children3);
+//          $(".money").val(children4);
+//          $(".term").val(children5);
+//          $(".zfb").val(children6);
+//          $(".remark").val(children7);
 
         }
 
@@ -669,38 +705,27 @@
         var project_id_02;
         var edit_parent_02;
         function editData_02(obj, id) {
-            $('.popup.m-edit-proj_02').addClass('in');
             project_id = id;
-            edit_parent_02 = $(obj).parent().parent().parent();
-            var parent_dom = $(edit_parent_02);
-            console.log(parent_dom);
-            var children0 = parent_dom.find("td").eq(0).text(),
-                children1 = parent_dom.find("td").eq(1).text(),
-                children2 = parent_dom.find("td").eq(2).text(),
-                children3 = parent_dom.find("td").eq(3).text(),
-                children4 = parent_dom.find("td").eq(4).text(),
-                children5 = parent_dom.find("td").eq(5).text(),
-                children6 = parent_dom.find("td").eq(6).text(),
-                children7 = parent_dom.find("td").eq(7).data('remark');
-                                console.log(children0+", "+children1+", "+children2+", "+children3+", "+children4+", "+children5+", "+children6+", "+children7+", ");
-            var option_val;
-            var options = $(".project_02 option");
-            for(var i = 0; i < options.length; i++) {
-                if($(options)[i].text == children0) {
-                    option_val = options[i].value;
+            $.ajax({
+                url: "/restapi/investlogs/" + project_id + "/",
+                dataType: "json",
+                type: 'get',
+                success: function(ret) {
+                    $(".project_02").val(ret.project);
+                    $(".date_02").val(ret.invest_date);
+                    $(".telnum_02").val(ret.invest_mobile);
+                    $(".zfbname_02").val(ret.invest_name);
+                    $(".money_02").val(ret.invest_amount);
+                    $(".term_02").val(ret.invest_term);
+                    $(".zfb_02").val(ret.zhifubao);
+                    $(".remark_02").val(ret.remark);
+                    $('.popup.m-edit-proj_02').addClass('in');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
+                    alert(jqXHR.responseText);
                 }
-
-            }
-            console.log(option_val);
-            $(".project_02").val(option_val);
-            $(".date_02").val(children1);
-            $(".telnum_02").val(children2);
-            $(".zfbname_02").val(children3);
-            $(".money_02").val(children4);
-            $(".term_02").val(children5);
-            $(".zfb_02").val(children6);
-            $(".remark_02").val(children7);
-
+            });
         }
 
         $("#confirm_edit_02").click(function() {
@@ -835,14 +860,14 @@
                     newurl += "&audit_state=" + state;
                 }
                 
-                var search_data = data0;
-                if(state == '1') {
+                var search_data = data;
+                if(state == '0') {
+                    search_data = data0;
+                } else if(state == '1') {
                     search_data = data1;
-                }
-                if(state == '2') {
+                } else if(state == '2') {
                     search_data = data2;
-                }
-                if(state == '3') {
+                } else if(state == '3') {
                     search_data = data3;
                 }
                 
@@ -868,14 +893,14 @@
                     zhifubao = $("#zhifubao").val(),
                     state = $("#state").val();
                     
-                if(!invest_date0 || !invest_date1) {
-                    alert('请先选择投资日期区间，再进行导出');
+                if(!submit_date0 || !submit_date1) {
+                    alert('请先选择提交日期区间，再进行导出');
                     return;
                 }
-                var date_diff = DateDiff(invest_date1,invest_date0);
+                var date_diff = DateDiff(submit_date1,submit_date0);
                 console.log(date_diff);
                 if (date_diff<0 || date_diff>5) {
-                	alert('选择的投资日期区间不能超过5天');
+                	alert('选择的提交日期区间不能超过5天');
                 	return;
                 }
                 
@@ -975,14 +1000,14 @@
                     newurl += "&audit_state=" + state;
                 }
                 
-                var search_data = data_user0;
-                if(state == '1') {
+                var search_data = data_user;
+                if(state == '0') {
+                    search_data = data_user0;
+                } else if(state == '1') {
                     search_data = data_user1;
-                }
-                if(state == '2') {
+                } else if(state == '2') {
                     search_data = data_user2;
-                }
-                if(state == '3') {
+                } else if(state == '3') {
                     search_data = data_user3;
                 }
                 

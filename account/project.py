@@ -23,6 +23,7 @@ def create_update_selfproject(request, id=None):
     strategy = request.POST.get('strategy', '')
     introduction = request.POST.get('introduction', '')
     cprice = request.POST.get('cprice', '')
+    shortprice = request.POST.get('shortprice', '')
     term = request.POST.get('term', '')
     investrange = request.POST.get('investrange', '')
     intrest = request.POST.get('intrest', '')
@@ -31,7 +32,7 @@ def create_update_selfproject(request, id=None):
     marks = request.POST.get('marks', '')
     company = request.POST.get('company', '')
     if not (title and strategy and introduction and cprice and term and investrange and intrest
-            and necessary_fields and company):
+            and necessary_fields and company and shortprice):
         ret['code'] = 1
         ret['msg'] = u'缺少必填字段'
         return JsonResponse(ret)
@@ -46,11 +47,11 @@ def create_update_selfproject(request, id=None):
     kwargs = {}
     if id is None:
         kwargs.update(user_id=user.id, title=title,strategy=strategy, introduction=introduction,
-                               cprice=cprice, term=term,investrange=investrange, intrest=intrest,
+                               cprice=cprice, shortprice=shortprice, term=term,investrange=investrange, intrest=intrest,
                                is_multisub_allowed=is_multisub_allowed, necessary_fields=necessary_fields
                                ,company_id=company, state='10' )
     else:
-        kwargs.update(title=title,strategy=strategy, introduction=introduction,
+        kwargs.update(title=title,strategy=strategy, introduction=introduction, shortprice=shortprice,
                         cprice=cprice, term=term,investrange=investrange, intrest=intrest,
                         is_multisub_allowed=is_multisub_allowed, necessary_fields=necessary_fields)
         
@@ -71,7 +72,8 @@ def update_offiproject(request, id):
     price = request.POST.get('price', '')
     intrest = request.POST.get('intrest', '')
     marks = request.POST.get('marks', '')
-    if not (introduction and price and intrest):
+    shortprice = request.POST.get('shortprice', '')
+    if not (introduction and price and intrest and shortprice):
         ret['code'] = 1
         ret['msg'] = u'缺少必填字段'
         return JsonResponse(ret)
@@ -88,6 +90,7 @@ def update_offiproject(request, id):
         sub.introduction=introduction
         sub.price=price
         sub.intrest=intrest
+        sub.shortprice = shortprice
         sub.save(update_fields=['introduction','price','intrest'])
         sub.marks = marks
     ret['code'] = 0

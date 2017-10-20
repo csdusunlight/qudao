@@ -39,12 +39,11 @@ class InvestLogSerializer(serializers.ModelSerializer):
     admin_user = serializers.CharField(source='admin_user.username', read_only=True) 
     admin_user = serializers.CharField(source='admin_user.username', read_only=True)
     other_remark = serializers.CharField(source='get_other_and_remark', read_only=True)
-    audit_date = serializers.CharField(source='get_audit_date', read_only=True)
     submit_type_des = serializers.CharField(source='get_submit_type_display', read_only=True)
     class Meta:
         model = InvestLog
         fields = '__all__'
-        read_only_fields = ('audit_time','submit_time','user','audit_state','qq_number','qq_name','user_level',
+        read_only_fields = ('audit_time','submit_time','user','qq_number','qq_name','user_level',
                              'user_mobile', 'settle_amount','return_amount', "admin_user", "is_official")
 class TransListSerializer(serializers.ModelSerializer):
     mobile = serializers.CharField(source='user.mobile', read_only=True)
@@ -75,6 +74,7 @@ class SubscribeShipSerializer(serializers.ModelSerializer):
     project_price02 = serializers.CharField(source='project.price02', read_only=True)
     project_price03 = serializers.CharField(source='project.price03', read_only=True)
     project_cprice = serializers.CharField(source='project.cprice', read_only=True)
+    project_shortprice = serializers.CharField(source='project.shortprice', read_only=True)
     project_investrange = serializers.CharField(source='project.investrange', read_only=True)
     project_intrest = serializers.CharField(source='project.intrest', read_only=True)
     project_term = serializers.CharField(source='project.term', read_only=True)

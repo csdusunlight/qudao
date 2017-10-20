@@ -220,6 +220,11 @@ class MarkList(BaseViewMixin, generics.ListCreateAPIView):
         return Mark.objects.filter(user=self.request.user)
     serializer_class = MarkSerializer
     pagination_class = MyPageNumberPagination
+    def perform_create(self, serializer):
+        user = serializer.validated_data['user']
+        if Mark.objects.filter(user=user).count() >= 7:
+            return ValidationError({'detail':u"自建标签数目最多为7"})
+        generics.ListCreateAPIView.perform_create(self, serializer)
 class MarkDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return Mark.objects.filter(user=self.request.user)

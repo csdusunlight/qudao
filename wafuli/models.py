@@ -80,6 +80,7 @@ class Project(models.Model):
     price02 = models.CharField(u"二级代理价格",max_length=20, blank=True)
     price03 = models.CharField(u"三级代理价格",max_length=20, blank=True)
     cprice = models.CharField(u"客户指导价",max_length=20)
+    shortprice = models.CharField(u"客户指导价简洁展示",max_length=20, help_text=u"格式必须为投资xxxx返xx，如投资1000返10")
     term = models.CharField(u"标期长度", max_length=20)
     investrange = models.CharField(u"投资额度区间", max_length=20)
     intrest = models.CharField(u"预期年化", max_length=20)
@@ -131,6 +132,7 @@ class SubscribeShip(models.Model):
     introduction = models.CharField(u"项目简介",max_length=100)
     myprice = models.CharField(u"保留字段",max_length=20)
     price = models.CharField(u"客户价",max_length=20)
+    shortprice = models.CharField(u"客户价简洁展示",max_length=20,)
     is_on = models.BooleanField(u"是否在主页显示",default=True)
     is_recommend = models.BooleanField(u"是否放到推荐位置",default=False)
     intrest = models.CharField(u"预期年化", max_length=20)
@@ -182,7 +184,7 @@ class InvestLog(models.Model):
     def __unicode__(self):
         return u"来自渠道用户：%s 的投资数据提交：%s" % (self.user, self.invest_amount)
     class Meta:
-        ordering = ["submit_time",]
+        ordering = ["-submit_time",]
     def get_other_and_remark(self):
         ret = []
         if self.qq_number:
@@ -192,8 +194,6 @@ class InvestLog(models.Model):
         if self.remark:
             ret.append(u"备注：" + self.remark)
         return '|'.join(ret)
-    def get_audit_date(self):
-        return self.audit_time.strftime("%Y-%m-%d") if self.audit_time else ''
 
 STATE = (
     ('0', u'置顶'),

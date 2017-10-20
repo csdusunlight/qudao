@@ -24,6 +24,7 @@ from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 import time
 from decimal import Decimal
+from datetime import timedelta
 logger = logging.getLogger("wafuli")
 
 @login_required
@@ -229,10 +230,12 @@ def export_investlog(request):
     if submittime_0 and submittime_1:
         s = datetime.datetime.strptime(submittime_0,'%Y-%m-%d')
         e = datetime.datetime.strptime(submittime_1,'%Y-%m-%d')
+        e += timedelta(days=1)
         item_list = item_list.filter(submit_time__range=(s,e))
     if audittime_0 and audittime_1:
         s = datetime.datetime.strptime(audittime_0,'%Y-%m-%d')
         e = datetime.datetime.strptime(audittime_1,'%Y-%m-%d')
+        e += timedelta(days=1)
         item_list = item_list.filter(audit_time__range=(s,e))
     qq_number = request.GET.get("qq_number", None)
     if qq_number:

@@ -301,11 +301,19 @@ $(function(){
 //      });
         $(".company").change(function(){
             var opt=$(".company").val();
+            console.log('change');
             console.log(opt);
             var option_dom = '.company option[value=' + opt + ']'
             console.log($(option_dom).data('logo'));
             $('.company-logo').attr('src', $(option_dom).data('logo'));
         });
+//      searchable-select-item selected
+        $('.searchable-select-item').click(function() {
+            var value = $(this).data('value');
+            console.log(value);
+            var option_dom = 'option[value="'+ value +'"]';
+            $('.company-logo').attr('src', $(option_dom).data('logo'));
+        })
 
 //      var cropper = $('.imageBox').cropbox(options);
         $('#upload-file').on('change', function(){

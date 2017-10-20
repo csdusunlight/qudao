@@ -497,7 +497,7 @@ $(function(){
             alert('填写项不能为空');
             return;
         }
-        console.log(' project_id=' + project_id +' edit_detail=' + edit_detail +' edit_price=' + edit_price +' less_price=' + less_price);
+        console.log(' project_id=' + project_id +' edit_detail=' + edit_detail +' edit_price=' + edit_price +' shortprice=' + shortprice);
         $.ajax({
             url: '/account/update_offiproject/' + project_id + '/',
             dataType: "json",

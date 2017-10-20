@@ -57,14 +57,14 @@
                     </div>
                     <ul class="recommend__itembox">
                     {% for recom in recom_projects %}
-                            <li class="recommend__item">
+                            <li class="recommend__item"><a href="{{recom.strategy}}" target="_blank">
                                 <img class="recommend__img" src="{{recom.pic.url}}" alt="" />
-                                <h4 class="recommend__name oneline">{{recom.title}}</h4>
+                                <!--<h4 class="recommend__name oneline">{{recom.title}}</h4>
                                 <p class="recommend__detail oneline">{{recom.introduction}}</p>
                                 <div class="btn-box m-account">
                                     <a href="{{recom.strategy}}" target="_blank" class="btn m-green">查看攻略</a>
-                                </div>
-                            </li>
+                                </div>-->
+                            </a></li>
                     {%endfor%}
                     </ul>
                 </div>

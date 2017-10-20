@@ -228,7 +228,10 @@
     display: block;
     margin: 10px auto 0;
     width: 120px;
-    height: 120px;
+    height: 50px;
+}
+.recommend__img:hover {
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
 }
 .recommend__name {
     margin: 20px 0 10px 0;

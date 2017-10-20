@@ -9,8 +9,10 @@
 <link rel="stylesheet" href="{% static 'css/cropbox.css' %}" type="text/css" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account_add_project.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.searchableSelect.css' %}" />
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/cropbox.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.searchableSelect.js' %}"></script>
 <!--<script type="text/javascript" src="{% static 'js/page.js' %}"></script>-->
 <script type="text/javascript">
 
@@ -69,7 +71,7 @@ $(function(){
                         <option data-logo="{{item.logo.url}}" value="{{item.id}}">{{item.name}}</option>
                       {%endfor%}
                     </select>
-                    <img class="company-logo" src="" alt="平台logo" />
+                    <img class="company-logo" src="" alt="" />
                 </div>
                 <div class="item">
                     <span class="item__name">项目名称</span>
@@ -225,6 +227,7 @@ $(function(){
         var url = '/account/create_update_selfproject/';
         var type = 'post';
         $('.add-title').text('新建项目');
+        $('.company').searchableSelect();
         console.log('xinjian');
 //      $.ajax({        //获取标签数据
 //          url: "/restapi/marks/",

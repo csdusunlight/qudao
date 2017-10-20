@@ -244,6 +244,11 @@ function edit(obj, id, project) {     //编辑调用函数
                 } else{
                     $('#edit_price').val(ret.price);
                 }
+                if (!ret.shortprice) {
+                    $('#shortprice').val(ret.project_shortprice);
+                } else{
+                    $('#shortprice').val(ret.shortprice);
+                }
                 if (!ret.intrest) {
                     $('#edit_intrest').val(ret.project_intrest);
                 } else{
@@ -481,14 +486,18 @@ $(function(){
     $('#edit_confirm').click(function(){     //确认修改官方项目
         var edit_detail = $('#edit_detail').val(),
             edit_price = $('#edit_price').val(),
+            shortprice = $('#shortprice').val(),
             edit_intrest = $('#edit_intrest').val();
         var mark_str = '';
         
         $('.mark.on').each(function(){
             mark_str += $(this).data('id') + ',';
         })
-        console.log(mark_str);
-        console.log(' project_id=' + project_id +' edit_detail=' + edit_detail +' edit_price=' + edit_price);
+        if (!edit_detail || !edit_price || !shortprice || !edit_intrest) {
+            alert('填写项不能为空');
+            return;
+        }
+        console.log(' project_id=' + project_id +' edit_detail=' + edit_detail +' edit_price=' + edit_price +' less_price=' + less_price);
         $.ajax({
             url: '/account/update_offiproject/' + project_id + '/',
             dataType: "json",
@@ -496,6 +505,7 @@ $(function(){
             data: {
                 'introduction': edit_detail,
                 'price': edit_price,
+                'shortprice': shortprice,
                 'intrest': edit_intrest,
                 'marks': mark_str
             },
@@ -624,7 +634,8 @@ $(function(){
         </div>
         <div class="popup__detail">
             <div class="popup__item"><span class="popup__itemname">项目简介</span><input id="edit_detail" type="text" /></div>
-            <div class="popup__item"><span class="popup__itemname">价格</span><input id="edit_price" type="text" /></div>
+            <div class="popup__item"><span class="popup__itemname">详情页价格</span><input id="edit_price" type="text" /></div>
+            <div class="popup__item"><span class="popup__itemname">主页价格</span><input id="shortprice" type="text" maxlength="12" placeholder="例：投一万返两千；限12个字符" /></div>
             <div class="popup__item"><span class="popup__itemname">预计年化</span><input id="edit_intrest" type="text" /></div>
             <div class="popup__item clearfix">
                 <span style="width: 200px;" class="popup__itemname l">项目标签（最多选择三个）：</span>               

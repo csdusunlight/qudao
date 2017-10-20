@@ -8,7 +8,9 @@ from public.tools import login_required_ajax, str_to_bool
 from wafuli.models import Project, SubscribeShip
 from django.http.response import JsonResponse
 from django.db import transaction
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 @login_required_ajax
 def create_update_selfproject(request, id=None):
     '''
@@ -17,27 +19,26 @@ def create_update_selfproject(request, id=None):
     ret = {}
     user = request.user
     is_official = False
-    title = request.POST.get('titile', '')
+    title = request.POST.get('title', '')
     strategy = request.POST.get('strategy', '')
     introduction = request.POST.get('introduction', '')
     cprice = request.POST.get('cprice', '')
     term = request.POST.get('term', '')
     investrange = request.POST.get('investrange', '')
     intrest = request.POST.get('intrest', '')
-    is_multisub_allowed = request.POST.get('is_multisub_allowed', '')
+    is_multisub_allowed = request.POST.get('is_multisub_allowed', False)
     necessary_fields = request.POST.get('necessary_fields', '')
-    marks = request.POST.get('necessary_fields', '')
+    marks = request.POST.get('marks', '')
     company = request.POST.get('company', '')
-    state = request.POST.get('state', '')
-    if not (title and strategy and introduction and cprice and term and investrange and intrest and is_multisub_allowed
-            and necessary_fields and marks and company):
+    if not (title and strategy and introduction and cprice and term and investrange and intrest
+            and necessary_fields and company):
         ret['code'] = 1
         ret['msg'] = u'缺少必填字段'
         return JsonResponse(ret)
     
     try:
         is_multisub_allowed = str_to_bool(is_multisub_allowed)
-        marks = marks.split(',')
+        marks = [ int(x) for x in marks.split(',') if x ]
     except:
         ret['code'] = 2
         ret['msg'] = u'字段不合法'
@@ -70,16 +71,13 @@ def update_offiproject(request, id):
     price = request.POST.get('price', '')
     intrest = request.POST.get('intrest', '')
     marks = request.POST.get('marks', '')
-    print marks
     if not (introduction and price and intrest):
         ret['code'] = 1
         ret['msg'] = u'缺少必填字段'
         return JsonResponse(ret)
     
     try:
-        print marks
         marks = [ int(x) for x in marks.split(',') if x ]
-        print marks
     except:
         ret['code'] = 2
         ret['msg'] = u'字段不合法'

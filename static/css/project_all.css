@@ -138,7 +138,9 @@
     float: left;
     margin: 10px 19px 0;
     width: 120px;
-    height: 120px;
+    height: 50px;
+    border-top: 35px solid transparent;
+    border-bottom: 35px solid transparent;
 }
 .finance__title {
     padding: 0 20px;

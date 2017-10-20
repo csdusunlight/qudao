@@ -15,6 +15,14 @@
 <script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/wfl-tab.js' %}"></script>
 <style type="text/css">
+    .edit_marks {
+        line-height: 30px;
+    }
+    .add-mark {
+        margin-left: 30px;
+        text-decoration: underline;
+        cursor: pointer;
+    }
 	.mark-box {
 	    font-size: 0;
 	}
@@ -323,7 +331,7 @@ $(function(){
             type: 'delete',
             success: function(ret) {
                 alert('操作成功');
-                del_dom.hide();
+                del_dom.remove();
                 $('.popup.m-del-mark').removeClass('in');
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -333,13 +341,25 @@ $(function(){
         });
     })
     $('.mark-box2').on('click', '.mark', function(){        //选择标签
-        $(this).toggleClass('on');
+        if ($('.mark.on').length >= 3 && !$(this).hasClass('on')) {
+            alert('每个项目最多选择三个标签');
+        } else {
+            $(this).toggleClass('on');
+        }
     })
     $('.add-mark').click(function(){        //新建标签
-        $('.popup.m-add-mark').addClass('in');
+        if ($('.mark-box .mark').length >= 7) {
+            alert('最多允许新建7个标签')
+        } else {
+            $('.popup.m-add-mark').addClass('in');
+        }
     })
     $('#add_mark').click(function(){
         var markname = $('#markname').val();
+        if (!markname) {
+            alert('标签内容不能为空');
+            return;
+        }
         $.ajax({        //获取标签数据
             url: "/restapi/marks/",
             dataType: "json",
@@ -563,11 +583,11 @@ $(function(){
                     	<li class="navitem on myproj-nav">官方项目</li>
                     	<li class="navitem myproj-nav">自建项目</li>
                     </ul>
-                    <div>
-                        <h4>项目标签：</h4>
-                        <ul class="mark-box">
+                    <div class="edit_marks clearfix">
+                        <h4 class="l">项目标签（限7个）：</h4>
+                        <ul class="mark-box l">
                         </ul>
-                        <span class="add-mark">添加标签</span>
+                        <span class="add-mark l">添加标签</span>
                     </div>
                     <div>
                         <div class="table conitem" style="display: block;">
@@ -606,9 +626,9 @@ $(function(){
             <div class="popup__item"><span class="popup__itemname">项目简介</span><input id="edit_detail" type="text" /></div>
             <div class="popup__item"><span class="popup__itemname">价格</span><input id="edit_price" type="text" /></div>
             <div class="popup__item"><span class="popup__itemname">预计年化</span><input id="edit_intrest" type="text" /></div>
-            <div class="popup__item">
-                <span class="popup__itemname">项目标签：</span>               
-                <div class="mark-box2"></div>
+            <div class="popup__item clearfix">
+                <span style="width: 200px;" class="popup__itemname l">项目标签（最多选择三个）：</span>               
+                <div class="mark-box2 l"></div>
             </div>
         </div>
         <div class="popup__btnbox">
@@ -675,7 +695,7 @@ $(function(){
             <h2 class="popup__title">添加标签</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
         </div>
         <div class="popup__detail">
-            <div class="popup__item"><span class="popup__itemname">标签名称</span><input id="markname" type="text" /></div>
+            <div class="popup__item"><span class="popup__itemname">标签名称</span><input id="markname" type="text" maxlength="4" placeholder="限4个字符长度" /></div>
         </div>
         <div class="popup__btnbox">
             <a class="btn m-green m-popup m-right" onclick="canclePopup(this)">取消</a>

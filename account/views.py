@@ -857,7 +857,7 @@ def project_add(request, id=None):
         id = int(id)
         kwargs.update(id=id)
         sub = SubscribeShip.objects.get(project_id=id, user=request.user)
-        checked_marks = [ x.id for x in sub.marks.all() ]
+        checked_marks = [ int(x.id) for x in sub.marks.all() ]
     kwargs.update(checked_marks=checked_marks)
     companies = Company.objects.all()
     kwargs.update(companies=companies)

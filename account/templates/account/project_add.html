@@ -128,7 +128,7 @@ $(function(){
 
             </div>
             <div class="right-top clearfix">
-                <h2 class="top-title l">项目标签</h2>
+                <h2 class="top-title l">项目标签（最多选择3个）</h2>
             </div>
             <div class="mark-box">
                 {% for item in marks %}
@@ -242,7 +242,11 @@ $(function(){
     }
     
     $('.mark-box').on('click', '.mark', function(){        //选择标签
-        $(this).toggleClass('on');
+        if ($('.mark.on').length >= 3 && !$(this).hasClass('on')) {
+            alert('每个项目最多选择三个标签');
+        } else {
+            $(this).toggleClass('on');
+        }
     })
     
     var img = '';

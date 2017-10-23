@@ -880,7 +880,7 @@
             var state_1 = '';
             $('.state-tab').click(function(){
                 $(this).addClass('on').siblings().removeClass('on');
-                state_1 = $(this).data('state');
+                state_1 = $(this).data('state') + '';
                 console.log(state_1)
                 $('#search').click();
 //              var search_data = data;
@@ -936,7 +936,7 @@
                 if(zhifubao) {
                     newurl += "&zhifubao_contains=" + zhifubao;
                 }
-                if(state) {
+                if(state != '') {
                     newurl += "&audit_state=" + state;
                 }
                 
@@ -1048,7 +1048,7 @@
             var state_2 = '';
             $('.state-tab-2').click(function(){
                 $(this).addClass('on').siblings().removeClass('on');
-                state_2 = $(this).data('state');
+                state_2 = $(this).data('state') + '';
                 console.log(state_2)
                 $('#search_02').click();
             })

@@ -109,6 +109,9 @@
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
             });
+            
+            
+            
             $(function() {
                 $(".g-checkbox,.g-lab-txt").click(function() {
                     $("#agreeChk").click();
@@ -137,6 +140,7 @@
                 //$(".re-input").each(function() {
                 //  this.value = "";
                 //});
+                
             });
         </script>
     </head>
@@ -180,7 +184,7 @@
                     <div class="reg">
                         <span class="reg__name">验证码</span>
                         <input type="text" autocomplete="off" class="re-input" name="code" placeholder="请输入手机验证码" />
-                        <button id="action-send-code-imagvalidate" class="re-huo">获取手机验证码</button>
+                        <input id="action-send-code-imagvalidate" type="button" class="re-huo" value="获取手机验证码">
                         <span class="tips" id="divcode"></span>
                     </div>
                     <div class="reg" style="position: relative;">

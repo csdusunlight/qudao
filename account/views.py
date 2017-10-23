@@ -844,6 +844,7 @@ def admin_investlog(request, id):
     else:
         log.audit_reason = request.POST['audit_reason']
     log.audit_state = audit_state
+    log.audit_time = datetime.now()
     log.save()
     return JsonResponse({'code':0})
 

@@ -45,6 +45,30 @@
 	.state2 {
         color: red;
     }
+    .state-tabbox,
+    .state-tabbox-2 {
+        font-size: 0;
+    }
+    .state-tab,
+    .state-tab-2 {
+        display: inline-block;
+        width: 80px;
+        line-height: 30px;
+        text-align: center;
+        border: 1px solid #91C11D;
+        border-right: none;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+    .state-tab:last-child,
+    .state-tab-2:last-child {
+        border-right: 1px solid #91C11D;
+    }
+    .state-tab.on,
+    .state-tab-2.on {
+        color: #fff;
+        background-color: #91C11D;
+    }
 </style>
 
 </head>
@@ -82,9 +106,17 @@
                 <input type="text" id="zhifubao" />
             </div>
             
-            <div class="search__item">
+            <div style="width: 320px;margin-left: 290px;" class="search__item">
+                <ul class="state-tabbox">
+                    <li data-state = "" class="state-tab on">全部</li>
+                    <li data-state = "1" class="state-tab">未审核</li>
+                    <li data-state = "0" class="state-tab">已通过</li>
+                    <li data-state = "2" class="state-tab">已拒绝</li>
+                </ul>
+            </div>
+            <div style="display: none;" class="search__item">
                 <span class="search__name">审核状态：</span>
-                <select name="select_status" id="state" onchange="$('#search').click()">
+                <select name="select_status" id="state">
                     <option value="">全部</option>
                     <option value="1">未审核</option>
                     <option value="0">已通过</option>
@@ -105,6 +137,7 @@
                 <a id="export" class="btn m-green m-export">导出</a>
             </div>
         </div>
+        
         <div id="pagedata">
         </div>
         <div class="changes-p">
@@ -140,9 +173,17 @@
                 <input type="text" id="zhifubao_02" />
             </div>
             
-            <div class="search__item">
+            <div style="width: 320px;margin-left: 290px;" class="search__item">
+                <ul class="state-tabbox-2">
+                    <li data-state = "" class="state-tab-2 on">全部</li>
+                    <li data-state = "1" class="state-tab-2">未审核</li>
+                    <li data-state = "0" class="state-tab-2">已通过</li>
+                    <li data-state = "2" class="state-tab-2">已拒绝</li>
+                </ul>
+            </div>
+            <div style="display: none;" class="search__item">
                 <span class="search__name">审核状态：</span>
-                <select name="select_status" id="state_02" onchange="$('#search_02').click()">
+                <select name="select_status" id="state_02">
                     <option value="">全部</option>
                     <option value="1">未审核</option>
                     <option value="0">已通过</option>
@@ -163,6 +204,7 @@
                 <a id="export_02" class="btn m-green m-export">导出</a>
             </div>
         </div>
+        
         <div id="pagedata2">
         </div>
         <div class="changes-p">
@@ -835,6 +877,34 @@
             });
             
 //          官方数据
+            var state_1 = '';
+            $('.state-tab').click(function(){
+                $(this).addClass('on').siblings().removeClass('on');
+                state_1 = $(this).data('state');
+                console.log(state_1)
+                $('#search').click();
+//              var search_data = data;
+//              switch (state_1){
+//              	case 0:
+//              	    search_data = data0;
+//              		break;
+//                  case 1:
+//                      search_data = data1;
+//                      break;
+//                  case 2:
+//                      search_data = data2;
+//                      break;
+//              }
+//              $("#page").empty();
+//              $("#pagedata").ajaxPage({
+//                  url: url + '&audit_state=' + state_1,
+//                  pageId: $("#page"),
+//                  pageSize: 10,
+//                  run: true,
+//                  content: search_data,
+//                  complete:pagecallback,
+//              });
+            })
             $("#search").click(function() {
                 var proj_name = $("#proj_name").val(),
                     invest_date0 = $("#invest_date0").val(),
@@ -843,7 +913,7 @@
                     submit_date1 = $("#submit_date1").val(),
                     telnum_sub = $("#telnum_sub").val(),
                     zhifubao = $("#zhifubao").val(),
-                    state = $("#state").val();
+                    state = state_1;
                 var newurl = url;
                 if(proj_name) {
                     newurl += "&project_title_contains=" + proj_name;
@@ -975,6 +1045,13 @@
                 document.getElementById("fileupload").click();
             }
 //          官方数据---end
+            var state_2 = '';
+            $('.state-tab-2').click(function(){
+                $(this).addClass('on').siblings().removeClass('on');
+                state_2 = $(this).data('state');
+                console.log(state_2)
+                $('#search_02').click();
+            })
             $("#search_02").click(function() {
                 var proj_name = $("#proj_name_02").val(),
                     invest_date0 = $("#invest_date0_02").val(),
@@ -983,7 +1060,7 @@
                     submit_date1 = $("#submit_date1_02").val(),
                     telnum_sub = $("#telnum_sub_02").val(),
                     zhifubao = $("#zhifubao_02").val(),
-                    state = $("#state_02").val();
+                    state = state_2;
                 var newurl = url2;
                 if(proj_name) {
                     newurl += "&project_title_contains=" + proj_name;

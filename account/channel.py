@@ -219,18 +219,18 @@ def export_investlog(request):
     submittime_1 = request.GET.get("submittime_1", None)
     audittime_0 = request.GET.get("audittime_0", None)
     audittime_1 = request.GET.get("audittime_1", None)
-    state = request.GET.get("audit_state",'1')
+    state = request.GET.get("audit_state",'')
     if not submittime_0 or not submittime_1:
         raise Http404
     s = datetime.datetime.strptime(submittime_0,'%Y-%m-%d')
     e = datetime.datetime.strptime(submittime_1,'%Y-%m-%d')
+    e += timedelta(days=1)
     if (e - s).days > 5:
         raise Http404
     item_list = item_list.filter( submit_time__range=(s,e))
     if investtime_0 and investtime_1:
         s = datetime.datetime.strptime(investtime_0,'%Y-%m-%d')
         e = datetime.datetime.strptime(investtime_1,'%Y-%m-%d')
-        e += timedelta(days=1)
         item_list = item_list.filter(invest_date__range=(s,e))
     if audittime_0 and audittime_1:
         s = datetime.datetime.strptime(audittime_0,'%Y-%m-%d')
@@ -266,7 +266,9 @@ def export_investlog(request):
     zhifubao = request.GET.get("zhifubao", None)
     if zhifubao:
         item_list = item_list.filter(zhifubao__contains=zhifubao)
-    item_list = item_list.filter(audit_state=state).select_related('project').order_by('submit_time')
+    if state:
+        item_list = item_list.filter(audit_state=state)
+    item_list = item_list.select_related('project').order_by('submit_time')
     data = []
     for con in item_list:
         project = con.project

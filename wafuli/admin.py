@@ -17,8 +17,10 @@ class ProjectAdmin(admin.ModelAdmin):
                 batch_subscribe(request.user, True, obj)
         if obj.state=='30' or not obj.is_addedto_repo:
             batch_deletesub(obj)
+class CompanyAdmin(admin.ModelAdmin):
+    search_fields = ['name',]            
 admin.site.register(Project, ProjectAdmin)
-admin.site.register(Company)
+admin.site.register(Company, CompanyAdmin)
 admin.site.register(MAdvert_PC)
 admin.site.register(Announcement)
 admin.site.register(SubscribeShip)

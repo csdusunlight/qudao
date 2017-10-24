@@ -106,10 +106,11 @@
                 <input type="text" id="zhifubao" />
             </div>
             
-            <div style="width: 320px;margin-left: 290px;" class="search__item">
+            <div style="width: 400px;margin-left: 210px;" class="search__item">
                 <ul class="state-tabbox">
                     <li data-state = "" class="state-tab on">全部</li>
                     <li data-state = "1" class="state-tab">未审核</li>
+                    <li data-state = "3" class="state-tab">复审中</li>
                     <li data-state = "0" class="state-tab">已通过</li>
                     <li data-state = "2" class="state-tab">已拒绝</li>
                 </ul>
@@ -422,11 +423,16 @@
         '<th>投资金额</th><th>投资标期</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
-//  已删除
-    var data3 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><td>{invest_term}</td>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-remark">备注及其他</th></tr>[results]' +
+//  复审
+    var data3 = '<table width="100%"><tr><th>项目名称3</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">复审原因</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{other_remark}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{audit_reason}</td><td data-remark="{remark}">{other_remark}</td>' +
+        '<td class="handle">详情<div class="handle-box"><a onclick="removeData(this,{id})">删除</a> | '+
+        '<a onclick="editData(this,{id})">编辑</a> | '+
+        '<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
+        '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span></div></td>'+
+        '</tr>[/results]</table>';
     
 //  全部
     var data_user = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +

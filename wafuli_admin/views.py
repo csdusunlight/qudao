@@ -898,7 +898,7 @@ def export_withdrawlog(request):
     if not user.is_staff:
         raise Http404
     state = request.GET.get("audit_state",'1')
-    item_list = WithdrawLog.objects.filter(audit_state=state).select_related('user').order_by('submit_time','amount')
+    item_list = WithdrawLog.objects.filter(audit_state=state).select_related('user').order_by('submit_time','-amount')
     submit_date_0 = request.GET.get("submit_date_0", None)
     submit_date_1 = request.GET.get("submit_date", None)
     audit_date_0 = request.GET.get("audit_date_0", None)

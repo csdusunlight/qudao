@@ -143,7 +143,8 @@ class SubscribeShipList(BaseViewMixin, generics.ListAPIView):
         user = self.request.user
         return SubscribeShip.objects.filter(user=user)
     serializer_class = SubscribeShipSerializer
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, )
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
+    ordering_fields = ('is_on','project__state')
     filter_class = SubscribeShipFilter
     pagination_class = MyPageNumberPagination
 

@@ -127,9 +127,9 @@ def admin_invest(request):
         investlog_id = request.POST.get('id', None)
         cash = request.POST.get('cash', None)
         type = request.POST.get('type', None)
-        reason = request.POST.get('reason', None)
+        reason = request.POST.get('reason', '') or u"无"
         type = int(type)
-        if not investlog_id or type==1 and not cash or type==2 and not reason or not type in [1, 2, 3]:
+        if not investlog_id or type==1 and not cash or not type in [1, 2, 3]:
             res['code'] = -2
             res['res_msg'] = u'传入参数不足，请联系技术人员！'
             return JsonResponse(res)
@@ -169,13 +169,11 @@ def admin_invest(request):
                 res['code'] = 0
         elif type==2:
             investlog.audit_state = '2'
-            investlog.audit_reason = reason
             res['code'] = 0
         elif type==3:
             investlog.audit_state = '3'
-            investlog.audit_reason = reason
             res['code'] = 0
-
+        investlog.audit_reason = reason
         if res['code'] == 0:
             investlog.audit_time = datetime.datetime.now()
             investlog.admin_user = admin_user
@@ -527,7 +525,7 @@ def import_investlog(request):
             with transaction.atomic():
                 id = row[0]
                 result = row[2]
-                reason = row[4]
+                reason = row[4] or u"无"
                 investlog = InvestLog.objects.get(id=id)
                 if not investlog.audit_state in ['1','3'] or investlog.translist.exists():
                     continue
@@ -542,10 +540,9 @@ def import_investlog(request):
                     translist.save(update_fields=['investlog'])
                 elif result==2:
                     investlog.audit_state = '2'
-                    investlog.audit_reason = reason
                 elif result==3:
                     investlog.audit_state = '3'
-                    investlog.audit_reason = reason
+                investlog.audit_reason = reason    
                 investlog.audit_time = datetime.datetime.now()
                 investlog.admin_user = admin_user
                 investlog.save(update_fields=['audit_state','audit_time','settle_amount','audit_reason','admin_user'])

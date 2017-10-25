@@ -103,7 +103,8 @@
 		})
 		$('.Finnow input[type="submit"]').click(function() {
 			id = $("input#ret_event_id").val();
-			cash = $("input#add_cash").val();
+			var cash = $("input#add_cash").val();
+			var audit_reason = $("input#audit_reason").val();
 //			score = $("input#add_score").val();
 			if(!id || !cash) {
 				return;
@@ -116,7 +117,7 @@
 				data: {
 					'id': id,
 					'cash': cash,
-//					'score': score,
+					'reason': audit_reason,
 					'type': 1,
 				},
 				success: function(ret) {
@@ -473,8 +474,8 @@
 			<input id="ret_event_id" type="hidden" />
 			<span>添加现金：</span>
 			<input id="add_cash" type="text" />
-			<!--<span>添加积分：</span>
-			<input id="add_score" type="text" />-->
+			<span>审核说明：</span>
+			<input id="audit_reason" type="text" placeholder="选填" />
 			<div class="Finnow-Sub">
 				<input type="submit" value="确认" onclick="return false;" />
 				<input type="button" value="取消" class="none-x-s" />

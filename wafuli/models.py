@@ -14,6 +14,7 @@ AUDIT_STATE = (
     ('0', u'审核通过'),
     ('1', u'待审核'),
     ('2', u'审核未通过'),
+    ('3', u'复审'),
 )    
 class Company(models.Model):
     name = models.CharField(u"平台名称(必填)",max_length=100,unique=True)

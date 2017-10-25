@@ -108,7 +108,7 @@ def admin_invest(request):
     if request.method == "GET":
         if not ( admin_user.is_authenticated() and admin_user.is_staff):
             return redirect(reverse('admin:login') + "?next=" + reverse('admin_project'))
-        item_list = InvestLog.objects.filter(is_official=True, audit_state='1', submit_time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
+        item_list = InvestLog.objects.filter(is_official=True, audit_state__in=['1','3'], submit_time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
         print item_list
         project_list = ()
         for item in item_list:
@@ -165,8 +165,12 @@ def admin_invest(request):
                 translist.investlog = investlog
                 translist.save(update_fields=['investlog'])
                 res['code'] = 0
-        else:
+        elif type==2:
             investlog.audit_state = '2'
+            investlog.audit_reason = reason
+            res['code'] = 0
+        elif type==3:
+            investlog.audit_state = '3'
             investlog.audit_reason = reason
             res['code'] = 0
 

@@ -15,7 +15,7 @@ from wafuli_admin.models import DayStatis, Invest_Record
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import logout as auth_logout
-from account.varify import send_multimsg_bydhst
+from account.varify import send_multimsg_bydhst, sendmsg_bydhst
 from xlwt import Workbook
 import StringIO
 from xlwt.Style import easyxf
@@ -85,6 +85,8 @@ def admin_apply(request):
                 apply.audit_time = datetime.datetime.now()
                 apply.admin_user = admin_user
                 apply.save()
+                sendmsg_bydhst(apply.mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + apply.qq_number + '.51fanshu.com' +
+                                     u"，快去分享给小伙伴们吧~")
         elif type==2:
             reason = request.POST.get('reason', '')
             apply.admin_user = admin_user

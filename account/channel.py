@@ -228,7 +228,7 @@ def export_investlog(request):
         s = datetime.datetime.strptime(submittime_0,'%Y-%m-%d')
         e = datetime.datetime.strptime(submittime_1,'%Y-%m-%d')
         e += timedelta(days=1)
-    item_list = item_list.filter( submit_time__range=(s,e))
+        item_list = item_list.filter( submit_time__range=(s,e))
     if investtime_0 and investtime_1:
         s = datetime.datetime.strptime(investtime_0,'%Y-%m-%d')
         e = datetime.datetime.strptime(investtime_1,'%Y-%m-%d')

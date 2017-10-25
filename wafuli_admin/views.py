@@ -150,7 +150,7 @@ def admin_invest(request):
                 res['code'] = -2
                 res['res_msg'] = u"操作失败，输入不合法！"
                 return JsonResponse(res)
-            if investlog.audit_state != '1':
+            if not investlog.audit_state in ['1', '3']:
                 res['code'] = -3
                 res['res_msg'] = u'该项目已审核过，不要重复审核！'
                 return JsonResponse(res)

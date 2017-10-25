@@ -33,7 +33,7 @@ var data2 = '<table width="100%"><thead><tr><th>项目名称</th><th>项目来�
     '<td><span data-isadd="{is_recommend}" class="recom switch {is_recommend}" onclick="isRecommend(this,{id})"></span></td>'+
     '<td data-isofficial="{project_is_official}" class="edit"><a href="/account/project_add/{project}">编辑</a></td></tr>[/results]'
     + '</tbody></table>';
-var url = "/restapi/sub/?page={page}&pageSize={pageSize}";
+var url = "/restapi/sub/?page={page}&pageSize={pageSize}&ordering=project__state,-is_on";
 //function pop(n){
 //	$("#coupon_id").val(n);
 //	$(".Password-modify").css("display","block");

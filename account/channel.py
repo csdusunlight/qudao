@@ -228,7 +228,7 @@ def export_investlog(request):
         s = datetime.datetime.strptime(submittime_0,'%Y-%m-%d')
         e = datetime.datetime.strptime(submittime_1,'%Y-%m-%d')
         e += timedelta(days=1)
-    item_list = item_list.filter( submit_time__range=(s,e))
+        item_list = item_list.filter( submit_time__range=(s,e))
     if investtime_0 and investtime_1:
         s = datetime.datetime.strptime(investtime_0,'%Y-%m-%d')
         e = datetime.datetime.strptime(investtime_1,'%Y-%m-%d')
@@ -294,6 +294,8 @@ def export_investlog(request):
             return_amount = str(con.return_amount)
         elif con.audit_state=='2':
             result = u'否'
+        elif con.audit_state=='3':
+            result = u'复审'
         data.append([id, project_name, submit_date, invest_date, invest_mobile, invest_name,invest_amount,
                      term, other_remark, result, settle_amount, return_amount, reason])
     w = Workbook()     #创建一个工作簿

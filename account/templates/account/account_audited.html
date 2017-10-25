@@ -69,6 +69,20 @@
         color: #fff;
         background-color: #91C11D;
     }
+    .day-search-box {
+        width: 100px;
+        display: inline-block;
+        font-size: 0px;
+    }
+    .search_today,
+    .search_yes {
+        display: inline-block;
+        width: 50%;
+        font-size: 14px;
+        color: #91C11D;
+        text-align: center;;
+        cursor: pointer;
+    }
 </style>
 
 </head>
@@ -101,7 +115,7 @@
                 <span class="search__name">提交手机号：</span>
                 <input type="text" id="telnum_sub" />
             </div>
-            <div class="search__item">
+            <div style="display: none;" class="search__item">
                 <span class="search__name">收款信息：</span>
                 <input type="text" id="zhifubao" />
             </div>
@@ -110,7 +124,11 @@
                 <div class="time-input-box"><input type="text" class="date_picker time-input" id="audit_date0" /></div> ——
                 <div class="time-input-box"><input type="text" class="date_picker time-input" id="audit_date1" /></div>
             </div>
-            <div style="width: 400px;margin-left: 530px;" class="search__item">
+            <div class="day-search-box">
+                <span class="search_today">今日</span>
+                <span class="search_yes">昨日</span>
+            </div>
+            <div style="width: 400px;margin-left: 10px;" class="search__item">
                 <ul class="state-tabbox">
                     <li data-state = "" class="state-tab on">全部</li>
                     <li data-state = "1" class="state-tab">未审核</li>
@@ -916,6 +934,22 @@
 //                  content: search_data,
 //                  complete:pagecallback,
 //              });
+            })
+            $('.search_today').click(function(){
+                var date = new Date();
+                var date_yes = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
+                $("#audit_date0").val(date_yes);
+                $("#audit_date1").val(date_yes);
+                $("#search").click();
+            })
+            $('.search_yes').click(function(){
+                var date = new Date();
+                var now_time = date.getTime();
+                date.setTime(now_time - 1 * (24 * 60 * 60 * 1000));
+                var date_yes = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
+                $("#audit_date0").val(date_yes);
+                $("#audit_date1").val(date_yes);
+                $("#search").click();
             })
             $("#search").click(function() {
                 var proj_name = $("#proj_name").val(),

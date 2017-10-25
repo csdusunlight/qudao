@@ -1,0 +1,145 @@
+
+/*我的项目*/
+.myproj-nav-box {
+    margin-bottom: 10px;
+    width: 200px;
+    box-sizing: content-box;
+    font-size: 0;
+    border: 1px solid #ffbe00;
+}
+.myproj-nav {
+    display: inline-block;
+    width: 100px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    color: #ffbe00;
+    background-color: #fff;
+    cursor: pointer;
+}
+.myproj-nav.on {
+    color: #fff;
+    background-color: #ffbe00;
+}
+.project-box .conitem {
+    display: none;
+}
+.look-projects,
+.create-project {
+    display: inline-block;
+    padding: 0 20px;
+    line-height: 60px;
+    font-size: 16px;
+    color: #222;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: #fff;
+    border: 1px solid #e4e4e4;
+    transition: all 0.4s ease;  
+    cursor: pointer;
+}
+.switch:before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+    transition: all 0.4s ease;  
+}
+.switch.true {
+    background-color: #91C11D;
+    /*border: 1px solid #91C11D;*/
+}
+.switch.true:before {
+    left: 32px;
+}
+.edit {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.link-tip {
+    margin-left: 70px;
+    color: #bcbcbc;
+}
+.link-btn {
+    text-decoration: underline;
+    color: #ffbe00;
+}
+.edit_marks {
+    line-height: 30px;
+}
+.add-mark {
+    margin-left: 30px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.mark-box {
+    font-size: 0;
+}
+.mark {
+    position: relative;
+    display: inline-block;
+    margin: 4px 8px;
+    padding: 5px 6px;
+    font-size: 12px;
+    line-height: 1;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #ffbe00;
+}
+.mark__del {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    line-height: 16px;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0.3);
+    cursor: pointer;
+}
+.mark-box2 .mark__del {
+    display: none;
+}
+.mark-box2 .mark {
+    border: 1px solid #ffbe00;
+    background-color: #fff;
+    color: #ffbe00;
+    cursor: pointer;
+}
+.mark-box2 .mark.on {
+    background-color: #ffbe00;
+    color: #fff;
+}
+.search {
+    position: relative;
+    padding-left: 0px;
+    margin-top: 10px;
+}
+.search .search__txt {
+    width: 400px;
+    height: 40px;
+    border-radius: 8px;
+}
+.search__submit {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    background: url(../images/search.png) center center no-repeat;
+    border: none;
+    cursor: pointer;
+}
+
+/*我的项目---end*/

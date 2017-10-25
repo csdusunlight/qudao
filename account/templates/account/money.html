@@ -134,8 +134,8 @@ $(function(){
                 <div class="search">
                     <div class="search__item">
                         <span class="search__name">获取时间：</span>
-                        <div class="time-input-box"><input type="text" class="date_picker time-input" id="trans_date_0" /></div> ——
-                        <div class="time-input-box"><input type="text" class="date_picker time-input" id="trans_date_1" /></div>
+                        <div class="time-input-box"><input type="text" class="date_picker time-input" id="trans_date_0" onchange="$('#search').click()" /></div> ——
+                        <div class="time-input-box"><input type="text" class="date_picker time-input" id="trans_date_1" onchange="$('#search').click()" /></div>
                     </div>
                     <div class="search__item">
                         <span class="search__name">收支类型：</span>
@@ -147,7 +147,7 @@ $(function(){
                         </select>
                     </div>
                 </div>
-                <div class="handle clearfix">
+                <div style="display: none;" class="handle clearfix">
                     <div class="handle__out r">
                         <a id="search" class="btn m-green m-search">搜索</a>
                     </div>

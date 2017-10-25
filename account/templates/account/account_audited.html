@@ -995,16 +995,16 @@
                     zhifubao = $("#zhifubao").val(),
                     state = $("#state").val();
                     
-                if(!submit_date0 || !submit_date1) {
-                    alert('请先选择提交日期区间，再进行导出');
-                    return;
-                }
-                var date_diff = DateDiff(submit_date1,submit_date0);
-                console.log(date_diff);
-                if (date_diff<0 || date_diff>5) {
-                	alert('选择的提交日期区间不能超过5天');
-                	return;
-                }
+//              if(!submit_date0 || !submit_date1) {
+//                  alert('请先选择提交日期区间，再进行导出');
+//                  return;
+//              }
+//              var date_diff = DateDiff(submit_date1,submit_date0);
+//              console.log(date_diff);
+//              if (date_diff<0 || date_diff>5) {
+//              	alert('选择的提交日期区间不能超过5天');
+//              	return;
+//              }
                 
                 html += '<input name="is_official" type="hidden" value="true"/>';
                 if(proj_name) {
@@ -1146,16 +1146,16 @@
                     zhifubao = $("#zhifubao_02").val(),
                     state = $("#state_02").val();
                     
-                if(!invest_date0 || !invest_date1) {
-                    alert('请先选择投资日期区间，再进行导出');
-                    return;
-                }
-                var date_diff = DateDiff(invest_date1,invest_date0);
-                console.log(date_diff);
-                if (date_diff<0 || date_diff>5) {
-                    alert('选择的投资日期区间不能超过5天');
-                    return;
-                }
+//              if(!invest_date0 || !invest_date1) {
+//                  alert('请先选择投资日期区间，再进行导出');
+//                  return;
+//              }
+//              var date_diff = DateDiff(invest_date1,invest_date0);
+//              console.log(date_diff);
+//              if (date_diff<0 || date_diff>5) {
+//                  alert('选择的投资日期区间不能超过5天');
+//                  return;
+//              }
                 
                 html += '<input name="is_official" type="hidden" value="false"/>';
                 if(proj_name) {

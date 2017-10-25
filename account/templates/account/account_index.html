@@ -95,6 +95,8 @@ $(function(){
     $('.back-a1').toggleClass("on");
     var notice_flag = 0;
     var notice_top = '';
+    var date = new Date();
+    var now_time = date.getTime();
     function saveCookie() {
         var date = new Date();
         //  date.setDate(date.getDate()+1);
@@ -134,20 +136,7 @@ $(function(){
         setCookie("first_time", date.getTime(), date.toUTCString(), "", "", "");
     }
 
-//  deleteCookie();
-    var date = new Date();
-    var first_time = getCookie('first_time');
-    var now_time = date.getTime();
-    console.log(first_time);
-    console.log(now_time);
-    if (first_time && first_time<now_time) {
-        console.log('已有');
-        notice_flag = 0;
-    } else{
-        console.log('还未');
-        saveCookie();
-        notice_flag = 1;
-    }
+
     
     var con1 = document.getElementById('con1');
     var notice_txt = '';
@@ -158,6 +147,28 @@ $(function(){
         success: function(ret) {
             if (ret.results.length != 0){
                 var notice_num = 1;
+                
+//                  deleteCookie();
+                
+                var first_time = getCookie('first_time');
+                
+                console.log(first_time);
+                console.log(now_time);
+                date.setTime(first_time);
+                var date_cookie = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+                date.setTime(now_time);
+                var date_now = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+                console.log(date_cookie);
+                console.log(date_now);
+                if (first_time && date_now == date_cookie) {
+                    console.log('已有');
+                    notice_flag = 0;
+                } else{
+                    console.log('还未');
+                    saveCookie();
+                    notice_flag = 1;
+                }
+                
                 for (var i in ret.results) {
                     notice_txt += '<li class="notice__item">';
                     if (ret.results[i].state == 0) {
@@ -168,7 +179,7 @@ $(function(){
                     }
                     notice_txt += ret.results[i].content +'</li>';
                 }
-                if (notice_flag == 1) {
+                if (notice_flag == 1 && notice_top != '') {
                     $('.popup__detail.m-notice').html(notice_top);
                     $('.popup.m-notice-top').addClass('in');
                 }

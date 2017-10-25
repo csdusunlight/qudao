@@ -127,7 +127,7 @@ def admin_invest(request):
         type = request.POST.get('type', None)
         reason = request.POST.get('reason', None)
         type = int(type)
-        if not investlog_id or type==1 and not cash or type==2 and not reason or type!=1 and type!=2:
+        if not investlog_id or type==1 and not cash or type==2 and not reason or not type in [1, 2, 3]:
             res['code'] = -2
             res['res_msg'] = u'传入参数不足，请联系技术人员！'
             return JsonResponse(res)

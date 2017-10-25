@@ -365,14 +365,13 @@ def export_investlog(request):
         user_level = con.user.level
         result = ''
         settle_amount = ''
-        reason = ''
+        reason = con.audit_reason
         submit_type = con.get_submit_type_display()
         if con.audit_state=='0':
             result = u'是'
             settle_amount = str(con.settle_amount)
         elif con.audit_state=='2':
             result = u'否'
-            reason = con.audit_reason
         data.append([id, project_name, invest_date, qq_number,user_level, invest_mobile, invest_name, term,
                      invest_amount, submit_type, remark, result, settle_amount, reason])
     w = Workbook()     #创建一个工作簿
@@ -493,18 +492,19 @@ def import_investlog(request):
                 elif j==11:
                     result = cell.value.strip()
                     if result == u"是":
-                        result = True
-                        temp.append(True)
+                        result = 1
                     elif result == u"否":
-                        result = False
-                        temp.append(False)
+                        result = 2
+                    elif result == u"复审":
+                        result = 3
                     else:
-                        raise Exception(u"审核结果必须为是或否。")
+                        raise Exception(u"审核结果必须为是,否或复审。")
+                    temp.append(result)
                 elif j==12:
                     return_amount = 0
                     if cell.value:
                         return_amount = Decimal(cell.value)
-                    elif result:
+                    elif result==1:
                         raise Exception(u"审核结果为是时，返现金额不能为空或零。")
                     temp.append(return_amount)
                 elif j==13:
@@ -527,19 +527,22 @@ def import_investlog(request):
                 result = row[2]
                 reason = row[4]
                 investlog = InvestLog.objects.get(id=id)
-                if investlog.audit_state != '1' or investlog.translist.exists():
+                if not investlog.audit_state in ['1','3'] or investlog.translist.exists():
                     continue
                 investlog_user = investlog.user
                 translist = None
-                if result:
+                if result==1:
                     amount = row[3]
                     translist = charge_money(investlog_user, '0', amount, row[1])
                     investlog.audit_state = '0'
                     investlog.settle_amount = amount
                     translist.investlog = investlog
                     translist.save(update_fields=['investlog'])
-                else:
+                elif result==2:
                     investlog.audit_state = '2'
+                    investlog.audit_reason = reason
+                elif result==3:
+                    investlog.audit_state = '3'
                     investlog.audit_reason = reason
                 investlog.audit_time = datetime.datetime.now()
                 investlog.admin_user = admin_user

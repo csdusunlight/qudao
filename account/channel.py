@@ -20,7 +20,7 @@ from xlwt.Style import easyxf
 from xlwt.Workbook import Workbook
 import logging
 import datetime
-from django.db.models import Q
+from django.db.models import Q,F
 from django.contrib.contenttypes.models import ContentType
 import time
 from decimal import Decimal
@@ -123,6 +123,8 @@ def channel(request):
                     log_list.append(obj)
             InvestLog.objects.bulk_create(log_list)
         succ_num = len(log_list)
+        project.points = F('points') + succ_num
+        project.save(update_fields=['points',])
         duplic_num1 = nrows - len(rtable)- 1
         duplic_num2 = len(rtable) - succ_num
         duplic_mobile_list_str = u'，'.join(duplicate_mobile_list)
@@ -167,11 +169,13 @@ def submit_itembyitem(request):
                 if queryset.exclude(audit_state='2').exists():
                     exist_num += 1   #jzy
                     exist_phone = exist_phone + project.title + invest_mobile + ";"   #jzy
-                    raise ValueError('This invest_mobile is repective in project:' + str(project.id))
+                    continue
             InvestLog.objects.create(user=request.user, project=project, invest_date=time, invest_mobile=invest_mobile, invest_term=term,
                              invest_amount=Decimal(amount), audit_state='1', is_official=project.is_official, is_selfsub=True,
                              zhifubao=zhifubao, invest_name=invest_name, remark=remark, submit_type=submit_type,)
             suc_num += 1
+            project.points = F('points') + 1
+            project.save(update_fields=['points',])
         except Exception, e:
             logger.info(e)
     result = {'code':0, 'suc_num':suc_num, 'exist_num':exist_num, 'exist_phone':exist_phone}   #jzy
@@ -286,20 +290,19 @@ def export_investlog(request):
         result = ''
         return_amount = ''
         settle_amount = ''
-        reason = ''
+        reason = con.audit_reason
         if con.audit_state=='0':
             result = u'是'
             settle_amount = str(con.settle_amount)
             return_amount = str(con.return_amount)
         elif con.audit_state=='2':
             result = u'否'
-            reason = con.audit_reason
         data.append([id, project_name, submit_date, invest_date, invest_mobile, invest_name,invest_amount,
                      term, other_remark, result, settle_amount, return_amount, reason])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
     title_row = [u'记录ID',u'项目名称',u'提交日期',u'投资日期', u'投资手机号', u'投资姓名',u'投资金额' ,u'投资标期', u'备注及其他',
-                 u'是否审核通过',u'结算金额',u'返现金额',u'拒绝原因']
+                 u'是否审核通过',u'结算金额',u'返现金额',u'审核说明']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
     row = len(data)

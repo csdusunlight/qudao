@@ -105,8 +105,12 @@
                 <span class="search__name">收款信息：</span>
                 <input type="text" id="zhifubao" />
             </div>
-            
-            <div style="width: 400px;margin-left: 210px;" class="search__item">
+            <div class="search__item">
+                <span class="search__name">审核日期：</span>
+                <div class="time-input-box"><input type="text" class="date_picker time-input" id="audit_date0" /></div> ——
+                <div class="time-input-box"><input type="text" class="date_picker time-input" id="audit_date1" /></div>
+            </div>
+            <div style="width: 400px;margin-left: 530px;" class="search__item">
                 <ul class="state-tabbox">
                     <li data-state = "" class="state-tab on">全部</li>
                     <li data-state = "1" class="state-tab">未审核</li>
@@ -420,9 +424,9 @@
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{audit_time}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{zhifubao}</td><td>{other_remark}</td></tr>[/results]</table>';
 //  已拒绝
     var data2 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th>审核时间</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{audit_time}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
 //  复审
     var data3 = '<table width="100%"><tr><th>项目名称3</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">复审原因</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
@@ -919,6 +923,8 @@
                     invest_date1 = $("#invest_date1").val(),
                     submit_date0 = $("#submit_date0").val(),
                     submit_date1 = $("#submit_date1").val(),
+                    audit_date0 = $("#audit_date0").val(),
+                    audit_date1 = $("#audit_date1").val(),
                     telnum_sub = $("#telnum_sub").val(),
                     zhifubao = $("#zhifubao").val(),
                     state = state_1;
@@ -937,6 +943,12 @@
                 }
                 if(submit_date1) {
                     newurl += "&submittime_1=" + submit_date1;
+                }
+                if(audit_date0) {
+                    newurl += "&audittime_0=" + audit_date0;
+                }
+                if(audit_date1) {
+                    newurl += "&audittime_1=" + audit_date1;
                 }
                 if(telnum_sub) {
                     newurl += "&invest_mobile=" + telnum_sub;
@@ -977,6 +989,8 @@
                     invest_date1 = $("#invest_date1").val(),
                     submit_date0 = $("#submit_date0").val(),
                     submit_date1 = $("#submit_date1").val(),
+                    audit_date0 = $("#audit_date0").val(),
+                    audit_date1 = $("#audit_date1").val(),
                     telnum_sub = $("#telnum_sub").val(),
                     zhifubao = $("#zhifubao").val(),
                     state = $("#state").val();
@@ -1003,6 +1017,10 @@
                 if(submit_date0 && submit_date1) {
                     html += '<input name="submittime_0" type="hidden" value="' + submit_date0 + '"/>';
                     html += '<input name="submittime_1" type="hidden" value="' + submit_date1 + '"/>';
+                }
+                if(audit_date0 && audit_date1) {
+                    html += '<input name="audittime_0" type="hidden" value="' + audit_date0 + '"/>';
+                    html += '<input name="audittime_1" type="hidden" value="' + audit_date1 + '"/>';
                 }
                 if(telnum_sub) {
                     html += '<input name="invest_mobile" type="hidden" value="' + telnum_sub + '"/>';

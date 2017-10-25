@@ -71,6 +71,18 @@
                 
                 
             </div>
+            <div class="popup m-notice-top">
+                <div class="popup__content" style="width: 600px;">
+                    <div class="popup__top">
+                        <h2 class="popup__title">置顶通知</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+                    </div>
+                    <div class="popup__detail m-notice">
+                    </div>
+                    <div class="popup__btnbox">
+                        <a class="cancel btn m-green" onclick="canclePopup(this)">我知道了</a>
+                    </div>
+                </div>
+            </div>
 </div>
 {% include "footer.html" %}
 
@@ -81,6 +93,62 @@
 <script type="text/javascript">
 $(function(){
     $('.back-a1').toggleClass("on");
+    var notice_flag = 0;
+    var notice_top = '';
+    function saveCookie() {
+        var date = new Date();
+        //  date.setDate(date.getDate()+1);
+        date.setTime(date.getTime() + 1 * (24 * 60 * 60 * 1000));
+        //将cookie保存1天
+        setCookie("first_time", now_time, date.toUTCString(), "", "", "");
+    }
+
+    function setCookie(name, value, expires, path, domain, secure) {
+        document.cookie = name + "=" + encodeURI(value) +
+            ((expires) ? "; expires=" + expires : "") +
+            ((path) ? "; path=" + path : "") +
+            ((domain) ? "; domain=" + domain : "") +
+            ((secure) ? "; secure=" + secure : "");
+    }
+
+    function getCookie(cName) {
+        var cookieString = decodeURI(document.cookie);
+        var cookieArray = cookieString.split("; ");
+        console.log(cookieArray.length);
+        for(var i = 0; i < cookieArray.length; i++) {
+            var cookieNum = cookieArray[i].split("=");
+            console.log(cookieNum.toString());
+            var cookieName = cookieNum[0];
+            var cookieValue = cookieNum[1];
+
+            if(cookieName == cName) {
+                return cookieValue;
+            }
+        }
+        return false;
+    }
+    //删除Cookie就是简单的将cookie的expires属性设置为一个过去的时间即可。
+    function deleteCookie() {
+        var date = new Date();
+        date.setTime(date.getTime() - 1000);
+        setCookie("first_time", date.getTime(), date.toUTCString(), "", "", "");
+    }
+
+//  deleteCookie();
+    var date = new Date();
+    var first_time = getCookie('first_time');
+    var now_time = date.getTime();
+    console.log(first_time);
+    console.log(now_time);
+    if (first_time && first_time<now_time) {
+        console.log('已有');
+        notice_flag = 0;
+    } else{
+        console.log('还未');
+        saveCookie();
+        notice_flag = 1;
+    }
+    
     var con1 = document.getElementById('con1');
     var notice_txt = '';
     $.ajax({
@@ -93,11 +161,16 @@ $(function(){
                 for (var i in ret.results) {
                     notice_txt += '<li class="notice__item">';
                     if (ret.results[i].state == 0) {
-                        notice_txt += '<span style="color:#f95a5a">【置顶】</span>'
+                        notice_txt += '<span style="color:#f95a5a">【置顶】</span>';
+                        notice_top += '<p>' + ret.results[i].content +'</p>';
                     } else{
-                        notice_txt += '<span>'+ notice_num++ +'</span>、'
+                        notice_txt += '<span>'+ notice_num++ +'</span>、';
                     }
                     notice_txt += ret.results[i].content +'</li>';
+                }
+                if (notice_flag == 1) {
+                    $('.popup__detail.m-notice').html(notice_top);
+                    $('.popup.m-notice-top').addClass('in');
                 }
             }
             con1.innerHTML = notice_txt;
@@ -121,15 +194,6 @@ $(function(){
     clipboard.on('error', function(e) {
         console.log(e);
     });
-//  var clipboard = new Clipboard('#copy');
-//  
-//  clipboard.on('success', function(e) {
-//      console.log(e);
-//  });
-//  
-//  clipboard.on('error', function(e) {
-//      console.log(e);
-//  });
 
 //  图表部分
 //  获取图表数据
@@ -155,7 +219,6 @@ $(function(){
     	    //  获取图表数据---end
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(document.getElementById('main'));
-        //  var data_x = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
             // 指定图表的配置项和数据
             var option = {
             tooltip: {
@@ -181,7 +244,6 @@ $(function(){
             xAxis: [
                 {
                     type: 'category',
-//                  data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
                     data: data_x,
                     axisPointer: {
                         type: 'shadow'
@@ -192,23 +254,11 @@ $(function(){
                 {
                     type: 'value',
                     name: '结算金额',
-//                  min: 0,
-//                  max: 250,
-//                  interval: 50,
                     axisLabel: {
                         formatter: '{value} 元'
                     }
                 }
-//              {
-//                  type: 'value',
-//                  name: '温度',
-//                  min: 0,
-//                  max: 25,
-//                  interval: 5,
-//                  axisLabel: {
-//                      formatter: '{value} °C'
-//                  }
-//              }
+
             ],
             color:['#61a0a8', '#2f4554', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'],
             series: [
@@ -216,20 +266,9 @@ $(function(){
                     name:'结算金额',
                     type:'bar',
                     bgcolor: '#ffbe00',
-//                  data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
                     data: data_y
                 }
-        //      {
-        //          name:'降水量',
-        //          type:'bar',
-        //          data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
-        //      },
-//              {
-//                  name:'平均温度',
-//                  type:'line',
-//                  yAxisIndex: 1,
-//                  data:[2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
-//              }
+
             ]
         };
         
@@ -244,33 +283,7 @@ $(function(){
 
 
 });
-//  滚动部分
-//  var area = document.getElementById('noticeBox');
-//  var con1 = document.getElementById('con1');
-//  var con2 = document.getElementById('con2');
-//  var speed = 50;
-//  area.scrollTop = 0;
-//  console.log(area.scrollTop);
-//  console.log(con1.scrollTop);
-//  if (area.clientHeight > con1.clientHeight) {
-//  } else {    
-//      con2.innerHTML = con1.innerHTML;
-//      function scrollUp(){
-//          if(area.scrollTop >= con1.scrollHeight) {
-//              area.scrollTop = 0;
-//              }else{
-//                 area.scrollTop ++;
-//              }
-//      }
-//      var myScroll = setInterval("scrollUp()",speed);
-//      area.onmouseover = function(){
-//          clearInterval(myScroll);
-//      }
-//      area.onmouseout = function(){
-//          myScroll = setInterval("scrollUp()",speed);
-//      }
-//  }
-//  滚动部分---end 
+
 </script>
 </body>
 </html>

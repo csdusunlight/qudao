@@ -527,6 +527,7 @@
         var edit_parent;
         function editData(obj, id) {
             project_id = id;
+            edit_parent = $(obj).parent().parent().parent();
             $.ajax({
                 url: "/restapi/investlogs/" + project_id + "/",
                 dataType: "json",
@@ -764,6 +765,7 @@
         var edit_parent_02;
         function editData_02(obj, id) {
             project_id = id;
+            edit_parent_02 = $(obj).parent().parent().parent();
             $.ajax({
                 url: "/restapi/investlogs/" + project_id + "/",
                 dataType: "json",

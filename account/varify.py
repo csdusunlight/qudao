@@ -142,13 +142,15 @@ def sendmsg_by189(app_id, app_secret, access_token, token, timestamp, phone):
 
 
 
-def sendmsg_bydhst(phone):
+def sendmsg_bydhst(phone, msg=None):
     raw_pass = '4i38lwX8'
     m2 = md5()   
     m2.update(raw_pass)   
-    code = random_code(6)
-    logger.info('Now is sending code to: ' + str(phone))
-    content = '尊敬的用户，您的验证码为：' + code + '，本验证码十分钟内有效，感谢您的使用。'
+    content = msg
+    if content is None:
+        code = random_code(6)
+        logger.info('Now is sending code to: ' + str(phone))
+        content = '尊敬的用户，您的验证码为：' + code + '，本验证码十分钟内有效，感谢您的使用。'
     param = {
                      'account':'dh31921',
                      'password':m2.hexdigest(),

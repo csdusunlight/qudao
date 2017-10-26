@@ -24,14 +24,15 @@ var data = '<table width="100%"><thead><tr><th>项目名称</th><th>项目来源
     '[results]<tr><td>{project_title}</td><td class="project_source">{project_source}</td><td data-price="{project_cprice}" class="price">{price}</td><td>{project_term}</td>'+
     '<td>{project_investrange}</td><td data-intrest="{project_intrest}" class="intrest">{intrest}</td><td><span data-isadd="{is_on}" class="home switch {is_on}" onclick="isadd(this,{id})"></span></td>'+
     '<td><span data-isadd="{is_recommend}" class="recom switch {is_recommend}" onclick="isRecommend(this,{id})"></span></td>'+
-    '<td data-isofficial="{project_is_official}" data-marks="{marks}" class="edit" onclick="edit(this, {id}, {project})">编辑</td></tr>[/results]'
+    '<td><a data-isofficial="{project_is_official}" data-marks="{marks}" class="edit" onclick="edit(this, {id}, {project})">编辑</a></td></tr>[/results]'
     + '</tbody></table>';
 var data2 = '<table width="100%"><thead><tr><th>项目名称</th><th>项目来源</th>'+
     '<th>客户指导价</th><th>标期</th><th>投资区间</th><th>预计年化</th><th width="14%">是否主页呈现</th><th width="14%">是否推荐</th><th>操作</th></tr></thead><tbody>'+
     '[results]<tr><td>{project_title}</td><td class="project_source">{project_source}</td><td data-price="{project_cprice}" class="price">{price}</td><td>{project_term}</td>'+
     '<td>{project_investrange}</td><td data-intrest="{project_intrest}" class="intrest">{intrest}</td><td><span data-isadd="{is_on}" class="home switch {is_on}" onclick="isadd(this,{id})"></span></td>'+
     '<td><span data-isadd="{is_recommend}" class="recom switch {is_recommend}" onclick="isRecommend(this,{id})"></span></td>'+
-    '<td data-isofficial="{project_is_official}" class="edit"><a href="/account/project_add/{project}">编辑</a></td></tr>[/results]'
+    '<td><a class="edit" href="/account/project_add/{project}">编辑</a>'+
+    ' | <a class="edit" class="edit" onclick="del(this, {id}, {project})">删除</a></td></tr>[/results]'
     + '</tbody></table>';
 var url = "/restapi/sub/?page={page}&pageSize={pageSize}&ordering=project__state,-is_on";
 //function pop(n){
@@ -175,9 +176,9 @@ function edit(obj, id, project) {     //编辑调用函数
     project_souse = project;
 //  console.log(project);
     project_id = id;
-    parent_dom = $(obj).parent();
+    parent_dom = $(obj).parent().parent();
     console.log(project_id);
-    var project_type = $(obj).data('isofficial');
+//  var project_type = $(obj).data('isofficial');
 //  var marks = $(obj).data('marks');
     
     $.ajax({
@@ -185,70 +186,54 @@ function edit(obj, id, project) {     //编辑调用函数
         dataType: "json",
         type:"get",
         success: function(ret) {
-            if (project_type == 'True') {
-                if (!ret.introduction) {
-                    $('#edit_detail').val(ret.project_intro);
-                } else{
-                	$('#edit_detail').val(ret.introduction);
-                }
-                if (!ret.price) {
-                    $('#edit_price').val(ret.project_cprice);
-                } else{
-                    $('#edit_price').val(ret.price);
-                }
-                if (!ret.shortprice) {
-                    $('#shortprice').val(ret.project_shortprice);
-                } else{
-                    $('#shortprice').val(ret.shortprice);
-                }
-                if (!ret.intrest) {
-                    $('#edit_intrest').val(ret.project_intrest);
-                } else{
-                    $('#edit_intrest').val(ret.intrest);
-                }
-                mark_list = ret.marks;
-                console.log(mark_list);
-                $('.mark-box2 .mark-name').each(function(){
-                    var i;
-                    for (i in mark_list) {
-                        if ($(this).text() == mark_list[i]) {
-                            $(this).parent().addClass('on');
-                        }
-                    }
-                })
-                
-                $('.popup.m-edit-proj').addClass('in');
-            } else if(project_type == 'False') {
-                if (!ret.introduction) {
-                    $('#edit_detail_02').val(ret.project_intro);
-                } else{
-                    $('#edit_detail_02').val(ret.introduction);
-                }
-                if (!ret.price) {
-                    $('#edit_price_02').val(ret.project_cprice);
-                } else{
-                    $('#edit_price_02').val(ret.price);
-                }
-                if (!ret.intrest) {
-                    $('#edit_intrest_02').val(ret.project_intrest);
-                } else{
-                    $('#edit_intrest_02').val(ret.intrest);
-                }
-                
-                $('#edit_link_02').val(ret.project_strategy);
-//              $('#edit_detail_02').val(ret.introduction);
-//              $('#edit_price_02').val(ret.price);
-                $('#edit_term_02').val(ret.project_term);
-                $('#edit_range_02').val(ret.project_investrange);
-//              $('#edit_intrest_02').val(ret.intrest);
-                
-            	$('.popup.m-edit-proj-02').addClass('in');
+            
+            if (!ret.introduction) {
+                $('#edit_detail').val(ret.project_intro);
+            } else{
+            	$('#edit_detail').val(ret.introduction);
             }
+            if (!ret.price) {
+                $('#edit_price').val(ret.project_cprice);
+            } else{
+                $('#edit_price').val(ret.price);
+            }
+            if (!ret.shortprice) {
+                $('#shortprice').val(ret.project_shortprice);
+            } else{
+                $('#shortprice').val(ret.shortprice);
+            }
+            if (!ret.intrest) {
+                $('#edit_intrest').val(ret.project_intrest);
+            } else{
+                $('#edit_intrest').val(ret.intrest);
+            }
+            mark_list = ret.marks;
+            console.log(mark_list);
+            $('.mark-box2 .mark-name').each(function(){
+                var i;
+                for (i in mark_list) {
+                    if ($(this).text() == mark_list[i]) {
+                        $(this).parent().addClass('on');
+                    }
+                }
+            })
+            
+            $('.popup.m-edit-proj').addClass('in');
+            
         },
         error: function() {
             alert("请检查网络连接");
         }
     });
+}
+var del_sub_id = '';
+var del_proj_id = '';
+var del_proj_dom;
+function del(obj, id, project) {
+    del_sub_id = id;
+    del_proj_id = project;
+    del_proj_dom = $(obj).parent().parent();
+    $('.popup.m-del-proj').addClass('in');
 }
 $(function(){
 	$('.back-a3').toggleClass("on");
@@ -336,6 +321,26 @@ $(function(){
             }
         });
     })
+    $('#del_proj').click(function(){        //确认删除项目
+        console.log(del_proj_id + ',' + del_sub_id);
+        $.ajax({        
+            url: "/restapi/marks/" + del_proj_id +'/',
+            dataType: "json",
+            type: 'post',
+            data: {
+                'project_id': del_proj_id 
+            },
+            success: function(ret) {
+                alert('操作成功');
+                $('.popup.m-del-proj').removeClass('in');
+                del_proj_dom.remove();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+                alert("数据错误");
+            }
+        });
+    })
     
     $('.project-box').tab({
         tabActiveClass: 'on',
@@ -409,7 +414,7 @@ $(function(){
             pageId:$("#page2"),
             pageSize:10,
             run:true,
-            content:data,
+            content:data2,
             complete:pagecallback,
         });
     })
@@ -421,7 +426,7 @@ $(function(){
                 pageId:$("#page2"),
                 pageSize:10,
                 run:true,
-                content:data,
+                content:data2,
                 complete:pagecallback,
             });
         }
@@ -559,7 +564,7 @@ $(function(){
         </div>
     </div>
 </div>
-<div class="popup m-edit-proj-02">
+<!--<div class="popup m-edit-proj-02">
     <div class="popup__content" style="width: 600px;">
         <div class="popup__top">
             <h2 class="popup__title">编辑自建项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
@@ -576,8 +581,8 @@ $(function(){
             <a id="edit_confirm_02" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
         </div>
     </div>
-</div>
-<div class="popup m-create-proj">
+</div>-->
+<!--<div class="popup m-create-proj">
     <div class="popup__content" style="width: 600px;">
         <div class="popup__top">
             <h2 class="popup__title">新建项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
@@ -597,7 +602,7 @@ $(function(){
             <a id="crt_confirm" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
         </div>
     </div>
-</div>
+</div>-->
 <div class="popup m-del-mark">
     <div class="popup__content" style="width: 600px;">
         <div class="popup__top">
@@ -623,6 +628,20 @@ $(function(){
         <div class="popup__btnbox">
             <a class="btn m-green m-popup m-right" onclick="canclePopup(this)">取消</a>
             <a id="add_mark" class="btn m-green m-popup popup-confirm">确认</a>
+        </div>
+    </div>
+</div>
+<div class="popup m-del-proj">
+    <div class="popup__content" style="width: 600px;">
+        <div class="popup__top">
+            <h2 class="popup__title">删除项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+        </div>
+        <div class="popup__detail">
+                        确认删除该项目？
+        </div>
+        <div class="popup__btnbox">
+            <a class="btn m-green m-popup m-right" onclick="canclePopup(this)">取消</a>
+            <a id="del_proj" class="btn m-green m-popup popup-confirm">确认</a>
         </div>
     </div>
 </div>

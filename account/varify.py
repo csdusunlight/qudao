@@ -147,6 +147,7 @@ def sendmsg_bydhst(phone, msg=None):
     m2 = md5()   
     m2.update(raw_pass)   
     content = msg
+    code = ''
     if content is None:
         code = random_code(6)
         logger.info('Now is sending code to: ' + str(phone))

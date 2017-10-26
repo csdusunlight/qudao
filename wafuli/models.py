@@ -194,6 +194,12 @@ class InvestLog(models.Model):
         if self.remark:
             ret.append(u"备注：" + self.remark)
         return '|'.join(ret)
+    def get_encrypt_mobile(self):
+        mobile = self.invest_mobile
+        if len(mobile)>=7:
+            return mobile[:3] + '****' + mobile[-4:]
+        else:
+            return mobile
 
 STATE = (
     ('0', u'置顶'),

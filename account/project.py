@@ -97,3 +97,19 @@ def update_offiproject(request, id):
         sub.marks = marks
     ret['code'] = 0
     return JsonResponse(ret)
+
+@csrf_exempt
+@login_required_ajax
+def delete_selfproject(request, id):
+    ret = {}
+    try:
+        with transaction.atomic():
+            project = Project.objects.get(id=id, user=request.user, is_official=False)
+            project.state = '30'
+            project.save(update_fields=['state'])
+            SubscribeShip.objects.filter(project_id=id).delete()
+            ret['code'] = 0
+    except:
+        ret['code'] = 1
+        ret['msg'] = u"您没有权限"
+    return JsonResponse(ret)

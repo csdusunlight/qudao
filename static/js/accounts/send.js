@@ -3,6 +3,24 @@ $(function() {
 	var emailpig = true;//事件点击通道
 	/*****************************发送验证码：手机**************************************/
 
+    var countdown=60;
+    function settime(val) {
+        console.log('验证码');
+        if (countdown == 0) {
+            val.removeAttribute("disabled");
+            val.value="获取验证码";
+            countdown = 60;
+            return;
+        } else {
+            val.setAttribute("disabled", true);
+            val.value="重新发送(" + countdown + ")";
+            countdown--;
+        }
+        setTimeout(function() {
+            settime(val)
+        },1000)
+    }
+    
 	var sendTelVerifyCodeImageV = function(phoneNum, action, actionurl) {
 		if(telpig){
 			$.ajax({
@@ -19,6 +37,7 @@ $(function() {
 				success : function(data) {
 					if (data.code == '1') {
 						alert('验证码发送成功！');
+						settime($('#action-send-code-imagvalidate')[0]);
 					} else {
 						alert(data.message);
 						// if (action=='register'){
@@ -100,23 +119,7 @@ $(function() {
 		send_sms_time_old -= 1;
 	}
 
-    var countdown=60;
-    function settime(val) {
-        console.log('验证码');
-        if (countdown == 0) {
-            val.removeAttribute("disabled");
-            val.value="获取验证码";
-            countdown = 60;
-            return;
-        } else {
-            val.setAttribute("disabled", true);
-            val.value="重新发送(" + countdown + ")";
-            countdown--;
-        }
-        setTimeout(function() {
-            settime(val)
-        },1000)
-    }
+    
 	/**
 	 * 绑定点击方法：手机发送验证码校验图片验证
 	 */
@@ -130,7 +133,7 @@ $(function() {
 			actionType = 'register';
 			actionurl = get_code_url;
 			sendTelVerifyCodeImageV(phoneNum, actionType, actionurl);
-			settime(this);
+			
 		// }
 		}
 

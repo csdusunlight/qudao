@@ -243,9 +243,9 @@ def phoneImageV(request):
 #             result['message'] = u'图形验证码输入错误！'
 #             result.update(generateCap())
 #             return JsonResponse(result)
-        users = MyUser.objects.filter(mobile=phone)
+        users = ApplyLog.objects.filter(mobile=phone)
         if users.exists():
-            result['message'] = u'该手机号码已被占用！'
+            result['message'] = u'该手机号码已申请！'
             result.update(generateCap())
             return JsonResponse(result)
     elif action=='forgot_passwd':

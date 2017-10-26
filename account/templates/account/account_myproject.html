@@ -438,50 +438,7 @@ $(function(){
 //      $('.popup.m-create-proj').addClass('in');
 //      
 //  })
-    $('#crt_confirm').click(function(){     //确认新建项目
-        var crt_name = $('#crt_name').val(),
-            crt_link = $('#crt_link').val(),
-            crt_detail = $('#crt_detail').val(),
-            crt_price = $('#crt_price').val(),
-            crt_term = $('#crt_term').val();
-            crt_range = $('#crt_range').val();
-            crt_intrest = $('#crt_intrest').val();
-            console.log(' crt_name=' + crt_name +' crt_link=' + crt_link +' crt_detail=' + crt_detail +' crt_price=' + crt_price +' crt_term=' + crt_term);
-        if (!crt_name || !crt_link || !crt_detail || !crt_price || !crt_term || !crt_range || !crt_intrest) {
-        	alert("填写项不能为空")
-        	return;
-        }    
-        $.ajax({
-            url: "{%url 'project_create' %}",
-            dataType: "json",
-            type: 'post',
-            data: {
-                'title': crt_name,
-                'strategy': crt_link,
-                'introduction': crt_detail,
-                'price': crt_price,
-                'term': crt_term,
-                'investrange': crt_range,
-                'intrest': crt_intrest
-            },
-            success: function(ret) {
-                if (ret.code == 0) {
-                    $.prompt({
-                        Content: '新建成功'
-                    })
-                    alert('新建成功');
-//                  $('.popup.m-create-proj').removeClass('in');
-                    history.go(0);
-                } else {
-                    alert(ret.msg);
-                }
-            },
-            error: function() {
-                alert("请检查网络连接");
-            }
-        });
-    })
-    
+        
     
     $('#edit_confirm').click(function(){     //确认修改官方项目
         var edit_detail = $('#edit_detail').val(),
@@ -522,60 +479,7 @@ $(function(){
             }
         });
     })
-    $('#edit_confirm_02').click(function(){     //确认修改自建项目
-        var edit_link_02 = $('#edit_link_02').val(),
-            edit_detail_02 = $('#edit_detail_02').val(),
-            edit_price_02 = $('#edit_price_02').val(),
-            edit_term_02 = $('#edit_term_02').val(),
-            edit_range_02 = $('#edit_range_02').val(),
-            edit_intrest_02 = $('#edit_intrest_02').val();
-            
-            console.log(' project_id=' + project_id +' edit_detail=' + edit_detail +' edit_price=' + edit_price);
-        $.ajax({
-            url: '/restapi/sub/' + project_id + '/',
-            dataType: "json",
-            type: 'put',
-            data: {
-                'project_strategy': edit_link_02,
-                'introduction': edit_detail_02,
-                'price': edit_price_02,
-                'project_term': edit_term_02,
-                'project_investrange': edit_range_02,
-                'intrest': edit_intrest_02
-            },
-            success: function(ret) {
-                $.ajax({
-                    url: '/restapi/projects/' + project_souse + '/',
-                    dataType: "json",
-                    type: 'put',
-                    data: {
-                        'strategy': edit_link_02,
-                        'introduction': edit_detail_02,
-                        'cprice': edit_price_02,
-                        'term': edit_term_02,
-                        'investrange': edit_range_02,
-                        'intrest': edit_intrest_02
-                    },
-                    success: function(ret) {
-                        $.prompt({
-                            Content: '编辑成功'
-                        })
-                        parent_dom.find('td').eq(2).text(edit_price_02);
-                        parent_dom.find('td').eq(3).text(edit_term_02);
-                        parent_dom.find('td').eq(4).text(edit_range_02);
-                        parent_dom.find('td').eq(5).text(edit_intrest_02);
-                        $('.popup.m-edit-proj-02').removeClass('in');
-                    },
-                    error: function() {
-                        alert("请检查网络连接");
-                    }
-                });
-            },
-            error: function() {
-                alert("请检查网络连接");
-            }
-        });
-    })
+   
 
 });
 </script>

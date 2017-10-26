@@ -9,6 +9,7 @@ from wafuli.models import Project, SubscribeShip
 from django.http.response import JsonResponse
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
+import random
 
 @csrf_exempt
 @login_required_ajax
@@ -46,10 +47,11 @@ def create_update_selfproject(request, id=None):
         return JsonResponse(ret)
     kwargs = {}
     if id is None:
+        points = random.randint(5,50)
         kwargs.update(user_id=user.id, title=title,strategy=strategy, introduction=introduction,
                                cprice=cprice, shortprice=shortprice, term=term,investrange=investrange, intrest=intrest,
                                is_multisub_allowed=is_multisub_allowed, necessary_fields=necessary_fields
-                               ,company_id=company, state='10' )
+                               ,company_id=company, state='10', points=points)
     else:
         kwargs.update(title=title,strategy=strategy, introduction=introduction, shortprice=shortprice,
                         cprice=cprice, term=term,investrange=investrange, intrest=intrest,

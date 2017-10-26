@@ -780,31 +780,32 @@ def project_manage(request):
     else:
         return render(request, 'account/account_myproject.html')
 
-
-@csrf_exempt
-@login_required_ajax
-def project_create(request):
-    ret = {}
-    user = request.user
-    title = request.POST.get("title", None)
-    strategy = request.POST.get("strategy", None)
-    introduction = request.POST.get("introduction", None)
-    price = request.POST.get("price", None)
-    term = request.POST.get("term", None)
-    investrange = request.POST.get("investrange", None)
-    intrest = request.POST.get("intrest", None)
-    if not title or not strategy or not introduction:
-        ret['code'] = 1
-        ret['msg'] = u"参数缺失"
-    else:
-        with transaction.atomic():
-            points = random.randint(5,50)
-            project = Project.objects.create(title=title, strategy=strategy, introduction=introduction,
-                    cprice=price, is_official=False, user=user, term=term, investrange=investrange,
-                    intrest=intrest, pic='', points=points)
-            SubscribeShip.objects.create(user=user, project=project, is_on=True)
-        ret['code'] = 0
-    return JsonResponse(ret)
+# 
+# @csrf_exempt
+# @login_required_ajax
+# def project_create(request):
+#     ret = {}
+#     user = request.user
+#     title = request.POST.get("title", None)
+#     strategy = request.POST.get("strategy", None)
+#     introduction = request.POST.get("introduction", None)
+#     price = request.POST.get("price", None)
+#     term = request.POST.get("term", None)
+#     investrange = request.POST.get("investrange", None)
+#     intrest = request.POST.get("intrest", None)
+#     if not title or not strategy or not introduction:
+#         ret['code'] = 1
+#         ret['msg'] = u"参数缺失"
+#     else:
+#         with transaction.atomic():
+#             points = random.randint(5,50)
+#             print points
+#             project = Project.objects.create(title=title, strategy=strategy, introduction=introduction,
+#                     cprice=price, is_official=False, user=user, term=term, investrange=investrange,
+#                     intrest=intrest, pic='', points=points)
+#             SubscribeShip.objects.create(user=user, project=project, is_on=True)
+#         ret['code'] = 0
+#     return JsonResponse(ret)
 
 @csrf_exempt
 @login_required_ajax

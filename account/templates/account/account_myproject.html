@@ -324,12 +324,9 @@ $(function(){
     $('#del_proj').click(function(){        //确认删除项目
         console.log(del_proj_id + ',' + del_sub_id);
         $.ajax({        
-            url: "/restapi/marks/" + del_proj_id +'/',
+            url: "/account/delete_selfproject/" + del_proj_id +'/',
             dataType: "json",
             type: 'post',
-            data: {
-                'project_id': del_proj_id 
-            },
             success: function(ret) {
                 alert('操作成功');
                 $('.popup.m-del-proj').removeClass('in');

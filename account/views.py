@@ -41,6 +41,7 @@ from wafuli.models import TransList, WithdrawLog, Project, SubscribeShip,\
 from public.tools import login_required_ajax
 from wafuli.tools import saveImgAndGenerateUrl
 from decimal import Decimal
+import random
 
 @sensitive_post_parameters()
 @csrf_protect
@@ -797,9 +798,10 @@ def project_create(request):
         ret['msg'] = u"参数缺失"
     else:
         with transaction.atomic():
+            points = random.randint(5,50)
             project = Project.objects.create(title=title, strategy=strategy, introduction=introduction,
                     cprice=price, is_official=False, user=user, term=term, investrange=investrange,
-                    intrest=intrest, pic='')
+                    intrest=intrest, pic='', points=points)
             SubscribeShip.objects.create(user=user, project=project, is_on=True)
         ret['code'] = 0
     return JsonResponse(ret)

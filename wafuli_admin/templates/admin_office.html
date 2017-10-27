@@ -22,6 +22,7 @@
 		color: #fff;
 		background-color: #91c11d;
 		border-radius: 4px;
+		cursor: pointer;
 	}
 </style>
 <script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
@@ -347,6 +348,10 @@
 			});
 			//	hint.innerHTML = '无';
 		});
+		$('.unhandle-box').on('click', '.unhandle', function(){
+		    $('#projectname').val($(this).text());
+		    $('#search').click();
+		})
 
 		var choose_file = document.getElementById("input_clone");
 //		var hint = document.getElementById("hint");
@@ -453,7 +458,7 @@
 	<div style="clear: both;"></div>
 	<p class="unhandle-box">还存在未审核数据（今天之前提交的）的项目有：
 	{% for item in unaudited_pronames %}
-	<span class="unhandle">{{item}} </span>
+	<span class="unhandle">{{item}}</span>
 	{%endfor%}
 	</p>
 </div>

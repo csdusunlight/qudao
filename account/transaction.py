@@ -20,6 +20,7 @@ def charge_money(user, type, amount, reason, reverse=False, remark=''):
     if amount <= 0:
         raise Exception('Charge_money amount can not be less or equal to 0')
     with transaction.atomic():
+        user = MyUser.objects.get(id=user.id)
         trans = TransList.objects.create(user=user, transType=type, initAmount = user.balance, 
                           transAmount=amount, reason=reason, remark=remark)
         if type == '0':

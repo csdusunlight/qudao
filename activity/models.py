@@ -1,3 +1,4 @@
+#coding:utf-8
 from django.db import models
 from wafuli.models import InvestLog, SUB_WAY
 from django.utils import timezone

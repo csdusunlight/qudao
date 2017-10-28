@@ -1,3 +1,4 @@
+#coding:utf-8
 from django.shortcuts import render
 from activity.models import IPLog, IPAward
 from account.tools import get_client_ip

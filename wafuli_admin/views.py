@@ -167,6 +167,9 @@ def admin_invest(request):
                 investlog.settle_amount = cash
                 translist.investlog = investlog
                 translist.save(update_fields=['investlog'])
+                #活动插入
+                on_audit_pass(request, investlog)
+                #活动插入结束
                 res['code'] = 0
         elif type==2:
             investlog.audit_state = '2'

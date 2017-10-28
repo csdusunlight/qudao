@@ -18,6 +18,6 @@ class IPLog(models.Model):
         
 class IPAward(models.Model):
     ip = models.CharField('remote_ip', max_length=15, db_index=True)
-    date = models.DateField(u"日期")
+    date = models.DateField(u"鏃ユ湡")
     class Meta:
-        index_together = ('ip','date') #联合索引
+        index_together = ('ip','date') #鑱斿悎绱㈠紩

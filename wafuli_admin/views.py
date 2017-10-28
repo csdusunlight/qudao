@@ -27,6 +27,7 @@ import json
 from django.db import transaction
 from public.tools import has_permission
 from decimal import Decimal
+from activity.views import on_audit_pass
 # Create your views here.
 logger = logging.getLogger('wafuli')
 def index(request):
@@ -538,6 +539,9 @@ def import_investlog(request):
                     investlog.settle_amount = amount
                     translist.investlog = investlog
                     translist.save(update_fields=['investlog'])
+                    #活动插入
+                    on_audit_pass(request, investlog)
+                    #活动插入结束
                 elif result==2:
                     investlog.audit_state = '2'
                 elif result==3:

@@ -157,10 +157,16 @@ SUB_TYPE = (
     ('1', u'首投'),
     ('2', u'复投'),
 )
+SUB_WAY = (
+    ('1', u'主页提交'),
+    ('2', u'个人中心逐条提交'),
+    ('3', u'个人中心表格提交'),
+)
 class InvestLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="investlog_submit")
     project = models.ForeignKey(Project, related_name="investlogs")
     submit_type = models.CharField(max_length=10, choices=SUB_TYPE, verbose_name=u"首投/复投")
+    submit_way = models.CharField(max_length=10, choices=SUB_WAY, verbose_name=u"提交入口")
     is_official = models.BooleanField(u'是否官方项目',)
     is_selfsub = models.BooleanField(u'是否渠道用户自己提交的',default=False)
     submit_time = models.DateTimeField(u'提交时间', default=timezone.now)

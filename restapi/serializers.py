@@ -11,6 +11,7 @@ from account.models import MyUser, ApplyLog
 from wafuli_admin.models import DayStatis
 from wafuli.models import Company
 from statistic.models import UserDetailStatis, UserAverageStatis
+from activity.models import SubmitRank
 
 class UserSerializer(serializers.ModelSerializer):
     real_name = serializers.CharField(source="user_bankcard.first.real_name")
@@ -138,4 +139,9 @@ class MarkSerializer(serializers.ModelSerializer):
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
+        fields = '__all__'
+        
+class RankSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubmitRank
         fields = '__all__'

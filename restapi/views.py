@@ -12,7 +12,8 @@ from restapi.serializers import UserSerializer, InvestLogSerializer,\
     TransListSerializer, NoticeSerializer, ProjectSerializer,\
     SubscribeShipSerializer, AnnouncementSerializer, DayStatisSerializer,\
     ApplyLogSerializer, WithdrawLogSerializer, UserDetailStatisSerializer,\
-    UserAverageStatisSerializer, MarkSerializer, CompanySerializer
+    UserAverageStatisSerializer, MarkSerializer, CompanySerializer,\
+    RankSerializer
 from account.models import MyUser, ApplyLog
 from rest_framework.filters import SearchFilter,OrderingFilter
 from restapi.permissions import IsOwnerOrStaff, IsSelfOrStaff
@@ -22,6 +23,7 @@ from django.db.models import Q
 from wafuli_admin.models import DayStatis
 from statistic.models import UserDetailStatis, UserAverageStatis
 from rest_framework.exceptions import ValidationError
+from activity.models import SubmitRank
 # from wafuli.Filters import UserEventFilter
 class BaseViewMixin(object):
     authentication_classes = (CsrfExemptSessionAuthentication,)
@@ -234,4 +236,8 @@ class MarkDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
 class CompanyList(BaseViewMixin, generics.ListAPIView):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
+    pagination_class = MyPageNumberPagination
+class RankList(BaseViewMixin, generics.ListAPIView):
+    queryset = SubmitRank.objects.all()
+    serializer_class = RankSerializer
     pagination_class = MyPageNumberPagination

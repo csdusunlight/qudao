@@ -29,7 +29,7 @@ class SubmitRank(models.Model):
     user = models.OneToOneField(MyUser)
     rank = models.PositiveIntegerField(u"排名", default=100)
     sub_num = models.PositiveIntegerField(u"获得奖励数", default=0)
-    award = models.IntegerField(u'奖励金额',  default=0)
+    award = models.DecimalField(u'奖励金额', default = Decimal(0), max_digits=10, decimal_places=2)
     def __unicode__(self):
         return self.user.username +',' +str(self.award)+','+str(self.rank)
     class Meta:

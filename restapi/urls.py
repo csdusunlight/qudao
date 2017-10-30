@@ -37,4 +37,6 @@ urlpatterns = [
     url(r'^marks/(?P<pk>[0-9]+)/$', views.MarkDetail.as_view()),
     
     url(r'^company/$', views.CompanyList.as_view()),
+    
+    url(r'^rank/$', views.RankList.as_view()),
 ]

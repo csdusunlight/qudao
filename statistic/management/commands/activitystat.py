@@ -30,14 +30,14 @@ class Command(BaseCommand):
         n = 0
         j = 0
         for r in ranks:
-            if r.acc_num == n:
+            if r.sub_num == n:
                 r.rank = i
             else:
                 i = i + j
                 r.rank = i
                 j = 0
             j = j + 1
-            n = r.acc_num
+            n = r.sub_num
             r.save(update_fields=['rank'])
         
         end_time = time.time()

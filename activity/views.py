@@ -30,5 +30,5 @@ def on_audit_pass(request, investlog):
             charge_money(investlog.user, '0', award, u"活动奖励")
             IPAward.objects.create(ip=ip, date=date)
             iplog.award = award
-            iplog.save(update_fields='award')
+            iplog.save(update_fields=['award',])
     

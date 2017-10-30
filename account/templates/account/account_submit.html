@@ -431,7 +431,9 @@
                     item_parent.find('.searchable-select').remove();
                     item_parent.find('.telnum').val('');
                     var value = $(this).parent().parent().find('.project_select').val();
+                    var value2 = $(this).parent().parent().find('.is_futou').val();
                     item_parent.find('.project_select').val(value);
+                    item_parent.find('.is_futou').val(value2);
                     item_parent.find('.project_select').searchableSelect();
 				})
 				// 单项提交部分-------start

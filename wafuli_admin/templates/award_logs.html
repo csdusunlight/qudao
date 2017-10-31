@@ -1,12 +1,11 @@
 {% extends "base.html" %} {% block js %}
 <script type="text/javascript">
-    var data = '<table width="100%"><tr><th>日期</th><th>新申请用户数</th><th>审核拒绝人数</th><th>审核通过人数</th>' +
-        '<th>成功提现金额</th><th>成功提现用户数</th><th>返现金额</th><th>返现用户数</th>' +
-        '[results]<tr><td>{date}</td><td>{apply_num}</td><td>{refuse_num}</td>' +
-        '<td>{new_reg_num}</td><td>{with_amount}</td><td>{with_num}</td><td>{ret_amount}</td>' +
-        '<td>{ret_num}</td>' +
+    var data = '<table width="100%"><tr><th>用户名</th><th>用户手机号</th><th>提交时间</th><th>ip地址</th>' +
+        '<th>奖励金额</th>' +
+        '[results]<tr><td>{username}</td><td>{mobile}</td><td>{time}</td>' +
+        '<td>{ip}</td><td>{award}' +
         '</tr>[/results]</table>';
-    var url = "/restapi/daystatis/" + "?page={page}&pageSize={pageSize}";
+    var url = "/restapi/iplogs/" + "?page={page}&pageSize={pageSize}";
     $(document).ready(function() {
         $(".ListTable tr:even").css("background-color", "#fcfcfc");
         $("li.home12").toggleClass("on");

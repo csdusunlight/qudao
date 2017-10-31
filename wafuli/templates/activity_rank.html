@@ -38,20 +38,6 @@
                     <span class="list-3 list-item">15233346666</span>
                     <span class="list-4 list-item">4565</span>
                     <span class="list-5 list-item">9786</span>
-                </div>
-                <div class="table__list">
-                    <span class="list-1 list-item">1</span>
-                    <span class="list-2 list-item"><img class="user-img" src="../../static/images/skin_1.jpg"/></span>
-                    <span class="list-3 list-item">15233346666</span>
-                    <span class="list-4 list-item">4565</span>
-                    <span class="list-5">9786</span>
-                </div>
-                <div class="table__list">
-                    <span class="list-1 list-item">1</span>
-                    <span class="list-2 list-item"><img class="user-img" src="../../static/images/skin_1.jpg"/></span>
-                    <span class="list-3 list-item">15233346666</span>
-                    <span class="list-4 list-item">4565</span>
-                    <span class="list-5 list-item">9786</span>
                 </div>-->
             </div>
         </div>
@@ -69,8 +55,8 @@
                     console.log(ret.results);
                     for (var i=0; i<ret.results.length; i++) {
                         rank_html += '<div class="table__list"><span class="list-1 list-item">'+ ret.results[i].rank +'</span>'+
-                        '<span class="list-2 list-item"><img class="user-img" src="../../static/images/skin_1.jpg"/></span>'+
-                        '<span class="list-3 list-item">15233346666</span>'+
+                        '<span class="list-2 list-item"><img class="user-img" src="'+ ret.results[i].user_pic +'"/></span>'+
+                        '<span class="list-3 list-item">'+ ret.results[i].mobile +'</span>'+
                         '<span class="list-4 list-item">'+ ret.results[i].sub_num +'</span>'+
                         '<span class="list-5 list-item">'+ ret.results[i].award +'</span></div>';
                     }

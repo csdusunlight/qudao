@@ -238,6 +238,7 @@ class CompanyList(BaseViewMixin, generics.ListAPIView):
     serializer_class = CompanySerializer
     pagination_class = MyPageNumberPagination
 class RankList(BaseViewMixin, generics.ListAPIView):
+    permission_classes = ()
     queryset = SubmitRank.objects.all()
     serializer_class = RankSerializer
     pagination_class = MyPageNumberPagination

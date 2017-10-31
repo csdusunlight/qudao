@@ -123,7 +123,12 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
             return '/static/images/user-icon.png'
         def __unicode__(self):
             return self.mobile
-
+    def get_encrypt_mobile(self):
+        mobile = self.mobile
+        if len(mobile)>=7:
+            return mobile[:3] + '****' + mobile[-4:]
+        else:
+            return mobile
 
 class BankCard(models.Model):
     user = models.ForeignKey(MyUser, related_name="user_bankcard")

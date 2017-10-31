@@ -1,0 +1,76 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>挖福利-专业的互联网福利体验平台！</title>
+        <meta name="keywords" content="挖福利，我要挖福利，p2p理财平台，p2p投资理财，p2p投资理财平台，小额投资理财，个人投资理财，互联网理财产品，互联网理财平台，互联网金融平台，互联网金融产品，网络理财产品，网赚" />
+        <meta name="description" content="挖福利从用户角度出发，致力于对整合对用户有价值的互联网福利产品，打造全国首家专业的互联网福利产品体验平台。" />
+        <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/wfl-common.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/wfl-flesslider.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/activity-rank.css"/>
+    </head>
+    <body>
+        {% include "header.html" %}
+        <img class="top-img" src="/static/images/rank-top-bg.jpg"/>
+        <div class="detail-box">
+            <div class="act__txt-box">
+                <p class="act__txt">为鼓励用户使用渠道交单主页，特开展了此次“迎上线，送现金”活动，用户通过渠道主业交单，渠道可获得相应现金奖励，奖励规则如下：</p>
+                <p class="act__txt">每单投资额<span class="act__num">≤1w</span>时，该主页的渠道可获得<span class="act__num">2.88</span>元现金奖励；</p>
+                <p class="act__txt">每单投资额<span class="act__num">>1w</span>时，可获得<span class="act__num">5.88</span>元的现金奖励。</p>
+                <p class="act__txt">*每个IP每天仅限前两单获得奖励</p>
+                <p class="act__txt">数据审核通过之后，将获得的奖励发放至福利联盟账号中。此次活动最终解释权归福利联盟所有。</p>
+            </div>
+        </div>
+        <div class="act-rank">
+            <div class="table__head table__list">
+                <span class="list-1 list-item">排名</span>
+                <span style="opacity: 0;" class="list-2 list-item">头像</span>
+                <span class="list-3 list-item">手机号</span>
+                <span class="list-4 list-item">交单数量</span>
+                <span class="list-5 list-item">已获奖励</span>
+            </div>
+            <div class="table__rank-box">
+                <!--<div class="table__list">
+                    <span class="list-1 list-item">1</span>
+                    <span class="list-2 list-item"><img class="user-img" src="../../static/images/skin_1.jpg"/></span>
+                    <span class="list-3 list-item">15233346666</span>
+                    <span class="list-4 list-item">4565</span>
+                    <span class="list-5 list-item">9786</span>
+                </div>-->
+            </div>
+        </div>
+        
+        {% include "footer.html" %}
+
+        <script src="/static/js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+            $.ajax({
+                url:"/restapi/rank/?page=1&pageSize=10",
+                type: 'get',
+                dataType: "json",
+                success: function(ret) {
+                    var rank_html='';
+                    console.log(ret.results);
+                    for (var i=0; i<10; i++) {
+                        if (ret.results[i]) {
+                            rank_html += '<div class="table__list"><span class="list-1 list-item">'+ (i+1) +'</span>'+
+                            '<span class="list-2 list-item"><img class="user-img" src="'+ ret.results[i].user_pic +'"/></span>'+
+                            '<span class="list-3 list-item">'+ ret.results[i].mobile +'</span>'+
+                            '<span class="list-4 list-item">'+ ret.results[i].sub_num +'</span>'+
+                            '<span class="list-5 list-item">'+ ret.results[i].award +'</span></div>';
+                        } else {
+                            rank_html += '<div class="table__list" style="font-size: 14px;"><span class="list-1 list-item">'+ (i+1) +'</span><span class="list-2 list-item"></span>人气之星正在路上。。。</div>';
+                        }
+                    }
+                    $('.table__rank-box').html(rank_html);
+                },
+                error: function() {
+                    console.log("请检查网络连接");
+                }
+            });
+        </script>
+
+    </body>
+</html>

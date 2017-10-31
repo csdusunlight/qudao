@@ -39,4 +39,6 @@ urlpatterns = [
     url(r'^company/$', views.CompanyList.as_view()),
     
     url(r'^rank/$', views.RankList.as_view()),
+    
+    url(r'^iplogs/$', views.IPLogList.as_view()),
 ]

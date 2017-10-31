@@ -11,7 +11,7 @@ from account.models import MyUser, ApplyLog
 from wafuli_admin.models import DayStatis
 from wafuli.models import Company
 from statistic.models import UserDetailStatis, UserAverageStatis
-from activity.models import SubmitRank
+from activity.models import SubmitRank, IPLog
 
 class UserSerializer(serializers.ModelSerializer):
     real_name = serializers.CharField(source="user_bankcard.first.real_name")
@@ -146,4 +146,11 @@ class RankSerializer(serializers.ModelSerializer):
     mobile = serializers.CharField(source='user.get_encrypt_mobile', read_only=True)
     class Meta:
         model = SubmitRank
+        fields = '__all__'
+        
+class IPLogSerializer(serializers.ModelSerializer):
+    user_pic = serializers.CharField(source='user.picture_url', read_only=True)
+    mobile = serializers.CharField(source='user.get_encrypt_mobile', read_only=True)
+    class Meta:
+        model = IPLog
         fields = '__all__'

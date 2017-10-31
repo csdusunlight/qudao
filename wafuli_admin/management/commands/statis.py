@@ -9,6 +9,7 @@ import time,datetime
 from django.db import connection
 from django.db.models import Sum, Count,Avg
 from wafuli.models import Project, WithdrawLog, InvestLog
+from activity.models import IPAward, IPLog
 logger = logging.getLogger("wafuli")
 from django.core.management.base import BaseCommand, CommandError
 from account.models import MyUser, Userlogin, ApplyLog
@@ -34,6 +35,9 @@ class Command(BaseCommand):
         
         new_project_num = Project.objects.filter(pub_date__gte=today).count()
         
+        dict = IPLog.objects.filter(date=today).aggregate(total=Sum('award'))
+        activity_consume = dict.get('total')
+        
         update_fields = {
                         'apply_num':apply_num,
                         'refuse_num':refuse_num,
@@ -44,6 +48,7 @@ class Command(BaseCommand):
                         'invest_amount':invest_amount,
                         'ret_num':ret_num,
                         'new_project_num':new_project_num,
+                        'activity_consume':activity_consume
         }
         DayStatis.objects.update_or_create(date=today, defaults=update_fields)
         

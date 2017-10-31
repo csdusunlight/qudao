@@ -17,7 +17,7 @@ class Command(BaseCommand):
         begin_time = time.time()
         today = datetime.date.today()
         
-        item_list = IPLog.objects.filter(award__gt=0).values('user').\
+        item_list = IPLog.objects.filter(award__gt=0, user__is_staff=False).values('user').\
             annotate(cou=Count('*'),award=Sum('award')).order_by('user')
         for dic in item_list:
             user_id = dic.get('user')

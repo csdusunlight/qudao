@@ -3,6 +3,7 @@ from django.db import models
 from account.models import MyUser
 from django.utils import timezone
 from wafuli.data import AUDIT_STATE
+from decimal import Decimal
 class DayStatis(models.Model):
     date = models.DateField(u"日期", primary_key=True)
     apply_num = models.PositiveIntegerField(u"新申请人数", default=0)
@@ -14,6 +15,7 @@ class DayStatis(models.Model):
     invest_amount = models.PositiveIntegerField(u"投资金额", default=0)
     ret_num = models.PositiveIntegerField(u"返现人数", default=0)
     new_project_num = models.PositiveIntegerField(u"今日上线项目数", default=0)
+    activity_consume = models.DecimalField(u'账户余额', default = Decimal(0), max_digits=10, decimal_places=2)
     def __unicode__(self):
         return self.date.strftime("%Y-%m-%d")
     class Meta:

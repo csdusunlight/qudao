@@ -53,12 +53,16 @@
                 success: function(ret) {
                     var rank_html='';
                     console.log(ret.results);
-                    for (var i=0; i<ret.results.length; i++) {
-                        rank_html += '<div class="table__list"><span class="list-1 list-item">'+ ret.results[i].rank +'</span>'+
-                        '<span class="list-2 list-item"><img class="user-img" src="'+ ret.results[i].user_pic +'"/></span>'+
-                        '<span class="list-3 list-item">'+ ret.results[i].mobile +'</span>'+
-                        '<span class="list-4 list-item">'+ ret.results[i].sub_num +'</span>'+
-                        '<span class="list-5 list-item">'+ ret.results[i].award +'</span></div>';
+                    for (var i=0; i<10; i++) {
+                        if (ret.results[i]) {
+                            rank_html += '<div class="table__list"><span class="list-1 list-item">'+ (i+1) +'</span>'+
+                            '<span class="list-2 list-item"><img class="user-img" src="'+ ret.results[i].user_pic +'"/></span>'+
+                            '<span class="list-3 list-item">'+ ret.results[i].mobile +'</span>'+
+                            '<span class="list-4 list-item">'+ ret.results[i].sub_num +'</span>'+
+                            '<span class="list-5 list-item">'+ ret.results[i].award +'</span></div>';
+                        } else {
+                            rank_html += '<div class="table__list" style="font-size: 14px;"><span class="list-1 list-item">'+ (i+1) +'</span><span class="list-2 list-item"></span>人气之星正在路上。。。</div>';
+                        }
                     }
                     $('.table__rank-box').html(rank_html);
                 },

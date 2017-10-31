@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block js %}
+<script type="text/javascript">
+    var data = '<table width="100%"><tr><th>用户名</th><th>用户手机号</th><th>提交时间</th><th>ip地址</th>' +
+        '<th>奖励金额</th>' +
+        '[results]<tr><td>{username}</td><td>{mobile}</td><td>{time}</td>' +
+        '<td>{ip}</td><td>{award}' +
+        '</tr>[/results]</table>';
+    var url = "/restapi/iplogs/" + "?page={page}&pageSize={pageSize}";
+    $(document).ready(function() {
+        $(".ListTable tr:even").css("background-color", "#fcfcfc");
+        $("li.home12").toggleClass("on");
+        $("#pagedata").ajaxPage({
+            url: url,
+            pageId: $("#page"),
+            pageSize: 10,
+            run: true,
+            content: data,
+        });
+    });
+</script>
+{% endblock js %} {% block right %}
+<div class="Dateover">
+    <span>奖励记录</span>
+    <div class="Date-box">
+        <div class="Date-Form">
+            <form>
+            </form>
+        </div>
+        <div class="ListTable">
+            <div id="pagedata">
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="Page-in-admin">
+    <div class="page" id="page">
+    </div>
+</div>
+{% endblock %}

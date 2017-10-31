@@ -1317,3 +1317,5 @@ def send_multiple_msg(request):
         res['res_msg'] = u"没有选中任何手机号码"
     return JsonResponse(res)
 
+def award_logs(request):
+    return render(request,"award_logs.html",)

@@ -39,6 +39,8 @@ def project_all(request):
     return render(request, 'finance_all.html',  )
 def user_guide(request):
     return render(request, 'user_guide.html',  )
+def activity_rank(request):
+    return render(request, 'activity_rank.html',  )
 @login_required
 def display_screenshot(request):
     id = request.GET.get('id', None)

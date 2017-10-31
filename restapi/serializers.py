@@ -149,8 +149,8 @@ class RankSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class IPLogSerializer(serializers.ModelSerializer):
-    user_pic = serializers.CharField(source='user.picture_url', read_only=True)
-    mobile = serializers.CharField(source='user.get_encrypt_mobile', read_only=True)
+    mobile = serializers.CharField(source='user.mobile', read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
     class Meta:
         model = IPLog
         fields = '__all__'

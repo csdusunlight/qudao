@@ -13,19 +13,27 @@ body {
     margin: 30px auto;
     padding-left: 40px;
 }
+.intro_txt {
+    color: #ffbe00;
+    font-size: 24px;
+    text-align: center;
+    line-height: 80px;
+}
 .act__txt {
     margin: 36px 0;
     color: #6caffe;
     font-size: 18px;
     height: 24px;
     line-height: 24px;
+    text-align: center;
 }
 .act__num {
     display: inline-block;
     margin: 0 8px;
     padding: 0 5px;
     height: 24px;
-    font-size: 14px;
+    font-size: 24px;
+    color: #ff6767;
     line-height: 24px;
     background-color: #fcf300;
     border-radius: 4px;

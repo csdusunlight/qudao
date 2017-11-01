@@ -112,6 +112,11 @@ $(function(){
                     <label><input class="is_futou" type="radio" value="true" name="is_futou" /><i class="need-icon m-left"></i>是</label>
                     <label><input class="is_futou" type="radio" checked="checked" value="false" name="is_futou" /><i class="need-icon"></i>否</label>
                 </div>
+                <div class="item">
+                    <span class="item__name">允许预约</span>
+                    <label><input class="is_book" type="radio" value="true" name="is_book" /><i class="need-icon m-left"></i>是</label>
+                    <label><input class="is_book" type="radio" checked="checked" value="false" name="is_book" /><i class="need-icon"></i>否</label>
+                </div>
     	    </div>
 
             <div class="right-top clearfix">
@@ -188,8 +193,10 @@ $(function(){
                 $('.term').val(ret.term);
                 $('.investrange').val(ret.investrange);
                 $('.intrest').val(ret.intrest);
-                var radio_dom = 'input[value="'+ ret.is_multisub_allowed +'"]'
+                var radio_dom = '.is_futou[value="'+ ret.is_multisub_allowed +'"]'
                 $(radio_dom).prop("checked",true);
+                var radio_dom2 = '.is_book[value="'+ ret.is_book +'"]'
+                $(radio_dom2).prop("checked",true);
 
                 var need_str = ret.necessary_fields;
                 var need_set = need_str.split(',');
@@ -476,6 +483,7 @@ $(function(){
             var investrange = $('.investrange').val();
             var intrest = $('.intrest').val();
             var is_futou = $('input[name="is_futou"]:checked').val();
+            var is_book = $('input[name="is_book"]:checked').val();
             var mark_str = '';
             $('.mark.on').each(function(){
                 mark_str += $(this).data('id') + ',';
@@ -511,13 +519,14 @@ $(function(){
                     'investrange' : investrange,
                     'intrest' : intrest,
                     'is_multisub_allowed' : is_futou,
+                    'is_book' : is_book,
                     'necessary_fields' : necessary_fields,
                     'marks' : mark_str,
                 },
                 success: function(ret) {
                     if(ret.code == 0) {
                         alert("操作成功!");
-                    window.location.href="/account/project?tab=2"
+//                  window.location.href="/account/project?tab=2"
                     } else {
                         console.log(ret.msg)
                     }

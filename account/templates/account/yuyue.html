@@ -40,38 +40,31 @@
 </style>
 <script type="text/javascript">
 var data = '<table width="100%"><thead><tr><th height="44">预约项目</th>' +
-'<th>手机号</th><th>QQ</th><th>预约金额</th><th>备注</th><th>状态</th><th>操作</th></tr></thead><tbody>'+
-'[results]<tr><td>{reason}</td><td class="shouzhi" data-shouzhi="{transType}">{transAmount}</td>'+
-'<td>{user_balance}</td><td class="submit-time">{time}</td><td>{remark}</td><td>预约</td>'+
-'<td><a onclick="changeState(this,{id})">修改状态</a></td></tr>[/results]'+
+'<th>QQ</th><th>预约金额</th><th>预约时间</th><th>状态</th><th>备注</th><th>操作</th></tr></thead><tbody>'+
+'[results]<tr><td>{project}</td><td>{qq_number}</td>'+
+'<td>{book_content}</td><td>{book_date}</td><td>{state_des}</td><td>{remark}</td>'+
+'<td><a onclick="changeState(this,{id},{state})">修改状态</a></td></tr>[/results]'+
 '</tbody></table>';
-var url = "/restapi/translist/" + "?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}";
-//function emptydisplay(obj){
-//	pic_url = "/restapi/projects/";
-//	obj.html('<div class="Defa-in"><img src="' + pic_url + '">'+
-//			'<h2>咦~~ 您还没有相关记录~~</h2></div>');
-//}
+var url = "/restapi/books/" + "?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}";
+
 function pagecallback(){
-    $('.shouzhi').each(function(){
-        console.log($(this).data('shouzhi'))
-        if($(this).data('shouzhi') == '0') {
-            $(this).text('+' + $(this).text());
-        } else if($(this).data('shouzhi') == '1') {
-            $(this).text('-' + $(this).text());
-        }
-    })
+    
     $('.submit-time').each(function(){
         var submit_time = $(this).text().split('T');
         $(this).text(submit_time[0]);
     })
 }
 
-var project_id;
+var yuyue_id;
 var parent_dom;
-function changeState (obj,id) {
+var yuyue_state;
+function changeState (obj,id,state) {
     parent_dom = $(obj).parent().parent();
-    project_id = id;
-    console.log(project_id);
+    yuyue_id = id;
+    yuyue_state = state;
+    console.log(yuyue_id);
+    var select_dom = '.yuyue_state option[value=' + yuyue_id + ']'
+    $(select_dom).prop('selected', true);
     $('.popup.m-yuyue-proj').addClass('in');
 }
 
@@ -117,6 +110,29 @@ $(function(){
             complete:pagecallback,
         });
     });
+    
+    $('#confirm_yuyue').click(function() {
+        var state = $('.yuyue_state').val();
+        var state_txt = $('.yuyue_state option:selected').text();
+        console.log(state + ', ' + state_txt)
+        $.ajax({        
+            url: "/restapi/books/" + yuyue_id + "/",
+            dataType: "json",
+            type: 'put',
+            data: {
+                'state': state
+            },
+            success: function(ret) {
+                alert('修改成功');
+                $(parent_dom).children().eq(4).text(state_txt);
+                $('.popup.m-yuyue-proj').removeClass('in');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+                console.log("数据错误");
+            }
+        });
+    })
 
     // 审核拒绝原因弹窗
 //	$('.Content').on('click','.state_2',function(){
@@ -134,11 +150,11 @@ $(function(){
     	<!--内容-->
     	{% include "account/left.html" %}
     	<div class="RightCont">
-        	<div class="fubi-box">
+        	<!--<div class="fubi-box">
             	<span class="fubi-item">预约提示</span>
             	<input type="" name="" id="" value="" />
                 <a class="tixian btn m-yellow r">修改</a>
-            </div>
+            </div>-->
             <div class="table">
                 <h2 class="table__title">预约详情</h2>
                 <!--<div class="search">
@@ -180,16 +196,17 @@ $(function(){
                     <div class="popup__detail">
                         <div class="popup__item">
                             <span class="popup__itemname">项目名称</span>
-                            <select class="project_02" placeholder="选择项目">
-                                <option value="0">预约中</option>
-                                <option value="1">已接受</option>
-                                <option value="2">已拒绝</option>
+                            <select class="yuyue_state" placeholder="选择项目">
+                                <option value="0">预约成功</option>
+                                <option value="1">未处理</option>
+                                <option value="2">作废</option>
+                                <option value="3">延后处理</option>
                             </select>
                         </div>
                     </div>
                     <div class="popup__btnbox">
                         <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
-                        <a id="confirm_delete" class="btn m-green popup__close-btn">确认</a>
+                        <a id="confirm_yuyue" class="btn m-green popup__close-btn">确认</a>
                     </div>
                 </div>
             </div>

@@ -70,6 +70,7 @@ class Project(models.Model):
     user = models.ForeignKey(MyUser, null=True, related_name="created_projects")
     is_official = models.BooleanField(u"是否官方项目", default=False)
     is_addedto_repo = models.BooleanField(u"是否加入项目库", default=True)
+    is_book = models.BooleanField(u"是否需要预约", default=False)
     state = models.CharField(u"项目状态", max_length=2, choices=Project_STATE, default='10')
     pic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）", blank=True)
     strategy = models.URLField(u"攻略链接")
@@ -157,10 +158,16 @@ SUB_TYPE = (
     ('1', u'首投'),
     ('2', u'复投'),
 )
+SUB_WAY = (
+    ('1', u'主页提交'),
+    ('2', u'逐条提交'),
+    ('3', u'表格提交'),
+)
 class InvestLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="investlog_submit")
     project = models.ForeignKey(Project, related_name="investlogs")
     submit_type = models.CharField(max_length=10, choices=SUB_TYPE, verbose_name=u"首投/复投")
+    submit_way = models.CharField(max_length=10, choices=SUB_WAY, verbose_name=u"提交入口")
     is_official = models.BooleanField(u'是否官方项目',)
     is_selfsub = models.BooleanField(u'是否渠道用户自己提交的',default=False)
     submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
@@ -331,3 +338,23 @@ class Announcement(models.Model):
         verbose_name = u"个人中心的通知"
         verbose_name_plural = u"个人中心的通知"
         ordering = ['-priority', '-time']
+        
+BOOK_STATE = (
+    ('0', u'预约成功'),
+    ('1', u'未处理'),
+    ('2', u'作废'),
+    ('3', u'延后处理'),
+)    
+class BookLog(models.Model):
+    user = models.ForeignKey(MyUser, related_name="booklogs")
+    project = models.ForeignKey(Project, related_name="booklogs")
+    submit_time = models.DateTimeField(u"提交时间", default=timezone.now)
+    book_date = models.DateField(u'预约日期')
+    book_content = models.CharField(u"预约明细", max_length=50)
+    qq_number = models.CharField(u"QQ号", max_length=15, blank=True)
+    remark = models.CharField(u"备注", max_length=100, blank=True)
+    state = models.CharField(max_length=10, choices=BOOK_STATE, verbose_name=u"预约状态")
+    def __unicode__(self):
+        return self.project.title + self.book_content
+    class Meta:
+        ordering = ['-submit_time']

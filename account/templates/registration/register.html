@@ -164,7 +164,7 @@
                         <textarea class="re-tex" name="intro" maxlength="200" placeholder="请输入您的个人简介（10——200字）"></textarea><span class="tips" id="intro"></span>
                         <!--<input type="text" class="re-input" name="intro" placeholder="请输入您的个人简介（10——200字）" /><span class="tips" id="intro"></span>-->
                     </div>
-                    <div class="reg">
+                    <div style="display: none;" class="reg">
                         <span class="reg__name">相关截图</span>
                         <div class="img-up">
                             <input type="file" name="picfile" id="choose" accept="image/jpeg,image/png" multiple>
@@ -432,13 +432,13 @@
             password1 = $("input[name='password1']").val();
             
         console.log(qq+', ' + qqname+', ' + intro+', ' + mobile+', ' + code+', ' + password1+', ');
-        if (file_list.length==0){
-            alert("请上传截图");
-            return;
-        }
-        for (i in file_list){
-            formdata.append(file_list[i].name, file_list[i].blob);
-        }
+//      if (file_list.length==0){
+//          alert("请上传截图");
+//          return;
+//      }
+//      for (i in file_list){
+//          formdata.append(file_list[i].name, file_list[i].blob);
+//      }
         formdata.append('qq_number', qq);
         formdata.append('qq_name', qqname);
         formdata.append('code', code);

@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^user_guide/$', 'wafuli.views.user_guide', name='user_guide'),
     url(r'^screenshot/$', 'wafuli.views.display_screenshot', name='screenshot'),
     url(r'^qualification/$', 'wafuli.views.display_qualification', name='qualification'),
+    url(r'^activity_rank/$', 'wafuli.views.activity_rank', name='activity_rank'),
 ]

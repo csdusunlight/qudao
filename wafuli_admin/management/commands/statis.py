@@ -35,7 +35,7 @@ class Command(BaseCommand):
         
         new_project_num = Project.objects.filter(pub_date__gte=today).count()
         
-        dict = IPLog.objects.filter(date=today).aggregate(total=Sum('award'))
+        dict = IPLog.objects.filter(time__gte=today).aggregate(total=Sum('award'))
         activity_consume = dict.get('total')
         
         update_fields = {

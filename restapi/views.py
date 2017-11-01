@@ -6,14 +6,14 @@ from rest_framework import generics, permissions
 import django_filters
 from Paginations import MyPageNumberPagination
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
-    Announcement, WithdrawLog, Mark, Company
+    Announcement, WithdrawLog, Mark, Company, BookLog
 from permissions import CsrfExemptSessionAuthentication, IsAdmin
 from restapi.serializers import UserSerializer, InvestLogSerializer,\
     TransListSerializer, NoticeSerializer, ProjectSerializer,\
     SubscribeShipSerializer, AnnouncementSerializer, DayStatisSerializer,\
     ApplyLogSerializer, WithdrawLogSerializer, UserDetailStatisSerializer,\
     UserAverageStatisSerializer, MarkSerializer, CompanySerializer,\
-    RankSerializer, IPLogSerializer
+    RankSerializer, IPLogSerializer, BookLogSerializer
 from account.models import MyUser, ApplyLog
 from rest_framework.filters import SearchFilter,OrderingFilter
 from restapi.permissions import IsOwnerOrStaff, IsSelfOrStaff
@@ -243,6 +243,17 @@ class RankList(BaseViewMixin, generics.ListAPIView):
     serializer_class = RankSerializer
     pagination_class = MyPageNumberPagination
 class IPLogList(BaseViewMixin, generics.ListAPIView):
+    permission_classes = (IsAdmin,)
     queryset = IPLog.objects.all()
     serializer_class = IPLogSerializer
     pagination_class = MyPageNumberPagination
+class BookLogList(BaseViewMixin, generics.ListCreateAPIView):
+    def get_queryset(self):
+        return BookLog.objects.filter(user=self.request.user)
+    serializer_class = BookLogSerializer
+    pagination_class = MyPageNumberPagination
+class BookLogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
+    def get_queryset(self):
+        return Mark.objects.filter(user=self.request.user)
+    serializer_class = BookLogSerializer
+    permission_classes = (IsOwnerOrStaff,)

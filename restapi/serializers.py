@@ -6,7 +6,7 @@ Created on 2017年8月10日
 '''
 from rest_framework import serializers
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
-    Announcement, WithdrawLog, Mark
+    Announcement, WithdrawLog, Mark, BookLog
 from account.models import MyUser, ApplyLog
 from wafuli_admin.models import DayStatis
 from wafuli.models import Company
@@ -86,6 +86,7 @@ class SubscribeShipSerializer(serializers.ModelSerializer):
     project_picture = serializers.CharField(source='project.picture_url', read_only=True)
     project_marks = serializers.CharField(source='project.marks_list', read_only=True)
     project_is_official = serializers.CharField(source='project.is_official', read_only=True)
+    project_is_book = serializers.BooleanField(source='project.is_book', read_only=True)
     submit_num = serializers.IntegerField(source='project.points', read_only=True)
     necessary_fields = serializers.CharField(source='project.necessary_fields', read_only=True)
     optional_fields = serializers.CharField(source='project.optional_fields', read_only=True)
@@ -154,4 +155,10 @@ class IPLogSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username', read_only=True)
     class Meta:
         model = IPLog
+        fields = '__all__'
+        
+class BookLogSerializer(serializers.ModelSerializer):
+    state_des = serializers.CharField(source='get_state_display', read_only=True)
+    class Meta:
+        model = BookLog
         fields = '__all__'

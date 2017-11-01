@@ -41,4 +41,7 @@ urlpatterns = [
     url(r'^rank/$', views.RankList.as_view()),
     
     url(r'^iplogs/$', views.IPLogList.as_view()),
+    
+    url(r'^books/$', views.BookLogList.as_view()),
+    url(r'^books/(?P<pk>[0-9]+)/$', views.BookLogDetail.as_view(), kwargs={'partial':True}),
 ]

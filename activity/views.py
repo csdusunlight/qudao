@@ -25,7 +25,7 @@ def on_audit_pass(request, investlog):
         if invest_amount < 10000:
             award = Decimal('1.88')
         else:
-            award = Decimal('5.88')
+            award = Decimal('3.88')
         with transaction.atomic():    
             charge_money(investlog.user, '0', award, u"活动奖励")
             IPAward.objects.create(ip=ip, date=date)

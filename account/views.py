@@ -446,7 +446,9 @@ def bind_bankcard(request):
 @login_required
 def money(request):
     return render(request, 'account/money.html', {})
-
+@login_required
+def yuyue(request):
+    return render(request, 'account/yuyue.html', {})
 def get_user_money_page(request):
     user = request.user
     res={'code':0,}

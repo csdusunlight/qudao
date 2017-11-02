@@ -31,7 +31,7 @@ var data2 = '<table width="100%"><thead><tr><th>项目名称</th><th>项目来�
     '[results]<tr><td>{project_title}</td><td class="project_source">{project_source}</td><td data-price="{project_cprice}" class="price">{price}</td><td>{project_term}</td>'+
     '<td>{project_investrange}</td><td data-intrest="{project_intrest}" class="intrest">{intrest}</td><td><span data-isadd="{is_on}" class="home switch {is_on}" onclick="isadd(this,{id})"></span></td>'+
     '<td><span data-isadd="{is_recommend}" class="recom switch {is_recommend}" onclick="isRecommend(this,{id})"></span></td>'+
-    '<td><a class="edit" href="/account/project_add/{project}">编辑</a>'+
+    '<td><a class="edit" href="/account/project_add/{project}/">编辑</a>'+
     ' | <a class="edit" class="edit" onclick="del(this, {id}, {project})">删除</a></td></tr>[/results]'
     + '</tbody></table>';
 var url = "/restapi/sub/?page={page}&pageSize={pageSize}&ordering=project__state,-is_on";

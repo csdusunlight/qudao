@@ -4,6 +4,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     url(r'^$', 'account.views.account', name='account_index'),
     url(r'^money/$', 'account.views.money', name='account_money'),
+    url(r'^yuyue/$', 'account.views.yuyue', name='account_yuyue'),
 #     url(r'^moneypage/$', 'account.views.get_user_money_page', name='get_user_money_page'),
     url(r'security/$', 'account.views.security', name='account_security'),
     url(r'^bankcard/$', 'account.views.bankcard', name='account_bankcard'),

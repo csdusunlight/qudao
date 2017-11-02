@@ -254,6 +254,6 @@ class BookLogList(BaseViewMixin, generics.ListCreateAPIView):
     pagination_class = MyPageNumberPagination
 class BookLogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
-        return Mark.objects.filter(user=self.request.user)
+        return BookLog.objects.filter(user=self.request.user)
     serializer_class = BookLogSerializer
     permission_classes = (IsOwnerOrStaff,)

@@ -42,27 +42,27 @@
 		'<td>{remark}</td><td id="item_{id}"><a class="fyin" onclick="pass({id})">返现' +
 		'</a>│<a class="jion-s" onclick="refuse({id})">拒绝</a>│<a class="repeat" onclick="repeat({id})">复审</a></td></tr>[/results]</table>';
     var data3 = '<table width="100%"><tr><th>QQ/QQ昵称</th><th>用户级别</th><th>手机号</th><th>项目名称</th>' +
-        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>投资类型</th><th>复审原因</th><th>上传截图</th>' +
+        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>投资类型</th><th>提交方式</th><th>复审原因</th><th>上传截图</th>' +
         '<th>备注</th><th>操作</th></tr>[results]<tr><td>{qq_number}/{qq_name}</td><td>{user_level}</td><td>{user_mobile}</td><td>{project_title}</td>' +
         '<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
-        '<td>{submit_type_des}</td><td>{audit_reason}</td>'+
+        '<td>{submit_type_des}</td><td>{submit_way_des}</td><td>{audit_reason}</td>'+
         '<td data-isimg="{invest_image}" class="is-img"><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
         '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
         '<td>{remark}</td><td id="item_{id}"><a class="fyin" onclick="pass({id})">返现' +
         '</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td></tr>[/results]</table>';
 	var data0 = '<table width="100%"><tr><th>QQ/QQ昵称</th><th>用户级别</th><th>手机号</th><th>项目名称</th>' +
-        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>投资类型</th><th>处理状态</th>' +
+        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>投资类型</th><th>提交方式</th><th>处理状态</th>' +
         '<th>审核人</th><th>审核时间</th><th>返现金额</th><th>上传截图</th><th>备注</th></tr>[results]<tr><td>{qq_number}/{qq_name}</td><td>{user_level}</td><td>{user_mobile}</td><td>{project_title}</td>' +
         '<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
-        '<td>{submit_type_des}</td><td>{audit_state_des}<td>{admin_user}</td></td><td>{audit_time}</td><td>{settle_amount}</td>'+
+        '<td>{submit_type_des}</td><td>{submit_way_des}</td><td>{audit_state_des}<td>{admin_user}</td></td><td>{audit_time}</td><td>{settle_amount}</td>'+
         '<td data-isimg="{invest_image}" class="is-img"><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
         '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
         '<td>{remark}</td></tr>[/results]</table>';
     var data2 = '<table width="100%"><tr><th>QQ/QQ昵称</th><th>用户级别</th><th>手机号</th><th>项目名称</th>' +
-        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>投资类型</th><th>处理状态</th>' +
+        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>投资类型</th><th>提交方式</th><th>处理状态</th>' +
         '<th>审核人</th><th>审核时间</th><th>拒绝金额</th><th>上传截图</th><th>备注</th></tr>[results]<tr><td>{qq_number}/{qq_name}</td><td>{user_level}</td><td>{user_mobile}</td><td>{project_title}</td>' +
         '<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
-        '<td>{submit_type_des}</td><td>{audit_state_des}<td>{admin_user}</td></td><td>{audit_time}</td><td>{audit_reason}</td>'+
+        '<td>{submit_type_des}</td><td>{submit_way_des}</td><td>{audit_state_des}<td>{admin_user}</td></td><td>{audit_time}</td><td>{audit_reason}</td>'+
         '<td data-isimg="{invest_image}" class="is-img"><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
         '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
         '<td>{remark}</td></tr>[/results]</table>';
@@ -100,8 +100,12 @@
 			complete:pagecallback,
 		});
 		$(".none-x").click(function() {
-			$(this).parent().parent().css("display", "none"); <!--隐藏-->
+			$(this).parent().parent().css("display", "none"); 
 		})
+		$(".none-x-s").click(function() {
+            $(this).parent().parent().parent().parent().css("display", "none"); 
+        })
+		
 		$('.Finnow input[type="submit"]').click(function() {
 			id = $("input#ret_event_id").val();
 			var cash = $("input#add_cash").val();

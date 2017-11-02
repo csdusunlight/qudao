@@ -37,12 +37,24 @@
 	    margin-top: 22px;
 	    margin-right: 20px;
 	}
+	.state0 {
+        color: #91c11d;
+    }
+    .state1 {
+        color: #ffbe00;
+    }
+    .state2 {
+        color: red;
+    }
+    .state3 {
+        color: blue;
+    }
 </style>
 <script type="text/javascript">
 var data = '<table width="100%"><thead><tr><th height="44">预约项目</th>' +
 '<th>QQ</th><th>预约金额</th><th>预约时间</th><th>状态</th><th>备注</th><th>操作</th></tr></thead><tbody>'+
 '[results]<tr><td>{project}</td><td>{qq_number}</td>'+
-'<td>{book_content}</td><td>{book_date}</td><td>{state_des}</td><td>{remark}</td>'+
+'<td>{book_content}</td><td>{book_date}</td><td class="state{state}">{state_des}</td><td>{remark}</td>'+
 '<td><a onclick="changeState(this,{id},{state})">修改状态</a></td></tr>[/results]'+
 '</tbody></table>';
 var url = "/restapi/books/" + "?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}";
@@ -115,6 +127,7 @@ $(function(){
         var state = $('.yuyue_state').val();
         var state_txt = $('.yuyue_state option:selected').text();
         console.log(state + ', ' + state_txt)
+        $(parent_dom).children().eq(4).text(state_txt).removeClass('state0 state1 state2 state3').addClass('state'+state);
         $.ajax({        
             url: "/restapi/books/" + yuyue_id + "/",
             dataType: "json",
@@ -124,7 +137,6 @@ $(function(){
             },
             success: function(ret) {
                 alert('修改成功');
-                $(parent_dom).children().eq(4).text(state_txt);
                 $('.popup.m-yuyue-proj').removeClass('in');
             },
             error: function(jqXHR, textStatus, errorThrown) {

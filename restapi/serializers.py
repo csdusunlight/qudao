@@ -20,7 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyUser
         fields = ('id', 'mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'with_total','accu_income',
-                  'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number')
+                  'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number', 'is_autowith')
         read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level',)
         
 class ProjectSerializer(serializers.ModelSerializer):
@@ -159,6 +159,7 @@ class IPLogSerializer(serializers.ModelSerializer):
         
 class BookLogSerializer(serializers.ModelSerializer):
     state_des = serializers.CharField(source='get_state_display', read_only=True)
+    project_title = serializers.CharField(source='project.title', read_only=True)
     class Meta:
         model = BookLog
         fields = '__all__'

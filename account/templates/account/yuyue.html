@@ -49,13 +49,40 @@
     .state3 {
         color: blue;
     }
+    .isauto-box {
+        position: absolute;
+        top: 8px;
+        right: 50px;
+    } 
+    .need-icon {
+        display: inline-block;
+        margin: 10px 10px 10px 38px;
+        width: 26px;
+        height: 26px;
+        border-radius: 4px;
+        border: 1px solid #e4e4e4;
+        vertical-align: middle;
+        cursor: pointer;
+    }
+    .is_auto {
+        opacity: 0;
+        position: absolute;
+    }
+    
+    .is_auto:checked + .need-icon {
+        background: url(/static/images/bg-checked-choose.png) center center no-repeat;
+    }
+    .change-status {
+        color: #91C11D;
+        text-decoration: underline;
+    }
 </style>
 <script type="text/javascript">
 var data = '<table width="100%"><thead><tr><th height="44">预约项目</th>' +
-'<th>QQ</th><th>预约金额</th><th>预约标期</th><th>预约时间</th><th>状态</th><th>备注</th><th>操作</th></tr></thead><tbody>'+
+'<th>QQ</th><th>预约金额</th><th>预约标期</th><th>预约时间</th><th>状态</th><th>提交时间</th><th>备注</th><th>操作</th></tr></thead><tbody>'+
 '[results]<tr><td>{project_title}</td><td>{qq_number}</td><td>{book_content}</td>'+
-'<td>{book_term}</td><td>{book_date}</td><td class="state{state}">{state_des}</td><td>{remark}</td>'+
-'<td><a onclick="changeState(this,{id},{state})">修改状态</a></td></tr>[/results]'+
+'<td>{book_term}</td><td>{book_date}</td><td class="state{state}">{state_des}</td><td class="submit-time">{submit_time}</td><td>{remark}</td>'+
+'<td><a class="change-status" onclick="changeState(this,{id},{state})">修改状态</a></td></tr>[/results]'+
 '</tbody></table>';
 var url = "/restapi/books/" + "?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}";
 
@@ -145,6 +172,32 @@ $(function(){
             }
         });
     })
+    $('.is_auto[name="is_auto"]').click(function(){
+        var that = this;
+        if ($(this).val() == 'true') {
+            var is_auto = true;
+        } else {
+            var is_auto = false;
+        }
+        console.log(is_auto);
+        $.ajax({
+            url: '/restapi/users/' + {{user.id}} + '/',
+            dataType: "json",
+            type:"put",
+            data: {
+                "is_autowith": is_auto
+            },
+            success: function(ret) {
+                alert("操作成功");
+                $(this).prop('checked', true);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+                $(that).prop('checked', false);
+                alert("数据错误");
+            }
+        });
+    })
 
     // 审核拒绝原因弹窗
 //	$('.Content').on('click','.state_2',function(){
@@ -167,8 +220,13 @@ $(function(){
             	<input type="" name="" id="" value="" />
                 <a class="tixian btn m-yellow r">修改</a>
             </div>-->
-            <div class="table">
+            <div class="table" style="position: relative;">
                 <h2 class="table__title">预约数据</h2>
+                <div class="isauto-box">
+                    <span class="item__name">允许预约邮件提醒</span>
+                    <label><input class="is_auto" type="radio" value="true" name="is_auto" /><i class="need-icon"></i>是</label>
+                    <label><input class="is_auto" type="radio" checked="checked" value="false" name="is_auto" /><i class="need-icon"></i>否</label>
+                </div>
                 <!--<div class="search">
                     <div class="search__item">
                         <span class="search__name">获取时间：</span>

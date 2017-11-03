@@ -30,9 +30,6 @@
     vertical-align: middle;
     cursor: pointer;
 }
-/*.need-icon.m-left {
-    margin-left: 0;
-}*/
 .is_auto {
     opacity: 0;
     position: absolute;
@@ -120,7 +117,7 @@ $(function(){
         $.ajax({
             url: '/restapi/users/' + {{user.id}} + '/',
             dataType: "json",
-            type:"post",
+            type:"put",
             data: {
                 "is_autowith": is_auto
             },
@@ -131,7 +128,6 @@ $(function(){
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText);
                 $(that).prop('checked', false);
-                console.log(that);
                 alert("数据错误");
             }
         });

@@ -78,6 +78,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     admin_permissions = models.ManyToManyField('AdminPermission',
         verbose_name='admin permissions', blank=True,
         related_name="user_set", related_query_name="user")
+    is_autowith = models.BooleanField(u'是否自动提现', default=True)
     objects = MyUserManager()
 
     USERNAME_FIELD = 'mobile'

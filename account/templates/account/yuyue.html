@@ -172,6 +172,13 @@ $(function(){
             }
         });
     })
+    var is_auto_val = "{{user.is_book_email_notice}}";
+    if(is_auto_val == 'True') {
+        var is_auto_dom = '.is_auto[value="true"]';
+    } else {
+        var is_auto_dom = '.is_auto[value="false"]';
+    }
+    $(is_auto_dom).prop('checked', true);
     $('.is_auto[name="is_auto"]').click(function(){
         var that = this;
         if ($(this).val() == 'true') {
@@ -185,7 +192,7 @@ $(function(){
             dataType: "json",
             type:"put",
             data: {
-                "is_autowith": is_auto
+                "is_book_email_notice": is_auto
             },
             success: function(ret) {
                 alert("操作成功");

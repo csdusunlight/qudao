@@ -79,6 +79,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         verbose_name='admin permissions', blank=True,
         related_name="user_set", related_query_name="user")
     is_autowith = models.BooleanField(u'是否自动提现', default=True)
+    is_book_email_notice = models.BooleanField(u'是否预约单邮件通知', default=True)
     objects = MyUserManager()
 
     USERNAME_FIELD = 'mobile'

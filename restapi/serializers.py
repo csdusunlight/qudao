@@ -159,6 +159,7 @@ class IPLogSerializer(serializers.ModelSerializer):
         
 class BookLogSerializer(serializers.ModelSerializer):
     state_des = serializers.CharField(source='get_state_display', read_only=True)
+    project_title = serializers.CharField(source='project.title', read_only=True)
     class Meta:
         model = BookLog
         fields = '__all__'

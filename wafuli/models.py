@@ -350,6 +350,7 @@ class BookLog(models.Model):
     project = models.ForeignKey(Project, related_name="booklogs")
     submit_time = models.DateTimeField(u"提交时间", default=timezone.now)
     book_date = models.DateField(u'预约日期')
+    book_term = models.CharField(u'预约标期',max_length=10)
     book_content = models.CharField(u"预约明细", max_length=50)
     qq_number = models.CharField(u"QQ号", max_length=15, blank=True)
     remark = models.CharField(u"备注", max_length=100, blank=True)

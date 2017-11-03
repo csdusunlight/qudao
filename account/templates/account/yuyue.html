@@ -52,9 +52,9 @@
 </style>
 <script type="text/javascript">
 var data = '<table width="100%"><thead><tr><th height="44">预约项目</th>' +
-'<th>QQ</th><th>预约金额</th><th>预约时间</th><th>状态</th><th>备注</th><th>操作</th></tr></thead><tbody>'+
-'[results]<tr><td>{project}</td><td>{qq_number}</td>'+
-'<td>{book_content}</td><td>{book_date}</td><td class="state{state}">{state_des}</td><td>{remark}</td>'+
+'<th>QQ</th><th>预约金额</th><th>预约标期</th><th>预约时间</th><th>状态</th><th>备注</th><th>操作</th></tr></thead><tbody>'+
+'[results]<tr><td>{project_title}</td><td>{qq_number}</td><td>{book_content}</td>'+
+'<td>{book_term}</td><td>{book_date}</td><td class="state{state}">{state_des}</td><td>{remark}</td>'+
 '<td><a onclick="changeState(this,{id},{state})">修改状态</a></td></tr>[/results]'+
 '</tbody></table>';
 var url = "/restapi/books/" + "?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}";

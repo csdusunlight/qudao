@@ -110,7 +110,31 @@ $(function(){
     });
     
     $('.is_auto[name="is_auto"]').click(function(){
-        console.log($(this).val())
+        var that = this;
+        if ($(this).val() == 'true') {
+            var is_auto = true;
+        } else {
+            var is_auto = false;
+        }
+        console.log(is_auto);
+        $.ajax({
+            url: '/restapi/users/' + {{user.id}} + '/',
+            dataType: "json",
+            type:"post",
+            data: {
+                "is_autowith": is_auto
+            },
+            success: function(ret) {
+                alert("操作成功");
+                $(this).prop('checked', true);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+                $(that).prop('checked', false);
+                console.log(that);
+                alert("数据错误");
+            }
+        });
     })
 });
 </script>

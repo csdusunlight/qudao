@@ -15,6 +15,33 @@
 <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/accounts/refresh.js' %}"></script>
+<style type="text/css">
+.isauto-box {
+    padding-left: 20px;
+    margin-top: 40px;
+} 
+.need-icon {
+    display: inline-block;
+    margin: 10px 10px 10px 38px;
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+    border: 1px solid #e4e4e4;
+    vertical-align: middle;
+    cursor: pointer;
+}
+/*.need-icon.m-left {
+    margin-left: 0;
+}*/
+.is_auto {
+    opacity: 0;
+    position: absolute;
+}
+
+.is_auto:checked + .need-icon {
+    background: url(/static/images/bg-checked-choose.png) center center no-repeat;
+}
+</style>
 <script type="text/javascript" >
 var coderefresh_url = "{% url 'captcha-refresh' %}";
 $.ajaxSetup({
@@ -82,7 +109,9 @@ $(function(){
         $(this).parent().parent().parent().parent().hide();
     });
     
-    
+    $('.is_auto[name="is_auto"]').click(function(){
+        console.log($(this).val())
+    })
 });
 </script>
 </head>
@@ -131,6 +160,11 @@ $(function(){
                                 </div>
                                 <input id="submit" type="submit" value="确  定" />
 
+                        </div>
+                        <div class="isauto-box">
+                            <span class="item__name">允许自动提现</span>
+                            <label><input class="is_auto" type="radio" value="true" name="is_auto" /><i class="need-icon"></i>是</label>
+                            <label><input class="is_auto" type="radio" checked="checked" value="false" name="is_auto" /><i class="need-icon"></i>否</label>
                         </div>
                     </div>
 

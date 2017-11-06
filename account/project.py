@@ -35,7 +35,7 @@ def create_update_selfproject(request, id=None):
     is_book = request.POST.get('is_book', False)
     channel = request.POST.get('channel', '')
     up_price = request.POST.get('up_price', '')
-    if not (title and strategy and introduction and cprice and term and investrange and intrest
+    if not (title and strategy and cprice and term and investrange and intrest
             and necessary_fields and company and shortprice and is_book):
         ret['code'] = 1
         ret['msg'] = u'缺少必填字段'

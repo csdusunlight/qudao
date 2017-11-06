@@ -77,7 +77,7 @@ class Project(models.Model):
     company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, verbose_name=u"合作平台")
     type = models.CharField(u"项目类别", max_length=1, choices=Project_TYPE, blank=True)
     is_multisub_allowed = models.BooleanField(u"是否允许同一手机号多次提交", default=False)
-    introduction = models.TextField(u"项目简介",max_length=100)
+    introduction = models.TextField(u"项目简介",max_length=100,blank=True)
     price01 = models.CharField(u"一级代理价格",max_length=20, blank=True)
     price02 = models.CharField(u"二级代理价格",max_length=20, blank=True)
     price03 = models.CharField(u"三级代理价格",max_length=20, blank=True)

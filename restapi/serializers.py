@@ -32,6 +32,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         
 class InvestLogSerializer(serializers.ModelSerializer):
     project_title = serializers.CharField(source='project.title', read_only=True)
+    project_source = serializers.CharField(source='project.channel', read_only=True)
     qq_number = serializers.CharField(source='user.qq_number', read_only=True)
     qq_name = serializers.CharField(source='user.qq_name', read_only=True)
     user_level = serializers.CharField(source='user.level', read_only=True)

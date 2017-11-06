@@ -71,11 +71,11 @@
     
     .is_auto:checked + .need-icon {
         background: url(/static/images/bg-checked-choose.png) center center no-repeat;
-    }
+    }*/
     .change-status {
         color: #91C11D;
         text-decoration: underline;
-    }*/
+    }
    .switch__name {
        display: inline-block;
        line-height: 30px;
@@ -231,7 +231,7 @@ $(function(){
         var state = $('.yuyue_state').val();
         var state_txt = $('.yuyue_state option:selected').text();
         console.log(state + ', ' + state_txt)
-        $(parent_dom).children().eq(4).text(state_txt).removeClass('state0 state1 state2 state3').addClass('state'+state);
+        $(parent_dom).children().eq(6).text(state_txt).removeClass('state0 state1 state2 state3').addClass('state'+state);
         $.ajax({        
             url: "/restapi/books/" + yuyue_id + "/",
             dataType: "json",

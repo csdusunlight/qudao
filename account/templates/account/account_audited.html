@@ -195,8 +195,12 @@
                 <span class="search__name">收款信息：</span>
                 <input type="text" id="zhifubao_02" />
             </div>
+            <div class="search__item">
+                <span class="search__name">项目来源：</span>
+                <input type="text" id="project_channel_02" />
+            </div>
             
-            <div style="width: 320px;margin-left: 290px;" class="search__item">
+            <div style="width: 320px;" class="search__item">
                 <ul class="state-tabbox-2">
                     <li data-state = "" class="state-tab-2 on">全部</li>
                     <li data-state = "1" class="state-tab-2">未审核</li>
@@ -1120,6 +1124,7 @@
                     submit_date1 = $("#submit_date1_02").val(),
                     telnum_sub = $("#telnum_sub_02").val(),
                     zhifubao = $("#zhifubao_02").val(),
+                    project_channel = $("#project_channel_02").val(),
                     state = state_2;
                 var newurl = url2;
                 if(proj_name) {
@@ -1142,6 +1147,9 @@
                 }
                 if(zhifubao) {
                     newurl += "&zhifubao_contains=" + zhifubao;
+                }
+                if(project_channel) {
+                    newurl += "&project_channel_contains=" + project_channel;
                 }
                 if(state) {
                     newurl += "&audit_state=" + state;
@@ -1178,6 +1186,7 @@
                     submit_date1 = $("#submit_date1_02").val(),
                     telnum_sub = $("#telnum_sub_02").val(),
                     zhifubao = $("#zhifubao_02").val(),
+                    project_channel = $("#project_channel_02").val(),
                     state = $("#state_02").val();
                     
 //              if(!invest_date0 || !invest_date1) {
@@ -1207,7 +1216,10 @@
                     html += '<input name="invest_mobile" type="hidden" value="' + telnum_sub + '"/>';
                 }
                 if(zhifubao) {
-                    html += '<input name="zhifubao" type="hidden" value="' + zhifubao + '"/>';
+                    html += '<input name="zhifubao_contains" type="hidden" value="' + zhifubao + '"/>';
+                }
+                if(project_channel) {
+                    html += '<input name="project_channel_02" type="hidden" value="' + project_channel + '"/>';
                 }
                 if(state) {
                     html += '<input name="audit_state" type="hidden" value="' + state + '"/>';

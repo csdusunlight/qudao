@@ -90,6 +90,8 @@ class Project(models.Model):
                 支付宝信息(4)，投资手机号(5)，预期返现金额(6)，QQ号(7)，投资截图(8)，字段以英文逗号隔开，如0,1,2,3,4,5", default = '0,1,2,3,4,5')
     subscribers = models.ManyToManyField(MyUser, through='SubscribeShip')
     points = models.IntegerField(u"参与人数", default=0)
+    channel = models.CharField(u"项目来源（上游渠道）", max_length=20, blank=True)
+    up_price = models.CharField(u"结算价格（收入）", max_length=40, blank=True)
     def clean(self):
         if not self.pic:
             raise ValidationError({'pic': u'图片不能为空'})

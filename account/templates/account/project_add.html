@@ -102,10 +102,10 @@ $(function(){
                     <span class="item__name">预计年化<i class="item__need">*</i></span>
                     <input class="intrest item__txt" type="text" maxlength="20" placeholder="限20个字符" />
                 </div>
-                <div class="item">
+                <!--<div class="item">
                     <span class="item__name">项目简介</span>
                     <input class="introduction item__txt" type="text" maxlength="40" placeholder="在项目详情页的头部展示，限40个字符" />
-                </div>
+                </div>-->
                 <div class="item">
                     <span class="item__name">项目来源</span>
                     <input class="channel item__txt" type="text" maxlength="20" placeholder="记录项目的结算方，限20个字符" />
@@ -200,7 +200,7 @@ $(function(){
                 $('.term').val(ret.term);
                 $('.investrange').val(ret.investrange);
                 $('.intrest').val(ret.intrest);
-                $('.introduction').val(ret.introduction);
+//              $('.introduction').val(ret.introduction);
                 $('.channel').val(ret.channel);
                 $('.up_price').val(ret.up_price);
                 var radio_dom = '.is_futou[value="'+ ret.is_multisub_allowed +'"]'
@@ -491,7 +491,7 @@ $(function(){
             var term = $('.term').val();
             var investrange = $('.investrange').val();
             var intrest = $('.intrest').val();
-            var introduction = $('.introduction').val();
+//          var introduction = $('.introduction').val();
             var channel = $('.channel').val();
             var up_price = $('.up_price').val();
             var is_futou = $('input[name="is_futou"]:checked').val();
@@ -529,7 +529,7 @@ $(function(){
                     'term' : term,
                     'investrange' : investrange,
                     'intrest' : intrest,
-                    'introduction' : introduction,
+//                  'introduction' : introduction,
                     'channel' : channel,
                     'up_price' : up_price,
                     'is_multisub_allowed' : is_futou,

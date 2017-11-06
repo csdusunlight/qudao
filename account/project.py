@@ -60,7 +60,7 @@ def create_update_selfproject(request, id=None):
         kwargs.update(title=title,strategy=strategy, introduction=introduction, shortprice=shortprice,
                         cprice=cprice, term=term,investrange=investrange, intrest=intrest,
                         is_multisub_allowed=is_multisub_allowed, necessary_fields=necessary_fields, 
-                        is_book=is_book, up_price=up_price)
+                        is_book=is_book, up_price=up_price,channel=channel,)
         
     with transaction.atomic():
         if id is None:

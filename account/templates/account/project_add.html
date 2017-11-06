@@ -64,7 +64,7 @@ $(function(){
                     </div>
         	    </div>-->
         	    <div class="item m-company">
-                    <span class="item__name">选择平台</span>
+                    <span class="item__name">选择平台<i class="item__need">*</i></span>
                     <select class="company" name="choose_company">
                         <option data-logo="" value="0">--</option>
                         {% for item in companies %}
@@ -74,37 +74,45 @@ $(function(){
                     <img class="company-logo" src="" alt="" />
                 </div>
                 <div class="item">
-                    <span class="item__name">项目名称</span>
+                    <span class="item__name">项目名称<i class="item__need">*</i></span>
                     <input class="title item__txt" type="text" maxlength="8" placeholder="限8个字符" />
                 </div>
                 <div class="item">
-                    <span class="item__name">攻略链接</span>
+                    <span class="item__name">攻略链接<i class="item__need">*</i></span>
                     <input class="strategy item__txt" type="text" />
                     <span><a class="link-btn" target="_blank" href="https://shimo.im/">点击</a>使用石墨创建工具</span>
+                </div>
+                <div class="item">
+                    <span class="item__name">详情页价格<i class="item__need">*</i></span>
+                    <input class="cprice item__txt" type="text" maxlength="40" placeholder="限40个字符" />
+                </div>
+                <div class="item">
+                    <span class="item__name">主页价格<i class="item__need">*</i></span>
+                    <input class="shortprice item__txt" type="text" maxlength="12" placeholder="例：投一万返两千；限12个字符" />
+                </div>
+                <div class="item">
+                    <span class="item__name">标期<i class="item__need">*</i></span>
+                    <input class="term item__txt" type="text" />
+                </div>
+                <div class="item">
+                    <span class="item__name">投资区间<i class="item__need">*</i></span>
+                    <input class="investrange item__txt" type="text" />
+                </div>
+                <div class="item">
+                    <span class="item__name">预计年化<i class="item__need">*</i></span>
+                    <input class="intrest item__txt" type="text" maxlength="20" placeholder="限20个字符" />
                 </div>
                 <div class="item">
                     <span class="item__name">项目简介</span>
                     <input class="introduction item__txt" type="text" maxlength="40" placeholder="限40个字符" />
                 </div>
                 <div class="item">
-                    <span class="item__name">详情页价格</span>
-                    <input class="cprice item__txt" type="text" maxlength="40" placeholder="限40个字符" />
+                    <span class="item__name">项目来源</span>
+                    <input class="channel item__txt" type="text" maxlength="20" placeholder="限20个字符" />
                 </div>
                 <div class="item">
-                    <span class="item__name">主页价格</span>
-                    <input class="shortprice item__txt" type="text" maxlength="12" placeholder="例：投一万返两千；限12个字符" />
-                </div>
-                <div class="item">
-                    <span class="item__name">标期</span>
-                    <input class="term item__txt" type="text" />
-                </div>
-                <div class="item">
-                    <span class="item__name">投资区间</span>
-                    <input class="investrange item__txt" type="text" />
-                </div>
-                <div class="item">
-                    <span class="item__name">预计年化</span>
-                    <input class="intrest item__txt" type="text" maxlength="20" placeholder="限20个字符" />
+                    <span class="item__name">结算价格</span>
+                    <input class="up_price item__txt" type="text" maxlength="40" placeholder="限40个字符" />
                 </div>
                 <div class="item">
                     <span class="item__name">允许复投</span>
@@ -187,12 +195,14 @@ $(function(){
 
                 $('.title').val(ret.title);
                 $('.strategy').val(ret.strategy);
-                $('.introduction').val(ret.introduction);
                 $('.cprice').val(ret.cprice);
                 $('.shortprice').val(ret.shortprice);
                 $('.term').val(ret.term);
                 $('.investrange').val(ret.investrange);
                 $('.intrest').val(ret.intrest);
+                $('.introduction').val(ret.introduction);
+                $('.channel').val(ret.channel);
+                $('.up_price').val(ret.up_price);
                 var radio_dom = '.is_futou[value="'+ ret.is_multisub_allowed +'"]'
                 $(radio_dom).prop("checked",true);
                 var radio_dom2 = '.is_book[value="'+ ret.is_book +'"]'
@@ -476,12 +486,14 @@ $(function(){
             var company = $('.company').val();
             var title = $('.title').val();
             var strategy = $('.strategy').val();
-            var introduction = $('.introduction').val();
             var cprice = $('.cprice').val();
             var shortprice = $('.shortprice').val();
             var term = $('.term').val();
             var investrange = $('.investrange').val();
             var intrest = $('.intrest').val();
+            var introduction = $('.introduction').val();
+            var channel = $('.channel').val();
+            var up_price = $('.up_price').val();
             var is_futou = $('input[name="is_futou"]:checked').val();
             var is_book = $('input[name="is_book"]:checked').val();
             var mark_str = '';
@@ -494,8 +506,8 @@ $(function(){
                 alert('请选择项目平台');
                 return;
             }
-            if (!title || !strategy || !introduction || !cprice || !shortprice || !term || !investrange || !intrest || !is_futou) {
-                alert('填写项不能为空');
+            if (!title || !strategy || !cprice || !shortprice || !term || !investrange || !intrest || !is_futou) {
+                alert('必填项不能为空');
                 return;
             }
             var reg_url= /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
@@ -512,12 +524,14 @@ $(function(){
                     'company' : company,
                     'title' : title,
                     'strategy' : strategy,
-                    'introduction' : introduction,
                     'cprice' : cprice,
                     'shortprice' : shortprice,
                     'term' : term,
                     'investrange' : investrange,
                     'intrest' : intrest,
+                    'introduction' : introduction,
+                    'channel' : channel,
+                    'up_price' : up_price,
                     'is_multisub_allowed' : is_futou,
                     'is_book' : is_book,
                     'necessary_fields' : necessary_fields,

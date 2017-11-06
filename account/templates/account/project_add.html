@@ -83,10 +83,6 @@ $(function(){
                     <span><a class="link-btn" target="_blank" href="https://shimo.im/">点击</a>使用石墨创建工具</span>
                 </div>
                 <div class="item">
-                    <span class="item__name">项目简介<i class="item__need">*</i></span>
-                    <input class="introduction item__txt" type="text" maxlength="40" placeholder="限40个字符" />
-                </div>
-                <div class="item">
                     <span class="item__name">详情页价格<i class="item__need">*</i></span>
                     <input class="cprice item__txt" type="text" maxlength="40" placeholder="限40个字符" />
                 </div>
@@ -105,6 +101,18 @@ $(function(){
                 <div class="item">
                     <span class="item__name">预计年化<i class="item__need">*</i></span>
                     <input class="intrest item__txt" type="text" maxlength="20" placeholder="限20个字符" />
+                </div>
+                <div class="item">
+                    <span class="item__name">项目简介</span>
+                    <input class="introduction item__txt" type="text" maxlength="40" placeholder="限40个字符" />
+                </div>
+                <div class="item">
+                    <span class="item__name">上级渠道</span>
+                    <input class="introduction item__txt" type="text" maxlength="40" placeholder="限40个字符" />
+                </div>
+                <div class="item">
+                    <span class="item__name">后台价格</span>
+                    <input class="introduction item__txt" type="text" maxlength="40" placeholder="限40个字符" />
                 </div>
                 <div class="item">
                     <span class="item__name">允许复投</span>
@@ -187,12 +195,14 @@ $(function(){
 
                 $('.title').val(ret.title);
                 $('.strategy').val(ret.strategy);
-                $('.introduction').val(ret.introduction);
                 $('.cprice').val(ret.cprice);
                 $('.shortprice').val(ret.shortprice);
                 $('.term').val(ret.term);
                 $('.investrange').val(ret.investrange);
                 $('.intrest').val(ret.intrest);
+                $('.introduction').val(ret.introduction);
+                $('.introduction').val(ret.introduction);
+                $('.introduction').val(ret.introduction);
                 var radio_dom = '.is_futou[value="'+ ret.is_multisub_allowed +'"]'
                 $(radio_dom).prop("checked",true);
                 var radio_dom2 = '.is_book[value="'+ ret.is_book +'"]'
@@ -476,12 +486,14 @@ $(function(){
             var company = $('.company').val();
             var title = $('.title').val();
             var strategy = $('.strategy').val();
-            var introduction = $('.introduction').val();
             var cprice = $('.cprice').val();
             var shortprice = $('.shortprice').val();
             var term = $('.term').val();
             var investrange = $('.investrange').val();
             var intrest = $('.intrest').val();
+            var introduction = $('.introduction').val();
+            var introduction = $('.introduction').val();
+            var introduction = $('.introduction').val();
             var is_futou = $('input[name="is_futou"]:checked').val();
             var is_book = $('input[name="is_book"]:checked').val();
             var mark_str = '';
@@ -494,8 +506,8 @@ $(function(){
                 alert('请选择项目平台');
                 return;
             }
-            if (!title || !strategy || !introduction || !cprice || !shortprice || !term || !investrange || !intrest || !is_futou) {
-                alert('填写项不能为空');
+            if (!title || !strategy || !cprice || !shortprice || !term || !investrange || !intrest || !is_futou) {
+                alert('必填项不能为空');
                 return;
             }
             var reg_url= /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
@@ -512,12 +524,14 @@ $(function(){
                     'company' : company,
                     'title' : title,
                     'strategy' : strategy,
-                    'introduction' : introduction,
                     'cprice' : cprice,
                     'shortprice' : shortprice,
                     'term' : term,
                     'investrange' : investrange,
                     'intrest' : intrest,
+                    'introduction' : introduction,
+                    'introduction' : introduction,
+                    'introduction' : introduction,
                     'is_multisub_allowed' : is_futou,
                     'is_book' : is_book,
                     'necessary_fields' : necessary_fields,

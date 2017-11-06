@@ -18,9 +18,9 @@
 <style type="text/css">
 .isauto-box {
     padding-left: 20px;
-    margin-top: 40px;
+    margin-top: 100px;
 } 
-.need-icon {
+/*.need-icon {
     display: inline-block;
     margin: 10px 10px 10px 38px;
     width: 26px;
@@ -37,6 +37,42 @@
 
 .is_auto:checked + .need-icon {
     background: url(/static/images/bg-checked-choose.png) center center no-repeat;
+}*/
+.switch__name {
+   display: inline-block;
+   font-size: 16px;
+   line-height: 30px;
+   vertical-align: top;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: #fff;
+    border: 1px solid #e4e4e4;
+    transition: all 0.4s ease;  
+    cursor: pointer;
+}
+.switch:before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+    transition: all 0.4s ease;  
+}
+.switch.True {
+    background-color: #91C11D;
+    /*border: 1px solid #91C11D;*/
+}
+.switch.True:before {
+    left: 32px;
 }
 </style>
 <script type="text/javascript" >
@@ -44,6 +80,49 @@ var coderefresh_url = "{% url 'captcha-refresh' %}";
 $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 });
+
+function isadd(obj) {        //是否主页显示调用函数
+    var flag = $(obj).data('isadd');
+    console.log(flag)
+    if (flag == 'True') {
+        $.ajax({
+            url: '/restapi/users/' + {{user.id}} + '/',
+            dataType: "json",
+            type:"put",
+            data: {
+                'is_autowith': false
+            },
+            success: function(ret) {
+                console.log('关闭');
+                $(obj).data('isadd', 'False');
+                $(obj).removeClass('True').addClass('False');
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+        
+    } else{
+        $.ajax({
+            url: '/restapi/users/' + {{user.id}} + '/',
+            dataType: "json",
+            type:"put",
+            data: {
+                'is_autowith': true
+            },
+            success: function(ret) {
+                console.log('开启');
+                $(obj).data('isadd', 'True');
+                $(obj).removeClass('False').addClass('True');
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+        
+    }
+}
+
 $(function(){
 	$('.back-a9').toggleClass("on");
 	$("#submit").click(function(){
@@ -106,39 +185,39 @@ $(function(){
         $(this).parent().parent().parent().parent().hide();
     });
     
-    var is_auto_val = "{{user.is_autowith}}";
-    if(is_auto_val == 'True') {
-        var is_auto_dom = '.is_auto[value="true"]';
-    } else {
-        var is_auto_dom = '.is_auto[value="false"]';
-    }
-    $(is_auto_dom).prop('checked', true);
-    $('.is_auto[name="is_auto"]').click(function(){
-        var that = this;
-        if ($(this).val() == 'true') {
-            var is_auto = true;
-        } else {
-            var is_auto = false;
-        }
-        console.log(is_auto);
-        $.ajax({
-            url: '/restapi/users/' + {{user.id}} + '/',
-            dataType: "json",
-            type:"put",
-            data: {
-                "is_autowith": is_auto
-            },
-            success: function(ret) {
-                alert("操作成功");
-                $(this).prop('checked', true);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText);
-                $(that).prop('checked', false);
-                alert("数据错误");
-            }
-        });
-    })
+//  var is_auto_val = "{{user.is_autowith}}";
+//  if(is_auto_val == 'True') {
+//      var is_auto_dom = '.is_auto[value="true"]';
+//  } else {
+//      var is_auto_dom = '.is_auto[value="false"]';
+//  }
+//  $(is_auto_dom).prop('checked', true);
+//  $('.is_auto[name="is_auto"]').click(function(){
+//      var that = this;
+//      if ($(this).val() == 'true') {
+//          var is_auto = true;
+//      } else {
+//          var is_auto = false;
+//      }
+//      console.log(is_auto);
+//      $.ajax({
+//          url: '/restapi/users/' + {{user.id}} + '/',
+//          dataType: "json",
+//          type:"put",
+//          data: {
+//              "is_autowith": is_auto
+//          },
+//          success: function(ret) {
+//              alert("操作成功");
+//              $(this).prop('checked', true);
+//          },
+//          error: function(jqXHR, textStatus, errorThrown) {
+//              console.log(jqXHR.responseText);
+//              $(that).prop('checked', false);
+//              alert("数据错误");
+//          }
+//      });
+//  })
 });
 </script>
 </head>
@@ -189,9 +268,11 @@ $(function(){
 
                         </div>
                         <div class="isauto-box">
-                            <span class="item__name">允许自动提现</span>
-                            <label><input class="is_auto" type="radio" value="true" name="is_auto" /><i class="need-icon"></i>是</label>
-                            <label><input class="is_auto" type="radio" checked="checked" value="false" name="is_auto" /><i class="need-icon"></i>否</label>
+                            <span class="switch__name">开启自动提现&nbsp;&nbsp;</span>
+                            <span data-isadd="{{user.is_autowith}}" class="home switch {{user.is_autowith}}" onclick="isadd(this)"></span>
+                            <p>注：每个工作日的10:50和17:50，如果您的账户余额大于10元，系统将自动提现</p>
+                            <!--<label><input class="is_auto" type="radio" value="true" name="is_auto" /><i class="need-icon"></i>是</label>
+                            <label><input class="is_auto" type="radio" checked="checked" value="false" name="is_auto" /><i class="need-icon"></i>否</label>-->
                         </div>
                     </div>
 

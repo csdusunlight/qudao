@@ -51,10 +51,10 @@
     }
     .isauto-box {
         position: absolute;
-        top: 8px;
+        top: 14px;
         right: 50px;
     } 
-    .need-icon {
+    /*.need-icon {
         display: inline-block;
         margin: 10px 10px 10px 38px;
         width: 26px;
@@ -75,13 +75,48 @@
     .change-status {
         color: #91C11D;
         text-decoration: underline;
+    }*/
+   .switch__name {
+       display: inline-block;
+       line-height: 30px;
+       vertical-align: top;
+   }
+   .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 30px;
+        border-radius: 15px;
+        background-color: #fff;
+        border: 1px solid #e4e4e4;
+        transition: all 0.4s ease;  
+        cursor: pointer;
+    }
+    .switch:before {
+        content: "";
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 30px;
+        height: 30px;
+        background-color: #fff;
+        border-radius: 50%;
+        box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+        transition: all 0.4s ease;  
+    }
+    .switch.True {
+        background-color: #91C11D;
+        /*border: 1px solid #91C11D;*/
+    }
+    .switch.True:before {
+        left: 32px;
     }
 </style>
 <script type="text/javascript">
-var data = '<table width="100%"><thead><tr><th height="44">预约项目</th>' +
-'<th>QQ</th><th>预约金额</th><th>预约标期</th><th>预约时间</th><th>状态</th><th>提交时间</th><th>备注</th><th>操作</th></tr></thead><tbody>'+
-'[results]<tr><td>{project_title}</td><td>{qq_number}</td><td>{book_content}</td>'+
-'<td>{book_term}</td><td>{book_date}</td><td class="state{state}">{state_des}</td><td class="submit-time">{submit_time}</td><td>{remark}</td>'+
+var data = '<table width="100%"><thead><tr><th>提交时间</th><th height="44">预约项目</th><th>预约日期</th>' +
+'<th>预约金额</th><th>预约标期</th><th>QQ</th><th>状态</th><th>备注</th><th>操作</th></tr></thead><tbody>'+
+'[results]<tr><td class="submit-time">{submit_time}</td><td>{project_title}</td><td>{book_date}</td><td>{book_content}</td>'+
+'<td>{book_term}</td><td>{qq_number}</td><td class="state{state}">{state_des}</td><td>{remark}</td>'+
 '<td><a class="change-status" onclick="changeState(this,{id},{state})">修改状态</a></td></tr>[/results]'+
 '</tbody></table>';
 var url = "/restapi/books/" + "?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}";
@@ -90,7 +125,7 @@ function pagecallback(){
     
     $('.submit-time').each(function(){
         var submit_time = $(this).text().split('T');
-        $(this).text(submit_time[0]);
+        $(this).text(submit_time[0]+ ' ' +submit_time[1].substr(0,5));
     })
 }
 
@@ -105,6 +140,48 @@ function changeState (obj,id,state) {
     var select_dom = '.yuyue_state option[value=' + yuyue_id + ']'
     $(select_dom).prop('selected', true);
     $('.popup.m-yuyue-proj').addClass('in');
+}
+
+function isadd(obj) {        //是否自动发送邮件
+    var flag = $(obj).data('isadd');
+    console.log(flag)
+    if (flag == 'True') {
+        $.ajax({
+            url: '/restapi/users/' + {{user.id}} + '/',
+            dataType: "json",
+            type:"put",
+            data: {
+                'is_book_email_notice': false
+            },
+            success: function(ret) {
+                console.log('关闭');
+                $(obj).data('isadd', 'False');
+                $(obj).removeClass('True').addClass('False');
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+        
+    } else{
+        $.ajax({
+            url: '/restapi/users/' + {{user.id}} + '/',
+            dataType: "json",
+            type:"put",
+            data: {
+                'is_book_email_notice': true
+            },
+            success: function(ret) {
+                console.log('开启');
+                $(obj).data('isadd', 'True');
+                $(obj).removeClass('False').addClass('True');
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+        
+    }
 }
 
 $(function(){
@@ -172,39 +249,39 @@ $(function(){
             }
         });
     })
-    var is_auto_val = "{{user.is_book_email_notice}}";
-    if(is_auto_val == 'True') {
-        var is_auto_dom = '.is_auto[value="true"]';
-    } else {
-        var is_auto_dom = '.is_auto[value="false"]';
-    }
-    $(is_auto_dom).prop('checked', true);
-    $('.is_auto[name="is_auto"]').click(function(){
-        var that = this;
-        if ($(this).val() == 'true') {
-            var is_auto = true;
-        } else {
-            var is_auto = false;
-        }
-        console.log(is_auto);
-        $.ajax({
-            url: '/restapi/users/' + {{user.id}} + '/',
-            dataType: "json",
-            type:"put",
-            data: {
-                "is_book_email_notice": is_auto
-            },
-            success: function(ret) {
-                alert("操作成功");
-                $(this).prop('checked', true);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText);
-                $(that).prop('checked', false);
-                alert("数据错误");
-            }
-        });
-    })
+//  var is_auto_val = "{{user.is_book_email_notice}}";
+//  if(is_auto_val == 'True') {
+//      var is_auto_dom = '.is_auto[value="true"]';
+//  } else {
+//      var is_auto_dom = '.is_auto[value="false"]';
+//  }
+//  $(is_auto_dom).prop('checked', true);
+//  $('.is_auto[name="is_auto"]').click(function(){
+//      var that = this;
+//      if ($(this).val() == 'true') {
+//          var is_auto = true;
+//      } else {
+//          var is_auto = false;
+//      }
+//      console.log(is_auto);
+//      $.ajax({
+//          url: '/restapi/users/' + {{user.id}} + '/',
+//          dataType: "json",
+//          type:"put",
+//          data: {
+//              "is_book_email_notice": is_auto
+//          },
+//          success: function(ret) {
+//              alert("操作成功");
+//              $(this).prop('checked', true);
+//          },
+//          error: function(jqXHR, textStatus, errorThrown) {
+//              console.log(jqXHR.responseText);
+//              $(that).prop('checked', false);
+//              alert("数据错误");
+//          }
+//      });
+//  })
 
     // 审核拒绝原因弹窗
 //	$('.Content').on('click','.state_2',function(){
@@ -230,9 +307,10 @@ $(function(){
             <div class="table" style="position: relative;">
                 <h2 class="table__title">预约数据</h2>
                 <div class="isauto-box">
-                    <span class="item__name">允许预约邮件提醒</span>
-                    <label><input class="is_auto" type="radio" value="true" name="is_auto" /><i class="need-icon"></i>是</label>
-                    <label><input class="is_auto" type="radio" checked="checked" value="false" name="is_auto" /><i class="need-icon"></i>否</label>
+                    <span class="switch__name">开启QQ邮件通知&nbsp;&nbsp;</span>
+                    <span data-isadd="{{user.is_book_email_notice}}" class="home switch {{user.is_book_email_notice}}" onclick="isadd(this)"></span>
+                    <!--<label><input class="is_auto" type="radio" value="true" name="is_auto" /><i class="need-icon"></i>是</label>
+                    <label><input class="is_auto" type="radio" checked="checked" value="false" name="is_auto" /><i class="need-icon"></i>否</label>-->
                 </div>
                 <!--<div class="search">
                     <div class="search__item">

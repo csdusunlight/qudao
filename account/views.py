@@ -308,7 +308,21 @@ def account_submit(request):
 
 @login_required
 def account_audited(request):
-    return render(request, 'account/account_audited.html',)
+    user = request.user
+    today = date.today()
+    submit_num = InvestLog.objects.filter(user=user, submit_time__gte=today).count()
+    nums = InvestLog.objects.filter(user=user, audit_time__gte=today).values('audit_state')\
+        .annotate(count=Count('*')).order_by('audit_state')
+    kwarg = {'submit_num':submit_num, 'pass_num':0, 'refuse_num':0, 'check_num':0}
+    for num in nums:
+        state = num.get('audit_state')
+        if state=='0':
+            kwarg.update(pass_num=num.get('count') or 0)
+        elif state=='2':
+            kwarg.update(refuse_num=num.get('count') or 0)
+        elif state=='3':
+            kwarg.update(check_num=num.get('count') or 0)
+    return render(request, 'account/account_audited.html', kwarg)
 
 
 

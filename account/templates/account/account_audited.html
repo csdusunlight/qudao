@@ -83,6 +83,23 @@
         text-align: center;;
         cursor: pointer;
     }
+    .today-detail {
+        width: 320px;
+        margin-top: -10px;
+        font-size: 0;
+    }
+    .today-detail-item {
+        display: inline-block;
+        width: 50%;
+        font-size: 14px;
+    }
+    .today-num {
+        display: inline-block;
+        margin: 0 4px;
+        font-size: 16px;
+        color: #ffbe00;
+    }
+    .
 </style>
 
 </head>
@@ -164,6 +181,10 @@
         <div id="pagedata">
         </div>
         <div class="changes-p">
+            <ul class="today-detail l">
+                <li class="today-detail-item">今日提交<span class="today-num">{{submit_num}}</span>项</li><li class="today-detail-item">今日通过<span class="today-num">{{pass_num}}</span>项</li>
+                <li class="today-detail-item">今日复审<span class="today-num">{{check_num}}</span>项</li><li class="today-detail-item">今日拒绝<span class="today-num">{{refuse_num}}</span>项</li>
+            </ul>
             <div class="page" id="page">
             </div>
         </div>

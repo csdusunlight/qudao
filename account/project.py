@@ -43,6 +43,7 @@ def create_update_selfproject(request, id=None):
     
     try:
         is_multisub_allowed = str_to_bool(is_multisub_allowed)
+        is_book = str_to_bool(is_book)
         marks = [ int(x) for x in marks.split(',') if x ]
     except:
         ret['code'] = 2

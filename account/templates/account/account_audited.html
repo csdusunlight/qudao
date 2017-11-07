@@ -84,14 +84,19 @@
         cursor: pointer;
     }
     .today-detail {
-        width: 320px;
+        position: absolute;
+        right: 0;
+        top: 14px;
+        margin-right: 20px;
+        width: 640px;
         margin-top: -10px;
         font-size: 0;
     }
     .today-detail-item {
         display: inline-block;
-        width: 50%;
+        width: 25%;
         font-size: 14px;
+        text-align: right;
     }
     .today-num {
         display: inline-block;
@@ -111,8 +116,12 @@
 <div class="Content">
 {% include "account/left.html" %}
 <div class="RightCont">
-    <div class="table">
+    <div class="table" style="position: relative;">
         <h2 class="table__title">官方数据</h2>
+        <ul class="today-detail">
+            <li class="today-detail-item">今日提交<span class="today-num">{{submit_num}}</span>项</li><li class="today-detail-item">通过<span class="today-num">{{pass_num}}</span>项</li>
+            <li class="today-detail-item">复审<span class="today-num">{{check_num}}</span>项</li><li class="today-detail-item">拒绝<span class="today-num">{{refuse_num}}</span>项</li>
+        </ul>
         <div class="search">
             <div class="search__item">
                 <span class="search__name">项目名称：</span>
@@ -181,10 +190,6 @@
         <div id="pagedata">
         </div>
         <div class="changes-p">
-            <ul class="today-detail l">
-                <li class="today-detail-item">今日提交<span class="today-num">{{submit_num}}</span>项</li><li class="today-detail-item">今日通过<span class="today-num">{{pass_num}}</span>项</li>
-                <li class="today-detail-item">今日复审<span class="today-num">{{check_num}}</span>项</li><li class="today-detail-item">今日拒绝<span class="today-num">{{refuse_num}}</span>项</li>
-            </ul>
             <div class="page" id="page">
             </div>
         </div>

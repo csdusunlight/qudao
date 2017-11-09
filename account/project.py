@@ -10,6 +10,7 @@ from django.http.response import JsonResponse
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 import random
+from public.pinyin import PinYin
 
 @csrf_exempt
 @login_required_ajax
@@ -49,7 +50,12 @@ def create_update_selfproject(request, id=None):
         ret['code'] = 2
         ret['msg'] = u'字段不合法'
         return JsonResponse(ret)
+    
+    pyin = PinYin()
+    pyin.load_word()
+    szm, pinyin = pyin.hanzi2pinyin_split(title)
     kwargs = {}
+    kwargs.update(szm=szm, pinyin=pinyin)
     if id is None:
         points = random.randint(5,50)
         kwargs.update(user_id=user.id, title=title,strategy=strategy, introduction=introduction,

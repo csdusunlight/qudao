@@ -64,7 +64,7 @@ Project_TYPE = (
     ('3', u'高收益区'),
 )
 class Project(models.Model):
-    title = models.CharField(max_length=200, verbose_name=u"标题")
+    title = models.CharField(max_length=20, verbose_name=u"标题")
     priority = models.IntegerField(u"优先级",default=3)
     pub_date = models.DateTimeField(u"创建时间", default=timezone.now)
     user = models.ForeignKey(MyUser, null=True, related_name="created_projects")
@@ -92,6 +92,8 @@ class Project(models.Model):
     points = models.IntegerField(u"参与人数", default=0)
     channel = models.CharField(u"项目来源（上游渠道）", max_length=20, blank=True)
     up_price = models.CharField(u"结算价格（收入）", max_length=40, blank=True)
+    pinyin = models.CharField(u"拼音全拼", max_length=100)
+    szm = models.CharField(u"首字母", max_length=20)
     def clean(self):
         if not self.pic:
             raise ValidationError({'pic': u'图片不能为空'})

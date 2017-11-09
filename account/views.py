@@ -856,6 +856,7 @@ def admin_investlog(request, id):
     log.save()
     return JsonResponse({'code':0})
 
+
 @csrf_exempt
 @login_required_ajax
 def project_add(request, id=None):

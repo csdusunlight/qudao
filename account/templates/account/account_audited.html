@@ -83,6 +83,12 @@
         text-align: center;;
         cursor: pointer;
     }
+    .return-amount {
+        color: #ffbe00;
+    }
+    .return-amount.m-success {
+        color: #91C11D;
+    }
 </style>
 
 </head>
@@ -529,8 +535,9 @@
                 $(this).text(submit_time[0]);
             })
             $('.return-amount').each(function(){
-                if ($(this).data('return')=='') {
-                	$(this).html('已返')
+                if ($(this).data('return') != null) {
+                	$(this).html('已返');
+                	$(this).addClass('m-success');
                 }
             })
         }
@@ -550,12 +557,13 @@
             content: data_user,
             complete:pagecallback,
         });
-        
+        var parent_all;
         var delete_id;
         var parent_del;
         //          编辑/删除数据部分(官方)
         var pass_id;
         function pass (obj,id) {
+            parent_all = $(obj).parent();
             pass_id = id;
             $(".return_amount").val('0');
             $('.popup.m-pass-proj').addClass('in');
@@ -732,7 +740,8 @@
                 },
                 success: function(ret) {
                     if(ret.code == 0) {
-                        alert('操作成功');
+                        parent_all.html('已返');
+                        parent_all.addClass('m-success');
                         $('.popup.m-pass-proj').removeClass('in');
                     } else {
                         console.log(ret.res_msg);

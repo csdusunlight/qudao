@@ -747,6 +747,7 @@
                     if(ret.code == 0) {
                         parent_all.html('已返');
                         parent_all.addClass('m-success');
+                        parent_all.parent().find('td').eq(7).text(return_amount);
                         $('.popup.m-pass-proj').removeClass('in');
                     } else {
                         console.log(ret.res_msg);

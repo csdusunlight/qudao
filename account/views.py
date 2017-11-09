@@ -837,19 +837,22 @@ def submit_screenshot(request):
 @csrf_exempt
 @login_required_ajax
 def admin_investlog(request, id):
-    log = InvestLog.objects.filter(is_official=False).get(id=id)
-    audit_state = request.POST['audit_state']
-
-    if log.audit_state != '1':
-        return JsonResponse({'code':1, 'msg':u"该项目已审核"})
-    if audit_state == '0':
-        log.settle_amount = request.POST['settle_amount']
-        log.return_amount = request.POST['return_amount']
-
+    log = InvestLog.objects.get(id=id)
+    if not log.is_official:
+        audit_state = request.POST['audit_state']
+    
+        if log.audit_state != '1':
+            return JsonResponse({'code':1, 'msg':u"该项目已审核"})
+        if audit_state == '0':
+            log.settle_amount = request.POST['settle_amount']
+            log.return_amount = request.POST['return_amount']
+    
+        else:
+            log.audit_reason = request.POST['audit_reason']
+        log.audit_state = audit_state
+        log.audit_time = datetime.now()
     else:
-        log.audit_reason = request.POST['audit_reason']
-    log.audit_state = audit_state
-    log.audit_time = datetime.now()
+        log.return_amount = request.POST['return_amount']
     log.save()
     return JsonResponse({'code':0})
 

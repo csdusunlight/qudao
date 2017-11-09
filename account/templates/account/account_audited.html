@@ -462,7 +462,7 @@
     var data0 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资金额</th><th>投资标期</th><th>审核时间</th>' +
         '<th>结算金额</th><th>返现金额</th><th class="w-zfb">收款信息</th><th>审核说明</th><th class="w-remark">备注及其他</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td>' +
-        '<td class="submit-time">{audit_time}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{zhifubao}</td><td>{audit_reason}</td><td>{other_remark}</td>'+
+        '<td class="submit-time">{audit_time}</td><td>{settle_amount}</td><td class="return-txt">{return_amount}</td><td>{zhifubao}</td><td>{audit_reason}</td><td>{other_remark}</td>'+
         '<td data-return="{return_amount}" class="return-amount"><a class="handle" onclick="pass(this,{id})">返现</a></td></tr>[/results]</table>';
 //  已拒绝
     var data2 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
@@ -533,6 +533,11 @@
             $('.submit-time').each(function(){
                 var submit_time = $(this).text().split('T');
                 $(this).text(submit_time[0]);
+            })
+            $('.return-txt').each(function(){
+                if ($(this).text() == 'null') {
+                    $(this).text('空');
+                }
             })
             $('.return-amount').each(function(){
                 if ($(this).data('return') != null) {

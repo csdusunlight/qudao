@@ -78,6 +78,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     admin_permissions = models.ManyToManyField('AdminPermission',
         verbose_name='admin permissions', blank=True,
         related_name="user_set", related_query_name="user")
+    is_autowith = models.BooleanField(u'是否自动提现', default=True)
+    is_book_email_notice = models.BooleanField(u'是否预约单邮件通知', default=True)
     objects = MyUserManager()
 
     USERNAME_FIELD = 'mobile'
@@ -123,7 +125,12 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
             return '/static/images/user-icon.png'
         def __unicode__(self):
             return self.mobile
-
+    def get_encrypt_mobile(self):
+        mobile = self.mobile
+        if len(mobile)>=7:
+            return mobile[:3] + '****' + mobile[-4:]
+        else:
+            return mobile
 
 class BankCard(models.Model):
     user = models.ForeignKey(MyUser, related_name="user_bankcard")

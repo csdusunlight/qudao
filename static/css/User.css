@@ -269,7 +269,7 @@ filter: grayscale(100%);
 filter: gray; opacity:.5;}
 /*input[type="text"] {padding-left: 10px !important;padding-right: 10px !important;}*/
 
-.Cash-box { float:left; width:100%; height:auto; text-align:left;}
+.Cash-box { /*float:left;*/ width:100%; height:auto; text-align:left;}
 .Cash-info { float:left; width:100%; height:auto; margin-top:20px;}
 .Cash-info span { float:left; width:108px; height:auto; font-size:15px; color:#666666; line-height:36px; text-align:right;}
 .Cash-info i { font-size:14px; color:#ff0000; line-height:36px;}

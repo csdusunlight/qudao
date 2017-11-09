@@ -2,7 +2,7 @@ body {
     background: url(../images/user-guide-bottom.png) center bottom 100px/100% auto no-repeat #ffbf5d;
 }
 .guide__title {
-    margin: 70px auto;
+    margin: 70px auto 40px;
     font-size: 30px;
     line-height: 50px;
     text-align: center;
@@ -45,9 +45,11 @@ body {
     color: #fff;
 }
 .guide-download {
-    margin-top: 30px;
+    margin-bottom: 30px;
+    font-size: 18px;
     color: #fff;
 }
 .download-btn {
+    font-size: 18px;
     text-decoration: underline;
 }

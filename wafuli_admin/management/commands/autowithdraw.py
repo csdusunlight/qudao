@@ -17,8 +17,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         logger.info("******Auto-withdrawing is beginning*********")
         begin_time = time.time()
-        channels = MyUser.objects.filter(balance__gte=10)
-        for user in channels:
+        users = MyUser.objects.filter(balance__gte=10, is_autowith=True)
+        for user in users:
             card = user.user_bankcard.first()
             if not card:
                 continue

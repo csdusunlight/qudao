@@ -241,7 +241,7 @@
     <div class="popup m-edit-proj">
         <div class="popup__content" style="width: 600px;">
             <div class="popup__top">
-                <h2 class="popup__title">编辑官方项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+                <h2 class="popup__title">编辑官方数据</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
             </div>
             <div class="popup__detail">
                 <div class="popup__item">
@@ -304,7 +304,7 @@
     <div class="popup m-edit-proj_02">
         <div class="popup__content" style="width: 600px;">
             <div class="popup__top">
-                <h2 class="popup__title">编辑自建项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+                <h2 class="popup__title">编辑自建数据</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
             </div>
             <div class="popup__detail">
                 <div class="popup__item">
@@ -350,10 +350,10 @@
     <div class="popup m-del-proj">
         <div class="popup__content" style="width: 600px;">
             <div class="popup__top">
-                <h2 class="popup__title">删除项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+                <h2 class="popup__title">删除数据</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
             </div>
             <div class="popup__detail">
-                该操作会彻底在数据库中删除项目，请慎重操作！
+                该操作会彻底在数据库中删除数据，请慎重操作！
             </div>
             <div class="popup__btnbox">
                 <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
@@ -434,10 +434,10 @@
 
 //  全部
     var data = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>审核状态</th><th>结算金额</th><th>返现金额</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th>审核状态</th><th>结算金额</th><th>返现金额</th><th class="w-zfb">审核信息</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time state{audit_state}">{audit_state_des}</td><td>{settle_amount}</td>'+
-        '<td>{return_amount}</td><td>{zhifubao}</td><td>{other_remark}</td></tr>[/results]</table>';
+        '<td>{return_amount}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
 //  未审核
     var data1 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
@@ -1081,7 +1081,7 @@
                     audit_date1 = $("#audit_date1").val(),
                     telnum_sub = $("#telnum_sub").val(),
                     zhifubao = $("#zhifubao").val(),
-                    state = $("#state").val();
+                    state = state_1;
                     
 //              if(!submit_date0 || !submit_date1) {
 //                  alert('请先选择提交日期区间，再进行导出');

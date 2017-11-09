@@ -32,8 +32,11 @@ def create_update_selfproject(request, id=None):
     necessary_fields = request.POST.get('necessary_fields', '')
     marks = request.POST.get('marks', '')
     company = request.POST.get('company', '')
+    is_book = request.POST.get('is_book', False)
+    channel = request.POST.get('channel', '')
+    up_price = request.POST.get('up_price', '')
     if not (title and strategy and introduction and cprice and term and investrange and intrest
-            and necessary_fields and company and shortprice):
+            and necessary_fields and company and shortprice and is_book):
         ret['code'] = 1
         ret['msg'] = u'缺少必填字段'
         return JsonResponse(ret)
@@ -51,11 +54,13 @@ def create_update_selfproject(request, id=None):
         kwargs.update(user_id=user.id, title=title,strategy=strategy, introduction=introduction,
                                cprice=cprice, shortprice=shortprice, term=term,investrange=investrange, intrest=intrest,
                                is_multisub_allowed=is_multisub_allowed, necessary_fields=necessary_fields
-                               ,company_id=company, state='10', points=points)
+                               ,company_id=company, state='10', points=points, is_book=is_book, channel=channel,
+                               up_price=up_price)
     else:
         kwargs.update(title=title,strategy=strategy, introduction=introduction, shortprice=shortprice,
                         cprice=cprice, term=term,investrange=investrange, intrest=intrest,
-                        is_multisub_allowed=is_multisub_allowed, necessary_fields=necessary_fields)
+                        is_multisub_allowed=is_multisub_allowed, necessary_fields=necessary_fields, 
+                        is_book=is_book, up_price=up_price)
         
     with transaction.atomic():
         if id is None:

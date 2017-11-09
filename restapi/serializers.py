@@ -6,11 +6,12 @@ Created on 2017年8月10日
 '''
 from rest_framework import serializers
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
-    Announcement, WithdrawLog, Mark
+    Announcement, WithdrawLog, Mark, BookLog
 from account.models import MyUser, ApplyLog
 from wafuli_admin.models import DayStatis
 from wafuli.models import Company
 from statistic.models import UserDetailStatis, UserAverageStatis
+from activity.models import SubmitRank, IPLog
 
 class UserSerializer(serializers.ModelSerializer):
     real_name = serializers.CharField(source="user_bankcard.first.real_name")
@@ -18,8 +19,8 @@ class UserSerializer(serializers.ModelSerializer):
     card_number = serializers.CharField(source="user_bankcard.first.card_number")
     class Meta:
         model = MyUser
-        fields = ('id', 'mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'with_total','accu_income',
-                  'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number')
+        fields = ('id', 'mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'with_total','accu_income','is_book_email_notice',
+                  'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number', 'is_autowith')
         read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level',)
         
 class ProjectSerializer(serializers.ModelSerializer):
@@ -31,6 +32,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         
 class InvestLogSerializer(serializers.ModelSerializer):
     project_title = serializers.CharField(source='project.title', read_only=True)
+    project_source = serializers.CharField(source='project.channel', read_only=True)
     qq_number = serializers.CharField(source='user.qq_number', read_only=True)
     qq_name = serializers.CharField(source='user.qq_name', read_only=True)
     user_level = serializers.CharField(source='user.level', read_only=True)
@@ -40,6 +42,7 @@ class InvestLogSerializer(serializers.ModelSerializer):
     admin_user = serializers.CharField(source='admin_user.username', read_only=True)
     other_remark = serializers.CharField(source='get_other_and_remark', read_only=True)
     submit_type_des = serializers.CharField(source='get_submit_type_display', read_only=True)
+    submit_way_des = serializers.CharField(source='get_submit_way_display', read_only=True)
     class Meta:
         model = InvestLog
         fields = '__all__'
@@ -84,6 +87,7 @@ class SubscribeShipSerializer(serializers.ModelSerializer):
     project_picture = serializers.CharField(source='project.picture_url', read_only=True)
     project_marks = serializers.CharField(source='project.marks_list', read_only=True)
     project_is_official = serializers.CharField(source='project.is_official', read_only=True)
+    project_is_book = serializers.BooleanField(source='project.is_book', read_only=True)
     submit_num = serializers.IntegerField(source='project.points', read_only=True)
     necessary_fields = serializers.CharField(source='project.necessary_fields', read_only=True)
     optional_fields = serializers.CharField(source='project.optional_fields', read_only=True)
@@ -138,4 +142,25 @@ class MarkSerializer(serializers.ModelSerializer):
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
+        fields = '__all__'
+        
+class RankSerializer(serializers.ModelSerializer):
+    user_pic = serializers.CharField(source='user.picture_url', read_only=True)
+    mobile = serializers.CharField(source='user.get_encrypt_mobile', read_only=True)
+    class Meta:
+        model = SubmitRank
+        fields = '__all__'
+        
+class IPLogSerializer(serializers.ModelSerializer):
+    mobile = serializers.CharField(source='user.mobile', read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
+    class Meta:
+        model = IPLog
+        fields = '__all__'
+        
+class BookLogSerializer(serializers.ModelSerializer):
+    state_des = serializers.CharField(source='get_state_display', read_only=True)
+    project_title = serializers.CharField(source='project.title', read_only=True)
+    class Meta:
+        model = BookLog
         fields = '__all__'

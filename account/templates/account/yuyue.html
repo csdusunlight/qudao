@@ -1,0 +1,376 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户中心</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
+<style type="text/css">
+	.fubi-box {
+	    margin-bottom: 20px;
+	    height: 80px;
+	    background-color: #fff;
+	}
+	.fubi-item {
+	    display: inline-block;
+	    margin-left: 20px;
+	    min-width: 200px;
+	    height: 80px;
+	    line-height: 80px;
+	    font-size: 18px;
+	}
+	.fubi-num {
+	    display: inline-block;
+	    padding: 0 10px;
+	    color: #FFBE00;
+	    font-size: 24px;
+	}
+	.tixian {
+	    margin-top: 22px;
+	    margin-right: 20px;
+	}
+	.state0 {
+        color: #91c11d;
+    }
+    .state1 {
+        color: #ffbe00;
+    }
+    .state2 {
+        color: red;
+    }
+    .state3 {
+        color: blue;
+    }
+    .isauto-box {
+        position: absolute;
+        top: 14px;
+        right: 50px;
+    } 
+    /*.need-icon {
+        display: inline-block;
+        margin: 10px 10px 10px 38px;
+        width: 26px;
+        height: 26px;
+        border-radius: 4px;
+        border: 1px solid #e4e4e4;
+        vertical-align: middle;
+        cursor: pointer;
+    }
+    .is_auto {
+        opacity: 0;
+        position: absolute;
+    }
+    
+    .is_auto:checked + .need-icon {
+        background: url(/static/images/bg-checked-choose.png) center center no-repeat;
+    }
+    .change-status {
+        color: #91C11D;
+        text-decoration: underline;
+    }*/
+   .switch__name {
+       display: inline-block;
+       line-height: 30px;
+       vertical-align: top;
+   }
+   .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 30px;
+        border-radius: 15px;
+        background-color: #fff;
+        border: 1px solid #e4e4e4;
+        transition: all 0.4s ease;  
+        cursor: pointer;
+    }
+    .switch:before {
+        content: "";
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 30px;
+        height: 30px;
+        background-color: #fff;
+        border-radius: 50%;
+        box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+        transition: all 0.4s ease;  
+    }
+    .switch.True {
+        background-color: #91C11D;
+        /*border: 1px solid #91C11D;*/
+    }
+    .switch.True:before {
+        left: 32px;
+    }
+</style>
+<script type="text/javascript">
+var data = '<table width="100%"><thead><tr><th>提交时间</th><th height="44">预约项目</th><th>预约日期</th>' +
+'<th>预约金额</th><th>预约标期</th><th>QQ</th><th>状态</th><th>备注</th><th>操作</th></tr></thead><tbody>'+
+'[results]<tr><td class="submit-time">{submit_time}</td><td>{project_title}</td><td>{book_date}</td><td>{book_content}</td>'+
+'<td>{book_term}</td><td>{qq_number}</td><td class="state{state}">{state_des}</td><td>{remark}</td>'+
+'<td><a class="change-status" onclick="changeState(this,{id},{state})">修改状态</a></td></tr>[/results]'+
+'</tbody></table>';
+var url = "/restapi/books/" + "?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}";
+
+function pagecallback(){
+    
+    $('.submit-time').each(function(){
+        var submit_time = $(this).text().split('T');
+        $(this).text(submit_time[0]+ ' ' +submit_time[1].substr(0,5));
+    })
+}
+
+var yuyue_id;
+var parent_dom;
+var yuyue_state;
+function changeState (obj,id,state) {
+    parent_dom = $(obj).parent().parent();
+    yuyue_id = id;
+    yuyue_state = state;
+    console.log(yuyue_id);
+    var select_dom = '.yuyue_state option[value=' + yuyue_id + ']'
+    $(select_dom).prop('selected', true);
+    $('.popup.m-yuyue-proj').addClass('in');
+}
+
+function isadd(obj) {        //是否自动发送邮件
+    var flag = $(obj).data('isadd');
+    console.log(flag)
+    if (flag == 'True') {
+        $.ajax({
+            url: '/restapi/users/' + {{user.id}} + '/',
+            dataType: "json",
+            type:"put",
+            data: {
+                'is_book_email_notice': false
+            },
+            success: function(ret) {
+                console.log('关闭');
+                $(obj).data('isadd', 'False');
+                $(obj).removeClass('True').addClass('False');
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+        
+    } else{
+        $.ajax({
+            url: '/restapi/users/' + {{user.id}} + '/',
+            dataType: "json",
+            type:"put",
+            data: {
+                'is_book_email_notice': true
+            },
+            success: function(ret) {
+                console.log('开启');
+                $(obj).data('isadd', 'True');
+                $(obj).removeClass('False').addClass('True');
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+        
+    }
+}
+
+$(function(){
+	$('.back-a11').toggleClass("on");
+    $(".Close").click(function(){
+    	$(".Listpop").css("display","none")<!--隐藏-->
+    });
+	$("#pagedata").ajaxPage({
+	    url:url,
+	    pageId:$("#page"),
+	    run:true,
+	    content:data,
+	    complete:pagecallback,
+	});
+	
+	$(".RightCont").on("focus", ".date_picker", function() {
+        $(this).date_input();
+    })
+	
+	$("#search").click(function() {
+        var trans_date_0 = $("#trans_date_0").val(),
+            trans_date_1 = $("#trans_date_1").val(),
+            transType = $("#transType").val();
+        var newurl = url;
+        if(trans_date_0) {
+            newurl += "&trans_date_0=" + trans_date_0;
+        }
+        if(trans_date_1) {
+            newurl += "&trans_date_1=" + trans_date_1;
+        }
+        if(transType) {
+            newurl += "&transType=" + transType;
+        }
+    
+        console.log(newurl);
+        $("#page").empty();
+        $("#pagedata").ajaxPage({
+            url: newurl,
+            pageId: $("#page"),
+            run: true,
+            content: data,
+            complete:pagecallback,
+        });
+    });
+    
+    $('#confirm_yuyue').click(function() {
+        var state = $('.yuyue_state').val();
+        var state_txt = $('.yuyue_state option:selected').text();
+        console.log(state + ', ' + state_txt)
+        $(parent_dom).children().eq(4).text(state_txt).removeClass('state0 state1 state2 state3').addClass('state'+state);
+        $.ajax({        
+            url: "/restapi/books/" + yuyue_id + "/",
+            dataType: "json",
+            type: 'put',
+            data: {
+                'state': state
+            },
+            success: function(ret) {
+                alert('修改成功');
+                $('.popup.m-yuyue-proj').removeClass('in');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+                console.log("数据错误");
+            }
+        });
+    })
+//  var is_auto_val = "{{user.is_book_email_notice}}";
+//  if(is_auto_val == 'True') {
+//      var is_auto_dom = '.is_auto[value="true"]';
+//  } else {
+//      var is_auto_dom = '.is_auto[value="false"]';
+//  }
+//  $(is_auto_dom).prop('checked', true);
+//  $('.is_auto[name="is_auto"]').click(function(){
+//      var that = this;
+//      if ($(this).val() == 'true') {
+//          var is_auto = true;
+//      } else {
+//          var is_auto = false;
+//      }
+//      console.log(is_auto);
+//      $.ajax({
+//          url: '/restapi/users/' + {{user.id}} + '/',
+//          dataType: "json",
+//          type:"put",
+//          data: {
+//              "is_book_email_notice": is_auto
+//          },
+//          success: function(ret) {
+//              alert("操作成功");
+//              $(this).prop('checked', true);
+//          },
+//          error: function(jqXHR, textStatus, errorThrown) {
+//              console.log(jqXHR.responseText);
+//              $(that).prop('checked', false);
+//              alert("数据错误");
+//          }
+//      });
+//  })
+
+    // 审核拒绝原因弹窗
+//	$('.Content').on('click','.state_2',function(){
+//		  var reason = $(this).attr('reason');
+//	      alert(reason);
+//	  });
+});
+</script>
+</head>
+
+<body>
+    {% include "header.html" %}
+	<div class="Content">
+    	<!--头部-->
+    	<!--内容-->
+    	{% include "account/left.html" %}
+    	<div class="RightCont">
+        	<!--<div class="fubi-box">
+            	<span class="fubi-item">预约提示</span>
+            	<input type="" name="" id="" value="" />
+                <a class="tixian btn m-yellow r">修改</a>
+            </div>-->
+            <div class="table" style="position: relative;">
+                <h2 class="table__title">预约数据</h2>
+                <div class="isauto-box">
+                    <span class="switch__name">开启QQ邮件通知&nbsp;&nbsp;</span>
+                    <span data-isadd="{{user.is_book_email_notice}}" class="home switch {{user.is_book_email_notice}}" onclick="isadd(this)"></span>
+                    <!--<label><input class="is_auto" type="radio" value="true" name="is_auto" /><i class="need-icon"></i>是</label>
+                    <label><input class="is_auto" type="radio" checked="checked" value="false" name="is_auto" /><i class="need-icon"></i>否</label>-->
+                </div>
+                <!--<div class="search">
+                    <div class="search__item">
+                        <span class="search__name">获取时间：</span>
+                        <div class="time-input-box"><input type="text" class="date_picker time-input" id="trans_date_0" onchange="$('#search').click()" /></div> ——
+                        <div class="time-input-box"><input type="text" class="date_picker time-input" id="trans_date_1" onchange="$('#search').click()" /></div>
+                    </div>
+                    <div class="search__item">
+                        <span class="search__name">收支类型：</span>
+                        <select name="select_status" id="transType" onchange="$('#search').click()">
+                            <option value="">全部</option>
+                            <option value="0">收入</option>
+                            <option value="1">支出</option>
+                        </select>
+                    </div>
+                </div>-->
+                <!--<div style="display: none;" class="handle clearfix">
+                    <div class="handle__out r">
+                        <a id="search" class="btn m-green m-search">搜索</a>
+                    </div>
+                </div>-->
+                <div id="pagedata">
+
+                </div>
+
+                <div class="changes-p">
+                    <div class="page" id="page">
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="popup m-yuyue-proj">
+                <div class="popup__content" style="width: 600px;">
+                    <div class="popup__top">
+                        <h2 class="popup__title">修改预约状态</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+                    </div>
+                    <div class="popup__detail">
+                        <div class="popup__item">
+                            <span class="popup__itemname">项目名称</span>
+                            <select class="yuyue_state" placeholder="选择项目">
+                                <option value="0">预约成功</option>
+                                <option value="1">未处理</option>
+                                <option value="2">作废</option>
+                                <option value="3">延后处理</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="popup__btnbox">
+                        <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
+                        <a id="confirm_yuyue" class="btn m-green popup__close-btn">确认</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    	<!--底部-->
+  <div style="clear: both;"></div>
+  </div>
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+    </div>
+</body>
+</html>

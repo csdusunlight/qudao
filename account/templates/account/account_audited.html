@@ -292,7 +292,7 @@
             <div class="popup__detail">
                 <div class="popup__item">
                     <span class="popup__itemname">返现金额：</span>
-                    <input type="text" class="return_amount" placeholder="填写投资金额" />
+                    <input type="text" class="return_amount" value="1" placeholder="填写投资金额" />
                 </div>
             </div>
             <div class="popup__btnbox">
@@ -552,7 +552,7 @@
         var pass_id;
         function pass (obj,id) {
             pass_id = id;
-            $(".return_amount").val('');
+            $(".return_amount").val('1');
             $('.popup.m-pass-proj').addClass('in');
         }
         
@@ -711,7 +711,7 @@
         });
         
         $('#confirm_pass').click(function() {       //官方数据确认返现
-            var return_amount = $(".return_amount_02").val();
+            var return_amount = $(".return_amount").val();
             if(!return_amount) {
                 alert('填写项不能为空')
                 return;

@@ -11,9 +11,19 @@ from account.models import MyUser
 from django.db.models import F, Sum
 import datetime
 from django.core.management.base import BaseCommand
+from public.pinyin import PinYin
 logger = logging.getLogger("wafuli")
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        InvestLog.objects.filter(return_amount=0).update(return_amount=None)
+        projects=Project.objects.all()
+        for project in projects:
+            title = project.title
+            pyin = PinYin()
+            pyin.load_word()
+            szm, pinyin = pyin.hanzi2pinyin_split(title)
+            project.szm = szm
+            project.pinyin = pinyin
+            project.save()
+            
 
             

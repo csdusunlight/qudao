@@ -100,6 +100,12 @@
         color: #ffbe00;
     }
     .
+    .return-amount {
+        color: #ffbe00;
+    }
+    .return-amount.m-success {
+        color: #91C11D;
+    }
 </style>
 
 </head>
@@ -309,6 +315,23 @@
             </div>
         </div>
     </div>
+    <div class="popup m-pass-proj">
+        <div class="popup__content" style="width: 600px;">
+            <div class="popup__top">
+                <h2 class="popup__title">数据返现</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+            </div>
+            <div class="popup__detail">
+                <div class="popup__item">
+                    <span class="popup__itemname">返现金额：</span>
+                    <input type="text" class="return_amount" value="0" onkeyup="this.value=this.value.replace(/[^\-?\d.]/g,'')" placeholder="填写投资金额" />
+                </div>
+            </div>
+            <div class="popup__btnbox">
+                <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
+                <a id="confirm_pass" class="btn m-green popup__close-btn">确认</a>
+            </div>
+        </div>
+    </div>
     <div class="popup m-edit-proj_02">
         <div class="popup__content" style="width: 600px;">
             <div class="popup__top">
@@ -461,10 +484,11 @@
         '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span></div></td>'+
         '</tr>[/results]</table>';
 //  已通过
-    var data0 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资金额</th>' +
-        '<th>投资标期</th><th>审核时间</th><th>结算金额</th><th>返现金额</th><th class="w-zfb">收款信息</th><th>审核说明</th><th class="w-remark">备注及其他</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{audit_time}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{zhifubao}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
+    var data0 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资金额</th><th>投资标期</th><th>审核时间</th>' +
+        '<th>结算金额</th><th>返现金额</th><th class="w-zfb">收款信息</th><th>审核说明</th><th class="w-remark">备注及其他</th><th>操作</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td>' +
+        '<td class="submit-time">{audit_time}</td><td>{settle_amount}</td><td class="return-txt">{return_amount}</td><td>{zhifubao}</td><td>{audit_reason}</td><td>{other_remark}</td>'+
+        '<td data-return="{return_amount}" class="return-amount"><a class="handle" onclick="pass(this,{id})">返现</a></td></tr>[/results]</table>';
 //  已拒绝
     var data2 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
         '<th>投资金额</th><th>投资标期</th><th>审核时间</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
@@ -535,6 +559,17 @@
                 var submit_time = $(this).text().split('T');
                 $(this).text(submit_time[0]);
             })
+            $('.return-txt').each(function(){
+                if ($(this).text() == 'null') {
+                    $(this).text('');
+                }
+            })
+            $('.return-amount').each(function(){
+                if ($(this).data('return') != null) {
+                	$(this).html('已返');
+                	$(this).addClass('m-success');
+                }
+            })
         }
         $("#pagedata").ajaxPage({
             url: url,
@@ -552,10 +587,18 @@
             content: data_user,
             complete:pagecallback,
         });
-        
+        var parent_all;
         var delete_id;
         var parent_del;
         //          编辑/删除数据部分(官方)
+        var pass_id;
+        function pass (obj,id) {
+            parent_all = $(obj).parent();
+            pass_id = id;
+            $(".return_amount").val('0');
+            $('.popup.m-pass-proj').addClass('in');
+        }
+        
         function removeData (obj,id) {
             parent_del = $(obj);
             delete_id = id;
@@ -709,6 +752,37 @@
                 }
             });
         });
+        
+        $('#confirm_pass').click(function() {       //官方数据确认返现
+            var return_amount = $(".return_amount").val();
+            if(!return_amount) {
+                alert('填写项不能为空')
+                return;
+            }
+            console.log(return_amount)
+            $.ajax({
+                url: "/account/admin_invest/" + pass_id + "/",
+                dataType: "json",
+                type: "post",
+                data: {
+                    'return_amount': return_amount,
+//                  'audit_state': 0,
+                },
+                success: function(ret) {
+                    if(ret.code == 0) {
+                        parent_all.html('已返');
+                        parent_all.addClass('m-success');
+                        parent_all.parent().find('td').eq(7).text(return_amount);
+                        $('.popup.m-pass-proj').removeClass('in');
+                    } else {
+                        console.log(ret.res_msg);
+                    }
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
+        });
 //      编辑/删除部分（官方）---end
 
         //          编辑/删除数据部分(自建)
@@ -735,7 +809,7 @@
             });
         })
         
-        var pass_id;
+//      var pass_id;
         function pass_02 (obj,id) {
             pass_id = id;
             $(".settle_amount_02").val('');
@@ -1052,7 +1126,7 @@
                     audit_date1 = $("#audit_date1").val(),
                     telnum_sub = $("#telnum_sub").val(),
                     zhifubao = $("#zhifubao").val(),
-                    state = $("#state").val();
+                    state = state_1;
                     
 //              if(!submit_date0 || !submit_date1) {
 //                  alert('请先选择提交日期区间，再进行导出');

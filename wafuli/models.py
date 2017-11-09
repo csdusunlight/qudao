@@ -190,7 +190,7 @@ class InvestLog(models.Model):
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
     audit_reason = models.CharField(u"审核原因", max_length=30, blank=True)
     settle_amount = models.DecimalField(u'结算金额', max_digits=10, decimal_places=2, default=0)
-    return_amount = models.DecimalField(u'返现金额', max_digits=10, decimal_places=2, default=0)
+    return_amount = models.DecimalField(u'返现金额', max_digits=10, decimal_places=2, null=True)
     remark = models.CharField(u"备注", max_length=100, blank=True)
     def __unicode__(self):
         return u"来自渠道用户：%s 的投资数据提交：%s" % (self.user, self.invest_amount)

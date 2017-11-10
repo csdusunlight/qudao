@@ -16,10 +16,10 @@ logger = logging.getLogger("wafuli")
 class Command(BaseCommand):
     def handle(self, *args, **options):
         projects=Project.objects.all()
+        pyin = PinYin()
+        pyin.load_word()
         for project in projects:
             title = project.title
-            pyin = PinYin()
-            pyin.load_word()
             szm, pinyin = pyin.hanzi2pinyin_split(title)
             project.szm = szm
             project.pinyin = pinyin

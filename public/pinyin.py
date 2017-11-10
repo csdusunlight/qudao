@@ -42,7 +42,10 @@ class PinYin(object):
         for char in string:
             key = '%X' % ord(char)
             value = self.word_dict.get(key, char)
-            outpinyin = str(value).split()[0][:-1].lower()
+            try:
+                outpinyin = str(value).split()[0][:-1].lower()
+            except:
+                continue
             if not outpinyin:
                 outpinyin = char
             result_fc.append(outpinyin[0])

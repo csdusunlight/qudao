@@ -8,3 +8,6 @@ dragon/settings.py
 .settings/
 uwsgi.ini
 reload
+static/excel/*.xls
+debug.log.*
+out*.xls

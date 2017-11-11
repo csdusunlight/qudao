@@ -63,7 +63,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(u'注册时间', default=timezone.now)
     type = models.CharField(u'用户类型', default='agent',max_length=10)
     level = models.CharField(u"用户等级", choices=USER_LEVEL, default='03', max_length=2)
-    color = models.CharField(u'个人主页色调', choices=COLORS, default='1', max_length=2)
+    color = models.CharField(u'个人主页色调', choices=COLORS, default='0', max_length=2)
+    submit_bg = models.CharField(u'交单页面背景', default='0', max_length=2)
     picture = models.ImageField(upload_to='photos/user_headphoto', verbose_name=u"个人头像")
     profile = models.TextField(u"个人简介", default=u"~~这个人啥都没写~~")
     qualification = models.CharField(u"资质证明截图", max_length=200)
@@ -206,3 +207,5 @@ class ApplyLog(models.Model):
         ordering = ["submit_time",]
     def __unicode__(self):
         return self.mobile
+
+ 

@@ -2,12 +2,17 @@
 from django.contrib import admin
 from wafuli.tools import batch_subscribe, batch_deletesub
 from wafuli.models import *
+from public.pinyin import PinYin
+
 class ProjectAdmin(admin.ModelAdmin):
-    readonly_fields = ('user','pub_date',)
+    readonly_fields = ('user','pub_date','pinyin','szm')
     list_display = ('title','is_official','is_addedto_repo','state','user','id')
     list_filter = ['is_official', 'is_addedto_repo']
     search_fields = ['title',]
     def save_model(self, request, obj, form, change):
+        pyin = PinYin()
+        pyin.load_word()
+        obj.szm, obj.pinyin = pyin.hanzi2pinyin_split(obj.title)
         super(ProjectAdmin,self).save_model (request, obj, form, change)
         if not change:
             obj.user = request.user
@@ -27,3 +32,11 @@ admin.site.register(SubscribeShip)
 admin.site.register(Mark)
 admin.site.register(InvestLog)
 admin.site.register(BookLog)
+
+
+import os
+# Create your tests here.
+if __name__ == '__main__':
+    pyin = PinYin()
+    pyin.load_word()
+    print pyin.hanzi2pinyin_split(u"激流卡")

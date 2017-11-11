@@ -80,6 +80,19 @@ $(function(){
                     	<li class="skin__item m-06">皮肤6</li>
                     </ul>
                 </div>
+                <div class="item clearfix">
+                    <span class="item__name l">背景</span>
+                    <ul class="submit_bg l">
+                        <li class="submit_bg__item m-01 on">背景1</li>
+                        <li class="submit_bg__item m-02">背景2</li>
+                        <li class="submit_bg__item m-03">背景3</li>
+                        <li class="submit_bg__item m-04">背景4</li>
+                        <li class="submit_bg__item m-05">背景5</li>
+                        <li class="submit_bg__item m-06">背景6</li>
+                        <li class="submit_bg__item m-07">背景4</li>
+                        <li class="submit_bg__item m-08">背景5</li>
+                    </ul>
+                </div>
                 <div class="item">
                     <span class="item__name m-need">用户名</span>
                     <input class="username item__txt" type="text" maxlength="8" value="{{user.username}}" />
@@ -137,7 +150,8 @@ $(function(){
 	{% include "footer.html" %}
 	<script src="{% static 'js/wfl-common.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
-    var skin = '';
+    var skin = '{{user.color}}';
+    var submit_bg = '{{user.submit_bg}}';
     var img = '';
     var img2;
     var file_list = [];
@@ -153,6 +167,8 @@ $(function(){
         console.log('{{user.color}}');
         $('.skin__item').removeClass('on');
         $('.skin__item').eq({{user.color}}).addClass('on');
+        $('.submit_bg__item').removeClass('on');
+        $('.submit_bg__item').eq({{user.submit_bg}}).addClass('on');
         
         
         console.log("{{user.picture_url}}");
@@ -225,6 +241,11 @@ $(function(){
             $(this).addClass('on').siblings().removeClass('on');
             skin = $(this).index();
             console.log(skin);
+        })
+        $('.submit_bg__item').click(function(){
+            $(this).addClass('on').siblings().removeClass('on');
+            submit_bg = $(this).index();
+            console.log(submit_bg);
         })
 //      头像处理
 
@@ -353,6 +374,7 @@ $(function(){
                 dataType: "json",
                 data: {
                     'color': skin,
+                    'submit_bg': submit_bg,
                     'username': username,
                     'qq_number': qq,
                     'qq_name': qqname,

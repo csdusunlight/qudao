@@ -91,7 +91,12 @@ canvas{width: 100%;border: 1px solid #000000;}
     display: inline-block;
     font-size: 0;
 }
-.skin__item {
+.submit_bg {
+    max-width: 770px;
+    font-size: 0;
+}
+.skin__item,
+.submit_bg__item {
     position: relative;
     display: inline-block;
     padding-top: 70px;
@@ -123,7 +128,32 @@ canvas{width: 100%;border: 1px solid #000000;}
 .skin__item.m-06 {
     background-image: url(../images/skin_6.jpg);
 }
-.skin__item.on:after {
+.submit_bg__item.m-01 {
+    background-image: url(../images/skin_1.jpg);
+}
+.submit_bg__item.m-02 {
+    background-image: url(../images/skin_2.jpg);
+}
+.submit_bg__item.m-03 {
+    background-image: url(../images/skin_3.jpg);
+}
+.submit_bg__item.m-04 {
+    background-image: url(../images/skin_4.jpg);
+}
+.submit_bg__item.m-05 {
+    background-image: url(../images/skin_5.jpg);
+}
+.submit_bg__item.m-06 {
+    background-image: url(../images/skin_6.jpg);
+}
+.submit_bg__item.m-07 {
+    background-image: url(../images/skin_5.jpg);
+}
+.submit_bg__item.m-08 {
+    background-image: url(../images/skin_6.jpg);
+}
+.skin__item.on:after,
+.submit_bg__item.on:after {
     content: '';
     position: absolute;
     right: -10px;

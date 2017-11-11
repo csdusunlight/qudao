@@ -1,19 +1,20 @@
 {% load staticfiles %}
 <div class="leftnav">
 	<ul>
-	   	<li><a href="{% url 'account_index' %}" class="back-a1 account-nav bottom">用户中心</a></li>
-	   	<li><a href="{% url 'account_setting' %}" class="back-a2 account-nav bottom">主页设置</a></li>
-	   	<li><a href="{% url 'account_notice' %}" class="back-a10 account-nav bottom">编辑公告</a></li>
-	   	<li><a href="{% url 'project_manage' %}" class="back-a3 account-nav bottom">我的项目</a></li>
-	   	
-	   	<li><a href="{% url 'account_submit' %}" class="back-a4 account-nav">自助交单</a></li>
-	   	<li><a href="{% url 'account_audited' %}" class="back-a5 account-nav">数据审核</a></li>
-	   	<li><a href="{% url 'account_yuyue' %}" class="back-a11 account-nav bottom">预约管理</a></li>
-	   	
-	   	<li><a href="{% url 'account_security' %}" class="back-a6 account-nav">安全中心</a></li>
-	   	<li><a href="{% url 'account_bankcard' %}" class="back-a7 account-nav">银行卡绑定</a></li>
-	   	<li><a href="{% url 'account_money' %}" class="back-a8 account-nav">收支详情</a></li>
-	   	<li><a href="{% url 'account_withdraw' %}" class="back-a9 account-nav">提现</a></li>
+	    <li class="account-nav-head m-homepage">主页管理</li>
+	   	<!--<li><a href="{% url 'account_index' %}" class="back-a1 account-nav">用户中心</a></li>-->
+	   	<li class="back-a2 account-navbox"><a href="{% url 'account_setting' %}" class="account-nav">主页设置</a></li>
+	   	<li class="back-a10 account-navbox"><a href="{% url 'account_notice' %}" class="account-nav">编辑公告</a></li>
+	   	<li class="back-a3 account-navbox"><a href="{% url 'project_manage' %}" class="account-nav">我的项目</a></li>
+	   	<li class="account-nav-head m-num">数据管理</li>
+	   	<li class="back-a4 account-navbox"><a href="{% url 'account_submit' %}" class="account-nav">自助交单</a></li>
+	   	<li class="back-a5 account-navbox"><a href="{% url 'account_audited' %}" class="account-nav">数据审核</a></li>
+	   	<li class="back-a11 account-navbox"><a href="{% url 'account_yuyue' %}" class="account-nav">预约管理</a></li>
+	   	<li class="account-nav-head m-account">账号管理</li>
+	   	<li class="back-a6 account-navbox"><a href="{% url 'account_security' %}" class="account-nav">安全中心</a></li>
+	   	<li class="back-a7 account-navbox"><a href="{% url 'account_bankcard' %}" class="account-nav">银行卡绑定</a></li>
+	   	<li class="back-a8 account-navbox"><a href="{% url 'account_money' %}" class="account-nav">收支详情</a></li>
+	   	<li class="back-a9 account-navbox"><a href="{% url 'account_withdraw' %}" class="account-nav">提现</a></li>
 	   </ul>
 </div>
 <script>

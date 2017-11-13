@@ -342,7 +342,7 @@ def export_investlog(request):
     companyname = request.GET.get("companyname", None)
     if companyname:
         item_list = item_list.filter(project__company__name__contains=companyname)
-    invest_mobile = request.GET.get("mobile_sub", None)
+    invest_mobile = request.GET.get("invest_mobile", None)
     if invest_mobile:
         item_list = item_list.filter(invest_mobile=invest_mobile)
     projectname = request.GET.get("project_title_contains", None)

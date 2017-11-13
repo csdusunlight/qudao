@@ -473,7 +473,7 @@
         '<th>投资金额</th><th>投资标期</th><th>审核状态</th><th>结算金额</th><th>返现金额</th><th class="w-zfb">审核信息</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time state{audit_state}">{audit_state_des}</td><td>{settle_amount}</td>'+
-        '<td>{return_amount}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
+        '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
 //  未审核
     var data1 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
@@ -537,7 +537,7 @@
     var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>项目来源</th><th>提交日期</th><th>提交手机号</th>' +
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>结算金额</th><th>返现金额</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{project_channel}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{settle_amount}</td><td>{return_amount}</td><td data-remark="{remark}">{other_remark}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{settle_amount}</td><td class="return-txt">{return_amount}</td><td data-remark="{remark}">{other_remark}</td></tr>[/results]</table>';
 //  已拒绝
     var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>项目来源</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
         '<th>投资金额</th><th>投资标期</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +

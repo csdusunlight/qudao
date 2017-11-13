@@ -129,28 +129,31 @@ canvas{width: 100%;border: 1px solid #000000;}
     background-image: url(../images/skin_6.jpg);
 }
 .submit_bg__item.m-01 {
-    background-image: url(../images/skin_1.jpg);
+    background-image: url(../images/submit-bg-0.jpg);
 }
 .submit_bg__item.m-02 {
-    background-image: url(../images/skin_2.jpg);
+    background-image: url(../images/submit-bg-1.jpg);
 }
 .submit_bg__item.m-03 {
-    background-image: url(../images/skin_3.jpg);
+    background-image: url(../images/submit-bg-2.jpg);
 }
 .submit_bg__item.m-04 {
-    background-image: url(../images/skin_4.jpg);
+    background-image: url(../images/submit-bg-3.jpg);
 }
 .submit_bg__item.m-05 {
-    background-image: url(../images/skin_5.jpg);
+    background-image: url(../images/submit-bg-4.jpg);
 }
 .submit_bg__item.m-06 {
-    background-image: url(../images/skin_6.jpg);
+    background-image: url(../images/submit-bg-5.jpg);
 }
 .submit_bg__item.m-07 {
-    background-image: url(../images/skin_5.jpg);
+    background-image: url(../images/submit-bg-6.jpg);
 }
 .submit_bg__item.m-08 {
-    background-image: url(../images/skin_6.jpg);
+    background-image: url(../images/submit-bg-7.jpg);
+}
+.submit_bg__item.m-09 {
+    background-image: url(../images/submit-bg-8.jpg);
 }
 .skin__item.on:after,
 .submit_bg__item.on:after {

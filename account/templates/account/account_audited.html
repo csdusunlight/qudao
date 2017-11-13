@@ -972,6 +972,7 @@
             $('.back-a5').toggleClass("on");
             
             $(".RightCont").on("focus", ".date_picker", function() {
+                $('.date_selector').remove();
                 $(this).date_input();
             })
             

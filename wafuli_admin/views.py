@@ -128,7 +128,7 @@ def admin_invest(request):
         investlog_id = request.POST.get('id', None)
         cash = request.POST.get('cash', None)
         type = request.POST.get('type', None)
-        reason = request.POST.get('reason', '') or u"无"
+        reason = request.POST.get('reason', '')
         type = int(type)
         if not investlog_id or type==1 and not cash or not type in [1, 2, 3]:
             res['code'] = -2
@@ -529,7 +529,7 @@ def import_investlog(request):
             with transaction.atomic():
                 id = row[0]
                 result = row[2]
-                reason = row[4] or u"无"
+                reason = row[4]
                 investlog = InvestLog.objects.get(id=id)
                 if not investlog.audit_state in ['1','3'] or investlog.translist.exists():
                     continue

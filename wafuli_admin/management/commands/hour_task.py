@@ -65,13 +65,17 @@ def update_jsapi_ticket(access_token):
 def sendTemplate(access_token):
     url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' + access_token
     kwarg = {}
-    kwarg.update(access_token=access_token, template_id='XKGoq0xWvXrg5alO_3pc4f4F5wKR7EDnfvzPoUlh-wY')
-    to_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx76aa03447c27f99d&redirect_uri=http%3A%2F%2Ftest.wafuli.cn%2Fweixin%2Fbind-user%2F&response_type=code&scope=snsapi_userinfo"
+    kwarg.update(access_token=access_token, template_id='Z6tuYFl_ptg_KcAOcG9lhLmkkvaWuV3v70YuvVqEvSM')
+    to_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx76aa03447c27f99d&redirect_uri=http%3A%2F%2Ftest.fuliunion.com%2Fweixin%2Fbind-user%2F&response_type=code&scope=snsapi_userinfo"
     kwarg.update(url=to_url, topcolor="#FF0000")
     wusers = WeiXinUser.objects.all()
     for wu in wusers:
         openid = wu.openid
-        data = {'user':{'value':wu.user.username, 'color':"#173177"},}
+        data = {'first':{'value':wu.user.username, 'color':"#173177"},
+                'keyword1':{'value':wu.user.username, 'color':"#173177"},
+                'keyword2':{'value':wu.user.username, 'color':"#173177"},
+                'keyword3':{'value':wu.user.username, 'color':"#173177"},
+                'remark':{'value':wu.user.username, 'color':"#173177"},}
         kwarg.update(data=data, touser=openid)
         ret = httpconn(url, kwarg, 1)
         logger.info(ret)

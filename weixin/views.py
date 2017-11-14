@@ -6,6 +6,7 @@ import logging
 from account.models import MyUser
 from .models import WeiXinUser
 from django.views.decorators.csrf import csrf_exempt
+from wafuli_admin.models import Dict
 logger = logging.getLogger('wafuli')
 from account.varify import httpconn, verifymobilecode
 from django.conf import settings
@@ -112,3 +113,19 @@ def bind_user_success(request):
     return render(request, 'm_bind_success.html')
 def bind_user_setpasswd(request):
     return render(request, 'm_bind_setpasswd.html')
+
+def sendWeixinTemplate():
+    access_token = Dict.objects.get(key='access_token')
+    url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' + access_token
+    kwarg = {}
+    kwarg.update(access_token=access_token, template_id='XKGoq0xWvXrg5alO_3pc4f4F5wKR7EDnfvzPoUlh-wY')
+    to_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx76aa03447c27f99d&redirect_uri=http%3A%2F%2Ftest.wafuli.cn%2Fweixin%2Fbind-user%2F&response_type=code&scope=snsapi_userinfo"
+    kwarg.update(url=to_url, topcolor="#FF0000")
+    wusers = WeiXinUser.objects.all()
+    for wu in wusers:
+        openid = wu.openid
+        data = {'user':{'value':wu.user.username, 'color':"#173177"},}
+        kwarg.update(data=data, touser=openid)
+        ret = httpconn(url, kwarg, 1)
+        logger.info(ret)
+    

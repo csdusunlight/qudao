@@ -886,3 +886,7 @@ def project_add(request, id=None):
     companies = Company.objects.all()
     kwargs.update(companies=companies)
     return render(request, 'account/project_add.html', kwargs)
+@csrf_exempt
+@login_required_ajax
+def doclist(request):
+    return render(request, 'account/account_doclist.html', {})

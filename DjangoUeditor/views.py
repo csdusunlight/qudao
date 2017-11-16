@@ -37,7 +37,7 @@ def get_ueditor_settings(request):
 def get_ueditor_controller(request):
     """获取ueditor的后端URL地址    """
 
-    action=request.GET.get("action","")
+    action=request.GET.get("action","uploadimage")
     reponseAction={
         "config":get_ueditor_settings,
         "uploadimage":UploadFile,
@@ -124,7 +124,7 @@ def UploadFile(request):
         return  HttpResponse(json.dumps(u"{'state:'ERROR'}"),content_type="application/javascript")
 
     state="SUCCESS"
-    action=request.GET.get("action")
+    action=request.GET.get("action",'uploadimage')
     #上传文件
     upload_field_name={
         "uploadfile":"fileFieldName","uploadimage":"imageFieldName",
@@ -203,7 +203,8 @@ def UploadFile(request):
         'state': state,                         #上传状态，成功时返回SUCCESS,其他任何值将原样返回至图片上传框中
         'size': upload_file_size
     }
-    return HttpResponse(json.dumps(return_info,ensure_ascii=False),content_type="application/javascript")
+    print return_info
+    return HttpResponse(json.dumps(return_info,ensure_ascii=False),)
 
 @csrf_exempt
 def catcher_remote_image(request):

@@ -61,4 +61,5 @@ urlpatterns = [
     url(r'^delete_selfproject/(?P<id>[0-9]+)/$', 'account.project.delete_selfproject', name='delete_selfproject'),
     
     url(r'^account_doclist/$', 'account.views.doclist', name='account_doclist'), #jzy
+    url(r'^account_docdetail/$', 'account.views.docdetail', name='account_docdetail'), #jzy
 ]

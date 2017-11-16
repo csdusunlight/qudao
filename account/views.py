@@ -890,3 +890,7 @@ def project_add(request, id=None):
 @login_required_ajax
 def doclist(request):
     return render(request, 'account/account_doclist.html', {})
+@csrf_exempt
+@login_required_ajax
+def docdetail(request):
+    return render(request, 'account/account_docdetail.html', {})

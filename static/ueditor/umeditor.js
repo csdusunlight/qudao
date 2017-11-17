@@ -10672,6 +10672,7 @@ UM.registerUI('autofloat',function(){
                     toolbarBox.style.position = 'fixed';
 //                  toolbarBox.style.zIndex = 1002;
                     toolbarBox.style.top = topOffset +"px";
+                    toolbarBox.style.top = "100px";
                     ((origalFloat == 'absolute' || origalFloat == 'relative') && parseFloat(origalLeft)) && (toolbarBox.style.left = toobarBoxPos.x + 'px');
                 }
             }

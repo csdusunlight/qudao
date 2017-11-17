@@ -14,16 +14,28 @@
 <script type="text/javascript" src="{% static 'ueditor/umeditor.config.js' %}"></script>
 <script type="text/javascript" src="{% static 'ueditor/umeditor.js' %}"></script>
 <style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+    }
+    .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100px;
+        background-color: darkseagreen;
+        z-index: 10000;
+    }
     .container {
         position: relative;
-        width: 800px;
-    }
-    .edui-editor-body {
-        padding-top: 100px;
+        width: 100%;
+        margin: 120px auto 0;
     }
     .proj__title-box {
         position: absolute;
-        top: 50px;
+        top: 100px;
         left: 0;
         width: 100%;
         z-index: 1000;
@@ -45,6 +57,34 @@
         text-overflow: ellipsis;
         border-bottom: 1px solid #e4e4e4;
     }
+    /*样式覆盖*/
+    .edui-container {
+        /*position: static;*/
+        margin: 0 auto;
+    }
+    .edui-container .edui-toolbar.m-top {
+        /*position: fixed;*/
+        left: 0;
+        width: 100% !important;
+        box-shadow: 0 1px 10px rgba(0,0,0,0.2);
+    }
+    .edui-btn-toolbar {
+        width: 800px;
+        margin: 0 auto;
+        box-sizing: border-box;
+    }
+    .edui-container,
+    .edui-container .edui-toolbar {
+        border: none;
+        box-shadow: none;
+        background-color: #f0f0f0;
+    }
+    .edui-toolbar .edui-btn-toolbar {
+        /*padding-left: 60px;*/
+    }
+    .edui-editor-body {
+        padding-top: 150px;
+    }
     .edui-combobox .edui-button-label {
         width: auto;
     }
@@ -58,40 +98,41 @@
 </head>
 
 <body>
-<div class="container">
-    <div class="proj__title-box">
-        <input class="proj__title" type="text" name="" id="" value="" placeholder="未填写项目名称" />
+    <div class="header">这里是头部</div>
+    <div class="container">
+        <div class="proj__title-box">
+            <input class="proj__title" type="text" name="" id="" value="" placeholder="未填写项目名称" />
+        </div>
+        <!--style给定宽度可以影响编辑器的最终宽度-->
+        <script type="text/plain" id="myEditor" style="width:800px;height:800px;">
+            <p>5</p>
+            <p style="text-align: center;">
+                &nbsp; &nbsp; &nbsp; <span style="font-size: 20px; color: rgb(49, 133, 155);">&nbsp;打击环境规范工程交付</span>
+            </p>
+            <p>
+                <span style="font-size: 20px; color: rgb(49, 133, 155);"><br/></span>
+            </p>
+            <p style="text-align: center;">
+                <span style="font-size: 14px; color: rgb(23, 54, 93);">法国红酒发挥地方</span>
+            </p>
+            <p>
+                <span style="font-size: 14px; color: rgb(23, 54, 93);"><br/></span>
+            </p>
+            <p>
+                <span style="font-size: 14px; color: rgb(23, 54, 93);"><br/></span>
+            </p>
+            <p>
+                <span style="font-size: 14px; color: rgb(23, 54, 93);"></span>
+            </p>
+            <hr/>
+            <p>
+                滚滚滚
+            </p>
+            <p>
+                <span style="font-size: 14px; color: rgb(23, 54, 93);"></span><br/>
+            </p>
+        </script>
     </div>
-    <!--style给定宽度可以影响编辑器的最终宽度-->
-    <script type="text/plain" id="myEditor" style="width:800px;height:800px;">
-        <p>5</p>
-        <p style="text-align: center;">
-            &nbsp; &nbsp; &nbsp; <span style="font-size: 20px; color: rgb(49, 133, 155);">&nbsp;打击环境规范工程交付</span>
-        </p>
-        <p>
-            <span style="font-size: 20px; color: rgb(49, 133, 155);"><br/></span>
-        </p>
-        <p style="text-align: center;">
-            <span style="font-size: 14px; color: rgb(23, 54, 93);">法国红酒发挥地方</span>
-        </p>
-        <p>
-            <span style="font-size: 14px; color: rgb(23, 54, 93);"><br/></span>
-        </p>
-        <p>
-            <span style="font-size: 14px; color: rgb(23, 54, 93);"><br/></span>
-        </p>
-        <p>
-            <span style="font-size: 14px; color: rgb(23, 54, 93);"></span>
-        </p>
-        <hr/>
-        <p>
-            滚滚滚
-        </p>
-        <p>
-            <span style="font-size: 14px; color: rgb(23, 54, 93);"></span><br/>
-        </p>
-    </script>
-</div>
 
 
 
@@ -100,7 +141,7 @@
     var um = UM.getEditor('myEditor', {
         toolbar:[
             'undo redo | bold italic underline strikethrough | forecolor backcolor | removeformat |',
-            'insertorderedlist insertunorderedlist | selectall cleardoc | fontfamily fontsize' ,
+            'insertorderedlist insertunorderedlist | selectall cleardoc | paragraph fontfamily fontsize' ,
             '| justifyleft justifycenter justifyright justifyjustify |',
             'link unlink | image ',
             '| horizontal'

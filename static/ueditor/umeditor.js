@@ -10671,8 +10671,9 @@ UM.registerUI('autofloat',function(){
                 if(toolbarBox.style.position != 'fixed'){
                     toolbarBox.style.position = 'fixed';
 //                  toolbarBox.style.zIndex = 1002;
-                    toolbarBox.style.top = topOffset +"px";
+//                  toolbarBox.style.top = topOffset +"px";
                     toolbarBox.style.top = "100px";
+                    $(toolbarBox).addClass('m-top');
                     ((origalFloat == 'absolute' || origalFloat == 'relative') && parseFloat(origalLeft)) && (toolbarBox.style.left = toobarBoxPos.x + 'px');
                 }
             }
@@ -10683,12 +10684,14 @@ UM.registerUI('autofloat',function(){
                 placeHolder.parentNode.removeChild(placeHolder);
             }
             toolbarBox.style.cssText = bakCssText;
+            $(toolbarBox).removeClass('m-top');
         }
 
         function updateFloating(){
             var rect3 = getPosition(me.container);
             var offset=me.options.toolbarTopOffset||0;
-            if (rect3.top < 0 && rect3.bottom - toolbarBox.offsetHeight > offset) {
+//          if (rect3.top < 0 && rect3.bottom - toolbarBox.offsetHeight > offset) {
+            if (rect3.top < 100 && rect3.bottom - toolbarBox.offsetHeight > offset) {
                 setFloating();
             }else{
                 unsetFloating();

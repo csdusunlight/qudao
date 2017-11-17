@@ -10660,7 +10660,6 @@ UM.registerUI('autofloat',function(){
                 origalLeft = domUtils.getComputedStyle(toolbarBox,'left');
             toolbarBox.style.width = toolbarBox.offsetWidth + 'px';
             toolbarBox.style.zIndex = me.options.zIndex * 1 + 1;
-//          toolbarBox.style.zIndex = 1002;
             toolbarBox.parentNode.insertBefore(placeHolder, toolbarBox);
             if (LteIE6 || (quirks && browser.ie)) {
                 if(toolbarBox.style.position != 'absolute'){
@@ -10670,10 +10669,11 @@ UM.registerUI('autofloat',function(){
             } else {
                 if(toolbarBox.style.position != 'fixed'){
                     toolbarBox.style.position = 'fixed';
-//                  toolbarBox.style.zIndex = 1002;
 //                  toolbarBox.style.top = topOffset +"px";
-                    toolbarBox.style.top = "100px";
+                    toolbarBox.style.top = "52px";
                     $(toolbarBox).addClass('m-top');
+                    $('.header').removeClass('m-shadow');
+//                  toolbarBox.style.zIndex = 10000;
                     ((origalFloat == 'absolute' || origalFloat == 'relative') && parseFloat(origalLeft)) && (toolbarBox.style.left = toobarBoxPos.x + 'px');
                 }
             }
@@ -10685,13 +10685,14 @@ UM.registerUI('autofloat',function(){
             }
             toolbarBox.style.cssText = bakCssText;
             $(toolbarBox).removeClass('m-top');
+            $('.header').addClass('m-shadow');
         }
 
         function updateFloating(){
             var rect3 = getPosition(me.container);
             var offset=me.options.toolbarTopOffset||0;
 //          if (rect3.top < 0 && rect3.bottom - toolbarBox.offsetHeight > offset) {
-            if (rect3.top < 100 && rect3.bottom - toolbarBox.offsetHeight > offset) {
+            if (rect3.top < 52 && rect3.bottom - toolbarBox.offsetHeight > offset) {
                 setFloating();
             }else{
                 unsetFloating();
@@ -10720,6 +10721,7 @@ UM.registerUI('autofloat',function(){
             }
 
             $(window).on('scroll resize',updateFloating);
+            $('.container').on('scroll resize',updateFloating);
             me.addListener('keydown', defer_updateFloating);
             me.addListener('resize', function(){
                 unsetFloating();

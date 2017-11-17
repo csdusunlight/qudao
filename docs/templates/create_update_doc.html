@@ -18,27 +18,38 @@
         margin: 0;
         padding: 0;
         background-color: #f0f0f0;
+        overflow-y: hidden;
     }
     .header {
         position: fixed;
         top: 0;
         left: 0;
+        box-sizing: border-box;
         width: 100%;
-        height: 100px;
-        background-color: darkseagreen;
+        height: 52px;
+        background-color: #fff;
         z-index: 10000;
+        border-bottom: 1px solid #e4e4e4;
+    }
+    .header.m-shadow {
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        border-bottom: none;
     }
     .container {
-        position: relative;
+        position: fixed;
         width: 100%;
-        margin: 120px auto 0;
+        top: 0;
+        bottom: 0;
+        /*height: 800px;*/
+        margin: 52px auto 0;
+        overflow-y: auto;
     }
     .proj__title-box {
         position: absolute;
-        top: 100px;
+        top: 110px;
         left: 0;
         width: 100%;
-        z-index: 1000;
+        z-index: 100;
     }
     .proj__title {
         display: block;
@@ -56,17 +67,57 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         border-bottom: 1px solid #e4e4e4;
+        background-color: transparent;
+    }
+    .footer {
+        width: 800px;
+        margin: 0 auto;
+        height: 50px;
+        /*background-color: #fff;*/
     }
     /*样式覆盖*/
     .edui-container {
-        /*position: static;*/
+        position: static;
         margin: 0 auto;
+    }
+    .edui-container .edui-toolbar {
+        padding-top: 6px;
+        z-index: 999;
+        transition: padding 0.3s ease-in; 
     }
     .edui-container .edui-toolbar.m-top {
         /*position: fixed;*/
         left: 0;
+        padding-bottom: 6px;
         width: 100% !important;
-        box-shadow: 0 1px 10px rgba(0,0,0,0.2);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        z-index: 10000 !important;
+    }
+    .dropdown-menu {
+        top: -6px !important;
+        width: 105px;
+        box-sizing: border-box;
+    }
+    /*.dropdown-menu:before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        left: 20px;
+        width: 10px;
+        height: 10px;
+        transform: rotate(45deg);
+        background-color: #fff;
+        border-top: 1px solid #ccc;
+        border-left: 1px solid #ccc;
+        z-index: 1;
+    }*/
+    .edui-dialog-container {
+        position: relative;
+        width: 800px;
+        margin: 0 auto;
+    }
+    .edui-toolbar.m-top .edui-btn-toolbar {
+        width: 816px;
     }
     .edui-btn-toolbar {
         width: 800px;
@@ -83,7 +134,9 @@
         /*padding-left: 60px;*/
     }
     .edui-editor-body {
-        padding-top: 150px;
+        /*padding-top: 160px;*/
+        box-shadow: 0 0px 8px rgba(0,0,0,0.1);
+        border-radius: 6px;
     }
     .edui-combobox .edui-button-label {
         width: auto;
@@ -100,38 +153,42 @@
 <body>
     <div class="header">这里是头部</div>
     <div class="container">
-        <div class="proj__title-box">
-            <input class="proj__title" type="text" name="" id="" value="" placeholder="未填写项目名称" />
+        <div style="position: relative; width: 800px; margin: 0 auto;">
+            
+            <div class="proj__title-box">
+                <input class="proj__title" type="text" name="" id="" value="" placeholder="未填写项目名称" />
+            </div>
+            <!--style给定宽度可以影响编辑器的最终宽度-->
+            <script type="text/plain" id="myEditor" style="width:800px;height:1000px;padding: 140px 100px 50px;">
+                <p>5</p>
+                <p style="text-align: center;">
+                    &nbsp; &nbsp; &nbsp; <span style="font-size: 20px; color: rgb(49, 133, 155);">&nbsp;打击环境规范工程交付</span>
+                </p>
+                <p>
+                    <span style="font-size: 20px; color: rgb(49, 133, 155);"><br/></span>
+                </p>
+                <p style="text-align: center;">
+                    <span style="font-size: 14px; color: rgb(23, 54, 93);">法国红酒发挥地方</span>
+                </p>
+                <p>
+                    <span style="font-size: 14px; color: rgb(23, 54, 93);"><br/></span>
+                </p>
+                <p>
+                    <span style="font-size: 14px; color: rgb(23, 54, 93);"><br/></span>
+                </p>
+                <p>
+                    <span style="font-size: 14px; color: rgb(23, 54, 93);"></span>
+                </p>
+                <hr/>
+                <p>
+                    滚滚滚
+                </p>
+                <p>
+                    <span style="font-size: 14px; color: rgb(23, 54, 93);"></span><br/>
+                </p>
+            </script>
         </div>
-        <!--style给定宽度可以影响编辑器的最终宽度-->
-        <script type="text/plain" id="myEditor" style="width:800px;height:800px;">
-            <p>5</p>
-            <p style="text-align: center;">
-                &nbsp; &nbsp; &nbsp; <span style="font-size: 20px; color: rgb(49, 133, 155);">&nbsp;打击环境规范工程交付</span>
-            </p>
-            <p>
-                <span style="font-size: 20px; color: rgb(49, 133, 155);"><br/></span>
-            </p>
-            <p style="text-align: center;">
-                <span style="font-size: 14px; color: rgb(23, 54, 93);">法国红酒发挥地方</span>
-            </p>
-            <p>
-                <span style="font-size: 14px; color: rgb(23, 54, 93);"><br/></span>
-            </p>
-            <p>
-                <span style="font-size: 14px; color: rgb(23, 54, 93);"><br/></span>
-            </p>
-            <p>
-                <span style="font-size: 14px; color: rgb(23, 54, 93);"></span>
-            </p>
-            <hr/>
-            <p>
-                滚滚滚
-            </p>
-            <p>
-                <span style="font-size: 14px; color: rgb(23, 54, 93);"></span><br/>
-            </p>
-        </script>
+        <div class="footer">编写于番薯文档</div>
     </div>
 
 

@@ -26,20 +26,20 @@
                 	    <a class="doc__link" href="#"><h4 class="doc__title one-line">和时代一期</h4></a>
                 	    <span class="doc__set"></span>
                 	    <div class="doc__handle">
-                	        <!--<input type="text" />-->
+                	        <input class="doc_rename doc__handleitem" value="和时代一期" type="text" />
                 	        <span class="doc_copy doc__handleitem">创建副本</span>
                             <span class="doc_del doc__handleitem">删除</span>
-                            <span class="doc_rename doc__handleitem">重命名</span>
+<!--                            <span class="doc_rename doc__handleitem">重命名</span>-->
                 	    </div>
                 	</li>
                 	<li class="doc__list">
                         <a class="doc__link" href="#"><h4 class="doc__title one-line">和时代一期</h4></a>
                         <span class="doc__set"></span>
                         <div class="doc__handle">
-                            <!--<input type="text" />-->
+                            <input class="doc_rename doc__handleitem" value="和时代一期" type="text" />
                             <span class="doc_copy doc__handleitem">创建副本</span>
                             <span class="doc_del doc__handleitem">删除</span>
-                            <span class="doc_rename doc__handleitem">重命名</span>
+                            <!--<span class="doc_rename doc__handleitem">重命名</span>-->
                         </div>
                     </li>
                     
@@ -65,6 +65,9 @@ $(function(){
         $(parent_dom).addClass('m-show');
         $(parent_dom).find('.doc__handle').addClass('m-show');
     })
+    $('.doc__box').on('click', '.doc__handle', function(){
+        stopBubble();
+    })
     $('body').click(function(){
         console.log('hide');
         $('.doc__list').removeClass('m-show');
@@ -78,6 +81,11 @@ $(function(){
         var copy_dom = $(parent_dom).clone();
         $(copy_dom).find('.doc__title').text(doc_title + ' 副本');
         $('.doc__box').prepend(copy_dom)
+    })
+    $('.doc__box').on('blur', '.doc_rename', function(){     //重命名文档
+        parent_dom = $(this).parent().parent();
+        console.log($(this).val());
+        $(parent_dom).find('.doc__title').text($(this).val());
     })
     $('.doc__box').on('click', '.doc_del', function(){     //删除文档
         $(this).parent().parent().remove();

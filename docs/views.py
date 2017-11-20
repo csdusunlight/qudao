@@ -4,6 +4,7 @@ from docs.models import Document
 from django.contrib.auth.decorators import login_required
 from public.tools import login_required_ajax
 from django.http.response import JsonResponse, Http404
+from django.template.defaulttags import csrf_token
 
 # Create your views here.
 
@@ -14,11 +15,8 @@ def get_user_doc_list(request):
 
 @login_required
 def create_doc(request):
-    if request.method == "POST":
-        doc = Document.objects.create(user=request.user)
-        return redirect('update_doc', id=doc.id)
-    else:
-        raise Http404
+    doc = Document.objects.create(user=request.user)
+    return redirect('update_doc', id=doc.id)
 @login_required
 def update_doc(request, id=None):
     if id:
@@ -27,6 +25,7 @@ def update_doc(request, id=None):
         doc = Document.objects.create(user=request.user)
     return render(request, 'create_update_doc.html', {'doc':doc})
 
+@csrf_token
 @login_required_ajax
 def duplicate_doc(request, id):
     if request.method == "POST":

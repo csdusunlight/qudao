@@ -22,14 +22,25 @@
 			{% include "account/left.html" %}
             <div class="RightCont">
                 <ul class="doc__box">
-                	<li class="doc__list">
+                    {% for doc in docs %}
+                    <li class="doc__list">
+                        <a class="doc__link" href="/docs/{{doc.id}}"><h4 class="doc__title one-line">{{doc.title}}</h4></a>
+                        <span class="doc__set"></span>
+                        <div class="doc__handle">
+                            <input class="doc_rename doc__handleitem" value="{{doc.title}}" type="text" />
+                            <span class="doc_copy doc__handleitem">创建副本</span>
+                            <span class="doc_del doc__handleitem">删除</span>
+                            <span class="doc_rename doc__handleitem">分享</span>
+                        </div>
+                    </li>
+                    {%endfor%}
+                	<!--<li class="doc__list">
                 	    <a class="doc__link" href="#"><h4 class="doc__title one-line">和时代一期</h4></a>
                 	    <span class="doc__set"></span>
                 	    <div class="doc__handle">
                 	        <input class="doc_rename doc__handleitem" value="和时代一期" type="text" />
                 	        <span class="doc_copy doc__handleitem">创建副本</span>
                             <span class="doc_del doc__handleitem">删除</span>
-<!--                            <span class="doc_rename doc__handleitem">重命名</span>-->
                 	    </div>
                 	</li>
                 	<li class="doc__list">
@@ -39,9 +50,8 @@
                             <input class="doc_rename doc__handleitem" value="和时代一期" type="text" />
                             <span class="doc_copy doc__handleitem">创建副本</span>
                             <span class="doc_del doc__handleitem">删除</span>
-                            <!--<span class="doc_rename doc__handleitem">重命名</span>-->
                         </div>
-                    </li>
+                    </li>-->
                     
                 </ul>
                 

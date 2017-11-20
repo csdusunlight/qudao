@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from public.tools import login_required_ajax
 from django.http.response import JsonResponse, Http404
 from django.template.defaulttags import csrf_token
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 
@@ -25,7 +26,7 @@ def update_doc(request, id=None):
         doc = Document.objects.create(user=request.user)
     return render(request, 'create_update_doc.html', {'doc':doc})
 
-@csrf_token
+@csrf_exempt
 @login_required_ajax
 def duplicate_doc(request, id):
     if request.method == "POST":

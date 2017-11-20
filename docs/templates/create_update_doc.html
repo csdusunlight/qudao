@@ -156,7 +156,7 @@
         <div style="position: relative; width: 800px; margin: 0 auto;">
             
             <div class="proj__title-box">
-                <input class="proj__title" type="text" name="" id="" value="{{doc.title}}" placeholder="未填写项目名称" />
+                <input class="proj__title" type="text" name="" id="" value="{{doc.title}}" placeholder="无标题" />
             </div>
             <!--style给定宽度可以影响编辑器的最终宽度-->
             <script type="text/plain" id="myEditor" style="width:800px;height:1000px;padding: 140px 100px 50px;">
@@ -181,16 +181,16 @@
         ]
     });
     if ($('.proj__title').val() == '') {
-    	$('.proj__title').val('未填写项目名称');
+    	$('.proj__title').val('无标题');
     }
     $('.proj__title').focus(function(){
-        if ($(this).val() == '未填写项目名称') {
+        if ($(this).val() == '无标题') {
         	$(this).val('');
         }
     })
     $('.proj__title').blur(function(){
         if ($(this).val() == '') {
-            $(this).val('未填写项目名称');
+            $(this).val('无标题');
         }
     })
     

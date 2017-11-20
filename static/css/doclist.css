@@ -36,6 +36,10 @@
     height: 17px;    
     background: url(../images/icon-setting.png) center center no-repeat;
     cursor: pointer;
+    transition: all 0.4s ease-in;
+}
+.doc__set:hover {
+    transform: rotate(180deg);
 }
 .doc__link:hover + .doc__set,
 .doc__set:hover,

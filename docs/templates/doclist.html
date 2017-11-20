@@ -17,7 +17,7 @@
     	<!--头部-->
 {% include "header.html" %}
    	<!--内容-->
-<div class="Content">
+<div class="Content clearfix">
    	<!--<div class="w1100">-->
 			{% include "account/left.html" %}
             <div class="RightCont">
@@ -30,7 +30,7 @@
                             <input class="doc_rename doc__handleitem" value="{{doc.title}}" type="text" />
                             <span class="doc_copy doc__handleitem">创建副本</span>
                             <span class="doc_del doc__handleitem">删除</span>
-                            <span class="doc_rename doc__handleitem">分享</span>
+                            <span data-clipboard-text = "{{doc.fanshu_url}}" class="copy-link doc__handleitem">分享</span>
                         </div>
                     </li>
                     {%endfor%}
@@ -61,6 +61,8 @@
 {% include "footer.html" %}
 
 <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
 <script type="text/javascript">
 $(function(){
 }); 
@@ -90,21 +92,38 @@ $(function(){
         parent_dom = $(this).parent().parent();
         doc_id = $(parent_dom).data('docid');
         console.log(doc_id);
-        var url = "{% url 'duplicate_doc' %}";
+        var url = "/docs/duplicate/" + doc_id + "/";
         $.ajax({        //创建副本
             url: url,
             dataType: "json",
-            type: 'post',
-            data: {
-                id: doc_id
-            },
+            type: 'get',
             success: function(ret) {
                 if (ret.code == 0) {
                     console.log(ret);	
-                    var doc_title = $(parent_dom).find('.doc__title').text();
+//                  var doc_title = $(parent_dom).find('.doc__title').text();
                     var copy_dom = $(parent_dom).clone();
-                    $(copy_dom).find('.doc__title').text(doc_title + ' 副本');
+                    $(copy_dom).attr('data-docid', ret.id);
+                    $(copy_dom).find('.doc__link').attr('href', '/docs/' + ret.id);
+                    $(copy_dom).find('.doc__title').text(ret.title);
+                    $(copy_dom).find('.doc_rename').val(ret.title);
+                    $(copy_dom).find('.copy-link').attr('data-clipboard-text', ret.fanshu_url);
                     $('.doc__box').prepend(copy_dom)
+                    
+                    //分享复制部分
+                    var share_btn = $(copy_dom).find('.copy-link')[0];
+                    var clipboard = new Clipboard(share_btn);
+                    
+                    clipboard.on('success', function(e) {
+                        console.log(e);
+                        $.prompt({
+                            Content: '复制成功'
+                        })
+                    });
+                
+                    clipboard.on('error', function(e) {
+                        console.log(e);
+                    });
+                    //分享复制部分---end
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -121,6 +140,22 @@ $(function(){
     $('.doc__box').on('click', '.doc_del', function(){     //删除文档
         $(this).parent().parent().remove();
     })
+    
+    //分享复制部分
+    var btns = document.querySelectorAll('.copy-link');
+    var clipboard = new Clipboard(btns);
+
+    clipboard.on('success', function(e) {
+        console.log(e);
+        $.prompt({
+            Content: '复制成功'
+        })
+    });
+
+    clipboard.on('error', function(e) {
+        console.log(e);
+    });
+    //分享复制部分---end
     
     function stopBubble(e) {            //阻止时间冒泡 
         //如果提供了事件对象，则这是一个非IE浏览器 

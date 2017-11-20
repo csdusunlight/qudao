@@ -29,5 +29,5 @@ def update_doc(request, id=None):
 def duplicate_doc(request, id):
     obj = Document.objects.get(user=request.user, id=id)
     doc = Document.objects.create(title=obj.title + u"_副本", content=obj.content, user=request.user)
-    ret = {'code':0, 'title':doc.title, 'content':doc.content, 'id':doc.id}
+    ret = {'code':0, 'title':doc.title, 'id':doc.id}
     return JsonResponse(ret)

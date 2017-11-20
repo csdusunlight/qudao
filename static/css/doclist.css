@@ -3,6 +3,7 @@
     min-height: 800px;
 }
 .doc__box {
+    padding-bottom: 200px;
     font-size: 0;
 }
 .doc__list {
@@ -84,7 +85,11 @@
     cursor: pointer;
 }
 .doc_copy:hover,
-.doc_del:hover {
+.doc_del:hover,
+.copy-link:hover {
     color: #91C11D;
 }
-
+/*样式覆盖*/
+.copy-link {
+    padding: 0;
+}

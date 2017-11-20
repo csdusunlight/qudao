@@ -44,4 +44,7 @@ urlpatterns = [
     
     url(r'^books/$', views.BookLogList.as_view()),
     url(r'^books/(?P<pk>[0-9]+)/$', views.BookLogDetail.as_view(), kwargs={'partial':True}),
+    
+    url(r'^docs/$', views.DocumentList.as_view(), ),
+    url(r'^docs/(?P<pk>[0-9a-zA-Z]+)/$', views.DocumentDetail.as_view(), kwargs={'partial':True}),
 ]

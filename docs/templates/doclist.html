@@ -96,7 +96,7 @@ $(function(){
         $.ajax({        //创建副本
             url: url,
             dataType: "json",
-            type: 'get',
+            type: 'post',
             success: function(ret) {
                 if (ret.code == 0) {
                     console.log(ret);	
@@ -134,11 +134,43 @@ $(function(){
     })
     $('.doc__box').on('blur', '.doc_rename', function(){     //重命名文档
         parent_dom = $(this).parent().parent();
-        console.log($(this).val());
-        $(parent_dom).find('.doc__title').text($(this).val());
+        doc_id = $(parent_dom).data('docid');
+        var title = $(this).val();
+        var that = this;
+        $.ajax({            //保存文档
+            url: "/restapi/docs/" + doc_id + "/",
+            dataType: "json",
+            type: 'put',
+            data: {
+                'title': title
+            },
+            success: function(ret) {
+                $(parent_dom).find('.doc__title').text(title);
+                $(that).val(title);
+                alert('重命名成功');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+                console.log("数据错误");
+            }
+        });
     })
     $('.doc__box').on('click', '.doc_del', function(){     //删除文档
-        $(this).parent().parent().remove();
+        parent_dom = $(this).parent().parent();
+        doc_id = $(parent_dom).data('docid');
+        $.ajax({            //删除文档
+            url: "/restapi/docs/" + doc_id + "/",
+            dataType: "json",
+            type: 'delete',
+            success: function(ret) {
+                $(parent_dom).remove();
+                
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+                console.log("数据错误");
+            }
+        });
     })
     
     //分享复制部分

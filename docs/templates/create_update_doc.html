@@ -160,14 +160,12 @@
             </div>
             <!--style给定宽度可以影响编辑器的最终宽度-->
             <script type="text/plain" id="myEditor" style="width:800px;height:1000px;padding: 140px 100px 50px;">
-                {{doc.content}}
+                {{doc.content|safe}}
             </script>
         </div>
-        <div><a class="save_btn">保存</a></div>
+        <div style="text-align: center;"><a class="save_btn">保存</a></div>
         <div class="footer">编写于番薯文档</div>
     </div>
-
-
 
 <script type="text/javascript">
     var doc_id = "{{doc.id}}";
@@ -194,6 +192,27 @@
         if ($(this).val() == '') {
             $(this).val('未填写项目名称');
         }
+    })
+    
+    $('.save_btn').click(function(){
+        var title = $('.proj__title').val();
+        var content = UM.getEditor('myEditor').getContent();
+        $.ajax({            //保存文档
+            url: "/restapi/docs/" + doc_id + "/",
+            dataType: "json",
+            type: 'put',
+            data: {
+                'title': title,
+                'content': content, 
+            },
+            success: function(ret) {
+                alert('保存成功');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+                console.log("数据错误");
+            }
+        });
     })
 </script>
 

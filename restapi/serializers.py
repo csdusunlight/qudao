@@ -12,6 +12,7 @@ from wafuli_admin.models import DayStatis
 from wafuli.models import Company
 from statistic.models import UserDetailStatis, UserAverageStatis
 from activity.models import SubmitRank, IPLog
+from docs.models import Document
 
 class UserSerializer(serializers.ModelSerializer):
     real_name = serializers.CharField(source="user_bankcard.first.real_name")
@@ -166,3 +167,8 @@ class BookLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookLog
         fields = '__all__'
+        
+class DocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Document
+        fields = ['title', 'content']

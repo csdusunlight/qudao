@@ -23,7 +23,7 @@
             <div class="RightCont">
                 <ul class="doc__box">
                     {% for doc in docs %}
-                    <li class="doc__list">
+                    <li data-docid = "{{doc.id}}" class="doc__list">
                         <a class="doc__link" href="/docs/{{doc.id}}"><h4 class="doc__title one-line">{{doc.title}}</h4></a>
                         <span class="doc__set"></span>
                         <div class="doc__handle">
@@ -65,6 +65,7 @@
 $(function(){
 }); 
     var parent_dom;     //全局，所有父元素
+    var doc_id;         //全局，每次请求的文档ID
     $('.back-a13').toggleClass("on");
     
     $('.doc__box').on('click', '.doc__set', function(){
@@ -87,10 +88,30 @@ $(function(){
         $(this).parent().removeClass('m-show');
         $(this).parent().parent().removeClass('m-show');
         parent_dom = $(this).parent().parent();
-        var doc_title = $(parent_dom).find('.doc__title').text();
-        var copy_dom = $(parent_dom).clone();
-        $(copy_dom).find('.doc__title').text(doc_title + ' 副本');
-        $('.doc__box').prepend(copy_dom)
+        doc_id = $(parent_dom).data('docid');
+        console.log(doc_id);
+        var url = "{% url 'duplicate_doc' %}";
+        $.ajax({        //创建副本
+            url: url,
+            dataType: "json",
+            type: 'post',
+            data: {
+                id: doc_id
+            },
+            success: function(ret) {
+                if (ret.code == 0) {
+                    console.log(ret);	
+                    var doc_title = $(parent_dom).find('.doc__title').text();
+                    var copy_dom = $(parent_dom).clone();
+                    $(copy_dom).find('.doc__title').text(doc_title + ' 副本');
+                    $('.doc__box').prepend(copy_dom)
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+                console.log("数据错误");
+            }
+        });
     })
     $('.doc__box').on('blur', '.doc_rename', function(){     //重命名文档
         parent_dom = $(this).parent().parent();

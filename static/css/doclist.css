@@ -25,6 +25,7 @@
     background-color: #f8f8f8;
 }
 .doc__title {
+    height: 24px;
     text-align: center;
 }
 .doc__set {

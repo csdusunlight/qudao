@@ -1,3 +1,4 @@
+#coding:utf-8
 from django.shortcuts import render, redirect
 from docs.models import Document
 from django.contrib.auth.decorators import login_required
@@ -27,6 +28,6 @@ def update_doc(request, id=None):
 @login_required_ajax
 def duplicate_doc(request, id):
     obj = Document.objects.get(user=request.user, id=id)
-    doc = Document.objects.create(title=obj.title + u"_¸±±¾", content=obj.content, user=request.user)
-    ret = {'code':0, 'title':doc.title, 'content':doc.content, 'id':doc.id}
+    doc = Document.objects.create(title=obj.title + u"_å‰¯æœ¬", content=obj.content, user=request.user)
+    ret = {'code':0, 'title':doc.title, 'id':doc.id}
     return JsonResponse(ret)

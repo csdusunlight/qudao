@@ -13,7 +13,7 @@ from restapi.serializers import UserSerializer, InvestLogSerializer,\
     SubscribeShipSerializer, AnnouncementSerializer, DayStatisSerializer,\
     ApplyLogSerializer, WithdrawLogSerializer, UserDetailStatisSerializer,\
     UserAverageStatisSerializer, MarkSerializer, CompanySerializer,\
-    RankSerializer, IPLogSerializer, BookLogSerializer
+    RankSerializer, IPLogSerializer, BookLogSerializer, DocumentSerializer
 from account.models import MyUser, ApplyLog
 from rest_framework.filters import SearchFilter,OrderingFilter
 from restapi.permissions import IsOwnerOrStaff, IsSelfOrStaff
@@ -24,6 +24,7 @@ from wafuli_admin.models import DayStatis
 from statistic.models import UserDetailStatis, UserAverageStatis
 from rest_framework.exceptions import ValidationError
 from activity.models import SubmitRank, IPLog
+from docs.models import Document
 # from wafuli.Filters import UserEventFilter
 class BaseViewMixin(object):
     authentication_classes = (CsrfExemptSessionAuthentication,)
@@ -256,4 +257,14 @@ class BookLogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return BookLog.objects.filter(user=self.request.user)
     serializer_class = BookLogSerializer
+    permission_classes = (IsOwnerOrStaff,)
+class DocumentList(BaseViewMixin, generics.ListCreateAPIView):
+    def get_queryset(self):
+        return Document.objects.all()
+    serializer_class = DocumentSerializer
+    pagination_class = MyPageNumberPagination
+class DocumentDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
+    def get_queryset(self):
+        return Document.objects.filter(user=self.request.user)
+    serializer_class = DocumentSerializer
     permission_classes = (IsOwnerOrStaff,)

@@ -32,7 +32,7 @@ def duplicate_doc(request, id):
     if request.method == "POST":
         obj = Document.objects.get(user=request.user, id=id)
         doc = Document.objects.create(title=obj.title + u"_副本", content=obj.content, user=request.user)
-        ret = {'code':0, 'title':doc.title, 'id':doc.id}
+        ret = {'code':0, 'title':doc.title, 'id':doc.id, 'url':doc.fanshu_url()}
         return JsonResponse(ret)
     else:
         raise Http404

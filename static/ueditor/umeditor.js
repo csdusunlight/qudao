@@ -7943,6 +7943,30 @@ UM.plugins['autosave'] = function() {
         editor.fireEvent( "afterautosave", {
             content: saveData
         } );
+        $('.save-tips').removeClass('m-hide');
+        $('.save-tips').text('正在保存...');
+        //添加自动保存部分
+        var title = $('.proj__title').val();
+        var content = UM.getEditor('myEditor').getContent();
+        $.ajax({            //保存文档
+            url: "/restapi/docs/" + doc_id + "/",
+            dataType: "json",
+            type: 'put',
+            data: {
+                'title': title,
+                'content': content, 
+            },
+            success: function(ret) {
+                console.log('保存成功');
+                $('.save-tips').text('已保存');
+                $('.save-tips').addClass('m-hide');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+                console.log("数据错误");
+            }
+        });
+        //添加自动保存部分---end
 
     }
 

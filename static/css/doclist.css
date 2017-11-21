@@ -2,6 +2,9 @@
     background-color: #fff;
     min-height: 800px;
 }
+.create-doc {
+    margin: 20px;
+}
 .doc__box {
     padding-bottom: 200px;
     font-size: 0;
@@ -15,10 +18,10 @@
 .doc__link {
     display: block;
     box-sizing: border-box;
-    padding-top: 140px;
+    padding-top: 124px;
     width: 145px;
-    height: 190px;
-    background: url(../images/bg-doc.png) top 18px center no-repeat;
+    height: 180px;
+    background: url(../images/bg-doc.png) top 15px center no-repeat;
 }
 .doc__list:hover,
 .doc__list.m-show {
@@ -51,10 +54,10 @@
 .doc__handle {
     display: none;
     position: absolute;
-    top: 204px;
-    left: 71px;
-    padding: 18px 4px;
-    width: 108px;
+    top: 195px;
+    left: 47px;
+    padding: 18px 8px;
+    width: 160px;
     /*height: 135px;*/
     box-shadow: 0 0 8px rgba(0,0,0,0.2);
     background-color: #fff;
@@ -68,7 +71,7 @@
     content: "";
     position: absolute;
     top: -7px;
-    left: 48px;
+    left: 73px;
     width: 14px;
     height: 14px;
     transform: rotate(45deg);
@@ -83,6 +86,10 @@
     line-height: 34px;
     text-align: center;
     cursor: pointer;
+}
+.doc__handle .doc_rename {
+    padding: 0;
+    border-radius: 4px;
 }
 .doc_copy:hover,
 .doc_del:hover,

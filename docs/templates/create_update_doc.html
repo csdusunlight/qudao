@@ -5,171 +5,105 @@
 <meta charset="utf-8" />
 <title>用户中心</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
 <!--<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />-->
-<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />-->
 <link rel="stylesheet" type="text/css" href="{% static 'ueditor/themes/default/css/umeditor.css' %}" />
-<script type="text/javascript" src="{% static 'ueditor/third-party/jquery.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'ueditor/third-party/template.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'ueditor/umeditor.config.js' %}"></script>
-<script type="text/javascript" src="{% static 'ueditor/umeditor.js' %}"></script>
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        background-color: #f0f0f0;
-        overflow-y: hidden;
-    }
-    .header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        box-sizing: border-box;
-        width: 100%;
-        height: 52px;
-        background-color: #fff;
-        z-index: 10000;
-        border-bottom: 1px solid #e4e4e4;
-    }
-    .header.m-shadow {
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        border-bottom: none;
-    }
-    .container {
-        position: fixed;
-        width: 100%;
-        top: 0;
-        bottom: 0;
-        /*height: 800px;*/
-        margin: 52px auto 0;
-        overflow-y: auto;
-    }
-    .proj__title-box {
-        position: absolute;
-        top: 110px;
-        left: 0;
-        width: 100%;
-        z-index: 100;
-    }
-    .proj__title {
-        display: block;
-        padding-top: 10px;
-        margin: 0 auto;
-        width: 600px;
-        height: 50px;
-        line-height: 50px;
-        border: none;
-        outline: none;
-        color: #333;
-        font-size: 30px;
-        font-weight: 700;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        border-bottom: 1px solid #e4e4e4;
-        background-color: transparent;
-    }
-    .footer {
-        width: 800px;
-        margin: 0 auto;
-        height: 50px;
-        /*background-color: #fff;*/
-    }
-    /*样式覆盖*/
-    .edui-container {
-        position: static;
-        margin: 0 auto;
-    }
-    .edui-container .edui-toolbar {
-        padding-top: 6px;
-        z-index: 999;
-        transition: padding 0.3s ease-in; 
-    }
-    .edui-container .edui-toolbar.m-top {
-        /*position: fixed;*/
-        left: 0;
-        padding-bottom: 6px;
-        width: 100% !important;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        z-index: 10000 !important;
-    }
-    .dropdown-menu {
-        top: -6px !important;
-        width: 105px;
-        box-sizing: border-box;
-    }
-    /*.dropdown-menu:before {
-        content: "";
-        position: absolute;
-        top: -8px;
-        left: 20px;
-        width: 10px;
-        height: 10px;
-        transform: rotate(45deg);
-        background-color: #fff;
-        border-top: 1px solid #ccc;
-        border-left: 1px solid #ccc;
-        z-index: 1;
-    }*/
-    .edui-dialog-container {
-        position: relative;
-        width: 800px;
-        margin: 0 auto;
-    }
-    .edui-toolbar.m-top .edui-btn-toolbar {
-        width: 816px;
-    }
-    .edui-btn-toolbar {
-        width: 800px;
-        margin: 0 auto;
-        box-sizing: border-box;
-    }
-    .edui-container,
-    .edui-container .edui-toolbar {
-        border: none;
-        box-shadow: none;
-        background-color: #f0f0f0;
-    }
-    .edui-toolbar .edui-btn-toolbar {
-        /*padding-left: 60px;*/
-    }
-    .edui-editor-body {
-        /*padding-top: 160px;*/
-        box-shadow: 0 0px 8px rgba(0,0,0,0.1);
-        border-radius: 6px;
-    }
-    .edui-combobox .edui-button-label {
-        width: auto;
-    }
-    .edui-combobox-menu {
-        min-width: 0;
-    }
-    .edui-combobox-menu .edui-combobox-item .edui-combobox-icon {
-        display: inline;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="{% static 'css/editor.css' %}" />
+
 </head>
 
 <body>
-    <div class="header">这里是头部</div>
+    <div class="header">
+        <div class="header__content clearfix">
+            <div class="header__left l">
+                <a class="header__back" href="{% url 'doc_list' %}"></a>
+                <h4 class="header__title">{{doc.title}}</h4>
+                <span class="header__time">{{doc.update_time|date:"Y-m-d h:i"}}&nbsp;更新</span>
+                <span class="save-tips"></span>
+            </div>
+            <div class="header__right r">
+                <a data-clipboard-text = "{{doc.fanshu_url}}" class="copy-link header__btn">分享</a>
+                <a class="doc_del header__btn">删除文档</a>
+                <div class="bg-share"></div>
+            </div>
+            <p class="share-alert">分享链接复制成功！</p>
+        </div>
+    </div>
     <div class="container">
         <div style="position: relative; width: 800px; margin: 0 auto;">
-            
             <div class="proj__title-box">
-                <input class="proj__title" type="text" name="" id="" value="{{doc.title}}" placeholder="无标题" />
+                <input class="proj__title" type="text" name="proj__title" value="{{doc.title}}" maxlength="20" placeholder="无标题" />
             </div>
             <!--style给定宽度可以影响编辑器的最终宽度-->
             <script type="text/plain" id="myEditor" style="width:800px;height:1000px;padding: 140px 100px 50px;">
                 {{doc.content|safe}}
             </script>
         </div>
-        <div style="text-align: center;"><a class="save_btn">保存</a></div>
-        <div class="footer">编写于番薯文档</div>
+        <!--<div style="text-align: center;"><a class="save_btn">保存</a></div>-->
+        <div class="footer"></div>
     </div>
-
+    <div class="popup m-del-doc">
+        <div class="popup__content" style="width: 400px;">
+            <div class="popup__top">
+                <h2 class="popup__title">删除文档</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+            </div>
+            <div class="popup__detail">
+                该操作会彻底在数据库中删除文档数据，请慎重操作！
+            </div>
+            <div class="popup__btnbox">
+                <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
+                <a id="confirm_delete" class="btn m-green popup__close-btn">确认</a>
+            </div>
+        </div>
+    </div>
+   
+<script type="text/javascript" src="{% static 'ueditor/third-party/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+<script type="text/javascript" src="{% static 'ueditor/third-party/template.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'ueditor/umeditor.config.js' %}"></script>
+<script type="text/javascript" src="{% static 'ueditor/umeditor.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
 <script type="text/javascript">
     var doc_id = "{{doc.id}}";
     console.log(doc_id);
+    //分享复制部分
+    var btns = $('.copy-link')[0];
+    var clipboard = new Clipboard(btns);
+
+    clipboard.on('success', function(e) {
+        console.log(e);
+        $('.share-alert').addClass('m-show');
+        window.setTimeout(function(){
+            $('.share-alert').removeClass('m-show');
+        }, 2000)
+    });
+
+    clipboard.on('error', function(e) {
+        console.log(e);
+    });
+    //分享复制部分---end
+    $('.doc_del').click(function(){     //删除文档
+        $(".popup.m-del-doc").addClass('in');
+    })
+    $("#confirm_delete").click(function(){
+        var doc_id = "{{doc.id}}";
+        $.ajax({            //删除文档
+            url: "/restapi/docs/" + doc_id + "/",
+            dataType: "json",
+            type: 'delete',
+            success: function(ret) {
+                console.log('删除成功');
+                $(".popup.m-del-doc").removeClass('in');
+                window.location.href="/docs/list/"; 
+                
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+                console.log("数据错误");
+            }
+        });
+    })
     //实例化编辑器
     var um = UM.getEditor('myEditor', {
         toolbar:[
@@ -194,7 +128,7 @@
         }
     })
     
-    $('.save_btn').click(function(){
+    $('.proj__title').keyup(function(){
         var title = $('.proj__title').val();
         var content = UM.getEditor('myEditor').getContent();
         $.ajax({            //保存文档
@@ -202,11 +136,11 @@
             dataType: "json",
             type: 'put',
             data: {
-                'title': title,
-                'content': content, 
+                'title': title, 
             },
             success: function(ret) {
-                alert('保存成功');
+                console.log('保存成功');
+                $('.header__title').text(title);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText);

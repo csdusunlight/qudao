@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 @login_required
 def get_user_doc_list(request):
-    docs = Document.objects.filter(user=request.user)
+    docs = Document.objects.filter(user=request.user).order_by("-update_time")
     return render(request, 'doclist.html', {'docs':docs})
 
 @login_required

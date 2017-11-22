@@ -127,6 +127,7 @@ span {
 .proj__title-box .proj__title {
     display: block;
     padding-top: 10px;
+    padding-bottom: 8px;
     margin: 0 auto;
     width: 600px;
     height: 50px;

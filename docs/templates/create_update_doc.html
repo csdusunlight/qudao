@@ -35,9 +35,7 @@
                 <input class="proj__title" type="text" name="proj__title" value="{{doc.title}}" maxlength="20" placeholder="无标题" />
             </div>
             <!--style给定宽度可以影响编辑器的最终宽度-->
-            <script type="text/plain" id="myEditor" style="width:800px;height:1000px;padding: 140px 100px 50px;">
-                {{doc.content|safe}}
-            </script>
+            <script type="text/plain" id="myEditor" style="width:800px;height:1000px;padding: 140px 100px 50px;">{{doc.content|safe}}</script>
         </div>
         <!--<div style="text-align: center;"><a class="save_btn">保存</a></div>-->
         <div class="footer"></div>

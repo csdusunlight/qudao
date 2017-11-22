@@ -3,10 +3,21 @@ body {
     padding: 0;
     background-color: #f0f0f0;
     overflow-y: hidden;
+}
+input {
     font-family: "microsoft yahei";
+}
+table {
+    width: 100%;
 }
 span {
     white-space: normal !important;
+}
+#myEditor {
+    width: 600px;
+    padding: 140px 100px 50px;
+    min-height: 810px;
+    z-index: 999;
 }
 .header {
     position: fixed;
@@ -270,7 +281,6 @@ span {
 .edui-container .edui-toolbar {
     padding-top: 6px;
     z-index: 999;
-    transition: padding 0.3s ease-in; 
 }
 .edui-container .edui-toolbar.m-top {
     /*position: fixed;*/
@@ -279,6 +289,7 @@ span {
     width: 100% !important;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     z-index: 10000 !important;
+    transition: padding 0.3s ease-in; 
 }
 .dropdown-menu {
     top: -6px !important;

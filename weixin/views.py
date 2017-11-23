@@ -60,10 +60,10 @@ def bind_user(request):
                 }
                 url = 'https://api.weixin.qq.com/sns/userinfo'
                 json_ret = httpconn(url, params, 0)
-                weixinuser = WeiXinUser.objects.create(openid=json_ret['openid'], nickname=json_ret['nickname'], sex=json_ret['sex'],
-                                          province=json_ret['province'], city=json_ret['city'], 
-                                          country=json_ret['country'], headimgurl=json_ret['headimgurl'],
-                                          unionid=json_ret['unionid'],)
+                weixinuser = WeiXinUser.objects.create(openid=json_ret.get('openid', ''), nickname=json_ret.get('nickname', ''), 
+                                    sex=json_ret.get('sex',''), province=json_ret.get('province', ''), 
+                                    city=json_ret.get('city',''), country=json_ret.get('country', ''), 
+                                    headimgurl=json_ret.get('headimgurl',''), unionid=json_ret.get('unionid', ''),)
             try:
                 user = MyUser.objects.get(mobile=mobile)
             except MyUser.DoesNotExist:

@@ -14,6 +14,8 @@ from account.varify import httpconn
 from wafuli_admin.models import Dict
 from django.conf import settings
 from weixin.models import WeiXinUser
+from weixin.settings import submit_investlog_notify_templateid
+from dragon.settings import APPID
 logger = logging.getLogger("wafuli")
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -65,8 +67,8 @@ def update_jsapi_ticket(access_token):
 def sendTemplate(access_token):
     url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' + access_token
     kwarg = {}
-    kwarg.update(access_token=access_token, template_id='Z6tuYFl_ptg_KcAOcG9lhLmkkvaWuV3v70YuvVqEvSM')
-    to_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx76aa03447c27f99d&redirect_uri=http%3A%2F%2Ftest.fuliunion.com%2Fweixin%2Fbind-user%2F&response_type=code&scope=snsapi_userinfo"
+    kwarg.update(access_token=access_token, template_id=submit_investlog_notify_templateid)
+    to_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + APPID +"&redirect_uri=http%3A%2F%2Ftest.fuliunion.com%2Fweixin%2Fbind-user%2F&response_type=code&scope=snsapi_userinfo"
     kwarg.update(url=to_url, topcolor="#FF0000")
     wusers = WeiXinUser.objects.all()
     for wu in wusers:

@@ -72,10 +72,10 @@ def sendTemplate(access_token):
     for wu in wusers:
         openid = wu.openid
         data = {'first':{'value':wu.user.username, 'color':"#173177"},
-                'keyword1':{'value':wu.user.username, 'color':"#173177"},
-                'keyword2':{'value':wu.user.username, 'color':"#173177"},
-                'keyword3':{'value':wu.user.username, 'color':"#173177"},
-                'remark':{'value':wu.user.username, 'color':"#173177"},}
+                'keyword1':{'value':u"美易理财三月标", 'color':"#173177"},
+                'keyword2':{'value':u"10000元", 'color':"#173177"},
+                'keyword3':{'value':u'90天', 'color':"#173177"},
+                'remark':{'value':u'如果您不想再收到此类通知，可在个人中心设置里取消微信消息通知', 'color':"#173177"},}
         kwarg.update(data=data, touser=openid)
         ret = httpconn(url, kwarg, 1)
         logger.info(ret)

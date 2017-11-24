@@ -4,7 +4,7 @@ from account.models import MyUser
 
 # Create your models here.
 class WeiXinUser(models.Model):
-    user = models.ForeignKey(MyUser, null=True)
+    user = models.ForeignKey(MyUser, null=True, related_name="weixin_users")
     openid = models.CharField(u'公众号关注者编号', max_length=30, unique=True)
     nickname = models.CharField(u'微信昵称', max_length=30)
     sex = models.CharField(u'性别', max_length=1)

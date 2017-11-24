@@ -68,7 +68,8 @@ def bind_user(request):
                 user = MyUser.objects.get(mobile=mobile)
             except MyUser.DoesNotExist:
                 request.session['mobile'] = mobile
-                result['url'] = "/weixin/bind-user/setpasswd/"
+                result['msg'] = u'您尚未注册，请先通过浏览器注册'
+                result['url'] = "/weixin/bind-user/nouser/"
             else:
                 user.backend = 'django.contrib.auth.backends.ModelBackend'#为了略过用户名和密码验证
                 auth_login(request, user)

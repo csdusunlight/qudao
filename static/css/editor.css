@@ -282,6 +282,9 @@ span {
 #edui1_iframeholder {
     /*width: 800px !important;*/
     padding: 148px 100px 50px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.14);
+    background-color: #fff;
+    border-radius: 8px;
     /*box-sizing: border-box;*/
 }
 .edui-default .edui-editor {
@@ -292,6 +295,7 @@ span {
 }
 .edui-editor .edui-editor-toolbarbox {
     padding-top: 6px;
+    padding-left: 10px;
     z-index: 999;
     background-color: #f0f0f0;
     box-shadow: none !important;
@@ -317,6 +321,9 @@ span {
 }
 #edui1_bottombar {
     display: none !important;
+}
+.edui-default .edui-editor {
+    background-color: transparent !important;
 }
 /*.edui-container {
     position: static;

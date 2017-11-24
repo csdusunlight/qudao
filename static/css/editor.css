@@ -5,7 +5,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f0f0f0;
-    overflow-y: hidden;
+    /*overflow-y: hidden;*/
 }
 input {
     font-family: "microsoft yahei";
@@ -107,13 +107,13 @@ span {
     border-bottom: none;
 }
 .container {
-    position: fixed;
+    /*position: fixed;*/
     width: 100%;
     top: 0;
     bottom: 0;
     height: auto;
     margin: 52px auto 0;
-    overflow-y: auto;
+    /*overflow-y: auto;*/
 }
 .proj__title-box {
     position: absolute;

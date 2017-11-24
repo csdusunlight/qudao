@@ -6920,7 +6920,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                     '.view{padding:0;word-wrap:break-word;cursor:text;height:90%;}\n' +
                     //设置默认字体和字号
                     //font-family不能呢随便改，在safari下fillchar会有解析问题
-                    'body{margin:8px;font-family:sans-serif;font-size:16px;}' +
+                    'body{margin:8px;font-family:Microsoft YaHei;font-size:16px;}' +
                     //设置段落间距
                     'p{margin:5px 0;}</style>' +
                     ( options.iframeCssUrl ? '<link rel=\'stylesheet\' type=\'text/css\' href=\'' + utils.unhtml(options.iframeCssUrl) + '\'/>' : '' ) +
@@ -23957,7 +23957,7 @@ UE.plugin.register('autosave', function (){
             content: saveData
         } );
         
-        //添加自动保存部分
+        //添加自动保存部分   jzy
         $('.save-tips').removeClass('m-hide');
         $('.save-tips').text('正在保存...');
         var title = $('.proj__title').val();

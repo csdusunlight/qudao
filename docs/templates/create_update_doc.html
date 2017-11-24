@@ -2,20 +2,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8" />
-<title>用户中心</title>
-<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />-->
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />-->
-<link rel="stylesheet" type="text/css" href="{% static 'ueditor/themes/default/css/umeditor.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/editor.css' %}" />
-<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-<script type="text/javascript" src="{% static 'ueditor/umeditor.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'ueditor/third-party/template.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'ueditor/umeditor.config.js' %}"></script>
-</head>
+    <title>编辑文档</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/editor.css' %}" />
+    <script type="text/javascript" charset="utf-8" src="{% static 'ueditor/ueditor.config.js' %}"></script>
+    <script type="text/javascript" charset="utf-8" src="{% static 'ueditor/ueditor.all.js' %}"> </script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="{% static 'ueditor/lang/zh-cn/zh-cn.js' %}"></script>
 
+    <style type="text/css">
+    </style>
+</head>
 <body>
+<div>
     <div class="header">
         <div class="header__content clearfix">
             <div class="header__left l">
@@ -27,21 +28,20 @@
             <div class="header__right r">
                 <a data-clipboard-text = "{{doc.fanshu_url}}" class="copy-link header__btn">分享</a>
                 <a class="doc_del header__btn">删除文档</a>
-                <div class="bg-share"></div>
             </div>
+            <div class="bg-share"></div>
             <p class="share-alert">分享链接复制成功！</p>
         </div>
     </div>
-    <div class="container">
+    <div id="container" class="container">
         <div style="position: relative; width: 800px; margin: 0 auto;">
             <div class="proj__title-box">
                 <input class="proj__title" type="text" name="proj__title" value="{{doc.title}}" maxlength="20" placeholder="无标题" />
             </div>
-            <!--style给定宽度可以影响编辑器的最终宽度-->
-            <script type="text/plain" id="myEditor" style="width:800px;height:1000px;padding: 148px 100px 50px;">{{doc.content|safe}}</script>
+            <script id="editor" type="text/plain" style="width:800px;">{{doc.content|safe}}</script>
         </div>
-        <!--<div style="text-align: center;"><a class="save_btn">保存</a></div>-->
         <div class="footer"></div>
+        <!--<div style="text-align: center;"><a class="save_btn">保存</a></div>-->
     </div>
     <div class="popup m-del-doc">
         <div class="popup__content" style="width: 400px;">
@@ -57,9 +57,46 @@
             </div>
         </div>
     </div>
-   
+</div>
+<!--<div id="btns">
+    <div>
+        <button onclick="getAllHtml()">获得整个html的内容</button>
+        <button onclick="getContent()">获得内容</button>
+        <button onclick="setContent()">写入内容</button>
+        <button onclick="setContent(true)">追加内容</button>
+        <button onclick="getContentTxt()">获得纯文本</button>
+        <button onclick="getPlainTxt()">获得带格式的纯文本</button>
+        <button onclick="hasContent()">判断是否有内容</button>
+        <button onclick="setFocus()">使编辑器获得焦点</button>
+        <button onmousedown="isFocus(event)">编辑器是否获得焦点</button>
+        <button onmousedown="setblur(event)" >编辑器失去焦点</button>
+
+    </div>
+    <div>
+        <button onclick="getText()">获得当前选中的文本</button>
+        <button onclick="insertHtml()">插入给定的内容</button>
+        <button id="enable" onclick="setEnabled()">可以编辑</button>
+        <button onclick="setDisabled()">不可编辑</button>
+        <button onclick=" UE.getEditor('editor').setHide()">隐藏编辑器</button>
+        <button onclick=" UE.getEditor('editor').setShow()">显示编辑器</button>
+        <button onclick=" UE.getEditor('editor').setHeight(300)">设置高度为300默认关闭了自动长高</button>
+    </div>
+
+    <div>
+        <button onclick="getLocalData()" >获取草稿箱内容</button>
+        <button onclick="clearLocalData()" >清空草稿箱</button>
+    </div>
+
+</div>
+<div>
+    <button onclick="createEditor()">
+    创建编辑器</button>
+    <button onclick="deleteEditor()">
+    删除编辑器</button>
+</div>-->
+<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>-->
 <script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
 <script type="text/javascript">
     var doc_id = "{{doc.id}}";
@@ -102,21 +139,30 @@
         });
     })
     //实例化编辑器
-    var um = UM.getEditor('myEditor', {
-        toolbar:[
-            'undo redo | bold italic underline strikethrough | forecolor backcolor | removeformat |',
-            'insertorderedlist insertunorderedlist | selectall cleardoc | paragraph fontfamily fontsize' ,
-            '| justifyleft justifycenter justifyright justifyjustify |',
-            'link unlink | image ',
-            '| horizontal'
-        ]
+    var ue = UE.getEditor('editor', {
+//      toolbar:[
+//          'undo redo | bold italic underline strikethrough | forecolor backcolor | removeformat |',
+//          'insertorderedlist insertunorderedlist | selectall cleardoc | paragraph fontfamily fontsize' ,
+//          '| justifyleft justifycenter justifyright justifyjustify |',
+//          'link unlink | image ',
+//          '| horizontal'
+//      ]
+        toolbars: [[
+            'undo', 'redo', '|',
+            'bold', 'italic', 'underline', 'strikethrough', 'removeformat', 'formatmatch', 'pasteplain', '|', 'forecolor', 'backcolor', 'cleardoc', '|',
+            'lineheight', 'horizontal', 'inserttable','|',
+            'fontfamily', 'fontsize', '|',
+            'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|',
+            'link', 'unlink', '|',
+            'simpleupload', '|',
+        ]]
     });
     if ($('.proj__title').val() == '') {
-    	$('.proj__title').val('无标题');
+        $('.proj__title').val('无标题');
     }
     $('.proj__title').focus(function(){
         if ($(this).val() == '无标题') {
-        	$(this).val('');
+            $(this).val('');
         }
     })
     $('.proj__title').blur(function(){
@@ -127,7 +173,7 @@
     
     $('.proj__title').keyup(function(){
         var title = $('.proj__title').val();
-        var content = UM.getEditor('myEditor').getContent();
+        var content = UE.getEditor('editor').getContent();
         $.ajax({            //保存文档
             url: "/restapi/docs/" + doc_id + "/",
             dataType: "json",

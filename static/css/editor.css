@@ -1,3 +1,6 @@
+iframe body {
+    overflow-y: hidden;
+}
 body {
     margin: 0;
     padding: 0;
@@ -13,12 +16,7 @@ table {
 span {
     white-space: normal !important;
 }
-#myEditor {
-    width: 600px;
-    padding: 148px 100px 50px;
-    min-height: 810px;
-    z-index: 999;
-}
+
 .header {
     position: fixed;
     top: 0;
@@ -26,10 +24,11 @@ span {
     box-sizing: border-box;
     width: 100%;
     background-color: #fff;
-    z-index: 10000;
+    z-index: 10001;
     border-bottom: 1px solid #e4e4e4;
 }
 .header__content {
+    position: relative;
     padding: 0 20px;
     margin: 0 auto;
     width: 1250px;
@@ -74,14 +73,13 @@ span {
     transition: opacity 2s cubic-bezier(1,0,1,0); 
 }
 .header__right {
-    position: relative;
     float: right;
     line-height: 52px;
 }
 .bg-share {
     position: absolute;
     top: 50px;
-    left: 30px;
+    right: 0px;
     width: 228px;
     height: 164px;
     background: url(../images/bg-share.png) center center no-repeat;
@@ -113,7 +111,7 @@ span {
     width: 100%;
     top: 0;
     bottom: 0;
-    /*height: 800px;*/
+    height: auto;
     margin: 52px auto 0;
     overflow-y: auto;
 }
@@ -122,7 +120,7 @@ span {
     top: 110px;
     left: 0;
     width: 100%;
-    z-index: 100;
+    z-index: 1000;
 }
 .proj__title-box .proj__title {
     display: block;
@@ -147,14 +145,13 @@ span {
     width: 800px;
     margin: 0 auto;
     height: 50px;
-    /*background-color: #fff;*/
 }
 .share-alert {
     /*display: none;*/
     visibility: hidden;
     opacity: 0;
     position: absolute;
-    left: 660px;
+    left: 530px;
     top: 110px;
     margin: 0 auto;
     width: 260px;
@@ -207,7 +204,7 @@ span {
     right: 0;
     background-color: rgba(0,0,0,0.3);
     opacity: 0;
-    z-index: 10;
+    z-index: 1000;
     transition: all 0.4s ease;
 }
 .popup.in {
@@ -275,7 +272,56 @@ span {
     margin-right: 100px;
 }
 /*样式覆盖*/
-.edui-container {
+#editor {
+    /*width: 600px;*/
+    min-height: 810px;
+    z-index: 999;
+}
+#edui1 {
+    box-sizing: border-box;
+    /*width: 800px !important;*/
+    border: none !important;
+}
+#edui1_iframeholder {
+    /*width: 800px !important;*/
+    padding: 148px 100px 50px;
+    /*box-sizing: border-box;*/
+}
+.edui-default .edui-editor {
+    position: static !important;
+}
+.edui-default .edui-toolbar .edui-combox-body .edui-button-body {
+    width: 30px !important;
+}
+.edui-editor .edui-editor-toolbarbox {
+    padding-top: 6px;
+    z-index: 999;
+    background-color: #f0f0f0;
+    box-shadow: none !important;
+}
+.edui-editor .edui-editor-toolbarbox.m-top {
+    left: 0 !important;
+    padding-bottom: 6px;
+    width: 100% !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+    background-color: #f0f0f0 !important;
+    z-index: 10000 !important;
+    transition: padding 0.3s ease-in; 
+}
+.edui-default .edui-editor-toolbarboxouter {
+    background-image: none !important;
+    border: none !important;
+    background-color: #f0f0f0 !important;
+    box-shadow: none !important;
+}
+.edui-editor-toolbarbox.m-top .edui-editor-toolbarboxouter {
+    width: 816px;
+    margin: 0 auto;
+}
+#edui1_bottombar {
+    display: none !important;
+}
+/*.edui-container {
     position: static;
     margin: 0 auto;
 }
@@ -284,7 +330,6 @@ span {
     z-index: 999;
 }
 .edui-container .edui-toolbar.m-top {
-    /*position: fixed;*/
     left: 0;
     padding-bottom: 6px;
     width: 100% !important;
@@ -297,19 +342,7 @@ span {
     width: 105px;
     box-sizing: border-box;
 }
-/*.dropdown-menu:before {
-    content: "";
-    position: absolute;
-    top: -8px;
-    left: 20px;
-    width: 10px;
-    height: 10px;
-    transform: rotate(45deg);
-    background-color: #fff;
-    border-top: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-    z-index: 1;
-}*/
+
 .edui-dialog-container {
     position: relative;
     width: 800px;
@@ -330,10 +363,8 @@ span {
     background-color: #f0f0f0;
 }
 .edui-toolbar .edui-btn-toolbar {
-    /*padding-left: 60px;*/
 }
 .edui-editor-body {
-    /*padding-top: 160px;*/
     box-shadow: 0 0px 8px rgba(0,0,0,0.1);
     border-radius: 6px;
 }
@@ -345,4 +376,4 @@ span {
 }
 .edui-combobox-menu .edui-combobox-item .edui-combobox-icon {
     display: inline;
-}
+}*/

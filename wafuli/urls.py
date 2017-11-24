@@ -1,3 +1,4 @@
+#coding:utf-8
 '''
 Created on 20160222
 
@@ -21,4 +22,6 @@ urlpatterns = [
     url(r'^screenshot/$', 'wafuli.views.display_screenshot', name='screenshot'),
     url(r'^qualification/$', 'wafuli.views.display_qualification', name='qualification'),
     url(r'^activity_rank/$', 'wafuli.views.activity_rank', name='activity_rank'),
+    url(r'^cooperate/$',TemplateView.as_view(template_name='cooperation.html'), name='cooperate'), 
+    url(r'^helpCenter/$',TemplateView.as_view(template_name='HelpCenter.html'), name='helpCenter'),
 ]

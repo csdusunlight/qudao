@@ -68,7 +68,8 @@ def bind_user(request):
                 user = MyUser.objects.get(mobile=mobile)
             except MyUser.DoesNotExist:
                 request.session['mobile'] = mobile
-                result['url'] = "/weixin/bind-user/setpasswd/"
+                result['msg'] = u'您尚未注册，请先通过浏览器注册'
+                result['url'] = "/weixin/bind-user/nouser/"
             else:
                 user.backend = 'django.contrib.auth.backends.ModelBackend'#为了略过用户名和密码验证
                 auth_login(request, user)
@@ -115,7 +116,7 @@ def bind_user_setpasswd(request):
     return render(request, 'm_bind_setpasswd.html')
 
 def sendWeixinTemplate():
-    access_token = Dict.objects.get(key='access_token')
+    access_token = Dict.objects.get(key='access_token').value
     url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' + access_token
     kwarg = {}
     kwarg.update(access_token=access_token, template_id='XKGoq0xWvXrg5alO_3pc4f4F5wKR7EDnfvzPoUlh-wY')

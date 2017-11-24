@@ -73,7 +73,7 @@ def sendTemplate(access_token):
     wusers = WeiXinUser.objects.all()
     for wu in wusers:
         openid = wu.openid
-        data = {'first':{'value':wu.user.username, 'color':"#173177"},
+        data = {'first':{'value':u"您的主页有用户成功交单，请及时处理。您的主页有新的预约单，请及时处理。", 'color':"#173177"},
                 'keyword1':{'value':u"美易理财三月标", 'color':"#173177"},
                 'keyword2':{'value':u"10000元", 'color':"#173177"},
                 'keyword3':{'value':u'90天', 'color':"#173177"},

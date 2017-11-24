@@ -13,7 +13,7 @@ from account.varify import httpconn
 import logging
 logger = logging.getLogger('wafuli')
 def sendWeixinNotify(user_obj_list, type):
-    access_token = Dict.objects.get(key='access_token')
+    access_token = Dict.objects.get(key='access_token').value
     url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' + access_token
     kwarg = {}
     to_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + APPID +"&redirect_uri=http%3A%2F%2F" + \

@@ -116,7 +116,7 @@ def bind_user_setpasswd(request):
     return render(request, 'm_bind_setpasswd.html')
 
 def sendWeixinTemplate():
-    access_token = Dict.objects.get(key='access_token')
+    access_token = Dict.objects.get(key='access_token').value
     url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' + access_token
     kwarg = {}
     kwarg.update(access_token=access_token, template_id='XKGoq0xWvXrg5alO_3pc4f4F5wKR7EDnfvzPoUlh-wY')

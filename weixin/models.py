@@ -12,4 +12,4 @@ class WeiXinUser(models.Model):
     city = models.CharField(u'城市', max_length=20)
     country = models.CharField(u'国家', max_length=50)
     headimgurl = models.CharField(u'头像', max_length=200)
-    unionid = models.CharField(u'unionid', max_length=50, unique=True)
+    unionid = models.CharField(u'unionid', max_length=50, )

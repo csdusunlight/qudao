@@ -123,6 +123,9 @@
             'simpleupload',
         ]]
     });
+    ue.ready(function(){
+    	ue.execCommand( 'lineheight', 1.5);
+    });
     if ($('.proj__title').val() == '') {
         $('.proj__title').val('无标题');
     }

@@ -359,6 +359,7 @@ $(function(){
             var qqname = $('.qqname').val();
             var qq = $('.qq').val();
             var tosign = $('.tosign').val().replace(/[\r\n]/g,'');
+            tosign = tosign ? tosign : "这个人无话可说~~";
             $('.tosign').val(tosign);
             if (!qq || !qqname) {
                 alert('qq号和qq昵称不能为空');

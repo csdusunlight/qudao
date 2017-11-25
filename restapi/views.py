@@ -265,6 +265,6 @@ class DocumentList(BaseViewMixin, generics.ListCreateAPIView):
     pagination_class = MyPageNumberPagination
 class DocumentDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
-        return Document.objects.filter(user=self.request.user)
+        return Document.objects.all()
     serializer_class = DocumentSerializer
     permission_classes = (IsOwnerOrStaff,)

@@ -19,11 +19,14 @@ def create_doc(request):
     doc = Document.objects.create(user=request.user)
     return redirect('update_doc', id=doc.id)
 @login_required
-def update_doc(request, id=None):
-    if id:
-        doc = Document.objects.get(user=request.user, id=id)
-    else:
-        doc = Document.objects.create(user=request.user)
+def update_doc(request, id):
+    try:
+        if request.user.is_staff:
+            doc = Document.objects.get(id=id)
+        else:
+            doc = Document.objects.get(user=request.user, id=id)
+    except:
+        raise Http404
     return render(request, 'create_update_doc.html', {'doc':doc})
 
 @csrf_exempt

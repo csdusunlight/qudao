@@ -14,6 +14,7 @@
                     document.getElementById('login').onclick = function() {
                         window.location.href = '/account/login/?next=/account/';
                     }
+                   
                 }
                 </script>
                 <li class="d-ib"><a class="headertop__navitem link" href="{% url 'register' %}">申请</a></li>
@@ -37,11 +38,21 @@
             <ul class="nav nav-layout l fs-0">
                 <li class="nav__itembox d-ib"><a class="nav__item" href="/">首页</a></li>
                 <li class="nav__itembox subnav-show d-ib"><a class="nav__item" href="{% url 'project_all' %}">项目库</a></li>
-                <li class="nav__itembox subnav-show d-ib">
-                    <a class="nav__item" href="{% url 'user_guide' %}">新人指南</a>
+                <li class="nav__itembox subnav-show d-ib box" style="position: relative;">
+                    <a class="nav__item">帮助</a>
+                    <ul class="toggle_box" id="toggle_box">
+                    	<div class="toggle_box_top"></div>
+                    	<li>
+                    		<a href="{% url 'user_guide'  %}">新人指南</a>
+                    	</li>
+                    	<!--<li>
+                    		<a href="{% url 'helpCenter' %}">常见问题</a>
+                    	</li>-->
+                    </ul>
                 </li>
                 <li class="nav__itembox d-ib"><a class="nav__item" href="{% url 'cooperate' %}">合作共赢</a></li>
                 <li class="nav__itembox d-ib"><a class="nav__item" href="{% url 'account_index' %}">个人中心</a></li>
+                
             </ul>
         </div>
     </div>

@@ -252,6 +252,7 @@ select {
 .nav-layout {
     float: right;
     margin-top: 36px;
+    position: relative;
 }
 .nav__itembox {
     margin-right: 8px;
@@ -261,6 +262,39 @@ select {
     padding: 0 30px;
     line-height: 36px;
     border-radius: 4px;
+}
+.toggle_box{
+	width: 88px;
+	height: 60px;
+	position: absolute;top: 48px;left: 0;
+	z-index: 9;
+	background: white;
+	box-shadow: 0 0px 8px rgba(0,0,0,0.3);
+	border-radius: 4px;
+	visibility: hidden;
+    opacity: 0;
+}
+.box:hover .toggle_box{
+	transition: all 0.6s ease-in;
+	opacity: 1;
+	visibility: visible;
+}
+.toggle_box_top{
+	width: 14px;
+	height: 14px;
+	position: absolute;top: -7px;left: 36px;
+	transform: rotate(45deg);
+	background: white;
+	box-shadow: -2px -2px 3px rgba(0,0,0,0.2);
+}
+.toggle_box li{
+	width: 100%;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+}
+.toggle_box li a:hover{
+	color: RGB(145,193,29);
 }
 .nav__item:hover {
     color: #fff;

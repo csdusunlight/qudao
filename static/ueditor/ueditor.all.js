@@ -6922,7 +6922,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                     //font-family不能呢随便改，在safari下fillchar会有解析问题
                     'body{margin:8px;font-family:Microsoft YaHei;font-size:16px;}' +
                     //设置段落间距
-                    'p{margin:5px 0;}</style>' +
+                    'p{margin:10px 0;line-height:1.5em;}</style>' +
                     ( options.iframeCssUrl ? '<link rel=\'stylesheet\' type=\'text/css\' href=\'' + utils.unhtml(options.iframeCssUrl) + '\'/>' : '' ) +
                     (options.initialStyle ? '<style>' + options.initialStyle + '</style>' : '') +
                     '</head><body class=\'view\' ></body>' +
@@ -20247,8 +20247,15 @@ UE.plugins['table'] = function () {
                 } else {
                     utils.each(tables, function (table) {
                         removeStyleSize(table, true);
-                        domUtils.removeAttributes(table, ['style', 'border']);
+                        domUtils.setAttributes(table, {
+                            style:'border-left:1px solid #666; border-top:1px solid #666;',
+                        }); 
+//                      domUtils.removeAttributes(table, ['style', 'border']);
                         utils.each(domUtils.getElementsByTagName(table, "td"), function (td) {
+                             //粘贴进来的表格td定义属性
+                            domUtils.setAttributes(td, {
+                                style:'border-bottom:1px solid #666; border-right:1px solid #666; padding:5px;',
+                            });     
                             if (isEmptyBlock(td)) {
                                 domUtils.fillNode(me.document, td);
                             }

@@ -171,5 +171,5 @@ class BookLogSerializer(serializers.ModelSerializer):
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Document
-        fields = ['id', 'title', 'content', 'update_time']
+        fields = ['id', 'title', 'content', 'update_time', 'is_on']
         read_only_fields = ('id',)

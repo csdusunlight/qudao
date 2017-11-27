@@ -4,7 +4,14 @@
 .banner{
 	width: 100%;
 	height: 345px;
+	overflow: hidden;
+	background-size: 100% 100%;
 }
+.banner img{
+	width: 100%;
+	height: 100%;
+}
+
 
 /*****************step***************/
 .step{

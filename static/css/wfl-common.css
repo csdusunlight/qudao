@@ -21,11 +21,10 @@ p {line-height: 24px; color: inherit;}
 a.link:hover {
     color: #91C11D;
 }
-input[type="text"],
-select {
+input[type="text"],select {
     padding-left: 8px;
-    width: 300px;
-    height: 30px;
+    /*width: 300px;
+    height: 30px;*/
     border: 1px solid #e4e4e4;
 }
 /*快捷样式*/
@@ -299,6 +298,7 @@ select {
 .toggle_box li a:hover{
 	color: RGB(145,193,29);
 }
+
 .nav__item:hover {
     color: #fff;
     background-color: #91c11d;

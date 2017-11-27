@@ -1,41 +1,49 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8" />
-<title>用户中心</title>
-<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/doclist.css' %}" />
-<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 
-</head>
+	<head>
+		<meta charset="utf-8" />
+		<title>用户中心</title>
+		<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
+		<!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
+		<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/doclist.css' %}" />
+		<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 
-<body>
-    	<!--头部-->
-{% include "header.html" %}
-   	<!--内容-->
-<div class="Content clearfix">
-   	<!--<div class="w1100">-->
+	</head>
+
+	<body>
+		<!--头部-->
+		{% include "header.html" %}
+		<!--内容-->
+		<div class="Content clearfix">
+			<!--<div class="w1100">-->
 			{% include "account/left.html" %}
-            <div class="RightCont">
-                <a class="create-doc btn m-yellow" href="{% url 'create_doc' %}">新建文档</a>
-                <ul class="doc__box">
-                    {% for doc in docs %}
-                    <li data-docid = "{{doc.id}}" class="doc__list">
-                        <a class="doc__link" href="/docs/{{doc.id}}"><h4 class="doc__title one-line">{{doc.title}}</h4></a>
-                        <span class="doc__set"></span>
-                        <div class="doc__handle">
-                            <input class="doc_rename doc__handleitem" value="{{doc.title}}" type="text" />
-                            <span class="doc_copy doc__handleitem">创建副本</span>
-                            <span class="doc_del doc__handleitem">删除</span>
-                            <span data-clipboard-text = "{{doc.fanshu_url}}" class="copy-link doc__handleitem">分享</span>
-                        </div>
-                    </li>
-                    {%endfor%}
-                	<!--<li class="doc__list">
+			<div class="RightCont">
+				<a class="create-doc btn m-yellow" href="{% url 'create_doc' %}">新建文档</a>
+				<ul class="doc__box">
+					{% for doc in docs %}
+					<li data-docid="{{doc.id}}" class="doc__list">
+						<a class="doc__link" href="/docs/{{doc.id}}">
+							<h4 class="doc__title one-line">{{doc.title}}</h4></a>
+						<span class="doc__set"></span>
+						<div class="doc__handle">
+							<input class="doc_rename doc__handleitem" value="{{doc.title}}" type="text" />
+							<span class="doc_copy doc__handleitem">创建副本</span>
+							<span class="doc_del doc__handleitem">删除</span>
+							<span data-clipboard-text="{{doc.fanshu_url}}" class="copy-link doc__handleitem">分享</span>
+							<div id="switch_btnBox" class="switch_btnBox">
+								<span>ON</span>
+								<span>OFF</span>
+								<div id="switch_btn" class="switch_btn"></div>
+							</div>
+							
+						</div>
+					</li>
+					{%endfor%}
+					<!--<li class="doc__list">
                 	    <a class="doc__link" href="#"><h4 class="doc__title one-line">和时代一期</h4></a>
                 	    <span class="doc__set"></span>
                 	    <div class="doc__handle">
@@ -53,178 +61,178 @@
                             <span class="doc_del doc__handleitem">删除</span>
                         </div>
                     </li>-->
-                    
-                </ul>
-                
-            </div>
-            
-</div>
-<div class="popup m-del-doc">
-    <div class="popup__content" style="width: 400px;">
-        <div class="popup__top">
-            <h2 class="popup__title">删除文档</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
-        </div>
-        <div class="popup__detail">
-            该操作会彻底在数据库中删除文档数据，请慎重操作！
-        </div>
-        <div class="popup__btnbox">
-            <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
-            <a id="confirm_delete" class="btn m-green popup__close-btn">确认</a>
-        </div>
-    </div>
-</div>
-{% include "footer.html" %}
 
-<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
-<script type="text/javascript">
-$(function(){
-}); 
-    if(window.name != "doc_change"){      //强制浏览器刷新
-        location.reload();
-        window.name = "doc_change";
-    }else{
-        window.name = "";
-    }
-    var parent_dom;     //全局，所有父元素
-    var doc_id;         //全局，每次请求的文档ID
-    $('.back-a13').toggleClass("on");
-    
-    $('.doc__box').on('click', '.doc__set', function(){
-        $('.doc__list').removeClass('m-show');
-        $('.doc__handle').removeClass('m-show');
-        stopBubble();
-        parent_dom = $(this).parent();
-        $(parent_dom).addClass('m-show');
-        $(parent_dom).find('.doc__handle').addClass('m-show');
-    })
-    $('.doc__box').on('click', '.doc__handle', function(){
-        stopBubble();
-    })
-    $('body').click(function(){
-        console.log('hide');
-        $('.doc__list').removeClass('m-show');
-        $('.doc__handle').removeClass('m-show');
-    })
-    $('.doc__box').on('click', '.doc_copy', function(){     //创建副本
-        $(this).parent().removeClass('m-show');
-        $(this).parent().parent().removeClass('m-show');
-        parent_dom = $(this).parent().parent();
-        doc_id = $(parent_dom).data('docid');
-        console.log(doc_id);
-        var url = "/docs/duplicate/" + doc_id + "/";
-        $.ajax({        //创建副本
-            url: url,
-            dataType: "json",
-            type: 'post',
-            success: function(ret) {
-                if (ret.code == 0) {
-                    console.log(ret);	
-//                  var doc_title = $(parent_dom).find('.doc__title').text();
-                    var copy_dom = $(parent_dom).clone();
-                    $(copy_dom).attr('data-docid', ret.id);
-                    $(copy_dom).find('.doc__link').attr('href', '/docs/' + ret.id);
-                    $(copy_dom).find('.doc__title').text(ret.title);
-                    $(copy_dom).find('.doc_rename').val(ret.title);
-                    $(copy_dom).find('.copy-link').attr('data-clipboard-text', ret.fanshu_url);
-                    $('.doc__box').prepend(copy_dom)
-                    
-                    //分享复制部分
-                    var share_btn = $(copy_dom).find('.copy-link')[0];
-                    var clipboard = new Clipboard(share_btn);
-                    
-                    clipboard.on('success', function(e) {
-                        console.log(e);
-                        $.prompt({
-                            Content: '复制成功'
-                        })
-                    });
-                
-                    clipboard.on('error', function(e) {
-                        console.log(e);
-                    });
-                    //分享复制部分---end
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText);
-                console.log("数据错误");
-            }
-        });
-    })
-    $('.doc__box').on('blur', '.doc_rename', function(){     //重命名文档
-        parent_dom = $(this).parent().parent();
-        doc_id = $(parent_dom).data('docid');
-        var title = $(this).val();
-        var that = this;
-        $.ajax({            //保存文档
-            url: "/restapi/docs/" + doc_id + "/",
-            dataType: "json",
-            type: 'put',
-            data: {
-                'title': title
-            },
-            success: function(ret) {
-                $(parent_dom).find('.doc__title').text(title);
-                $(that).val(title);
-                console.log('重命名成功');
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText);
-                console.log("数据错误");
-            }
-        });
-    })
-    $('.doc__box').on('click', '.doc_del', function(){     //删除文档
-        parent_dom = $(this).parent().parent();
-        doc_id = $(parent_dom).data('docid');
-        $(".popup.m-del-doc").addClass('in');
-    })
-    $("#confirm_delete").click(function(){         //确认删除文档
-        $.ajax({            //删除文档
-            url: "/restapi/docs/" + doc_id + "/",
-            dataType: "json",
-            type: 'delete',
-            success: function(ret) {
-                $(parent_dom).remove();
-                $(".popup.m-del-doc").removeClass('in');
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR.responseText);
-                console.log("数据错误");
-            }
-        });
-    })
-    
-    //分享复制部分
-    var btns = document.querySelectorAll('.copy-link');
-    var clipboard = new Clipboard(btns);
+				</ul>
 
-    clipboard.on('success', function(e) {
-        console.log(e);
-        $.prompt({
-            Content: '复制成功'
-        })
-    });
+			</div>
 
-    clipboard.on('error', function(e) {
-        console.log(e);
-    });
-    //分享复制部分---end
-    
-    function stopBubble(e) {            //阻止时间冒泡 
-        //如果提供了事件对象，则这是一个非IE浏览器 
-        if ( e && e.stopPropagation ) {
-            //因此它支持W3C的stopPropagation()方法 
-            e.stopPropagation(); 
-        }
-        else {
-            //否则，我们需要使用IE的方式来取消事件冒泡 
-            window.event.cancelBubble = true; 
-        }
-    }
-    
-</script>
-</body>
+		</div>
+		<div class="popup m-del-doc">
+			<div class="popup__content" style="width: 400px;">
+				<div class="popup__top">
+					<h2 class="popup__title">删除文档</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+				</div>
+				<div class="popup__detail">
+					该操作会彻底在数据库中删除文档数据，请慎重操作！
+				</div>
+				<div class="popup__btnbox">
+					<a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
+					<a id="confirm_delete" class="btn m-green popup__close-btn">确认</a>
+				</div>
+			</div>
+		</div>
+		{% include "footer.html" %}
+
+		<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
+		<script type="text/javascript">
+			$(function() {});
+			if(window.name != "doc_change") { //强制浏览器刷新
+				location.reload();
+				window.name = "doc_change";
+			} else {
+				window.name = "";
+			}
+			var parent_dom; //全局，所有父元素
+			var doc_id; //全局，每次请求的文档ID
+			$('.back-a13').toggleClass("on");
+
+			$('.doc__box').on('click', '.doc__set', function() {
+				$('.doc__list').removeClass('m-show');
+				$('.doc__handle').removeClass('m-show');
+				stopBubble();
+				parent_dom = $(this).parent();
+				$(parent_dom).addClass('m-show');
+				$(parent_dom).find('.doc__handle').addClass('m-show');
+			})
+			$('.doc__box').on('click', '.doc__handle', function() {
+				stopBubble();
+			})
+			$('body').click(function() {
+				console.log('hide');
+				$('.doc__list').removeClass('m-show');
+				$('.doc__handle').removeClass('m-show');
+			})
+			$('.doc__box').on('click', '.doc_copy', function() { //创建副本
+				$(this).parent().removeClass('m-show');
+				$(this).parent().parent().removeClass('m-show');
+				parent_dom = $(this).parent().parent();
+				doc_id = $(parent_dom).data('docid');
+				console.log(doc_id);
+				var url = "/docs/duplicate/" + doc_id + "/";
+				$.ajax({ //创建副本
+					url: url,
+					dataType: "json",
+					type: 'post',
+					success: function(ret) {
+						if(ret.code == 0) {
+							console.log(ret);
+							//                  var doc_title = $(parent_dom).find('.doc__title').text();
+							var copy_dom = $(parent_dom).clone();
+							$(copy_dom).attr('data-docid', ret.id);
+							$(copy_dom).find('.doc__link').attr('href', '/docs/' + ret.id);
+							$(copy_dom).find('.doc__title').text(ret.title);
+							$(copy_dom).find('.doc_rename').val(ret.title);
+							$(copy_dom).find('.copy-link').attr('data-clipboard-text', ret.fanshu_url);
+							$('.doc__box').prepend(copy_dom)
+
+							//分享复制部分
+							var share_btn = $(copy_dom).find('.copy-link')[0];
+							var clipboard = new Clipboard(share_btn);
+
+							clipboard.on('success', function(e) {
+								console.log(e);
+								$.prompt({
+									Content: '复制成功'
+								})
+							});
+
+							clipboard.on('error', function(e) {
+								console.log(e);
+							});
+							//分享复制部分---end
+						}
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.log(jqXHR.responseText);
+						console.log("数据错误");
+					}
+				});
+			})
+			$('.doc__box').on('blur', '.doc_rename', function() { //重命名文档
+				parent_dom = $(this).parent().parent();
+				doc_id = $(parent_dom).data('docid');
+				var title = $(this).val();
+				var that = this;
+				$.ajax({ //保存文档
+					url: "/restapi/docs/" + doc_id + "/",
+					dataType: "json",
+					type: 'put',
+					data: {
+						'title': title
+					},
+					success: function(ret) {
+						$(parent_dom).find('.doc__title').text(title);
+						$(that).val(title);
+						console.log('重命名成功');
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.log(jqXHR.responseText);
+						console.log("数据错误");
+					}
+				});
+			})
+			$('.doc__box').on('click', '.doc_del', function() { //删除文档
+				parent_dom = $(this).parent().parent();
+				doc_id = $(parent_dom).data('docid');
+				$(".popup.m-del-doc").addClass('in');
+			})
+			$("#confirm_delete").click(function() { //确认删除文档
+				$.ajax({ //删除文档
+					url: "/restapi/docs/" + doc_id + "/",
+					dataType: "json",
+					type: 'delete',
+					success: function(ret) {
+						$(parent_dom).remove();
+						$(".popup.m-del-doc").removeClass('in');
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.log(jqXHR.responseText);
+						console.log("数据错误");
+					}
+				});
+			})
+			
+			var swicth_btn = document.querySelector(".swi")
+
+			//分享复制部分
+			var btns = document.querySelectorAll('.copy-link');
+			var clipboard = new Clipboard(btns);
+
+			clipboard.on('success', function(e) {
+				console.log(e);
+				$.prompt({
+					Content: '复制成功'
+				})
+			});
+
+			clipboard.on('error', function(e) {
+				console.log(e);
+			});
+			//分享复制部分---end
+
+			function stopBubble(e) { //阻止时间冒泡 
+				//如果提供了事件对象，则这是一个非IE浏览器 
+				if(e && e.stopPropagation) {
+					//因此它支持W3C的stopPropagation()方法 
+					e.stopPropagation();
+				} else {
+					//否则，我们需要使用IE的方式来取消事件冒泡 
+					window.event.cancelBubble = true;
+				}
+			}
+		</script>
+	</body>
+
 </html>

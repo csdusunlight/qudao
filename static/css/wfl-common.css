@@ -23,8 +23,8 @@ a.link:hover {
 }
 input[type="text"],select {
     padding-left: 8px;
-    /*width: 300px;
-    height: 30px;*/
+    width: 300px;
+    height: 30px;
     border: 1px solid #e4e4e4;
 }
 /*快捷样式*/

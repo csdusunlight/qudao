@@ -93,36 +93,17 @@
 }
 .doc_copy:hover,
 .doc_del:hover,
-.copy-link:hover {
+.copy-link:hover,
+.doc_off:hover,
+.doc_on:hover{
     color: #91C11D;
 }
-#switch_btnBox{
-	width: 60px;
-	height: 30px;
-	background: yellow;
-	border-radius: 20px;
-	position: relative;left: 40px;
-}
-#switch_btn{
-	width: 30px;
-	height: 30px;
-	background: white;
-	border-radius:30px;
-	/*border: 1px solid rgb(0,0,0);*/
-	box-shadow: 0px 1px 1px 1px rgba(0,0,0,0.4);
-	position: absolute;top: 0;left: 0;
-}
-.switch_btnBox{
-	background: rgba(0,184,0,0.8);
-}
-.switch_btnBox span{
-	font-size: 14;
-}
-.switch_btn{
-   top: 2px;
-   right: 1px;
-}
 
+.doc__title_off{
+	height: 24px;
+    text-align: center;
+	color: #666666;
+}
 /*样式覆盖*/
 .copy-link {
     padding: 0;

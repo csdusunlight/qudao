@@ -274,10 +274,9 @@ select {
     opacity: 0;
     transition: all 0.6s ease-in;
 }
-.box:hover .toggle_box{
-	
+.box:hover .toggle_box{  
 	opacity: 1;
-	visibility: visible;
+	visibility: visible; 
 }
 .toggle_box:hover{
 	opacity: 1;

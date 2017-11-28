@@ -97,24 +97,28 @@ $(function(){
                 <div class="item">
                     <span class="item__name m-need">用户名</span>
                     <input class="username item__txt" type="text" maxlength="8" value="{{user.username}}" />
-                    <span>用于显示在个人主页，限8个字符</span>
+                    <!--<span>用于显示在个人主页，限8个字符</span>-->
+                    <p style="margin-left: 206px;">用于显示在个人主页，限8个字符</p>
                 </div>
-                <div class="item">
+                <!--<div class="item">
                     <span class="item__name m-need">QQ昵称</span>
                     <input class="qqname item__txt" type="text" value="{{user.qq_name}}" />
                 </div>
                 <div class="item">
                     <span class="item__name m-need">注册QQ</span>
                     <input class="qq item__txt" type="text" value="{{user.qq_number}}" onkeyup="this.value=this.value.replace(/\D/g,'')" />
-                </div>
+                </div>-->
                 <div class="item">
-                    <span class="item__name m-need">域名</span>
+                    <span class="item__name m-need">主页域名</span>
                     <input class="url-name item__txt" type="text" value="{{user.domain_name}}" />
                     <span style="color: red;" class="url-tips"></span>
+                    <p style="margin-left: 206px;">如填写abc，则主页域名为abc.51fanshu.com</p>
                 </div>
                 <div class="item">
-                    <span class="item__name m-need">客服QQ</span>
+                    <span class="item__name m-need">主页客服QQ</span>
                     <input class="qq-link item__txt" type="text" value="{{user.cs_qq}}" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+                    <!--<span>显示在个人主页，用于交单用户联系您</span>-->
+                    <p style="margin-left: 206px;">显示在个人主页，用于交单用户联系您</p>
                 </div>
                 <div class="item">
                     <span class="item__name">个人签名</span>
@@ -335,6 +339,7 @@ $(function(){
         
 //      头像处理---end
         var re_url = /^[0-9a-zA-Z_]{1,}$/;
+        var is_url = false;
         $('.url-name').blur(function(){
             var url_name = $('.url-name').val();
             if(!re_url.test(url_name)){
@@ -343,32 +348,39 @@ $(function(){
             } else {
                 $('.url-tips').text('').hide();
             }
-//          $.ajax({
-//              url: '/restapi/users/' + userId + '/',
-//              type: 'put',
-//              dataType: "json",
-//              data: {
-//                  'url_name': url_name,
-//              },
-//              success: function(ret) {
-//                  $('.url-tips').text('').hide();
-//              },
-//              error: function(jqXHR, textStatus, errorThrown) {
-//                  console.log(jqXHR.responseText);
-//                  $('.url-tips').text('域名已使用，请重新输入').show();
-//              }
-//          });
+            $.ajax({
+                url: '/account/verify_domain/',
+                type: 'get',
+                dataType: "json",
+                data: {
+                    'domain_name': url_name,
+                },
+                success: function(ret) {
+                    if (ret.code == 0) {
+                        $('.url-tips').text('').hide();
+                    } else if (ret.code == 1) {
+                    	$('.url-tips').text('域名已使用，请重新输入').show();
+                    	console.log('域名已使用');
+                    } else {
+                        console.log('数据错误')
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
+                    console.log('数据错误')
+                }
+            });
         })
         $('.save').click(function(){
             var username = $('.username').val();
-            var qqname = $('.qqname').val();
-            var qq = $('.qq').val();
+//          var qqname = $('.qqname').val();
+//          var qq = $('.qq').val();
             var url_name = $('.url-name').val();
             var qq_link = $('.qq-link').val();
             var tosign = $('.tosign').val().replace(/[\r\n]/g,'');
             tosign = tosign ? tosign : "这个人无话可说~~";
             $('.tosign').val(tosign);
-            if (!username || !qq || !qqname || !url_name || !qq_link) {
+            if (!username|| !url_name || !qq_link) {
                 alert('必填项不能为空');
                 return;
             }
@@ -386,8 +398,8 @@ $(function(){
                     'color': skin,
                     'submit_bg': submit_bg,
                     'username': username,
-                    'qq_name': qqname,
-                    'qq_number': qq,
+//                  'qq_name': qqname,
+//                  'qq_number': qq,
                     'domain_name': url_name,
                     'cs_qq': qq_link,
                     'profile': tosign

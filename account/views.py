@@ -213,6 +213,8 @@ def verifyinviter(request):
 def verify_domainName(request):
     ret = {}
     domain_name = request.GET.get('domain_name', None)
+    if not domain_name:
+        raise Http404
     if MyUser.objects.filter(domain_name=domain_name).exists():
         ret['code'] = 1
         ret['msg'] = u"该域名已被占用"

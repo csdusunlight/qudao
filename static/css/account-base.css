@@ -24,6 +24,9 @@
 .account-nav-head.m-num {
     background-image: url(../images/account-setting-2.png);
 }
+.account-nav-head.m-doc {
+    background-image: url(../images/account-doc.png);
+}
 .account-nav-head.m-account {
     background-image: url(../images/account-setting-3.png);
 }

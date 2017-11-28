@@ -26,7 +26,7 @@
 				<ul class="doc__box">
 					{% for doc in docs %}
 					<li data-docid="{{doc.id}}" class="doc__list">
-						<a class="doc__link" href="/docs/{{doc.id}}">
+						<a class="doc__link {{doc.is_on}}" href="/docs/{{doc.id}}">
 							<h4 class="doc__title one-line">{{doc.title}}</h4></a>
 						<span class="doc__set"></span>
 						<div class="doc__handle">
@@ -34,8 +34,6 @@
 							<span class="doc_copy doc__handleitem">创建副本</span>
 							<span class="doc_del doc__handleitem">删除</span>
 							<span data-clipboard-text="{{doc.fanshu_url}}" class="copy-link doc__handleitem">分享</span>
-							<span class="doc_off doc__handleitem">关闭分享</span>
-							<span class="doc_on doc__handleitem">开启分享</span>
 						</div>
 					</li>
 					{%endfor%}
@@ -131,6 +129,9 @@
 							$(copy_dom).find('.doc__title').text(ret.title);
 							$(copy_dom).find('.doc_rename').val(ret.title);
 							$(copy_dom).find('.copy-link').attr('data-clipboard-text', ret.fanshu_url);
+							if ($(copy_dom).find('.doc__link').hasClass('False')) {
+								$(copy_dom).find('.doc__link').removeClass('False').addClass('True');
+							}
 							$('.doc__box').prepend(copy_dom)
 
 							//分享复制部分

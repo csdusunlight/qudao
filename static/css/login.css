@@ -1,3 +1,6 @@
+.headertop__navitem {
+    color: #fff;
+}
 .bgd{
 	width:100%;
 	height:480px;}
@@ -24,7 +27,7 @@
 	text-align: center;
 	color: #222;
 	}
-.lo-input{
+.login-form .lo-input{
 	width: 400px;
 	height: 60px;
 	margin-bottom: 30px;
@@ -75,7 +78,7 @@
 .co-left{width:50%;
 	float:left;
 	text-align:left;}
-.re-input{
+.reg .re-input{
 	padding-left: 40px;
 	width: 340px;
 	height: 44px;

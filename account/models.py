@@ -12,6 +12,8 @@ from django.contrib.auth.hashers import (
 )
 from wafuli.data import BANK
 from decimal import Decimal
+import re
+from django.core.exceptions import ValidationError
 class MyUserManager(BaseUserManager):
 
     def _create_user(self, mobile, username, qq_number, password,
@@ -134,7 +136,10 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
             return mobile[:3] + '****' + mobile[-4:]
         else:
             return mobile
-
+    def clean(self):
+        mat = re.match(r'[0-9a-zA-A\-_]+$', self.domain_name)
+        if not mat:
+            raise ValidationError({'pub_date': _('域名只能包含数字、字母、-和_字符')})
 class BankCard(models.Model):
     user = models.ForeignKey(MyUser, related_name="user_bankcard")
     card_number = models.CharField(u"银行卡号",max_length=23)

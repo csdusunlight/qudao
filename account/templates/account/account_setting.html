@@ -110,7 +110,7 @@ $(function(){
                 </div>-->
                 <div class="item">
                     <span class="item__name m-need">主页域名</span>
-                    <input class="url-name item__txt" type="text" value="{{user.domain_name}}" />
+                    <input class="url-name item__txt" type="text" value="{{user.domain_name}}" maxlength="20" />
                     <span style="color: red;" class="url-tips"></span>
                     <p style="margin-left: 206px;">如填写abc，则主页域名为abc.51fanshu.com</p>
                 </div>
@@ -386,7 +386,7 @@ $(function(){
             }
             
             
-            var detail = 'skin=' + skin + ' username=' + username + ' qqname=' + qqname + ' qq=' + qq + ' url_name=' + url_name + ' qq_link=' + qq_link + ' tosign=' + tosign;
+            var detail = 'skin=' + skin + ' username=' + username + ' url_name=' + url_name + ' qq_link=' + qq_link + ' tosign=' + tosign;
             console.log(detail);
 
             var userId = {{user.id}};

@@ -32,7 +32,7 @@ $(function(){
     	<div class="RightCont">
     	    <div class="right-top clearfix">
     	        <h2 class="top-title l">主页资料</h2>
-    	        <a class="btn m-yellow m-exp r" href="http://{{user.qq_number}}.51fanshu.com" target="_blank">进入主页</a>
+    	        <a class="btn m-yellow m-exp r" href="http://{{user.domain_name}}.51fanshu.com" target="_blank">进入主页</a>
     	    </div>
     	    <div class="user-info-box">
         	    <div class="item">
@@ -109,12 +109,12 @@ $(function(){
                 </div>
                 <div class="item">
                     <span class="item__name m-need">域名</span>
-                    <input class="url-name item__txt" type="text" value="{{user.qq_number}}" />
+                    <input class="url-name item__txt" type="text" value="{{user.domain_name}}" />
                     <span style="color: red;" class="url-tips"></span>
                 </div>
                 <div class="item">
                     <span class="item__name m-need">客服QQ</span>
-                    <input class="qq-link item__txt" type="text" value="{{user.qq_number}}" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+                    <input class="qq-link item__txt" type="text" value="{{user.cs_qq}}" onkeyup="this.value=this.value.replace(/\D/g,'')" />
                 </div>
                 <div class="item">
                     <span class="item__name">个人签名</span>
@@ -340,22 +340,24 @@ $(function(){
             if(!re_url.test(url_name)){
                 $('.url-tips').text('域名格式不正确，限英文、数字及下划线').show();
                 return;
+            } else {
+                $('.url-tips').text('').hide();
             }
-            $.ajax({
-                url: '/restapi/users/' + userId + '/',
-                type: 'put',
-                dataType: "json",
-                data: {
-                    'url_name': url_name,
-                },
-                success: function(ret) {
-                    $('.url-tips').text('').hide();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR.responseText);
-                    $('.url-tips').text('域名已使用，请重新输入').show();
-                }
-            });
+//          $.ajax({
+//              url: '/restapi/users/' + userId + '/',
+//              type: 'put',
+//              dataType: "json",
+//              data: {
+//                  'url_name': url_name,
+//              },
+//              success: function(ret) {
+//                  $('.url-tips').text('').hide();
+//              },
+//              error: function(jqXHR, textStatus, errorThrown) {
+//                  console.log(jqXHR.responseText);
+//                  $('.url-tips').text('域名已使用，请重新输入').show();
+//              }
+//          });
         })
         $('.save').click(function(){
             var username = $('.username').val();
@@ -386,8 +388,8 @@ $(function(){
                     'username': username,
                     'qq_name': qqname,
                     'qq_number': qq,
-                    'url_name': url_name,
-                    'qq_link': qq_link,
+                    'domain_name': url_name,
+                    'cs_qq': qq_link,
                     'profile': tosign
                 },
                 success: function(ret) {

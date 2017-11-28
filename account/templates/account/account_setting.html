@@ -110,7 +110,7 @@ $(function(){
                 <div class="item">
                     <span class="item__name m-need">域名</span>
                     <input class="url-name item__txt" type="text" value="{{user.qq_number}}" />
-                    <span>限英文、数字及下划线</span>
+                    <span style="color: red;" class="url-tips"></span>
                 </div>
                 <div class="item">
                     <span class="item__name m-need">客服QQ</span>
@@ -334,6 +334,29 @@ $(function(){
         }
         
 //      头像处理---end
+        var re_url = /^[0-9a-zA-Z_]{1,}$/;
+        $('.url-name').blur(function(){
+            var url_name = $('.url-name').val();
+            if(!re_url.test(url_name)){
+                $('.url-tips').text('域名格式不正确，限英文、数字及下划线').show();
+                return;
+            }
+            $.ajax({
+                url: '/restapi/users/' + userId + '/',
+                type: 'put',
+                dataType: "json",
+                data: {
+                    'url_name': url_name,
+                },
+                success: function(ret) {
+                    $('.url-tips').text('').hide();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
+                    $('.url-tips').text('域名已使用，请重新输入').show();
+                }
+            });
+        })
         $('.save').click(function(){
             var username = $('.username').val();
             var qqname = $('.qqname').val();
@@ -347,13 +370,7 @@ $(function(){
                 alert('必填项不能为空');
                 return;
             }
-            var re_url = /^[0-9a-zA-Z_]{1,}$/;
-            if(!re_url.test(url_name)){
-                alert("域名格式限字母、数字及下划线！")
-                return;
-            } else {
-                console.log('pass');
-            }
+            
             
             var detail = 'skin=' + skin + ' username=' + username + ' qqname=' + qqname + ' qq=' + qq + ' url_name=' + url_name + ' qq_link=' + qq_link + ' tosign=' + tosign;
             console.log(detail);

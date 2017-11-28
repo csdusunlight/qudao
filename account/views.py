@@ -210,17 +210,21 @@ def verifyinviter(request):
             code = '1'
     result = {'code':code,}
     return JsonResponse(result)
+@login_required
 def verify_domainName(request):
     ret = {}
     domain_name = request.GET.get('domain_name', None)
     if not domain_name:
         raise Http404
     if MyUser.objects.filter(domain_name=domain_name).exists():
-        ret['code'] = 1
-        ret['msg'] = u"该域名已被占用"
+        if request.user.domain_name == domain_name:
+            ret['code'] = 0
+        else:
+            ret['code'] = 1
+            ret['msg'] = u"该域名已被占用"
     else:
         mat = re.match(r'[0-9a-zA-A\-_]+$', domain_name)
-        if mat:
+        if not mat:
             ret['code'] = 2
             ret['msg'] = u"域名只能包含数字、字母、-和_"
         else:

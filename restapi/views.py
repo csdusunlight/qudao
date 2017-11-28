@@ -25,6 +25,7 @@ from statistic.models import UserDetailStatis, UserAverageStatis
 from rest_framework.exceptions import ValidationError
 from activity.models import SubmitRank, IPLog
 from docs.models import Document
+import re
 # from wafuli.Filters import UserEventFilter
 class BaseViewMixin(object):
     authentication_classes = (CsrfExemptSessionAuthentication,)
@@ -66,6 +67,11 @@ class UserDetail(BaseViewMixin,generics.RetrieveUpdateDestroyAPIView):
     queryset = MyUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsSelfOrStaff,)
+    def perform_update(self, serializer):
+        mat = re.match(r'[0-9a-zA-A\-_]+$', self.domain_name)
+        if not mat:
+            raise ValidationError({'detail': u'域名只能包含数字、字母、-和_字符'})
+        generics.RetrieveUpdateDestroyAPIView.perform_update(self, serializer)
     
 class InvestlogList(BaseViewMixin, generics.ListCreateAPIView):
     def get_queryset(self):

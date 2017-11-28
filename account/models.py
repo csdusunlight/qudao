@@ -98,9 +98,6 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         update_fields=None):
         if not self.pk:
             self.invite_code = random_str(5) + str(MyUser.objects.count())
-        mat = re.match(r'[0-9a-zA-A\-_]+$', self.domain_name)
-        if not mat:
-            raise ValidationError({'pub_date': u'域名只能包含数字、字母、-和_字符'})
         return AbstractBaseUser.save(self, force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
     class Meta:
         verbose_name = 'user'

@@ -68,9 +68,11 @@ class UserDetail(BaseViewMixin,generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     permission_classes = (IsSelfOrStaff,)
     def perform_update(self, serializer):
-        mat = re.match(r'[0-9a-zA-A\-_]+$', serializer.instance.domain_name)
-        if not mat:
-            raise ValidationError({'detail': u'域名只能包含数字、字母、-和_字符'})
+        domain_name = serializer.validated_data.get('domain_name', None)
+        if domain_name:
+            mat = re.match(r'[0-9a-zA-A\-_]+$', domain_name)
+            if not mat:
+                raise ValidationError({'detail': u'域名只能包含数字、字母、-和_字符'})
         generics.RetrieveUpdateDestroyAPIView.perform_update(self, serializer)
     
 class InvestlogList(BaseViewMixin, generics.ListCreateAPIView):

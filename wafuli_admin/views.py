@@ -69,7 +69,8 @@ def admin_apply(request):
             level = request.POST.get('level', '03')
             with transaction.atomic():
                 user = MyUser(mobile=apply.mobile, username=apply.username, level=level, profile=apply.profile,
-                              qq_name=apply.qq_name, qq_number=apply.qq_number, qualification=apply.qualification)
+                              qq_name=apply.qq_name, qq_number=apply.qq_number,
+                              cs_qq=apply.qq_number, domain_name=apply.qq_number, qualification=apply.qualification)
                 user.set_password(apply.password)
                 user.save()
                 id_list_list= list(Project.objects.filter(is_official=True, state='10', is_addedto_repo=True).values_list('id'))
@@ -86,7 +87,7 @@ def admin_apply(request):
                 apply.audit_time = datetime.datetime.now()
                 apply.admin_user = admin_user
                 apply.save()
-                sendmsg_bydhst(apply.mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + apply.qq_number + '.51fanshu.com' +
+                sendmsg_bydhst(apply.mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + apply.domain_name + '.51fanshu.com' +
                                      u"，快去分享给小伙伴们吧~")
         elif type==2:
             reason = request.POST.get('reason', '')

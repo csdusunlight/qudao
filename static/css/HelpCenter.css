@@ -1,15 +1,13 @@
 .wrapper{
-	width: 1920px;
+	width: 100%;
+	margin: 0 auto;
 }
 .banner{
 	width: 100%;
-	height: 345px;
-	overflow: hidden;
-	background-size: 100% 100%;
+	height: 375px;
 }
-.banner img{
+.banner_img{
 	width: 100%;
-	height: 100%;
 }
 
 
@@ -26,7 +24,6 @@
 	position: relative;
 	border-right: 2px solid RGB(199,199,199);
 }
-
 /******************中间盒子*******************/
 .step-center{
 	width: 310px;

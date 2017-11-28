@@ -1,3 +1,6 @@
+body {
+    background-color: #fff;
+}
 .headertop__navitem {
     color: #fff;
 }
@@ -79,6 +82,7 @@
 	float:left;
 	text-align:left;}
 .reg .re-input{
+    box-sizing: content-box;
 	padding-left: 40px;
 	width: 340px;
 	height: 44px;

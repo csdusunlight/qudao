@@ -42,6 +42,7 @@ from public.tools import login_required_ajax
 from wafuli.tools import saveImgAndGenerateUrl
 from decimal import Decimal
 import random
+import re
 
 @sensitive_post_parameters()
 @csrf_protect
@@ -209,6 +210,20 @@ def verifyinviter(request):
             code = '1'
     result = {'code':code,}
     return JsonResponse(result)
+def verify_domainName(request):
+    ret = {}
+    domain_name = request.GET.get('domain_name', None)
+    if MyUser.objects.filter(domain_name=domain_name).exists():
+        ret['code'] = 1
+        ret['msg'] = u"该域名已被占用"
+    else:
+        mat = re.match(r'[0-9a-zA-A\-_]+$', domain_name)
+        if mat:
+            ret['code'] = 2
+            ret['msg'] = u"域名只能包含数字、字母、-和_"
+        else:
+            ret['code'] = 0
+    return JsonResponse(ret)
 @csrf_exempt
 def callbackby189(request):
     rand_code = request.POST.get('rand_code', None)

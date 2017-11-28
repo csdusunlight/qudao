@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^verifymobile/$', 'account.views.verifymobile', name='verifymobile'),
     url(r'^verifyusername/$', 'account.views.verifyusername', name='verifyusername'),
     url(r'^verifyqq/$', 'account.views.verifyqq', name='verifyqq'),
+    url(r'^verify_domain/$', 'account.views.verify_domainName', name='verify_domain'),
 #     url(r'^verifyinviter/$', 'account.views.verifyinviter', name='verifyinviter'),
     url(r'^phoneImageV/$', 'account.views.phoneImageV', name='phoneImageV'),
 #    url(r'verifytelcode/$', 'account.views.verifytelcode', name='verifytelcode'),

@@ -139,7 +139,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def clean(self):
         mat = re.match(r'[0-9a-zA-A\-_]+$', self.domain_name)
         if not mat:
-            raise ValidationError({'pub_date': _('域名只能包含数字、字母、-和_字符')})
+            raise ValidationError({'pub_date': u'域名只能包含数字、字母、-和_字符'})
 class BankCard(models.Model):
     user = models.ForeignKey(MyUser, related_name="user_bankcard")
     card_number = models.CharField(u"银行卡号",max_length=23)

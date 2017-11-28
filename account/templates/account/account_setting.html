@@ -339,7 +339,7 @@ $(function(){
         
 //      头像处理---end
         var re_url = /^[0-9a-zA-Z_]{1,}$/;
-        var is_url = false;
+        var is_url = true;
         $('.url-name').blur(function(){
             var url_name = $('.url-name').val();
             if(!re_url.test(url_name)){

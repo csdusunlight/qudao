@@ -4,7 +4,10 @@ img {
 }  
 body {  
  overflow-y: hidden !important;  
-}  
+} 
+span {
+    max-width: 100% !important;
+} 
 .view {  
  word-break: break-all;  
 }  

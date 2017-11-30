@@ -54,6 +54,8 @@ def login(request, template_name='registration/login.html',
     """
     Displays the login form and handles the login action.
     """
+    if request.mobile:
+        template_name='registration/m_login.html' 
     redirect_to = request.POST.get(redirect_field_name,
                                    request.GET.get(redirect_field_name, ''))
     if request.method == "POST":
@@ -168,6 +170,7 @@ def register(request):
             'icode':icode,
             'mobile':mobile,
         }
+        template = 'registration/m_register.html' if request.mobile else 'registration/register.html'
         return render(request,'registration/register.html', context)
 
 

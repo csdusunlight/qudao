@@ -23,6 +23,10 @@
     height: 180px;
     background: url(../images/bg-doc.png) top 15px center no-repeat;
 }
+.doc__link.False {
+    background: url(../images/icon-lock.png) 88px 86px no-repeat,
+                url(../images/bg-doc.png) top 15px center no-repeat;
+}
 .doc__list:hover,
 .doc__list.m-show {
     border: 1px solid #dfdfdf;
@@ -35,10 +39,10 @@
 .doc__set {
     display: none;
     position: absolute;
-    right: 10px;
-    bottom: 10px;
-    width: 16px;
-    height: 17px;    
+    right: 8px;
+    bottom: 8px;
+    width: 24px;
+    height: 24px;    
     background: url(../images/icon-setting.png) center center no-repeat;
     cursor: pointer;
     transition: all 0.4s ease-in;
@@ -107,4 +111,7 @@
 /*样式覆盖*/
 .copy-link {
     padding: 0;
+}
+.Content {
+    overflow: visible;
 }

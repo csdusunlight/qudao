@@ -103,6 +103,44 @@ span {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     border-bottom: none;
 }
+.isauto-box {
+    display: inline-block;
+    height: 52px;
+}
+.switch__name {
+    font-size: 14px;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    vertical-align: middle;
+    border-radius: 15px;
+    background-color: #fff;
+    border: 1px solid #e4e4e4;
+    transition: all 0.4s ease;  
+    cursor: pointer;
+}
+.switch:before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+    transition: all 0.4s ease;  
+}
+.switch.True {
+    background-color: #ffbe00;
+    /*border: 1px solid #91C11D;*/
+}
+.switch.True:before {
+    left: 32px;
+}
 .container {
     position: fixed;
     width: 100%;
@@ -325,59 +363,3 @@ span {
 .edui-default .edui-editor {
     background-color: transparent !important;
 }
-/*.edui-container {
-    position: static;
-    margin: 0 auto;
-}
-.edui-container .edui-toolbar {
-    padding-top: 6px;
-    z-index: 999;
-}
-.edui-container .edui-toolbar.m-top {
-    left: 0;
-    padding-bottom: 6px;
-    width: 100% !important;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    z-index: 10000 !important;
-    transition: padding 0.3s ease-in; 
-}
-.dropdown-menu {
-    top: -6px !important;
-    width: 105px;
-    box-sizing: border-box;
-}
-
-.edui-dialog-container {
-    position: relative;
-    width: 800px;
-    margin: 0 auto;
-}
-.edui-toolbar.m-top .edui-btn-toolbar {
-    width: 816px;
-}
-.edui-btn-toolbar {
-    width: 800px;
-    margin: 0 auto;
-    box-sizing: border-box;
-}
-.edui-container,
-.edui-container .edui-toolbar {
-    border: none;
-    box-shadow: none;
-    background-color: #f0f0f0;
-}
-.edui-toolbar .edui-btn-toolbar {
-}
-.edui-editor-body {
-    box-shadow: 0 0px 8px rgba(0,0,0,0.1);
-    border-radius: 6px;
-}
-.edui-combobox .edui-button-label {
-    width: auto;
-}
-.edui-combobox-menu {
-    min-width: 0;
-}
-.edui-combobox-menu .edui-combobox-item .edui-combobox-icon {
-    display: inline;
-}*/

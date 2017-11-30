@@ -42,6 +42,7 @@ from public.tools import login_required_ajax
 from wafuli.tools import saveImgAndGenerateUrl
 from decimal import Decimal
 import random
+import re
 
 @sensitive_post_parameters()
 @csrf_protect
@@ -53,6 +54,8 @@ def login(request, template_name='registration/login.html',
     """
     Displays the login form and handles the login action.
     """
+    if request.mobile:
+        template_name='registration/m_login.html' 
     redirect_to = request.POST.get(redirect_field_name,
                                    request.GET.get(redirect_field_name, ''))
     if request.method == "POST":
@@ -167,6 +170,7 @@ def register(request):
             'icode':icode,
             'mobile':mobile,
         }
+        template = 'registration/m_register.html' if request.mobile else 'registration/register.html'
         return render(request,'registration/register.html', context)
 
 
@@ -209,6 +213,26 @@ def verifyinviter(request):
             code = '1'
     result = {'code':code,}
     return JsonResponse(result)
+@login_required
+def verify_domainName(request):
+    ret = {}
+    domain_name = request.GET.get('domain_name', None)
+    if not domain_name:
+        raise Http404
+    if MyUser.objects.filter(domain_name=domain_name).exists():
+        if request.user.domain_name == domain_name:
+            ret['code'] = 0
+        else:
+            ret['code'] = 1
+            ret['msg'] = u"该域名已被占用"
+    else:
+        mat = re.match(r'[0-9a-zA-A\-_]+$', domain_name)
+        if not mat:
+            ret['code'] = 2
+            ret['msg'] = u"域名只能包含数字、字母、-和_"
+        else:
+            ret['code'] = 0
+    return JsonResponse(ret)
 @csrf_exempt
 def callbackby189(request):
     rand_code = request.POST.get('rand_code', None)
@@ -291,7 +315,8 @@ def phoneImageV(request):
 def account(request):
     announce_list = Announcement.objects.all()
     recom_projects = Project.objects.filter(state='10', is_official=True, is_addedto_repo=True)[0:4]
-    return render(request, 'account/account_index.html',{'announce_list':announce_list, 'recom_projects':recom_projects})
+    template = 'account/m_account_index.html' if request.mobile else 'account/account_index.html'
+    return render(request, template,{'announce_list':announce_list, 'recom_projects':recom_projects})
 
 @login_required
 def account_setting(request):

@@ -1,0 +1,34 @@
+.header_icon{
+	position: absolute;right: 4rem;top: 0.5rem;
+}
+.header_audit{
+	position: absolute;right: 1rem;top: 1.3rem;
+	font-size: 1.4rem;
+	color: RGB(145,192,28);
+}
+.mui-table-view-cell{
+	position: relative;
+}
+.mui-bar-nav~.mui-content{
+	padding-top: 0;
+}
+.pro_name{
+	font-size:1.3rem;
+	color:RGB(102,102,102);
+}
+.pro_add{
+	font-size:1.3rem;
+	color:RGB(248,104,104);
+	position: absolute;right: 2rem;
+}
+.pro_time{
+	font-size: 1.3rem;
+	margin-top: 1rem;
+}
+.pro_num{
+	font-size: 1.3rem;
+	position: absolute;right: 2rem;top: 3.7rem;
+}
+.pro_reduice{
+	color: RGB(106,164,238);
+}

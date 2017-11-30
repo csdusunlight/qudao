@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>个人中心</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		
+		<link rel="stylesheet" href="{% static 'css/mui.min.css' %}" />
+		<!--<link rel="stylesheet" href="dist/css/User.css" />-->
+		<link rel="stylesheet" href="{% static 'css/User.css' %}" />
+		<!--<link rel="stylesheet" href="dist/css/iconfont.css" />-->
+		<link rel="stylesheet" href="{% static 'css/iconfont.css' %}" />
+		<!--<script type="text/javascript" src="dist/js/rem.js" ></script>-->
+		<script type="text/javascript" src="{% js/rem.js %}"></script>
+	</head>
+
+	<body>
+		<div class="top">
+			<div class="headerPic">
+				<!--<img src="img/userPic.jpg" />-->
+				<img src="{% static 'images/userPic.jpg' %}" />
+			</div>
+			<span class="phone_num">15111203705</span>
+			<div class="left_btm">
+				<p>12570.36</p>
+				<p>积累收益(元)</p>
+			</div>
+			<div class="right_btm">
+				<p>1.36</p>
+				<p>账户余额(元)</p>
+			</div>
+		</div>
+		<div class="mui-content">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" style="position: relative;">
+					<a href="#" style="color: RGB(102,102,102);">主页链接：http://1468418932.51fanshu.com/</a>
+					<span class="mui-icon iconfont icon-fenxiang" style="position: absolute;top: 1.2rem;right: 1rem;"></span>
+				</li>
+			    <li class="mui-table-view-cell">
+			        <a href="m_ProjectManagement.html" class="mui-navigate-right" style="color: RGB(102,102,102);">项目管理</a>
+			    </li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 0.5rem;">
+				<li class="mui-table-view-cell">
+			        <a href="#" class="mui-navigate-right" style="color: RGB(102,102,102);">自助交单</a>
+			    </li>
+			    <li class="mui-table-view-cell">
+			        <a href="m_DataManagement.html" class="mui-navigate-right" style="color: RGB(102,102,102);">数据审核</a>
+			    </li>
+			    <li class="mui-table-view-cell">
+			        <a href="#" class="mui-navigate-right" style="color: RGB(102,102,102);">预约管理</a>
+			    </li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 0.5rem;">
+				<li class="mui-table-view-cell">
+			        <a href="m_PaymentDetails.html" class="mui-navigate-right" style="color: RGB(102,102,102);">收支详情</a>
+			    </li>
+			</ul>	
+		</div>
+		
+		
+		
+		<script src="dist/js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			
+		</script>
+	</body>
+
+</html>

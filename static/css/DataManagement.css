@@ -1,0 +1,39 @@
+.header_icon{
+	position: absolute;right: 4.8rem;top: 0.5rem;
+}
+.header_audit{
+	font-size: 1.2rem;
+	position: absolute;right: 0.8rem;top: 1.4rem;
+	color: RGB(145,194,27);
+}
+.nav {
+	color: white;
+	background: RGB(145, 193, 29);
+	border-radius: 5px;
+}
+.nav_list{
+	font-size: 1.1rem;
+}
+.nav_name{
+	margin-left: 0.2rem;
+}
+.nav_num,
+.nav_state,
+.nav_operation{
+	margin-left: 3.5rem;
+}
+.mui-table-view-cell{
+	position: relative;
+}
+.pro_list{
+	font-size: 1.1rem;
+}
+.pro_num{
+	margin-left: 2.2rem;
+}
+.pro_state{
+	margin-left: 3rem;
+}
+.pro_editor{
+	margin-left: 4.2rem;
+}

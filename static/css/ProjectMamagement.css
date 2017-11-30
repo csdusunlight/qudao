@@ -1,0 +1,25 @@
+.nav {
+	color: white;
+	background: RGB(145, 193, 29);
+	border-radius: 5px;
+}
+.nav_list{
+	font-size: 1.1rem;
+}
+.nav_price,
+.nav_isShow,
+.nav_operation{
+	margin-left: 3rem;
+}
+.mui-table-view-cell{
+	position: relative;
+}
+.pro_list{
+	font-size: 1.1rem;
+}
+.pro_price{
+	margin-left: 1.5rem;
+}
+.pro_editor{
+	position: absolute;right: 1.8rem;top: 1rem;
+}

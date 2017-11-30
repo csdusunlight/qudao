@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!doctype html>
 <html>
 
@@ -12,29 +13,29 @@
 		<!--<link rel="stylesheet" href="dist/css/iconfont.css" />-->
 		<link rel="stylesheet" href="{% static 'css/iconfont.css' %}" />
 		<!--<script type="text/javascript" src="dist/js/rem.js" ></script>-->
-		<script type="text/javascript" src="{% js/rem.js %}"></script>
+		<script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
 	</head>
 
 	<body>
 		<div class="top">
 			<div class="headerPic">
 				<!--<img src="img/userPic.jpg" />-->
-				<img src="{% static 'images/userPic.jpg' %}" />
+				<img src="{{user.picture_url}}" />
 			</div>
-			<span class="phone_num">15111203705</span>
+			<span class="phone_num">{{user.mobile}}</span>
 			<div class="left_btm">
-				<p>12570.36</p>
+				<p>{{user.accu_income}}</p>
 				<p>积累收益(元)</p>
 			</div>
 			<div class="right_btm">
-				<p>1.36</p>
+				<p>{{user.balance}}</p>
 				<p>账户余额(元)</p>
 			</div>
 		</div>
 		<div class="mui-content">
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell" style="position: relative;">
-					<a href="#" style="color: RGB(102,102,102);">主页链接：http://1468418932.51fanshu.com/</a>
+					<a href="http://{{user.domain_name}}.51fanshu.com" style="color: RGB(102,102,102);">我的主页：http://{{user.domain_name}}.51fanshu.com</a>
 					<span class="mui-icon iconfont icon-fenxiang" style="position: absolute;top: 1.2rem;right: 1rem;"></span>
 				</li>
 			    <li class="mui-table-view-cell">
@@ -61,10 +62,24 @@
 		
 		
 		
-		<script src="dist/js/mui.min.js"></script>
+		<script src="{% static 'js/mui.min.js' %}"></script>
 		<script type="text/javascript">
-			mui.init()
-			
+			mui.init();
+//			mui.ajax('http://127.0.0.1:8000/restapi/announcement/?ordering=state',{
+//				dataType:'json',//服务器返回json格式数据
+//				type:'get',//HTTP请求类型
+//				timeout:10000,//超时时间设置为10秒；
+//				headers:{'Content-Type':'application/json'},	              
+//				success:function(data){
+//					console.log(data)
+//					
+//					
+//				},
+//				error:function(xhr,type,errorThrown){
+//					//异常处理；
+//					console.log(type);
+//				}
+//			});
 		</script>
 	</body>
 

@@ -1,0 +1,184 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <!-- 优先使用 IE 最新版本和 Chrome -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <!-- 为移动设备添加 viewport -->
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <!-- 添加到主屏后的标题（iOS 6 新增） -->
+    <meta name="apple-mobile-web-app-title" content="">
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <!-- 添加智能 App 广告条 Smart App Banner（iOS 6+ Safari） -->
+    <meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <!--下面三个是清除缓存 微信浏览器缓存严重又无刷新；这个方法调试的时候很方便-->
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>福利管理</title>
+    <link href="{%static 'css/mui.min.css'%}" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="{%static 'css/m_common.css'%}"/>
+    <link rel="stylesheet" type="text/css" href="{%static 'css/m_account_welfare.css'%}"/>
+</head>
+<body>
+<header id="header" class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">福利管理</h1>
+</header>
+<div class="mui-content">
+    <!--选项卡部分-->
+    <div id="finance_slider" class="mui-slider mui-fullscreen">
+        <div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+            <a class="mui-control-item" href="#item1">体验福利</a>
+            <a class="mui-control-item" href="#item2">理财福利</a>
+        </div>
+        <div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6"></div>
+        <div class="mui-slider-group">
+            <div id="item1" class="mui-slider-item mui-control-content mui-active" value="1">
+            	<div id="scroll1" class="mui-scroll-wrapper">
+            	<div class="mui-scroll">
+            	<ul class="prefix">
+            		<li class="ti-yan">
+	                	<div class="icon">
+							<div></div>
+							<h4>体验福利</h4>
+							<p>	完成：<span>&nbsp;<number>{{statis.tcount_u}}</number>&nbsp;</span>个</p>
+						</div>
+	                </li>
+	                <li class="list clearfix head">
+	                	<span class="li-01">项目</span>
+			            <span class="li-02">提交手机号</span>
+			            <span class="li-03">提交时间</span>
+			            <span class="li-04">状态</span>
+	                </li>
+            	</ul>
+
+
+                <ul class="mui-table-view">
+                </ul>
+                </div>
+                </div>
+            </div>
+            <div id="item2" class="mui-slider-item mui-control-content" value="2">
+            	<div id="scroll2" class="mui-scroll-wrapper">
+            	<div class="mui-scroll">
+            	<ul class="mui-table-view">
+            		<li class="li-cai">
+                    	<div class="icon">
+							<div></div>
+							<h4>理财福利</h4>
+							<p>	完成：<span>&nbsp;<number>{{statis.fcount_u}}</number>&nbsp;</span>个</p>
+						</div>
+                    </li>
+                    <li class="list clearfix head-02">
+                    	<span class="li-01">项目</span>
+			            <span class="li-02">提交手机号</span>
+			            <span class="li-03">提交时间</span>
+			            <span class="li-04">状态</span>
+                    </li>
+            	</ul>
+                <ul class="mui-table-view">
+                </ul>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  <script src="{%static 'js/mui.min.js'%}"></script>
+	<script src="{%static 'js/mui.pullToRefresh.js'%}"></script>
+	<script src="{%static 'js/mui.pullToRefresh.material.js'%}"></script>
+	<script>
+		mui.init();
+		var get_welfare_url = "{% url 'get_user_welfare_json' %}";
+		(function($) {
+			//阻尼系数
+			var deceleration = mui.os.ios?0.003:0.0009;
+			$('.mui-scroll-wrapper').scroll({
+				bounce: true,
+				indicators: true, //是否显示滚动条
+				deceleration:deceleration
+			});
+			$.ready(function() {
+				//循环初始化所有上拉加载
+				$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+					var count = 0;
+					$(pullRefreshEl).pullToRefresh({
+						up: {
+							auto:true,
+							callback: function() {
+								var self = this;
+								var ul = self.element.querySelector('.mui-table-view');
+								get_welfare_list(this,ul,count++,index);
+							//		ul.appendChild(createFragment(ul, index, 5));
+								//	self.endPullUpToRefresh(true);
+							}
+						}
+					});
+				});
+
+				function get_welfare_list(obj,ul,n,index){
+					mui.ajax(get_welfare_url,{
+						data:{
+							count:n,
+							type:index,
+						},
+						dataType:'json',//服务器返回json格式数据
+						type:'get',//HTTP请求类型
+						timeout:3000,//超时时间设置为10秒；
+//						headers:{'Content-Type':'application/json'},
+						success:function(data){
+							if (!data.length){
+								obj.endPullUpToRefresh(true);
+							}
+							else {
+								obj.endPullUpToRefresh(false);//参数为true代表没有更多数据了。
+								var table = document.body.querySelector('.mui-table-view');
+//								var cells = document.body.querySelectorAll('.mui-table-view-cell');
+								for (var i in data) {
+									var wel = data[i];
+									var li = document.createElement('li');
+									li.className = 'list clearfix';
+									str_html = '<span class="li-01"><b>' + wel.title +
+										'</b></span><span class="li-02"><number>' + wel.username +
+										'</number></span><span class="li-03"><number>' + wel.time +
+										'</number></span>';
+									if (wel.state_int=='2'){
+										str_html += '<span class="li-04 review-refuse" reason="' + wel.reason + '">'+ wel.state + '</span>';
+									}
+									else if(wel.state_int=='0'){
+										str_html += '<span class="li-04 review-pass">' + wel.state + '</span>';
+									}
+									else{
+										str_html += '<span class="li-04">' + wel.state + '</span>';
+									}
+									li.innerHTML = str_html
+									ul.appendChild(li);
+								}
+							}
+						},
+						error:function(xhr,type,errorThrown){
+							alert(type);
+						}
+					});
+				}
+			});
+		})(mui);
+	</script>
+  <script>
+    // 审核拒绝原因弹窗
+    mui('.mui-table-view').on('tap','.review-refuse',function(){
+    	var reason = this.getAttribute("reason");
+        mui.alert(reason,'审核未通过原因','确定');
+    });
+  </script>
+</body>
+</html>

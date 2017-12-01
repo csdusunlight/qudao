@@ -820,7 +820,7 @@ def project_manage(request):
         res["data"] = data
         return JsonResponse(res)
     else:
-        template = 'm_account_myproject.html' if request.mobile else 'account_myproject.html' 
+        template = 'account/m_account_myproject.html' if request.mobile else 'account/account_myproject.html' 
         return render(request, template)
 
 # 

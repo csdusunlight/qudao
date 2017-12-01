@@ -820,7 +820,8 @@ def project_manage(request):
         res["data"] = data
         return JsonResponse(res)
     else:
-        return render(request, 'account/account_myproject.html')
+        template = 'm_account_myproject.html' if request.mobile else 'account_myproject.html' 
+        return render(request, template)
 
 # 
 # @csrf_exempt

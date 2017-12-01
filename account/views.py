@@ -347,7 +347,7 @@ def account_audited(request):
             kwarg.update(refuse_num=num.get('count') or 0)
         elif state=='3':
             kwarg.update(check_num=num.get('count') or 0)
-    template = 'm_account_audited.html' if request.mobile else 'account_audited.html' 
+    template = 'account/m_account_audited.html' if request.mobile else 'account/account_audited.html' 
     return render(request, template, kwarg)
 
 

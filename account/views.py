@@ -54,6 +54,8 @@ def login(request, template_name='registration/login.html',
     """
     Displays the login form and handles the login action.
     """
+    if request.mobile:
+        template_name='registration/m_login.html' 
     redirect_to = request.POST.get(redirect_field_name,
                                    request.GET.get(redirect_field_name, ''))
     if request.method == "POST":
@@ -168,8 +170,8 @@ def register(request):
             'icode':icode,
             'mobile':mobile,
         }
-        template = 'registration/register.html'
-        return render(request,template, context)
+        template = 'registration/m_register.html' if request.mobile else 'registration/register.html'
+        return render(request,'registration/register.html', context)
 
 
 def verifymobile(request):
@@ -313,7 +315,7 @@ def phoneImageV(request):
 def account(request):
     announce_list = Announcement.objects.all()
     recom_projects = Project.objects.filter(state='10', is_official=True, is_addedto_repo=True)[0:4]
-    template = 'account/account_index.html'
+    template = 'account/m_account_index.html' if request.mobile else 'account/account_index.html'
     return render(request, template,{'announce_list':announce_list, 'recom_projects':recom_projects})
 
 @login_required
@@ -345,7 +347,7 @@ def account_audited(request):
             kwarg.update(refuse_num=num.get('count') or 0)
         elif state=='3':
             kwarg.update(check_num=num.get('count') or 0)
-    template =  'account/account_audited.html' 
+    template = 'account/m_account_audited.html' if request.mobile else 'account/account_audited.html' 
     return render(request, template, kwarg)
 
 
@@ -818,7 +820,7 @@ def project_manage(request):
         res["data"] = data
         return JsonResponse(res)
     else:
-        template = 'account/account_myproject.html' 
+        template = 'account/m_account_myproject.html' if request.mobile else 'account/account_myproject.html' 
         return render(request, template)
 
 # 

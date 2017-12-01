@@ -1,0 +1,35 @@
+.nav {
+	width: 100%;
+	height: 40px;
+	border-radius: 5px;
+	background: RGB(145, 193, 29);
+	margin-top: 5px;
+	line-height: 45px;
+	color: white;
+}
+
+.nav_list {
+	font-size: 1.3rem;
+}
+
+.name {
+	margin-left: 1rem;
+}
+
+.nav_operite,
+.navisShow,
+.nav_price {
+	margin-left: 2rem;
+}
+
+.pro_list {
+	font-size: 1.1rem;
+}
+
+.pro_editor {
+	margin-left: 10.5rem;
+}
+
+.pro_touzi {
+	margin-left: 0.5rem;
+}

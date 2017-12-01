@@ -213,8 +213,9 @@
 				newurl += "&submittime_0=" + startTime;
 				newurl += "&submittime_1=" + endTime;
 			}
-			var startTime2 = $("#startTime2").val();
-			var endTime2 = $("#endTime2").val();
+			var startTime2 = $("#startTime2").val().replace('T', '+');
+			var endTime2 = $("#endTime2").val().replace('T', '+');
+			console.log(startTime2 + "," + endTime2);
 			if(startTime2 && endTime2) {
 				newurl += "&audittime_0=" + startTime2;
 				newurl += "&audittime_1=" + endTime2;
@@ -282,8 +283,8 @@
 				html += '<input name="submittime_0" type="hidden" value="' + startTime + '"/>';
 				html += '<input name="submittime_1" type="hidden" value="' + endTime + '"/>';
 			}
-			var startTime2 = $("#startTime2").val();
-			var endTime2 = $("#endTime2").val();
+			var startTime2 = $("#startTime2").val().replace('T', '+');
+			var endTime2 = $("#endTime2").val().replace('T', '+');
 			if(startTime2 && endTime2) {
 				html += '<input name="audittime_0" type="hidden" value="' + startTime2 + '"/>';
 				html += '<input name="audittime_1" type="hidden" value="' + endTime2 + '"/>';
@@ -382,11 +383,11 @@
 					</td>
 					<td>
 						<i>审核开始时间：</i>
-						<input id="startTime2" type="date" />
+						<input id="startTime2" type="datetime-local" />
 					</td>
 					<td>
 						<i>审核结束时间：</i>
-						<input id="endTime2" type="date" />
+						<input id="endTime2" type="datetime-local" />
 					</td>
 				</tr>
 				<tr>

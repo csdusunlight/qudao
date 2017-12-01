@@ -21,46 +21,77 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Cache-Control" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>福利管理</title>
+    <title>项目管理</title>
     <link href="{%static 'css/mui.min.css'%}" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{%static 'css/m_common.css'%}"/>
     <link rel="stylesheet" type="text/css" href="{%static 'css/m_account_welfare.css'%}"/>
 </head>
 <body>
 <header id="header" class="mui-bar mui-bar-nav">
-	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-	<h1 class="mui-title">福利管理</h1>
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
+	<h1 class="mui-title">项目管理</h1>
 </header>
-<div class="mui-content">
+<div class="mui-content">	    
     <!--选项卡部分-->
     <div id="finance_slider" class="mui-slider mui-fullscreen">
         <div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-            <a class="mui-control-item" href="#item1">体验福利</a>
-            <a class="mui-control-item" href="#item2">理财福利</a>
+            <a class="mui-control-item" href="#item1">官方项目</a>
+            <a class="mui-control-item" href="#item2">自建项目</a>
         </div>
-        <div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6"></div>
-        <div class="mui-slider-group">
+        <div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6" style="background: #92C11D;"></div>
+        
+        <div class="nav" >
+        	<span class="nav_list name">项目名称</span>
+        	<span class="nav_list nav_price">客户指导价</span>
+        	<span class="nav_list navisShow">是否主页呈现</span>
+        	<span class="nav_list nav_operite">操作</span>
+        </div>
+        
+        <div class="mui-slider-group"style="position: absolute;top: 86px;">
             <div id="item1" class="mui-slider-item mui-control-content mui-active" value="1">
             	<div id="scroll1" class="mui-scroll-wrapper">
             	<div class="mui-scroll">
-            	<ul class="prefix">
-            		<li class="ti-yan">
-	                	<div class="icon">
-							<div></div>
-							<h4>体验福利</h4>
-							<p>	完成：<span>&nbsp;<number>{{statis.tcount_u}}</number>&nbsp;</span>个</p>
-						</div>
-	                </li>
-	                <li class="list clearfix head">
-	                	<span class="li-01">项目</span>
-			            <span class="li-02">提交手机号</span>
-			            <span class="li-03">提交时间</span>
-			            <span class="li-04">状态</span>
-	                </li>
-            	</ul>
-
-
                 <ul class="mui-table-view">
+			        <li class="mui-table-view-cell" style="position: relative;">
+			        	<span class="pro_list pro_name">合时代一期</span>
+			        	<span class="pro_list pro_touzi">年化投资金额*1.4%</span>
+			        	<div class="mui-switch mui-switch-mini mui-active" style="position: absolute;right: 8rem;">
+			        	  <div class="mui-switch-handle"></div>
+			        	</div>
+			        	<span class="pro_list pro_editor">编辑</span>
+			        </li>
+				    <li class="mui-table-view-cell" style="position: relative;">
+			        	<span class="pro_list pro_name">合时代一期</span>
+			        	<span class="pro_list pro_touzi">年化投资金额*1.4%</span>
+			        	<div class="mui-switch mui-switch-mini mui-active" style="position: absolute;right: 8rem;">
+			        	  <div class="mui-switch-handle"></div>
+			        	</div>
+			        	<span class="pro_list pro_editor">编辑</span>
+			        </li>
+			        <li class="mui-table-view-cell" style="position: relative;">
+			        	<span class="pro_list pro_name">合时代一期</span>
+			        	<span class="pro_list pro_touzi">年化投资金额*1.4%</span>
+			        	<div class="mui-switch mui-switch-mini mui-active" style="position: absolute;right: 8rem;">
+			        	  <div class="mui-switch-handle"></div>
+			        	</div>
+			        	<span class="pro_list pro_editor">编辑</span>
+			        </li>
+			        <li class="mui-table-view-cell" style="position: relative;">
+			        	<span class="pro_list pro_name">合时代一期</span>
+			        	<span class="pro_list pro_touzi">年化投资金额*1.4%</span>
+			        	<div class="mui-switch mui-switch-mini mui-active" style="position: absolute;right: 8rem;">
+			        	  <div class="mui-switch-handle"></div>
+			        	</div>
+			        	<span class="pro_list pro_editor">编辑</span>
+			        </li>
+			        <li class="mui-table-view-cell" style="position: relative;">
+			        	<span class="pro_list pro_name">合时代一期</span>
+			        	<span class="pro_list pro_touzi">年化投资金额*1.4%</span>
+			        	<div class="mui-switch mui-switch-mini mui-active" style="position: absolute;right: 8rem;">
+			        	  <div class="mui-switch-handle"></div>
+			        	</div>
+			        	<span class="pro_list pro_editor">编辑</span>
+			        </li>
                 </ul>
                 </div>
                 </div>
@@ -68,29 +99,37 @@
             <div id="item2" class="mui-slider-item mui-control-content" value="2">
             	<div id="scroll2" class="mui-scroll-wrapper">
             	<div class="mui-scroll">
-            	<ul class="mui-table-view">
-            		<li class="li-cai">
-                    	<div class="icon">
-							<div></div>
-							<h4>理财福利</h4>
-							<p>	完成：<span>&nbsp;<number>{{statis.fcount_u}}</number>&nbsp;</span>个</p>
-						</div>
-                    </li>
-                    <li class="list clearfix head-02">
-                    	<span class="li-01">项目</span>
-			            <span class="li-02">提交手机号</span>
-			            <span class="li-03">提交时间</span>
-			            <span class="li-04">状态</span>
-                    </li>
-            	</ul>
-                <ul class="mui-table-view">
+                <ul class="mui-table-view">                                                        
+                   <li class="mui-table-view-cell" style="position: relative;">
+			        	<span class="pro_list pro_name">合时代一期</span>
+			        	<span class="pro_list pro_touzi">年化投资金额*1.4%</span>
+			        	<div class="mui-switch mui-switch-mini mui-active" style="position: absolute;right: 8rem;">
+			        	  <div class="mui-switch-handle"></div>
+			        	</div>
+			        	<span class="pro_list pro_editor">编辑</span>
+			        </li>
+			        <li class="mui-table-view-cell" style="position: relative;">
+			        	<span class="pro_list pro_name">合时代一期</span>
+			        	<span class="pro_list pro_touzi">年化投资金额*1.4%</span>
+			        	<div class="mui-switch mui-switch-mini mui-active" style="position: absolute;right: 8rem;">
+			        	  <div class="mui-switch-handle"></div>
+			        	</div>
+			        	<span class="pro_list pro_editor">编辑</span>
+			        </li>
+			        <li class="mui-table-view-cell" style="position: relative;">
+			        	<span class="pro_list pro_name">合时代一期</span>
+			        	<span class="pro_list pro_touzi">年化投资金额*1.4%</span>
+			        	<div class="mui-switch mui-switch-mini mui-active" style="position: absolute;right: 8rem;">
+			        	  <div class="mui-switch-handle"></div>
+			        	</div>
+			        	<span class="pro_list pro_editor">编辑</span>
+			        </li>
                 </ul>
                 </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 
   <script src="{%static 'js/mui.min.js'%}"></script>
@@ -126,7 +165,28 @@
 				});
 
 				function get_welfare_list(obj,ul,n,index){
-					mui.ajax(get_welfare_url,{
+					var table = document.body.querySelector('.mui-table-view');
+//								var cells = document.body.querySelectorAll('.mui-table-view-cell');
+							for (var i in data) {
+								var wel = data[i];
+								var li = document.createElement('li');
+								li.className = 'list clearfix';
+								str_html = '<span class="li-01"><b>' + wel.title +
+									'</b></span><span class="li-02"><number>' + wel.username +
+									'</number></span><span class="li-03"><number>' + wel.time +
+									'</number></span>';
+								if (wel.state_int=='2'){
+									str_html += '<span class="li-04 review-refuse" reason="' + wel.reason + '">'+ wel.state + '</span>';
+								}
+								else if(wel.state_int=='0'){
+									str_html += '<span class="li-04 review-pass">' + wel.state + '</span>';
+								}
+								else{
+									str_html += '<span class="li-04">' + wel.state + '</span>';
+								}
+								li.innerHTML = str_html
+								ul.appendChild(li);
+					/*mui.ajax(get_welfare_url,{
 						data:{
 							count:n,
 							type:index,
@@ -168,7 +228,7 @@
 						error:function(xhr,type,errorThrown){
 							alert(type);
 						}
-					});
+					});*/
 				}
 			});
 		})(mui);

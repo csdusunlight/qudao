@@ -19,11 +19,13 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^', include('wafuli.urls',)),
-    url('^restapi/', include('restapi.urls')),
-    url('^account/', include('account.urls')),
-    url('^Admin/', include('wafuli_admin.urls')),
+    url(r'^restapi/', include('restapi.urls')),
+    url(r'^account/', include('account.urls')),
+    url(r'^Admin/', include('wafuli_admin.urls')),
     url(r'^ueditor/',  include('DjangoUeditor.urls' )),
     url(r'^captcha/', include('captcha.urls')),
+    url(r'^weixin/', include('weixin.urls')),
+    url(r'^docs/', include('docs.urls')),
 # #     url(r'^statistic/', include('statistics.urls', namespace='statistic'),),
     url(r'^admin/', include(admin.site.urls)),
 #     url(r'^project/', include('project_admin.urls')),

@@ -1,0 +1,117 @@
+.RightCont {
+    background-color: #fff;
+    min-height: 800px;
+}
+.create-doc {
+    margin: 20px;
+}
+.doc__box {
+    padding-bottom: 200px;
+    font-size: 0;
+}
+.doc__list {
+    position: relative;
+    display: inline-block;
+    margin-left: 18px;
+    border: 1px solid transparent;
+}
+.doc__link {
+    display: block;
+    box-sizing: border-box;
+    padding-top: 124px;
+    width: 145px;
+    height: 180px;
+    background: url(../images/bg-doc.png) top 15px center no-repeat;
+}
+.doc__link.False {
+    background: url(../images/icon-lock.png) 88px 86px no-repeat,
+                url(../images/bg-doc.png) top 15px center no-repeat;
+}
+.doc__list:hover,
+.doc__list.m-show {
+    border: 1px solid #dfdfdf;
+    background-color: #f8f8f8;
+}
+.doc__title {
+    height: 24px;
+    text-align: center;
+}
+.doc__set {
+    display: none;
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    width: 24px;
+    height: 24px;    
+    background: url(../images/icon-setting.png) center center no-repeat;
+    cursor: pointer;
+    transition: all 0.4s ease-in;
+}
+.doc__set:hover {
+    transform: rotate(180deg);
+}
+.doc__link:hover + .doc__set,
+.doc__set:hover,
+.doc__list.m-show .doc__set {
+    display: block;
+}
+.doc__handle {
+    display: none;
+    position: absolute;
+    top: 195px;
+    left: 47px;
+    padding: 18px 8px;
+    width: 160px;
+    /*height: 135px;*/
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    background-color: #fff;
+    border-radius: 6px;
+    z-index: 10;
+}
+.doc__handle.m-show {
+    display: block;
+}
+.doc__handle:before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    left: 73px;
+    width: 14px;
+    height: 14px;
+    transform: rotate(45deg);
+    background-color: #fff;
+    box-shadow: -3px -3px 6px rgba(0,0,0,0.1);
+    z-index: 1;
+}
+.doc__handle .doc__handleitem {
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    line-height: 34px;
+    text-align: center;
+    cursor: pointer;
+}
+.doc__handle .doc_rename {
+    padding: 0;
+    border-radius: 4px;
+}
+.doc_copy:hover,
+.doc_del:hover,
+.copy-link:hover,
+.doc_off:hover,
+.doc_on:hover{
+    color: #91C11D;
+}
+
+.doc__title_off{
+	height: 24px;
+    text-align: center;
+	color: #666666;
+}
+/*样式覆盖*/
+.copy-link {
+    padding: 0;
+}
+.Content {
+    overflow: visible;
+}

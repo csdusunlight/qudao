@@ -36,35 +36,8 @@ $(function(){
     	        <h2 class="top-title add-title l">新建项目</h2>
     	    </div>
     	    <div class="user-info-box">
-        	    <!--<div class="item">
-        	        <span class="item__name">项目logo（非必选）</span>
-                    <div class="uploadimg-container">
-                          <div class="imageBox">
-                            <div class="thumbBox"></div>
-                            <div class="spinner" style="display: none">Loading...</div>
-                          </div>
-                          <div class="action">
-                            <div class="new-contentarea tc">
-                                <a href="javascript:void(0)" class="upload-img">
-                                    <label for="upload-file">上传图像</label>
-                              </a>
-                              <input type="file" class="" name="upload-file" id="upload-file" />
-                            </div>
-                            <div style="padding-left:10px;margin: 15px 0 25px;">
-                                <input type="button" id="btnZoomIn" class="Btnsty_peyton" value="+"  >
-                                <input type="button" id="btnZoomOut" class="Btnsty_peyton" value="-" >
-                            </div>
-                            <div>
-                                <input style="width: 160px;" type="button" id="btnCrop"  class="Btnsty_peyton" value="确定">
-                            </div>
-                          </div>
-                          <div class="cropped">
-                              <span style="display: inline-block;margin-bottom: 84px;">*请先上传后进行裁切</span>
-                          </div>
-                    </div>
-        	    </div>-->
         	    <div class="item m-company">
-                    <span class="item__name">选择平台</span>
+                    <span class="item__name">选择平台<i class="item__need">*</i></span>
                     <select class="company" name="choose_company">
                         <option data-logo="" value="0">--</option>
                         {% for item in companies %}
@@ -73,38 +46,45 @@ $(function(){
                     </select>
                     <img class="company-logo" src="" alt="" />
                 </div>
+                <p style="padding-left: 204px;">注：如没有找到要选择的平台，请联系工作人员上传平台。
+                    <a style="color: #91C11D; text-decoration: underline;" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1319169588&site=qq&menu=yes">点击联系</a>
+                </p>
                 <div class="item">
-                    <span class="item__name">项目名称</span>
+                    <span class="item__name">项目名称<i class="item__need">*</i></span>
                     <input class="title item__txt" type="text" maxlength="8" placeholder="限8个字符" />
                 </div>
                 <div class="item">
-                    <span class="item__name">攻略链接</span>
+                    <span class="item__name">攻略链接<i class="item__need">*</i></span>
                     <input class="strategy item__txt" type="text" />
-                    <span><a class="link-btn" target="_blank" href="https://shimo.im/">点击</a>使用石墨创建工具</span>
+                    <span><a class="link-btn" target="_blank" href="/docs/create/">使用番薯文档创建</a></span>
                 </div>
                 <div class="item">
-                    <span class="item__name">项目简介</span>
-                    <input class="introduction item__txt" type="text" maxlength="40" placeholder="限40个字符" />
+                    <span class="item__name">详情页价格<i class="item__need">*</i></span>
+                    <input class="cprice item__txt" type="text" maxlength="40" placeholder="详细返现方案，限40个字符" />
                 </div>
                 <div class="item">
-                    <span class="item__name">详情页价格</span>
-                    <input class="cprice item__txt" type="text" maxlength="40" placeholder="限40个字符" />
+                    <span class="item__name">主页价格<i class="item__need">*</i></span>
+                    <input class="shortprice item__txt" type="text" maxlength="12" placeholder="主页精短价格，限12个字符，例如：投10000返200" />
                 </div>
                 <div class="item">
-                    <span class="item__name">主页价格</span>
-                    <input class="shortprice item__txt" type="text" maxlength="12" placeholder="例：投一万返两千；限12个字符" />
+                    <span class="item__name">标期<i class="item__need">*</i></span>
+                    <input class="term item__txt" type="text" placeholder="例如：1~3个月" />
                 </div>
                 <div class="item">
-                    <span class="item__name">标期</span>
-                    <input class="term item__txt" type="text" />
+                    <span class="item__name">投资区间<i class="item__need">*</i></span>
+                    <input class="investrange item__txt" type="text" placeholder="例如：3000~5万" />
                 </div>
                 <div class="item">
-                    <span class="item__name">投资区间</span>
-                    <input class="investrange item__txt" type="text" />
+                    <span class="item__name">预计年化<i class="item__need">*</i></span>
+                    <input class="intrest item__txt" type="text" maxlength="20" placeholder="百分比，例如：20%" />
                 </div>
                 <div class="item">
-                    <span class="item__name">预计年化</span>
-                    <input class="intrest item__txt" type="text" maxlength="20" placeholder="限20个字符" />
+                    <span class="item__name">项目来源</span>
+                    <input class="channel item__txt" type="text" maxlength="20" placeholder="记录项目的结算方，限20个字符，例如：金叶子" />
+                </div>
+                <div class="item">
+                    <span class="item__name">结算价格</span>
+                    <input class="up_price item__txt" type="text" maxlength="40" placeholder="记录项目的结算价格，限40个字符，例如10000返220" />
                 </div>
                 <div class="item">
                     <span class="item__name">允许复投</span>
@@ -113,7 +93,7 @@ $(function(){
                     <label><input class="is_futou" type="radio" checked="checked" value="false" name="is_futou" /><i class="need-icon"></i>否</label>
                 </div>
                 <div class="item">
-                    <span class="item__name">允许预约</span>
+                    <span class="item__name">需要预约</span>
                     <label><input class="is_book" type="radio" value="true" name="is_book" /><i class="need-icon m-left"></i>是</label>
                     <label><input class="is_book" type="radio" checked="checked" value="false" name="is_book" /><i class="need-icon"></i>否</label>
                 </div>
@@ -187,12 +167,14 @@ $(function(){
 
                 $('.title').val(ret.title);
                 $('.strategy').val(ret.strategy);
-                $('.introduction').val(ret.introduction);
                 $('.cprice').val(ret.cprice);
                 $('.shortprice').val(ret.shortprice);
                 $('.term').val(ret.term);
                 $('.investrange').val(ret.investrange);
                 $('.intrest').val(ret.intrest);
+//              $('.introduction').val(ret.introduction);
+                $('.channel').val(ret.channel);
+                $('.up_price').val(ret.up_price);
                 var radio_dom = '.is_futou[value="'+ ret.is_multisub_allowed +'"]'
                 $(radio_dom).prop("checked",true);
                 var radio_dom2 = '.is_book[value="'+ ret.is_book +'"]'
@@ -207,24 +189,6 @@ $(function(){
                     console.log(dom);
                     $(dom).prop("checked", true);
                 }
-//              $.ajax({        //获取标签数据
-//                  url: "/restapi/marks/",
-//                  dataType: "json",
-//                  type: 'get',
-//                  success: function(ret) {
-//                      console.log(ret.results);
-//                      var mark_detail = '';
-//                      for (var i=0; i<ret.results.length; i++) {
-//                          mark_detail += '<li data-id="'+ ret.results[i].id +'" class="mark"><span class="mark-name">'+ ret.results[i].name +'</span><span class="mark__del">x<span></li>'
-//                      }
-//                      $('.mark-box').html(mark_detail);
-//                      
-//                  },
-//                  error: function(jqXHR, textStatus, errorThrown) {
-//                      console.log(jqXHR.responseText);
-//                      alert("数据错误");
-//                  }
-//              });
             },
             error: function() {
                 alert("请检查网络连接");
@@ -236,24 +200,6 @@ $(function(){
         $('.add-title').text('新建项目');
         $('.company').searchableSelect();
         console.log('xinjian');
-//      $.ajax({        //获取标签数据
-//          url: "/restapi/marks/",
-//          dataType: "json",
-//          type: 'get',
-//          success: function(ret) {
-//              console.log(ret.results);
-//              var mark_detail = '';
-//              for (var i=0; i<ret.results.length; i++) {
-//                  mark_detail += '<li data-id="'+ ret.results[i].id +'" class="mark"><span class="mark-name">'+ ret.results[i].name +'</span><span class="mark__del">x<span></li>'
-//              }
-//              $('.mark-box').html(mark_detail);
-//              
-//          },
-//          error: function(jqXHR, textStatus, errorThrown) {
-//              console.log(jqXHR.responseText);
-//              alert("数据错误");
-//          }
-//      });
     }
     
     $('.mark-box').on('click', '.mark', function(){        //选择标签
@@ -288,24 +234,6 @@ $(function(){
             }
         })
         
-//      $.ajax({        //平台数据
-//          url: "/restapi/company/",
-//          dataType: "json",
-//          type: 'get',
-//          success: function(ret) {
-//              console.log(ret.results);
-//              var company_html = '<option data-logo="" value="0">--</option>';
-//              for (var i=0; i<ret.results.length; i++) {
-//                  company_html += '<option data-logo="'+ ret.results[i].logo +'" value="'+ ret.results[i].id +'">'+ ret.results[i].name +'</option>'
-//              }
-//              $('.company').html(company_html);
-//              
-//          },
-//          error: function(jqXHR, textStatus, errorThrown) {
-//              console.log(jqXHR.responseText);
-//              alert("数据错误");
-//          }
-//      });
         $(".company").change(function(){
             var opt=$(".company").val();
             console.log('change');
@@ -476,12 +404,14 @@ $(function(){
             var company = $('.company').val();
             var title = $('.title').val();
             var strategy = $('.strategy').val();
-            var introduction = $('.introduction').val();
             var cprice = $('.cprice').val();
             var shortprice = $('.shortprice').val();
             var term = $('.term').val();
             var investrange = $('.investrange').val();
             var intrest = $('.intrest').val();
+//          var introduction = $('.introduction').val();
+            var channel = $('.channel').val();
+            var up_price = $('.up_price').val();
             var is_futou = $('input[name="is_futou"]:checked').val();
             var is_book = $('input[name="is_book"]:checked').val();
             var mark_str = '';
@@ -494,8 +424,8 @@ $(function(){
                 alert('请选择项目平台');
                 return;
             }
-            if (!title || !strategy || !introduction || !cprice || !shortprice || !term || !investrange || !intrest || !is_futou) {
-                alert('填写项不能为空');
+            if (!title || !strategy || !cprice || !shortprice || !term || !investrange || !intrest || !is_futou) {
+                alert('必填项不能为空');
                 return;
             }
             var reg_url= /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
@@ -512,12 +442,14 @@ $(function(){
                     'company' : company,
                     'title' : title,
                     'strategy' : strategy,
-                    'introduction' : introduction,
                     'cprice' : cprice,
                     'shortprice' : shortprice,
                     'term' : term,
                     'investrange' : investrange,
                     'intrest' : intrest,
+//                  'introduction' : introduction,
+                    'channel' : channel,
+                    'up_price' : up_price,
                     'is_multisub_allowed' : is_futou,
                     'is_book' : is_book,
                     'necessary_fields' : necessary_fields,
@@ -526,7 +458,7 @@ $(function(){
                 success: function(ret) {
                     if(ret.code == 0) {
                         alert("操作成功!");
-                        window.location.href="/account/project?tab=2"
+//                      window.location.href="/account/project?tab=2"
                     } else {
                         console.log(ret.msg)
                     }

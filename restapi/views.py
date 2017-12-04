@@ -13,7 +13,7 @@ from restapi.serializers import UserSerializer, InvestLogSerializer,\
     SubscribeShipSerializer, AnnouncementSerializer, DayStatisSerializer,\
     ApplyLogSerializer, WithdrawLogSerializer, UserDetailStatisSerializer,\
     UserAverageStatisSerializer, MarkSerializer, CompanySerializer,\
-    RankSerializer, IPLogSerializer, BookLogSerializer
+    RankSerializer, IPLogSerializer, BookLogSerializer, DocumentSerializer
 from account.models import MyUser, ApplyLog
 from rest_framework.filters import SearchFilter,OrderingFilter
 from restapi.permissions import IsOwnerOrStaff, IsSelfOrStaff
@@ -24,6 +24,8 @@ from wafuli_admin.models import DayStatis
 from statistic.models import UserDetailStatis, UserAverageStatis
 from rest_framework.exceptions import ValidationError
 from activity.models import SubmitRank, IPLog
+from docs.models import Document
+import re
 # from wafuli.Filters import UserEventFilter
 class BaseViewMixin(object):
     authentication_classes = (CsrfExemptSessionAuthentication,)
@@ -40,7 +42,7 @@ class ProjectList(BaseViewMixin, generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
     filter_backends = (SearchFilter, django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
     filter_fields = ['state','type','is_multisub_allowed','is_official']
-    ordering_fields = ('state','pub_date')
+    ordering_fields = ('state','pub_date','pinyin')
     search_fields = ('title', 'introduction')
     pagination_class = MyPageNumberPagination
     def perform_create(self, serializer):
@@ -65,6 +67,13 @@ class UserDetail(BaseViewMixin,generics.RetrieveUpdateDestroyAPIView):
     queryset = MyUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsSelfOrStaff,)
+    def perform_update(self, serializer):
+        domain_name = serializer.validated_data.get('domain_name', None)
+        if domain_name:
+            mat = re.match(r'[0-9a-zA-A\-_]+$', domain_name)
+            if not mat:
+                raise ValidationError({'detail': u'域名只能包含数字、字母、-和_字符'})
+        generics.RetrieveUpdateDestroyAPIView.perform_update(self, serializer)
     
 class InvestlogList(BaseViewMixin, generics.ListCreateAPIView):
     def get_queryset(self):
@@ -256,4 +265,14 @@ class BookLogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return BookLog.objects.filter(user=self.request.user)
     serializer_class = BookLogSerializer
+    permission_classes = (IsOwnerOrStaff,)
+class DocumentList(BaseViewMixin, generics.ListCreateAPIView):
+    def get_queryset(self):
+        return Document.objects.all()
+    serializer_class = DocumentSerializer
+    pagination_class = MyPageNumberPagination
+class DocumentDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
+    def get_queryset(self):
+        return Document.objects.all()
+    serializer_class = DocumentSerializer
     permission_classes = (IsOwnerOrStaff,)

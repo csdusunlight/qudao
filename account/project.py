@@ -10,6 +10,7 @@ from django.http.response import JsonResponse
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 import random
+from public.pinyin import PinYin
 
 @csrf_exempt
 @login_required_ajax
@@ -35,7 +36,7 @@ def create_update_selfproject(request, id=None):
     is_book = request.POST.get('is_book', False)
     channel = request.POST.get('channel', '')
     up_price = request.POST.get('up_price', '')
-    if not (title and strategy and introduction and cprice and term and investrange and intrest
+    if not (title and strategy and cprice and term and investrange and intrest
             and necessary_fields and company and shortprice and is_book):
         ret['code'] = 1
         ret['msg'] = u'缺少必填字段'
@@ -43,12 +44,18 @@ def create_update_selfproject(request, id=None):
     
     try:
         is_multisub_allowed = str_to_bool(is_multisub_allowed)
+        is_book = str_to_bool(is_book)
         marks = [ int(x) for x in marks.split(',') if x ]
     except:
         ret['code'] = 2
         ret['msg'] = u'字段不合法'
         return JsonResponse(ret)
+    
+    pyin = PinYin()
+    pyin.load_word()
+    szm, pinyin = pyin.hanzi2pinyin_split(title)
     kwargs = {}
+    kwargs.update(szm=szm, pinyin=pinyin)
     if id is None:
         points = random.randint(5,50)
         kwargs.update(user_id=user.id, title=title,strategy=strategy, introduction=introduction,
@@ -60,7 +67,7 @@ def create_update_selfproject(request, id=None):
         kwargs.update(title=title,strategy=strategy, introduction=introduction, shortprice=shortprice,
                         cprice=cprice, term=term,investrange=investrange, intrest=intrest,
                         is_multisub_allowed=is_multisub_allowed, necessary_fields=necessary_fields, 
-                        is_book=is_book, up_price=up_price)
+                        is_book=is_book, up_price=up_price,channel=channel,)
         
     with transaction.atomic():
         if id is None:

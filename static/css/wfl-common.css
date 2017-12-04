@@ -4,7 +4,7 @@ html,body,h1,h2,h3,h4,h5,h6,div,dl,dt,dd,ul,ol,li,p,table,th,td,form,input,selec
 body {font:14px/24px Helvetica, "microsoft yahei",arial;background:#f5f5f5; color: #666;}
 table{border-collapse:collapse;border-spacing:0;}
 html,body,img {border:0;}
-img {max-width: 100%; vertical-align: middle;}
+/*img {max-width: 100%; vertical-align: middle;}*/
 h1,h2,h3,h4,h5,h6,strong,b{color: #222; font-weight:normal;}
 i,em{font-style:normal;}
 li{list-style:none;}
@@ -21,8 +21,7 @@ p {line-height: 24px; color: inherit;}
 a.link:hover {
     color: #91C11D;
 }
-input[type="text"],
-select {
+input[type="text"],select {
     padding-left: 8px;
     width: 300px;
     height: 30px;
@@ -228,6 +227,7 @@ select {
     margin: 0 auto;
     width: 1250px;
     color: #fff;
+    background-color: #333;
 }
 .headertop__welcome {
     line-height: 30px;
@@ -243,6 +243,7 @@ select {
 .headermain {
     margin: 0 auto;
     width: 1250px;
+    background-color: #fff;
 }
 .logo {
     width: 259px;
@@ -252,6 +253,7 @@ select {
 .nav-layout {
     float: right;
     margin-top: 36px;
+    position: relative;
 }
 .nav__itembox {
     margin-right: 8px;
@@ -262,6 +264,44 @@ select {
     line-height: 36px;
     border-radius: 4px;
 }
+
+.toggle_box{
+	width: 88px;
+	position: absolute;top: 48px;left: 0;
+	z-index: 9;
+	background: white;
+	box-shadow: 0 0px 8px rgba(0,0,0,0.3);
+	border-radius: 4px;
+	visibility: hidden;
+    opacity: 0;
+    transition: all 0.6s ease-in;
+}
+.box:hover .toggle_box{  
+	opacity: 1;
+	visibility: visible; 
+}
+.toggle_box:hover{
+	opacity: 1;
+	visibility: visible;
+}
+.toggle_box_top{
+	width: 14px;
+	height: 14px;
+	position: absolute;top: -7px;left: 36px;
+	transform: rotate(45deg);
+	background: white;
+	box-shadow: -2px -2px 3px rgba(0,0,0,0.2);
+}
+.toggle_box li{
+	width: 100%;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+}
+.toggle_box li a:hover{
+	color: RGB(145,193,29);
+}
+
 .nav__item:hover {
     color: #fff;
     background-color: #91c11d;
@@ -317,7 +357,6 @@ select {
 /*header---end*/
 /*footer部分*/
 .footer {
-    padding: 20px 10px;
     width: 100%;
     height: 100px;
     margin-top: 40px;
@@ -341,7 +380,10 @@ select {
     background: url(../images/bg-icon-qq.png) center center/auto 100% no-repeat;
 }
 .wfl-wrap.m-footer {
-    margin-top: 10px;
+    margin-top: 0;
+    padding: 30px 10px;
+    height: 100px;
+    background-color: #1e1e1e;
 }
 .footer-left,
 .footer-middle,

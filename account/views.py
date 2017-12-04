@@ -42,6 +42,7 @@ from public.tools import login_required_ajax
 from wafuli.tools import saveImgAndGenerateUrl
 from decimal import Decimal
 import random
+import re
 
 @sensitive_post_parameters()
 @csrf_protect
@@ -167,7 +168,8 @@ def register(request):
             'icode':icode,
             'mobile':mobile,
         }
-        return render(request,'registration/register.html', context)
+        template = 'registration/register.html'
+        return render(request,template, context)
 
 
 def verifymobile(request):
@@ -209,6 +211,26 @@ def verifyinviter(request):
             code = '1'
     result = {'code':code,}
     return JsonResponse(result)
+@login_required
+def verify_domainName(request):
+    ret = {}
+    domain_name = request.GET.get('domain_name', None)
+    if not domain_name:
+        raise Http404
+    if MyUser.objects.filter(domain_name=domain_name).exists():
+        if request.user.domain_name == domain_name:
+            ret['code'] = 0
+        else:
+            ret['code'] = 1
+            ret['msg'] = u"该域名已被占用"
+    else:
+        mat = re.match(r'[0-9a-zA-A\-_]+$', domain_name)
+        if not mat:
+            ret['code'] = 2
+            ret['msg'] = u"域名只能包含数字、字母、-和_"
+        else:
+            ret['code'] = 0
+    return JsonResponse(ret)
 @csrf_exempt
 def callbackby189(request):
     rand_code = request.POST.get('rand_code', None)
@@ -291,7 +313,8 @@ def phoneImageV(request):
 def account(request):
     announce_list = Announcement.objects.all()
     recom_projects = Project.objects.filter(state='10', is_official=True, is_addedto_repo=True)[0:4]
-    return render(request, 'account/account_index.html',{'announce_list':announce_list, 'recom_projects':recom_projects})
+    template = 'account/account_index.html'
+    return render(request, template,{'announce_list':announce_list, 'recom_projects':recom_projects})
 
 @login_required
 def account_setting(request):
@@ -308,7 +331,22 @@ def account_submit(request):
 
 @login_required
 def account_audited(request):
-    return render(request, 'account/account_audited.html',)
+    user = request.user
+    today = date.today()
+    submit_num = InvestLog.objects.filter(user=user, submit_time__gte=today).count()
+    nums = InvestLog.objects.filter(user=user, audit_time__gte=today).values('audit_state')\
+        .annotate(count=Count('*')).order_by('audit_state')
+    kwarg = {'submit_num':submit_num, 'pass_num':0, 'refuse_num':0, 'check_num':0}
+    for num in nums:
+        state = num.get('audit_state')
+        if state=='0':
+            kwarg.update(pass_num=num.get('count') or 0)
+        elif state=='2':
+            kwarg.update(refuse_num=num.get('count') or 0)
+        elif state=='3':
+            kwarg.update(check_num=num.get('count') or 0)
+    template =  'account/account_audited.html' 
+    return render(request, template, kwarg)
 
 
 
@@ -780,7 +818,8 @@ def project_manage(request):
         res["data"] = data
         return JsonResponse(res)
     else:
-        return render(request, 'account/account_myproject.html')
+        template = 'account/account_myproject.html' 
+        return render(request, template)
 
 # 
 # @csrf_exempt
@@ -872,3 +911,4 @@ def project_add(request, id=None):
     companies = Company.objects.all()
     kwargs.update(companies=companies)
     return render(request, 'account/project_add.html', kwargs)
+

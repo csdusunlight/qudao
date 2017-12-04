@@ -69,7 +69,8 @@ def admin_apply(request):
             level = request.POST.get('level', '03')
             with transaction.atomic():
                 user = MyUser(mobile=apply.mobile, username=apply.username, level=level, profile=apply.profile,
-                              qq_name=apply.qq_name, qq_number=apply.qq_number, qualification=apply.qualification)
+                              qq_name=apply.qq_name, qq_number=apply.qq_number,
+                              cs_qq=apply.qq_number, domain_name=apply.qq_number, qualification=apply.qualification)
                 user.set_password(apply.password)
                 user.save()
                 id_list_list= list(Project.objects.filter(is_official=True, state='10', is_addedto_repo=True).values_list('id'))
@@ -86,7 +87,7 @@ def admin_apply(request):
                 apply.audit_time = datetime.datetime.now()
                 apply.admin_user = admin_user
                 apply.save()
-                sendmsg_bydhst(apply.mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + apply.qq_number + '.51fanshu.com' +
+                sendmsg_bydhst(apply.mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + user.domain_name + '.51fanshu.com' +
                                      u"，快去分享给小伙伴们吧~")
         elif type==2:
             reason = request.POST.get('reason', '')
@@ -128,7 +129,7 @@ def admin_invest(request):
         investlog_id = request.POST.get('id', None)
         cash = request.POST.get('cash', None)
         type = request.POST.get('type', None)
-        reason = request.POST.get('reason', '') or u"无"
+        reason = request.POST.get('reason', '')
         type = int(type)
         if not investlog_id or type==1 and not cash or not type in [1, 2, 3]:
             res['code'] = -2
@@ -324,8 +325,8 @@ def export_investlog(request):
         e = datetime.datetime.strptime(submittime_1,'%Y-%m-%d')
         item_list = item_list.filter(submit_time__range=(s,e))
     if audittime_0 and audittime_1:
-        s = datetime.datetime.strptime(audittime_0,'%Y-%m-%d')
-        e = datetime.datetime.strptime(audittime_1,'%Y-%m-%d') + datetime.timedelta(days=1)
+        s = datetime.datetime.strptime(audittime_0,'%Y-%m-%d %H:%M')
+        e = datetime.datetime.strptime(audittime_1,'%Y-%m-%d %H:%M')
         item_list = item_list.filter(audit_time__range=(s,e))
     qq_number = request.GET.get("qq_number", None)
     if qq_number:
@@ -342,7 +343,7 @@ def export_investlog(request):
     companyname = request.GET.get("companyname", None)
     if companyname:
         item_list = item_list.filter(project__company__name__contains=companyname)
-    invest_mobile = request.GET.get("mobile_sub", None)
+    invest_mobile = request.GET.get("invest_mobile", None)
     if invest_mobile:
         item_list = item_list.filter(invest_mobile=invest_mobile)
     projectname = request.GET.get("project_title_contains", None)
@@ -529,7 +530,7 @@ def import_investlog(request):
             with transaction.atomic():
                 id = row[0]
                 result = row[2]
-                reason = row[4] or u"无"
+                reason = row[4]
                 investlog = InvestLog.objects.get(id=id)
                 if not investlog.audit_state in ['1','3'] or investlog.translist.exists():
                     continue

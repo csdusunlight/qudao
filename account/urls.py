@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^verifymobile/$', 'account.views.verifymobile', name='verifymobile'),
     url(r'^verifyusername/$', 'account.views.verifyusername', name='verifyusername'),
     url(r'^verifyqq/$', 'account.views.verifyqq', name='verifyqq'),
+    url(r'^verify_domain/$', 'account.views.verify_domainName', name='verify_domain'),
 #     url(r'^verifyinviter/$', 'account.views.verifyinviter', name='verifyinviter'),
     url(r'^phoneImageV/$', 'account.views.phoneImageV', name='phoneImageV'),
 #    url(r'verifytelcode/$', 'account.views.verifytelcode', name='verifytelcode'),
@@ -59,4 +60,5 @@ urlpatterns = [
     url(r'^create_update_selfproject/(?:(?P<id>[0-9]+)/)?$', 'account.project.create_update_selfproject', name='create_update_selfproject'),
     url(r'^update_offiproject/(?P<id>[0-9]+)/$', 'account.project.update_offiproject', name='update_offiproject'),
     url(r'^delete_selfproject/(?P<id>[0-9]+)/$', 'account.project.delete_selfproject', name='delete_selfproject'),
+    
 ]

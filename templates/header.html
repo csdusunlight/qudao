@@ -1,49 +1,78 @@
 <!--header-->
 {% load staticfiles %}
+</style>
 <div class="header">
-    <div class="bgc-333">
-        <div class="headertop color-fff clearfix">
-            <p class="headertop__welcome l">欢迎来到福利联盟！客服热线：0731-85586375&nbsp;&nbsp;</p>
-            <ul class="r fs-0">
+	<div class="bgc-333">
+		<div class="headertop color-fff clearfix">
+			<p class="headertop__welcome l">欢迎来到福利联盟！客服热线：0731-85586375&nbsp;&nbsp;</p>
+			<ul class="r fs-0">
 
-                {% if not user.is_authenticated %}
-                <!-- <li class="d-ib"><a class="headertop__navitem link" href="{% url 'login' %}">登录</a></li> -->
-                <li class="d-ib"><a id="login" class="headertop__navitem link">登录</a></li>
-                <script>
-                window.onload = function () {
-                    document.getElementById('login').onclick = function() {
-                        window.location.href = '/account/login/?next=/account/';
-                    }
-                }
-                </script>
-                <li class="d-ib"><a class="headertop__navitem link" href="{% url 'register' %}">申请</a></li>
-                {% else %}
-                <li class="d-ib"><font>您好，<a class="headertop__navitem link" href="{% url 'account_index' %}">{{user.mobile}}</a></li>
-                    <!--{%if user.level > 0 %}
+				{% if not user.is_authenticated %}
+				<!-- <li class="d-ib"><a class="headertop__navitem link" href="{% url 'login' %}">登录</a></li> -->
+				<li class="d-ib">
+					<a id="login" class="headertop__navitem link">登录</a>
+				</li>
+				<script>
+					window.onload = function() {
+						document.getElementById('login').onclick = function() {
+							window.location.href = '/account/login/?next=/account/';
+						}
+
+					}
+				</script>
+				<li class="d-ib">
+					<a class="headertop__navitem link" href="{% url 'register' %}">申请</a>
+				</li>
+				{% else %}
+				<li class="d-ib">
+					<font>您好，
+						<a class="headertop__navitem link" href="{% url 'account_index' %}">{{user.mobile}}</a>
+				</li>
+				<!--{%if user.level > 0 %}
                      （VIP{{user.level}}）
                     {%endif%}-->
-                </font>
-                <li class="d-ib"><a class="headertop__navitem link" href="{%url 'logout' %}">退出</a></li>
-                {% endif %}
+				</font>
+				<li class="d-ib">
+					<a class="headertop__navitem link" href="{%url 'logout' %}">退出</a>
+				</li>
+				{% endif %}
 
+			</ul>
+		</div>
+	</div>
+	<div class="headermain-box bgc-fff">
+		<div class="headermain clearfix">
+			<a href="{% url 'index' %}"><img src="{% static 'images/qudao-logo.png' %}" alt="logo" class="logo l" /></a>
+			<!--<img style="margin-left: 40px; margin-top: 30px;" src="{% static 'images/slogan.png' %}" alt="logo" class="slogan l" />-->
+			<!--<a href="{% url 'activity_rank' %}"><img src="{% static 'images/activity-rank.gif' %}" class="activity-rank l" style="margin-left: 80px; margin-top: 10px;" /></a>-->
+			<ul class="nav nav-layout l fs-0">
+				<li class="nav__itembox d-ib">
+					<a class="nav__item" href="/">首页</a>
+				</li>
+				<li class="nav__itembox subnav-show d-ib">
+					<a class="nav__item" href="{% url 'project_all' %}">项目库</a>
+				</li>
+				<li class="nav__itembox subnav-show d-ib box" style="position: relative;">
+					<a class="nav__item">帮助</a>
+					<ul class="toggle_box" id="toggle_box">
+						<div class="toggle_box_top"></div>
+						<li>
+							<a href="{% url 'user_guide'  %}">新人指南</a>
+						</li>
+						<li>
+							<a href="{% url 'helpCenter' %}">常见问题</a>
+						</li>
+					</ul>
+				</li>
+				<li class="nav__itembox d-ib">
+					<a class="nav__item" href="{% url 'cooperate' %}">合作共赢</a>
+				</li>
+				<li class="nav__itembox d-ib">
+					<a class="nav__item" href="{% url 'account_index' %}">个人中心</a>
+				</li>
 
-            </ul>
-        </div>
-    </div>
-    <div class="headermain-box bgc-fff">
-        <div class="headermain clearfix">
-            <a href="{% url 'index' %}"><img src="{% static 'images/qudao-logo.png' %}" alt="logo" class="logo l" /></a><!--<img style="margin-left: 40px; margin-top: 30px;" src="{% static 'images/slogan.png' %}" alt="logo" class="slogan l" />-->
-            <!--<a href="{% url 'activity_rank' %}"><img src="{% static 'images/activity-rank.gif' %}" class="activity-rank l" style="margin-left: 80px; margin-top: 10px;" /></a>-->
-            <ul class="nav nav-layout l fs-0">
-                <li class="nav__itembox d-ib"><a class="nav__item" href="/">首页</a></li>
-                <li class="nav__itembox subnav-show d-ib"><a class="nav__item" href="{% url 'project_all' %}">项目库</a></li>
-                <li class="nav__itembox subnav-show d-ib">
-                    <a class="nav__item" href="{% url 'user_guide' %}">新人指南</a>
-                </li>
-                <li class="nav__itembox d-ib"><a class="nav__item" href="#">合作共赢</a></li>
-                <li class="nav__itembox d-ib"><a class="nav__item" href="{% url 'account_index' %}">个人中心</a></li>
-            </ul>
-        </div>
-    </div>
+			</ul>
+		</div>
+	</div>
 </div>
 <!--header---end-->

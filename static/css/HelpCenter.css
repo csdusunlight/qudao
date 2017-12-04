@@ -1,0 +1,245 @@
+.wrapper{
+	width: 100%;
+	margin: 0 auto;
+}
+.banner{
+    width: 100%;
+	min-width: 1250px;
+	/*height: 375px;*/
+}
+.banner_img{
+	width: 100%;
+}
+
+
+/*****************step***************/
+.step{
+	width: 1116px;
+	height: 552px;
+	margin: 86px auto;
+	position: relative;
+}
+.step-left{
+	width: 200px;
+	height: 100%;
+	position: relative;
+	border-right: 2px solid RGB(199,199,199);
+}
+/******************中间盒子*******************/
+.step-center{
+	width: 310px;
+	height: 100%;
+	position: absolute;top: 0;left: 246px;
+}
+.regestor{
+	width: 100%;
+	height: 25px;
+	position: absolute;top: 35px;
+}
+.regestor a{
+	position: absolute;left: 60px;top: 5px;
+	color: RGB(34,34,34);
+	font-size: 16px;
+}
+.main{
+	width: 100%;
+	height: 25px;
+	position: absolute;top: 115px;
+}
+.main a{
+	position: absolute;left: 60px;top: 2px;
+	color: RGB(34,34,34);
+	font-size: 16px;
+}
+.data{
+	width: 100%;
+	height: 25px;
+	position: absolute;top: 292px;
+}
+.data a{
+	position: absolute;left: 60px;top: 1px;
+	color: RGB(34,34,34);
+	font-size: 16px;
+}
+.botm{
+	width: 100%;
+	height: 25px;
+	position: absolute;top: 454px;
+}
+.botm a{
+	position: absolute;left: 60px;top: 5px;
+	color: RGB(34,34,34);
+	font-size: 16px;
+}
+.dot1{
+	width: 16px;
+	height: 4px;
+	border-radius: 2px 2px 2px 2px;
+	background: RGB(199,199,199);
+	position: absolute;top: 35px;left: 191px;
+}
+.dot2{
+	width: 16px;
+	height: 4px;
+	border-radius: 2px 2px 2px 2px;
+	background: RGB(199,199,199);
+	position: absolute;top: 126px;left: 191px;
+}
+.dot3{
+	width: 16px;
+	height: 4px;
+	border-radius: 2px 2px 2px 2px;
+	background: RGB(199,199,199);
+	position: absolute;top: 302px;left: 191px;
+}
+.dot4{
+	width: 16px;
+	height: 4px;
+	border-radius: 2px 2px 2px 2px;
+	background: RGB(199,199,199);
+	position: absolute;top: 470px;left: 191px;
+}
+.first{
+	width: 100px;
+	height: 25px;
+	position: absolute;top:25px;
+}
+.f-dot{
+	width: 8px;
+	height: 8px;
+	border-radius: 100%;
+	background: RGB(191,191,191);
+	position: absolute;top: 10px;
+}
+.first a{
+	font-size: 14px;
+	position: absolute;left: 20px;top: 2px;
+	color: RGB(34,34,34);
+}
+.scond{
+	width: 100%;
+	height: 110px;
+	position: absolute;top: 115px;
+}
+.scond li{
+	width: 100%;
+	height: 22px;
+	position: relative;
+}
+.scond li:nth-child(2){
+	margin-top: 25px;
+}
+.scond li:nth-child(3){
+	margin-top: 25px;
+}
+.scond li a{
+	font-size: 14px;
+	position: absolute;left: 20px;
+	color: RGB(34,34,34);
+}
+.s-dot{
+	width: 8px;
+	height: 8px;
+	border-radius: 100%;
+	background: RGB(191,191,191);
+	position: absolute;top: 10px;
+}
+.thrid{
+	width: 100%;
+	height: 108px;
+	position: absolute;top: 290px;
+}
+.thrid li{
+	width: 100%;
+	height: 22px;
+	position: relative;
+}
+.thrid li:nth-child(2){
+	margin-top: 25px;
+}
+.thrid li:nth-child(3){
+	margin-top: 25px;
+}
+.thrid a{
+	font-size: 14px;
+	position: absolute;left: 20px;
+	color: RGB(34,34,34);
+}
+.fouth{
+	width: 100%;
+	height: 66px;
+	position: absolute;top: 460px;
+}
+.fouth li{
+	width: 100%;
+	height: 22px;
+	position: relative;
+}
+.fouth li:nth-child(2){
+	margin-top: 25px;
+}
+.fouth a{
+	font-size: 14px;
+	position: absolute;left: 20px;
+	color: RGB(34,34,34);
+}
+
+/**************右边盒子*****************/
+.step-right{
+	width: 280px;
+	height: 100%;
+	position: absolute;right: 0;top: 0;
+}
+.r-f-box{
+	width: 100%;
+	height: 68px;
+	position: absolute;top: 115px;
+}
+.r-f-box li{
+	width: 100%;
+	height: 22px;
+	position: relative;
+}
+.r-f-box li:nth-child(2){
+	margin-top: 25px;
+}
+.r-dot{
+	width: 8px;
+	height: 8px;
+	border-radius: 100%;
+	background: RGB(191,191,191);
+	position: absolute;top: 10px;
+}
+.step-right a{
+	font-size: 14px;
+	position: absolute;left: 20px;
+	color: RGB(34,34,34);
+}
+.r-s-box{
+	width: 100%;
+	height: 108px;
+	position: absolute;top: 290px;
+}
+.r-s-box li{
+	width: 100%;
+	height: 22px;
+	position: relative;
+}
+.r-s-box li:nth-child(2){
+	margin-top: 25px;
+}
+.r-t-box{
+	width: 100%;
+	height: 66px;
+	position: absolute;top: 460px;
+}
+.r-t-box li{
+	width: 100%;
+	height: 22px;
+	position: relative;
+}
+.r-t-box a{
+	font-size: 14px;
+	position: absolute;left: 20px;
+	color: RGB(34,34,34);
+}

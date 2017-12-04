@@ -12,6 +12,7 @@ from wafuli_admin.models import DayStatis
 from wafuli.models import Company
 from statistic.models import UserDetailStatis, UserAverageStatis
 from activity.models import SubmitRank, IPLog
+from docs.models import Document
 
 class UserSerializer(serializers.ModelSerializer):
     real_name = serializers.CharField(source="user_bankcard.first.real_name")
@@ -20,7 +21,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyUser
         fields = ('id', 'mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'with_total','accu_income','is_book_email_notice',
-                  'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number', 'is_autowith')
+                  'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number', 'is_autowith',
+                  'submit_bg', 'domain_name', 'cs_qq')
         read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level',)
         
 class ProjectSerializer(serializers.ModelSerializer):
@@ -32,7 +34,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         
 class InvestLogSerializer(serializers.ModelSerializer):
     project_title = serializers.CharField(source='project.title', read_only=True)
-    project_source = serializers.CharField(source='project.channel', read_only=True)
+    project_channel = serializers.CharField(source='project.channel', read_only=True)
     qq_number = serializers.CharField(source='user.qq_number', read_only=True)
     qq_name = serializers.CharField(source='user.qq_name', read_only=True)
     user_level = serializers.CharField(source='user.level', read_only=True)
@@ -71,6 +73,7 @@ class ApplyLogSerializer(serializers.ModelSerializer):
 # SubscribeShip
 class SubscribeShipSerializer(serializers.ModelSerializer):
     project_source = serializers.CharField(source='project.is_official', read_only=True)
+    project_channel = serializers.CharField(source='project.channel', read_only=True)
     project_title = serializers.CharField(source='project.title', read_only=True)
     project_intro = serializers.CharField(source='project.introduction', read_only=True)
     project_price01 = serializers.CharField(source='project.price01', read_only=True)
@@ -164,3 +167,9 @@ class BookLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookLog
         fields = '__all__'
+        
+class DocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Document
+        fields = ['id', 'title', 'content', 'update_time', 'is_on']
+        read_only_fields = ('id',)

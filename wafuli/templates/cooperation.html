@@ -1,0 +1,102 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>合作共赢</title>
+		<!--<link rel="stylesheet" href="css/wfl-common.css" />-->
+		<link rel="stylesheet" href="{% static 'css/wfl-common.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/cooperation.css' %}" />
+		<link rel = "Shortcut Icon" href="{% static 'images/favicon.ico' %}" >
+	</head>
+	<body>
+		<!--
+        	作者：763008201@qq.com
+        	时间：2017-11-24
+        	描述：导入头部
+        -->
+		{% include "header.html" %}
+		
+		<div class="c-main">
+			<!--
+            	作者：763008201@qq.com
+            	时间：2017-11-23
+            	描述：我们的优势
+            -->
+			<div class="ascendancy">
+				<hr class="left-line" />
+				<div class="left-dot"></div>
+				<p>我们的优势</p>
+				<div class="right-dot"></div>
+				<hr  class="right-line"/>
+			</div>
+			<!--
+            	作者：763008201@qq.com
+            	时间：2017-11-23
+            	描述：六边形部分
+            -->
+			<ul class="six">
+				<li>
+					<!--<img src="img/pic1_04.jpg" />-->
+					<img src="{% static 'images/pic1_04.jpg' %}" />
+				</li>
+				<li>
+					<!--<img src="img/pic2_06.jpg" />-->
+					<img src="{% static 'images/pic2_06.jpg' %}" />
+				</li>
+				<li>
+					<!--<img src="img/pic3_04.jpg" />-->
+					<img src="{% static 'images/pic3_04.jpg' %}" />
+				</li>
+				<li>
+					<!--<img src="img/pic4_06.jpg" />-->
+					<img src="{% static 'images/pic4_06.jpg' %}" />
+				</li>
+			</ul>
+			
+			<!--
+            	作者：763008201@qq.com
+            	时间：2017-11-23
+            	描述：请联系我们
+            -->
+			<div class="ascendancy">
+				<hr class="left-line" />
+				<div class="left-dot"></div>
+				<p>请联系我们</p>
+				<div class="right-dot"></div>
+				<hr  class="right-line"/>
+			</div>
+			
+			<!--
+            	作者：763008201@qq.com
+            	时间：2017-11-23
+            	描述：bottom-box
+            -->
+			<div class="bottom-box">
+				<div class="left-box">
+					<!--<img src="img/pic5_23.jpg" />-->
+					<img src="{% static 'images/pic5_23.jpg' %}" />
+					
+				</div>
+				<div class="right-box">
+					<!--<img src="img/pic6_26.jpg" />-->
+					<img src="{% static 'images/pic6_26.jpg' %}" />
+				</div>
+			</div>
+		</div>
+		
+		<!--
+        	作者：763008201@qq.com
+        	时间：2017-11-24
+        	描述：导入底部
+        -->
+        <div style="clear:both"></div>
+		<!--底部-->
+		 {% include "footer.html" %}
+		 
+		 <script src="/static/js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+		 <script type="text/javascript">
+		 	$('.nav__item:eq(3)').addClass('active');
+		 </script>
+	</body>
+</html>

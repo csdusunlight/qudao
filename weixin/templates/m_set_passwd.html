@@ -1,0 +1,126 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>用户登录</title>
+		<link href="{% static 'css/mui.min.css' %}" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/m_common.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/m_login.css' %}" />
+		<script src="{% static 'js/mui.min.js' %}"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">登录</h1>
+		</header>
+		<div class="mui-content">
+			<form id='login-form' class="mui-input-group">
+				{% csrf_token %}
+				<div class="mui-input-row">
+					<label><i class="icon iconfont">&#xe637;</i></label>
+					<input id='username' type="text" class="mui-input" placeholder="请输入账号" value={{mobile}}>
+				</div>
+				<div class="mui-input-row">
+					<label><i class="icon iconfont">&#xe600;</i></label>
+					<input id='password' type="password" class="mui-input" placeholder="请输入密码">
+				</div>
+			</form>
+			<div class="mui-content-padded">
+				<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登录</button>
+				<div class="link-area">
+					<a id='register'>注册账号</a> <span class="spliter">|</span>
+					<a id='reset_password'>忘记密码</a>
+				</div>
+			</div>
+			<!--<div class="mui-content-padded oauth-area">
+
+			</div>-->
+		</div>
+		<script type="text/javascript" charset="utf-8">
+			var reset_password_url = "{% url 'password_reset' %}";
+			var register_url = "{% url 'register' %}";
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+			document.getElementById("login").addEventListener('tap', function() {
+				var username = document.getElementById("username").value;
+				var password = document.getElementById("password").value;
+				var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+				if (!username || !password){
+					mui.alert('帐号或密码不能为空', '抱歉', function() {});
+					return;
+				}
+				mui.ajax(window.location.href,{
+					data:{
+						username:username,
+						password:password,
+						csrfmiddlewaretoken:csrfmiddlewaretoken
+					},
+					dataType:'json',//服务器返回json格式数据
+					type:'post',//HTTP请求类型
+					timeout:10000,//超时时间设置为10秒；
+					success:function(data){
+						if(data.code==0){
+							mui.openWindow({
+				                url: data.url,
+				                styles: {
+				                    top: 0,
+				                    bottom: 0
+				                },
+				                show: {
+				                    aniShow: 'slide-in-right',
+				                },
+				                waiting: {
+				                    autoShow: false, //自动显示等待框
+				                    title: '正在加载...', //等待对话框上显示的提示内容
+				                }
+				            });
+						}
+						else {
+							mui.alert('您输入的帐号或密码有误，请重新输入', '抱歉', function() {});
+						}
+					},
+					error:function(xhr,type,errorThrown){
+						mui.alert(type);
+					}
+				});
+			});
+			document.getElementById("reset_password").addEventListener('tap', function() {
+				mui.openWindow({
+	                url: reset_password_url,
+	                styles: {
+	                    top: 0,
+	                    bottom: 0
+	                },
+	                show: {
+	                    aniShow: 'slide-in-right',
+	                },
+	                waiting: {
+	                    autoShow: false, //自动显示等待框
+	                    title: '正在加载...', //等待对话框上显示的提示内容
+	                }
+	            });
+			});
+			document.getElementById("register").addEventListener('tap', function() {
+				mui.openWindow({
+	                url: register_url,
+	                styles: {
+	                    top: 0,
+	                    bottom: 0
+	                },
+	                show: {
+	                    aniShow: 'slide-in-right',
+	                },
+	                waiting: {
+	                    autoShow: false, //自动显示等待框
+	                    title: '正在加载...', //等待对话框上显示的提示内容
+	                }
+	            });
+			});
+		</script>
+	</body>
+
+</html>

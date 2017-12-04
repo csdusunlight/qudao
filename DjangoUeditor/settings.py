@@ -12,13 +12,13 @@ TOOLBARS_SETTINGS={
 UEditorSettings={
     "toolbars":TOOLBARS_SETTINGS["normal"],
     "autoFloatEnabled":False,
-    "defaultPathFormat":"%(basename)s_%(datetime)s_%(rnd)s.%(extname)s"   #默认保存上传文件的命名方式
+    "defaultPathFormat":"%(year)s/%(month)s/%(day)s/%(basename)s_%(rnd)s.%(extname)s"   #默认保存上传文件的命名方式
 }
 #请参阅php文件夹里面的config.json进行配置
 UEditorUploadSettings={
    #上传图片配置项
     "imageActionName": "uploadimage", #执行上传图片的action名称
-    "imageMaxSize": 10485760, #上传大小限制，单位B,10M
+    "imageMaxSize": 1000000, #上传大小限制，单位B,10M
     "imageFieldName": "upfile", #* 提交的图片表单名称 */
     "imageUrlPrefix":"",
     "imagePathFormat":"",

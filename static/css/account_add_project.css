@@ -187,3 +187,8 @@ canvas{width: 100%;border: 1px solid #000000;}
     background-color: #ffbe00;
     color: #fff;
 }
+.item__need {
+    position: absolute;
+    color: red;
+    font-size: 20px;
+}

@@ -12,6 +12,8 @@ from django.contrib.auth.hashers import (
 )
 from wafuli.data import BANK
 from decimal import Decimal
+import re
+from django.core.exceptions import ValidationError
 class MyUserManager(BaseUserManager):
 
     def _create_user(self, mobile, username, qq_number, password,
@@ -63,7 +65,10 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(u'注册时间', default=timezone.now)
     type = models.CharField(u'用户类型', default='agent',max_length=10)
     level = models.CharField(u"用户等级", choices=USER_LEVEL, default='03', max_length=2)
-    color = models.CharField(u'个人主页色调', choices=COLORS, default='1', max_length=2)
+    domain_name = models.CharField(u"个人主页域名", max_length=20, unique=True)
+    cs_qq = models.CharField(u"客服QQ号", max_length=20,)
+    color = models.CharField(u'个人主页色调', choices=COLORS, default='0', max_length=2)
+    submit_bg = models.CharField(u'交单页面背景', default='0', max_length=2)
     picture = models.ImageField(upload_to='photos/user_headphoto', verbose_name=u"个人头像")
     profile = models.TextField(u"个人简介", default=u"~~这个人啥都没写~~")
     qualification = models.CharField(u"资质证明截图", max_length=200)
@@ -131,7 +136,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
             return mobile[:3] + '****' + mobile[-4:]
         else:
             return mobile
-
+    def clean(self):
+        print 'dsfsdfsdsd'
 class BankCard(models.Model):
     user = models.ForeignKey(MyUser, related_name="user_bankcard")
     card_number = models.CharField(u"银行卡号",max_length=23)
@@ -206,3 +212,5 @@ class ApplyLog(models.Model):
         ordering = ["submit_time",]
     def __unicode__(self):
         return self.mobile
+
+ 

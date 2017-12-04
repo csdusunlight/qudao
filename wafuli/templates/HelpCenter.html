@@ -1,0 +1,168 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="{% static 'css/wfl-common.css' %}" />
+		<!--<link rel="stylesheet" href="css/HelpCenter.css" />-->
+		<link rel="stylesheet" href="{% static 'css/HelpCenter.css' %}" />
+	</head>
+	<body>
+		<!--
+        	作者：763008201@qq.com
+        	时间：2017-11-24
+        	描述：引入头部不对啊   刚添加上去的class都没有
+        	搞错了好像 
+        	等下
+        -->
+        {% include "header.html" %}
+        
+		<div class="wrapper">
+			<!--
+            	作者：763008201@qq.com
+            	时间：2017-11-23
+            	描述：banner
+          -->
+          <div class="banner">
+          	<img src="{% static 'images/banner_03.jpg' %}" class="banner_img"/>
+          </div>
+          
+          <!--
+          	作者：763008201@qq.com
+          	时间：2017-11-23
+          	描述：步骤
+          -->
+          <div class="step">
+          	<!--
+              	作者：763008201@qq.com
+              	时间：2017-11-23
+              	描述：left部分
+              -->
+          	<div class="step-left">
+          		<div class="regestor">
+          			<!--<img src="img/icon_1_08.jpg" />-->
+          			<img src="{% static 'images/icon_1_08.jpg' %}" />
+          			<a href="#">注册</a>
+          		</div>
+          		<div class="main">
+          			<!--<img src="img/icon_2_12.jpg" />-->
+          			<img src="{% static 'images/icon_2_12.jpg' %}" />
+          			<a href="#">番薯主页</a>
+          		</div>
+          		<div class="data">
+          			<!--<img src="img/icon_3_14.jpg" />-->
+          			<img src="{% static 'images/icon_3_14.jpg' %}" />
+          			<a href="#">数据管理</a>
+          		</div>
+          		<div class="botm">
+          			<!--<img src="img/icon_3_17.jpg" />-->
+          			<img src="{% static 'images/icon_3_17.jpg' %}" />
+          			<a href="#">提现与返现</a>
+          		</div>
+          		<div class="dot1"></div>
+          		<div class="dot2"></div>
+          		<div class="dot3"></div>
+          		<div class="dot4"></div>
+          	</div>
+          	
+          	<!--
+              	作者：763008201@qq.com
+              	时间：2017-11-23
+              	描述：center部分
+              -->
+          	<div class="step-center">
+          		<div class="first">
+          			<div class="f-dot"></div>
+          			<a href="http://51fanshu.com/docs/a22Kr/" target="view_window">如何注册</a>
+          		</div>
+          		
+          		<ul class="scond">
+          			<li>
+          				<div class="s-dot"></div>
+          				<a href="http://51fanshu.com/docs/qycrN/" target="view_window">什么是番薯主页？为什么使用番薯主页？</a>
+          			</li>
+          			<li>
+          				<div class="s-dot"></div>
+          				<a href="http://51fanshu.com/docs/tSgKQ/" target="view_window">如何管理番薯主页上展示的项目？</a>
+          			</li>
+          			<li>
+          				<div class="s-dot"></div>
+          				<a href="http://51fanshu.com/docs/fV9hB/" target="view_window">如何推广自己的番薯主页？</a>
+          			</li>
+          		</ul>
+          		
+          		<ul class="thrid">
+          			<li>
+          				<div class="s-dot"></div>
+          				<a href="http://51fanshu.com/docs/dQiYl/" target="view_window">官方项目数据怎么管理？</a>
+          			</li>
+          			<li>
+          				<div class="s-dot"></div>
+          				<a href="http://51fanshu.com/docs/KjkBo/" target="view_window">预约管理如何操作？</a>
+          			</li>
+          			<li>
+          				<div class="s-dot"></div>
+          				<a href="http://51fanshu.com/docs/jpnEw" target="view_window">如何进行快速交单？</a>
+          			</li>
+          		</ul>
+          		
+          		<ul class="fouth">
+          			<li>
+          				<div class="s-dot"></div>
+          				<a href="http://51fanshu.com/docs/cEbzY/" target="view_window">提现规则是什么？</a>
+          			</li>
+          			<!--<li>
+          				<div class="s-dot"></div>
+          				<a href="#">如何查看收支详情？</a>
+          			</li>-->
+          		</ul>
+          	</div>
+          	
+          	<!--
+              	作者：763008201@qq.com
+              	时间：2017-11-23
+              	描述：right部分
+              -->
+          	<div class="step-right">
+          		<ul class="r-f-box"> 
+          			<li>
+          				<div class="r-dot"></div>
+          				<a href="http://51fanshu.com/docs/VJd64/" target="view_window">如何设置番薯主页信息？</a>
+          			</li>
+          			<li>
+          				<div class="r-dot"></div>
+          				<a href="http://51fanshu.com/docs/YhVAR" target="view_window">如何使用标签分类？</a>
+          			</li>
+          		</ul>
+          		
+          		<ul class="r-s-box">
+          			<li>
+          				<div class="r-dot"></div>
+          				<a href="http://51fanshu.com/docs/ahnzV/" target="view_window">自建项目数据怎么管理？</a>
+          			</li>
+          			<li>
+          				<div class="r-dot"></div>
+          				<a href="http://www.fuliunion.com/docs/ov1UV/" target="view_window">如何进行自助交单？</a>
+          			</li>
+          		</ul>
+          		
+          		<!--<ul class="r-t-box">
+          			<li>
+          				<div class="r-dot"></div>
+          				<a>什么是自动提现？自动提现的时间什么？</a>
+          			</li>
+          		</ul>-->
+          	</div>
+          </div>
+		</div>
+		<!--
+        	作者：763008201@qq.com
+        	时间：2017-11-24
+        	描述：导入底部
+        -->
+         <div style="clear:both"></div>
+		<!--底部-->
+		 {% include "footer.html" %}
+	</body>
+</html>

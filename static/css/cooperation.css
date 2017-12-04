@@ -1,0 +1,76 @@
+body{
+	background: white;
+}
+.c-main{
+	width: 1250px;
+	margin: 0 auto;
+	/*background: yellow;*/
+}
+.ascendancy{
+	width: 560px;
+	height: 106px;
+	margin: 0 auto;
+	position: relative;
+}
+.left-line{
+	width: 174px;
+	border: 1px solid RGB(153,153,153);
+	position: absolute;top: 50px;
+}
+.right-line{
+	width: 174px;
+	border: 1px solid RGB(153,153,153);
+	position: absolute;top: 50px;right: 0;
+}
+.left-dot{
+	width: 10px;
+	height: 10px;
+	border-radius: 100%;
+	background: RGB(153,153,153);
+	position: absolute;top: 46px;left: 176px;
+}
+.right-dot{
+	width: 10px;
+	height: 10px;
+	border-radius: 100%;
+	background: RGB(153,153,153);
+	position: absolute;top: 46px;right: 176px;
+}
+.ascendancy p{
+	font-size: 24px;
+	font-family: "微软雅黑";
+	text-align: center;
+	line-height: 100px;
+}
+.six{
+	width: 100%;
+	height: 288px;
+}
+.six li{
+	width: 245px;
+	height: 288px;
+	float: left;
+	position: relative;
+}
+.six li:nth-child(2){
+	margin-left: 80px;
+}
+.six li:nth-child(3){
+	margin-left: 80px;
+}
+.six li:nth-child(4){
+	margin-left: 80px;
+}
+
+/************bottom-box**************/
+.bottom-box{
+	width: 100%;
+	height: 440px;
+	position: relative;
+}
+.left-box{
+	position: absolute;left: 104px;
+}
+.right-box{
+	position: absolute;right: 104px;
+}

@@ -7,8 +7,9 @@
 <meta name="keywords" content="登录" />
 <meta name="description" content="登录" />
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}" />
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />-->
+<link rel="stylesheet" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/login-1.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/accounts/cookie.js' %}"></script>
@@ -66,7 +67,7 @@ function check(){
         	<font class="login-tips">用户名或密码输入有误!</font>
         	</span>
         	{% endif %}
-            <form name="myform" method="post" action="">
+            <form class="login-form" name="myform" method="post" action="">
             	{% csrf_token %}
             	<div>
                 	<span class="input-name">手机号</span>

@@ -35,6 +35,8 @@ def login_required_ajax(function=None,redirect_field_name=None):
         return _decorator(function)
     
 def str_to_bool(chars):
+    if type(chars)==bool:
+        return chars
     to_dic = {
         'false': False,
         'False': False,

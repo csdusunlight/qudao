@@ -5,7 +5,6 @@ Created on 2016年8月29日
 @author: lch
 '''
 import logging
-from wafuli.models import Welfare
 from django.core.management.base import BaseCommand
 from account.models import MyUser
 from django.db.models import F
@@ -14,6 +13,9 @@ import time
 from account.varify import httpconn
 from wafuli_admin.models import Dict
 from django.conf import settings
+from weixin.models import WeiXinUser
+from weixin.settings import submit_investlog_notify_templateid
+from dragon.settings import APPID
 logger = logging.getLogger("wafuli")
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -22,11 +24,9 @@ class Command(BaseCommand):
         now = datetime.datetime.now()
         start = datetime.datetime(now.year, now.month, now.day, now.hour, 0, 0)
         to = start + datetime.timedelta(hours=1)
-        wels = Welfare.objects.filter(state='0', startTime__range=(start, to)).update(state='1', startTime=now)
-        
         access_token = update_accesstoken()
         update_jsapi_ticket(access_token)
-
+        sendTemplate(access_token)
         end_time = time.time()
         logger.info("******Hour-task is finished, time:%s*********",end_time-begin_time)
         
@@ -63,3 +63,22 @@ def update_jsapi_ticket(access_token):
         Dict.objects.update_or_create(key='jsapi_ticket', defaults=defaults)
     else:
         logger.error('Getting access_token error:' + str(json_ret) )
+
+def sendTemplate(access_token):
+    url = 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' + access_token
+    kwarg = {}
+    kwarg.update(access_token=access_token, template_id=submit_investlog_notify_templateid)
+    to_url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + APPID +"&redirect_uri=http%3A%2F%2Ftest.fuliunion.com%2Fweixin%2Fbind-user%2F&response_type=code&scope=snsapi_userinfo"
+    kwarg.update(url=to_url, topcolor="#FF0000")
+    wusers = WeiXinUser.objects.all()
+    for wu in wusers:
+        openid = wu.openid
+        data = {'first':{'value':u"您的主页有用户成功交单，请及时处理。您的主页有新的预约单，请及时处理。", 'color':"#173177"},
+                'keyword1':{'value':u"美易理财三月标", 'color':"#173177"},
+                'keyword2':{'value':u"10000元", 'color':"#173177"},
+                'keyword3':{'value':u'90天', 'color':"#173177"},
+                'remark':{'value':u'如果您不想再收到此类通知，可在个人中心设置里取消微信消息通知', 'color':"#173177"},}
+        kwarg.update(data=data, touser=openid)
+        ret = httpconn(url, kwarg, 1)
+        logger.info(ret)
+    

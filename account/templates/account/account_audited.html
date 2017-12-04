@@ -83,6 +83,28 @@
         text-align: center;;
         cursor: pointer;
     }
+    .today-detail {
+        position: absolute;
+        right: 0;
+        top: 14px;
+        margin-right: 20px;
+        width: 640px;
+        margin-top: -10px;
+        font-size: 0;
+    }
+    .today-detail-item {
+        display: inline-block;
+        width: 25%;
+        font-size: 14px;
+        text-align: right;
+    }
+    .today-num {
+        display: inline-block;
+        margin: 0 4px;
+        font-size: 16px;
+        color: #ffbe00;
+    }
+    .
     .return-amount {
         color: #ffbe00;
     }
@@ -100,8 +122,12 @@
 <div class="Content">
 {% include "account/left.html" %}
 <div class="RightCont">
-    <div class="table">
+    <div class="table" style="position: relative;">
         <h2 class="table__title">官方数据</h2>
+        <ul class="today-detail">
+            <li class="today-detail-item">今日提交<span class="today-num">{{submit_num}}</span>项</li><li class="today-detail-item">通过<span class="today-num">{{pass_num}}</span>项</li>
+            <li class="today-detail-item">复审<span class="today-num">{{check_num}}</span>项</li><li class="today-detail-item">拒绝<span class="today-num">{{refuse_num}}</span>项</li>
+        </ul>
         <div class="search">
             <div class="search__item">
                 <span class="search__name">项目名称：</span>
@@ -201,8 +227,12 @@
                 <span class="search__name">收款信息：</span>
                 <input type="text" id="zhifubao_02" />
             </div>
+            <div class="search__item">
+                <span class="search__name">项目来源：</span>
+                <input type="text" id="project_channel_02" />
+            </div>
             
-            <div style="width: 320px;margin-left: 290px;" class="search__item">
+            <div style="width: 320px;" class="search__item">
                 <ul class="state-tabbox-2">
                     <li data-state = "" class="state-tab-2 on">全部</li>
                     <li data-state = "1" class="state-tab-2">未审核</li>
@@ -466,9 +496,9 @@
         '<td data-return="{return_amount}" class="return-amount"><a class="handle" onclick="pass(this,{id})">返现</a></td></tr>[/results]</table>';
 //  已拒绝
     var data2 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>审核时间</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>审核时间</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{audit_time}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td class="submit-time">{audit_time}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
 //  复审
     var data3 = '<table width="100%"><tr><th>项目名称3</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">复审原因</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
@@ -481,15 +511,15 @@
         '</tr>[/results]</table>';
     
 //  全部
-    var data_user = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>审核状态</th><th>结算金额</th><th>返现金额</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+    var data_user = '<table width="100%"><tr><th>项目名称</th><th>项目来源</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
+        '<th>投资金额</th><th>投资标期</th><th>审核状态</th><th>结算金额</th><th>返现金额</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td>{project_channel}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time state{audit_state}">{audit_state_des}</td><td>{settle_amount}</td>'+
-        '<td class="return-txt">{return_amount}</td><td>{zhifubao}</td><td>{other_remark}</td></tr>[/results]</table>';    
+        '<td class="return-txt">{return_amount}</td><td>{other_remark}</td></tr>[/results]</table>';    
 //  未审核
-    var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
+    var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>项目来源</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th><th>操作</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+        '<tr><td>{project_title}</td><td>{project_channel}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td data-remark="{remark}">{other_remark}</td>' +
 //      '<td id="item_{id}"><a class="fyin" onclick="removeData_02(this,{id})">删除' +
 //      '</a>│<a class="jion-s" onclick="editData_02(this,{id})">编辑'+
@@ -504,14 +534,14 @@
         '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span></div></td>'+
         '</tr>[/results]</table>';
 //  已通过
-    var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
+    var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>项目来源</th><th>提交日期</th><th>提交手机号</th>' +
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>结算金额</th><th>返现金额</th><th class="w-remark">备注及其他</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+        '<tr><td>{project_title}</td><td>{project_channel}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{settle_amount}</td><td class="return-txt">{return_amount}</td><td data-remark="{remark}">{other_remark}</td></tr>[/results]</table>';
 //  已拒绝
-    var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
+    var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>项目来源</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+        '<tr><td>{project_title}</td><td>{project_channel}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
 //  已删除
     var data_user4 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
@@ -942,6 +972,7 @@
             $('.back-a5').toggleClass("on");
             
             $(".RightCont").on("focus", ".date_picker", function() {
+                $('.date_selector').remove();
                 $(this).date_input();
             })
             
@@ -1194,6 +1225,7 @@
                     submit_date1 = $("#submit_date1_02").val(),
                     telnum_sub = $("#telnum_sub_02").val(),
                     zhifubao = $("#zhifubao_02").val(),
+                    project_channel = $("#project_channel_02").val(),
                     state = state_2;
                 var newurl = url2;
                 if(proj_name) {
@@ -1216,6 +1248,9 @@
                 }
                 if(zhifubao) {
                     newurl += "&zhifubao_contains=" + zhifubao;
+                }
+                if(project_channel) {
+                    newurl += "&project_channel_contains=" + project_channel;
                 }
                 if(state) {
                     newurl += "&audit_state=" + state;
@@ -1252,7 +1287,8 @@
                     submit_date1 = $("#submit_date1_02").val(),
                     telnum_sub = $("#telnum_sub_02").val(),
                     zhifubao = $("#zhifubao_02").val(),
-                    state = $("#state_02").val();
+                    project_channel = $("#project_channel_02").val(),
+                    state = state_2;
                     
 //              if(!invest_date0 || !invest_date1) {
 //                  alert('请先选择投资日期区间，再进行导出');
@@ -1281,7 +1317,10 @@
                     html += '<input name="invest_mobile" type="hidden" value="' + telnum_sub + '"/>';
                 }
                 if(zhifubao) {
-                    html += '<input name="zhifubao" type="hidden" value="' + zhifubao + '"/>';
+                    html += '<input name="zhifubao_contains" type="hidden" value="' + zhifubao + '"/>';
+                }
+                if(project_channel) {
+                    html += '<input name="project_channel_02" type="hidden" value="' + project_channel + '"/>';
                 }
                 if(state) {
                     html += '<input name="audit_state" type="hidden" value="' + state + '"/>';

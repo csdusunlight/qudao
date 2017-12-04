@@ -38,8 +38,10 @@
                         是否开启文档加密
                         <span data-isadd="{{user.is_autowith}}" class="home switch {{user.is_autowith}}" onclick="isadd(this)"></span>
                     </p>
-                    <p class="doc__password"></p>
-                    <a class="btn">更换密码</a>
+                    <p class="doc__password">
+                        <span></span>
+                        <a class="btn">更换密码</a>
+                    </p>
                 </div>
                 <a data-clipboard-text = "{{doc.fanshu_url}}" class="copy-link header__btn">分享</a>
                 <a class="doc_del header__btn">删除文档</a>

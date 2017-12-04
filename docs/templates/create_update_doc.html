@@ -177,10 +177,13 @@
     })
     if($('.doc-secret').data('isadd')) {
         $('.doc-secret').addClass('True').removeClass('False');
+        $('.doc__password').show();
+        $('.secret-txt').text($('.doc-secret').data('isadd'));
     } else {
         $('.doc-secret').addClass('False').removeClass('True');
+        $('.doc__password').hide();
     }
-    function is_secret(obj) {        //文档是否公开控制
+    function is_secret(obj) {        //文档是否加密
         var flag = $(obj).data('isadd');
         if (flag != '') {
             $.ajax({
@@ -194,6 +197,7 @@
                     console.log('关闭');
                     $(obj).data('isadd', '');
                     $(obj).removeClass('True').addClass('False');
+                    $('.doc__password').hide();
                 },
                 error: function() {
                     alert("请检查网络连接");
@@ -219,6 +223,8 @@
                     console.log('开启');
                     $(obj).data('isadd', 'True');
                     $(obj).removeClass('False').addClass('True');
+                    $('.doc__password').show();
+                    $('.secret-txt').text(pwd);
                 },
                 error: function() {
                     alert("请检查网络连接");
@@ -227,6 +233,34 @@
             
         }
     }
+    $('.change-secret').click(function () {
+        var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+        var maxPos = $chars.length;
+                    　 var pwd = '';
+                    　 for (i = 0; i < 4; i++) {
+                    　　　  pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+                    　  }
+        console.log(pwd);
+        $.ajax({
+            url: "/restapi/docs/" + doc_id + "/",
+            dataType: "json",
+            type:"put",
+            data: {
+                'secret': pwd
+            },
+            success: function(ret) {
+                console.log('开启');
+//              $(obj).data('isadd', 'True');
+//              $(obj).removeClass('False').addClass('True');
+                $('.doc__password').show();
+                $('.secret-txt').text(pwd);
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+    })
+    
     function isadd(obj) {        //文档是否公开控制
         var flag = $(obj).data('isadd');
         console.log(flag)

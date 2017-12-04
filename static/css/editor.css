@@ -319,6 +319,7 @@ span {
     width: 100px;
     line-height: 30px;
     height: 30px;
+    text-align: center;
     border: 1px solid #E4E4E4;
     border-radius: 6px;
     vertical-align: middle;

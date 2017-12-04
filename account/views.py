@@ -168,7 +168,8 @@ def register(request):
             'icode':icode,
             'mobile':mobile,
         }
-        return render(request,'registration/register.html', context)
+        template = 'registration/register.html'
+        return render(request,template, context)
 
 
 def verifymobile(request):
@@ -312,7 +313,8 @@ def phoneImageV(request):
 def account(request):
     announce_list = Announcement.objects.all()
     recom_projects = Project.objects.filter(state='10', is_official=True, is_addedto_repo=True)[0:4]
-    return render(request, 'account/account_index.html',{'announce_list':announce_list, 'recom_projects':recom_projects})
+    template = 'account/account_index.html'
+    return render(request, template,{'announce_list':announce_list, 'recom_projects':recom_projects})
 
 @login_required
 def account_setting(request):
@@ -343,7 +345,8 @@ def account_audited(request):
             kwarg.update(refuse_num=num.get('count') or 0)
         elif state=='3':
             kwarg.update(check_num=num.get('count') or 0)
-    return render(request, 'account/account_audited.html', kwarg)
+    template =  'account/account_audited.html' 
+    return render(request, template, kwarg)
 
 
 
@@ -815,7 +818,8 @@ def project_manage(request):
         res["data"] = data
         return JsonResponse(res)
     else:
-        return render(request, 'account/account_myproject.html')
+        template = 'account/account_myproject.html' 
+        return render(request, template)
 
 # 
 # @csrf_exempt

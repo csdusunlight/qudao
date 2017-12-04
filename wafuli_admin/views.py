@@ -87,7 +87,7 @@ def admin_apply(request):
                 apply.audit_time = datetime.datetime.now()
                 apply.admin_user = admin_user
                 apply.save()
-                sendmsg_bydhst(apply.mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + apply.domain_name + '.51fanshu.com' +
+                sendmsg_bydhst(apply.mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + user.domain_name + '.51fanshu.com' +
                                      u"，快去分享给小伙伴们吧~")
         elif type==2:
             reason = request.POST.get('reason', '')
@@ -325,8 +325,8 @@ def export_investlog(request):
         e = datetime.datetime.strptime(submittime_1,'%Y-%m-%d')
         item_list = item_list.filter(submit_time__range=(s,e))
     if audittime_0 and audittime_1:
-        s = datetime.datetime.strptime(audittime_0,'%Y-%m-%d')
-        e = datetime.datetime.strptime(audittime_1,'%Y-%m-%d') + datetime.timedelta(days=1)
+        s = datetime.datetime.strptime(audittime_0,'%Y-%m-%d %H:%M')
+        e = datetime.datetime.strptime(audittime_1,'%Y-%m-%d %H:%M')
         item_list = item_list.filter(audit_time__range=(s,e))
     qq_number = request.GET.get("qq_number", None)
     if qq_number:

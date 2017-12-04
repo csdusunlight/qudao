@@ -485,7 +485,8 @@ def bind_bankcard(request):
 
 @login_required
 def money(request):
-    return render(request, 'account/money.html', {})
+    template = 'account/m_money.html' if request.mobile else 'account/money.html'
+    return render(request, template)
 @login_required
 def yuyue(request):
     return render(request, 'account/yuyue.html', {})

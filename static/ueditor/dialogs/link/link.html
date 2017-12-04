@@ -66,7 +66,7 @@
     }
     $G("title").value = url ? link.title : "";
     $G("href").value = url ? url: '';
-    $G("target").checked = url && link.target == "_blank" ? true :  false;
+    $G("target").checked = url && link.target == "_self" ? true :  false;
     $focus($G("href"));
 
     function handleDialogOk(){
@@ -77,7 +77,7 @@
             }
             var obj = {
                 'href' : href,
-                'target' : $G("target").checked ? "_blank" : '_self',
+                'target' : $G("target").checked ? "_self" : '_blank',
                 'title' : $G("title").value.replace(/^\s+|\s+$/g, ''),
                 '_href':href
             };

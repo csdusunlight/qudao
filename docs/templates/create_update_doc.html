@@ -36,11 +36,11 @@
                 <div class="doc__private">
                     <p>
                         是否开启文档加密
-                        <span data-isadd="{{user.is_autowith}}" class="home switch {{user.is_autowith}}" onclick="isadd(this)"></span>
+                        <span data-isadd="{{doc.secret}}" class="doc-secret switch {{doc.secret}}" onclick="is_secret(this)"></span>
                     </p>
                     <p class="doc__password">
-                        <span></span>
-                        <a class="btn">更换密码</a>
+                        <span class="secret-txt"></span>
+                        <a class="change-secret">更换密码</a>
                     </p>
                 </div>
                 <a data-clipboard-text = "{{doc.fanshu_url}}" class="copy-link header__btn">分享</a>
@@ -175,7 +175,58 @@
             }
         });
     })
-    
+    if($('.doc-secret').data('isadd')) {
+        $('.doc-secret').addClass('True').removeClass('False');
+    } else {
+        $('.doc-secret').addClass('False').removeClass('True');
+    }
+    function is_secret(obj) {        //文档是否公开控制
+        var flag = $(obj).data('isadd');
+        if (flag != '') {
+            $.ajax({
+                url: "/restapi/docs/" + doc_id + "/",
+                dataType: "json",
+                type:"put",
+                data: {
+                    'secret': '',
+                },
+                success: function(ret) {
+                    console.log('关闭');
+                    $(obj).data('isadd', '');
+                    $(obj).removeClass('True').addClass('False');
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
+            
+        } else{
+            var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+            var maxPos = $chars.length;
+                        　 var pwd = '';
+                        　 for (i = 0; i < 4; i++) {
+                        　　　  pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+                        　  }
+            console.log(pwd);
+            $.ajax({
+                url: "/restapi/docs/" + doc_id + "/",
+                dataType: "json",
+                type:"put",
+                data: {
+                    'secret': pwd
+                },
+                success: function(ret) {
+                    console.log('开启');
+                    $(obj).data('isadd', 'True');
+                    $(obj).removeClass('False').addClass('True');
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
+            
+        }
+    }
     function isadd(obj) {        //文档是否公开控制
         var flag = $(obj).data('isadd');
         console.log(flag)

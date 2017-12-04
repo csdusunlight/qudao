@@ -268,7 +268,7 @@ class BookLogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsOwnerOrStaff,)
 class DocumentList(BaseViewMixin, generics.ListCreateAPIView):
     def get_queryset(self):
-        return Document.objects.all()
+        return Document.objects.filter(user=self.request.user)
     serializer_class = DocumentSerializer
     pagination_class = MyPageNumberPagination
 class DocumentDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):

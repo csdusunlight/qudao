@@ -12,7 +12,7 @@ class Document(RandomPrimaryIdModel):
     update_time = models.DateTimeField(u"更新时间", auto_now=True)
     view_count = models.IntegerField(u"浏览次数", default=0)
     is_on = models.BooleanField(u"开启/关闭", default=True)
-    secret = models.CharField(u"密码", max_length=20)
+    secret = models.CharField(u"密码", max_length=20, blank=True)
     def __unicode__(self):
         return self.user.username + self.title
     def fanshu_url(self):

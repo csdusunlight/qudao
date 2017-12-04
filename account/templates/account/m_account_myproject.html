@@ -1,0 +1,194 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+	<head lang="en">
+		<meta charset="UTF-8">
+		<!-- 优先使用 IE 最新版本和 Chrome -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<!-- 为移动设备添加 viewport -->
+		<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+		<!-- 添加到主屏后的标题（iOS 6 新增） -->
+		<meta name="apple-mobile-web-app-title" content="">
+		<!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<!-- 设置苹果工具栏颜色 -->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<!-- 添加智能 App 广告条 Smart App Banner（iOS 6+ Safari） -->
+		<meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">
+		<!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+		<meta name="format-detection" content="telphone=no, email=no" />
+		<!--下面三个是清除缓存 微信浏览器缓存严重又无刷新；这个方法调试的时候很方便-->
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<title>项目管理</title>
+		<link href="{%static 'css/mui.min.css'%}" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="{%static 'css/m_common.css'%}" />
+		<link rel="stylesheet" type="text/css" href="{%static 'css/m_ProjectMamagement.css' %}" />
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
+			<h1 class="mui-title">项目管理</h1>
+		</header>
+		<div class="mui-content">
+			<!--选项卡部分-->
+			<div id="finance_slider" class="mui-slider mui-fullscreen">
+				<div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item" href="#item1">官方项目</a>
+					<a class="mui-control-item" href="#item2">自建项目</a>
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6" style="background: #92C11D;"></div>
+
+				<div class="nav">
+					<span class="nav_list name">项目名称</span>
+					<span class="nav_list nav_price">客户指导价</span>
+					<span class="nav_list navisShow">是否主页呈现</span>
+					<span class="nav_list nav_operite">操作</span>
+				</div>
+
+				<div class="mui-slider-group" style="position: absolute;top: 86px;">
+					<div id="item1" class="mui-slider-item mui-control-content mui-active">
+						<div id="scroll1" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view">
+
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item2" class="mui-slider-item mui-control-content">
+						<div id="scroll2" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view">
+
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<script src="{%static 'js/mui.min.js'%}"></script>
+			<script src="{%static 'js/mui.pullToRefresh.js'%}"></script>
+			<script src="{%static 'js/mui.pullToRefresh.material.js'%}"></script>
+			<script>
+				mui.init();
+				(function($) {
+					//阻尼系数
+					var deceleration = mui.os.ios ? 0.003 : 0.0009;
+					$('.mui-scroll-wrapper').scroll({
+						bounce: true,
+						indicators: true, //是否显示滚动条
+						deceleration: deceleration
+					});
+					$.ready(function() {
+						//循环初始化所有上拉加载
+						$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+							var count = 1;
+							$(pullRefreshEl).pullToRefresh({
+								up: {
+									auto: true,
+									callback: function() {
+										var self = this;
+										var ul = self.element.querySelector('.mui-table-view');
+										get_welfare_list(this, ul, count++, index);
+
+									}
+								}
+							});
+						});
+
+						function get_welfare_list(obj, ul, n, index) {
+							if(index === 0) {
+								var url = '/restapi/sub/?ordering=project__state,-is_on&is_official=2';
+							} else if(index === 1) {
+								var url = '/restapi/sub/?ordering=project__state,-is_on&is_official=3';
+							}
+							mui.ajax(url, {
+								data: {
+									page: n,
+									pageSize: 1,
+								},
+								dataType: 'json', //服务器返回json格式数据
+								type: 'get', //HTTP请求类型
+								timeout: 3000, //超时时间设置为10秒；
+								success: function(data) {
+									console.log("这是data：", data);
+									if(!data.results.length) {
+										obj.endPullUpToRefresh(true);
+									} else {
+										obj.endPullUpToRefresh(false); //参数为true代表没有更多数据了。
+										var table = document.body.querySelector('.mui-table-view');
+										for(var i in data.results) {
+											var li = document.createElement('li');
+											li.className = 'mui-table-view-cell';
+											str_html = '<span class="pro_list pro_name">' + data.results[i].project_title + '</span>' +
+												'<span class="pro_list pro_touzi">' + data.results[i].price + '</span>' +
+												'<div data-btn= ' + (data.results[i].id) + ' class="mui-switch mui-switch-mini ' + (data.results[i].is_on ? "mui-active" : "") + ' " style="position: absolute;right: 8rem;"><div class="mui-switch-handle"></div></div>' +
+												'<a  href="#" class="pro_list pro_editor" style="position:absolute;right:1.8rem;top:1rem">编辑</a>';
+
+											li.innerHTML = str_html;
+											ul.appendChild(li);
+										}
+										mui('.mui-switch').switch();
+									}
+								},
+								error: function(xhr, type, errorThrown) {
+									mui('.mui-switch').switch();
+									console.log("没有数据")
+									//
+									obj.endPullUpToRefresh(true);
+								}
+							});
+						}
+						
+					});
+
+				})(mui);
+				mui('.mui-table-view').on('toggle', '.mui-switch', function() {
+					console.log(this, "llc")
+					var id = this.getAttribute("data-btn"); //获取当前switch属性
+					console.log(id)
+					if(event.detail.isActive) {
+						console.log("你启动了开关");
+						mui.ajax('/restapi/sub/' + id + '/', {
+							data: {
+								'is_on': true
+							},
+							dataType: 'json', //服务器返回json格式数据
+							type: 'put', //HTTP请求类型
+							timeout: 10000, //超时时间设置为10秒；
+							success: function(data) {
+								console.log("llc发送成功");
+							},
+							error: function(xhr, type, errorThrown) {
+								console.log(jqXHR.responseText);
+							}
+						});
+
+					} else {
+						console.log("你关闭了开关");
+						mui.ajax('/restapi/sub/' + id + '/', {
+							data: {
+								'is_on': false
+							},
+							dataType: 'json', //服务器返回json格式数据
+							type: 'put', //HTTP请求类型
+							timeout: 10000, //超时时间设置为10秒；
+							success: function(data) {
+								console.log("llc发送成功");
+							},
+							error: function(xhr, type, errorThrown) {
+								console.log(jqXHR.responseText);
+							}
+						});
+					}
+
+				});
+			</script>
+	</body>
+
+</html>

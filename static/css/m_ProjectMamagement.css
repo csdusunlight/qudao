@@ -20,16 +20,17 @@
 .navisShow,
 .nav_price {
 	margin-left: 2rem;
+	
 }
 
 .pro_list {
-	font-size: 1.1rem;
+	font-size: 1.4rem;
 }
 
 .pro_editor {
-	margin-left: 10.5rem;
+	position: absolute;right:1.5rem;
 }
 
 .pro_touzi {
-	margin-left: 0.5rem;
+	position: absolute;left: 11rem;
 }

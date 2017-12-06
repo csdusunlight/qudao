@@ -45,6 +45,9 @@
 	.state2 {
         color: red;
     }
+    .state3 {
+        color: blue;
+    }
     .state-tabbox,
     .state-tabbox-2 {
         font-size: 0;
@@ -111,6 +114,10 @@
     .return-amount.m-success {
         color: #91C11D;
     }
+    
+    .handle-mark {
+        color: #91c11d;
+    }
 </style>
 
 </head>
@@ -122,6 +129,11 @@
 <div class="Content">
 {% include "account/left.html" %}
 <div class="RightCont">
+    <div style="margin-bottom: 20px;" class="data-intro">
+        <h3>操作说明：</h3>
+        <p style="margin-left: 30px;">官方数据的<span class="handle-mark">删除</span>、<span class="handle-mark">编辑</span>、<span class="handle-mark">提交截图</span>等操作位于未审核选项下，<span class="handle-mark">审核</span>位于已通过选项下；</p>
+        <p style="margin-left: 30px;">自建数据的<span class="handle-mark">删除</span>、<span class="handle-mark">编辑</span>、<span class="handle-mark">审核</span>、<span class="handle-mark">拒绝</span>、<span class="handle-mark">提交截图</span>等操作位于未审核选项下；</p>
+    </div>
     <div class="table" style="position: relative;">
         <h2 class="table__title">官方数据</h2>
         <ul class="today-detail">
@@ -528,7 +540,7 @@
 //      '</a>│<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
 //      '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span></td>'+
         '<td class="handle">详情<div class="handle-box"><a onclick="removeData_02(this,{id})">删除</a> | '+
-        '<a onclick="editData_02(this,{id})">编辑</a> | <a onclick="pass_02(this,{id})">返现</a> | '+
+        '<a onclick="editData_02(this,{id})">编辑</a> | <a onclick="pass_02(this,{id})">审核</a> | '+
         '<a onclick="refuse_02(this,{id})">拒绝</a> | '+
         '<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
         '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span></div></td>'+
@@ -571,7 +583,7 @@
             })
             $('.return-amount').each(function(){
                 if ($(this).data('return') != null) {
-                	$(this).html('已返');
+                	$(this).find('.handle').text('已返');
                 	$(this).addClass('m-success');
                 }
             })
@@ -775,7 +787,7 @@
                 },
                 success: function(ret) {
                     if(ret.code == 0) {
-                        parent_all.html('已返');
+                        parent_all.find('.handle').text('已返');
                         parent_all.addClass('m-success');
                         parent_all.parent().find('td').eq(7).text(return_amount);
                         $('.popup.m-pass-proj').removeClass('in');

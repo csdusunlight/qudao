@@ -26,7 +26,7 @@
 				<ul class="doc__box">
 					{% for doc in docs %}
 					<li data-docid="{{doc.id}}" class="doc__list">
-						<a class="doc__link {{doc.is_on}}" href="/docs/{{doc.id}}">
+						<a data-secret="{{doc.secret}}" class="doc__link {{doc.is_on}}" href="/docs/{{doc.id}}">
 							<h4 class="doc__title one-line">{{doc.title}}</h4></a>
 						<span class="doc__set"></span>
 						<div class="doc__handle">
@@ -88,6 +88,11 @@
 			} else {
 				window.name = "";
 			}
+			$('.doc__link').each(function(){
+			    if($(this).data('secret')) {
+			        $(this).addClass('secret');
+			    }
+			})
 			var parent_dom; //全局，所有父元素
 			var doc_id; //全局，每次请求的文档ID
 			$('.back-a13').toggleClass("on");

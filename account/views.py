@@ -1,5 +1,5 @@
 #coding:utf-8
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http.response import Http404
 from .models import MyUser, Userlogin,MobileCode
 from captcha.models import CaptchaStore
@@ -37,7 +37,7 @@ from account.tools import send_mail, get_client_ip
 from django.db import connection, transaction
 from wafuli.data import BANK
 from wafuli.models import TransList, WithdrawLog, Project, SubscribeShip,\
-    InvestLog, Announcement, Mark, Company
+    InvestLog, Announcement, Company
 from public.tools import login_required_ajax
 from wafuli.tools import saveImgAndGenerateUrl
 from decimal import Decimal
@@ -899,19 +899,19 @@ def admin_investlog(request, id):
     return JsonResponse({'code':0})
 
 
-@csrf_exempt
-@login_required_ajax
-def project_add(request, id=None):
-    marks = Mark.objects.filter(user=request.user)
-    kwargs = {'marks':marks}
-    checked_marks = []
-    if not id is None:
-        id = int(id)
-        kwargs.update(id=id)
-        sub = SubscribeShip.objects.get(project_id=id, user=request.user)
-        checked_marks = [ int(x.id) for x in sub.marks.all() ]
-    kwargs.update(checked_marks=checked_marks)
-    companies = Company.objects.all()
-    kwargs.update(companies=companies)
-    return render(request, 'account/project_add.html', kwargs)
+# @csrf_exempt
+# @login_required_ajax
+# def project_add(request):
+#     marks = Mark.objects.filter(user=request.user)
+#     kwargs = {'marks':marks}
+#     checked_marks = []
+#     if not id is None:
+#         id = int(id)
+#         kwargs.update(id=id)
+#         sub = get_object_or_404(SubscribeShip, project_id=id, user=request.user)
+#         checked_marks = [ int(x.id) for x in sub.marks.all() ]
+#     kwargs.update(checked_marks=checked_marks)
+#     companies = Company.objects.all()
+#     kwargs.update(companies=companies)
+#     return render(request, 'account/project_add.html', kwargs)
 

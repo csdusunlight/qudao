@@ -170,6 +170,10 @@ input[type="text"],select {
     margin-top: -100px;
     width: 40%;
     min-width: 600px;
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     background-color: #fff;
     border-radius: 5px;

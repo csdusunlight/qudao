@@ -1084,10 +1084,10 @@
                     newurl += "&submittime_1=" + submit_date1;
                 }
                 if(audit_date0) {
-                    newurl += "&audittime_0=" + audit_date0;
+                    newurl += "&auditdate_0=" + audit_date0;
                 }
                 if(audit_date1) {
-                    newurl += "&audittime_1=" + audit_date1;
+                    newurl += "&auditdate_1=" + audit_date1;
                 }
                 if(telnum_sub) {
                     newurl += "&invest_mobile=" + telnum_sub;
@@ -1158,8 +1158,8 @@
                     html += '<input name="submittime_1" type="hidden" value="' + submit_date1 + '"/>';
                 }
                 if(audit_date0 && audit_date1) {
-                    html += '<input name="audittime_0" type="hidden" value="' + audit_date0 + '"/>';
-                    html += '<input name="audittime_1" type="hidden" value="' + audit_date1 + '"/>';
+                    html += '<input name="auditdate_0" type="hidden" value="' + audit_date0 + '"/>';
+                    html += '<input name="auditdate_1" type="hidden" value="' + audit_date1 + '"/>';
                 }
                 if(telnum_sub) {
                     html += '<input name="invest_mobile" type="hidden" value="' + telnum_sub + '"/>';

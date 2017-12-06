@@ -158,7 +158,7 @@ def sendmsg_bydhst(phone, msg=None):
                      'msgid':'2c92825934837c4d0134837dcba00150',
                      'phones':phone,
                      'content':content,
-                     'sign':'【挖福利】',
+                     'sign':'【福利联盟】',
                      'subcode':'',
                      'sendtime':'',
     }
@@ -184,7 +184,7 @@ def send_multimsg_bydhst(phones, content):
          'msgid':msgid,
          'phones':phones,
          'content':content,
-         'sign':'【挖福利】',
+         'sign':'【福利联盟】',
          'subcode':'',
          'sendtime':'',
     }

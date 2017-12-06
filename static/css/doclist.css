@@ -1,6 +1,27 @@
 .RightCont {
+    position: relative;
     background-color: #fff;
     min-height: 800px;
+}
+.search {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+.search .search__txt {
+    width: 400px;
+    height: 40px;
+    border-radius: 8px;
+}
+.search__submit {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    background: url(../images/search.png) center center no-repeat;
+    border: none;
+    cursor: pointer;
 }
 .create-doc {
     margin: 20px;

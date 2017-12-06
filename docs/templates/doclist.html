@@ -23,6 +23,10 @@
 			{% include "account/left.html" %}
 			<div class="RightCont">
 				<a class="create-doc btn m-yellow" href="{% url 'create_doc' %}">新建文档</a>
+				<div class="search">
+                    <input class="search__txt search_doc_txt" type="text">
+                    <input class="search__submit search_doc" value="" type="submit">
+                </div>
 				<ul class="doc__box">
 					{% for doc in docs %}
 					<li data-docid="{{doc.id}}" class="doc__list">
@@ -37,24 +41,6 @@
 						</div>
 					</li>
 					{%endfor%}
-					<!--<li class="doc__list">
-                	    <a class="doc__link" href="#"><h4 class="doc__title one-line">和时代一期</h4></a>
-                	    <span class="doc__set"></span>
-                	    <div class="doc__handle">
-                	        <input class="doc_rename doc__handleitem" value="和时代一期" type="text" />
-                	        <span class="doc_copy doc__handleitem">创建副本</span>
-                            <span class="doc_del doc__handleitem">删除</span>
-                	    </div>
-                	</li>
-                	<li class="doc__list">
-                        <a class="doc__link" href="#"><h4 class="doc__title one-line">和时代一期</h4></a>
-                        <span class="doc__set"></span>
-                        <div class="doc__handle">
-                            <input class="doc_rename doc__handleitem" value="和时代一期" type="text" />
-                            <span class="doc_copy doc__handleitem">创建副本</span>
-                            <span class="doc_del doc__handleitem">删除</span>
-                        </div>
-                    </li>-->
 
 				</ul>
 
@@ -93,6 +79,62 @@
 			        $(this).addClass('secret');
 			    }
 			})
+			$('.search_doc').click(function(){
+                var search_key = $('.search_doc_txt').val();
+                $.ajax({ 
+                    url: '/restapi/docs/' + '?doc_title_contains=' + search_key,
+                    dataType: "json",
+                    type: 'get',
+                    success: function(ret) {
+                        var doclist_html = '';
+                        for (var i=0; i<ret.results.length; i++) {
+                            doclist_html += '<li data-docid='+ doc.id + ' class="doc__list">'+
+                                            '<a data-secret='+ doc.secret + ' class="doc__link ' + doc.is_on + '" href="/docs/{{doc.id}}">' +
+                                            '<h4 class="doc__title one-line">' + doc.title + '</h4></a>'+
+                                            '<span class="doc__set"></span><div class="doc__handle">'+
+                                            '<input class="doc_rename doc__handleitem" value="' + doc.title + '" type="text" />'+
+                                            '<span class="doc_copy doc__handleitem">创建副本</span><span class="doc_del doc__handleitem">删除</span>'+
+                                            '<span data-clipboard-text="' + doc.fanshu_url + '" class="copy-link doc__handleitem">分享</span>'+
+                                            '</div></li>';
+                        }
+                        $('.doc__box').html(doclist_html);
+                        
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR.responseText);
+                        console.log("数据错误");
+                    }
+                });
+            })
+            $('.search_doc_txt').on('keypress',function(e){
+                if(e.keyCode == 13) {
+                    var search_key = $('.search_doc_txt').val();
+                    $.ajax({ 
+                        url: '/restapi/docs/' + '?doc_title_contains=' + search_key,
+                        dataType: "json",
+                        type: 'get',
+                        success: function(ret) {
+                            var doclist_html = '';
+                            for (var i=0; i<ret.results.length; i++) {
+                                doclist_html += '<li data-docid='+ doc.id + ' class="doc__list">'+
+                                                '<a data-secret='+ doc.secret + ' class="doc__link ' + doc.is_on + '" href="/docs/{{doc.id}}">' +
+                                                '<h4 class="doc__title one-line">' + doc.title + '</h4></a>'+
+                                                '<span class="doc__set"></span><div class="doc__handle">'+
+                                                '<input class="doc_rename doc__handleitem" value="' + doc.title + '" type="text" />'+
+                                                '<span class="doc_copy doc__handleitem">创建副本</span><span class="doc_del doc__handleitem">删除</span>'+
+                                                '<span data-clipboard-text="' + doc.fanshu_url + '" class="copy-link doc__handleitem">分享</span>'+
+                                                '</div></li>';
+                            }
+                            $('.doc__box').html(doclist_html);
+                            
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(jqXHR.responseText);
+                            console.log("数据错误");
+                        }
+                    });
+                }
+            });
 			var parent_dom; //全局，所有父元素
 			var doc_id; //全局，每次请求的文档ID
 			$('.back-a13').toggleClass("on");

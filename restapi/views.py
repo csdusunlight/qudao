@@ -268,9 +268,11 @@ class BookLogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsOwnerOrStaff,)
 class DocumentList(BaseViewMixin, generics.ListCreateAPIView):
     def get_queryset(self):
-        return Document.objects.all()
+        return Document.objects.filter(user=self.request.user).order_by("-update_time")
     serializer_class = DocumentSerializer
     pagination_class = MyPageNumberPagination
+    filter_backends = (SearchFilter,)
+    search_fields = ('title',)
 class DocumentDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return Document.objects.all()

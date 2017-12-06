@@ -5,7 +5,7 @@
     <title>{{doc.title}}</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/editor.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/editor-17.12.06.css' %}" />
     <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="{% static 'ueditor/ueditor.config.js' %}"></script>
     <script type="text/javascript" charset="utf-8" src="{% static 'ueditor/ueditor.all.min.js' %}"></script>
@@ -31,6 +31,17 @@
                 <div class="isauto-box">
                     <span class="switch__name">是否公开文档&nbsp;</span>
                     <span data-isadd="{{doc.is_on}}" class="home switch {{doc.is_on}}" onclick="isadd(this)"></span>
+                </div>
+                <a class="doc_secret header__btn">加密文档</a>
+                <div class="doc__private">
+                    <p class="switch-secret">
+                        开启文档加密
+                        <span data-isadd="{{doc.secret}}" class="doc-secret switch {{doc.secret}}" onclick="is_secret(this)"></span>
+                    </p>
+                    <p class="doc__password">
+                        <span class="secret-txt"></span>
+                        <a class="change-secret">更换密码</a>
+                    </p>
                 </div>
                 <a data-clipboard-text = "{{doc.fanshu_url}}" class="copy-link header__btn">分享</a>
                 <a class="doc_del header__btn">删除文档</a>
@@ -161,6 +172,91 @@
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText);
                 console.log("数据错误");
+            }
+        });
+    })
+    if($('.doc-secret').data('isadd')) {
+        $('.doc-secret').addClass('True').removeClass('False');
+        $('.doc__password').show();
+        $('.secret-txt').text($('.doc-secret').data('isadd'));
+    } else {
+        $('.doc-secret').addClass('False').removeClass('True');
+        $('.doc__password').hide();
+    }
+    function is_secret(obj) {        //文档是否加密
+        var flag = $(obj).data('isadd');
+        if (flag != '') {
+            $.ajax({
+                url: "/restapi/docs/" + doc_id + "/",
+                dataType: "json",
+                type:"put",
+                data: {
+                    'secret': '',
+                },
+                success: function(ret) {
+                    console.log('关闭');
+                    $(obj).data('isadd', '');
+                    $(obj).removeClass('True').addClass('False');
+                    $('.doc__password').hide();
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
+            
+        } else{
+            var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+            var maxPos = $chars.length;
+                        　 var pwd = '';
+                        　 for (i = 0; i < 4; i++) {
+                        　　　  pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+                        　  }
+            console.log(pwd);
+            $.ajax({
+                url: "/restapi/docs/" + doc_id + "/",
+                dataType: "json",
+                type:"put",
+                data: {
+                    'secret': pwd
+                },
+                success: function(ret) {
+                    console.log('开启');
+                    $(obj).data('isadd', 'True');
+                    $(obj).removeClass('False').addClass('True');
+                    $('.doc__password').show();
+                    $('.secret-txt').text(pwd);
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
+            
+        }
+    }
+    $('.change-secret').click(function () {
+        var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+        var maxPos = $chars.length;
+                    　 var pwd = '';
+                    　 for (i = 0; i < 4; i++) {
+                    　　　  pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+                    　  }
+        console.log(pwd);
+        $.ajax({
+            url: "/restapi/docs/" + doc_id + "/",
+            dataType: "json",
+            type:"put",
+            data: {
+                'secret': pwd
+            },
+            success: function(ret) {
+                console.log('开启');
+//              $(obj).data('isadd', 'True');
+//              $(obj).removeClass('False').addClass('True');
+                $('.doc__password').show();
+                $('.secret-txt').text(pwd);
+            },
+            error: function() {
+                alert("请检查网络连接");
             }
         });
     })

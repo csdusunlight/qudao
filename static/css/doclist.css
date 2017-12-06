@@ -23,8 +23,12 @@
     height: 180px;
     background: url(../images/bg-doc.png) top 15px center no-repeat;
 }
+.doc__link.secret {
+    background: url(../images/icon-secret.png) 88px 86px no-repeat,
+                url(../images/bg-doc.png) top 15px center no-repeat;
+}
 .doc__link.False {
-    background: url(../images/icon-lock.png) 88px 86px no-repeat,
+    background: url(../images/icon-private.png) 88px 86px no-repeat,
                 url(../images/bg-doc.png) top 15px center no-repeat;
 }
 .doc__list:hover,

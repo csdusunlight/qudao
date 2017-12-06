@@ -94,14 +94,14 @@
 									callback: function() {
 										var self = this;
 										var ul = self.element.querySelector('.mui-table-view');
-										get_welfare_list(this, ul, count++, index);
+										getList(this, ul, count++, index);
 
 									}
 								}
 							});
 						});
 
-						function get_welfare_list(obj, ul, n, index) {
+						function getList(obj, ul, n, index) {
 							if(index === 0) {
 								var url = '/restapi/sub/?ordering=project__state,-is_on&is_official=2';
 							} else if(index === 1) {
@@ -116,12 +116,12 @@
 								type: 'get', //HTTP请求类型
 								timeout: 3000, //超时时间设置为10秒；
 								success: function(data) {
-									console.log("这是data：", data);
+//									console.log("这是data：", data);
 									if(!data.results.length) {
 										obj.endPullUpToRefresh(true);
 									} else {
 										obj.endPullUpToRefresh(false); //参数为true代表没有更多数据了。
-										var table = document.body.querySelector('.mui-table-view');
+//										var table = document.body.querySelector('.mui-table-view');
 										for(var i in data.results) {
 											var li = document.createElement('li');
 											li.className = 'mui-table-view-cell';
@@ -139,7 +139,7 @@
 								error: function(xhr, type, errorThrown) {
 									mui('.mui-switch').switch();
 									console.log("没有数据")
-									//
+									//没有数据 显示没有更多数据
 									obj.endPullUpToRefresh(true);
 								}
 							});
@@ -149,7 +149,7 @@
 
 				})(mui);
 				mui('.mui-table-view').on('toggle', '.mui-switch', function() {
-//					console.log(this, "llc")
+					console.log(this, "llc")
 					var id = this.getAttribute("data-btn"); //获取当前switch属性
 					console.log(id)
 					if(event.detail.isActive) {

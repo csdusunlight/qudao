@@ -18,6 +18,7 @@ span {
     position: fixed;
     top: 0;
     left: 0;
+    height: 52px;
     box-sizing: border-box;
     width: 100%;
     background-color: #fff;
@@ -36,15 +37,22 @@ span {
     float: left;
 }
 .header__back {
+    position: relative;
     display: inline-block;
-    width: 20px;
-    height: 20px;
-    margin-top: 14px;
-    margin-left: 10px;
+    width: 80px;
+    height: 52px;
+    opacity: 0.6;
+}
+.header__back:after {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    width: 14px;
+    height: 14px;
+    transform: rotate(-45deg);
     border-top: 2px solid #222;
     border-left: 2px solid #222;
-    transform: rotate(-45deg);
-    opacity: 0.6;
 }
 .header__back:hover {
     opacity: 1;
@@ -305,6 +313,95 @@ span {
 }
 .btn.m-right {
     margin-right: 100px;
+}
+/*文档加密部分*/
+.doc_secret:hover+.doc__private,
+.doc__private:hover {
+    visibility: visible;
+    opacity: 1;
+    
+}
+.doc__private {
+    visibility: hidden;
+    opacity: 0;
+    box-sizing: border-box;
+    width: 194px;
+    position: absolute;
+    top: 60px;
+    right: 166px;
+    padding: 10px;
+    font-size: 14px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    border-radius: 6px;
+    z-index: 10;
+    transition: all 0.6s ease-in;
+}
+.doc__private:before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 84px;
+    width: 18px;
+    height: 18px;
+    transform: rotate(45deg);
+    background-color: #fff;
+    box-shadow: -2px -2px 4px rgba(0,0,0,0.1);
+    z-index: 1;
+}
+.doc-secret {
+    margin-left: 20px;
+}
+.switch-secret,
+.doc__password {
+    margin: 0;
+    line-height: 50px;
+}
+.secret-txt {
+    display: inline-block;
+    width: 100px;
+    line-height: 30px;
+    height: 30px;
+    text-align: center;
+    border: 1px solid #E4E4E4;
+    border-radius: 6px;
+    vertical-align: middle;
+    letter-spacing: 2px;
+}
+.change-secret {
+    margin-left: 10px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: #fff;
+    border: 1px solid #e4e4e4;
+    transition: all 0.4s ease;  
+    cursor: pointer;
+}
+.switch:before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+    transition: all 0.4s ease;  
+}
+.switch.true {
+    background-color: #91C11D;
+    /*border: 1px solid #91C11D;*/
+}
+.switch.true:before {
+    left: 32px;
 }
 /*样式覆盖*/
 #editor {

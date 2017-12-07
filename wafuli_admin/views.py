@@ -27,7 +27,6 @@ import json
 from django.db import transaction
 from public.tools import has_permission
 from decimal import Decimal
-from activity.views import on_audit_pass
 # Create your views here.
 logger = logging.getLogger('wafuli')
 def index(request):
@@ -87,7 +86,7 @@ def admin_apply(request):
                 apply.audit_time = datetime.datetime.now()
                 apply.admin_user = admin_user
                 apply.save()
-                sendmsg_bydhst(apply.mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + apply.domain_name + '.51fanshu.com' +
+                sendmsg_bydhst(apply.mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + user.domain_name + '.51fanshu.com' +
                                      u"，快去分享给小伙伴们吧~")
         elif type==2:
             reason = request.POST.get('reason', '')
@@ -168,9 +167,9 @@ def admin_invest(request):
                 investlog.settle_amount = cash
                 translist.investlog = investlog
                 translist.save(update_fields=['investlog'])
-                #活动插入
-                on_audit_pass(request, investlog)
-                #活动插入结束
+#                 #活动插入
+#                 on_audit_pass(request, investlog)
+#                 #活动插入结束
                 res['code'] = 0
         elif type==2:
             investlog.audit_state = '2'
@@ -543,9 +542,9 @@ def import_investlog(request):
                     investlog.settle_amount = amount
                     translist.investlog = investlog
                     translist.save(update_fields=['investlog'])
-                    #活动插入
-                    on_audit_pass(request, investlog)
-                    #活动插入结束
+#                     #活动插入
+#                     on_audit_pass(request, investlog)
+#                     #活动插入结束
                 elif result==2:
                     investlog.audit_state = '2'
                 elif result==3:

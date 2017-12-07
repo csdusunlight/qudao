@@ -35,8 +35,8 @@ class Command(BaseCommand):
         
         new_project_num = Project.objects.filter(pub_date__gte=today).count()
         
-        dict = IPLog.objects.filter(time__gte=today).aggregate(total=Sum('award'))
-        activity_consume = dict.get('total')
+#         dict = IPLog.objects.filter(time__gte=today).aggregate(total=Sum('award'))
+#         activity_consume = dict.get('total')
         
         update_fields = {
                         'apply_num':apply_num,
@@ -48,7 +48,7 @@ class Command(BaseCommand):
                         'invest_amount':invest_amount,
                         'ret_num':ret_num,
                         'new_project_num':new_project_num,
-                        'activity_consume':activity_consume
+#                         'activity_consume':activity_consume
         }
         DayStatis.objects.update_or_create(date=today, defaults=update_fields)
         

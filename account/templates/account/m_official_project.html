@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>官方项目详情</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="{% static 'css/mui.min.css' %}" rel="stylesheet" />
+		<script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
+		<style type="text/css">
+			body {
+				background: white;
+			}
+			
+			table {
+				color: RGB(102, 102, 102);
+				font-size: 14px;
+			}
+			
+			td {
+				padding: 1rem 1.3rem;
+			}
+			
+			.txt {
+				border: 1px solid RGB(153, 153, 153);
+				border-radius: 6px;
+				width: 18rem;
+				height: 3rem;
+				line-height: 3rem;
+				position: relative;
+			}
+			
+			.btn {
+				width: 16rem;
+				height: 4rem;
+				background: RGB(145, 193, 29);
+				text-align: center;
+				line-height: 4rem;
+				color: white;
+				border-radius: 10px;
+				margin-left: 6rem;
+			}
+			
+			.decrBox {
+				width: 100%;
+				height: 3rem;
+				position: relative;
+			}
+			
+			.decrBox li {
+				list-style: none;
+				float: left;
+				width: 4rem;
+				height: 3rem;
+				text-align: center;
+				line-height: 3rem;
+				margin-left: 1rem;
+				border-radius: 6px;
+			}
+			
+			.decrBox li:nth-child(1) {
+				position: absolute;
+				left: -1.5rem;
+			}
+			
+			.decrBox li:nth-child(1),
+			.decrBox li:nth-child(2) {
+				background: RGB(254, 191, 0);
+				color: white;
+			}
+			
+			.decrBox li:nth-child(3),
+			.decrBox li:nth-child(4) {
+				border: 1px solid RGB(254, 191, 0);
+				color: RGB(254, 191, 0);
+			}
+		</style>
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<h1 class="mui-title" style="color: RGB(102,102,102);">查看详情</h1>
+		</header>
+		<div class="mui-content" style="background: white;">
+			<form>
+				<table>
+					<tr>
+						<td><span>项目名称</span></td>
+						<td><span>合时代一期</span></td>
+					</tr>
+					<tr>
+						<td><span>客户指导价</span></td>
+						<td>
+							<div class="txt">
+								<span>15111203705</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><span>主页价格</span></td>
+						<td>
+							<div class="txt">
+								<span>100返2.9</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><span>标期</span></td>
+						<td>
+							<div class="txt">
+								<span>2017/09/12</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><span>投资区间</span></td>
+						<td>
+							<div class="txt">
+								<span>30天</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><span>预计年化</span></td>
+						<td>
+							<div class="txt">
+								<span>30000元</span>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><span>是否主业呈现</span></td>
+						<td>
+							<div class="mui-switch mui-switch-mini mui-active">
+								<div class="mui-switch-handle"></div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><span>是否推荐</span></td>
+						<td>
+							<div class="mui-switch mui-switch-mini mui-active">
+								<div class="mui-switch-handle"></div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><span>项目标签</span></td>
+						<td>
+							<ul class="decrBox">
+								<li>稳健型</li>
+								<li>稳健型</li>
+								<li>稳健型</li>
+								<li>稳健型</li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<a href="#">
+								<div class="btn">确定</div>
+							</a>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+
+		<script src="{% static 'js/mui.min.js' %}"></script>
+		<script type="text/javascript">
+			mui.init();
+		</script>
+	</body>
+
+</html>

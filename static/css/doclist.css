@@ -9,9 +9,10 @@
     right: 20px;
 }
 .search .search__txt {
+    padding-left: 12px;
     width: 400px;
     height: 40px;
-    border-radius: 8px;
+    border-radius: 4px;
 }
 .search__submit {
     position: absolute;
@@ -37,12 +38,22 @@
     border: 1px solid transparent;
 }
 .doc__link {
+    position: relative;
     display: block;
     box-sizing: border-box;
     padding-top: 124px;
     width: 145px;
     height: 180px;
     background: url(../images/bg-doc.png) top 15px center no-repeat;
+}
+.doc__link.m-star:before {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 40px;
+    width: 20px;
+    height: 20px;
+    background: url(../images/doc-star.png) center center/100% auto no-repeat;
 }
 .doc__link.secret {
     background: url(../images/icon-secret.png) 88px 86px no-repeat,

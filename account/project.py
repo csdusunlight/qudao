@@ -135,7 +135,7 @@ def update_offiproject(request, id):
         sub = get_object_or_404(SubscribeShip, project_id=id, user=request.user)
         checked_marks = [ int(x.id) for x in sub.marks.all() ]
         kwargs.update(checked_marks=checked_marks)
-        template = 'account/m_official_project.html' if request.mobile else 'account/official_project.html'
+        template = 'account/m_official_project.html'
         return render(request, template, kwargs)
 
 @csrf_exempt

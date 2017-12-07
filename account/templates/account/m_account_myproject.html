@@ -25,7 +25,7 @@
 		<title>项目管理</title>
 		<link href="{%static 'css/mui.min.css'%}" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="{%static 'css/m_common.css'%}" />
-		<link rel="stylesheet" type="text/css" href="{%static 'css/m_ProjectMamagement.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{%static 'css/ProjectMamagement.css' %}" />
 	</head>
 
 	<body>
@@ -43,7 +43,7 @@
 				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6" style="background: #92C11D;"></div>
 
 				<div class="nav">
-					<span class="nav_list name">项目名称</span>
+					<span class="nav_list nav_name">项目名称</span>
 					<span class="nav_list nav_price">客户指导价</span>
 					<span class="nav_list navisShow">是否主页呈现</span>
 					<span class="nav_list nav_operite">操作</span>
@@ -128,7 +128,7 @@
 											str_html = '<span class="pro_list pro_name">' + data.results[i].project_title + '</span>' +
 												'<span class="pro_list pro_touzi">' + data.results[i].price + '</span>' +
 												'<div data-btn= ' + (data.results[i].id) + ' class="mui-switch mui-switch-mini ' + (data.results[i].is_on ? "mui-active" : "") + ' " style="position: absolute;right: 8rem;"><div class="mui-switch-handle"></div></div>' +
-												'<a  href="#" class="pro_list pro_editor" style="position:absolute;right:1.8rem;top:1rem">编辑</a>';
+												'<a  href="#" class="pro_list pro_editor" style="position:absolute;right:1.2rem;top:1rem">编辑</a>';
 
 											li.innerHTML = str_html;
 											ul.appendChild(li);

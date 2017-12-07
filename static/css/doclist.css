@@ -46,7 +46,8 @@
     height: 180px;
     background: url(../images/bg-doc.png) top 15px center no-repeat;
 }
-.doc__link.m-star:before {
+.doc__link.star-true:before,
+.doc__link.star-True:before {
     content: '';
     position: absolute;
     top: 16px;
@@ -59,7 +60,8 @@
     background: url(../images/icon-secret.png) 88px 86px no-repeat,
                 url(../images/bg-doc.png) top 15px center no-repeat;
 }
-.doc__link.False {
+.doc__link.False,
+.doc__link.false {
     background: url(../images/icon-private.png) 88px 86px no-repeat,
                 url(../images/bg-doc.png) top 15px center no-repeat;
 }

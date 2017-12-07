@@ -114,6 +114,21 @@
                                 $(this).parent().find('.doc_star').text('标星');
                             }
                         })
+                        //分享复制部分
+                        var btns = document.querySelectorAll('.copy-link');
+                        var clipboard = new Clipboard(btns);
+            
+                        clipboard.on('success', function(e) {
+                            console.log(e);
+                            $.prompt({
+                                Content: '分享链接复制成功'
+                            })
+                        });
+            
+                        clipboard.on('error', function(e) {
+                            console.log(e);
+                        });
+                        //分享复制部分---end
                         
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
@@ -152,6 +167,21 @@
                                     $(this).parent().find('.doc_star').text('标星');
                                 }
                             })
+                            //分享复制部分
+                            var btns = document.querySelectorAll('.copy-link');
+                            var clipboard = new Clipboard(btns);
+                
+                            clipboard.on('success', function(e) {
+                                console.log(e);
+                                $.prompt({
+                                    Content: '分享链接复制成功'
+                                })
+                            });
+                
+                            clipboard.on('error', function(e) {
+                                console.log(e);
+                            });
+                            //分享复制部分---end
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
                             console.log(jqXHR.responseText);
@@ -201,10 +231,10 @@
 							$(copy_dom).find('.doc__title').text(ret.title);
 							$(copy_dom).find('.doc_rename').val(ret.title);
 							$(copy_dom).find('.copy-link').attr('data-clipboard-text', ret.fanshu_url);
-							if ($(copy_dom).find('.doc__link').hasClass('False')) {
-								$(copy_dom).find('.doc__link').removeClass('False').addClass('True');
-							}
-							$(copy_dom).find('.doc__link').removeClass('star-True').removeClass('star-true')
+//							if ($(copy_dom).find('.doc__link').hasClass('False')) {
+//								$(copy_dom).find('.doc__link').removeClass('False').addClass('True');
+//							}
+							$(copy_dom).find('.doc__link').removeClass('star-True').removeClass('star-true').removeClass('secret').removeClass('false').removeClass('False');
 							$('.doc__box').prepend(copy_dom)
 
 							//分享复制部分
@@ -214,7 +244,7 @@
 							clipboard.on('success', function(e) {
 								console.log(e);
 								$.prompt({
-									Content: '复制成功'
+									Content: '分享链接复制成功'
 								})
 							});
 
@@ -326,7 +356,7 @@
 			clipboard.on('success', function(e) {
 				console.log(e);
 				$.prompt({
-					Content: '复制成功'
+					Content: '分享链接复制成功'
 				})
 			});
 

@@ -1,5 +1,5 @@
 #coding:utf-8
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http.response import Http404
 from .models import MyUser, Userlogin,MobileCode
 from captcha.models import CaptchaStore
@@ -898,7 +898,15 @@ def admin_investlog(request, id):
     log.save()
     return JsonResponse({'code':0})
 
-
+def detail_investlog(request, id):
+    investlog = get_object_or_404(InvestLog, id=id)
+    kwargs = {'investlog':investlog, 'id':id}
+    if investlog.is_official:
+        template = 'account/m_detail_official_investlog.html'
+    else:
+        template = 'account/m_detail_personal_investlog.html'
+    return render(request, template, kwargs)
+    
 # @csrf_exempt
 # @login_required_ajax
 # def project_add(request):

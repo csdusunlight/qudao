@@ -61,4 +61,5 @@ urlpatterns = [
     url(r'^update_offiproject/(?P<id>[0-9]+)/$', 'account.project.update_offiproject', name='update_offiproject'),
     url(r'^delete_selfproject/(?P<id>[0-9]+)/$', 'account.project.delete_selfproject', name='delete_selfproject'),
     
+    url(r'^detail_investlog/(?P<id>[0-9]+)/$', 'account.views.detail_investlog', name='detail_investlog'),
 ]

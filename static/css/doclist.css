@@ -1,6 +1,28 @@
 .RightCont {
+    position: relative;
     background-color: #fff;
     min-height: 800px;
+}
+.search {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+.search .search__txt {
+    padding-left: 12px;
+    width: 400px;
+    height: 40px;
+    border-radius: 4px;
+}
+.search__submit {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    background: url(../images/search.png) center center no-repeat;
+    border: none;
+    cursor: pointer;
 }
 .create-doc {
     margin: 20px;
@@ -16,6 +38,7 @@
     border: 1px solid transparent;
 }
 .doc__link {
+    position: relative;
     display: block;
     box-sizing: border-box;
     padding-top: 124px;
@@ -23,11 +46,22 @@
     height: 180px;
     background: url(../images/bg-doc.png) top 15px center no-repeat;
 }
+.doc__link.star-true:before,
+.doc__link.star-True:before {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 40px;
+    width: 20px;
+    height: 20px;
+    background: url(../images/doc-star.png) center center/100% auto no-repeat;
+}
 .doc__link.secret {
     background: url(../images/icon-secret.png) 88px 86px no-repeat,
                 url(../images/bg-doc.png) top 15px center no-repeat;
 }
-.doc__link.False {
+.doc__link.False,
+.doc__link.false {
     background: url(../images/icon-private.png) 88px 86px no-repeat,
                 url(../images/bg-doc.png) top 15px center no-repeat;
 }

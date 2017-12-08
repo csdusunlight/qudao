@@ -194,23 +194,23 @@
 					</tr>
 					<tr>
 						<td colspan="2">
-							<input class="box2" type="checkbox" />投资姓名/用户名
-							<input class="box2" type="checkbox" style="margin-left: 2rem;" />投资金额
-							<input class="box2" type="checkbox" style="margin-left: 2rem;" />投资标期
+							<input class="box2" value="0" type="checkbox" disabled="disabled" />投资姓名/用户名
+							<input class="box2" value="1" type="checkbox" disabled="disabled" style="margin-left: 2rem;" />投资金额
+							<input class="box2" value="2" type="checkbox" disabled="disabled" style="margin-left: 2rem;" />投资标期
 						</td>
 					</tr>
 					<tr>
 						<td colspan="2">
-							<input class="box2" type="checkbox" />投资日期
-							<input class="box2" type="checkbox" style="margin-left: 6rem;" />收款信息
-							<input class="box2" type="checkbox" style="margin-left: 1.8rem;" />投资手机号
+							<input class="box2" value="3" type="checkbox" disabled="disabled" />投资日期
+							<input class="box2" value="4" type="checkbox" disabled="disabled" style="margin-left: 6rem;" />收款信息
+							<input class="box2" value="5" type="checkbox"  disabled="disabled"style="margin-left: 1.8rem;" />投资手机号
 						</td>
 					</tr>
 					<tr>
 						<td colspan="2">
-							<input class="box2" type="checkbox" />用户预期返现金额
-							<input class="box2" type="checkbox" style="margin-left:1.2rem ;" />QQ
-							<input class="box2" type="checkbox" style="margin-left:4.8rem;" />投资截图
+							<input class="box2" value="6" type="checkbox" />用户预期返现金额
+							<input class="box2" value="7" type="checkbox" style="margin-left:1.2rem ;" />QQ
+							<input class="box2" value="8" type="checkbox" style="margin-left:4.8rem;" />投资截图
 						</td>
 					</tr>
 					<tr>
@@ -234,6 +234,7 @@
 			    term = document.getElementById('term'),
 			    investrange = document.getElementById('investrange'),
 			    intrest = document.getElementById('intrest');
+			    
 			mui.ajax('/restapi/projects/' + project_id + '/',{
                 dataType:'json',//服务器返回json格式数据
                 type:'get',//HTTP请求类型
@@ -246,6 +247,16 @@
                     term.innerText = ret.term;
                     investrange.innerText = ret.investrange;
                     intrest.innerText = ret.intrest;
+                    
+                    var need_str = ret.necessary_fields;
+                    var need_set = need_str.split(',');
+                    var need_id;
+                    console.log(need_set);
+                    for (need_id in need_set) {
+                        var dom = 'input[value="'+ need_set[need_id].replace(/(^\s*)|(\s*$)/g, "") +'"]';
+                        console.log(mui(dom));
+                        mui(dom)[0].checked = true;
+                    }
                 },
                 error:function(xhr,type,errorThrown){
                     console.log(xhr.responseText);

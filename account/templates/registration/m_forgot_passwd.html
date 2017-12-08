@@ -1,183 +1,167 @@
-<!doctype html>
+{%load staticfiles%}
+<!DOCTYPE html>
 <html>
-
 	<head>
-		<meta charset="UTF-8">
-		<title>找回密码</title>
+		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link href="{% static 'css.mui.min.js' %}" rel="stylesheet" />
-		<script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
-		<style>
-			body {
-				background: white;
-			}
-			
-			* {
-				margin: 0;
-				padding: 0;
-				font-family: "微软雅黑";
-				font-size: 15px;
-			}
-			
-			table {
-				margin-left: 1.5rem;
-				color: RGB(102, 102, 102);
-			}
-			
-			td {
-				padding: 0.5rem 1rem;
-			}
-			
-			.ipt {
-				margin-bottom: 0 !important;
-				width: 25rem !important;
-				height: 3rem !important;
-				border-radius: 5px !important;
-				font-size: 14px;
-			}
-			
-			.numbox {
-				width: 25rem;
-				height: 3rem;
-				border: 1px solid RGB(204, 204, 204);
-				border-radius: 3px;
-				position: relative;
-			}
-			
-			.numbox input[type=text] {
-				border: none;
-				height: 2.5rem;
-				font-size: 15px;
-			}
-			
-			.checkbox {
-				width: 1.2rem;
-				height: 1.2rem;
-			}
-			
-			.checkbox {
-				width: 1.2rem;
-				height: 1.2rem;
-			}
-			
-			.btn {
-				background: RGB(145, 193, 29);
-				width: 14rem;
-				height: 3rem;
-				border-radius: 5px;
-				text-align: center;
-				line-height: 3rem;
-				color: white;
-				margin: 1.5rem 5rem;
-			}
-			
-			.psdBox {
-				width: 25rem;
-				height: 3rem;
-				border-radius: 5px;
-				border: 1px solid RGB(204, 204, 204);
-				position: relative;
-			}
-			
-			.psdBox>input {
-				font-size: 15px;
-				height: 2.8rem;
-				border: none;
-			}
-			
-			.psdBox>span {
-				position: absolute;
-				top: 0.5rem;
-				right: 1rem;
-			}
-		</style>
+		<title>重置密码</title>
+		<link href="{% static 'css/mui.min.css' %}" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/m_common.css' %}"/>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/m_password_reset.css' %}"/>
 	</head>
-	<header class="mui-bar mui-bar-nav">
-		<h1 class="mui-title">重置密码</h1>
-	</header>
-	<div class="mui-content" style="background: white;">
-		<form>
-			<table>
-				<tr>
-					<td>请输入手机号</td>
-				</tr>
-				<tr>
-					<td>
-						<input type="text" class="ipt" id="phone" />
-					</td>
-				</tr>
-				<tr>
-					<td>图形验证码</td>
-				</tr>
-				<tr>
-					<td>
-						<input type="text" class="ipt" />
-					</td>
-				</tr>
-				<tr>
-					<td>验证码</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="numbox">
-								<input type="text" />
-								<input type="button" onclick="sendCode(this)" value="获取验证码" style="height:100%;position: absolute;right: 0;top: 0;background: RGB(145,193,29);color: white;" />
-							</div>
-					</td>
-				</tr>
-				<tr>
-					<td>重置密码</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="psdBox">
-							<input type="text" />
-							<span class="mui-icon mui-icon-eye"></span>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<a href="#">
-							<div class="btn">
-								重置密码
-							</div>
-						</a>
-					</td>
-				</tr>
-			</table>
-		</form>
-	</div>
-
 	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">重置密码</h1>
+		</header>
+		<div class="mui-content">
+			<form class="mui-input-group">
+			{%csrf_token%}
+				<div class="mui-input-row">
+					<label><i class="icon iconfont">&#xe637;</i></label>
+					<input id='mobile' type="text" class="mui-input" placeholder="请输入手机号">
+				</div>
+				<div class="yanzhengma mui-input-row">
+					<label><i class="icon iconfont">&#xe603;</i></label>
+					<input id='x_yanzhengma' type="text" maxlength=4 class="mui-input" placeholder="图形验证码">
+					<img src="{{ codimg_url }}" id="id_checkImg"  alt="验证码图片" class="yanzheng ">
+       				<input id="id_hashkey" name="hashkey" type="hidden" value="{{ hashkey }}">
+				</div>
+				<div class="yanzhengma mui-input-row">
+					<label><i class="icon iconfont">&#xe61a;</i></label>
+					<input id='telcode' type="text" maxlength=6 class="mui-input" placeholder="手机验证码">
+					<button type="button" id="gettelcode" class=" huoqu mui-btn-blue mui-btn-outlined">获取验证码</button>
+				</div>
+				<div class="mui-input-row mui-password">
+					<label><i class="icon iconfont">&#xe600;</i></label>
+					<input id='password' type="password" class="mui-input-password " placeholder="重置密码（6-16位字符）">
+				</div>
+			</form>
+			<div class="mui-content-padded">
+				<button id='submit_btn' class="mui-btn mui-btn-block mui-btn-primary">重置密码</button>
+				</div>
+			</div>
+		</div>
 		<script src="{% static 'js/mui.min.js' %}"></script>
-		<script type="text/javascript">
-			mui.init()
-			//获取验证码
-			var clock = '';
-			var nums = 60;
-			var btn;
-			function sendCode(thisBtn) {
-				btn = thisBtn;
-				btn.disabled = true; //将按钮置为不可点击
-				btn.value = nums + '秒后可重新获取';
-				clock = setInterval(doLoop, 1000); 
-			} 
-			function doLoop() {
-				nums--;
-				if(nums > 0) {
-					btn.value = nums + '秒后可重新获取';
-				} else {
-					clearInterval(clock); //清除定时器
-					btn.disabled = false;
-					btn.value = '点击发送验证码';
-					nums = 60; 
+		<script src="{%static 'js/accounts/user-validate.js'%}"></script>
+		<script type="text/javascript" charset="utf-8">
+			mui.init({
+				swipeBack:true //启用右滑关闭功能
+			});
+	      	var countdown=60;
+			var coderefresh_url = "{% url 'captcha-refresh' %}";
+			var sendtelcode_url = "{% url 'phoneImageV' %}";
+			var submit_url = "";
+			document.getElementById("submit_btn").addEventListener('tap', function() {
+				var mobile = document.getElementById("mobile").value;
+				if(!validatePhone(mobile)) {
+					mui.alert('您输入的手机号格式有误，请重新输入！', '抱歉');
+					return;
 				}
+				var password = document.getElementById("password").value;
+				if(!validatePassport(password)) {
+					mui.alert('您输入的密码格式有误，请重新输入！（6-18位，至少包含字母、数字和特殊字符中的两种）', '抱歉');
+					return;
+				}
+				var telcode = document.getElementById("telcode").value;
+				if(!validatetelcode(telcode)) {
+					mui.alert('您输入的手机验证码格式有误，请重新输入！', '抱歉');
+					return;
+				}
+				var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+				mui.ajax({
+					url : submit_url,
+					data : {
+						password: password,
+						code : telcode,
+						mobile : mobile,
+						csrfmiddlewaretoken:csrfmiddlewaretoken
+					},
+					type:'POST',
+					timeout : 3000,
+					success : function(ret) {
+						mui.alert(ret.msg,callback=function(){
+							if (ret.code==0){
+								window.history.back();
+							}
+						});
+					},
+					error:function(xhr,type,errorThrown){
+						mui.alert(type);
+					}
+				});
+			});
+			document.getElementById("gettelcode").addEventListener('tap', function() {
+				var mobile = document.getElementById("mobile").value;
+				if(!validatePhone(mobile)) {
+					mui.alert('您输入的手机号格式有误，请重新输入！', '抱歉');
+				}
+				else{
+					sendTelVerifyCodeImageV(mobile);
+					settime(this);
+				}
+			});
+			function settime(val) {
+			    if (countdown == 0) {
+				    val.removeAttribute("disabled");
+				    val.innerText="获取验证码";
+				    countdown = 60;
+				    return;
+			  	} else {
+				    val.setAttribute("disabled", true);
+				    val.innerText="重新发送(" + countdown + ")";
+				    countdown--;
+			  	}
+			  	setTimeout(function() {
+			    	settime(val);
+			    },1000)
 			}
-			
-			//电话正则
-			var phoneNum = document.getElementById("phone").value;
-			
+			document.getElementById("id_checkImg").addEventListener('tap',function(){
+				mui.getJSON(coderefresh_url, null, function(data) {
+					var new_cptch_key = data.key;
+					var new_cptch_image = data.image_url;
+					key = document.getElementById("id_hashkey");
+					img = document.getElementById("id_checkImg");
+					key.value = new_cptch_key;
+					img.src = new_cptch_image;
+				});
+			});
+			var sendTelVerifyCodeImageV = function(mobile) {
+				var hashkey = document.getElementById("id_hashkey").value;
+				var response = document.getElementById("x_yanzhengma").value;
+				if (!response){
+					mui.alert("请输入图形验证码!");
+					countdown = 0;
+					return;
+				}
+				mui.ajax({
+					url : sendtelcode_url,
+					data : {
+						'phone' : mobile,
+						'action' : 'reset_password',
+						'hashkey': hashkey,
+						'response': response,
+						},
+					timeout : 3000,
+					success : function(data) {
+						if (data.code != 0) {
+							mui.alert(data.message);
+							var new_cptch_key = data.key;
+					        var new_cptch_image = data.image_url;
+					        key = document.getElementById("id_hashkey");
+							img = document.getElementById("id_checkImg");
+							key.value = new_cptch_key;
+							img.src = new_cptch_image;
+						}
+						if (data.code == 1){
+							countdown = 0;
+						}
+					},
+					error:function(xhr,type,errorThrown){
+						mui.alert(type);
+					}
+				});
+			};
 		</script>
 	</body>
 

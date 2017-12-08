@@ -29,8 +29,6 @@ $(function() {
 				data : {
 					'phone' : phoneNum,
 					'action' : action,
-					// 'hashkey': $("#id_hashkey").val(),
-					// 'response': $("#x_yanzhengma").val(),
 					},
 				dataType : 'json',
 				timeout : 3000,
@@ -40,14 +38,6 @@ $(function() {
 						settime($('#action-send-code-imagvalidate')[0]);
 					} else {
 						alert(data.message);
-						// if (action=='register'){
-						// 	var new_cptch_key = data['key'];
-					 //        var new_cptch_image = data['image_url'];
-					 //        key = $("#id_hashkey");
-					 //        img = $("#id_checkImg");
-					 //        key.attr("value", new_cptch_key);
-					 //        img.attr("src", new_cptch_image);
-						// }
 						if (action=='change_bankcard'){
 
 						}
@@ -125,23 +115,20 @@ $(function() {
 	 */
 	$('#action-send-code-imagvalidate').bind('click',function() {
 		if(is_tel($("input[name='mobile']"))){
+			
 		}
 		else{
-			// if(is_net_code($("#x_yanzhengma"))){}
-			// else{
 			phoneNum = $("input[name='mobile']").val();
 			actionType = 'register';
 			actionurl = get_code_url;
 			sendTelVerifyCodeImageV(phoneNum, actionType, actionurl);
-			
-		// }
 		}
 
 	});
 	$('#yanzhengma_button').bind('click',function() {
 		actionType = "change_bankcard";
 		actionurl = get_code_url;
-		phoneNum = phoneNum;
+		phoneNum = phoneNum;coderefresh_url
 		sendTelVerifyCodeImageV(phoneNum, actionType, actionurl);
 	});
 

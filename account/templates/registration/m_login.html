@@ -65,9 +65,10 @@
 		</header>
 		<div class="mui-content" style="background: white;">
 			{% if form.errors %}
-			<span class="tipsl" id="divname">
-        	<font class="login-tips">用户名或密码输入有误!</font>
-        	</span> {% endif %}
+				<span class="tipsl" id="divname">
+	        		<font class="login-tips">用户名或密码输入有误!</font>
+	        	</span> 
+        	{% endif %}
 			<form action="" method="post">
 				{%csrf_token%}
 				<table>

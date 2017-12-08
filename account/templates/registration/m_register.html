@@ -6,7 +6,7 @@
 		<meta charset="UTF-8">
 		<title>注册</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link href="{% static 'css/mui.min.js' %}" rel="stylesheet" />
+		<link href="{% static 'css/mui.min.css' %}" rel="stylesheet" />
 		<script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
 		<style type="text/css">
 			body {
@@ -52,7 +52,7 @@
 			
 			.numbox input[type=text] {
 				border: none;
-				height: 2.5rem;
+				height: 2.8rem;
 				font-size: 15px;
 			}
 			
@@ -62,13 +62,14 @@
 			}
 			
 			.btn {
-				background: RGB(145, 193, 29);
+				background: RGB(145, 193, 29) !important;
 				width: 14rem;
 				height: 3rem;
 				border-radius: 5px;
 				text-align: center;
 				line-height: 3rem;
 				color: white;
+				border: none !important;
 				margin: 1.5rem 5rem;
 			}
 		</style>
@@ -86,7 +87,7 @@
 					</tr>
 					<tr>
 						<td>
-							<input type="text" name="qq" class="ipt" />
+							<input type="text" id="qq" name="qq" class="ipt" />
 						</td>
 					</tr>
 					<tr>
@@ -94,7 +95,7 @@
 					</tr>
 					<tr>
 						<td>
-							<input type="text" name="qqName" class="ipt" id="qqTest" />
+							<input type="text" id="qqName" name="qqName" class="ipt" id="qqTest" />
 						</td>
 					</tr>
 					<tr>
@@ -102,7 +103,7 @@
 					</tr>
 					<tr>
 						<td>
-							<input type="text" name="" class="ipt" />
+							<input type="text" id="introduce" name="introduce" class="ipt" />
 						</td>
 					</tr>
 					<tr>
@@ -110,7 +111,7 @@
 					</tr>
 					<tr>
 						<td>
-							<input type="text" name="phoneNum" class="ipt" />
+							<input type="text" id="phone" name="phone" class="ipt" />
 						</td>
 					</tr>
 
@@ -120,8 +121,8 @@
 					<tr>
 						<td>
 							<div class="numbox">
-								<input type="text" name="checkNum" />
-								<input type="button" onclick="sendCode(this)" value="获取验证码" style="height:100%;position: absolute;right: 0;top: 0;background: RGB(145,193,29);color: white;" />
+								<input type="text" id="checkNum" name="checkNum" />
+								<input type="button" id="setBtn" onclick="sendCode(this)" value="获取验证码" style="height:100%;position: absolute;right: 0;top: 0;background: RGB(145,193,29);color: white;" />
 							</div>
 						</td>
 					</tr>
@@ -131,22 +132,18 @@
 					</tr>
 					<tr>
 						<td>
-							<input type="password" name="password" class="mui-input-password ipt">
+							<input type="password" id="pwd" name="password" class="mui-input-password ipt">
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<input type="checkbox" class="checkbox" />
+							<input type="checkbox" id="checkBox" class="checkbox" />
 							<a style="font-size: 13px;color: RGB(102,102,102);">我接受《注册协议》、《免责声明》</a>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<a href="#">
-								<div class="btn">
-									立即申请
-								</div>
-							</a>
+							<input class="btn" id="btn" type="submit" value="立即申请" />
 						</td>
 					</tr>
 				</table>
@@ -157,43 +154,96 @@
 		<script type="text/javascript">
 			mui.init()
 			//发送验证码
-			var clock = '';
-			var nums = 60;
-			var btn;
+			var countdown = 60;
+
+			function settime(val) {
+				console.log('验证码');
+				if(countdown == 0) {
+					val.removeAttribute("disabled");
+					val.value = "获取验证码";
+					countdown = 60;
+					return;
+				} else {
+					val.setAttribute("disabled", true);
+					val.value = "重新发送(" + countdown + ")";
+					countdown--;
+				}
+				setTimeout(function() {
+					settime(val)
+				}, 1000)
+			}
+
+			
+			var phone = document.getElementById("phone").value;
+
 			function sendCode(thisBtn) {
-				btn = thisBtn;
-				btn.disabled = true; //将按钮置为不可点击
-				btn.value = nums + '秒后可重新获取';
-				clock = setInterval(doLoop, 1000); 
-				
-				mui.ajax('',{
-					data:{
-						
+				var url = "{% url 'phoneImageV' %}";
+				console.log(url);
+
+				console.log(phone);
+				mui.ajax(url, {
+					data: {
+						"phone": phone,
+						"csrfmiddlewaretoken": '{{ csrf_token }}',
 					},
-					dataType:'json',//服务器返回json格式数据
-					type:'post',//HTTP请求类型
-					timeout:10000,//超时时间设置为10秒；
-					success:function(data){
-						
+					dataType: 'json', //服务器返回json格式数据
+					type: 'get', //HTTP请求类型
+					timeout: 10000, //超时时间设置为10秒；
+					success: function(data) {
+						console.log(data)
+						if(data.code == "1") {
+							mui.alert("验证码发送成功");
+							settime(document.getElementById("setBtn"));
+						} else {
+							mui.alert("验证码发送失败");
+							console.log(data.message);
+						}
 					},
-					error:function(xhr,type,errorThrown){
-						
+					error: function(xhr, type, errorThrown) {
+						console.log("获取数据失败");
 					}
 				});
-			} 
-			function doLoop() {
-				nums--;
-				if(nums > 0) {
-					btn.value = nums + '秒后可重新获取';
-				} else {
-					clearInterval(clock); //清除定时器
-					btn.disabled = false;
-					btn.value = '点击发送验证码';
-					nums = 60; 
-				}
 			}
-			
-			
+
+			var register_url = "{% url 'register' %}";
+
+			document.getElementById("btn").addEventListener("tap", function() {
+				var qq = document.getElementById("qq").value;
+				var qqName = document.getElementById("qqName").value;
+				var introduce = document.getElementById("introduce").value;
+				var checkNum = document.getElementById("checkNum").value;
+				var phone = document.getElementById("phone").value;
+				var pwd = document.getElementById("pwd").value;
+				var checkBox = document.getElementById("checkBox");
+				console.log(qq + "," + qqName + "," + introduce + "," + phone + "," + checkNum + "," + pwd);
+				if(!qq || !qqName || !introduce || !phone || !checkNum || !pwd) {
+
+					mui.alert("填写不能为空");
+				}
+				/*if (checkBox = false) {
+					mui.alert("请阅读《注册协议》、《免责声明》");
+				}*/
+				mui.ajax(register_url, {
+					data: {
+						"qq": qq,
+						"qqName": qqName,
+						"introduce": introduce,
+						"checkNum": checkNum,
+						"pwd": pwd,
+						"phone": phone,
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'post', //HTTP请求类型
+					timeout: 10000, //超时时间设置为10秒；
+					success: function(data) {
+						console.log(data);
+						mui.alert("申请成功，请等待短信通知");
+					},
+					error: function(xhr, type, errorThrown) {
+						console.log("数据请求错误");
+					}
+				});
+			})
 		</script>
 	</body>
 

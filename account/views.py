@@ -171,7 +171,7 @@ def register(request):
             'mobile':mobile,
         }
         template = 'registration/m_register.html' if request.mobile else 'registration/register.html'
-        return render(request,'registration/register.html', context)
+        return render(request,template, context)
 
 
 def verifymobile(request):

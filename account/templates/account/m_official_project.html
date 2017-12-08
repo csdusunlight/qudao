@@ -23,14 +23,18 @@
 			}
 			
 			.txt {
-				border: 1px solid RGB(153, 153, 153);
-				border-radius: 6px;
 				width: 18rem;
 				height: 3rem;
 				line-height: 3rem;
+				border-radius: 5px;
+				border: 1px solid RGB(204, 204, 204);
 				position: relative;
 			}
-			
+			.txt > input{
+				border: none;
+				height: 2.5rem;
+				font-size: 15px;
+			}
 			.btn {
 				width: 16rem;
 				height: 4rem;
@@ -48,33 +52,28 @@
 				position: relative;
 			}
 			
-			.decrBox li {
-				list-style: none;
-				float: left;
-				width: 4rem;
-				height: 3rem;
-				text-align: center;
-				line-height: 3rem;
-				margin-left: 1rem;
-				border-radius: 6px;
-			}
-			
-			.decrBox li:nth-child(1) {
-				position: absolute;
-				left: -1.5rem;
-			}
-			
-			.decrBox li:nth-child(1),
-			.decrBox li:nth-child(2) {
-				background: RGB(254, 191, 0);
-				color: white;
-			}
-			
-			.decrBox li:nth-child(3),
-			.decrBox li:nth-child(4) {
-				border: 1px solid RGB(254, 191, 0);
-				color: RGB(254, 191, 0);
-			}
+			.decrBox .mark {
+                list-style: none;
+                float: left;
+                width: 4rem;
+                height: 3rem;
+                text-align: center;
+                line-height: 3rem;
+                margin-left: 1rem;
+                border-radius: 6px;
+            }
+            
+            
+            
+            .decrBox .mark.on {
+                background: RGB(254, 191, 0);
+                color: white;
+            }
+            
+            .decrBox .mark {
+                border: 1px solid RGB(254, 191, 0);
+                color: RGB(254, 191, 0);
+            }
 		</style>
 	</head>
 
@@ -91,6 +90,7 @@
 						    <div class="txt">
                                 <input id="title" type="text" />
                             </div>
+
 						</td>
 					</tr>
 					<tr>
@@ -153,7 +153,7 @@
 						<td><span>项目标签</span></td>
 						<td>
 							<ul class="decrBox mark-box">
-								{% for item in checkedmarks %}
+								{% for item in marks %}
                                     <li data-id="{{item.id}}" class="mark">{{item.name}}</li>
                                 {%endfor%}
 							</ul>
@@ -174,8 +174,6 @@
 		<script type="text/javascript">
 			mui.init();
 			var project_id = "{{id}}";
-            var company_id;
-            var strategy;
             var title = document.getElementById('title'),
                 cprice = document.getElementById('cprice'),
                 shortprice = document.getElementById('shortprice'),
@@ -183,19 +181,15 @@
                 investrange = document.getElementById('investrange'),
                 intrest = document.getElementById('intrest');
                 
-            mui.ajax('/restapi/projects/' + project_id + '/',{
+            mui.ajax('/restapi/sub/' + project_id + '/',{
                 dataType:'json',//服务器返回json格式数据
                 type:'get',//HTTP请求类型
                 timeout:10000,//超时时间设置为10秒；
                 success:function(ret){
-                    company_id = ret.company;
-                    strategy = ret.strategy;
-                    title.value = ret.title;
-                    cprice.value = ret.cprice?ret.cprice:ret.cprice;
-                    shortprice.value = ret.shortprice;
-                    term.value = ret.term;
-                    investrange.value = ret.investrange;
-                    intrest.value = ret.intrest;
+                    title.value = ret.project_title;
+                    cprice.value = ret.price?ret.price:ret.project_cprice;
+                    shortprice.value = ret.shortprice?ret.shortprice:ret.project_shortprice;
+                    intrest.value = ret.intrest?ret.intrest:ret.project_intrest;
                 },
                 error:function(xhr,type,errorThrown){
                     console.log(xhr.responseText);
@@ -234,18 +228,13 @@
                     mark_str += this.getAttribute('data-id') + ',';
                 })
                 
-                if (!title || !cprice || !shortprice || !term || !investrange || !intrest) {
+                if (!cprice || !shortprice || !intrest) {
                     mui.alert('填写项不能为空');
                 }
-                mui.ajax('/account/create_update_selfproject/' + project_id + '/',{
+                mui.ajax('/account/update_offiproject/' + project_id + '/',{
                     data: {
-                        'company': company_id,
-                        'strategy': strategy,
-                        'title': title.value,
-                        'cprice': cprice.value,
+                        'price': cprice.value,
                         'shortprice': shortprice.value,
-                        'term': term.value,
-                        'investrange': investrange.value,
                         'intrest': intrest.value,
                         'marks': mark_str,
                     },

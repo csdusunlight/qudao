@@ -42,8 +42,8 @@ def forgot_passwd(request):
     else:
         hashkey = CaptchaStore.generate_key()
         codimg_url = captcha_image_url(hashkey)
-        return render(request,'registration/forgot_passwd.html',
-                  {'hashkey':hashkey, 'codimg_url':codimg_url})
+        template = 'registration/m_forgot_passwd.html' if request.mobile else 'registration/forgot_passwd.html'
+        return render(request,template,{'hashkey':hashkey, 'codimg_url':codimg_url})
         
 
 def validate_randcode(request):

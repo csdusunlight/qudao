@@ -23,14 +23,18 @@
 			}
 			
 			.txt {
-				border: 1px solid RGB(153, 153, 153);
-				border-radius: 6px;
 				width: 18rem;
 				height: 3rem;
 				line-height: 3rem;
+				border-radius: 5px;
+				border: 1px solid RGB(204, 204, 204);
 				position: relative;
 			}
-			
+			.txt > input{
+				border: none;
+				height: 2.5rem;
+				font-size: 15px;
+			}
 			.btn {
 				width: 16rem;
 				height: 4rem;
@@ -87,13 +91,15 @@
 				<table>
 					<tr>
 						<td><span>项目名称</span></td>
-						<td><span>合时代一期</span></td>
+						<td>
+							<input type="text" name="project_name" />
+						</td>
 					</tr>
 					<tr>
 						<td><span>客户指导价</span></td>
 						<td>
 							<div class="txt">
-								<span>15111203705</span>
+								<input type="text" name="project_price" />
 							</div>
 						</td>
 					</tr>
@@ -101,7 +107,7 @@
 						<td><span>主页价格</span></td>
 						<td>
 							<div class="txt">
-								<span>100返2.9</span>
+								<input type="text" name="project_Mprice" />
 							</div>
 						</td>
 					</tr>
@@ -109,7 +115,7 @@
 						<td><span>标期</span></td>
 						<td>
 							<div class="txt">
-								<span>2017/09/12</span>
+								<input type="text" name="qibiao" />
 							</div>
 						</td>
 					</tr>
@@ -117,7 +123,7 @@
 						<td><span>投资区间</span></td>
 						<td>
 							<div class="txt">
-								<span>30天</span>
+								<input type="text" name="invest" />
 							</div>
 						</td>
 					</tr>
@@ -125,7 +131,7 @@
 						<td><span>预计年化</span></td>
 						<td>
 							<div class="txt">
-								<span>30000元</span>
+								<input type="text" name="annual" />
 							</div>
 						</td>
 					</tr>

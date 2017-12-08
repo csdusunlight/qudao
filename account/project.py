@@ -129,7 +129,8 @@ def update_offiproject(request, id):
         ret['code'] = 0
         return JsonResponse(ret)
     else:
-        kwargs = {}
+        marks = Mark.objects.filter(user=request.user)
+        kwargs = {'marks':marks}
         id = int(id)
         kwargs.update(id=id)
         sub = get_object_or_404(SubscribeShip, project_id=id, user=request.user)

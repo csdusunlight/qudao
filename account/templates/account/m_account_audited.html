@@ -16,7 +16,7 @@
 				background-color: white;
 			}
 			
-			.nav{
+			.nav {
 				width: 100%;
 				height: 40px;
 				border-radius: 5px;
@@ -26,18 +26,18 @@
 				color: white;
 			}
 			
-			.nav_list{
+			.nav_list {
 				font-size: 1.3rem;
 			}
 			
-			.nav_name{
+			.nav_name {
 				margin-left: 1.5rem;
 				font-size: 1.3rem;
 			}
 			
 			.nav_operite,
 			.nav_shenhe,
-			.nav_num{
+			.nav_num {
 				margin-left: 2.8rem;
 			}
 			
@@ -45,11 +45,17 @@
 				font-size: 1.2rem;
 				padding: 10px 10px;
 			}
-			.pro_num{
-				position: absolute;left: 9rem;top: 0;
+			
+			.pro_num {
+				position: absolute;
+				left: 9rem;
+				top: 0;
 			}
-			.pro_shenhe{
-				position: absolute;left: 19rem;top: 0;
+			
+			.pro_shenhe {
+				position: absolute;
+				left: 19rem;
+				top: 0;
 			}
 		</style>
 	</head>
@@ -80,7 +86,7 @@
 						<div id="scroll1" class="mui-scroll-wrapper">
 							<div class="mui-scroll">
 								<ul class="mui-table-view">
-								
+
 								</ul>
 							</div>
 						</div>
@@ -142,21 +148,22 @@
 										obj.endPullUpToRefresh(true);
 									} else {
 										obj.endPullUpToRefresh(false); //参数为true代表没有更多数据了。
-//										var table = document.body.querySelector('.mui-table-view');
+										//										var table = document.body.querySelector('.mui-table-view');
 										for(var i in data.results) {
 											var li = document.createElement('li');
 											li.className = 'mui-table-view-cell';
-											str_html = '<span class="pro_name ">'+ data.results[i].project_title +'</span>' +
-												'<span class="pro_list pro_num">'+ data.results[i].invest_mobile +'</span>' +
-												'<span class="pro_list pro_shenhe">'+ data.results[i].audit_state_des +'</span>'+ 
-												'<a href="#" style="position:absolute;right:1rem;top:0.9rem">编辑</a>';
+											str_html = '<span class="pro_name ">' + data.results[i].project_title + '</span>' +
+												'<span class="pro_list pro_num">' + data.results[i].invest_mobile + '</span>' +
+												'<span class="pro_list pro_shenhe">' + data.results[i].audit_state_des + '</span>' +
+												'<a data-type="' + data.results[i].is_official + '" data-id="' + (data.results[i].id) + '" class="pro_list pro_editor" style="position:absolute;right:1rem;top:0.9rem">编辑</a>';
 
 											li.innerHTML = str_html;
 											ul.appendChild(li);
 										}
-										
+
 									}
-								},error: function(xhr, type, errorThrown) {
+								},
+								error: function(xhr, type, errorThrown) {
 									console.log("没有数据")
 									//没有数据 显示没有更多数据
 									obj.endPullUpToRefresh(true);
@@ -165,8 +172,43 @@
 						}
 
 					});
-
 				})(mui);
+				
+				mui('.mui-table-view').on('tap', '.pro_editor', function() {
+					var project_id = this.getAttribute('data-id');
+					var type = this.getAttribute("data-type");
+					if(type == "true") {
+						mui.openWindow({
+							url: "/account/m_detail_official_investlog/" + project_id,
+							styles: {
+								top: 0,
+								bottom: 0
+							},
+							show: {
+								aniShow: 'slide-in-right',
+							},
+							waiting: {
+								autoShow: false, //自动显示等待框
+								title: '正在加载...', //等待对话框上显示的提示内容
+							}
+						});
+					} else {
+						mui.openWindow({
+							url: "/account/m_detail_personal_investlog/" + project_id,
+							styles: {
+								top: 0,
+								bottom: 0
+							},
+							show: {
+								aniShow: 'slide-in-right',
+							},
+							waiting: {
+								autoShow: false, //自动显示等待框
+								title: '正在加载...', //等待对话框上显示的提示内容
+							}
+						});
+					}
+				});
 			</script>
 
 	</body>

@@ -116,19 +116,19 @@
 								type: 'get', //HTTP请求类型
 								timeout: 3000, //超时时间设置为10秒；
 								success: function(data) {
-//									console.log("这是data：", data);
+									//									console.log("这是data：", data);
 									if(!data.results.length) {
 										obj.endPullUpToRefresh(true);
 									} else {
 										obj.endPullUpToRefresh(false); //参数为true代表没有更多数据了。
-//										var table = document.body.querySelector('.mui-table-view');
+										//										var table = document.body.querySelector('.mui-table-view');
 										for(var i in data.results) {
 											var li = document.createElement('li');
 											li.className = 'mui-table-view-cell';
 											str_html = '<span class="pro_list pro_name">' + data.results[i].project_title + '</span>' +
 												'<span class="pro_list pro_touzi">' + data.results[i].price + '</span>' +
 												'<div data-btn= ' + (data.results[i].id) + ' class="mui-switch mui-switch-mini ' + (data.results[i].is_on ? "mui-active" : "") + ' " style="position: absolute;right: 8rem;"><div class="mui-switch-handle"></div></div>' +
-												'<a  href="#" class="pro_list pro_editor" style="position:absolute;right:1.2rem;top:1rem">编辑</a>';
+												'<a data-type="' + data.results[i].project_is_official + '" data-id="' + (data.results[i].id) + '" class="pro_list pro_editor" style="position:absolute;right:1.2rem;top:1rem">编辑</a>';
 
 											li.innerHTML = str_html;
 											ul.appendChild(li);
@@ -144,10 +144,47 @@
 								}
 							});
 						}
-						
+
 					});
 
 				})(mui);
+
+				mui('.mui-table-view').on('tap', '.pro_editor', function() {
+					var project_id = this.getAttribute('data-id');
+					var type = this.getAttribute("data-type");
+					if(type == "True") {
+						mui.openWindow({
+							url: "/account/update_offiproject/" + project_id,
+							styles: {
+								top: 0,
+								bottom: 0
+							},
+							show: {
+								aniShow: 'slide-in-right',
+							},
+							waiting: {
+								autoShow: false, //自动显示等待框
+								title: '正在加载...', //等待对话框上显示的提示内容
+							}
+						});
+					} else {
+						mui.openWindow({
+							url: "/account/create_update_selfproject/" + project_id,
+							styles: {
+								top: 0,
+								bottom: 0
+							},
+							show: {
+								aniShow: 'slide-in-right',
+							},
+							waiting: {
+								autoShow: false, //自动显示等待框
+								title: '正在加载...', //等待对话框上显示的提示内容
+							}
+						});
+					}
+				})
+
 				mui('.mui-table-view').on('toggle', '.mui-switch', function() {
 					console.log(this, "llc")
 					var id = this.getAttribute("data-btn"); //获取当前switch属性

@@ -22,15 +22,27 @@
 				padding: 1rem 1.3rem;
 			}
 			
-			.txt {
+			/*.txt {
 				border: 1px solid RGB(153, 153, 153);
 				border-radius: 6px;
 				width: 18rem;
 				height: 3rem;
 				line-height: 3rem;
 				position: relative;
+			}*/
+			.txt{
+				width: 18rem;
+				height: 3rem;
+				line-height: 3rem;
+				border-radius: 5px;
+				border: 1px solid RGB(204, 204, 204);
+				position: relative;
 			}
-			
+			.txt > input{
+				border: none;
+				height: 2.5rem;
+				font-size: 15px;
+			}
 			.btn {
 				width: 16rem;
 				height: 4rem;
@@ -91,6 +103,7 @@
 				width: 1.2rem;
 				height: 1.2rem;
 			}
+			
 		</style>
 	</head>
 
@@ -104,13 +117,17 @@
 				<table>
 					<tr>
 						<td><span>项目名称</span></td>
-						<td><span id="title"></span></td>
+						<td>
+							<div class="txt">
+								<input type="text" />
+							</div>
+						</td>
 					</tr>
 					<tr>
 						<td><span>客户指导价</span></td>
 						<td>
 							<div class="txt">
-								<span id="cprice">15111203705</span>
+								<input type="text" />
 							</div>
 						</td>
 					</tr>
@@ -118,7 +135,7 @@
 						<td><span>主页价格</span></td>
 						<td>
 							<div class="txt">
-								<span id="shortprice">100返2.9</span>
+								<input type="text" />
 							</div>
 						</td>
 					</tr>
@@ -126,7 +143,7 @@
 						<td><span>标期</span></td>
 						<td>
 							<div class="txt">
-								<span id="term">2017/09/12</span>
+								<input type="text" />
 							</div>
 						</td>
 					</tr>
@@ -134,7 +151,7 @@
 						<td><span>投资区间</span></td>
 						<td>
 							<div class="txt">
-								<span id="investrange">30天</span>
+								<input type="text" />
 							</div>
 						</td>
 					</tr>
@@ -142,7 +159,7 @@
 						<td><span>预计年化</span></td>
 						<td>
 							<div class="txt">
-								<span id="intrest">30000元</span>
+								<input type="text" />
 							</div>
 						</td>
 					</tr>
@@ -165,8 +182,8 @@
 					<tr>
 						<td>允许复投</td>
 						<td>
-							<input class="box" type="checkbox" name="yes_no" value="是" />是
-							<input class="box" type="checkbox" name="yes_no" value="否" style="margin-left: 4rem;" />否
+							<input class="box" type="radio" name="yes_no" value="是" />是
+							<input class="box" type="radio" name="yes_no" value="否" style="margin-left: 4rem;" />否
 						</td>
 					</tr>
 					<tr>

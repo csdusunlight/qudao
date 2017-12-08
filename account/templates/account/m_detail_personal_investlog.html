@@ -114,7 +114,7 @@
 					<tr>
 						<td><span>项目名称</span></td>
 						<td>
-							<input id="project" type="text" class="ipt" value="{{investlog.project.id}}" />
+							<input id="project" type="text" class="ipt" value="{{investlog.project}}" disabled="disabled" />
 						</td>
 					</tr>
 					<tr>
@@ -237,7 +237,7 @@
                 }
                 mui.ajax('/restapi/investlogs/{{id}}/',{
                     data: {
-                        'project': project.value,
+                        'project': {{investlog.project.id}},
                         'invest_date': date.value,
                         'invest_mobile': invest_mobile.value,
                         'invest_name': invest_name.value,

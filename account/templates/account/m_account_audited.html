@@ -133,7 +133,12 @@
 						});
 
 						function getList(obj, ul, n, index) {
-							var url = '/restapi/investlogs/?page=1&pageSize=10&is_official=true&user=2';
+						    console.log(index);
+						    if (index == 0) {
+						        var url = '/restapi/investlogs/?is_official=true&user={{user.id}}';
+						    } else if (index == 1) {
+						    	var url = '/restapi/investlogs/?is_official=false&user={{user.id}}';
+						    }
 							mui.ajax(url, {
 								data: {
 									page: n,
@@ -155,7 +160,8 @@
 											str_html = '<span class="pro_name ">' + data.results[i].project_title + '</span>' +
 												'<span class="pro_list pro_num">' + data.results[i].invest_mobile + '</span>' +
 												'<span class="pro_list pro_shenhe">' + data.results[i].audit_state_des + '</span>' +
-												'<a data-type="' + data.results[i].is_official + '" data-id="' + (data.results[i].id) + '" class="pro_list pro_editor" style="position:absolute;right:1rem;top:0.9rem">编辑</a>';
+												'<a data-type="' + data.results[i].is_official + '" data-id="' + (data.results[i].id) + '" class="pro_list pro_editor" style="position:absolute;right:1rem;top:0.9rem">'+
+												(data.results[i].audit_state==1?'编辑':'查看') + '</a>';
 
 											li.innerHTML = str_html;
 											ul.appendChild(li);
@@ -179,7 +185,7 @@
 					var type = this.getAttribute("data-type");
 					if(type == "true") {
 						mui.openWindow({
-							url: "/account/m_detail_official_investlog/" + project_id,
+							url: "/account/detail_investlog/" + project_id,
 							styles: {
 								top: 0,
 								bottom: 0
@@ -194,7 +200,7 @@
 						});
 					} else {
 						mui.openWindow({
-							url: "/account/m_detail_personal_investlog/" + project_id,
+							url: "/account/detail_investlog/" + project_id,
 							styles: {
 								top: 0,
 								bottom: 0

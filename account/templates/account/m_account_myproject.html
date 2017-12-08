@@ -128,7 +128,7 @@
 											str_html = '<span class="pro_list pro_name">' + data.results[i].project_title + '</span>' +
 												'<span class="pro_list pro_touzi">' + data.results[i].price + '</span>' +
 												'<div data-btn= ' + (data.results[i].id) + ' class="mui-switch mui-switch-mini ' + (data.results[i].is_on ? "mui-active" : "") + ' " style="position: absolute;right: 8rem;"><div class="mui-switch-handle"></div></div>' +
-												'<a data-type="' + data.results[i].project_is_official + '" data-id="' + (data.results[i].id) + '" class="pro_list pro_editor" style="position:absolute;right:1.2rem;top:1rem">编辑</a>';
+												'<a data-type="' + data.results[i].project_is_official + '" data-id="' + (data.results[i].project) + '" class="pro_list pro_editor" style="position:absolute;right:1.2rem;top:1rem">编辑</a>';
 
 											li.innerHTML = str_html;
 											ul.appendChild(li);

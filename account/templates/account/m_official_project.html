@@ -52,33 +52,28 @@
 				position: relative;
 			}
 			
-			.decrBox li {
-				list-style: none;
-				float: left;
-				width: 4rem;
-				height: 3rem;
-				text-align: center;
-				line-height: 3rem;
-				margin-left: 1rem;
-				border-radius: 6px;
-			}
-			
-			.decrBox li:nth-child(1) {
-				position: absolute;
-				left: -1.5rem;
-			}
-			
-			.decrBox li:nth-child(1),
-			.decrBox li:nth-child(2) {
-				background: RGB(254, 191, 0);
-				color: white;
-			}
-			
-			.decrBox li:nth-child(3),
-			.decrBox li:nth-child(4) {
-				border: 1px solid RGB(254, 191, 0);
-				color: RGB(254, 191, 0);
-			}
+			.decrBox .mark {
+                list-style: none;
+                float: left;
+                width: 4rem;
+                height: 3rem;
+                text-align: center;
+                line-height: 3rem;
+                margin-left: 1rem;
+                border-radius: 6px;
+            }
+            
+            
+            
+            .decrBox .mark.on {
+                background: RGB(254, 191, 0);
+                color: white;
+            }
+            
+            .decrBox .mark {
+                border: 1px solid RGB(254, 191, 0);
+                color: RGB(254, 191, 0);
+            }
 		</style>
 	</head>
 
@@ -92,14 +87,17 @@
 					<tr>
 						<td><span>项目名称</span></td>
 						<td>
-							<input type="text" name="project_name" />
+						    <div class="txt">
+                                <input id="title" type="text" />
+                            </div>
+
 						</td>
 					</tr>
 					<tr>
 						<td><span>客户指导价</span></td>
 						<td>
 							<div class="txt">
-								<input type="text" name="project_price" />
+								<input id="cprice" type="text" />
 							</div>
 						</td>
 					</tr>
@@ -107,7 +105,7 @@
 						<td><span>主页价格</span></td>
 						<td>
 							<div class="txt">
-								<input type="text" name="project_Mprice" />
+								<input id="shortprice" type="text" />
 							</div>
 						</td>
 					</tr>
@@ -115,7 +113,7 @@
 						<td><span>标期</span></td>
 						<td>
 							<div class="txt">
-								<input type="text" name="qibiao" />
+								<input id="term" type="text" />
 							</div>
 						</td>
 					</tr>
@@ -123,7 +121,7 @@
 						<td><span>投资区间</span></td>
 						<td>
 							<div class="txt">
-								<input type="text" name="invest" />
+								<input id="investrange" type="text" />
 							</div>
 						</td>
 					</tr>
@@ -131,11 +129,11 @@
 						<td><span>预计年化</span></td>
 						<td>
 							<div class="txt">
-								<input type="text" name="annual" />
+								<input id="intrest" type="text" />
 							</div>
 						</td>
 					</tr>
-					<tr>
+					<!--<tr>
 						<td><span>是否主业呈现</span></td>
 						<td>
 							<div class="mui-switch mui-switch-mini mui-active">
@@ -150,22 +148,21 @@
 								<div class="mui-switch-handle"></div>
 							</div>
 						</td>
-					</tr>
+					</tr>-->
 					<tr>
 						<td><span>项目标签</span></td>
 						<td>
-							<ul class="decrBox">
-								<li>稳健型</li>
-								<li>稳健型</li>
-								<li>稳健型</li>
-								<li>稳健型</li>
+							<ul class="decrBox mark-box">
+								{% for item in marks %}
+                                    <li data-id="{{item.id}}" class="mark">{{item.name}}</li>
+                                {%endfor%}
 							</ul>
 						</td>
 					</tr>
 					<tr>
 						<td colspan="2">
-							<a href="#">
-								<div class="btn">确定</div>
+							<a>
+								<div id="submit" class="btn submit">确定</div>
 							</a>
 						</td>
 					</tr>
@@ -176,6 +173,89 @@
 		<script src="{% static 'js/mui.min.js' %}"></script>
 		<script type="text/javascript">
 			mui.init();
+			var project_id = "{{id}}";
+			var sub_id = "{{subid}}";
+            var title = document.getElementById('title'),
+                cprice = document.getElementById('cprice'),
+                shortprice = document.getElementById('shortprice'),
+                term = document.getElementById('term'),
+                investrange = document.getElementById('investrange'),
+                intrest = document.getElementById('intrest');
+                
+            mui.ajax('/restapi/sub/' + sub_id + '/',{
+                dataType:'json',//服务器返回json格式数据
+                type:'get',//HTTP请求类型
+                timeout:10000,//超时时间设置为10秒；
+                success:function(ret){
+                    title.value = ret.project_title;
+                    cprice.value = ret.price?ret.price:ret.project_cprice;
+                    shortprice.value = ret.shortprice?ret.shortprice:ret.project_shortprice;
+                    term.value = ret.project_term;
+                    investrange.value = ret.project_investrange;
+                    intrest.value = ret.intrest?ret.intrest:ret.project_intrest;
+                },
+                error:function(xhr,type,errorThrown){
+                    console.log(xhr.responseText);
+                }
+            });
+            
+            var checked_marks = {{checked_marks}};
+            console.log('marks: '+checked_marks);
+            mui('.mark-box .mark').each(function(){
+                var i;
+                var mark_id = this.getAttribute('data-id');
+                console.log(mark_id);
+                for (i in checked_marks) {
+                    if (mark_id == checked_marks[i]) {
+                        this.className = 'mark on';
+                        console.log('on');
+                    }
+                }
+            })
+            mui('.mark-box').on('tap', '.mark', function(){        //选择标签
+                if (this.className == 'mark on') {
+                    this.className = 'mark';
+                } else{
+                    
+                    if (mui('.mark.on').length >= 3) {
+                        mui.alert('每个项目最多选择三个标签');
+                    } else {
+                        this.className = 'mark on';
+                    }
+                }
+            })
+            
+            document.getElementById('submit').addEventListener('tap',function (){
+                var mark_str = '';
+                mui('.mark.on').each(function(){
+                    mark_str += this.getAttribute('data-id') + ',';
+                })
+                
+                if (!cprice || !shortprice || !intrest) {
+                    mui.alert('填写项不能为空');
+                }
+                mui.ajax('/account/update_offiproject/' + sub_id + '/',{
+                    data: {
+                        'price': cprice.value,
+                        'shortprice': shortprice.value,
+                        'intrest': intrest.value,
+                        'marks': mark_str,
+                    },
+                    dataType:'json',//服务器返回json格式数据
+                    type:'post',//HTTP请求类型
+                    timeout:10000,//超时时间设置为10秒；
+                    success:function(ret){
+                        if (ret.code == 0) {
+                            mui.alert('修改成功');
+                        } else{
+                            console.log(ret.msg);
+                        }
+                    },
+                    error:function(xhr,type,errorThrown){
+                        console.log(xhr.responseText);
+                    }
+                });
+            })
 		</script>
 	</body>
 

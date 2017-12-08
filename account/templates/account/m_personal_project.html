@@ -61,7 +61,7 @@
 				position: relative;
 			}
 			
-			.decrBox li {
+			.decrBox .mark {
 				list-style: none;
 				float: left;
 				width: 4rem;
@@ -72,19 +72,14 @@
 				border-radius: 6px;
 			}
 			
-			.decrBox li:nth-child(1) {
-				position: absolute;
-				left: -1.5rem;
-			}
 			
-			.decrBox li:nth-child(1),
-			.decrBox li:nth-child(2) {
+			
+			.decrBox .mark.on {
 				background: RGB(254, 191, 0);
 				color: white;
 			}
 			
-			.decrBox li:nth-child(3),
-			.decrBox li:nth-child(4) {
+			.decrBox .mark {
 				border: 1px solid RGB(254, 191, 0);
 				color: RGB(254, 191, 0);
 			}
@@ -119,7 +114,7 @@
 						<td><span>项目名称</span></td>
 						<td>
 							<div class="txt">
-								<input type="text" />
+								<input id="title" type="text" />
 							</div>
 						</td>
 					</tr>
@@ -127,7 +122,7 @@
 						<td><span>客户指导价</span></td>
 						<td>
 							<div class="txt">
-								<input type="text" />
+								<input id="cprice" type="text" />
 							</div>
 						</td>
 					</tr>
@@ -135,7 +130,7 @@
 						<td><span>主页价格</span></td>
 						<td>
 							<div class="txt">
-								<input type="text" />
+								<input id="shortprice" type="text" />
 							</div>
 						</td>
 					</tr>
@@ -143,7 +138,7 @@
 						<td><span>标期</span></td>
 						<td>
 							<div class="txt">
-								<input type="text" />
+								<input id="term" type="text" />
 							</div>
 						</td>
 					</tr>
@@ -151,7 +146,7 @@
 						<td><span>投资区间</span></td>
 						<td>
 							<div class="txt">
-								<input type="text" />
+								<input id="investrange" type="text" />
 							</div>
 						</td>
 					</tr>
@@ -159,11 +154,11 @@
 						<td><span>预计年化</span></td>
 						<td>
 							<div class="txt">
-								<input type="text" />
+								<input id="intrest" type="text" />
 							</div>
 						</td>
 					</tr>
-					<tr>
+					<!--<tr>
 						<td><span>是否主业呈现</span></td>
 						<td>
 							<div class="mui-switch mui-switch-mini mui-active">
@@ -178,29 +173,32 @@
 								<div class="mui-switch-handle"></div>
 							</div>
 						</td>
-					</tr>
+					</tr>-->
 					<tr>
 						<td>允许复投</td>
 						<td>
-							<input class="box" type="radio" name="yes_no" value="是" />是
-							<input class="box" type="radio" name="yes_no" value="否" style="margin-left: 4rem;" />否
+							<input class="box is_futou" type="radio" name="yes_no" value="true" />是
+							<input class="box is_futou" type="radio" name="yes_no" value="false" style="margin-left: 4rem;" />否
 						</td>
 					</tr>
 					<tr>
 						<td>需要预约</td>
 						<td>
-							<input class="box1" type="checkbox" name="older" />是
-							<input class="box1" type="checkbox" name="older" style="margin-left: 4rem;" />否
+							<input class="box1 is_book" type="radio" name="older" value="true" />是
+							<input class="box1 is_book" type="radio" name="older" value="false" style="margin-left: 4rem;" />否
 						</td>
 					</tr>
 					<tr>
 						<td><span>项目标签</span></td>
 						<td>
-							<ul class="decrBox">
+							<ul class="decrBox mark-box">
+								<!--<li>稳健型</li>
 								<li>稳健型</li>
 								<li>稳健型</li>
-								<li>稳健型</li>
-								<li>稳健型</li>
+								<li>稳健型</li>-->
+								{% for item in marks %}
+                                    <li data-id="{{item.id}}" class="mark">{{item.name}}</li>
+                                {%endfor%}
 							</ul>
 						</td>
 					</tr>
@@ -211,29 +209,29 @@
 					</tr>
 					<tr>
 						<td colspan="2">
-							<input class="box2" type="checkbox" />投资姓名/用户名
-							<input class="box2" type="checkbox" style="margin-left: 2rem;" />投资金额
-							<input class="box2" type="checkbox" style="margin-left: 2rem;" />投资标期
+							<input class="box2" value="0" type="checkbox" disabled="disabled" />投资姓名/用户名
+							<input class="box2" value="1" type="checkbox" disabled="disabled" style="margin-left: 2rem;" />投资金额
+							<input class="box2" value="2" type="checkbox" disabled="disabled" style="margin-left: 2rem;" />投资标期
 						</td>
 					</tr>
 					<tr>
 						<td colspan="2">
-							<input class="box2" type="checkbox" />投资日期
-							<input class="box2" type="checkbox" style="margin-left: 6rem;" />收款信息
-							<input class="box2" type="checkbox" style="margin-left: 1.8rem;" />投资手机号
+							<input class="box2" value="3" type="checkbox" disabled="disabled" />投资日期
+							<input class="box2" value="4" type="checkbox" disabled="disabled" style="margin-left: 6rem;" />收款信息
+							<input class="box2" value="5" type="checkbox"  disabled="disabled"style="margin-left: 1.8rem;" />投资手机号
 						</td>
 					</tr>
 					<tr>
 						<td colspan="2">
-							<input class="box2" type="checkbox" />用户预期返现金额
-							<input class="box2" type="checkbox" style="margin-left:1.2rem ;" />QQ
-							<input class="box2" type="checkbox" style="margin-left:4.8rem;" />投资截图
+							<input class="box2" value="6" type="checkbox" />用户预期返现金额
+							<input class="box2" value="7" type="checkbox" style="margin-left:1.2rem ;" />QQ
+							<input class="box2" value="8" type="checkbox" style="margin-left:4.8rem;" />投资截图
 						</td>
 					</tr>
 					<tr>
 						<td colspan="2">
-							<a href="#">
-								<div class="btn">确定</div>
+							<a>
+								<div id="submit" class="btn">确定</div>
 							</a>
 						</td>
 					</tr>
@@ -245,29 +243,124 @@
 		<script type="text/javascript">
 			mui.init();
 			var project_id = "{{id}}";
+			var company_id;
+			var strategy;
 			var title = document.getElementById('title'),
 			    cprice = document.getElementById('cprice'),
 			    shortprice = document.getElementById('shortprice'),
 			    term = document.getElementById('term'),
 			    investrange = document.getElementById('investrange'),
 			    intrest = document.getElementById('intrest');
+			    
 			mui.ajax('/restapi/projects/' + project_id + '/',{
                 dataType:'json',//服务器返回json格式数据
                 type:'get',//HTTP请求类型
                 timeout:10000,//超时时间设置为10秒；
                 success:function(ret){
-                    console.log(ret);
-                    title.innerText = ret.title;
-                    cprice.innerText = ret.cprice?ret.cprice:ret.cprice;
-                    shortprice.innerText = ret.shortprice;
-                    term.innerText = ret.term;
-                    investrange.innerText = ret.investrange;
-                    intrest.innerText = ret.intrest;
+                    company_id = ret.company;
+                    strategy = ret.strategy;
+                    title.value = ret.title;
+                    cprice.value = ret.cprice?ret.cprice:ret.cprice;
+                    shortprice.value = ret.shortprice;
+                    term.value = ret.term;
+                    investrange.value = ret.investrange;
+                    intrest.value = ret.intrest;
+                    
+                    var radio_dom = '.is_futou[value="'+ ret.is_multisub_allowed +'"]'
+                    mui(radio_dom)[0].checked = true;
+                    var radio_dom2 = '.is_book[value="'+ ret.is_book +'"]'
+                    mui(radio_dom2)[0].checked = true;
+                    
+                    var need_str = ret.necessary_fields;
+                    var need_set = need_str.split(',');
+                    var need_id;
+                    if (need_set.length != 0) {
+                        for (need_id in need_set) {
+                            var dom = 'input[value="'+ need_set[need_id].replace(/(^\s*)|(\s*$)/g, "") +'"]';
+                            mui(dom)[0].checked = true;
+                        }
+                    }
                 },
                 error:function(xhr,type,errorThrown){
                     console.log(xhr.responseText);
                 }
             });
+            
+            var checked_marks = {{checked_marks}};
+            console.log('marks: '+checked_marks);
+            mui('.mark-box .mark').each(function(){
+                var i;
+                var mark_id = this.getAttribute('data-id');
+                console.log(mark_id);
+                for (i in checked_marks) {
+                    if (mark_id == checked_marks[i]) {
+                        this.className = 'mark on';
+                        console.log('on');
+                    }
+                }
+            })
+            mui('.mark-box').on('tap', '.mark', function(){        //选择标签
+                if (this.className == 'mark on') {
+                	this.className = 'mark';
+                } else{
+                	
+                    if (mui('.mark.on').length >= 3) {
+                        mui.alert('每个项目最多选择三个标签');
+                    } else {
+                        this.className = 'mark on';
+                    }
+                }
+            })
+            
+            document.getElementById('submit').addEventListener('tap',function (){
+                var is_futou = mui("input[name='yes_no']:checked")[0].value;
+                var is_book = mui("input[name='older']:checked")[0].value;
+                var mark_str = '';
+                mui('.mark.on').each(function(){
+                    mark_str += this.getAttribute('data-id') + ',';
+                })
+                
+                var need_arr = [];
+                mui('input[type="checkbox"]:checked').each(function() {
+                    need_arr.push(this.value);
+                })
+                var necessary_fields = need_arr.join(',');
+                console.log(necessary_fields);
+                
+                if (!title || !cprice || !shortprice || !term || !investrange || !intrest) {
+                	mui.alert('填写项不能为空');
+                }
+                console.log(typeof(is_futou));
+                mui.ajax('/account/create_update_selfproject/' + project_id + '/',{
+                    data: {
+                        'company': company_id,
+                        'strategy': strategy,
+                        'title': title.value,
+                        'cprice': cprice.value,
+                        'shortprice': shortprice.value,
+                        'term': term.value,
+                        'investrange': investrange.value,
+                        'intrest': intrest.value,
+                        'is_multisub_allowed': is_futou,
+                        'is_book': is_book,
+                        'necessary_fields': necessary_fields,
+                        'marks': mark_str,
+                    },
+                    dataType:'json',//服务器返回json格式数据
+                    type:'post',//HTTP请求类型
+                    timeout:10000,//超时时间设置为10秒；
+                    success:function(ret){
+                        if (ret.code == 0) {
+                        	mui.alert('修改成功');
+                        } else{
+                        	console.log(ret.msg);
+                        }
+                    },
+                    error:function(xhr,type,errorThrown){
+                        console.log(xhr.responseText);
+                    }
+                });
+            })
 		</script>
 	</body>
 

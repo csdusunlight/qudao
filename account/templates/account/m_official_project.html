@@ -174,6 +174,7 @@
 		<script type="text/javascript">
 			mui.init();
 			var project_id = "{{id}}";
+			var sub_id = "{{subid}}";
             var title = document.getElementById('title'),
                 cprice = document.getElementById('cprice'),
                 shortprice = document.getElementById('shortprice'),
@@ -181,7 +182,7 @@
                 investrange = document.getElementById('investrange'),
                 intrest = document.getElementById('intrest');
                 
-            mui.ajax('/restapi/sub/' + project_id + '/',{
+            mui.ajax('/restapi/sub/' + sub_id + '/',{
                 dataType:'json',//服务器返回json格式数据
                 type:'get',//HTTP请求类型
                 timeout:10000,//超时时间设置为10秒；
@@ -189,6 +190,8 @@
                     title.value = ret.project_title;
                     cprice.value = ret.price?ret.price:ret.project_cprice;
                     shortprice.value = ret.shortprice?ret.shortprice:ret.project_shortprice;
+                    term.value = ret.project_term;
+                    investrange.value = ret.project_investrange;
                     intrest.value = ret.intrest?ret.intrest:ret.project_intrest;
                 },
                 error:function(xhr,type,errorThrown){
@@ -231,7 +234,7 @@
                 if (!cprice || !shortprice || !intrest) {
                     mui.alert('填写项不能为空');
                 }
-                mui.ajax('/account/update_offiproject/' + project_id + '/',{
+                mui.ajax('/account/update_offiproject/' + sub_id + '/',{
                     data: {
                         'price': cprice.value,
                         'shortprice': shortprice.value,

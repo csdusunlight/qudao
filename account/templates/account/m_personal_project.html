@@ -104,13 +104,13 @@
 				<table>
 					<tr>
 						<td><span>项目名称</span></td>
-						<td><span>{{project.title}}</span></td>
+						<td><span id="title"></span></td>
 					</tr>
 					<tr>
 						<td><span>客户指导价</span></td>
 						<td>
 							<div class="txt">
-								<span>15111203705</span>
+								<span id="cprice">15111203705</span>
 							</div>
 						</td>
 					</tr>
@@ -118,7 +118,7 @@
 						<td><span>主页价格</span></td>
 						<td>
 							<div class="txt">
-								<span>100返2.9</span>
+								<span id="shortprice">100返2.9</span>
 							</div>
 						</td>
 					</tr>
@@ -126,7 +126,7 @@
 						<td><span>标期</span></td>
 						<td>
 							<div class="txt">
-								<span>2017/09/12</span>
+								<span id="term">2017/09/12</span>
 							</div>
 						</td>
 					</tr>
@@ -134,7 +134,7 @@
 						<td><span>投资区间</span></td>
 						<td>
 							<div class="txt">
-								<span>30天</span>
+								<span id="investrange">30天</span>
 							</div>
 						</td>
 					</tr>
@@ -142,7 +142,7 @@
 						<td><span>预计年化</span></td>
 						<td>
 							<div class="txt">
-								<span>30000元</span>
+								<span id="intrest">30000元</span>
 							</div>
 						</td>
 					</tr>
@@ -226,7 +226,31 @@
 
 		<script src="{% static 'js/mui.min.js' %}"></script>
 		<script type="text/javascript">
-			mui.init()
+			mui.init();
+			var project_id = "{{id}}";
+			var title = document.getElementById('title'),
+			    cprice = document.getElementById('cprice'),
+			    shortprice = document.getElementById('shortprice'),
+			    term = document.getElementById('term'),
+			    investrange = document.getElementById('investrange'),
+			    intrest = document.getElementById('intrest');
+			mui.ajax('/restapi/projects/' + project_id + '/',{
+                dataType:'json',//服务器返回json格式数据
+                type:'get',//HTTP请求类型
+                timeout:10000,//超时时间设置为10秒；
+                success:function(ret){
+                    console.log(ret);
+                    title.innerText = ret.title;
+                    cprice.innerText = ret.cprice?ret.cprice:ret.cprice;
+                    shortprice.innerText = ret.shortprice;
+                    term.innerText = ret.term;
+                    investrange.innerText = ret.investrange;
+                    intrest.innerText = ret.intrest;
+                },
+                error:function(xhr,type,errorThrown){
+                    console.log(xhr.responseText);
+                }
+            });
 		</script>
 	</body>
 

@@ -39,7 +39,7 @@
 					<span class="mui-icon iconfont icon-fenxiang" style="position: absolute;top: 1.2rem;right: 1rem;"></span>
 				</li>
 			    <li class="mui-table-view-cell">
-			        <a href="m_ProjectManagement.html" class="mui-navigate-right" style="color: RGB(102,102,102);">项目管理</a>
+			        <a href="{% url 'project_manage' %}" class="mui-navigate-right" style="color: RGB(102,102,102);">项目管理</a>
 			    </li>
 			</ul>
 			<ul class="mui-table-view" style="margin-top: 0.5rem;">
@@ -47,7 +47,7 @@
 			        <a href="#" class="mui-navigate-right" style="color: RGB(102,102,102);">自助交单</a>
 			    </li>
 			    <li class="mui-table-view-cell">
-			        <a href="m_DataManagement.html" class="mui-navigate-right" style="color: RGB(102,102,102);">数据审核</a>
+			        <a href="{%url 'account_audited'%}" class="mui-navigate-right" style="color: RGB(102,102,102);">数据审核</a>
 			    </li>
 			    <li class="mui-table-view-cell">
 			        <a href="#" class="mui-navigate-right" style="color: RGB(102,102,102);">预约管理</a>
@@ -55,7 +55,7 @@
 			</ul>
 			<ul class="mui-table-view" style="margin-top: 0.5rem;">
 				<li class="mui-table-view-cell">
-			        <a href="m_PaymentDetails.html" class="mui-navigate-right" style="color: RGB(102,102,102);">收支详情</a>
+			        <a href="{% url 'account_money' %}" class="mui-navigate-right" style="color: RGB(102,102,102);">收支详情</a>
 			    </li>
 			</ul>	
 		</div>

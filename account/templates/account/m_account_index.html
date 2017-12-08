@@ -1,0 +1,86 @@
+{% load staticfiles %}
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>个人中心</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		
+		<link rel="stylesheet" href="{% static 'css/mui.min.css' %}" />
+		<!--<link rel="stylesheet" href="dist/css/User.css" />-->
+		<link rel="stylesheet" href="{% static 'css/User.css' %}" />
+		<!--<link rel="stylesheet" href="dist/css/iconfont.css" />-->
+		<link rel="stylesheet" href="{% static 'css/iconfont.css' %}" />
+		<!--<script type="text/javascript" src="dist/js/rem.js" ></script>-->
+		<script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
+	</head>
+
+	<body>
+		<div class="top">
+			<div class="headerPic">
+				<!--<img src="img/userPic.jpg" />-->
+				<img src="{{user.picture_url}}" />
+			</div>
+			<span class="phone_num">{{user.mobile}}</span>
+			<div class="left_btm">
+				<p>{{user.accu_income}}</p>
+				<p>积累收益(元)</p>
+			</div>
+			<div class="right_btm">
+				<p>{{user.balance}}</p>
+				<p>账户余额(元)</p>
+			</div>
+		</div>
+		<div class="mui-content">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" style="position: relative;">
+					<a href="http://{{user.domain_name}}.51fanshu.com" style="color: RGB(102,102,102);">我的主页：http://{{user.domain_name}}.51fanshu.com</a>
+					<span class="mui-icon iconfont icon-fenxiang" style="position: absolute;top: 1.2rem;right: 1rem;"></span>
+				</li>
+			    <li class="mui-table-view-cell">
+			        <a href="{% url 'project_manage' %}" class="mui-navigate-right" style="color: RGB(102,102,102);">项目管理</a>
+			    </li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 0.5rem;">
+				<li class="mui-table-view-cell">
+			        <a href="#" class="mui-navigate-right" style="color: RGB(102,102,102);">自助交单</a>
+			    </li>
+			    <li class="mui-table-view-cell">
+			        <a href="{%url 'account_audited'%}" class="mui-navigate-right" style="color: RGB(102,102,102);">数据审核</a>
+			    </li>
+			    <li class="mui-table-view-cell">
+			        <a href="#" class="mui-navigate-right" style="color: RGB(102,102,102);">预约管理</a>
+			    </li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 0.5rem;">
+				<li class="mui-table-view-cell">
+			        <a href="{% url 'account_money' %}" class="mui-navigate-right" style="color: RGB(102,102,102);">收支详情</a>
+			    </li>
+			</ul>	
+		</div>
+		
+		
+		
+		<script src="{% static 'js/mui.min.js' %}"></script>
+		<script type="text/javascript">
+			mui.init();
+//			mui.ajax('http://127.0.0.1:8000/restapi/announcement/?ordering=state',{
+//				dataType:'json',//服务器返回json格式数据
+//				type:'get',//HTTP请求类型
+//				timeout:10000,//超时时间设置为10秒；
+//				headers:{'Content-Type':'application/json'},	              
+//				success:function(data){
+//					console.log(data)
+//					
+//					
+//				},
+//				error:function(xhr,type,errorThrown){
+//					//异常处理；
+//					console.log(type);
+//				}
+//			});
+		</script>
+	</body>
+
+</html>

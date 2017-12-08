@@ -1,0 +1,127 @@
+{% load staticfiles %}
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>登陆</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="{% static 'css/mui.min.css' %}" rel="stylesheet" />
+		<script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
+		<style>
+			body {
+				background: white;
+			}
+			
+			* {
+				margin: 0;
+				padding: 0;
+				font-family: "微软雅黑";
+				font-size: 15px;
+			}
+			
+			table {
+				margin-left: 1.5rem;
+				color: RGB(102, 102, 102);
+			}
+			
+			td {
+				padding: 0.5rem 1rem;
+			}
+			
+			.ipt {
+				margin-bottom: 0 !important;
+				width: 25rem !important;
+				height: 3rem !important;
+				border-radius: 5px !important;
+				font-size: 14px;
+			}
+			
+			.checkbox {
+				width: 1.2rem;
+				height: 1.2rem;
+			}
+			
+			.btnBox {
+				border-radius: 5px;
+				text-align: center;
+				line-height: 3rem;
+				margin: 1.5rem 5rem;
+			}
+			
+			.btnBox>input {
+				border: none;
+				background: RGB(145, 193, 29);
+				width: 14rem;
+				height: 3rem;
+				color: white;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">用户登陆</h1>
+		</header>
+		<div class="mui-content" style="background: white;">
+			{% if form.errors %}
+			<span class="tipsl" id="divname">
+        	<font class="login-tips">用户名或密码输入有误!</font>
+        	</span> {% endif %}
+			<form action="" method="post">
+				{%csrf_token%}
+				<table>
+					<tr>
+						<td>手机号</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="text" name="username" id="user" class="ipt" />
+						</td>
+					</tr>
+					<tr>
+						<td>密码</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="password" name="password" id="pwd" class="ipt" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="checkbox" name="checkbox" class="checkbox" />
+							<span style="font-size: 13px;">记住密码</span>
+							<a href="{% url 'forgot_passwd' %}" style="font-size: 13px; margin-left: 8rem;color: RGB(102,102,102);">忘记密码?</a>
+							丨
+							<a href="{% url 'register' %}" style="font-size: 13px; color:RGB(255,0,0);">快速注册</a>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="#">
+								<div class="btnBox">
+									<input type="submit" id="btn" />
+								</div>
+							</a>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+
+		<script src="{% static 'js/mui.min.js' %}"></script>
+		<script type="text/javascript">
+			mui.init();
+			function check() {
+				var user = document.getElementById("user").value;
+				var pwd = document.getElementById("pwd").value;
+				if(user == "" || pwd == "") {
+					mui.alert("请输入账号");
+					return false;
+				}
+				return true;
+			};
+		</script>
+	</body>
+
+</html>

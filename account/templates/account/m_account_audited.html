@@ -1,0 +1,216 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>数据管理</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="{% static 'css/mui.min.css' %}">
+		<script type="text/javascript" src="{% static  'js/rem.js'%}"></script>
+		<style>
+			.mui-control-content {
+				background-color: white;
+			}
+			
+			.nav {
+				width: 100%;
+				height: 40px;
+				border-radius: 5px;
+				background: RGB(145, 193, 29);
+				margin-top: 5px;
+				line-height: 45px;
+				color: white;
+			}
+			
+			.nav_list {
+				font-size: 1.3rem;
+			}
+			
+			.nav_name {
+				margin-left: 1.5rem;
+				font-size: 1.3rem;
+			}
+			
+			.nav_operite,
+			.nav_shenhe,
+			.nav_num {
+				margin-left: 2.8rem;
+			}
+			
+			.pro_list {
+				font-size: 1.2rem;
+				padding: 10px 10px;
+			}
+			
+			.pro_num {
+				position: absolute;
+				left: 9rem;
+				top: 0;
+			}
+			
+			.pro_shenhe {
+				position: absolute;
+				left: 19rem;
+				top: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
+			<h1 class="mui-title">数据管理</h1>
+		</header>
+		<div class="mui-content">
+			<!--选项卡部分-->
+			<div id="finance_slider" class="mui-slider mui-fullscreen">
+				<div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+					<a class="mui-control-item" href="#item1">官方数据</a>
+					<a class="mui-control-item" href="#item2">自建数据</a>
+				</div>
+				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6" style="background: #92C11D;"></div>
+
+				<div class="nav">
+					<span class="nav_name">项目名称</span>
+					<span class="nav_list nav_num">提交手机号</span>
+					<span class="nav_list nav_shenhe">审核状态</span>
+					<span class="nav_list nav_operite">操作</span>
+				</div>
+
+				<div class="mui-slider-group" style="position: absolute;top: 86px;">
+					<div id="item1" class="mui-slider-item mui-control-content mui-active">
+						<div id="scroll1" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view">
+
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div id="item2" class="mui-slider-item mui-control-content">
+						<div id="scroll2" class="mui-scroll-wrapper">
+							<div class="mui-scroll">
+								<ul class="mui-table-view">
+
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script src="{% static 'js/mui.min.js' %}"></script>
+			<script src="{%static 'js/mui.pullToRefresh.js'%}"></script>
+			<script src="{%static 'js/mui.pullToRefresh.material.js'%}"></script>
+			<script>
+				mui.init();
+				(function($) {
+					//阻尼系数
+					var deceleration = mui.os.ios ? 0.003 : 0.0009;
+					$('.mui-scroll-wrapper').scroll({
+						bounce: true,
+						indicators: true, //是否显示滚动条
+						deceleration: deceleration
+					});
+					$.ready(function() {
+						//循环初始化所有上拉加载
+						$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+							var count = 1;
+							$(pullRefreshEl).pullToRefresh({
+								up: {
+									auto: true,
+									callback: function() {
+										var self = this;
+										var ul = self.element.querySelector('.mui-table-view');
+										getList(this, ul, count++, index);
+
+									}
+								}
+							});
+						});
+
+						function getList(obj, ul, n, index) {
+							var url = '/restapi/investlogs/?page=1&pageSize=10&is_official=true&user=2';
+							mui.ajax(url, {
+								data: {
+									page: n,
+									pageSize: 1,
+								},
+								dataType: 'json', //服务器返回json格式数据
+								type: 'get', //HTTP请求类型
+								timeout: 3000, //超时时间设置为10秒；
+								success: function(data) {
+									console.log("这是data：", data.results);
+									if(!data.results.length) {
+										obj.endPullUpToRefresh(true);
+									} else {
+										obj.endPullUpToRefresh(false); //参数为true代表没有更多数据了。
+										//										var table = document.body.querySelector('.mui-table-view');
+										for(var i in data.results) {
+											var li = document.createElement('li');
+											li.className = 'mui-table-view-cell';
+											str_html = '<span class="pro_name ">' + data.results[i].project_title + '</span>' +
+												'<span class="pro_list pro_num">' + data.results[i].invest_mobile + '</span>' +
+												'<span class="pro_list pro_shenhe">' + data.results[i].audit_state_des + '</span>' +
+												'<a data-type="' + data.results[i].is_official + '" data-id="' + (data.results[i].id) + '" class="pro_list pro_editor" style="position:absolute;right:1rem;top:0.9rem">编辑</a>';
+
+											li.innerHTML = str_html;
+											ul.appendChild(li);
+										}
+
+									}
+								},
+								error: function(xhr, type, errorThrown) {
+									console.log("没有数据")
+									//没有数据 显示没有更多数据
+									obj.endPullUpToRefresh(true);
+								}
+							});
+						}
+
+					});
+				})(mui);
+				
+				mui('.mui-table-view').on('tap', '.pro_editor', function() {
+					var project_id = this.getAttribute('data-id');
+					var type = this.getAttribute("data-type");
+					if(type == "true") {
+						mui.openWindow({
+							url: "/account/m_detail_official_investlog/" + project_id,
+							styles: {
+								top: 0,
+								bottom: 0
+							},
+							show: {
+								aniShow: 'slide-in-right',
+							},
+							waiting: {
+								autoShow: false, //自动显示等待框
+								title: '正在加载...', //等待对话框上显示的提示内容
+							}
+						});
+					} else {
+						mui.openWindow({
+							url: "/account/m_detail_personal_investlog/" + project_id,
+							styles: {
+								top: 0,
+								bottom: 0
+							},
+							show: {
+								aniShow: 'slide-in-right',
+							},
+							waiting: {
+								autoShow: false, //自动显示等待框
+								title: '正在加载...', //等待对话框上显示的提示内容
+							}
+						});
+					}
+				});
+			</script>
+
+	</body>
+
+</html>

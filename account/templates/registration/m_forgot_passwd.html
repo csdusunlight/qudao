@@ -83,7 +83,9 @@
 						mui.alert(ret.msg,callback=function(){
 							if (ret.code==0){
 								window.history.back();
-							}
+							}else{
+                                mui.alert(ret.res_msg);
+                            }
 						});
 					},
 					error:function(xhr,type,errorThrown){
@@ -145,7 +147,7 @@
 					timeout : 3000,
 					success : function(data) {
 						if (data.code != 0) {
-							mui.alert(data.message);
+							console.log(data.message);
 							var new_cptch_key = data.key;
 					        var new_cptch_image = data.image_url;
 					        key = document.getElementById("id_hashkey");

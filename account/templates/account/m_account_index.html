@@ -16,39 +16,52 @@
 		<script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
 		<script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
 		<style type="text/css">
-			body{
+			body {
 				font-size: 1.2rem;
 			}
-			.top{
-				background: RGB(145,193,29);
+			
+			.top {
+				background: RGB(145, 193, 29);
 				position: relative;
 				height: 20.5rem;
 				width: 100%;
 			}
-			.headerPic{
+			
+			.headerPic {
 				width: 9rem;
 				height: 9rem;
 				border-radius: 100%;
 				background: blue;
-				position: absolute;left: 11rem;top: 2rem;z-index: 1;
+				position: absolute;
+				left: 11rem;
+				top: 2rem;
 			}
-			.headerPic > img{
+			
+			.headerPic>img {
 				width: 100%;
 				height: 100%;
 				border-radius: 100%;
 				overflow: hidden;
 			}
-			.phone_num{
+			
+			.phone_num {
 				margin-left: 1rem;
 				color: white;
 			}
-			.left_btm{
-				position: absolute;bottom: 0;left: 2rem;
+			
+			.left_btm {
+				position: absolute;
+				bottom: 0;
+				left: 2rem;
 			}
-			.right_btm{
-				position: absolute;bottom: 0;right: 2rem;
+			
+			.right_btm {
+				position: absolute;
+				bottom: 0;
+				right: 2rem;
 			}
-			.top p{
+			
+			.top p {
 				color: white;
 			}
 		</style>
@@ -139,11 +152,11 @@
 			});
 
 			//点击icon复制链接
-			
+
 			var clipboard = new Clipboard("#fenxiang", {
 				text: function() {
-                    return 'http://{{user.domain_name}}.51fanshu.com';
-                }
+					return 'http://{{user.domain_name}}.51fanshu.com';
+				}
 			});
 
 			clipboard.on('success', function(e) {

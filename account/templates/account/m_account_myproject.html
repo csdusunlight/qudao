@@ -110,7 +110,7 @@
 							mui.ajax(url, {
 								data: {
 									page: n,
-									pageSize: 1,
+									pageSize: 6,
 								},
 								dataType: 'json', //服务器返回json格式数据
 								type: 'get', //HTTP请求类型
@@ -183,7 +183,7 @@
 							}
 						});
 					}
-				})
+				});
 
 				mui('.mui-table-view').on('toggle', '.mui-switch', function() {
 					console.log(this, "llc")

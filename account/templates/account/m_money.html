@@ -25,7 +25,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav" style="position: relative;background: white;">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: RGB(102,102,102);"></a>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
 			<h1 class="mui-title" style="style=" color: RGB(102,102,102); "">收支详情</h1>
 			<img src="{% static 'images/icon_03.jpg' %}" class="header_icon" />
 			<span class="header_audit">全部</span>
@@ -89,7 +89,7 @@
 						mui.ajax(url, {
 							data: {
 								page: n,
-								pageSize: 1,
+								pageSize: 6,
 							},
 							dataType: 'json', //服务器返回json格式数据
 							type: 'get', //HTTP请求类型
@@ -108,7 +108,7 @@
 										var transType = data.results[i].transType;
 										var li = document.createElement('li');
 										li.className = 'mui-table-view-cell';
-										str_html = '<span class=" pro_name">' + data.results[i].user + '</span>' +
+										str_html = '<span class=" pro_name">' + data.results[i].reason + '</span>' +
 											'<span data-isAdd="+ data.results[i].transType +" class="pro_add">' + (transType==0 ? '+' + data.results[i].transAmount : '-' + data.results[i].transAmount) +'</span>' +
 											'<p class="pro_time">' + Time[0] + '</p>' +
 											'<span  class="pro_num">' + data.results[i].user_balance + '</span>';

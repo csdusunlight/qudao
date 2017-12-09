@@ -44,7 +44,10 @@ body {
     padding: 20px 4% 0;
     background-color: #fff;
 }
-.data-box:after {
+.total__box {
+    font-size: 0;
+}
+/*.data-box:after {
     content: "";
     position: absolute;
     top: 2rem;
@@ -52,7 +55,7 @@ body {
     width: 100%;
     height: 2px;
     background: linear-gradient(to right, #fff, #91C11D 50%,#fff);
-}
+}*/
 .data-title {
     margin: 0.1rem 0;
     font-size: 0.4rem;

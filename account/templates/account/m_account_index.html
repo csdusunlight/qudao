@@ -16,40 +16,98 @@
 		<script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
 		<script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
 		<style type="text/css">
-			body{
+			body {
 				font-size: 1.2rem;
 			}
-			.top{
-				background: RGB(145,193,29);
+			li {
+                list-style: none;
+            }
+            ul,li,p {
+                margin: 0;
+                padding: 0;
+            }
+            .mui-content {
+                padding-bottom: 60px;
+            }
+			
+			.top {
+				background: RGB(145, 193, 29);
 				position: relative;
 				height: 20.5rem;
 				width: 100%;
 			}
-			.headerPic{
+			
+			.headerPic {
 				width: 9rem;
 				height: 9rem;
 				border-radius: 100%;
-				position: absolute;left: 10rem;top: 2rem;z-index: 1;
+				background: blue;
+				position: absolute;
+				left: 11rem;
+				top: 2rem;
 			}
-			.headerPic > img{
+			
+			.headerPic>img {
 				width: 100%;
 				height: 100%;
 				border-radius: 100%;
 				overflow: hidden;
 			}
-			.phone_num{
-				position: absolute;top: 11.2rem;left: 10rem;
-				color: white
-			}
-			.left_btm{
-				position: absolute;bottom: 0;left: 2rem;
-			}
-			.right_btm{
-				position: absolute;bottom: 0;right: 2rem;
-			}
-			.top p{
+			
+			.phone_num {
+				margin-left: 1rem;
 				color: white;
 			}
+			
+			.left_btm {
+				position: absolute;
+				bottom: 0;
+				left: 2rem;
+			}
+			
+			.right_btm {
+				position: absolute;
+				bottom: 0;
+				right: 2rem;
+			}
+			
+			.top p {
+				color: white;
+			}
+			/*底部导航部分*/
+            footer {
+                width: 100%;
+                height: 45px;
+                position: fixed;
+                bottom: 0;
+                font-size: 0;
+                background: #fff;
+                z-index: 1000;
+                border-top: 1px solid #e4e4e4;
+            }
+            footer .footer__item {
+                width: 50%;
+                display: inline-block;
+                font-size: 0;
+                text-align: center;
+                position: relative;
+            }
+            footer .mui-icon {
+                font-size: 22px;
+                color: #8f8f8f;
+            }
+            .on .mui-icon {
+                color: #91C11D;
+            }
+            .footer__txt {
+                display: block;
+                margin-top: -6px;
+                font-size: 14px;
+                color: #4d4d4d;
+            }
+            .on .footer__txt {
+                color: #91C11D;
+            }
 		</style>
 	</head>
 
@@ -58,8 +116,8 @@
 			<div class="headerPic">
 				<!--<img src="img/userPic.jpg" />-->
 				<img src="{{user.picture_url}}" />
+				<span class="phone_num">{{user.mobile}}</span>
 			</div>
-			<span class="phone_num">{{user.mobile}}</span>
 			<div class="left_btm">
 				<p>{{user.accu_income}}</p>
 				<p>积累收益(元)</p>
@@ -96,6 +154,22 @@
 				</li>
 			</ul>
 		</div>
+		<footer>
+            <ul>
+                <li class="footer__item">
+                    <a href="{%url 'index'%}">
+                    <i class="mui-icon mui-icon-home"></i>
+                    <span class="footer__txt">首页</span>
+                    </a>
+                </li>
+                <li class="footer__item on">
+                    <a href="{%url 'account_index'%}">
+                    <i class="mui-icon mui-icon-person"></i>
+                    <span class="footer__txt">个人中心</span>
+                    </a>
+                </li>
+            </ul>
+       </footer>
 
 		<script src="{% static 'js/mui.min.js' %}"></script>
 		<script type="text/javascript">
@@ -138,11 +212,11 @@
 			});
 
 			//点击icon复制链接
-			
+
 			var clipboard = new Clipboard("#fenxiang", {
 				text: function() {
-                    return 'http://{{user.domain_name}}.51fanshu.com';
-                }
+					return 'http://{{user.domain_name}}.51fanshu.com';
+				}
 			});
 
 			clipboard.on('success', function(e) {

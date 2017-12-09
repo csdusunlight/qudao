@@ -16,6 +16,11 @@
 				background-color: white;
 			}
 			
+			.mui-pull-bottom-wrapper {
+				padding-top: 0.5rem;
+				text-align: center;
+			}
+			
 			.nav {
 				width: 100%;
 				height: 40px;
@@ -57,7 +62,8 @@
 				left: 19rem;
 				top: 0;
 			}
-			.pro_name{
+			
+			.pro_name {
 				width: 5rem;
 				height: 100%;
 				white-space: nowrap;
@@ -72,7 +78,7 @@
 			<a id="anchor" href="{% url 'account_index' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
 			<h1 class="mui-title">数据管理</h1>
 		</header>
-		
+
 		<div class="mui-content">
 			<div id="finance_slider" class="mui-slider mui-fullscreen">
 				<div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
@@ -109,7 +115,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<script src="{% static 'js/mui.min.js' %}"></script>
 			<script src="{%static 'js/mui.pullToRefresh.js'%}"></script>
 			<script src="{%static 'js/mui.pullToRefresh.material.js'%}"></script>
@@ -141,12 +147,12 @@
 						});
 
 						function getList(obj, ul, n, index) {
-						    console.log(index);
-						    if (index == 0) {
-						        var url = '/restapi/investlogs/?is_official=true&user={{user.id}}';
-						    } else if (index == 1) {
-						    	var url = '/restapi/investlogs/?is_official=false&user={{user.id}}';
-						    }
+							console.log(index);
+							if(index == 0) {
+								var url = '/restapi/investlogs/?is_official=true&user={{user.id}}';
+							} else if(index == 1) {
+								var url = '/restapi/investlogs/?is_official=false&user={{user.id}}';
+							}
 							mui.ajax(url, {
 								data: {
 									page: n,
@@ -168,8 +174,8 @@
 											str_html = '<div class="pro_name ">' + data.results[i].project_title + '</div>' +
 												'<span class="pro_list pro_num">' + data.results[i].invest_mobile + '</span>' +
 												'<span class="pro_list pro_shenhe">' + data.results[i].audit_state_des + '</span>' +
-												'<a data-type="' + data.results[i].is_official + '" data-id="' + (data.results[i].id) + '" class="pro_list pro_editor" style="position:absolute;right:1rem;top:0.9rem">'+
-												(data.results[i].audit_state==1?'编辑':'查看') + '</a>';
+												'<a data-type="' + data.results[i].is_official + '" data-id="' + (data.results[i].id) + '" class="pro_list pro_editor" style="position:absolute;right:1rem;top:0.9rem">' +
+												(data.results[i].audit_state == 1 ? '编辑' : '查看') + '</a>';
 
 											li.innerHTML = str_html;
 											ul.appendChild(li);
@@ -187,7 +193,7 @@
 
 					});
 				})(mui);
-				
+
 				mui('.mui-table-view').on('tap', '.pro_editor', function() {
 					var project_id = this.getAttribute('data-id');
 					var type = this.getAttribute("data-type");
@@ -224,22 +230,22 @@
 					}
 				});
 				mui('.mui-bar-nav').on('tap', '.mui-pull-left', function() {
-				var Url = document.getElementById("anchor").getAttribute("href");
-				mui.openWindow({
-					url: Url,
-					styles: {
-						top: 0,
-						bottom: 0
-					},
-					show: {
-						aniShow: 'slide-in-right',
-					},
-					waiting: {
-						autoShow: false, //自动显示等待框
-						title: '正在加载...', //等待对话框上显示的提示内容
-					}
+					var Url = document.getElementById("anchor").getAttribute("href");
+					mui.openWindow({
+						url: Url,
+						styles: {
+							top: 0,
+							bottom: 0
+						},
+						show: {
+							aniShow: 'slide-in-right',
+						},
+						waiting: {
+							autoShow: false, //自动显示等待框
+							title: '正在加载...', //等待对话框上显示的提示内容
+						}
+					});
 				});
-			});
 			</script>
 
 	</body>

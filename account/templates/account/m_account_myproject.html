@@ -22,17 +22,26 @@
 		<meta http-equiv="Pragma" content="no-cache">
 		<meta http-equiv="Cache-Control" content="no-cache">
 		<meta http-equiv="Expires" content="0">
+		
 		<title>项目管理</title>
 		<link href="{%static 'css/mui.min.css'%}" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="{%static 'css/m_common.css'%}" />
 		<link rel="stylesheet" type="text/css" href="{%static 'css/ProjectMamagement.css' %}" />
+		<style type="text/css">
+			.mui-pull-bottom-wrapper{
+				padding-top: 1rem;
+				text-align: center;
+			}
+		</style>
 	</head>
 
 	<body>
+		
 		<header id="header" class="mui-bar mui-bar-nav">
 			<a id="anchor" href="{% url 'account_index' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
 			<h1 class="mui-title">项目管理</h1>
 		</header>
+		
 		<div class="mui-content">
 			<!--选项卡部分-->
 			<div id="finance_slider" class="mui-slider mui-fullscreen">
@@ -44,7 +53,7 @@
 
 				<div class="nav">
 					<span class="nav_list nav_name">项目名称</span>
-					<span class="nav_list nav_price">客户指导价</span>
+					<span class="nav_list nav_price">详情页价格导价</span>
 					<span class="nav_list navisShow">是否主页呈现</span>
 					<span class="nav_list nav_operite">操作</span>
 				</div>

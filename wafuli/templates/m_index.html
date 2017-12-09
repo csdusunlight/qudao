@@ -35,7 +35,7 @@
                 <h2 class="data-title">今日推荐</h2>
                 <ul class="mui-table-view today">
                     {% for item in recom_projects %}
-                        <li class="today__item mui-table-view-cell"><a href="">
+                        <li class="today__item mui-table-view-cell"><a href="{{item.strategy}}">
                             <img class="today__img" src="{{item.picture_url}}"/>
                             <span class="today__go ">查看攻略</span>
                             <span style="color: #91C11D;" class="mui-icon mui-icon-arrowthinright"></span>
@@ -58,7 +58,23 @@
         <script src="{% static 'js/mui.min.js' %}"></script>
         <script type="text/javascript">
             mui.init();
-            
+            mui('.today').on('tap', 'a', function() {
+                var url_gonglue = this.getAttribute('href');
+                mui.openWindow({
+                    url: url_gonglue,
+                    styles: {
+                        top: 0,
+                        bottom: 0
+                    },
+                    show: {
+                        aniShow: 'slide-in-right',
+                    },
+                    waiting: {
+                        autoShow: false, //自动显示等待框
+                        title: '正在加载...', //等待对话框上显示的提示内容
+                    }
+                });
+            });
         </script>
     </body>
 

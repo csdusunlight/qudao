@@ -49,7 +49,7 @@
 				line-height: 2.5rem;
 				color: white;
 				border-radius: 10px;
-				position: absolute;top: 1rem;left: 17rem;
+				position: absolute;top: 1rem;left: 13rem;
 			}
 			
 			.decrBox {
@@ -190,11 +190,6 @@
 					</tr>
 					<tr>
 						<td colspan="2" style="position: relative;">
-							<a href="#">
-								<div class="btn">
-									取消
-								</div>
-							</a>
 							<a>
 								<div id="submit" class="btn1">
 									确定
@@ -227,8 +222,9 @@
                     invest_term = document.getElementById('invest_term'),
                     invest_amount = document.getElementById('invest_amount'),
                     remark = document.getElementById('remark');
-                if (!project || !date || !invest_mobile || !invest_name || !invest_term || !invest_amount || !remark) {
+                if (!project || !date.value || !invest_mobile.value || !invest_name.value || !invest_term.value || !invest_amount.value) {
                     mui.alert('填写项不能为空');
+                    return;
                 }
                 mui.ajax('/restapi/investlogs/{{id}}/',{
                     data: {

@@ -43,6 +43,7 @@ from wafuli.tools import saveImgAndGenerateUrl
 from decimal import Decimal
 import random
 import re
+from weixin.tasks import sendWeixinNotify
 
 @sensitive_post_parameters()
 @csrf_protect
@@ -606,6 +607,11 @@ def withdraw(request):
                     translist = charge_money(user, '1', withdraw_amount, u'提现')
                     event = WithdrawLog.objects.create(user=user, amount=withdraw_amount, audit_state='1')
                     result['code'] = 0
+                try:
+                    print event
+                    sendWeixinNotify.delay([(request.user, event),], 'withdraw_apply')
+                except Exception, e:
+                    logger.error(e)
             except:
                 result['code'] = -2
                 result['res_msg'] = u'提现失败！'

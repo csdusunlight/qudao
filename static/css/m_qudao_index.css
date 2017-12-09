@@ -10,7 +10,7 @@ body {
     background-color: #fff;
 }
 .mui-content {
-    padding-bottom: 1rem;
+    padding-bottom: 60px;
 }
 .top {
     position: relative;
@@ -112,6 +112,7 @@ body {
 /*底部导航部分*/
 footer {
     width: 100%;
+    height: 45px;
     position: fixed;
     bottom: 0;
     font-size: 0;
@@ -127,8 +128,7 @@ footer .footer__item {
     position: relative;
 }
 footer .mui-icon {
-    font-size: 0.8rem;
-    line-height: 1rem;
+    font-size: 22px;
     color: #8f8f8f;
 }
 .on .mui-icon {
@@ -136,8 +136,8 @@ footer .mui-icon {
 }
 .footer__txt {
     display: block;
-    margin-top: -0.2rem;
-    font-size: 0.4rem;
+    margin-top: -6px;
+    font-size: 14px;
     color: #4d4d4d;
 }
 .on .footer__txt {

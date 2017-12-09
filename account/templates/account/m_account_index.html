@@ -29,7 +29,8 @@
 				width: 9rem;
 				height: 9rem;
 				border-radius: 100%;
-				position: absolute;left: 10rem;top: 2rem;z-index: 1;
+				background: blue;
+				position: absolute;left: 11rem;top: 2rem;z-index: 1;
 			}
 			.headerPic > img{
 				width: 100%;
@@ -38,8 +39,8 @@
 				overflow: hidden;
 			}
 			.phone_num{
-				position: absolute;top: 11.2rem;left: 10rem;
-				color: white
+				margin-left: 1rem;
+				color: white;
 			}
 			.left_btm{
 				position: absolute;bottom: 0;left: 2rem;
@@ -58,8 +59,8 @@
 			<div class="headerPic">
 				<!--<img src="img/userPic.jpg" />-->
 				<img src="{{user.picture_url}}" />
+				<span class="phone_num">{{user.mobile}}</span>
 			</div>
-			<span class="phone_num">{{user.mobile}}</span>
 			<div class="left_btm">
 				<p>{{user.accu_income}}</p>
 				<p>积累收益(元)</p>

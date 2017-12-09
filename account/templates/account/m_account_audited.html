@@ -65,8 +65,8 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
 			<h1 class="mui-title">数据管理</h1>
 		</header>
+		
 		<div class="mui-content">
-			<!--选项卡部分-->
 			<div id="finance_slider" class="mui-slider mui-fullscreen">
 				<div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
 					<a class="mui-control-item" href="#item1">官方数据</a>
@@ -102,6 +102,7 @@
 					</div>
 				</div>
 			</div>
+			
 			<script src="{% static 'js/mui.min.js' %}"></script>
 			<script src="{%static 'js/mui.pullToRefresh.js'%}"></script>
 			<script src="{%static 'js/mui.pullToRefresh.material.js'%}"></script>
@@ -133,7 +134,12 @@
 						});
 
 						function getList(obj, ul, n, index) {
-							var url = '/restapi/investlogs/?page=1&pageSize=10&is_official=true&user=2';
+						    console.log(index);
+						    if (index == 0) {
+						        var url = '/restapi/investlogs/?is_official=true&user={{user.id}}';
+						    } else if (index == 1) {
+						    	var url = '/restapi/investlogs/?is_official=false&user={{user.id}}';
+						    }
 							mui.ajax(url, {
 								data: {
 									page: n,
@@ -155,7 +161,8 @@
 											str_html = '<span class="pro_name ">' + data.results[i].project_title + '</span>' +
 												'<span class="pro_list pro_num">' + data.results[i].invest_mobile + '</span>' +
 												'<span class="pro_list pro_shenhe">' + data.results[i].audit_state_des + '</span>' +
-												'<a data-type="' + data.results[i].is_official + '" data-id="' + (data.results[i].id) + '" class="pro_list pro_editor" style="position:absolute;right:1rem;top:0.9rem">编辑</a>';
+												'<a data-type="' + data.results[i].is_official + '" data-id="' + (data.results[i].id) + '" class="pro_list pro_editor" style="position:absolute;right:1rem;top:0.9rem">'+
+												(data.results[i].audit_state==1?'编辑':'查看') + '</a>';
 
 											li.innerHTML = str_html;
 											ul.appendChild(li);
@@ -179,7 +186,7 @@
 					var type = this.getAttribute("data-type");
 					if(type == "true") {
 						mui.openWindow({
-							url: "/account/m_detail_official_investlog/" + project_id,
+							url: "/account/detail_investlog/" + project_id,
 							styles: {
 								top: 0,
 								bottom: 0
@@ -194,7 +201,7 @@
 						});
 					} else {
 						mui.openWindow({
-							url: "/account/m_detail_personal_investlog/" + project_id,
+							url: "/account/detail_investlog/" + project_id,
 							styles: {
 								top: 0,
 								bottom: 0

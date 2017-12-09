@@ -6,7 +6,7 @@
 		<meta charset="UTF-8">
 		<title>个人中心</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		
+
 		<link rel="stylesheet" href="{% static 'css/mui.min.css' %}" />
 		<!--<link rel="stylesheet" href="dist/css/User.css" />-->
 		<link rel="stylesheet" href="{% static 'css/User.css' %}" />
@@ -14,6 +14,7 @@
 		<link rel="stylesheet" href="{% static 'css/iconfont.css' %}" />
 		<!--<script type="text/javascript" src="dist/js/rem.js" ></script>-->
 		<script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
 	</head>
 
 	<body>
@@ -35,51 +36,87 @@
 		<div class="mui-content">
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell" style="position: relative;">
-					<a href="http://{{user.domain_name}}.51fanshu.com" style="color: RGB(102,102,102);">我的主页：http://{{user.domain_name}}.51fanshu.com</a>
-					<span class="mui-icon iconfont icon-fenxiang" style="position: absolute;top: 1.2rem;right: 1rem;"></span>
+					<a class="Alink" id="Alink" href="http://{{user.domain_name}}.51fanshu.com" style="color: RGB(102,102,102);">我的主页：http://{{user.domain_name}}.51fanshu.com</a>
+					<a id="fenxiang" class="mui-icon iconfont icon-fenxiang" style="position: absolute;top: 1.2rem;right: 1rem;"></a>
 				</li>
-			    <li class="mui-table-view-cell">
-			        <a href="{% url 'project_manage' %}" class="mui-navigate-right" style="color: RGB(102,102,102);">项目管理</a>
-			    </li>
+				<li class="mui-table-view-cell">
+					<a id="project" href="{% url 'project_manage' %}" class="mui-navigate-right" style="color: RGB(102,102,102);">项目管理</a>
+				</li>
 			</ul>
 			<ul class="mui-table-view" style="margin-top: 0.5rem;">
 				<li class="mui-table-view-cell">
-			        <a href="#" class="mui-navigate-right" style="color: RGB(102,102,102);">自助交单</a>
-			    </li>
-			    <li class="mui-table-view-cell">
-			        <a href="{%url 'account_audited'%}" class="mui-navigate-right" style="color: RGB(102,102,102);">数据审核</a>
-			    </li>
-			    <li class="mui-table-view-cell">
-			        <a href="#" class="mui-navigate-right" style="color: RGB(102,102,102);">预约管理</a>
-			    </li>
+					<a href="http://{{user.domain_name}}.51fanshu.com/quick-submit/" class="mui-navigate-right" style="color: RGB(102,102,102);">自助交单</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="{%url 'account_audited'%}" class="mui-navigate-right" style="color: RGB(102,102,102);">数据审核</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="#" class="mui-navigate-right" style="color: RGB(102,102,102);">预约管理</a>
+				</li>
 			</ul>
 			<ul class="mui-table-view" style="margin-top: 0.5rem;">
 				<li class="mui-table-view-cell">
-			        <a href="{% url 'account_money' %}" class="mui-navigate-right" style="color: RGB(102,102,102);">收支详情</a>
-			    </li>
-			</ul>	
+					<a href="{% url 'account_money' %}" class="mui-navigate-right" style="color: RGB(102,102,102);">收支详情</a>
+				</li>
+			</ul>
 		</div>
-		
-		
-		
+
 		<script src="{% static 'js/mui.min.js' %}"></script>
 		<script type="text/javascript">
 			mui.init();
-//			mui.ajax('http://127.0.0.1:8000/restapi/announcement/?ordering=state',{
-//				dataType:'json',//服务器返回json格式数据
-//				type:'get',//HTTP请求类型
-//				timeout:10000,//超时时间设置为10秒；
-//				headers:{'Content-Type':'application/json'},	              
-//				success:function(data){
-//					console.log(data)
-//					
-//					
-//				},
-//				error:function(xhr,type,errorThrown){
-//					//异常处理；
-//					console.log(type);
-//				}
-//			});
+			var hUrl = document.getElementById("Alink").getAttribute("href");
+			console.log(hUrl);
+			mui('.mui-table-view-cell').on('tap', '.Alink', function() {
+				mui.openWindow({
+					url: hUrl,
+					styles: {
+						top: 0,
+						bottom: 0
+					},
+					show: {
+						aniShow: 'slide-in-right',
+					},
+					waiting: {
+						autoShow: false, //自动显示等待框
+						title: '正在加载...', //等待对话框上显示的提示内容
+					}
+				});
+			});
+
+			mui('.mui-table-view-cell').on('tap', '.mui-navigate-right', function() {
+				var pUrl = this.getAttribute("href");
+				mui.openWindow({
+					url: pUrl,
+					styles: {
+						top: 0,
+						bottom: 0
+					},
+					show: {
+						aniShow: 'slide-in-right',
+					},
+					waiting: {
+						autoShow: false, //自动显示等待框
+						title: '正在加载...', //等待对话框上显示的提示内容
+					}
+				});
+			});
+
+			//点击icon复制链接
+			
+			var clipboard = new Clipboard("#fenxiang", {
+				text: function() {
+                    return 'http://{{user.domain_name}}.51fanshu.com';
+                }
+			});
+
+			clipboard.on('success', function(e) {
+				mui.alert("分享链接复制成功");
+				console.log(e);
+			});
+
+			clipboard.on('error', function(e) {
+				console.log(e);
+			});
 		</script>
 	</body>
 

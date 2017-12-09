@@ -100,7 +100,8 @@
 
 	<body>
 		<header id="header" class="mui-bar mui-bar-nav">
-			<h1 class="mui-title" style="color: RGB(102,102,102);">查看详情</h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
+			<h1 class="mui-title" style="color: RGB(102,102,102);">{{investlog.project}}</h1>
 		</header>
 		<div class="mui-content" style="background: white;">
 			<form>
@@ -108,55 +109,55 @@
 					<tr>
 						<td><span>项目名称</span></td>
 						<td> 
-							<input type="text" class="ipt" value="123" />
+							<input id="project" type="text" class="ipt" value="{{investlog.project}}" disabled="disabled" />
 						</td>
 					</tr>
 					<tr>
 						<td><span>投资日期</span></td>
 						<td>
-							<input type="text" class="ipt" value="123" />
+							<input id="date" type="date" class="ipt" value='{{investlog.invest_date|date:"Y-m-d"}}' />
 						</td>
 					</tr>
 					<tr>
 						<td><span>提交日期</span></td>
 						<td>
-							<span class="desc">123</span>
+							<span class="desc">{{investlog.submit_time|date:"Y-m-d"}}</span>
 						</td>
 					</tr>
 					<tr>
 						<td><span>提交手机号</span></td>
 						<td>
-							<input type="text" class="ipt" value="123" />
+							<input id="invest_mobile" type="text" class="ipt" value="{{investlog.invest_mobile}}" />
 						</td>
 					</tr>
 					<tr>
 						<td><span>投资姓名</span></td>
 						<td>
-							<input type="text" class="ipt" value="123" />
+							<input id="invest_name" type="text" class="ipt" value="{{investlog.invest_name}}" />
 						</td>
 					</tr>
 					<tr>
 						<td><span>投资标期</span></td>
 						<td>
-							<input type="text" class="ipt" value="123" />
+							<input id="invest_term" type="text" class="ipt" value="{{investlog.invest_term}}" />
 						</td>
 					</tr>
 					<tr>
 						<td><span>投资金额</span></td>
 						<td>
-							<input type="text" class="ipt" value="123" />
+							<input id="invest_amount" type="text" class="ipt" value="{{investlog.invest_amount}}" />
 						</td>
 					</tr>
 					<tr>
 						<td><span>审核状态</span></td>
 						<td>
-							<span class="desc">123</span>	
+							<span class="desc">{{investlog.get_audit_state_display}}</span>	
 						</td>
 					</tr>
 					<tr>
 						<td><span>结算金额</span></td>
 						<td>
-							<span class="desc">123</span>	
+							<span class="desc">{{investlog.settle_amount}}</span>	
 						</td>
 					</tr>
 					<tr>
@@ -164,7 +165,11 @@
 							<span>返现金额</span>
 						</td>
 						<td>
-							<span class="desc">123</span>	
+							{%if investlog.return_amount %}
+                            <span class="desc">{{investlog.return_amount}}</span>
+                            {% else %}
+                            <span class="desc">无</span>
+                            {%endif%}
 						</td>
 					</tr>
 					<tr>
@@ -172,15 +177,15 @@
 							<span>审核信息</span>
 						</td>
 						<td>
-							<span class="desc">123</span>	
+							<span class="desc">{{investlog.audit_reason}}</span>	
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<span>备注及其他</span>
+							<span>备注</span>
 						</td>
 						<td>
-							<input type="text" class="ipt" value="123" />
+							<input id="remark" type="text" class="ipt" value="{{investlog.remark}}" />
 						</td>
 					</tr>
 					<tr>
@@ -190,8 +195,8 @@
 									取消
 								</div>
 							</a>
-							<a href="#">
-								<div class="btn1">
+							<a>
+								<div id="submit" class="btn1">
 									确定
 								</div>
 							</a>
@@ -204,6 +209,50 @@
 		<script src="{% static 'js/mui.min.js' %}"></script>
 		<script type="text/javascript">
 			mui.init()
+			if ({{investlog.audit_state}} != 1) {
+                console.log('查看');
+                document.getElementById('project').disabled = true;
+                document.getElementById('date').disabled = true;
+                document.getElementById('invest_mobile').disabled = true;
+                document.getElementById('invest_name').disabled = true;
+                document.getElementById('invest_term').disabled = true;
+                document.getElementById('invest_amount').disabled = true;
+                document.getElementById('remark').disabled = true;
+            }
+			document.getElementById('submit').addEventListener('tap',function (){
+                var project = document.getElementById('project'),
+                    date = document.getElementById('date'),
+                    invest_mobile = document.getElementById('invest_mobile'),
+                    invest_name = document.getElementById('invest_name'),
+                    invest_term = document.getElementById('invest_term'),
+                    invest_amount = document.getElementById('invest_amount'),
+                    remark = document.getElementById('remark');
+                if (!project || !date || !invest_mobile || !invest_name || !invest_term || !invest_amount || !remark) {
+                    mui.alert('填写项不能为空');
+                }
+                mui.ajax('/restapi/investlogs/{{id}}/',{
+                    data: {
+                        'project': {{investlog.project.id}},
+                        'invest_date': date.value,
+                        'invest_mobile': invest_mobile.value,
+                        'invest_name': invest_name.value,
+                        'invest_term': invest_term.value,
+                        'invest_amount': invest_amount.value,
+                        'remark': remark.value,
+                    },
+                    dataType:'json',//服务器返回json格式数据
+                    type:'put',//HTTP请求类型
+                    timeout:10000,//超时时间设置为10秒；
+                    success:function(ret){
+                            mui.alert('修改成功');
+                    },
+                    error:function(xhr,type,errorThrown){
+                        console.log(xhr.responseText);
+                    }
+                });
+            })
+			
+			
 		</script>
 	</body>
 

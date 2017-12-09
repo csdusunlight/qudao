@@ -96,7 +96,8 @@ def create_update_selfproject(request, id=None):
         kwargs.update(companies=companies)
         template = 'account/m_personal_project.html' if request.mobile else 'account/personal_project.html'
         return render(request, template, kwargs)
-  
+    
+@csrf_exempt    
 @login_required
 def update_offiproject(request, id):
     if request.method == 'POST':
@@ -106,7 +107,7 @@ def update_offiproject(request, id):
         intrest = request.POST.get('intrest', '')
         marks = request.POST.get('marks', '')
         shortprice = request.POST.get('shortprice', '')
-        if not (introduction and price and intrest and shortprice):
+        if not (price and intrest and shortprice):
             ret['code'] = 1
             ret['msg'] = u'缺少必填字段'
             return JsonResponse(ret)

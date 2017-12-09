@@ -239,10 +239,10 @@
 					
 					timeout: 10000, //超时时间设置为10秒；
 					success: function(data) {
-						if(ret.code == 0) {
+						if(data.code == 0) {
 							mui.alert("申请成功，请等待短信通知");
 						} else {
-							mui.alert(ret.msg);
+							mui.alert(data.msg);
 						}
 					},
 					error: function(xhr, type, errorThrown) {

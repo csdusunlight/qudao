@@ -103,33 +103,20 @@
 
 			//点击icon复制链接
 			
-//			var clipboard = new Clipboard("#fenxiang", {
-//				target: function() {
-//					return document.querySelector(".Alink");
-//				}
-//			});
-//
-//			clipboard.on('success', function(e) {
-//				mui.alert("复制链接成功");
-//				console.log(e);
-//			});
-//
-//			clipboard.on('error', function(e) {
-//				console.log(e);
-//			});
-			var clipboard = new Clipboard('#fenxiang', {
-		        target: function() {
-		            return document.querySelector('.Alink');
-		        }
-		    });
-		
-		    clipboard.on('success', function(e) {
-		        console.log(e);
-		    });
-		
-		    clipboard.on('error', function(e) {
-		        console.log(e);
-		    });
+			var clipboard = new Clipboard("#fenxiang", {
+				text: function() {
+                    return 'http://{{user.domain_name}}.51fanshu.com';
+                }
+			});
+
+			clipboard.on('success', function(e) {
+				mui.alert("分享链接复制成功");
+				console.log(e);
+			});
+
+			clipboard.on('error', function(e) {
+				console.log(e);
+			});
 		</script>
 	</body>
 

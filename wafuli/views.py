@@ -32,7 +32,8 @@ def index(request):
     #合作平台
     platforms = Company.objects.order_by("-priority")[0:20]
     data.update(platforms=platforms)
-    return render(request, 'wfl-index.html', data)
+    template = 'm_index.html' if request.mobile else 'index.html'
+    return render(request, template, data)
 
 @login_required
 def project_all(request):

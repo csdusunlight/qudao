@@ -190,8 +190,14 @@ def register_from_gzh(request):
             result['msg'] = u'传入参数不足！'
             return JsonResponse(result)
         if ApplyLog.objects.filter(mobile=mobile).exists():
-            result['code'] = '1'
-            result['msg'] = u'该手机号码已被注册，请直接登录！'
+            applog = ApplyLog.objects.filter(mobile=mobile).first()
+            logger.error(applog.audit_state)
+            if applog.audit_state == '0':
+                result['code'] = '1'
+                result['msg'] = u'该手机号码已被注册，请直接登录！'
+            else:
+                result['code'] = '1'
+                result['msg'] = u'该手机号已提交注册申请，请等待短信通知！'
             return JsonResponse(result)
 
         try:

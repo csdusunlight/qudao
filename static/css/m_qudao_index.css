@@ -10,7 +10,7 @@ body {
     background-color: #fff;
 }
 .mui-content {
-    background-color: #fff;
+    /*background-color: #fff;*/
 }
 .top {
     position: relative;
@@ -41,9 +41,8 @@ body {
 }
 .data-box {
     position: relative;
-    padding: 0 4%;
-    margin-top: 20px;
-    font-size: 0;
+    padding: 20px 4% 0;
+    background-color: #fff;
 }
 .data-box:after {
     content: "";
@@ -61,8 +60,9 @@ body {
     color: #91C11D;
 }
 .today-box {
-    margin-top: 20px;
-    padding: 0 4%;
+    margin-top: 10px;
+    padding: 10px 4% 0;
+    background-color: #fff;
 }
 .total__item {
     display: inline-block;
@@ -90,8 +90,9 @@ body {
     font-size: 0.4rem;
 }
 .business-box {
-    margin-top: 20px;
-    padding: 0 4%;
+    margin-top: 10px;
+    padding: 10px 4% 0;
+    background-color: #fff;
 }
 .business {
     font-size: 0;

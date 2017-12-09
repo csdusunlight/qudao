@@ -80,6 +80,8 @@ def bind_user(request):
         return JsonResponse(result)    
     else:
         code = request.GET.get('code','')
+        to_url = request.GET.get('to_url')
+        logger.error(to_url)
         if not code:
             return HttpResponse(u"微信授权失败，请稍后再试")
         url = ' https://api.weixin.qq.com/sns/oauth2/access_token'

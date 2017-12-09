@@ -191,7 +191,6 @@ def register_from_gzh(request):
             return JsonResponse(result)
         if ApplyLog.objects.filter(mobile=mobile).exists():
             applog = ApplyLog.objects.filter(mobile=mobile).first()
-            logger.error(applog.audit_state)
             if applog.audit_state == '0':
                 result['code'] = '1'
                 result['msg'] = u'该手机号码已被注册，请直接登录！'

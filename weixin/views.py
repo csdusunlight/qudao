@@ -80,6 +80,7 @@ def bind_user(request):
         return JsonResponse(result)    
     else:
         code = request.GET.get('code','')
+        to_url = request.GET.get('to_url')
         if not code:
             return HttpResponse(u"微信授权失败，请稍后再试")
         url = ' https://api.weixin.qq.com/sns/oauth2/access_token'
@@ -105,7 +106,7 @@ def bind_user(request):
                     return render(request, 'm_bind.html')
                 user.backend = 'django.contrib.auth.backends.ModelBackend'#为了略过用户名和密码验证
                 auth_login(request, user)
-                return redirect('account_index')
+                return redirect(to_url)
         else:
             logger.error('Getting access_token error:' + str(json_ret) )
             return HttpResponse(u"本页面转发或刷新无效，请在微信公众号中重新打开")

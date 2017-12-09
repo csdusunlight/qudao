@@ -401,7 +401,7 @@
 					if(xhr.readyState == 4 && xhr.status == 200) {
 						var ret = JSON.parse(xhr.responseText);
 						if(ret.code == 0) {
-							alert("已申请，请等待审核！")
+							alert("已申请，请等待审核！");
 							window.location.href = "/";
 							return;
 						} else {

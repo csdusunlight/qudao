@@ -12,6 +12,7 @@ urlpatterns = [
 #     url(r'^message/$', 'account.views.message', name='account_message'),
 #     url(r'^messagepage/$', 'account.views.get_user_message_page', name='get_user_message_page'),
     url(r'^register/$', 'account.views.register', name='register'),
+    url(r'^register_from_gzh/$', 'account.views.register_from_gzh', name='register_from_gzh'),
     url(r'^login/$', 'account.views.login', {'template_name': 'registration/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'template_name': 'registration/logged_out.html', 'next_page':'login'}, name='logout'),
 #     url(r'signin/$', 'account.views.signin', name='signin'),

@@ -56,7 +56,7 @@ def login(request, template_name='registration/login.html',
     Displays the login form and handles the login action.
     """
     if request.mobile:
-        template_name='registration/m_login.html' 
+        template_name='registration/m_login.html'
     redirect_to = request.POST.get(redirect_field_name,
                                    request.GET.get(redirect_field_name, ''))
     if request.method == "POST":
@@ -174,6 +174,72 @@ def register(request):
         template = 'registration/m_register.html' if request.mobile else 'registration/register.html'
         return render(request,template, context)
 
+@csrf_exempt
+def register_from_gzh(request):
+    if request.method == 'POST':
+        if not request.is_ajax():
+            raise Http404
+        result = {}
+        password = request.POST.get('password', None)
+        qq_number = request.POST.get('qq_number', None)
+        qq_name = request.POST.get('qq_name', '')
+        profile = request.POST.get('profile', '')
+        mobile = request.session.get('mobile')
+        if not (mobile and password and qq_number):
+            result['code'] = '3'
+            result['msg'] = u'传入参数不足！'
+            return JsonResponse(result)
+        if ApplyLog.objects.filter(mobile=mobile).exists():
+            result['code'] = '1'
+            result['msg'] = u'该手机号码已被注册，请直接登录！'
+            return JsonResponse(result)
+
+        try:
+            username = 'wx' + str(mobile)
+            apply = ApplyLog(mobile=mobile, username=username, password=password,
+                            qq_name=qq_name, qq_number=qq_number, profile=profile, audit_state='1')
+            apply.save()
+            logger.info('Creating ApplyLog:' + mobile + ' succeed!')
+        except Exception,e:
+            logger.error(e)
+            result['code'] = '4'
+            result['msg'] = u'创建申请失败！'
+            return JsonResponse(result)
+        imgurl_list = []
+        if len(request.FILES)>6:
+            result = {'code':-2, 'msg':u"上传图片数量不能超过6张"}
+            apply.delete()
+            return JsonResponse(result)
+        for key in request.FILES:
+            block = request.FILES[key]
+            if block.size > 100*1024:
+                result = {'code':-1, 'msg':u"每张图片大小不能超过100k，请重新上传"}
+                apply.delete()
+                return JsonResponse(result)
+        for key in request.FILES:
+            block = request.FILES[key]
+            imgurl = saveImgAndGenerateUrl(key, block, 'qualification')
+            imgurl_list.append(imgurl)
+        invest_image = ';'.join(imgurl_list)
+        apply.qualification = invest_image
+        apply.save(update_fields=['qualification',])
+        result['code'] = 0
+        print 'here'
+        return JsonResponse(result)
+    else:
+        mobile = request.GET.get('mobile','')
+        icode = request.GET.get('icode','')
+        hashkey = CaptchaStore.generate_key()
+        codimg_url = captcha_image_url(hashkey)
+        icode = request.GET.get('icode','')
+        context = {
+            'hashkey':hashkey,
+            'codimg_url':codimg_url,
+            'icode':icode,
+            'mobile':mobile,
+        }
+        template = 'registration/m_register_from_gzh.html'
+        return render(request,template, context)
 
 def verifymobile(request):
     mobilev = request.GET.get('mobile', None)
@@ -477,7 +543,6 @@ def bind_bankcard(request):
         real_name = request.GET.get("real_name", '')
         bank = request.GET.get("bank", '')
         subbranch = request.GET.get("subbranch",'')
-        print 'bank' + bank
         if card_number and real_name and bank:
             user.user_bankcard.create(user=user, card_number=card_number, real_name=real_name,
                                        bank=bank, subbranch=subbranch)
@@ -608,7 +673,6 @@ def withdraw(request):
                     event = WithdrawLog.objects.create(user=user, amount=withdraw_amount, audit_state='1')
                     result['code'] = 0
                 try:
-                    print event
                     sendWeixinNotify.delay([(request.user, event),], 'withdraw_apply')
                 except Exception, e:
                     logger.error(e)

@@ -58,9 +58,8 @@
 			.decrBox {
 				width: 100%;
 				height: 3rem;
-				position: relative;
+				position: absolute;top: 0;left: 0;
 			}
-			
 			.decrBox .mark {
 				list-style: none;
 				float: left;
@@ -70,6 +69,7 @@
 				line-height: 3rem;
 				margin-left: 1rem;
 				border-radius: 6px;
+				font-size: 12px;
 			}
 			
 			.decrBox .mark.on {
@@ -189,7 +189,7 @@
 					</tr>
 					<tr>
 						<td><span>项目标签</span></td>
-						<td>
+						<td style="position: relative;">
 							<ul class="decrBox mark-box">
 								<!--<li>稳健型</li>
 								<li>稳健型</li>
@@ -200,6 +200,9 @@
                                 {%endfor%}
 							</ul>
 						</td>
+					</tr>
+					<tr>
+						<td style="padding-top:5rem;"></td>
 					</tr>
 					<tr>
 						<td colspan="2">

@@ -57,6 +57,13 @@
 				left: 19rem;
 				top: 0;
 			}
+			.pro_name{
+				width: 5rem;
+				height: 100%;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
 		</style>
 	</head>
 
@@ -158,7 +165,7 @@
 										for(var i in data.results) {
 											var li = document.createElement('li');
 											li.className = 'mui-table-view-cell';
-											str_html = '<span class="pro_name ">' + data.results[i].project_title + '</span>' +
+											str_html = '<div class="pro_name ">' + data.results[i].project_title + '</div>' +
 												'<span class="pro_list pro_num">' + data.results[i].invest_mobile + '</span>' +
 												'<span class="pro_list pro_shenhe">' + data.results[i].audit_state_des + '</span>' +
 												'<a data-type="' + data.results[i].is_official + '" data-id="' + (data.results[i].id) + '" class="pro_list pro_editor" style="position:absolute;right:1rem;top:0.9rem">'+

@@ -143,7 +143,7 @@
 					</tr>
 					<tr>
 						<td>
-							<input class="btn" id="btn" type="submit" value="立即申请" />
+							<input class="btn" id="btn"  value="立即申请" />
 						</td>
 					</tr>
 				</table>
@@ -205,7 +205,7 @@
 //				});
 //			}
 
-			var register_url = "{% url 'register' %}";
+			var register_url = "{% url 'register_from_gzh' %}";
 
 			document.getElementById("btn").addEventListener("tap", function() {
 				var qq = document.getElementById("qq").value;
@@ -214,16 +214,19 @@
 //				var checkNum = document.getElementById("checkNum").value;
 //				var phone = document.getElementById("phone").value;
 				var pwd = document.getElementById("pwd").value;
+				
 				var checkBox = document.getElementById("checkBox");
 				console.log(qq + "," + qqName + "," + introduce + "," + pwd);
-				if(!qq || !qqName || !introduce || || !pwd) {
+				if(!qq || !qqName || !introduce || !pwd) {
 
 					mui.alert("填写不能为空");
+					return;
 				}
 				/*if (checkBox = false) {
 					mui.alert("请阅读《注册协议》、《免责声明》");
 				}*/
 				mui.ajax(register_url, {
+					type: 'POST', //HTTP请求类型
 					data: {
 						"qq": qq,
 						"qqName": qqName,
@@ -233,11 +236,11 @@
 //						"phone": phone,
 					},
 					dataType: 'json', //服务器返回json格式数据
-					type: 'post', //HTTP请求类型
+					
 					timeout: 10000, //超时时间设置为10秒；
 					success: function(data) {
 						console.log(data);
-						mui.alert("申请成功，请等待短信通知");
+						alert("申请成功，请等待短信通知");
 					},
 					error: function(xhr, type, errorThrown) {
 						console.log("数据请求错误");

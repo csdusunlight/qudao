@@ -143,7 +143,7 @@
 					</tr>
 					<tr>
 						<td>
-							<input class="btn" id="btn" type="submit" value="立即申请" />
+							<input class="btn" id="btn" value="立即申请" />
 						</td>
 					</tr>
 				</table>
@@ -219,6 +219,7 @@
 				if(!qq || !qqName || !introduce || !phone || !checkNum || !pwd) {
 
 					mui.alert("填写不能为空");
+					return;
 				}
 				/*if (checkBox = false) {
 					mui.alert("请阅读《注册协议》、《免责声明》");
@@ -236,8 +237,11 @@
 					type: 'post', //HTTP请求类型
 					timeout: 10000, //超时时间设置为10秒；
 					success: function(data) {
-						console.log(data);
-						mui.alert("申请成功，请等待短信通知");
+						if(ret.code == 0) {
+							mui.alert("申请成功，请等待短信通知");
+						} else {
+							mui.alert(ret.msg);
+						}
 					},
 					error: function(xhr, type, errorThrown) {
 						console.log("数据请求错误");

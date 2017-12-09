@@ -72,10 +72,10 @@
 				mui.ajax({
 					url : submit_url,
 					data : {
-						password: password,
-						code : telcode,
-						mobile : mobile,
-						csrfmiddlewaretoken:csrfmiddlewaretoken
+						'passwd': password,
+						'code' : telcode,
+						'mobile' : mobile,
+						'csrfmiddlewaretoken':csrfmiddlewaretoken
 					},
 					type:'POST',
 					timeout : 3000,

@@ -227,8 +227,9 @@
                     mark_str += this.getAttribute('data-id') + ',';
                 })
                 
-                if (!cprice || !shortprice || !intrest) {
+                if (!cprice.value || !shortprice.value || !intrest.value) {
                     mui.alert('填写项不能为空');
+                    return;
                 }
                 mui.ajax('/account/update_offiproject/' + sub_id + '/',{
                     data: {

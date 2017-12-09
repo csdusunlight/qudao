@@ -314,8 +314,9 @@
                 var necessary_fields = need_arr.join(',');
                 console.log(necessary_fields);
                 
-                if (!title || !cprice || !shortprice || !term || !investrange || !intrest) {
+                if (!title.value || !cprice.value || !shortprice.value || !term.value || !investrange.value || !intrest.value) {
                 	mui.alert('填写项不能为空');
+                	return;
                 }
                 console.log(typeof(is_futou));
                 mui.ajax('/account/create_update_selfproject/' + project_id + '/',{

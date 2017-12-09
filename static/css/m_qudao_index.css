@@ -1,0 +1,112 @@
+li {
+    list-style: none;
+}
+ul,li,p {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #fff;
+}
+.mui-content {
+    background-color: #fff;
+}
+.top {
+    position: relative;
+}
+.top__img {
+    width: 100%;
+    height: 4rem;
+}
+.top__mask {
+    position: absolute;
+    top: 0.8rem;
+    left: 10%;
+    width: 80%;
+    height: 2.4rem;
+    text-align: center;
+    background-color: rgba(0,0,0,0.3);
+}
+.top__mask-title {
+    margin-top: 0.4rem;
+    font-size: 0.4rem;
+    color: #fff;
+}
+.top__mask-txt {
+    margin-top: 0.2rem;
+    font-size: 0.3rem;
+    line-height: 0.5rem;
+    color: #fff;
+}
+.data-box {
+    position: relative;
+    padding: 0 4%;
+    margin-top: 20px;
+    font-size: 0;
+}
+.data-box:after {
+    content: "";
+    position: absolute;
+    top: 2rem;
+    right: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, #fff, #91C11D 50%,#fff);
+}
+.data-title {
+    margin: 0.1rem 0;
+    font-size: 0.4rem;
+    margin-bottom: 0.3rem;
+    color: #91C11D;
+}
+.today-box {
+    margin-top: 20px;
+    padding: 0 4%;
+}
+.total__item {
+    display: inline-block;
+    width: 50%;
+    margin-bottom: 0.2rem;
+    font-size: 0.3rem;
+    color: #333;
+}
+.total__item-num {
+    color: #FFBE00;
+    font-size: 0.4rem;
+}
+.today__item {
+    list-style: none;
+}
+.today__img {
+    display: inline-block;
+    margin: 0 1rem;
+    width: 2.4rem;
+    height: 1rem;
+    vertical-align: middle;
+}
+.today__go {
+    display: inline-block;
+    font-size: 0.4rem;
+}
+.business-box {
+    margin-top: 20px;
+    padding: 0 4%;
+}
+.business {
+    font-size: 0;
+}
+.business__img-box {
+    display: inline-block;
+    margin-bottom: 0.4rem;
+    width: 33.3333%;
+    text-align: center;
+}
+.business__img {
+    width: 2.4rem;
+    height: 1rem;
+}
+/*样式重置*/
+.mui-table-view:before {
+    display: none;
+}

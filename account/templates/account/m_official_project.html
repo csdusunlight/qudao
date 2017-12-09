@@ -19,8 +19,7 @@
 			}
 			
 			td {
-				padding: 1.2rem 1.3rem;
-				
+				padding: 1rem 1.3rem;
 			}
 			
 			.txt {
@@ -50,7 +49,7 @@
 			.decrBox {
 				width: 100%;
 				height: 3rem;
-				position: relative;
+				position: absolute;top: 0;
 			}
 			
 			.decrBox .mark {
@@ -63,8 +62,6 @@
                 margin-left: 1rem;
                 border-radius: 6px;
             }
-            
-            
             
             .decrBox .mark.on {
                 background: RGB(254, 191, 0);
@@ -154,7 +151,7 @@
 					</tr>-->
 					<tr>
 						<td><span>项目标签</span></td>
-						<td>
+						<td style="position: relative;">
 							<ul class="decrBox mark-box">
 								{% for item in marks %}
                                     <li data-id="{{item.id}}" class="mark">{{item.name}}</li>
@@ -163,7 +160,10 @@
 						</td>
 					</tr>
 					<tr>
-						<td colspan="2">
+						<td style="padding-top:5rem;"></td>
+					</tr>
+					<tr>
+						<td colspan="2" style="position: relative;">
 							<a>
 								<div id="submit" class="btn submit">确定</div>
 							</a>

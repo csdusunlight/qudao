@@ -12,13 +12,10 @@
 	font-size: 1.3rem;
 }
 
-.pro_name {
-	/*margin-left: 1rem;*/
-	font-size: 1.3rem;
-}
-.nav_name{
+.nav_name {
 	margin-left: 1rem;
 }
+
 .nav_operite,
 .navisShow,
 .nav_price {
@@ -29,6 +26,25 @@
 	font-size: 1.4rem;
 }
 
+.pro_name {
+	font-size: 14px;
+	width: 5rem;
+	height: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 .pro_touzi {
-	position: absolute;left: 11rem;
+	width: 5rem;
+	height: 100%;
+	line-height: 3rem;
+	position: absolute;
+	left: 8.5rem;
+	top: 0;
+	font-size: 15px;
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }

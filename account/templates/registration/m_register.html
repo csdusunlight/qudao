@@ -231,16 +231,11 @@
 					type: 'post', //HTTP请求类型
 					timeout: 10000, //超时时间设置为10秒；
 					success: function(data) {
-<<<<<<< HEAD
-						console.log(data)
-						mui.alert("申请成功，请等待短信通知");
-=======
 						if(data.code == 0) {
 							mui.alert("申请成功，请等待短信通知");
 						} else {
 							mui.alert(data.msg);
 						}
->>>>>>> 72fbbcb400dab04d76c213140703a9d63ce825d4
 					},
 					error: function(xhr, type, errorThrown) {
 						console.log("数据请求错误");

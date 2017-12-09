@@ -224,6 +224,7 @@ def register_from_gzh(request):
         apply.qualification = invest_image
         apply.save(update_fields=['qualification',])
         result['code'] = 0
+        print 'here'
         return JsonResponse(result)
     else:
         mobile = request.GET.get('mobile','')

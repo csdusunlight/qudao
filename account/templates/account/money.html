@@ -59,8 +59,8 @@ function pagecallback(){
         }
     })
     $('.submit-time').each(function(){
-        var submit_time = $(this).text().split('T');
-        $(this).text(submit_time[0]);
+        var submit_time = $(this).text().replace('T','');
+        $(this).text(submit_time);
     })
 }
 

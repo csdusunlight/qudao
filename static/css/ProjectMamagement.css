@@ -19,32 +19,50 @@
 .nav_operite,
 .navisShow,
 .nav_price {
-	margin-left:1.3rem;
+	margin-left: 1.8rem;
 }
 
-.pro_list {
-	font-size: 1.4rem;
+.mui-table-view-cell {
+	overflow: hidden;
 }
 
 .pro_name {
 	font-size: 14px;
-	width: 5rem;
+	width: 20%;
 	height: 100%;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
+	word-break: break-all;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+	float: left;
+	font-size: 1.4rem;
 }
 
 .pro_touzi {
-	width: 5rem;
+	width: 35%;
 	height: 100%;
-	line-height: 3rem;
-	position: absolute;
-	left: 8.5rem;
-	top: 0;
+	float: left;
 	font-size: 15px;
-	display: block;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
+	word-break: break-all;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+	font-size: 1.4rem;
+	margin-left: 2rem;
+}
+
+.pro_editor {
+	width: 22%;
+	font-size: 1.4rem;
+	float: right;
+}
+
+.wrapper {
+	position: relative;
+	float: left;
+	font-size: 1.4rem;
+	width: 4rem;
+	margin-left: 1rem;
+}
+
+.mui-table-view-cell {
+	line-height: 3rem;
 }

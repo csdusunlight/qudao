@@ -109,7 +109,10 @@ def bind_user(request):
                     return render(request, 'm_bind.html')
                 user.backend = 'django.contrib.auth.backends.ModelBackend'#为了略过用户名和密码验证
                 auth_login(request, user)
-                return redirect(to_url)
+                try:
+                    return redirect(to_url)
+                except Exception,e:
+                    return redirect('account_index')
         else:
             logger.error('Getting access_token error:' + str(json_ret) )
             return HttpResponse(u"本页面转发或刷新无效，请在微信公众号中重新打开")

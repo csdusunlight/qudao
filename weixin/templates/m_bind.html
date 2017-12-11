@@ -110,10 +110,8 @@
 						},
 					timeout : 3000,
 					success : function(data) {
-						if (data.code != 0) {
+						if (data.code != 1) {
 							mui.alert(data.message);
-						}
-						if (data.code == 1){
 							countdown = 0;
 						}
 					},

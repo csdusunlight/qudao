@@ -269,7 +269,7 @@ def export_investlog(request):
         item_list = item_list.filter(zhifubao__contains=zhifubao)
     if state:
         item_list = item_list.filter(audit_state=state)
-    item_list = item_list.select_related('project').order_by('submit_time')
+    item_list = item_list.select_related('project').order_by('-submit_time')
     data = []
     for con in item_list:
         project = con.project
@@ -279,10 +279,12 @@ def export_investlog(request):
         invest_date=con.invest_date
         submit_date=con.submit_time.strftime("%Y-%m-%d")
         id=con.id
-        other_remark= con.get_other_and_remark()
+        remark= con.remark
         invest_amount= con.invest_amount
         term=con.invest_term
-        qq_number = con.user.qq_number
+        qq_number = con.qq_number
+        zhifubao = con.zhifubao
+        expect_amount = con.expect_amount
         user_level = con.user.level
         result = ''
         return_amount = ''
@@ -297,10 +299,10 @@ def export_investlog(request):
         elif con.audit_state=='3':
             result = u'复审'
         data.append([id, project_name, submit_date, invest_date, invest_mobile, invest_name,invest_amount,
-                     term, other_remark, result, settle_amount, return_amount, reason])
+                     term, zhifubao, expect_amount, qq_number, remark, result, settle_amount, return_amount, reason])
     w = Workbook()     #创建一个工作簿
-    ws = w.add_sheet(u'待审核记录')     #创建一个工作表
-    title_row = [u'记录ID',u'项目名称',u'提交日期',u'投资日期', u'投资手机号', u'投资姓名',u'投资金额' ,u'投资标期', u'备注及其他',
+    ws = w.add_sheet(u'交单记录表')     #创建一个工作表
+    title_row = [u'记录ID',u'项目名称',u'提交日期',u'投资日期', u'投资手机号', u'投资姓名',u'投资金额' ,u'投资标期', u'收款信息', u'预期返现', u'QQ号',u'备注',
                  u'是否审核通过',u'结算金额',u'返现金额',u'审核说明']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
@@ -336,7 +338,7 @@ def import_investlog(request):
     table = data.sheets()[0]
     nrows = table.nrows
     ncols = table.ncols
-    if ncols!=13:
+    if ncols!=16:
         ret['msg'] = u"文件格式与模板不符，请在导出的投资记录表中更新后将文件导入！"
         return JsonResponse(ret)
     rtable = []
@@ -353,7 +355,7 @@ def import_investlog(request):
                 elif j==1:
                     project = cell.value
                     temp.append(project)
-                elif j==9:
+                elif j==12:
                     result = cell.value.strip()
                     if result == u"是":
                         result = True
@@ -363,21 +365,21 @@ def import_investlog(request):
                         temp.append(False)
                     else:
                         raise Exception(u"审核结果必须为是或否。")
-                elif j==10:
+                elif j==13:
                     settle_amount = 0
                     if cell.value:
                         settle_amount = Decimal(cell.value)
                     elif result:
                         raise Exception(u"审核结果为是时，结算金额不能为空或零。")
                     temp.append(settle_amount)
-                elif j==11:
+                elif j==14:
                     return_amount = 0
                     if cell.value:
                         return_amount = Decimal(cell.value)
                     elif result:
                         raise Exception(u"审核结果为是时，结算金额不能为空或零。")
                     temp.append(return_amount)
-                elif j==12:
+                elif j==15:
                     reason = cell.value
                     temp.append(reason)
                 else:

@@ -101,7 +101,7 @@
 						<td>
 							<a href="#">
 								<div class="btnBox">
-									<input type="submit" id="btn" onclick="check();"/>
+									<input type="submit" id="btn" onclick="return check();"/>
 								</div>
 							</a>
 						</td>
@@ -122,7 +122,7 @@
 				var user = document.getElementById("user").value;
 				var pwd = document.getElementById("pwd").value;
 				if(user == "" || pwd == "") {
-					mui.alert("请输入账号");
+					mui.alert("账号和密码不能为空！");
 					return false;
 				}
 				return true;

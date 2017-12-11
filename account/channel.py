@@ -283,6 +283,7 @@ def export_investlog(request):
         invest_amount= con.invest_amount
         term=con.invest_term
         qq_number = con.qq_number
+        zhifubao = con.zhifubao
         expect_amount = con.expect_amount
         user_level = con.user.level
         result = ''

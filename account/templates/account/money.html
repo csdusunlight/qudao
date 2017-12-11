@@ -59,7 +59,7 @@ function pagecallback(){
         }
     })
     $('.submit-time').each(function(){
-        var submit_time = $(this).text().replace('T','');
+        var submit_time = $(this).text().replace('T',' ');
         $(this).text(submit_time);
     })
 }

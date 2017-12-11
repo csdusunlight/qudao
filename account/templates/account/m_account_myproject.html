@@ -53,7 +53,7 @@
 
 				<div class="nav">
 					<span class="nav_list nav_name">项目名称</span>
-					<span class="nav_list nav_price">详情页价格导价</span>
+					<span class="nav_list nav_price">详情页价格</span>
 					<span class="nav_list navisShow">是否主页呈现</span>
 					<span class="nav_list nav_operite">操作</span>
 				</div>
@@ -134,10 +134,10 @@
 										for(var i in data.results) {
 											var li = document.createElement('li');
 											li.className = 'mui-table-view-cell';
-											str_html = '<div class="pro_list pro_name">' + data.results[i].project_title + '</d>' +
-												'<div class="pro_list pro_touzi">' + (data.results[i].price ? data.results[i].price : data.results[i].project_cprice) + '</div>' +
-												'<div data-btn= ' + (data.results[i].id) + ' class="mui-switch mui-switch-mini ' + (data.results[i].is_on ? "mui-active" : "") + ' " style="position: absolute;right: 8rem;top:0.3rem;"><div class="mui-switch-handle"></div></div>' +
-												'<a data-type="' + data.results[i].project_is_official + '" data-id="' + (data.results[i].project) + '" class="pro_list pro_editor" style="position:absolute;right:1.2rem;top:1rem">编辑</a>';
+											str_html = '<div class=" pro_name">' + data.results[i].project_title + '</div>' +
+												'<div class="pro_touzi">' + (data.results[i].price ? data.results[i].price : data.results[i].project_cprice) + '</div>' +
+												'<div class="wrapper"><div data-btn= ' + (data.results[i].id) + ' class="mui-switch mui-switch-mini ' + (data.results[i].is_on ? "mui-active" : "") + ' "><div class="mui-switch-handle"></div></div></div>' +
+												'<a data-type="' + data.results[i].project_is_official + '" data-id="' + (data.results[i].project) + '" class="pro_list pro_editor">编辑</a>';
 
 											li.innerHTML = str_html;
 											ul.appendChild(li);

@@ -231,6 +231,11 @@
 					type: 'post', //HTTP请求类型
 					timeout: 10000, //超时时间设置为10秒；
 					success: function(data) {
+						console.log(data)
+<<<<<<< HEAD
+						mui.alert("申请成功，请等待短信通知");
+=======
+>>>>>>> be5222676689777c157a31ffd68159430eafc383
 						if(data.code == 0) {
 							mui.alert("申请成功，请等待短信通知");
 						} else {

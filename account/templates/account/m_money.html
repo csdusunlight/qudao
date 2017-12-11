@@ -29,7 +29,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav" style="position: relative;background: white;">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
+			<a href="{% url 'account_index' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
 			<h1 class="mui-title" style="style=" color: RGB(102,102,102); "">收支详情</h1>
 			<!--<img src="{% static 'images/icon_03.jpg' %}" class="header_icon" />
 			<span class="header_audit">全部</span>-->
@@ -89,7 +89,7 @@
 					});
 				});
 				function getList(obj, ul, n, index) {
-						var url = '/restapi/translist/?page=1&pageSize=10';
+						var url = '/restapi/translist/?user_mobile={{user.mobile}}';
 						mui.ajax(url, {
 							data: {
 								page: n,

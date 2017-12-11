@@ -14,13 +14,14 @@
 				background: white;
 			}
 			
-			table {
-				color: RGB(102, 102, 102);
+			 table {
+				color: RGB(153,153,153);
 				font-size: 14px;
 			}
 			
 			td {
 				padding: 1rem 1.3rem;
+				color: RGB(119,12,30) !important;
 			}
 			
 			.txt {
@@ -29,18 +30,8 @@
 				width: 18rem;
 				height: 3rem;
 				line-height: 3rem;
+				color: RGB(153,153,153);
 				position: relative;
-			}
-			
-			.btn {
-				width: 7rem;
-				height: 2.5rem;
-				background: RGB(145, 193, 29);
-				text-align: center;
-				line-height: 2.5rem;
-				color: white;
-				border-radius: 10px;
-				margin-left: 3.5rem;
 			}
 			
 			.btn1 {
@@ -51,9 +42,7 @@
 				line-height: 2.5rem;
 				color: white;
 				border-radius: 10px;
-				position: absolute;
-				top: 1rem;
-				left: 17rem;
+				margin: 0 auto;
 			}
 			
 			.decrBox {
@@ -90,16 +79,20 @@
 				color: RGB(254, 191, 0);
 			}
 			
-			.ipt {
+			.mui-content .ipt {
 				margin-bottom: 0 !important;
 				width: 18rem !important;
 				height: 3rem !important;
 				border-radius: 5px !important;
 				font-size: 14px;
+				border: 1px solid rgba(0,0,0,.4);
 			}
 			
 			.desc {
 				margin-left: 1.2rem;
+			}
+			.noBorder{
+				border: none;
 			}
 		</style>
 	</head>
@@ -115,7 +108,7 @@
 					<tr>
 						<td><span>项目名称</span></td>
 						<td>
-							<input id="project" type="text" class="ipt" value="{{investlog.project}}" disabled="disabled" />
+							<input id="project" type="text" class="ipt " value="{{investlog.project}}" disabled="disabled" />
 						</td>
 					</tr>
 					<tr>
@@ -196,11 +189,6 @@
 					</tr>
 					<tr>
 						<td colspan="2" style="position: relative;">
-							<a href="#">
-								<div class="btn">
-									取消
-								</div>
-							</a>
 							<a>
 								<div id="submit" class="btn1">
 									确定
@@ -224,6 +212,15 @@
                 document.getElementById('invest_term').disabled = true;
                 document.getElementById('invest_amount').disabled = true;
                 document.getElementById('remark').disabled = true;
+                
+                document.getElementById("project").style.border = "none";
+                document.getElementById("date").style.border = "none";
+                document.getElementById("invest_mobile").style.border = "none";
+                document.getElementById("invest_name").style.border = "none";
+                document.getElementById("invest_term").style.border = "none";
+                document.getElementById("invest_amount").style.border = "none";
+                document.getElementById("remark").style.border = "none";
+               
 			}
             document.getElementById('submit').addEventListener('tap',function (){
                 var project = document.getElementById('project'),

@@ -69,6 +69,7 @@ def login(request, template_name='registration/login.html',
 
             # Okay, security check complete. Log the user in.
             user = form.get_user()
+            logger.info(user.mobile)
             auth_login(request, user)
             # anything you can add here
 #             user.last_login_time = user.this_login_time

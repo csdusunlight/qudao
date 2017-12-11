@@ -70,12 +70,29 @@
 				white-space: pre-wrap;
 				float: left;
 			}
-			.pro_editor{
+			
+			.pro_editor {
 				width: 18%;
 				float: left;
 				margin-left: 0.05rem !important;
 				margin-top: 0.1rem !important;
 				padding: 0;
+			}
+			
+			.state0 {
+				color: #91c11d;
+			}
+			
+			.state1 {
+				color: #ffbe00;
+			}
+			
+			.state2 {
+				color: red;
+			}
+			
+			.state3 {
+				color: blue;
 			}
 		</style>
 	</head>
@@ -170,6 +187,7 @@
 								timeout: 3000, //超时时间设置为10秒；
 								success: function(data) {
 									console.log("这是data：", data.results);
+									
 									if(!data.results.length) {
 										obj.endPullUpToRefresh(true);
 									} else {
@@ -180,7 +198,7 @@
 											li.className = 'mui-table-view-cell';
 											str_html = '<div class="pro_name ">' + data.results[i].project_title + '</div>' +
 												'<span class="pro_list pro_num">' + data.results[i].invest_mobile + '</span>' +
-												'<span class="pro_list pro_shenhe">' + data.results[i].audit_state_des + '</span>' +
+												'<span class="pro_list pro_shenhe state'+data.results[i].audit_state+' ">' + data.results[i].audit_state_des + '</span>' +
 												'<a data-type="' + data.results[i].is_official + '" data-id="' + (data.results[i].id) + '" class="pro_list pro_editor">' +
 												(data.results[i].audit_state == 1 ? '编辑' : '查看') + '</a>';
 

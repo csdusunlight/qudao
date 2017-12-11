@@ -338,7 +338,7 @@ def import_investlog(request):
     table = data.sheets()[0]
     nrows = table.nrows
     ncols = table.ncols
-    if ncols!=13:
+    if ncols!=16:
         ret['msg'] = u"文件格式与模板不符，请在导出的投资记录表中更新后将文件导入！"
         return JsonResponse(ret)
     rtable = []

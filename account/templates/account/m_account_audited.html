@@ -52,23 +52,30 @@
 			}
 			
 			.pro_num {
-				position: absolute;
-				left: 9rem;
-				top: 0;
+				width: 30%;
+				float: left;
+				margin-left: 1.2rem;
 			}
 			
 			.pro_shenhe {
-				position: absolute;
-				left: 19rem;
-				top: 0;
+				width: 30%;
+				float: left;
+				margin-left: 0.5rem;
 			}
 			
 			.pro_name {
-				width: 5rem;
-				height: 100%;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
+				width: 20%;
+				word-break: break-all;
+				word-wrap: break-word;
+				white-space: pre-wrap;
+				float: left;
+			}
+			.pro_editor{
+				width: 18%;
+				float: left;
+				margin-left: 0.05rem !important;
+				margin-top: 0.1rem !important;
+				padding: 0;
 			}
 		</style>
 	</head>
@@ -174,7 +181,7 @@
 											str_html = '<div class="pro_name ">' + data.results[i].project_title + '</div>' +
 												'<span class="pro_list pro_num">' + data.results[i].invest_mobile + '</span>' +
 												'<span class="pro_list pro_shenhe">' + data.results[i].audit_state_des + '</span>' +
-												'<a data-type="' + data.results[i].is_official + '" data-id="' + (data.results[i].id) + '" class="pro_list pro_editor" style="position:absolute;right:1rem;top:0.9rem">' +
+												'<a data-type="' + data.results[i].is_official + '" data-id="' + (data.results[i].id) + '" class="pro_list pro_editor">' +
 												(data.results[i].audit_state == 1 ? '编辑' : '查看') + '</a>';
 
 											li.innerHTML = str_html;

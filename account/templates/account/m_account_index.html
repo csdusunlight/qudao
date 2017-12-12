@@ -241,14 +241,16 @@
 					return 'http://{{user.domain_name}}.51fanshu.com';
 				}
 			});
-			clipboard.on('success', function(e) {
+			//组织事件冒泡
+			document.getElementById("fenxiang").addEventListener('tap',function(){
 				event.stopPropagation();
+			})
+			
+			clipboard.on('success', function(e) {
 				mui.alert("分享链接复制成功");
 				console.log(e);
 			});
-
 			clipboard.on('error', function(e) {
-				 event.stopPropagation();
 				console.log(e);
 			});
 

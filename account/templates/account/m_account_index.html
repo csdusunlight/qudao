@@ -242,11 +242,13 @@
 				}
 			});
 			clipboard.on('success', function(e) {
+				event.stopPropagation();
 				mui.alert("分享链接复制成功");
 				console.log(e);
 			});
 
 			clipboard.on('error', function(e) {
+				 event.stopPropagation();
 				console.log(e);
 			});
 

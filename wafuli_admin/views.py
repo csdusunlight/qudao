@@ -27,6 +27,7 @@ import json
 from django.db import transaction
 from public.tools import has_permission
 from decimal import Decimal
+from weixin.tasks import sendWeixinNotify
 # Create your views here.
 logger = logging.getLogger('wafuli')
 def index(request):
@@ -797,6 +798,13 @@ def admin_withdraw(request):
         withdrawlog.audit_time = datetime.datetime.now()
         withdrawlog.admin_user = admin_user
         withdrawlog.save(update_fields=['audit_state','audit_time','audit_reason'])
+        
+        #发送微信通知
+        if type==1:
+            sendWeixinNotify.delay([(withdrawlog.user, withdrawlog),], 'withdraw_success')
+        elif type==2:
+            sendWeixinNotify.delay([(withdrawlog.user, withdrawlog),], 'withdraw_fail')
+        #
         return JsonResponse(res)
 
 def get_admin_with_page(request):
@@ -1052,6 +1060,8 @@ def import_withdrawlog(request):
         ret['num'] = 0
         return JsonResponse(ret)
     suc_num = 0
+    suc_list = []
+    fail_list = []
     try:
         for row in rtable:
             with transaction.atomic():
@@ -1064,12 +1074,14 @@ def import_withdrawlog(request):
                 withdrawlog_user = withdrawlog.user
                 if result:
                     withdrawlog.audit_state = '0'
+                    suc_list.append((withdrawlog_user,withdrawlog))
                 else:
                     if not reason:
                         raise Exception(u"拒绝原因缺失")
                     withdrawlog.audit_state = '2'
                     withdrawlog.audit_reason = reason
                     charge_money(withdrawlog.user, '0', withdrawlog.amount, u'冲账', True, reason)
+                    fail_list.append((withdrawlog_user,withdrawlog))
                 withdrawlog.audit_time = datetime.datetime.now()
                 withdrawlog.admin_user = admin_user
                 withdrawlog.save(update_fields=['audit_state','audit_time','audit_reason','admin_user'])
@@ -1079,6 +1091,10 @@ def import_withdrawlog(request):
         traceback.print_exc()
         ret['code'] = 1
         ret['msg'] = unicode(e)
+    #发送微信通知
+    sendWeixinNotify.delay(suc_list, 'withdraw_success')
+    sendWeixinNotify.delay(fail_list, 'withdraw_fail')
+    #
     ret['num'] = suc_num
     return JsonResponse(ret)
 

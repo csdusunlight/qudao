@@ -7,7 +7,7 @@ Created on 2017年11月24日
 from wafuli_admin.models import Dict
 from weixin.settings import submit_investlog_notify_templateid,\
     book_invest_notify_templateid, withdraw_success_notify_templateid,\
-    withdraw_apply_notify_templateid
+    withdraw_apply_notify_templateid, withdraw_fail_notify_templateid
 from dragon.settings import APPID, FULIUNION_DOMAIN
 from weixin.models import WeiXinUser
 from account.varify import httpconn
@@ -103,8 +103,28 @@ def sendWeixinNotify(user_obj_list, type):
                     'keyword1':{'value':bank.bank, 'color':"#173177"},
                     'keyword2':{'value':bank.card_number, 'color':"#173177"},
                     'keyword3':{'value':bank.real_name, 'color':"#173177"},
-                    'keyword2':{'value':amount, 'color':"#173177"},
-                    'keyword3':{'value':audittime, 'color':"#173177"},
+                    'keyword4':{'value':amount, 'color':"#173177"},
+                    'keyword5':{'value':audittime, 'color':"#173177"},
+                    'remark':{'value':u'如果您不想再收到此类通知，可在个人中心设置里取消微信消息通知', 'color':"#173177"},}
+            kwarg.update(data=data, touser=openid)
+            ret = httpconn(url, kwarg, 1)
+            logger.info(ret)
+    elif type == 'withdraw_fail':
+        kwarg.update(template_id=withdraw_fail_notify_templateid)
+        for user_withdrawlog in user_obj_list:
+            user = user_withdrawlog[0]
+            withdrawlog = user_withdrawlog[1]
+            wuser = user.weixin_users.first()
+            if not wuser:
+                continue
+            amount = str(withdrawlog.amount)
+            audittime = withdrawlog.submit_time.strftime('%Y-%m-%d %H:%M')
+            reason = withdrawlog.audit_reason
+            openid = wuser.openid
+            data = {'first':{'value':u"抱歉，提现审核失败，如有疑问请联系渠道客服。", 'color':"#FF0900"},
+                    'keyword1':{'value':amount, 'color':"#173177"},
+                    'keyword2':{'value':audittime, 'color':"#173177"},
+                    'keyword3':{'value':reason, 'color':"#173177"},
                     'remark':{'value':u'如果您不想再收到此类通知，可在个人中心设置里取消微信消息通知', 'color':"#173177"},}
             kwarg.update(data=data, touser=openid)
             ret = httpconn(url, kwarg, 1)

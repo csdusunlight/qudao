@@ -1,76 +1,84 @@
 .mui-table-view-left {
-                width: 25%;
-                float: left;
-                margin: 0;
-                padding: 0;
-            }
-            .mui-table-view-right {
-                width: 75%;
-                float: right;
-                margin: 0;
-                padding: 0;
-                overflow-x: scroll;
-            }
-            .mui-control-content {
-                background-color: white;
-            }
-            .item_line {
-                box-sizing: content-box;
-                padding: 1rem 0;
-                height: 40px;
-                font-size: 0;
-                border-bottom: 1px solid #e4e4e4;
-            }
-            /*.item_line.m-head {
-                position: fixed;
-                top: 0;
-            }*/
-            .item_line.m-right {
-                width: 32rem;
-            }
-            .column {
-                display: inline-block;
-                font-size: 0px;
-                vertical-align: top;
-            }
-            .column.m-head {
-                font-size: 12px;
-            }
-            .column_1 {
-                width: 100%;
-            }
-            .column_2 {
-                width: 8rem;
-            }
-            .column_3 {
-                width: 8rem;
-            }
-            .column_4 {
-                width: 8rem;
-            }
-            .column_5 {
-                width: 8rem;
-            }
-            .item {
-                display: block;
-                font-size: 12px;
-                overflow: hidden;
-                text-overflow:ellipsis;
-                white-space: nowrap;
-            }
-            
-            .state0 {
-                color: #91c11d;
-            }
-            
-            .state1 {
-                color: #ffbe00;
-            }
-            
-            .state2 {
-                color: red;
-            }
-            
-            .state3 {
-                color: blue;
-            }
+	width: 25%;
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+
+.mui-table-view-right {
+	width: 75%;
+	float: right;
+	margin: 0;
+	padding: 0;
+	overflow-x: scroll;
+}
+
+.mui-control-content {
+	background-color: white;
+}
+
+.item_line {
+	box-sizing: content-box;
+	padding: 1rem 0;
+	height: 40px;
+	font-size: 0;
+	border-bottom: 1px solid #e4e4e4;
+}
+
+.item_line.m-right {
+	width: 32rem;
+}
+
+.column {
+	display: inline-block;
+	font-size: 0px;
+	vertical-align: top;
+}
+
+.column.m-head {
+	font-size: 12px;
+}
+
+.column_1 {
+	width: 100%;
+}
+
+.column_2 {
+	width: 8rem;
+}
+
+.column_3 {
+	width: 8rem;
+}
+
+.column_4 {
+	width: 8rem;
+}
+
+.column_5 {
+	width: 8rem;
+}
+
+.item {
+	display: block;
+	font-size: 12px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.state0 {
+	color: #91c11d;
+}
+
+.state1 {
+	color: #ffbe00;
+}
+
+.state2 {
+	color: red;
+}
+
+.state3 {
+	color: blue;
+}

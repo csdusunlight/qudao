@@ -149,7 +149,6 @@
 			mui.init()
 			//发送验证码
 			var countdown = 60;
-
 			function settime(val) {
 				console.log('验证码');
 				if(countdown == 0) {
@@ -209,15 +208,26 @@
 				var phone = document.getElementById("phone").value;
 				var pwd = document.getElementById("pwd").value;
 				var checkBox = document.getElementById("checkBox");
-				console.log(qq + "," + qqName + "," + introduce + "," + phone + "," + checkNum + "," + pwd);
+				
 				if(!qq || !qqName || !introduce || !phone || !checkNum || !pwd) {
-
 					mui.alert("填写不能为空");
 					return;
 				}
-				/*if (checkBox = false) {
-					mui.alert("请阅读《注册协议》、《免责声明》");
-				}*/
+				
+				//qq验证：
+				var qqReg = /^\d{5,10}$/;
+				if (!qqReg.test(qq)) {
+					mui.alert("请输入正确的QQ");
+					return false;
+				}
+				//手机号验证：
+				var phoneReg = /^1[34578]\d{9}$/;
+				if (!phoneReg.test(phone)) {
+					mui.alert("请输入正确的手机号");
+					return false;
+				}
+				
+				
 				mui.ajax(register_url, {
 					data: {
 						"qq_number": qq,
@@ -232,10 +242,9 @@
 					timeout: 10000, //超时时间设置为10秒；
 					success: function(data) {
 						console.log(data)
-<<<<<<< HEAD
+
 						mui.alert("申请成功，请等待短信通知");
-=======
->>>>>>> be5222676689777c157a31ffd68159430eafc383
+						
 						if(data.code == 0) {
 							mui.alert("申请成功，请等待短信通知");
 						} else {
@@ -247,6 +256,10 @@
 					}
 				});
 			})
+			
+			//表单验证：
+			
+			
 		</script>
 	</body>
 

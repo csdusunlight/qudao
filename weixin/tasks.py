@@ -100,7 +100,7 @@ def sendWeixinNotify(user_obj_list, type):
             bank = user.user_bankcard.first()
             openid = wuser.openid
             data = {'first':{'value':u"提现成功，请查收", 'color':"#173177"},
-                    'keyword1':{'value':bank.bank, 'color':"#173177"},
+                    'keyword1':{'value':bank.get_bank_display(), 'color':"#173177"},
                     'keyword2':{'value':bank.card_number, 'color':"#173177"},
                     'keyword3':{'value':bank.real_name, 'color':"#173177"},
                     'keyword4':{'value':amount, 'color':"#173177"},

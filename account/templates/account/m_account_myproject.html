@@ -126,7 +126,6 @@
 								type: 'get', //HTTP请求类型
 								timeout: 3000, //超时时间设置为10秒；
 								success: function(data) {
-									//									console.log("这是data：", data);
 									if(!data.results.length) {
 										obj.endPullUpToRefresh(true);
 									} else {

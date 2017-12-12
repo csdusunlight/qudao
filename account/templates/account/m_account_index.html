@@ -152,6 +152,9 @@
 				<li class="mui-table-view-cell">
 					<a href="{% url 'account_money' %}" class="mui-navigate-right" style="color: RGB(102,102,102);">收支详情</a>
 				</li>
+				 <li class="mui-table-view-cell" id="out" style="color: RGB(102,102,102);">
+                	退出
+                </li>
 			</ul>
 		</div>
 		<footer>
@@ -212,13 +215,11 @@
 			});
 
 			//点击icon复制链接
-
 			var clipboard = new Clipboard("#fenxiang", {
 				text: function() {
 					return 'http://{{user.domain_name}}.51fanshu.com';
 				}
 			});
-
 			clipboard.on('success', function(e) {
 				mui.alert("分享链接复制成功");
 				console.log(e);
@@ -227,6 +228,21 @@
 			clipboard.on('error', function(e) {
 				console.log(e);
 			});
+			
+			//点击退出
+			document.getElementById("out").addEventListener("tap",function(){
+				var btnArray = ['确定退出','取消'];
+				mui.confirm('您确定要退出账户吗？',"提示",btnArray,function(e){
+					if(e.index == 1){
+						return;
+					}else{
+						mui.openWindow({
+							url:'{% url "logout" %}'
+						});
+					}
+				});
+			});
+			
 		</script>
 	</body>
 

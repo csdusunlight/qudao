@@ -19,16 +19,21 @@
 			body {
 				font-size: 1.2rem;
 			}
+			
 			li {
-                list-style: none;
-            }
-            ul,li,p {
-                margin: 0;
-                padding: 0;
-            }
-            .mui-content {
-                padding-bottom: 60px;
-            }
+				list-style: none;
+			}
+			
+			ul,
+			li,
+			p {
+				margin: 0;
+				padding: 0;
+			}
+			
+			.mui-content {
+				padding-bottom: 60px;
+			}
 			
 			.top {
 				background: RGB(145, 193, 29);
@@ -75,39 +80,55 @@
 				color: white;
 			}
 			/*底部导航部分*/
-            footer {
-                width: 100%;
-                height: 45px;
-                position: fixed;
-                bottom: 0;
-                font-size: 0;
-                background: #fff;
-                z-index: 1000;
-                border-top: 1px solid #e4e4e4;
-            }
-            footer .footer__item {
-                width: 50%;
-                display: inline-block;
-                font-size: 0;
-                text-align: center;
-                position: relative;
-            }
-            footer .mui-icon {
-                font-size: 22px;
-                color: #8f8f8f;
-            }
-            .on .mui-icon {
-                color: #91C11D;
-            }
-            .footer__txt {
-                display: block;
-                margin-top: -6px;
-                font-size: 14px;
-                color: #4d4d4d;
-            }
-            .on .footer__txt {
-                color: #91C11D;
-            }
+			
+			footer {
+				width: 100%;
+				height: 45px;
+				position: fixed;
+				bottom: 0;
+				font-size: 0;
+				background: #fff;
+				z-index: 1000;
+				border-top: 1px solid #e4e4e4;
+			}
+			
+			footer .footer__item {
+				width: 50%;
+				display: inline-block;
+				font-size: 0;
+				text-align: center;
+				position: relative;
+			}
+			
+			footer .mui-icon {
+				font-size: 22px;
+				color: #8f8f8f;
+			}
+			
+			.on .mui-icon {
+				color: #91C11D;
+			}
+			
+			.footer__txt {
+				display: block;
+				margin-top: -6px;
+				font-size: 14px;
+				color: #4d4d4d;
+			}
+			
+			.on .footer__txt {
+				color: #91C11D;
+			}
+			
+			.outbtn {
+				width: 16rem;
+				height: 3rem;
+				background: RGB(221, 82, 77);
+				margin:1rem auto;
+				color:white;
+				text-align: center;
+				line-height: 3rem;
+			}
 		</style>
 	</head>
 
@@ -153,23 +174,26 @@
 					<a href="{% url 'account_money' %}" class="mui-navigate-right" style="color: RGB(102,102,102);">收支详情</a>
 				</li>
 			</ul>
+			<div id="out" class="outbtn">
+				退出账户
+			</div>
 		</div>
 		<footer>
-            <ul>
-                <li class="footer__item">
-                    <a href="{%url 'index'%}">
-                    <i class="mui-icon mui-icon-home"></i>
-                    <span class="footer__txt">首页</span>
-                    </a>
-                </li>
-                <li class="footer__item on">
-                    <a href="{%url 'account_index'%}">
-                    <i class="mui-icon mui-icon-person"></i>
-                    <span class="footer__txt">个人中心</span>
-                    </a>
-                </li>
-            </ul>
-       </footer>
+			<ul>
+				<li class="footer__item">
+					<a href="{%url 'index'%}">
+						<i class="mui-icon mui-icon-home"></i>
+						<span class="footer__txt">首页</span>
+					</a>
+				</li>
+				<li class="footer__item on">
+					<a href="{%url 'account_index'%}">
+						<i class="mui-icon mui-icon-person"></i>
+						<span class="footer__txt">个人中心</span>
+					</a>
+				</li>
+			</ul>
+		</footer>
 
 		<script src="{% static 'js/mui.min.js' %}"></script>
 		<script type="text/javascript">
@@ -212,20 +236,37 @@
 			});
 
 			//点击icon复制链接
-
 			var clipboard = new Clipboard("#fenxiang", {
 				text: function() {
 					return 'http://{{user.domain_name}}.51fanshu.com';
 				}
 			});
-
+			//组织事件冒泡
+			document.getElementById("fenxiang").addEventListener('tap',function(){
+				event.stopPropagation();
+//				mui.alert("点击了分享按钮");
+			})
+			
 			clipboard.on('success', function(e) {
 				mui.alert("分享链接复制成功");
 				console.log(e);
 			});
-
 			clipboard.on('error', function(e) {
 				console.log(e);
+			});
+
+			//点击退出
+			document.getElementById("out").addEventListener("tap", function() {
+				var btnArray = ['确定退出', '取消'];
+				mui.confirm('您确定要退出账户吗？', "提示", btnArray, function(e) {
+					if(e.index == 1) {
+						return;
+					} else {
+						mui.openWindow({
+							url: '{% url "logout" %}'
+						});
+					}
+				});
 			});
 		</script>
 	</body>

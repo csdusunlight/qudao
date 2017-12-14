@@ -160,7 +160,7 @@
 												'<div class="column_7 column"><span>' + data.results[i].remark + '</div>' +
 												//操作
 												'<div class="column_8 column"><span data-id="' + data.results[i].id + '" class="item deleteItem">删除</span>' +
-												'<span data-type="' + data.results[i].is_official + '"  data-id="' + data.results[i].id + '" class="item pro_editor">编辑</span></div>';
+												'<span data-type="' + data.results[i].is_official + '"  data-id="' + data.results[i].id + '" class="item pro_editor"> '+ (data.results[i].audit_state==1?'编辑':'查看') +' </span></div>';
 											li_left.innerHTML = left_html;
 											li_right.innerHTML = right_html;
 											ul_left.appendChild(li_left);
@@ -174,11 +174,13 @@
 									//没有数据 显示没有更多数据
 									obj.endPullUpToRefresh(true);
 								}
+								
 							});
 						}
 
 					});
 				})(mui);
+				
 				
 				mui(".mui-table-view-right").on('tap', '.deleteItem', function() {
 					var dataId = this.getAttribute('data-id');//获取当前data-id

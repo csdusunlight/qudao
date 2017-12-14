@@ -192,15 +192,26 @@
 		<script type="text/javascript">
 			mui.init()
 			if ({{investlog.audit_state}} != 1) {
-                console.log('查看');
-                document.getElementById('project').disabled = true;
-                document.getElementById('date').disabled = true;
+				console.log('查看');
+				var sub = document.getElementById("submit");
+				sub.style.display = "none";
+				
                 document.getElementById('invest_mobile').disabled = true;
                 document.getElementById('invest_name').disabled = true;
                 document.getElementById('invest_term').disabled = true;
                 document.getElementById('invest_amount').disabled = true;
                 document.getElementById('remark').disabled = true;
-            }
+                
+                document.getElementById("project").style.border = "none";
+                document.getElementById("date").style.border = "none";
+                document.getElementById("invest_mobile").style.border = "none";
+                document.getElementById("invest_name").style.border = "none";
+                document.getElementById("invest_term").style.border = "none";
+                document.getElementById("invest_amount").style.border = "none";
+                document.getElementById("remark").style.border = "none";
+			}
+			
+			
 			document.getElementById('submit').addEventListener('tap',function (){
                 var project = document.getElementById('project'),
                     date = document.getElementById('date'),

@@ -98,11 +98,11 @@
 	<body>
 		<header id="header" class="mui-bar mui-bar-nav">
 			<a id="anchor" href="{% url 'account_audited' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
-			<h1 class="mui-title" style="color: RGB(102,102,102);">查看详情</h1>
+			<h1 class="mui-title" style="color: RGB(102,102,102);">{{investlog.project}}</h1>
 		</header>
 		<div class="mui-content" style="background: white;">
 			<form>
-				<table>
+				<table id="tab">
 					<tr>
 						<td><span>项目名称</span></td>
 						<td>
@@ -199,6 +199,9 @@
 			mui.init();
 			if ({{investlog.audit_state}} != 1) {
 				console.log('查看');
+				var sub = document.getElementById("submit");
+				sub.style.display = "none";
+				
 				document.getElementById('project').disabled = true;
                 document.getElementById('date').disabled = true;
                 document.getElementById('invest_mobile').disabled = true;
@@ -214,7 +217,8 @@
                 document.getElementById("invest_term").style.border = "none";
                 document.getElementById("invest_amount").style.border = "none";
                 document.getElementById("remark").style.border = "none";
-               
+                
+                
 			}
             document.getElementById('submit').addEventListener('tap',function (){
                 var project = document.getElementById('project'),

@@ -117,182 +117,43 @@
 	/*height: 844px;*/
 }
 .finance {
-    display: inline-block;
     padding: 10px;
     margin-bottom: 20px;
-    width: 615px;
-    height: 216px;
+    width: 100%;
+    /*height: 216px;*/
     background-color: #fff;
     transition: box-shadow 0.4s ease;
+    overflow: hidden;
 }
 .finance:hover {
     box-shadow: 1px 1px 10px rgba(0,0,0,0.2);
 }
-.finance:nth-of-type(2n) {
-    margin-left: 20px;
-}
-.finance__delbox {
-    height: 150px;
-}
-.finance__img {
+.link_left {
+    width: 1120px;
     float: left;
-    margin: 10px 19px 0;
-    width: 120px;
-    height: 50px;
-    border-top: 35px solid transparent;
-    border-bottom: 35px solid transparent;
-}
-.finance__title {
-    padding: 0 20px;
-    font-size: 18px;
-    line-height: 38px;
-    height: 38px;
-}
-.finance__price {
-    float: left;
-    font-size: 14px;
-}
-.finance__price-num {
-    color: #ff9501;
-}
-.finance__term {
-    float: right;
-    font-size: 14px;
-    color: #666;
-}
-.finance__price02 {
-    line-height: 54px;
-}
-.finance__term-txt,
-.finance__price02-txt {
-    color: #ff9501;
-}
-.finance__btnbox {
-    padding: 0 20px;
     font-size: 0;
 }
-.btn.m-finance {
+.link_right {
+    float: right;
     width: 100px;
 }
-.btn.m-finance:nth-of-type(2) {
-    margin-left: 130px;
+.finance__item {
+    display: inline-block;
+    width: 180px;
+    font-size: 14px;
 }
-.btn.m-finance:last-child {
-    float: right;
+
+.finance__price {
+    color: #ff9501;
+}
+.finance__term,
+.finance__price02 {
+    color: #ff9501;
+}
+
+.btn.m-finance {
+    width: 100px;
 }
 .add-project.true {
     background-color: #e4e4e4;
 }
-/*样式覆盖*/
-/*#index-banner {
-	overflow: hidden;
-}
-#index-banner,
-.flexslider,
-.slides li {
-	height: 88px;
-}
-.changes-p {
-	width: 1112px;
-	margin: 0 auto;
-	border: none;
-}
-.header-t {
-	font-size: 12px;
-}
-.header-t .goto-mobile {
-	font-size: 12px;
-}
-.index_52 a {
-	color: #666;
-}
-.index_54 .lf a {
-	color: #666;
-}*/
-/*横向展示部分*/
-/*.item-add-container {
-	width: 1112px;
-	margin: 0 auto;
-}
-.item-add-content {
-	padding: 0 30px;
-	margin-top: 20px;
-	border: 1px solid #e4e4e4;
-}
-.item-add-box {
-	margin-top: 24px;
-	font-size: 0;
-}
-.item-add-box>img {
-	display: inline-block;
-	width: 144px;
-	height: 96px;
-	margin-left: -90px;
-}
-.item-add-box>p {
-	display: inline-block;
-	margin-top: 8px;
-	margin-left: 70px;
-	line-height: 40px;
-	text-align: center;
-	vertical-align: top;
-}
-.item-add-box>p span {
-	display: block;
-}
-.item-add-name {
-	font-size: 18px;
-	text-align: left;
-}
-.item-add-btn {
-	box-sizing: border-box;
-	float: right;
-	display: inline-block;
-	width: 128px;
-	padding: 14px 32px;
-	margin-top: 26px;
-	font-size: 16px;
-	line-height: 1;
-	color: #fff;
-	background-color: #52c6fe;
-	border-radius: 4px;
-	text-align: center;
-	vertical-align: top;
-}
-.item-add-btn.end {
-	background-color: #c4c5c2;
-}*/
-/*遮罩部分*/
-/*.finance-add-mask {
-	position: fixed;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	text-align: center;
-	background-color: rgba(0, 0, 0, 0.7);
-	z-index: 10;
-}
-.mask-box {
-	width: 100%;
-	height: 380px;
-	position: absolute;
-	top: 50%;
-	-webkit-transform: translateY(-190px);
-	transform: translateY(-190px);
-}
-.mask-box>img {
-	display: block;
-	width: 960px;
-	height: 264px;
-	margin: 0 auto 50px;
-}
-
-.mask-box>a {
-	padding: 6px 30px;
-	border-radius: 20px;
-	background: #f08519;
-	cursor: pointer;
-	font-size: 20px;
-	color: #fff;
-}*/

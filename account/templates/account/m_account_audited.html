@@ -16,6 +16,10 @@
 			.mui-pull-bottom-wrapper {
 				text-align: center;
 			}
+			.deleteItem{
+				color: RGB(228,44,44);
+			}
+			
 		</style>
 	</head>
 
@@ -159,14 +163,14 @@
 												//备注及其他
 												'<div class="column_7 column"><span>' + data.results[i].remark + '</div>' +
 												//操作
-												'<div class="column_8 column"><span data-id="' + data.results[i].id + '" class="item deleteItem">删除</span>' +
+												'<div class="column_8 column">'+(data.results[i].audit_state==1 ? '<span data-id="' + data.results[i].id + '" class="item deleteItem">删除</span>' : '')+' '+
 												'<span data-type="' + data.results[i].is_official + '"  data-id="' + data.results[i].id + '" class="item pro_editor"> '+ (data.results[i].audit_state==1?'编辑':'查看') +' </span></div>';
 											li_left.innerHTML = left_html;
 											li_right.innerHTML = right_html;
 											ul_left.appendChild(li_left);
 											ul_right.appendChild(li_right);
 										}
-
+//<span data-id="' + data.results[i].id + '" class="item deleteItem">删除</span>'
 									}
 								},
 								error: function(xhr, type, errorThrown) {

@@ -160,7 +160,7 @@
 												'<div class="column_7 column"><span class="item">' + data.results[i].remark + '</div>' +
 												//操作
 												'<div class="column_8 column"><span data-id="' + data.results[i].id + '" class="item deleteItem">删除</span>' +
-												'<span data-type="' + data.results[i].is_official + '"  data-type="' + data.results[i].is_official + ' "  data-id=" ' + data.results[i].id + ' " class="item pro_editor">编辑</span></div>';
+												'<span data-type="' + data.results[i].is_official + '"  data-id="' + data.results[i].id + '" class="item pro_editor">编辑</span></div>';
 											li_left.innerHTML = left_html;
 											li_right.innerHTML = right_html;
 											ul_left.appendChild(li_left);
@@ -179,11 +179,11 @@
 
 					});
 				})(mui);
-
+				
 				mui(".mui-table-view-right").on('tap', '.deleteItem', function() {
-					var dataId = this.getAttribute('data-id');
+					var dataId = this.getAttribute('data-id');//获取当前data-id
 					console.log('dataId:', dataId);
-					console.log(mui(".item" + dataId));
+//					console.log(mui(".item" + dataId));
 					var btnArry = ['否', '是'];
 					mui.confirm("是否要删除该条数据", "提示", btnArry, function(e) {
 						if(e.index == 1) {
@@ -194,7 +194,7 @@
 								timeout: 10000, //超时时间设置为10秒；
 								success: function(data) {
 									mui(".item" + dataId).each(function() {
-										console.log(this.parentNode);
+										console.log(this.parentNode);//当前父节点 
 										this.parentNode.removeChild(this);
 									})
 								},
@@ -207,11 +207,10 @@
 							return;
 						}
 					});
-
 				});
 
 				mui('.mui-table-view-right').on('tap', '.pro_editor', function() {
-					console.log("点击了编辑按钮");
+					
 					var project_id = this.getAttribute('data-id'); //获取自定义data-id属性
 					var type = this.getAttribute("data-type"); //获取自定义属性data-type属性
 					console.log(type)
@@ -248,23 +247,6 @@
 					}
 				});
 
-				/*mui('.mui-bar-nav').on('tap', '.mui-pull-left', function() {
-					var Url = document.getElementById("anchor").getAttribute("href");
-					mui.openWindow({
-						url: Url,
-						styles: {
-							top: 0,
-							bottom: 0
-						},
-						show: {
-							aniShow: 'slide-in-right',
-						},
-						waiting: {
-							autoShow: false, //自动显示等待框
-							title: '正在加载...', //等待对话框上显示的提示内容
-						}
-					});
-				});*/
 			</script>
 
 	</body>

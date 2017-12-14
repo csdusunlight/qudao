@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8" />
         <title>福利联盟-行业领先的P2P渠道分发机构</title>
-        <meta name="keywords" content="挖福利，我要挖福利，p2p理财平台，p2p投资理财，p2p投资理财平台，小额投资理财，个人投资理财，互联网理财产品，互联网理财平台，互联网金融平台，互联网金融产品，网络理财产品，网赚" />
+        <meta name="keywords" content="福利联盟，p2p理财平台，p2p投资理财，p2p投资理财平台，小额投资理财，个人投资理财，互联网理财产品，互联网理财平台，互联网金融平台，互联网金融产品，网络理财产品，网赚" />
         <meta name="description" content="福利联盟是行业领先的P2P渠道分发机构。" />
         <link href="/static/images/favicon.ico" rel="shortcut icon"/>
         <link rel="stylesheet" type="text/css" href="/static/css/wfl-common.css"/>
@@ -53,7 +53,7 @@
                 <ul class="today">
                     {% for item in recom_projects %}
                         <li class="today__item">
-                            <img class="today__img" src="{{item.picture_url}}"/>
+                            <img class="today__img" src="{{item.picture_url}}" alt="平台logo"/>
                             <h2 class="today__title one-line">{{item.title}}</h2>
                             {%if user.is_authenticated %}
                             <a class="today__btn btn m-green" href="{{item.strategy}}" target="_blank">查看攻略</a>

@@ -81,7 +81,7 @@
 				height: 3rem !important;
 				border-radius: 5px !important;
 				font-size: 14px;
-				border: 1px solid rgba(0,0,0,.4) !important;
+				border: 1px solid rgba(0,0,0,.4);
 			}
 			.desc{
 				margin-left: 1.2rem;
@@ -191,11 +191,13 @@
 		<script src="{% static 'js/mui.min.js' %}"></script>
 		<script type="text/javascript">
 			mui.init()
+			
 			if ({{investlog.audit_state}} != 1) {
 				console.log('查看');
 				var sub = document.getElementById("submit");
 				sub.style.display = "none";
 				
+				document.getElementById('date').disabled = true;
                 document.getElementById('invest_mobile').disabled = true;
                 document.getElementById('invest_name').disabled = true;
                 document.getElementById('invest_term').disabled = true;

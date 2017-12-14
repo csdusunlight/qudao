@@ -1,8 +1,9 @@
-.mui-table-view-left {
+.mui-scroll .mui-table-view-left {
 	width: 25%;
 	float: left;
 	margin: 0;
 	padding: 0;
+	text-align: center;
 }
 
 .mui-table-view-right {
@@ -26,7 +27,8 @@
 }
 
 .item_line.m-right {
-	width: 32rem;
+	width: 56rem;
+	text-align: center;
 }
 
 .column {
@@ -57,6 +59,16 @@
 
 .column_5 {
 	width: 8rem;
+}
+.column_6 {
+	width: 8rem;
+}
+.column_7 {
+	width: 8rem;
+}
+.column_8 {
+	width: 8rem;
+	text-align: center;
 }
 
 .item {

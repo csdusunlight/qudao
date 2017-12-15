@@ -37,7 +37,8 @@ def index(request):
 
 @login_required
 def project_all(request):
-    return render(request, 'finance_all.html',  )
+    template = 'm_finance_all.html' if request.mobile else 'finance_all.html'
+    return render(request, template,  )
 def user_guide(request):
     return render(request, 'user_guide.html',  )
 def activity_rank(request):

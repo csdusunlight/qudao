@@ -15,6 +15,9 @@
 			pointer-events: none;
 			background-color: #e4e4e4 !important;
 		}
+		.go_homepage {
+		    display: none;
+		}
 	</style>
 
 </head>
@@ -117,7 +120,7 @@
 
 		</ul>
 		<!--<div style="width: 1250px; margin: 0 auto;" class="page-box clearfix">-->
-		<div style="width: 1250px; margin: 0 auto;" class="changes-p clearfix">
+		<div style="display:none; width: 1250px; margin: 0 auto;" class="changes-p clearfix">
 			<div style="padding: 10px 20px 6px;" class="page r" id="page1">
 			</div>
 		</div>
@@ -143,7 +146,7 @@
 				'<span class="finance__price finance__item">{project_price01}</span><span class="finance__price02 finance__item">{project_cprice}</span>' +
 				'<span class="finance__remark finance__item">这里是备注说明这里是备注说明</span></a>' +
 				'<div class="link_right"><a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a>' +
-				'<a>进入推广主页</a></div></li>[/results]';
+				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank">进入推广主页</a></div></li>[/results]';
 		} else if(userlevel == '02') {
 			var data = '[results]<li class="finance">' +
 				'<a class="link_left" href="{project_strategy}" target="_blank"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo">' +
@@ -151,7 +154,7 @@
 				'<span class="finance__price finance__item">{project_price02}</span><span class="finance__price02 finance__item">{project_cprice}</span>' +
 				'<span class="finance__remark finance__item">这里是备注说明这里是备注说明</span></a>' +
 				'<div class="link_right"><a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a>' +
-				'<a>进入推广主页</a></div></li>[/results]';
+				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank">进入推广主页</a></div></li>[/results]';
 		} else if(userlevel == '03') {
 			var data = '[results]<li class="finance">' +
 				'<a class="link_left" href="{project_strategy}" target="_blank"><img class="finance__img finance__item pic" src="{project_picture}" alt="商家logo">' +
@@ -159,13 +162,14 @@
 				'<span class="finance__price finance__item">{project_price03}</span><span class="finance__price02 finance__item">{project_cprice}</span>' +
 				'<span class="finance__remark finance__item" style="text-align:center">这里是备注说明这里是备注说明</span></a>' +
 				'<div class="link_right"><a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a>' +
-				'<a>进入推广主页</a></div></li>[/results]';
+				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank">进入推广主页</a></div></li>[/results]';
 		}
 		var url = "/restapi/sub/?page={page}&pageSize={pageSize}&is_official=2";
 
 		function pagecallback() {
 			$('.add-project.true').each(function() {
 				this.innerText = '已添加';
+				$(this).parent().find('.go_homepage').show()
 			})
 			$('.state20').text('已结束');
 			$('.oneline').each(function(index, el) { //单行
@@ -206,6 +210,7 @@
 						$(obj).data('isadd', false);
 						obj.innerText = "添加至主页";
 						$(obj).removeClass('true').addClass('false');
+						$(obj).parent().find('.go_homepage').hide();
 					},
 					error: function() {
 						alert("请检查网络连接");
@@ -225,6 +230,7 @@
 						$(obj).data('isadd', true);
 						obj.innerText = "已添加";
 						$(obj).removeClass('false').addClass('true');
+						$(obj).parent().find('.go_homepage').show();
 					},
 					error: function() {
 						alert("请检查网络连接");
@@ -250,7 +256,7 @@
 			$("#pagedata1").ajaxPage({
 				url: url + "&type=" + "&state=",
 				pageId: $("#page1"),
-				pageSize: 12,
+				pageSize: 999,
 				run: true,
 				content: data,
 				complete: pagecallback,
@@ -279,7 +285,7 @@
 				$("#pagedata1").ajaxPage({
 					url: newurl,
 					pageId: $("#page1"),
-					pageSize: 12,
+					pageSize: 999,
 					run: true,
 					content: data,
 					complete: pagecallback,
@@ -307,7 +313,7 @@
 					$("#pagedata1").ajaxPage({
 						url: newurl2,
 						pageId: $("#page1"),
-						pageSize: 12,
+						pageSize: 999,
 						run: true,
 						content: data,
 						complete: pagecallback,

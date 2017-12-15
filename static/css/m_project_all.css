@@ -1,6 +1,12 @@
 body{
 	line-height: 15px;
+	background: white;
 }
+
+.mui-content{
+	background: white;
+}
+
 .mui-content .mui-table-view-left {
 	width: 25%;
 	float: left;
@@ -106,7 +112,7 @@ body{
 	font-size: 12px;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
+	/*white-space: nowrap;*/
 }
 
 .state0 {
@@ -141,7 +147,6 @@ body{
 	width: 20rem;
 	height: 2.5rem;
 	border: none;
-	background: RGB(239,239,244);
 	font-size: 1.2rem;
 }
 

@@ -154,3 +154,9 @@ body{
 	margin-left: 8rem;	
 	position: absolute;right: 1rem;top: 0.4rem;
 }
+.right_ul{
+	padding-left: 0;
+}
+.left_ul{
+	padding-left: 0;
+}

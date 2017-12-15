@@ -1,6 +1,7 @@
 
 from django.conf.urls import url, include
 from restapi import views
+from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls',namespace='rest_framework')),
@@ -47,4 +48,6 @@ urlpatterns = [
     
     url(r'^docs/$', views.DocumentList.as_view(), ),
     url(r'^docs/(?P<pk>[0-9a-zA-Z]+)/$', views.DocumentDetail.as_view(), kwargs={'partial':True}),
+    
+    url(r'^doc/', include_docs_urls(title='d'))
 ]

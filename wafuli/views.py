@@ -37,7 +37,9 @@ def index(request):
 
 @login_required
 def project_all(request):
-    return render(request, 'finance_all.html',  )
+    template = 'm_finance_all.html' if request.mobile else 'finance_all.html'
+    projects = Project.objects.all(is_official=True)
+    return render(request, template, {'projects':projects})
 def user_guide(request):
     return render(request, 'user_guide.html',  )
 def activity_rank(request):

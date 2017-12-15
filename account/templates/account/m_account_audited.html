@@ -13,7 +13,13 @@
 		<link rel="stylesheet" href="{% static 'css/m_audit.css' %}">
 		<script type="text/javascript" src="{% static  'js/rem.js'%}"></script>
 		<style>
-		    
+			.mui-pull-bottom-wrapper {
+				text-align: center;
+			}
+			.deleteItem{
+				color: RGB(228,44,44);
+			}
+			
 		</style>
 	</head>
 
@@ -31,29 +37,25 @@
 				</div>
 				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6" style="background: #92C11D;"></div>
 
-				<!--<div class="nav">
-					<span class="nav_name">项目名称</span>
-					<span class="nav_list nav_num">提交手机号</span>
-					<span class="nav_list nav_shenhe">审核状态</span>
-					<span class="nav_list nav_operite">操作</span>
-				</div>-->
-
 				<div class="mui-slider-group">
 					<div id="item1" class="mui-slider-item mui-control-content mui-active">
 						<div id="scroll1" class="mui-scroll-wrapper">
 							<div class="mui-scroll">
 								<div class="mui-table-view">
-                                    <ul class="mui-table-view-left">
-                                        <li class="item_line m-head"><span class="column_1 column m-head">名称/手机号</span></li>
-                                    </ul>
-                                    <ul class="mui-table-view-right">
-                                        <li class="item_line m-head m-right">
-                                            <div class="column_2 column m-head">金额/标期</div>
-                                            <div class="column_3 column m-head">结算/返现</div>
-                                            <div class="column_4 column m-head">日期/姓名</div>
-                                            <div class="column_5 column m-head">审核信息/备注</div>
-                                        </li>
-                                    </ul>
+									<ul class="mui-table-view-left">
+										<li class="item_line m-head"><span class="column_1 column m-head">名称/<br />手机号</span></li>
+									</ul>
+									<ul class="mui-table-view-right">
+										<li class="item_line m-head m-right">
+											<div class="column_2 column m-head">提交日期/<br />投资姓名</div>
+											<div class="column_3 column m-head">投资金额/<br />投资标期</div>
+											<div class="column_4 column m-head">收款信息</div>
+											<div class="column_5 column m-head">结算金额/<br />返现金额</div>
+											<div class="column_6 column m-head">审核状态/<br />审核信息</div>
+											<div class="column_7 column m-head">备注及其他</div>
+											<div class="column_8 column m-head">操作</div>
+										</li>
+									</ul>
 								</div>
 							</div>
 						</div>
@@ -62,17 +64,20 @@
 						<div id="scroll2" class="mui-scroll-wrapper">
 							<div class="mui-scroll">
 								<div class="mui-table-view">
-                                    <ul class="mui-table-view-left">
-                                        <li class="item_line m-head"><span class="column_1 column m-head">名称/手机号</span></li>
-                                    </ul>
-                                    <ul class="mui-table-view-right">
-                                        <li class="item_line m-head m-right">
-                                            <div class="column_2 column m-head">金额/标期</div>
-                                            <div class="column_3 column m-head">结算/返现</div>
-                                            <div class="column_4 column m-head">日期/姓名</div>
-                                            <div class="column_5 column m-head">审核信息/备注</div>
-                                        </li>
-                                    </ul>
+									<ul class="mui-table-view-left">
+										<li class="item_line m-head"><span class="column_1 column m-head">名称/<br />手机号</span></li>
+									</ul>
+									<ul class="mui-table-view-right">
+										<li class="item_line m-head m-right">
+											<div class="column_2 column m-head">提交日期/<br />投资姓名</div>
+											<div class="column_3 column m-head">投资金额/<br />投资标期</div>
+											<div class="column_4 column m-head">收款信息</div>
+											<div class="column_5 column m-head">结算金额/<br />返现金额</div>
+											<div class="column_6 column m-head">审核状态/<br />审核信息</div>
+											<div class="column_7 column m-head">备注及其他</div>
+											<div class="column_8 column m-head">操作</div>
+										</li>
+									</ul>
 								</div>
 							</div>
 						</div>
@@ -128,8 +133,7 @@
 								type: 'get', //HTTP请求类型
 								timeout: 3000, //超时时间设置为10秒；
 								success: function(data) {
-									console.log("这是data：", data.results);
-									
+									console.log("ajax数据：", data.results);
 									if(!data.results.length) {
 										obj.endPullUpToRefresh(true);
 									} else {
@@ -138,26 +142,35 @@
 										for(var i in data.results) {
 											var li_left = document.createElement('li');
 											var li_right = document.createElement('li');
-											li_left.className = 'item_line';
-											li_right.className = 'item_line m-right';
-											var left_html = '<div class="column_1 column"><span class="item">' + data.results[i].project_title + 
-											'</span><span class="item">'+ data.results[i].invest_mobile +'</span></div>';
-                                            
-											var right_html = '<div class="column_2 column"><span class="item">' + data.results[i].invest_amount + '</span>' +
-                                                            '<span class="item">'+data.results[i].invest_term+'</span></div>' +
-                                                            '<div class="column_3 column"><span class="item">' + data.results[i].settle_amount + '</span>' +
-                                                            '<span class="item">'+data.results[i].return_amount+'</span></div>' +
-                                                            '<div class="column_4 column"><span class="item">' + data.results[i].date + '</span>' +
-                                                            '<span class="item">'+data.results[i].invest_name+'</span></div>' +
-                                                            '<div class="column_4 column"><span class="item">' + data.results[i].audit_reason + '</span>' +
-                                                            '<span class="item">'+data.results[i].remark+'</span></div>';
+											li_left.className = 'item_line item' + data.results[i].id;
+											li_right.className = 'item_line m-right item' + data.results[i].id;
+											var left_html = '<div data-id=" ' + data.results[i].id + ' " class="column_1 column"><span class="item">' + data.results[i].project_title +
+												'</span><span class="item">' + data.results[i].invest_mobile + '</span></div>';
+
+											var right_html = '<div data-id=" ' + data.results[i].id + ' " class="column_2 column"><span class="item">' + data.results[i].invest_date + '</span>' +
+												'<span class="item">' + data.results[i].invest_name + '</span></div>' +
+												//投资金额/投资标期
+												'<div class="column_3 column"><span class="item">' + data.results[i].invest_amount + '</span>' +
+												'<span class="item">' + data.results[i].invest_term + '</span></div>' +
+												//收款信息
+												'<div class="column_4 column"><span>' + data.results[i].zhifubao + '</span></div>' +
+												//结算返现
+												'<div class="column_5 column"><span class="item">' + data.results[i].settle_amount + '</span>' +
+												'<span class="item">' + data.results[i].return_amount + '</span></div>' +
+												//审核状态/审核信息
+												'<div class="column_6 column"><span class="item state' + data.results[i].audit_state + ' ">' + data.results[i].audit_state_des + '</span>' +
+												'<span class="item">' + data.results[i].audit_reason + '</span></div>' +
+												//备注及其他
+												'<div class="column_7 column"><span>' + data.results[i].remark + '</div>' +
+												//操作
+												'<div class="column_8 column">'+(data.results[i].audit_state==1 ? '<span data-id="' + data.results[i].id + '" class="item deleteItem">删除</span>' : '')+' '+
+												'<span data-type="' + data.results[i].is_official + '"  data-id="' + data.results[i].id + '" class="item pro_editor"> '+ (data.results[i].audit_state==1?'编辑':'查看') +' </span></div>';
 											li_left.innerHTML = left_html;
 											li_right.innerHTML = right_html;
-//											ul.appendChild(li);
 											ul_left.appendChild(li_left);
 											ul_right.appendChild(li_right);
 										}
-
+//<span data-id="' + data.results[i].id + '" class="item deleteItem">删除</span>'
 									}
 								},
 								error: function(xhr, type, errorThrown) {
@@ -165,15 +178,48 @@
 									//没有数据 显示没有更多数据
 									obj.endPullUpToRefresh(true);
 								}
+								
 							});
 						}
 
 					});
 				})(mui);
+				
+				
+				mui(".mui-table-view-right").on('tap', '.deleteItem', function() {
+					var dataId = this.getAttribute('data-id');//获取当前data-id
+					console.log('dataId:', dataId);
+//					console.log(mui(".item" + dataId));
+					var btnArry = ['否', '是'];
+					mui.confirm("是否要删除该条数据", "提示", btnArry, function(e) {
+						if(e.index == 1) {
+							
+							mui.ajax("/restapi/investlogs/" + dataId + "/", {
+								dataType: 'json', //服务器返回json格式数据
+								type: 'delete', //HTTP请求类型
+								timeout: 10000, //超时时间设置为10秒；
+								success: function(data) {
+									mui(".item" + dataId).each(function() {
+										console.log(this.parentNode);//当前父节点 
+										this.parentNode.removeChild(this);
+									})
+								},
+								error: function(xhr, type, errorThrown) {
+									console.log(xhr.resoponseText);
+								}
+							});
 
-				mui('.mui-table-view').on('tap', '.pro_editor', function() {
-					var project_id = this.getAttribute('data-id');
-					var type = this.getAttribute("data-type");
+						} else {
+							return;
+						}
+					});
+				});
+
+				mui('.mui-table-view-right').on('tap', '.pro_editor', function() {
+					
+					var project_id = this.getAttribute('data-id'); //获取自定义data-id属性
+					var type = this.getAttribute("data-type"); //获取自定义属性data-type属性
+					console.log(type)
 					if(type == "true") {
 						mui.openWindow({
 							url: "/account/detail_investlog/" + project_id,
@@ -206,26 +252,9 @@
 						});
 					}
 				});
-				mui('.mui-bar-nav').on('tap', '.mui-pull-left', function() {
-					var Url = document.getElementById("anchor").getAttribute("href");
-					mui.openWindow({
-						url: Url,
-						styles: {
-							top: 0,
-							bottom: 0
-						},
-						show: {
-							aniShow: 'slide-in-right',
-						},
-						waiting: {
-							autoShow: false, //自动显示等待框
-							title: '正在加载...', //等待对话框上显示的提示内容
-						}
-					});
-				});
+
 			</script>
 
 	</body>
 
 </html>
-

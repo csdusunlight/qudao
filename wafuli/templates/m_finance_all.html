@@ -43,10 +43,34 @@
                     </ul>
                 </ul>
             </div>
+            <footer>
+                <ul>
+                    <li class="footer__item">
+                        <a href="{%url 'index'%}">
+                            <i class="mui-icon mui-icon-home"></i>
+                            <span class="footer__txt">首页</span>
+                        </a>
+                    </li>
+                    <li class="footer__item on">
+                        <a href="{%url 'project_all'%}">
+                        <i class="mui-icon mui-icon-more"></i>
+                        <span class="footer__txt">项目库</span>
+                        </a>
+                    </li>
+                    <li class="footer__item">
+                        <a href="{%url 'account_index'%}">
+                            <i class="mui-icon mui-icon-person"></i>
+                            <span class="footer__txt">个人中心</span>
+                        </a>
+                    </li>
+                </ul>
+            </footer>
 
 		<script src="{% static 'js/mui.min.js' %}"></script>
 		<script type="text/javascript" charset="utf-8">
             mui.init();
+            var user_level = '{{user.level}}';
+            console.log(user_level);
             var get_proj_url = "/restapi/sub/?is_official=2";
             get_list(get_proj_url);
             document.getElementById('search_btn').addEventListener('tap', function () {
@@ -80,7 +104,15 @@
 
                                 var right_html = '<div class="column_2 column"><span class="item">' + data.results[i].project_term + '</span></div>' +
                                     '<div class="column_3 column"><span class="item">' + data.results[i].project_investrange + '</span></div>' +
-                                    '<div class="column_4 column"><span class="item">' + data.results[i].project_price03 + '</span></div>' +
+                                    '<div class="column_4 column"><span class="item">';
+                                    if(user_level == 01) {
+                                        right_html += data.results[i].project_price01;
+                                    } else if (user_level == 02) {
+                                        right_html += data.results[i].project_price02;
+                                    } else if (user_level == 03) {
+                                        right_html += data.results[i].project_price03;
+                                    }
+                                    right_html += '</span></div>' +
                                     '<div class="column_5 column"><span class="item">' + data.results[i].project_cprice + '</span></div>' +
                                     '<div class="column_6 column"><span class="item">这里是备注说明这里是备注说明</div>' +
                                     '<div class="column_7 column"><span data-isadd="'+ data.results[i].is_on +'" data-id="'+ data.results[i].id +
@@ -92,7 +124,7 @@
                                 document.getElementById('right_box').appendChild(li_right);
                             }
                         } else {
-                            
+                            document.getElementById('right_box').innerHTML = '<p style="margin:40px;">未搜索到相关数据</p>';
                             console.log('nodata');
                         }
     

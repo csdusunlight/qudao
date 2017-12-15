@@ -1,0 +1,126 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>数据管理</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="{% static 'css/mui.min.css' %}">
+		<link rel="stylesheet" href="{% static 'css/m_project_all.css' %}">
+		<script type="text/javascript" src="{% static  'js/rem.js'%}"></script>
+		
+	</head>
+
+	<body>
+		<!--<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
+			<h1 class="mui-title">项目库</h1>
+		</header>-->
+        <!--<div id="pullrefresh" class="mui-scroll-wrapper">-->
+            <div class="mui-content">
+                <div id="search"><span class="search-icon mui-icon mui-icon-search"></span>点此进入搜索</div>
+                <div class="mui-table-view project-all-box">
+                    <ul id="mui-table-view-left" class="mui-table-view-left">
+                        <li class="item_line m-head"><span class="column_1 column m-head">项目名称</span></li>
+                    </ul>
+                    <ul id="mui-table-view-right" class="mui-table-view-right">
+                        <li class="item_line m-head m-right">
+                            <div class="column_2 column m-head">推广标期</div>
+                            <div class="column_3 column m-head">投资档位</div>
+                            <div class="column_4 column m-head">结算价格</div>
+                            <div class="column_5 column m-head">客户指导价</div>
+                            <div class="column_6 column m-head">备注说明</div>
+                            <div class="column_7 column m-head">操作</div>
+                        </li>
+                    </ul>
+                </ul>
+            </div>
+        <!--</div>-->
+		
+
+		<script src="{% static 'js/mui.min.js' %}"></script>
+		<script src="{%static 'js/mui.pullToRefresh.js'%}"></script>
+		<script src="{%static 'js/mui.pullToRefresh.material.js'%}"></script>
+		<script type="text/javascript" charset="utf-8">
+            mui.init({
+//                  pullRefresh: {
+//                      container: '#pullrefresh',
+//                      up: {
+//                          auto:true,
+//                          contentrefresh: '正在加载...',
+//                          contentnomore:'—— 我可是有底线的 ——',//可选，请求完毕若没有更多数据时显示的提醒内容；
+//                          callback: pullupRefresh
+//                      }
+//                  }
+            });
+            /**
+             * 上拉加载具体业务实现
+             */
+//          var count = 1;
+            var get_proj_url = "/restapi/sub/?page={page}&pageSize={pageSize}&is_official=2";
+//          function get_wel_list(n){
+//              console.log(n);
+                mui.ajax(get_proj_url,{
+                    data:{
+                        'page':1,
+                        'pageSize': 999,
+                    },
+                    dataType:'json',//服务器返回json格式数据
+                    type:'get',//HTTP请求类型
+                    timeout:10000,//超时时间设置为10秒；
+    //              headers:{'Content-Type':'application/json'},
+                    success:function(data){
+                        console.log(data.results);
+                        if (!data.results.length){
+//                          mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+                        }
+                        else {
+//                          mui('#pullrefresh').pullRefresh().endPullupToRefresh(false); //参数为true代表没有更多数据了。
+//                          var table = document.body.querySelector('.project-all-box');
+                            for(var i in data.results) {
+                                var li_left = document.createElement('li');
+                                var li_right = document.createElement('li');
+                                li_left.className = 'item_line';
+                                li_right.className = 'item_line m-right';
+                                var left_html = '<div class="column_1 column"><span class="item">' + data.results[i].project_title + '</span></div>';
+
+                                var right_html = '<div class="column_2 column"><span class="item">' + data.results[i].project_term + '</span></div>' +
+                                    '<div class="column_3 column"><span class="item">' + data.results[i].project_investrange + '</span></div>' +
+                                    '<div class="column_4 column"><span>' + data.results[i].project_price03 + '</span></div>' +
+                                    '<div class="column_5 column"><span class="item">' + data.results[i].project_cprice + '</span></div>' +
+                                    '<div class="column_6 column"><span>这里是备注说明这里是备注说明</div>' +
+                                    '<div class="column_7 column"><span class="item">添加至主页</span>' +
+                                    '<span class="item">进入推广主页</span></div>';
+                                li_left.innerHTML = left_html;
+                                li_right.innerHTML = right_html;
+                                document.getElementById('mui-table-view-left').appendChild(li_left);
+                                document.getElementById('mui-table-view-right').appendChild(li_right);
+                            }
+                        }
+    
+                    },
+                    error:function(xhr,type,errorThrown){
+                        mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+                        console.log(xhr.responseText);
+                    }
+                });
+//          }
+//          function pullupRefresh() {
+//              console.log('ss');
+//              if (count == 1){
+//                  mui('#pullrefresh').pullRefresh().scrollTo(0,0);
+//              }
+//              get_wel_list(count++);
+//          }
+            
+    
+    
+        </script>
+
+	</body>
+
+</html>

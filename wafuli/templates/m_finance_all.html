@@ -94,9 +94,9 @@
 
                                 var right_html = '<div class="column_2 column"><span class="item">' + data.results[i].project_term + '</span></div>' +
                                     '<div class="column_3 column"><span class="item">' + data.results[i].project_investrange + '</span></div>' +
-                                    '<div class="column_4 column"><span>' + data.results[i].project_price03 + '</span></div>' +
+                                    '<div class="column_4 column"><span class="item">' + data.results[i].project_price03 + '</span></div>' +
                                     '<div class="column_5 column"><span class="item">' + data.results[i].project_cprice + '</span></div>' +
-                                    '<div class="column_6 column"><span>这里是备注说明这里是备注说明</div>' +
+                                    '<div class="column_6 column"><span class="item">这里是备注说明这里是备注说明</div>' +
                                     '<div class="column_7 column"><span data-isadd="'+ data.results[i].is_on +'" data-id="'+ data.results[i].id +
                                     '" class="item add-project '+ data.results[i].is_on +'">'+ (data.results[i].is_on?'已添加':'添加至主页') +'</span>' +
                                     '<a '+ (data.results[i].is_on?'':'style="display:none"') +' class="item" href="http://{{user.domain_name}}.51fanshu.com/detail/project/'+ data.results[i].project+'/">进入推广主页</a></div>';

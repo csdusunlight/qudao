@@ -22,7 +22,10 @@
 		</header>-->
         <!--<div id="pullrefresh" class="mui-scroll-wrapper">-->
             <div class="mui-content">
-                <div id="search"><span class="search-icon mui-icon mui-icon-search"></span>点此进入搜索</div>
+                <div id="search" class="searchBox">
+                	<input type="text" placeholder="点此进入搜索" />
+                	<span class="search-icon mui-icon mui-icon-search"></span>
+                </div>
                 <div class="mui-table-view project-all-box">
                     <ul id="mui-table-view-left" class="mui-table-view-left">
                         <li class="item_line m-head"><span class="column_1 column m-head">项目名称</span></li>
@@ -62,9 +65,10 @@
              */
 //          var count = 1;
             var get_proj_url = "/restapi/sub/?page={page}&pageSize={pageSize}&is_official=2";
-//          function get_wel_list(n){
+            get_list(get_proj_url);
+            function get_list(url){
 //              console.log(n);
-                mui.ajax(get_proj_url,{
+                mui.ajax(url,{
                     data:{
                         'page':1,
                         'pageSize': 999,
@@ -93,8 +97,9 @@
                                     '<div class="column_4 column"><span>' + data.results[i].project_price03 + '</span></div>' +
                                     '<div class="column_5 column"><span class="item">' + data.results[i].project_cprice + '</span></div>' +
                                     '<div class="column_6 column"><span>这里是备注说明这里是备注说明</div>' +
-                                    '<div class="column_7 column"><span class="item">添加至主页</span>' +
-                                    '<span class="item">进入推广主页</span></div>';
+                                    '<div class="column_7 column"><span data-isadd="'+ data.results[i].is_on +'" data-id="'+ data.results[i].id +
+                                    '" class="item add-project '+ data.results[i].is_on +'">'+ (data.results[i].is_on?'已添加':'添加至主页') +'</span>' +
+                                    '<a '+ (data.results[i].is_on?'':'style="display:none"') +' class="item" href="http://{{user.domain_name}}.51fanshu.com/detail/project/'+ data.results[i].project+'/">进入推广主页</a></div>';
                                 li_left.innerHTML = left_html;
                                 li_right.innerHTML = right_html;
                                 document.getElementById('mui-table-view-left').appendChild(li_left);
@@ -108,7 +113,7 @@
                         console.log(xhr.responseText);
                     }
                 });
-//          }
+            }
 //          function pullupRefresh() {
 //              console.log('ss');
 //              if (count == 1){
@@ -117,7 +122,68 @@
 //              get_wel_list(count++);
 //          }
             
+            mui(".mui-table-view-right").on('tap', '.add-project', function() {
+                var that = this;
+                var dataId = this.getAttribute('data-id'); //获取当前span标签的data-id
+                var flag = this.getAttribute('data-isadd');
+                console.log(flag)
+                console.log(typeof(flag))
+                if(flag == 'true') {
+                    var btnArry = ['否', '是'];
+                    mui.confirm("是否取消添加项目到个人主页", "提示", btnArry, function(e) {
+                        if(e.index == 1) {
     
+                            mui.ajax("/restapi/sub/" + dataId + "/", {
+                                dataType: 'json', //服务器返回json格式数据
+                                type: 'put', //HTTP请求类型
+                                timeout: 10000, //超时时间设置为10秒；
+                                data: {
+                                    'is_on': false
+                                },
+                                success: function(ret) {
+                                    console.log('关闭');
+                                    that.setAttribute('data-isadd', 'false');
+                                    that.innerText = "添加至主页";
+                                    that.className = 'item add-project false';
+                                    that.nextSibling.style.display = 'none';
+                                },
+                                error: function(xhr, type, errorThrown) {
+                                    console.log(xhr.resoponseText);
+                                }
+                            });
+    
+                        }
+                    });
+    
+                } else {
+                    var btnArry = ['否', '是'];
+                    mui.confirm("是否添加项目到个人主页", "提示", btnArry, function(e) {
+                        if(e.index == 1) {
+    
+                            mui.ajax("/restapi/sub/" + dataId + "/", {
+                                dataType: 'json', //服务器返回json格式数据
+                                type: 'put', //HTTP请求类型
+                                timeout: 10000, //超时时间设置为10秒；
+                                data: {
+                                    'is_on': true
+                                },
+                                success: function(ret) {
+                                    console.log('关闭');
+                                    that.setAttribute('data-isadd', 'true');
+                                    that.innerText = "已添加";
+                                    that.className = 'item add-project true';
+                                    that.nextSibling.style.display = 'block';
+                                },
+                                error: function(xhr, type, errorThrown) {
+                                    console.log(xhr.resoponseText);
+                                }
+                            });
+                        }
+                    });
+    
+                }
+                
+            });
     
         </script>
 

@@ -1,3 +1,6 @@
+body{
+	line-height: 15px;
+}
 .mui-content .mui-table-view-left {
 	width: 25%;
 	float: left;
@@ -30,12 +33,15 @@
 .item_line.m-right {
 	width: 56rem;
 	text-align: center;
+	display: table;
 }
 
 .column {
-	display: inline-block;
+	/*display: inline-block;*/
+	display: table-cell;
+	vertical-align: middle;
 	font-size: 0px;
-	vertical-align: top;
+	/*vertical-align: top;*/
 }
 
 .column.m-head {
@@ -117,4 +123,29 @@
 
 .state3 {
 	color: blue;
+}
+
+.searchBox{
+	width:25rem;
+	height:3rem;
+	border:1px solid RGB(201,201,201);
+	margin: 1rem auto;
+	border-radius: 5px;
+	line-height: 3rem;
+	padding: 0 0 0 1rem;
+	position: relative;
+}
+
+.searchBox > input{
+	display: inline-block;
+	width: 20rem;
+	height: 2.5rem;
+	border: none;
+	background: RGB(239,239,244);
+	font-size: 1.2rem;
+}
+
+.mui-icon-search{
+	margin-left: 8rem;	
+	position: absolute;right: 1rem;top: 0.4rem;
 }

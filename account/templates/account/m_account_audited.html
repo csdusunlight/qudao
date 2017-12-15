@@ -16,10 +16,10 @@
 			.mui-pull-bottom-wrapper {
 				text-align: center;
 			}
-			.deleteItem{
-				color: RGB(228,44,44);
-			}
 			
+			.deleteItem {
+				color: RGB(228, 44, 44);
+			}
 		</style>
 	</head>
 
@@ -138,7 +138,7 @@
 										obj.endPullUpToRefresh(true);
 									} else {
 										obj.endPullUpToRefresh(false); //参数为true代表没有更多数据了。
-										//										var table = document.body.querySelector('.mui-table-view');
+										//var table = document.body.querySelector('.mui-table-view');
 										for(var i in data.results) {
 											var li_left = document.createElement('li');
 											var li_right = document.createElement('li');
@@ -163,14 +163,14 @@
 												//备注及其他
 												'<div class="column_7 column"><span>' + data.results[i].remark + '</div>' +
 												//操作
-												'<div class="column_8 column">'+(data.results[i].audit_state==1 ? '<span data-id="' + data.results[i].id + '" class="item deleteItem">删除</span>' : '')+' '+
-												'<span data-type="' + data.results[i].is_official + '"  data-id="' + data.results[i].id + '" class="item pro_editor"> '+ (data.results[i].audit_state==1?'编辑':'查看') +' </span></div>';
+												'<div class="column_8 column">' + (data.results[i].audit_state == 1 ? '<span data-id="' + data.results[i].id + '" class="item deleteItem">删除</span>' : '') + ' ' +
+												'<span data-type="' + data.results[i].is_official + '"  data-id="' + data.results[i].id + '" class="item pro_editor"> ' + (data.results[i].audit_state == 1 ? '编辑' : '查看') + ' </span></div>';
 											li_left.innerHTML = left_html;
 											li_right.innerHTML = right_html;
 											ul_left.appendChild(li_left);
 											ul_right.appendChild(li_right);
 										}
-//<span data-id="' + data.results[i].id + '" class="item deleteItem">删除</span>'
+
 									}
 								},
 								error: function(xhr, type, errorThrown) {
@@ -178,29 +178,28 @@
 									//没有数据 显示没有更多数据
 									obj.endPullUpToRefresh(true);
 								}
-								
+
 							});
 						}
 
 					});
 				})(mui);
-				
-				
+
 				mui(".mui-table-view-right").on('tap', '.deleteItem', function() {
-					var dataId = this.getAttribute('data-id');//获取当前data-id
+					var dataId = this.getAttribute('data-id'); //获取当前span标签的data-id
 					console.log('dataId:', dataId);
-//					console.log(mui(".item" + dataId));
+					//					console.log(mui(".item" + dataId));
 					var btnArry = ['否', '是'];
 					mui.confirm("是否要删除该条数据", "提示", btnArry, function(e) {
 						if(e.index == 1) {
-							
+
 							mui.ajax("/restapi/investlogs/" + dataId + "/", {
 								dataType: 'json', //服务器返回json格式数据
 								type: 'delete', //HTTP请求类型
 								timeout: 10000, //超时时间设置为10秒；
 								success: function(data) {
 									mui(".item" + dataId).each(function() {
-										console.log(this.parentNode);//当前父节点 
+										console.log(this.parentNode); //当前父节点 
 										this.parentNode.removeChild(this);
 									})
 								},
@@ -216,7 +215,7 @@
 				});
 
 				mui('.mui-table-view-right').on('tap', '.pro_editor', function() {
-					
+
 					var project_id = this.getAttribute('data-id'); //获取自定义data-id属性
 					var type = this.getAttribute("data-type"); //获取自定义属性data-type属性
 					console.log(type)
@@ -252,7 +251,6 @@
 						});
 					}
 				});
-
 			</script>
 
 	</body>

@@ -1,29 +1,34 @@
 ﻿{% load staticfiles %}
 <!DOCTYPE html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>理财福利，互联网理财平台。</title>
-<meta name="keywords" content="P2P理财,P2P网贷,投资理财,网络理财,网络投资,小额投资理财,如何投资理财,个人理财,家庭理财,挖福利" />
-<meta name="description" content="挖福利是一个优质的互联网理财平台！让你感受到不一样的金融理财。" />
-<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/project_all.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
-<style type="text/css">
-    .state20 {
-        pointer-events: none;
-        background-color: #e4e4e4 !important;    
-    }
-</style>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>理财福利，互联网理财平台。</title>
+	<meta name="keywords" content="P2P理财,P2P网贷,投资理财,网络理财,网络投资,小额投资理财,如何投资理财,个人理财,家庭理财,挖福利" />
+	<meta name="description" content="挖福利是一个优质的互联网理财平台！让你感受到不一样的金融理财。" />
+	<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/project_all.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
+	<style type="text/css">
+		.state20 {
+			pointer-events: none;
+			background-color: #e4e4e4 !important;
+		}
+		.go_homepage {
+		    display: none;
+		}
+	</style>
 
 </head>
-<body>
-{% include "header.html" %}
-<div id="content">
 
-  <div class="fiter-item-container">
-    <div class="fiter-content">
-      <!--<div class="filter-box-company">
+<body>
+	{% include "header.html" %}
+	<div id="content">
+
+		<div class="fiter-item-container">
+			<div class="fiter-content">
+				<!--<div class="filter-box-company">
         <div class="filter-box-name">
           平台背景：
         </div>
@@ -43,279 +48,290 @@
         </ul>
       </div>-->
 
-      <div class="filter-box-company">
-        <div class="filter-box-name">
-          投标次数：
-        </div>
-        <ul class="filter-item invest-count">
-          <li data-key = "" class="on">
-            <a href="javascript:void(0);">不限</a>
-          </li>
-          <li data-key = "3">
-            <a href="javascript:void(0);">首投</a>
-          </li>
-          <li data-key = "2">
-            <a href="javascript:void(0);">复投</a>
-          </li>
-        </ul>
-      </div>
+				<div class="filter-box-company">
+					<div class="filter-box-name">
+						投标次数：
+					</div>
+					<ul class="filter-item invest-count">
+						<li data-key="" class="on">
+							<a href="javascript:void(0);">不限</a>
+						</li>
+						<li data-key="3">
+							<a href="javascript:void(0);">首投</a>
+						</li>
+						<li data-key="2">
+							<a href="javascript:void(0);">复投</a>
+						</li>
+					</ul>
+				</div>
 
-      <div class="filter-box-company">
-        <div class="filter-box-name">
-          项目分类：
-        </div>
-        <ul class="filter-item project-type">
-          <li data-key = "" class="on">
-            <a href="javascript:void(0);">不限</a>
-          </li>
-          <li data-key = "2">
-            <a href="javascript:void(0);">稳健投资</a>
-          </li>
-          <li data-key = "3">
-            <a href="javascript:void(0);">高收益区</a>
-          </li>
-        </ul>
-      </div>
+				<div class="filter-box-company">
+					<div class="filter-box-name">
+						项目分类：
+					</div>
+					<ul class="filter-item project-type">
+						<li data-key="" class="on">
+							<a href="javascript:void(0);">不限</a>
+						</li>
+						<li data-key="2">
+							<a href="javascript:void(0);">稳健投资</a>
+						</li>
+						<li data-key="3">
+							<a href="javascript:void(0);">高收益区</a>
+						</li>
+					</ul>
+				</div>
 
-      <div class="filter-box-company">
-        <div class="filter-box-name">
-          项目状态：
-        </div>
-        <ul class="filter-item project-status">
-          <li data-key = "" class="on">
-            <a href="javascript:void(0);">不限</a>
-          </li>
-          <li data-key = "10">
-            <a href="javascript:void(0);">正在进行</a>
-          </li>
-          <li data-key = "20">
-            <a href="javascript:void(0);">已结束</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    
-    <div class="hongbao-search">
-        <input class="hongbao-input" name="key" type="text">
-        <input class="hongbao-submit" type="submit" value="">
-    </div>
+				<div class="filter-box-company">
+					<div class="filter-box-name">
+						项目状态：
+					</div>
+					<ul class="filter-item project-status">
+						<li data-key="" class="on">
+							<a href="javascript:void(0);">不限</a>
+						</li>
+						<li data-key="10">
+							<a href="javascript:void(0);">正在进行</a>
+						</li>
+						<li data-key="20">
+							<a href="javascript:void(0);">已结束</a>
+						</li>
+					</ul>
+				</div>
+			</div>
 
-  </div>  <!--fiter-item-container-end-->
+			<div class="hongbao-search">
+				<input class="hongbao-input" name="key" type="text">
+				<input class="hongbao-submit" type="submit" value="">
+			</div>
 
-  <ul id="pagedata1" class="item-container clearfix">
-    
-  </ul>
-  <!--<div style="width: 1250px; margin: 0 auto;" class="page-box clearfix">-->
-      <div style="width: 1250px; margin: 0 auto;" class="changes-p clearfix">
-          <div style="padding: 10px 20px 6px;" class="page r"  id="page1">
-          </div>
-      </div>
-  <!--</div>-->
-</div>
-<div style="clear:both"></div>
-{% include "footer.html" %}
+		</div>
+		<!--fiter-item-container-end-->
 
-<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
-<!--<script type="text/javascript" src="{% static 'js/jQuery.infiniteCarousel.js' %}"></script>-->
-<!--<script type="text/javascript" src="{% static 'js/MSClass.js' %}"></script>-->
-<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
-<script type="text/javascript">
+		<div class="content-head">
+			<div class="c-item c1">推广标期</div>
+			<div class="c-item c2">投资档位</div>
+			<div class="c-item c3">结算价格</div>
+			<div class="c-item c4">客户指导价</div>
+			<div class="c-item c5">备注说明</div>
+		</div>
 
-var userlevel = '{{user.level}}';
-console.log(userlevel);
-if (userlevel == '01') {
-	var data='[results]<li class="finance">'+
-  '<a class="link_left" href="{project_strategy}" target="_blank"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo">'+
-  '<span class="finance__term finance__item">{project_term}</span><span class="finance__range finance__item">{project_investrange}</span>'+
-  '<span class="finance__price finance__item">{project_price01}</span><span class="finance__price02 finance__item">{project_cprice}</span>'+
-  '<span class="finance__remark finance__item">这里是备注说明这里是备注说明</span></a>'+
-  '<div class="link_right"><a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a>'+
-  '<a>进入推广主页</a></div></li>[/results]';
-} else if (userlevel == '02') {
-	var data='[results]<li class="finance">'+
-  '<a class="link_left" href="{project_strategy}" target="_blank"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo">'+
-  '<span class="finance__term finance__item">{project_term}</span><span class="finance__range finance__item">{project_investrange}</span>'+
-  '<span class="finance__price finance__item">{project_price02}</span><span class="finance__price02 finance__item">{project_cprice}</span>'+
-  '<span class="finance__remark finance__item">这里是备注说明这里是备注说明</span></a>'+
-  '<div class="link_right"><a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a>'+
-  '<a>进入推广主页</a></div></li>[/results]';
-} else if (userlevel == '03') {
-    var data='[results]<li class="finance">'+
-  '<a class="link_left" href="{project_strategy}" target="_blank"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo">'+
-  '<span class="finance__term finance__item">{project_term}</span><span class="finance__range finance__item">{project_investrange}</span>'+
-  '<span class="finance__price finance__item">{project_price03}</span><span class="finance__price02 finance__item">{project_cprice}</span>'+
-  '<span class="finance__remark finance__item">这里是备注说明这里是备注说明</span></a>'+
-  '<div class="link_right"><a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a>'+
-  '<a>进入推广主页</a></div></li>[/results]';
-}
-var url = "/restapi/sub/?page={page}&pageSize={pageSize}&is_official=2";
-function pagecallback(){
-    $('.add-project.true').each(function() {
-        this.innerText = '已添加';
-    })
-    $('.state20').text('已结束');
-    $('.oneline').each(function(index, el) {        //单行
-        if ($(this).height() > 30) {
-            $(this).addClass('one-line')
-            $(this).addTitle();
-        }
-    });
-    var btns = document.querySelectorAll('.copy-link');
-    var clipboard = new Clipboard(btns);
+		<ul id="pagedata1" class="item-container clearfix">
 
-    clipboard.on('success', function(e) {
-        console.log(e);
-        $.prompt({
-            Content: '复制成功'
-        })
-    });
+		</ul>
+		<!--<div style="width: 1250px; margin: 0 auto;" class="page-box clearfix">-->
+		<div style="display:none; width: 1250px; margin: 0 auto;" class="changes-p clearfix">
+			<div style="padding: 10px 20px 6px;" class="page r" id="page1">
+			</div>
+		</div>
+		<!--</div>-->
+	</div>
+	<div style="clear:both"></div>
+	{% include "footer.html" %}
 
-    clipboard.on('error', function(e) {
-        console.log(e);
-    });
-}
-var textarray=[];
-function addProject (obj, id) {
-    var flag = $(obj).data('isadd');
-    console.log(flag)
-    if (flag == true) {
-        $.ajax({
-            url: '/restapi/sub/' + id + '/',
-            dataType: "json",
-            type:"put",
-            data: {
-                'is_on': false
-            },
-            success: function(ret) {
-                console.log('关闭');
-                $(obj).data('isadd', false);
-                obj.innerText = "添加至主页";
-                $(obj).removeClass('true').addClass('false');
-            },
-            error: function() {
-                alert("请检查网络连接");
-            }
-        });
-        
-    } else{
-        $.ajax({
-            url: '/restapi/sub/' + id + '/',
-            dataType: "json",
-            type:"put",
-            data: {
-                'is_on': true
-            },
-            success: function(ret) {
-                console.log('开启');
-                $(obj).data('isadd', true);
-                obj.innerText = "已添加";
-                $(obj).removeClass('false').addClass('true');
-            },
-            error: function() {
-                alert("请检查网络连接");
-            }
-        });
-        
-    }
-}
-function emptydisplay(obj){
-  obj.html('<p style="margin-top:20px;">抱歉，没有找到符合条件的项目！</p>');
-}
-$(function(){
-    $('.nav__item:eq(1)').addClass('active');
+	<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
+	<!--<script type="text/javascript" src="{% static 'js/jQuery.infiniteCarousel.js' %}"></script>-->
+	<!--<script type="text/javascript" src="{% static 'js/MSClass.js' %}"></script>-->
+	<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+	<script type="text/javascript">
+		var userlevel = '{{user.level}}';
+		console.log(userlevel);
+		if(userlevel == '01') {
+			var data = '[results]<li class="finance">' +
+				'<a class="link_left" href="{project_strategy}" target="_blank"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo">' +
+				'<span class="finance__term finance__item">{project_term}</span><span class="finance__range finance__item">{project_investrange}</span>' +
+				'<span class="finance__price finance__item">{project_price01}</span><span class="finance__price02 finance__item">{project_cprice}</span>' +
+				'<span class="finance__remark finance__item">这里是备注说明这里是备注说明</span></a>' +
+				'<div class="link_right"><a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a>' +
+				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank">进入推广主页</a></div></li>[/results]';
+		} else if(userlevel == '02') {
+			var data = '[results]<li class="finance">' +
+				'<a class="link_left" href="{project_strategy}" target="_blank"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo">' +
+				'<span class="finance__term finance__item">{project_term}</span><span class="finance__range finance__item">{project_investrange}</span>' +
+				'<span class="finance__price finance__item">{project_price02}</span><span class="finance__price02 finance__item">{project_cprice}</span>' +
+				'<span class="finance__remark finance__item">这里是备注说明这里是备注说明</span></a>' +
+				'<div class="link_right"><a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a>' +
+				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank">进入推广主页</a></div></li>[/results]';
+		} else if(userlevel == '03') {
+			var data = '[results]<li class="finance">' +
+				'<a class="link_left" href="{project_strategy}" target="_blank"><img class="finance__img finance__item pic" src="{project_picture}" alt="商家logo">' +
+				'<span class="finance__term finance__item">{project_term}</span><span class="finance__range finance__item">{project_investrange}</span>' +
+				'<span class="finance__price finance__item">{project_price03}</span><span class="finance__price02 finance__item">{project_cprice}</span>' +
+				'<span class="finance__remark finance__item" style="text-align:center">这里是备注说明这里是备注说明</span></a>' +
+				'<div class="link_right"><a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a>' +
+				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank">进入推广主页</a></div></li>[/results]';
+		}
+		var url = "/restapi/sub/?page={page}&pageSize={pageSize}&is_official=2";
 
-  var newurl = url;
-  var index = "0",
-    index_text;
-  var invest_account = "", 
-    project_type = "",
-    project_status = "";
+		function pagecallback() {
+			$('.add-project.true').each(function() {
+				this.innerText = '已添加';
+				$(this).parent().find('.go_homepage').show()
+			})
+			$('.state20').text('已结束');
+			$('.oneline').each(function(index, el) { //单行
+				if($(this).height() > 30) {
+					$(this).addClass('one-line')
+					$(this).addTitle();
+				}
+			});
+			var btns = document.querySelectorAll('.copy-link');
+			var clipboard = new Clipboard(btns);
 
+			clipboard.on('success', function(e) {
+				console.log(e);
+				$.prompt({
+					Content: '复制成功'
+				})
+			});
 
-    $("#pagedata1").ajaxPage({
-          url:url + "&type=" + "&state=",
-          pageId:$("#page1"),
-          pageSize:12,
-          run:true,
-          content:data,
-          complete:pagecallback,
-    });
+			clipboard.on('error', function(e) {
+				console.log(e);
+			});
+		}
+		var textarray = [];
 
-  $(".fiter-item-container li").click(function() {
-    var parent = $(this).parent(".filter-item");
+		function addProject(obj, id) {
+			var flag = $(obj).data('isadd');
+			console.log(flag)
+			if(flag == true) {
+				$.ajax({
+					url: '/restapi/sub/' + id + '/',
+					dataType: "json",
+					type: "put",
+					data: {
+						'is_on': false
+					},
+					success: function(ret) {
+						console.log('关闭');
+						$(obj).data('isadd', false);
+						obj.innerText = "添加至主页";
+						$(obj).removeClass('true').addClass('false');
+						$(obj).parent().find('.go_homepage').hide();
+					},
+					error: function() {
+						alert("请检查网络连接");
+					}
+				});
 
+			} else {
+				$.ajax({
+					url: '/restapi/sub/' + id + '/',
+					dataType: "json",
+					type: "put",
+					data: {
+						'is_on': true
+					},
+					success: function(ret) {
+						console.log('开启');
+						$(obj).data('isadd', true);
+						obj.innerText = "已添加";
+						$(obj).removeClass('false').addClass('true');
+						$(obj).parent().find('.go_homepage').show();
+					},
+					error: function() {
+						alert("请检查网络连接");
+					}
+				});
 
-    if($(parent).hasClass("invest-count")) {
-      $(this).addClass("on").siblings().removeClass("on");
-      invest_account = $(this).data('key');
-    }
+			}
+		}
 
-    if($(parent).hasClass("project-type")) {
-      $(this).addClass("on").siblings().removeClass("on");
-      project_type = $(this).data('key');
-    }
+		function emptydisplay(obj) {
+			obj.html('<p style="margin-top:20px;">抱歉，没有找到符合条件的项目！</p>');
+		}
+		$(function() {
+			$('.nav__item:eq(1)').addClass('active');
 
-    if($(parent).hasClass("project-status")) {
-      $(this).addClass("on").siblings().removeClass("on");
-      project_status = $(this).data('key');
-    }
-    newurl=url + "&project_futou=" + invest_account + "&project_type=" + project_type + "&project_state=" + project_status;
-    console.log(newurl)
+			var newurl = url;
+			var index = "0",
+				index_text;
+			var invest_account = "",
+				project_type = "",
+				project_status = "";
 
-    $("#pagedata1").ajaxPage({
-        url:newurl,
-        pageId:$("#page1"),
-        pageSize:12,
-        run:true,
-        content:data,
-        complete:pagecallback,
-    });
-  })
-  
-    $('.hongbao-submit').click(function() {
-        var searchValue = $('.hongbao-input').val();
-        var newurl2 = url + "&project_title_contains=" + searchValue;
-        
-        $("#pagedata1").ajaxPage({
-            url:newurl2,
-            pageId:$("#page1"),
-            pageSize:12,
-            run:true,
-            content:data,
-            complete:pagecallback,
-        });
-    })
-    $('.hongbao-input').on('keypress',function(e){
-        if(e.keyCode == 13) {
-            var searchValue = $('.hongbao-input').val();
-            var newurl2 = url + "&project_title_contains=" + searchValue;
-            
-            $("#pagedata1").ajaxPage({
-                url:newurl2,
-                pageId:$("#page1"),
-                pageSize:12,
-                run:true,
-                content:data,
-                complete:pagecallback,
-            });
-        }
-    });
-    
+			$("#pagedata1").ajaxPage({
+				url: url + "&type=" + "&state=",
+				pageId: $("#page1"),
+				pageSize: 999,
+				run: true,
+				content: data,
+				complete: pagecallback,
+			});
 
-});
+			$(".fiter-item-container li").click(function() {
+				var parent = $(this).parent(".filter-item");
 
-function tounicode(data) {
-   if(data == '') return '请输入汉字';
-   var str ='';
-   for(var i=0;i<data.length;i++)
-   {
-      str+="\\u"+parseInt(data[i].charCodeAt(0),10).toString(16);
-   }
-   return str;
-}
-</script>
+				if($(parent).hasClass("invest-count")) {
+					$(this).addClass("on").siblings().removeClass("on");
+					invest_account = $(this).data('key');
+				}
+
+				if($(parent).hasClass("project-type")) {
+					$(this).addClass("on").siblings().removeClass("on");
+					project_type = $(this).data('key');
+				}
+
+				if($(parent).hasClass("project-status")) {
+					$(this).addClass("on").siblings().removeClass("on");
+					project_status = $(this).data('key');
+				}
+				newurl = url + "&project_futou=" + invest_account + "&project_type=" + project_type + "&project_state=" + project_status;
+				console.log(newurl)
+
+				$("#pagedata1").ajaxPage({
+					url: newurl,
+					pageId: $("#page1"),
+					pageSize: 999,
+					run: true,
+					content: data,
+					complete: pagecallback,
+				});
+			})
+
+			$('.hongbao-submit').click(function() {
+				var searchValue = $('.hongbao-input').val();
+				var newurl2 = url + "&project_title_contains=" + searchValue;
+
+				$("#pagedata1").ajaxPage({
+					url: newurl2,
+					pageId: $("#page1"),
+					pageSize: 12,
+					run: true,
+					content: data,
+					complete: pagecallback,
+				});
+			})
+			$('.hongbao-input').on('keypress', function(e) {
+				if(e.keyCode == 13) {
+					var searchValue = $('.hongbao-input').val();
+					var newurl2 = url + "&project_title_contains=" + searchValue;
+
+					$("#pagedata1").ajaxPage({
+						url: newurl2,
+						pageId: $("#page1"),
+						pageSize: 999,
+						run: true,
+						content: data,
+						complete: pagecallback,
+					});
+				}
+			});
+
+		});
+
+		function tounicode(data) {
+			if(data == '') return '请输入汉字';
+			var str = '';
+			for(var i = 0; i < data.length; i++) {
+				str += "\\u" + parseInt(data[i].charCodeAt(0), 10).toString(16);
+			}
+			return str;
+		}
+	</script>
 </body>
+
 </html>

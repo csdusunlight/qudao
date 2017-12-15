@@ -1,9 +1,13 @@
 body{
 	line-height: 15px;
+	background: white;
 }
 ul,li {
     padding: 0;
     margin: 0;
+}
+.mui-content{
+	background: white;
 }
 .mui-content .mui-table-view-left {
 	width: 25%;
@@ -110,7 +114,7 @@ ul,li {
 	font-size: 12px;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
+	/*white-space: nowrap;*/
 }
 
 .state0 {
@@ -145,13 +149,18 @@ ul,li {
 	width: 20rem;
 	height: 2.5rem;
 	border: none;
-	background: RGB(239,239,244);
 	font-size: 1.2rem;
 }
 
 .mui-icon-search{
 	margin-left: 8rem;	
 	position: absolute;right: 1rem;top: 0.4rem;
+}
+.right_ul{
+	padding-left: 0;
+}
+.left_ul{
+	padding-left: 0;
 }
 /*底部导航部分*/
 footer {
@@ -183,6 +192,7 @@ footer .mui-icon {
     margin-top: -6px;
     font-size: 14px;
     color: #4d4d4d;
+    line-height: 20px;
 }
 .on .footer__txt {
     color: #91C11D;

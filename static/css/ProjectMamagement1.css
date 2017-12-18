@@ -106,7 +106,7 @@
 
 .item_line.m-right {
 	width: 56rem;
-	height: 4.1rem;
+	height: 4.05rem;
 	text-align: center;
 	display: table;
 }
@@ -171,9 +171,9 @@
 	text-align: center;
 }
 
-.item {
+.item1 {
 	display: inline-block;
-	vertical-align: middle;
+	/*vertical-align: middle;*/
 	font-size: 12px;
 	/*overflow: hidden;*/
 	/*text-overflow: ellipsis;*/

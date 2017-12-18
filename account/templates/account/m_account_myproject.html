@@ -160,16 +160,16 @@
 											var li_right = document.createElement('li');
 											li_left.className = 'item_line item';
 											li_right.className = 'item_line m-right item';
-											var left_html = '<div class="column_1 column"><span class="item" >' + data.results[i].project_title + '</span></div>';
+											var left_html = '<div class="column_1 column"><span class="item1" >' + data.results[i].project_title + '</span></div>';
 
 											var right_html = '<div data-id=" ' + data.results[i].id + ' " class="column_2 column">' +
-												'<span class="item">' + (data.results[i].price ? data.results[i].price : data.results[i].project_cprice) + '</span></div>' +
+												'<span class="item1">' + (data.results[i].price ? data.results[i].price : data.results[i].project_cprice) + '</span></div>' +
 												//标期
-												'<div class="column_3 column"><span class="item">' + data.results[i].project_term + '</span></div>' +
+												'<div class="column_3 column"><span class="item1">' + data.results[i].project_term + '</span></div>' +
 												//投资区间
-												'<div class="column_4 column"><span class="item">' + data.results[i].project_intrest + '</span></div>' +
+												'<div class="column_4 column"><span class="item1">' + data.results[i].project_intrest + '</span></div>' +
 												//
-												'<div class="column_5 column"><span class="item">' + data.results[i].project_intrest + '</span></div>' +
+												'<div class="column_5 column"><span class="item1">' + data.results[i].project_intrest + '</span></div>' +
 												//是否主业呈现
 												'<div class="column_6 column"><div class="btn"><div data-btn="' + (data.results[i].id) + '" class="mui-switch show mui-switch-mini ' + (data.results[i].is_on ? "mui-active" : "") + ' "><div class="mui-switch-handle"></div></div></div></div>' +
 												//是否推荐

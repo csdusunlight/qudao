@@ -12,16 +12,17 @@
 		<style type="text/css">
 			body {
 				background: white;
+				color: #000000;
 			}
 			
 			 table {
-				color: RGB(153,153,153);
+				/*color: RGB(153,153,153);*/
 				font-size: 14px;
 			}
 			
 			td {
 				padding: 1rem 1.3rem;
-				color: RGB(119,12,30) !important;
+				/*color: RGB(119,12,30);*/
 			}
 			
 			.txt {
@@ -30,7 +31,7 @@
 				width: 18rem;
 				height: 3rem;
 				line-height: 3rem;
-				color: RGB(153,153,153);
+				/*color: RGB(153,153,153);*/
 				position: relative;
 			}
 			
@@ -228,7 +229,7 @@
                     invest_term = document.getElementById('invest_term'),
                     invest_amount = document.getElementById('invest_amount'),
                     remark = document.getElementById('remark');
-                if (!project || !date.value || !invest_mobile.value || !invest_name.value || !invest_term.value || !invest_amount.value) {
+                if (!project || !date.value || !invest_mobile.value || !invest_term.value || !invest_amount.value) {
                     mui.alert('填写项不能为空');
                     return;
                 }

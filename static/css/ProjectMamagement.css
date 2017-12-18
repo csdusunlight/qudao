@@ -104,6 +104,9 @@
 	display: inline-block;
 	font-size: 0px;
 	vertical-align: top;
+	word-break: break-all;
+	word-wrap: break-word;
+	white-space: pre-wrap;
 }
 
 .column.m-head {

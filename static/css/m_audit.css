@@ -28,7 +28,7 @@
 }
 
 .item_line.m-right {
-	width: 56rem;
+	width: 64rem;
 	text-align: center;
 }
 
@@ -91,7 +91,7 @@
 }
 
 .column_8 {
-	width: 8rem;
+	width: 16rem;
 	text-align: center;
 }
 
@@ -101,6 +101,10 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+}
+.column_8 .item{
+    display: inline-block;
+    width: 25%;
 }
 
 .state0 {
@@ -118,3 +122,82 @@
 .state3 {
 	color: blue;
 }
+/*弹窗部分*/
+.popup {
+    display: none;
+    position: fixed;
+    /*visibility: hidden;*/
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.3);
+    /*opacity: 0;*/
+    z-index: 10;
+    transition: all 0.4s ease;
+}
+/*.popup.in {
+    visibility: visible;
+    opacity: 1;
+}*/
+.popup__content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    padding: 10px 10px;
+    /*margin-top: -100px;*/
+    width: 80%;
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 5px 5px 13px 2px rgba(0,0,0,0.4);
+    /*opacity: 0;*/
+    transition: all 0.4s ease;
+}
+/*.popup.in .popup__content {
+    opacity: 1;
+    margin-top: 0px;
+}*/
+.popup__title {
+    margin-bottom: 22px;
+    text-align: center;
+    font-size: 20px;
+}
+.popup__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    float: right;
+    height: 37px;
+    width: 40px;
+    color: #000;
+    font-size: 28px;
+    line-height: 40px;
+    text-shadow: 0 1px 0 #fff;
+    background: none;
+    opacity: 0.2;
+    border: 0;
+    cursor: pointer;
+}
+.popup__detail {
+    line-height: 30px;
+}
+.popup__item {
+    margin-bottom: 30px;
+}
+.popup__itemname {
+    display: inline-block;
+    width: 40%;
+}
+.popup__btnbox {
+    margin-top: 22px;
+    text-align: center;
+}
+.popup__btnbox .btn:hover {
+    transform: translateY(0);
+}
+/*弹窗部分---end*/

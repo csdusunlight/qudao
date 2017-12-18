@@ -84,174 +84,376 @@
 					</div>
 				</div>
 			</div>
-
-			<script src="{% static 'js/mui.min.js' %}"></script>
-			<script src="{%static 'js/mui.pullToRefresh.js'%}"></script>
-			<script src="{%static 'js/mui.pullToRefresh.material.js'%}"></script>
-			<script>
-				mui.init();
-				mui('.mui-slider').slider().setStopped(true);
-				(function($) {
-					//阻尼系数
-					var deceleration = mui.os.ios ? 0.003 : 0.0009;
-					$('.mui-scroll-wrapper').scroll({
-						bounce: true,
-						indicators: true, //是否显示滚动条
-						deceleration: deceleration
-					});
-					$.ready(function() {
-						//循环初始化所有上拉加载
-						$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
-							var count = 1;
-							$(pullRefreshEl).pullToRefresh({
-								up: {
-									auto: true,
-									callback: function() {
-										var self = this;
-										var ul_left = self.element.querySelector('.mui-table-view-left');
-										var ul_right = self.element.querySelector('.mui-table-view-right');
-										getList(this, ul_left, ul_right, count++, index);
-
-									}
-								}
-							});
-						});
-
-						function getList(obj, ul_left, ul_right, n, index) {
-							console.log(index);
-							if(index == 0) {
-								var url = '/restapi/investlogs/?is_official=true&user={{user.id}}';
-							} else if(index == 1) {
-								var url = '/restapi/investlogs/?is_official=false&user={{user.id}}';
-							}
-							mui.ajax(url, {
-								data: {
-									page: n,
-									pageSize: 12,
-								},
-								dataType: 'json', //服务器返回json格式数据
-								type: 'get', //HTTP请求类型
-								timeout: 3000, //超时时间设置为10秒；
-								success: function(data) {
-									console.log("ajax数据：", data.results);
-									if(!data.results.length) {
-										obj.endPullUpToRefresh(true);
-									} else {
-										obj.endPullUpToRefresh(false); //参数为true代表没有更多数据了。
-										//var table = document.body.querySelector('.mui-table-view');
-										for(var i in data.results) {
-											var li_left = document.createElement('li');
-											var li_right = document.createElement('li');
-											li_left.className = 'item_line item' + data.results[i].id;
-											li_right.className = 'item_line m-right item' + data.results[i].id;
-											var left_html = '<div data-id=" ' + data.results[i].id + ' " class="column_1 column"><span class="item">' + data.results[i].project_title +
-												'</span><span class="item">' + data.results[i].invest_mobile + '</span></div>';
-
-											var right_html = '<div data-id=" ' + data.results[i].id + ' " class="column_2 column"><span class="item">' + data.results[i].invest_date + '</span>' +
-												'<span class="item">' + data.results[i].invest_name + '</span></div>' +
-												//投资金额/投资标期
-												'<div class="column_3 column"><span class="item">' + data.results[i].invest_amount + '</span>' +
-												'<span class="item">' + data.results[i].invest_term + '</span></div>' +
-												//收款信息
-												'<div class="column_4 column"><span>' + data.results[i].zhifubao + '</span></div>' +
-												//结算返现
-												'<div class="column_5 column"><span class="item">' + data.results[i].settle_amount + '</span>' +
-												'<span class="item">' + data.results[i].return_amount + '</span></div>' +
-												//审核状态/审核信息
-												'<div class="column_6 column"><span class="item state' + data.results[i].audit_state + ' ">' + data.results[i].audit_state_des + '</span>' +
-												'<span class="item">' + data.results[i].audit_reason + '</span></div>' +
-												//备注及其他
-												'<div class="column_7 column"><span>' + data.results[i].remark + '</div>' +
-												//操作
-												'<div class="column_8 column">' + (data.results[i].audit_state == 1 ? '<span data-id="' + data.results[i].id + '" class="item deleteItem">删除</span>' : '') + ' ' +
-												'<span data-type="' + data.results[i].is_official + '"  data-id="' + data.results[i].id + '" class="item pro_editor"> ' + (data.results[i].audit_state == 1 ? '编辑' : '查看') + ' </span></div>';
-											li_left.innerHTML = left_html;
-											li_right.innerHTML = right_html;
-											ul_left.appendChild(li_left);
-											ul_right.appendChild(li_right);
-										}
-
-									}
-								},
-								error: function(xhr, type, errorThrown) {
-									console.log("没有数据")
-									//没有数据 显示没有更多数据
-									obj.endPullUpToRefresh(true);
-								}
-
-							});
-						}
-
-					});
-				})(mui);
-
-				mui(".mui-table-view-right").on('tap', '.deleteItem', function() {
-					var dataId = this.getAttribute('data-id'); //获取当前span标签的data-id
-					console.log('dataId:', dataId);
-					//					console.log(mui(".item" + dataId));
-					var btnArry = ['否', '是'];
-					mui.confirm("是否要删除该条数据", "提示", btnArry, function(e) {
-						if(e.index == 1) {
-
-							mui.ajax("/restapi/investlogs/" + dataId + "/", {
-								dataType: 'json', //服务器返回json格式数据
-								type: 'delete', //HTTP请求类型
-								timeout: 10000, //超时时间设置为10秒；
-								success: function(data) {
-									mui(".item" + dataId).each(function() {
-										console.log(this.parentNode); //当前父节点 
-										this.parentNode.removeChild(this);
-									})
-								},
-								error: function(xhr, type, errorThrown) {
-									console.log(xhr.resoponseText);
-								}
-							});
-
-						} else {
-							return;
-						}
-					});
+        </div>
+        
+        <div class="popup m-pass-proj">
+            <div class="popup__content">
+                <div class="popup__top">
+                    <h2 class="popup__title">数据返现</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+                </div>
+                <div class="popup__detail">
+                    <div class="popup__item">
+                        <span class="popup__itemname">返现金额：</span>
+                        <input type="number" id="return_amount" class="return_amount" value="0" placeholder="填写返现金额" />
+                    </div>
+                </div>
+                <div class="popup__btnbox">
+                    <button class="cancel mui-btn mui-btn-outlined" onclick="canclePopup(this)">取消</button>
+                    <button id="confirm_pass" class="popup__close-btn mui-btn mui-btn-primary">确认</button>
+                </div>
+            </div>
+        </div>
+        <div class="popup m-pass-proj-02">
+            <div class="popup__content">
+                <div class="popup__top">
+                    <h2 class="popup__title">审核通过</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+                </div>
+                <div class="popup__detail">
+                    <div class="popup__item">
+                        <span class="popup__itemname">结算金额：</span>
+                        <input type="number" id="settle_amount_02" class="settle_amount_02" placeholder="填写结算金额" />
+                    </div>
+                    <div class="popup__item">
+                        <span class="popup__itemname">返现金额：</span>
+                        <input type="number" id="return_amount_02" class="return_amount_02" placeholder="填写返现金额" />
+                    </div>
+                </div>
+                <div class="popup__btnbox">
+                    <button class="cancel mui-btn mui-btn-outlined" onclick="canclePopup(this)">取消</button>
+                    <button id="confirm_pass_02" class="popup__close-btn mui-btn mui-btn-primary">确认</button>
+                </div>
+            </div>
+        </div>
+        <div class="popup m-refuse-proj-02">
+            <div class="popup__content">
+                <div class="popup__top">
+                    <h2 class="popup__title">审核拒绝</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+                </div>
+                <div class="popup__detail">
+                    <div class="popup__item">
+                        <span class="popup__itemname">拒绝原因：</span>
+                        <input type="text" id="refuse_reason_02" class="refuse_reason_02" placeholder="填写拒绝原因" />
+                    </div>
+                </div>
+                <div class="popup__btnbox">
+                    <button class="cancel mui-btn mui-btn-outlined" onclick="canclePopup(this)">取消</button>
+                    <button id="confirm_refuse_02" class="popup__close-btn mui-btn mui-btn-primary">确认</button>
+                </div>
+            </div>
+        </div>
+        
+		<script src="{% static 'js/mui.min.js' %}"></script>
+		<script src="{%static 'js/mui.pullToRefresh.js'%}"></script>
+		<script src="{%static 'js/mui.pullToRefresh.material.js'%}"></script>
+		<script>
+			mui.init();
+			mui('.mui-slider').slider().setStopped(true);
+			(function($) {
+				//阻尼系数
+				var deceleration = mui.os.ios ? 0.003 : 0.0009;
+				$('.mui-scroll-wrapper').scroll({
+					bounce: true,
+					indicators: true, //是否显示滚动条
+					deceleration: deceleration
 				});
+				$.ready(function() {
+					//循环初始化所有上拉加载
+					$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+						var count = 1;
+						$(pullRefreshEl).pullToRefresh({
+							up: {
+								auto: true,
+								callback: function() {
+									var self = this;
+									var ul_left = self.element.querySelector('.mui-table-view-left');
+									var ul_right = self.element.querySelector('.mui-table-view-right');
+									getList(this, ul_left, ul_right, count++, index);
 
-				mui('.mui-table-view-right').on('tap', '.pro_editor', function() {
-
-					var project_id = this.getAttribute('data-id'); //获取自定义data-id属性
-					var type = this.getAttribute("data-type"); //获取自定义属性data-type属性
-					console.log(type)
-					if(type == "true") {
-						mui.openWindow({
-							url: "/account/detail_investlog/" + project_id,
-							styles: {
-								top: 0,
-								bottom: 0
-							},
-							show: {
-								aniShow: 'slide-in-right',
-							},
-							waiting: {
-								autoShow: false, //自动显示等待框
-								title: '正在加载...', //等待对话框上显示的提示内容
+								}
 							}
 						});
-					} else {
-						mui.openWindow({
-							url: "/account/detail_investlog/" + project_id,
-							styles: {
-								top: 0,
-								bottom: 0
+					});
+
+					function getList(obj, ul_left, ul_right, n, index) {
+						console.log(index);
+						if(index == 0) {
+							var url = '/restapi/investlogs/?is_official=true&user={{user.id}}';
+						} else if(index == 1) {
+							var url = '/restapi/investlogs/?is_official=false&user={{user.id}}';
+						}
+						mui.ajax(url, {
+							data: {
+								page: n,
+								pageSize: 12,
 							},
-							show: {
-								aniShow: 'slide-in-right',
+							dataType: 'json', //服务器返回json格式数据
+							type: 'get', //HTTP请求类型
+							timeout: 3000, //超时时间设置为10秒；
+							success: function(data) {
+								console.log("ajax数据：", data.results);
+								if(!data.results.length) {
+									obj.endPullUpToRefresh(true);
+								} else {
+									obj.endPullUpToRefresh(false); //参数为true代表没有更多数据了。
+									//var table = document.body.querySelector('.mui-table-view');
+									for(var i in data.results) {
+										var li_left = document.createElement('li');
+										var li_right = document.createElement('li');
+										li_left.className = 'item_line item' + data.results[i].id;
+										li_right.className = 'item_line m-right item' + data.results[i].id;
+										var left_html = '<div data-id=" ' + data.results[i].id + ' " class="column_1 column"><span class="item">' + data.results[i].project_title +
+											'</span><span class="item">' + data.results[i].invest_mobile + '</span></div>';
+
+										var right_html = '<div data-id=" ' + data.results[i].id + ' " class="column_2 column"><span class="item">' + data.results[i].invest_date + '</span>' +
+											'<span class="item">' + data.results[i].invest_name + '</span></div>' +
+											//投资金额/投资标期
+											'<div class="column_3 column"><span class="item">' + data.results[i].invest_amount + '</span>' +
+											'<span class="item">' + data.results[i].invest_term + '</span></div>' +
+											//收款信息
+											'<div class="column_4 column"><span>' + data.results[i].zhifubao + '</span></div>' +
+											//结算返现
+											'<div class="column_5 column"><span class="item">' + data.results[i].settle_amount + '</span>' +
+											'<span class="item pass_' + data.results[i].id + '">' + data.results[i].return_amount + '</span></div>' +
+											//审核状态/审核信息
+											'<div class="column_6 column"><span class="item state' + data.results[i].audit_state + ' ">' + data.results[i].audit_state_des + '</span>' +
+											'<span class="item">' + data.results[i].audit_reason + '</span></div>' +
+											//备注及其他
+											'<div class="column_7 column"><span>' + data.results[i].remark + '</div>' +
+											//操作
+											'<div class="column_8 column">';
+											if (index == 0) {
+												if (data.results[i].audit_state == 1) {
+                                                    right_html += '<span data-id="' + data.results[i].id + '" class="item deleteItem">删除</span>' +
+                                                                   '<span data-id="' + data.results[i].id + '" class="item pro_editor">编辑</span></div>';
+                                                } else if ((data.results[i].audit_state == 0)) {
+                                                    right_html += '<span data-id="' + data.results[i].id + '" class="item pro_editor">查看</span>' +
+                                                                    '<span data-id="' + data.results[i].id + '" class="item pro_pass_01">返现</span></div>';
+                                                } else {
+                                                    right_html += '<span data-id="' + data.results[i].id + '" class="item pro_editor">查看</span></div>';
+                                                }
+											} else{
+											    if (data.results[i].audit_state == 1) {
+											    	right_html += '<span data-id="' + data.results[i].id + '" class="item deleteItem">删除</span>' +
+											    	               '<span data-id="' + data.results[i].id + '" class="item pro_editor">编辑</span>' +
+											    	               '<span data-id="' + data.results[i].id + '" class="item pro_pass_02">审核</span>' +
+											    	               '<span data-id="' + data.results[i].id + '" class="item pro_refuse_02">拒绝</span></div>';
+											    } else{
+											    	right_html += '<span data-id="' + data.results[i].id + '" class="item pro_editor">查看</span></div>';
+											    }
+											}
+//												(data.results[i].audit_state == 1 ? '<span data-id="' + data.results[i].id + '" class="item deleteItem">删除</span>' : '') +
+//												'<span data-type="' + data.results[i].is_official + '"  data-id="' + data.results[i].id + '" class="item pro_editor"> ' + (data.results[i].audit_state == 1 ? '编辑' : '查看') + ' </span></div>';
+										li_left.innerHTML = left_html;
+										li_right.innerHTML = right_html;
+										ul_left.appendChild(li_left);
+										ul_right.appendChild(li_right);
+									}
+
+								}
 							},
-							waiting: {
-								autoShow: false, //自动显示等待框
-								title: '正在加载...', //等待对话框上显示的提示内容
+							error: function(xhr, type, errorThrown) {
+								console.log("没有数据")
+								//没有数据 显示没有更多数据
+								obj.endPullUpToRefresh(true);
 							}
+
 						});
 					}
+
 				});
-			</script>
+			})(mui);
+            
+            
+            var _that;
+            var _id;
+            var confirm_pass = document.getElementById('confirm_pass'),
+                confirm_pass_02 = document.getElementById('confirm_pass_02'),
+                confirm_refuse_02 = document.getElementById('confirm_refuse_02');
+			mui(".mui-table-view-right").on('tap', '.deleteItem', function() {
+				var dataId = this.getAttribute('data-id'); //获取当前span标签的data-id
+				console.log('dataId:', dataId);
+				//					console.log(mui(".item" + dataId));
+				var btnArry = ['否', '是'];
+				mui.confirm("是否要删除该条数据", "提示", btnArry, function(e) {
+					if(e.index == 1) {
+
+						mui.ajax("/restapi/investlogs/" + dataId + "/", {
+							dataType: 'json', //服务器返回json格式数据
+							type: 'delete', //HTTP请求类型
+							timeout: 10000, //超时时间设置为10秒；
+							success: function(data) {
+								mui(".item" + dataId).each(function() {
+									console.log(this.parentNode); //当前父节点 
+									this.parentNode.removeChild(this);
+								})
+							},
+							error: function(xhr, type, errorThrown) {
+								console.log(xhr.resoponseText);
+							}
+						});
+
+					} else {
+						return;
+					}
+				});
+			});
+
+			mui('.mui-table-view-right').on('tap', '.pro_editor', function() {
+
+				var project_id = this.getAttribute('data-id'); //获取自定义data-id属性
+				var type = this.getAttribute("data-type"); //获取自定义属性data-type属性
+				console.log(type)
+				if(type == "true") {
+					mui.openWindow({
+						url: "/account/detail_investlog/" + project_id,
+						styles: {
+							top: 0,
+							bottom: 0
+						},
+						show: {
+							aniShow: 'slide-in-right',
+						},
+						waiting: {
+							autoShow: false, //自动显示等待框
+							title: '正在加载...', //等待对话框上显示的提示内容
+						}
+					});
+				} else {
+					mui.openWindow({
+						url: "/account/detail_investlog/" + project_id,
+						styles: {
+							top: 0,
+							bottom: 0
+						},
+						show: {
+							aniShow: 'slide-in-right',
+						},
+						waiting: {
+							autoShow: false, //自动显示等待框
+							title: '正在加载...', //等待对话框上显示的提示内容
+						}
+					});
+				}
+			});
+			
+			mui(".mui-table-view-right").on('tap', '.pro_pass_01', function() {
+                _id = this.getAttribute('data-id');
+                _that = this;
+                document.getElementById("return_amount").value = '';
+                mui('.popup.m-pass-proj')[0].style.display = 'block';
+            });
+			mui(".mui-table-view-right").on('tap', '.pro_pass_02', function() {
+                _id = this.getAttribute('data-id');
+                _that = this;
+                document.getElementById("settle_amount_02").value = '';
+                document.getElementById("return_amount_02").value = '';
+                mui('.popup.m-pass-proj-02')[0].style.display = 'block';
+            });
+            mui(".mui-table-view-right").on('tap', '.pro_refuse_02', function() {
+                _id = this.getAttribute('data-id');
+                _that = this;
+                document.getElementById("refuse_reason_02").value = '';
+                mui('.popup.m-refuse-proj-02')[0].style.display = 'block';
+            });
+            confirm_pass.addEventListener('tap', function(){
+                console.log(_id);
+                var return_amount = document.getElementById("return_amount").value;
+                if(!return_amount) {
+                    mui.alert('填写项不能为空')
+                    return;
+                }
+                console.log(return_amount)
+                
+                mui.ajax("/account/admin_invest/" + _id + "/", {
+                    dataType: 'json', //服务器返回json格式数据
+                    type: 'post', //HTTP请求类型
+                    timeout: 10000, //超时时间设置为10秒；
+                    data: {
+                        'return_amount': return_amount,
+                    },
+                    success: function(ret) {
+                        if(ret.code == 0) {
+                            var pass_dom = '.pass_' + _id;
+//                          console.log(mui(pass_dom)[0]);
+                            mui(pass_dom)[0].innerText = return_amount;
+                            mui('.popup.m-pass-proj')[0].style.display = 'none';
+                            mui.alert('操作成功');
+                        } else {
+                            mui.alert(ret.msg);
+                        }
+                    },
+                    error: function(xhr, type, errorThrown) {
+                        console.log(xhr.resoponseText);
+                    }
+                });
+            })
+            confirm_pass_02.addEventListener('tap', function(){
+                console.log(_id);
+                var settle_amount_02 = document.getElementById("settle_amount_02").value;
+                var return_amount_02 = document.getElementById("return_amount_02").value;
+                if(!settle_amount_02 || !return_amount_02) {
+                    mui.alert('填写项不能为空');
+                    return;
+                }
+                console.log(settle_amount_02 + ', ' + return_amount_02);
+                mui.ajax("/account/admin_invest/" + _id + "/", {
+                    dataType: 'json', //服务器返回json格式数据
+                    type: 'post', //HTTP请求类型
+                    timeout: 10000, //超时时间设置为10秒；
+                    data: {
+                        'settle_amount': settle_amount_02,
+                        'return_amount': return_amount_02,
+                        'audit_state': 0,
+                    },
+                    success: function(ret) {
+                        if(ret.code == 0) {
+                            _that.parentNode.innerHTML = '<span data-id="' + _id + '" class="item pro_editor">查看</span>';
+                            mui('.popup.m-pass-proj-02')[0].style.display = 'none';
+                            mui.alert('操作成功');
+                        } else {
+                            mui.alert(ret.msg);
+                        }
+                    },
+                    error: function(xhr, type, errorThrown) {
+                        console.log(xhr.resoponseText);
+                    }
+                });
+            })
+            confirm_refuse_02.addEventListener('tap', function(){
+                console.log(_id);
+                var refuse_reason_02 = document.getElementById("refuse_reason_02").value;
+                if(!refuse_reason_02) {
+                    mui.alert('拒绝原因不能为空')
+                    return;
+                }
+                console.log(refuse_reason_02);
+                mui.ajax("/account/admin_invest/" + _id + "/", {
+                    dataType: 'json', //服务器返回json格式数据
+                    type: 'post', //HTTP请求类型
+                    timeout: 10000, //超时时间设置为10秒；
+                    data: {
+                        'audit_reason': refuse_reason_02,
+                        'audit_state': 2,
+                    },
+                    success: function(ret) {
+                        if(ret.code == 0) {
+                            _that.parentNode.innerHTML = '<span data-id="' + _id + '" class="item pro_editor">查看</span>';
+                            mui('.popup.m-refuse-proj-02')[0].style.display = 'none';
+                            mui.alert('操作成功');
+                        } else {
+                            mui.alert(ret.msg);
+                        }
+                    },
+                    error: function(xhr, type, errorThrown) {
+                        console.log(xhr.resoponseText);
+                    }
+                });
+                
+            })
+            var canclePopup = function(obj) {       //取消自定义弹窗
+                obj.parentNode.parentNode.parentNode.style.display = 'none';
+            }
+		</script>
 
 	</body>
 

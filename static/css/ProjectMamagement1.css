@@ -66,7 +66,9 @@
 	line-height: 3rem;
 }*/
 
-
+.mui-table-view{
+	overflow: hidden;
+}
 .mui-scroll .mui-table-view-left {
 	width: 25%;
 	float: left;

@@ -8,6 +8,7 @@ ul,li {
 }
 .mui-content{
 	background: white;
+	padding-bottom: 9rem;
 }
 .mui-content .mui-table-view-left {
 	width: 25%;

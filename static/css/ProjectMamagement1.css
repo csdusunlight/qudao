@@ -83,6 +83,7 @@
 	margin: 0;
 	padding: 0;
 	overflow-x: scroll;
+	text-align: center;
 	border-left: 1px solid RGB(233,233,233);
 }
 
@@ -90,9 +91,9 @@
 	background-color: white;
 }
 
-.item_line m-head{
+/*.item_line m-head{
 	
-}
+}*/
 
 .item_line {
 	width: 100%;
@@ -105,7 +106,7 @@
 
 .item_line.m-right {
 	width: 56rem;
-	height: 4.2rem;
+	height: 4.1rem;
 	text-align: center;
 	display: table;
 }

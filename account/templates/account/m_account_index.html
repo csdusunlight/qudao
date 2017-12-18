@@ -93,7 +93,7 @@
 			}
 			
 			footer .footer__item {
-				width: 50%;
+				width: 33.3333%;
 				display: inline-block;
 				font-size: 0;
 				text-align: center;
@@ -114,6 +114,7 @@
 				margin-top: -6px;
 				font-size: 14px;
 				color: #4d4d4d;
+				line-height: 20px;
 			}
 			
 			.on .footer__txt {
@@ -186,6 +187,12 @@
 						<span class="footer__txt">首页</span>
 					</a>
 				</li>
+				<li class="footer__item">
+                    <a href="{%url 'project_all'%}">
+                    <i class="mui-icon mui-icon-more"></i>
+                    <span class="footer__txt">项目库</span>
+                    </a>
+                </li>
 				<li class="footer__item on">
 					<a href="{%url 'account_index'%}">
 						<i class="mui-icon mui-icon-person"></i>

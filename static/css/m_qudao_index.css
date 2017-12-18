@@ -121,7 +121,7 @@ footer {
     border-top: 1px solid #e4e4e4;
 }
 footer .footer__item {
-    width: 50%;
+    width: 33.3333%;
     display: inline-block;
     font-size: 0;
     text-align: center;
@@ -139,6 +139,7 @@ footer .mui-icon {
     margin-top: -6px;
     font-size: 14px;
     color: #4d4d4d;
+    line-height: 20px;
 }
 .on .footer__txt {
     color: #91C11D;

@@ -2,11 +2,13 @@ body{
 	line-height: 15px;
 	background: white;
 }
-
+ul,li {
+    padding: 0;
+    margin: 0;
+}
 .mui-content{
 	background: white;
 }
-
 .mui-content .mui-table-view-left {
 	width: 25%;
 	float: left;
@@ -159,4 +161,39 @@ body{
 }
 .left_ul{
 	padding-left: 0;
+}
+/*底部导航部分*/
+footer {
+    width: 100%;
+    height: 45px;
+    position: fixed;
+    bottom: 0;
+    font-size: 0;
+    background: #fff;
+    z-index: 1000;
+    border-top: 1px solid #e4e4e4;
+}
+footer .footer__item {
+    width: 33.3333%;
+    display: inline-block;
+    font-size: 0;
+    text-align: center;
+    position: relative;
+}
+footer .mui-icon {
+    font-size: 22px;
+    color: #8f8f8f;
+}
+.on .mui-icon {
+    color: #91C11D;
+}
+.footer__txt {
+    display: block;
+    margin-top: -6px;
+    font-size: 14px;
+    color: #4d4d4d;
+    line-height: 20px;
+}
+.on .footer__txt {
+    color: #91C11D;
 }

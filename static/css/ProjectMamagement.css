@@ -103,7 +103,6 @@
 
 .item_line.m-right {
 	width: 56rem;
-	height: 4rem;
 	text-align: center;
 	display: table;
 }
@@ -120,7 +119,7 @@
 
 .column_1 {
 	width: 20rem;
-	height: 4rem;
+	/*height: 4rem;*/
 	word-break: break-all;
 	word-wrap: break-word;
 	white-space: pre-wrap;

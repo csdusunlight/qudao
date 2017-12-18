@@ -2,90 +2,95 @@
 <!DOCTYPE html>
 <html>
 
-	<head lang="en">
-		<meta charset="UTF-8">
-		<!-- 优先使用 IE 最新版本和 Chrome -->
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		<!-- 为移动设备添加 viewport -->
-		<meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-		<!-- 添加到主屏后的标题（iOS 6 新增） -->
-		<meta name="apple-mobile-web-app-title" content="">
-		<!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<!-- 设置苹果工具栏颜色 -->
-		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-		<!-- 添加智能 App 广告条 Smart App Banner（iOS 6+ Safari） -->
-		<meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">
-		<!-- 忽略页面中的数字识别为电话，忽略email识别 -->
-		<meta name="format-detection" content="telphone=no, email=no" />
-		<!--下面三个是清除缓存 微信浏览器缓存严重又无刷新；这个方法调试的时候很方便-->
-		<meta http-equiv="Pragma" content="no-cache">
-		<meta http-equiv="Cache-Control" content="no-cache">
-		<meta http-equiv="Expires" content="0">
-		
+	<head>
+		<meta charset="utf-8">
 		<title>项目管理</title>
-		<link href="{%static 'css/mui.min.css'%}" rel="stylesheet" />
-		<link rel="stylesheet" type="text/css" href="{%static 'css/m_common.css'%}" />
-		<link rel="stylesheet" type="text/css" href="{%static 'css/ProjectMamagement.css' %}" />
-		<style type="text/css">
-			.mui-pull-bottom-wrapper{
-				padding-top: 1rem;
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="{% static 'css/mui.min.css' %}">
+		<link rel="stylesheet" href="{% static 'css/m_audit.css' %}">
+		<script type="text/javascript" src="{% static  'js/rem.js'%}"></script>
+		<style>
+			.mui-pull-bottom-wrapper {
 				text-align: center;
+			}
+			
+			.deleteItem {
+				color: RGB(228, 44, 44);
 			}
 		</style>
 	</head>
 
 	<body>
-		
 		<header id="header" class="mui-bar mui-bar-nav">
 			<a id="anchor" href="{% url 'account_index' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
 			<h1 class="mui-title">项目管理</h1>
 		</header>
-		
+
 		<div class="mui-content">
-			<!--选项卡部分-->
 			<div id="finance_slider" class="mui-slider mui-fullscreen">
 				<div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-					<a class="mui-control-item" href="#item1">官方项目</a>
-					<a class="mui-control-item" href="#item2">自建项目</a>
+					<a class="mui-control-item" href="#item1">官方数据</a>
+					<a class="mui-control-item" href="#item2">自建数据</a>
 				</div>
 				<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6" style="background: #92C11D;"></div>
 
-				<div class="nav">
-					<span class="nav_list nav_name">项目名称</span>
-					<span class="nav_list nav_price">详情页价格</span>
-					<span class="nav_list navisShow">是否主页呈现</span>
-					<span class="nav_list nav_operite">操作</span>
-				</div>
-
-				<div class="mui-slider-group" style="position: absolute;top: 86px;">
+				<div class="mui-slider-group">
 					<div id="item1" class="mui-slider-item mui-control-content mui-active">
 						<div id="scroll1" class="mui-scroll-wrapper">
 							<div class="mui-scroll">
-								<ul class="mui-table-view">
-
-								</ul>
+								<div class="mui-table-view">
+									<ul class="mui-table-view-left">
+										<li class="item_line m-head"><span class="column_1 column m-head">项目名称</span></li>
+									</ul>
+									<ul class="mui-table-view-right">
+										<li class="item_line m-head m-right">
+											<div class="column_2 column m-head">客户指导价</div>
+											<div class="column_3 column m-head">标期</div>
+											<div class="column_4 column m-head">投资区间</div>
+											<div class="column_5 column m-head">预计年化</div>
+											<div class="column_6 column m-head">是否主页呈现</div>
+											<div class="column_7 column m-head">是否推荐</div>
+											<div class="column_8 column m-head">操作</div>
+										</li>
+									</ul>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div id="item2" class="mui-slider-item mui-control-content">
 						<div id="scroll2" class="mui-scroll-wrapper">
 							<div class="mui-scroll">
-								<ul class="mui-table-view">
-
-								</ul>
+								<div class="mui-table-view">
+									<ul class="mui-table-view-left">
+										<li class="item_line m-head"><span class="column_1 column m-head">名称/<br />手机号</span></li>
+									</ul>
+									<ul class="mui-table-view-right">
+										<li class="item_line m-head m-right">
+											<div class="column_2 column m-head">客户指导价</div>
+											<div class="column_3 column m-head">标期</div>
+											<div class="column_4 column m-head">投资区间</div>
+											<div class="column_5 column m-head">预计年化</div>
+											<div class="column_6 column m-head">是否主页呈现</div>
+											<div class="column_7 column m-head">是否推荐</div>
+											<div class="column_8 column m-head">操作</div>
+										</li>
+									</ul>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<script src="{%static 'js/mui.min.js'%}"></script>
+			<script src="{% static 'js/mui.min.js' %}"></script>
 			<script src="{%static 'js/mui.pullToRefresh.js'%}"></script>
 			<script src="{%static 'js/mui.pullToRefresh.material.js'%}"></script>
 			<script>
 				mui.init();
-//				mui('.mui-slider').slider().setStopped(true);
+				mui('.mui-slider').slider().setStopped(true);
 				(function($) {
 					//阻尼系数
 					var deceleration = mui.os.ios ? 0.003 : 0.0009;
@@ -103,15 +108,17 @@
 									auto: true,
 									callback: function() {
 										var self = this;
-										var ul = self.element.querySelector('.mui-table-view');
-										getList(this, ul, count++, index);
+										var ul_left = self.element.querySelector('.mui-table-view-left');
+										var ul_right = self.element.querySelector('.mui-table-view-right');
+										getList(this, ul_left, ul_right, count++, index);
 
 									}
 								}
 							});
 						});
 
-						function getList(obj, ul, n, index) {
+						function getList(obj, ul_left, ul_right, n, index) {
+							console.log(index);
 							if(index === 0) {
 								var url = '/restapi/sub/?ordering=project__state,-is_on&is_official=2';
 							} else if(index === 1) {
@@ -126,42 +133,143 @@
 								type: 'get', //HTTP请求类型
 								timeout: 3000, //超时时间设置为10秒；
 								success: function(data) {
+									console.log("ajax数据：", data.results);
 									if(!data.results.length) {
 										obj.endPullUpToRefresh(true);
 									} else {
 										obj.endPullUpToRefresh(false); //参数为true代表没有更多数据了。
-										//										var table = document.body.querySelector('.mui-table-view');
+										//var table = document.body.querySelector('.mui-table-view');
 										for(var i in data.results) {
-											var li = document.createElement('li');
-											li.className = 'mui-table-view-cell';
-											str_html = '<div class=" pro_name">' + data.results[i].project_title + '</div>' +
-												'<div class="pro_touzi">' + (data.results[i].price ? data.results[i].price : data.results[i].project_cprice) + '</div>' +
-												'<div class="wrapper"><div data-btn= ' + (data.results[i].id) + ' class="mui-switch mui-switch-mini ' + (data.results[i].is_on ? "mui-active" : "") + ' "><div class="mui-switch-handle"></div></div></div>' +
-												'<a data-type="' + data.results[i].project_is_official + '" data-id="' + (data.results[i].project) + '" class="pro_list pro_editor">编辑</a>';
+											var li_left = document.createElement('li');
+											var li_right = document.createElement('li');
+											li_left.className = 'item_line item';
+											li_right.className = 'item_line m-right item';
+											var left_html = '<div class="column_1 column"><span class="item">' + data.results[i].project_title + '</span></div>';
 
-											li.innerHTML = str_html;
-											ul.appendChild(li);
+											var right_html = '<div data-id=" ' + data.results[i].id + ' " class="column_2 column">' +
+												'<span class="item">' + (data.results[i].price ? data.results[i].price : data.results[i].project_cprice) + '</span></div>' +
+												//标期
+												'<div class="column_3 column"><span class="item">' + data.results[i].project_term + '</span></div>' +
+												//投资区间
+												'<div class="column_4 column"><span>' + data.results[i].project_intrest + '</span></div>' +
+												//
+												'<div class="column_5 column"><span class="item">' + data.results[i].project_intrest + '</span></div>' +
+												//是否主业呈现
+												'<div class="column_6 column"><div data-btn="' + (data.results[i].id) + '" class="mui-switch show mui-switch-mini ' + (data.results[i].is_on ? "mui-active" : "") + ' "><div class="mui-switch-handle"></div></div></div>' +
+												//是否推荐
+												'<div class="column_7 column"><div data-id="'+(data.results[i].id)+'" data-recommend= "' + (data.results[i].is_recommend) + '" class="mui-switch recommend mui-switch-mini ' + (data.results[i].is_recommend ? "mui-active" : "") + ' "><div class="mui-switch-handle"></div></div></div>' +
+												//操作
+												'<div class="column_8 column"><span data-type="' + data.results[i].project_is_official + '" data-project="'+ data.results[i].project +'" data-id="' + data.results[i].id + '" class="item pro_editor"> ' + (data.results[i].audit_state == 1 ? '查看' : '编辑') + ' </span></div>';
+											li_left.innerHTML = left_html;
+											li_right.innerHTML = right_html;
+											ul_left.appendChild(li_left);
+											ul_right.appendChild(li_right);
 										}
 										mui('.mui-switch').switch();
 									}
 								},
 								error: function(xhr, type, errorThrown) {
-									mui('.mui-switch').switch();
 									console.log("没有数据")
 									//没有数据 显示没有更多数据
 									obj.endPullUpToRefresh(true);
 								}
+
 							});
 						}
 
 					});
-
 				})(mui);
 
+				//是否主业呈现
+				mui('.mui-table-view').on('toggle', '.show', function() {
+					var id = this.getAttribute("data-btn"); //获取当前switch属性
+					console.log('是否主页呈现', id)
+					if(event.detail.isActive) {
+						console.log("你启动了开关");
+						mui.ajax('/restapi/sub/' + id + '/', {
+							data: {
+								'is_on': true
+							},
+							dataType: 'json', //服务器返回json格式数据
+							type: 'put', //HTTP请求类型
+							timeout: 10000, //超时时间设置为10秒；
+							success: function(data) {
+								console.log("llc发送成功");
+							},
+							error: function(xhr, type, errorThrown) {
+								console.log(xhr.responseText);
+							}
+						});
+
+					} else {
+						console.log("你关闭了开关");
+						mui.ajax('/restapi/sub/' + id + '/', {
+							data: {
+								'is_on': false
+							},
+							dataType: 'json', //服务器返回json格式数据
+							type: 'put', //HTTP请求类型
+							timeout: 10000, //超时时间设置为10秒；
+							success: function(data) {
+								console.log("llc发送成功");
+							},
+							error: function(xhr, type, errorThrown) {
+								console.log(xhr.responseText);
+							}
+						});
+					}
+				});
+
+				//是否推荐
+				mui('.mui-table-view').on('toggle', '.recommend', function() {
+					var id = this.getAttribute("data-id");
+					console.log("当前的----ID：",id);
+					var r_id = this.getAttribute("data-recommend"); //获取当前switch属性
+					console.log("是否推荐", r_id);
+					if(event.detail.isActive) {
+						console.log("你启动了开关");
+						mui.ajax('/restapi/sub/' + id + '/', {
+							data: {
+								'is_recommend': true
+							},
+							dataType: 'json', //服务器返回json格式数据
+							type: 'put', //HTTP请求类型
+							timeout: 10000, //超时时间设置为10秒；
+							success: function(data) {
+								console.log("llc发送成功");
+							},
+							error: function(xhr, type, errorThrown) {
+								console.log(xhr.responseText);
+							}
+						});
+
+					} else {
+						console.log("你关闭了开关");
+						mui.ajax('/restapi/sub/' + id + '/', {
+							data: {
+								'is_recommend': false
+							},
+							dataType: 'json', //服务器返回json格式数据
+							type: 'put', //HTTP请求类型
+							timeout: 10000, //超时时间设置为10秒；
+							success: function(data) {
+								console.log("llc发送成功");
+							},
+							error: function(xhr, type, errorThrown) {
+								console.log(xhr.responseText);
+							}
+						});
+					}
+
+				});
+				
+				//跳转页面
 				mui('.mui-table-view').on('tap', '.pro_editor', function() {
-					var project_id = this.getAttribute('data-id');
+					var project_id = this.getAttribute('data-project');
+					console.log("当前project_id值：",project_id);
 					var type = this.getAttribute("data-type");
-					if(type == "True") {
+					console.log("当前type值：",type);
+					if(type == 'True') {
 						mui.openWindow({
 							url: "/account/update_offiproject/" + project_id,
 							styles: {
@@ -193,65 +301,9 @@
 						});
 					}
 				});
-
-				mui('.mui-table-view').on('toggle', '.mui-switch', function() {
-					console.log(this, "llc")
-					var id = this.getAttribute("data-btn"); //获取当前switch属性
-					console.log(id)
-					if(event.detail.isActive) {
-						console.log("你启动了开关");
-						mui.ajax('/restapi/sub/' + id + '/', {
-							data: {
-								'is_on': true
-							},
-							dataType: 'json', //服务器返回json格式数据
-							type: 'put', //HTTP请求类型
-							timeout: 10000, //超时时间设置为10秒；
-							success: function(data) {
-								console.log("llc发送成功");
-							},
-							error: function(xhr, type, errorThrown) {
-								console.log(jqXHR.responseText);
-							}
-						});
-
-					} else {
-						console.log("你关闭了开关");
-						mui.ajax('/restapi/sub/' + id + '/', {
-							data: {
-								'is_on': false
-							},
-							dataType: 'json', //服务器返回json格式数据
-							type: 'put', //HTTP请求类型
-							timeout: 10000, //超时时间设置为10秒；
-							success: function(data) {
-								console.log("llc发送成功");
-							},
-							error: function(xhr, type, errorThrown) {
-								console.log(jqXHR.responseText);
-							}
-						});
-					}
-				});
 				
-				mui('.mui-bar-nav').on('tap', '.mui-pull-left', function() {
-				var Url = document.getElementById("anchor").getAttribute("href");
-				mui.openWindow({
-					url: Url,
-					styles: {
-						top: 0,
-						bottom: 0
-					},
-					show: {
-						aniShow: 'slide-in-right',
-					},
-					waiting: {
-						autoShow: false, //自动显示等待框
-						title: '正在加载...', //等待对话框上显示的提示内容
-					}
-				});
-			});
 			</script>
+
 	</body>
 
 </html>

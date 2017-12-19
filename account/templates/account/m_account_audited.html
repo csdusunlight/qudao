@@ -57,6 +57,7 @@
 								<div class="mui-table-view">
 									<ul class="mui-table-view-left">
 										<li class="item_line m-head">
+										    <div class="column_0 column m-head">序号</div>
 										    <div class="column_1 column m-head">名称/<br />手机号</div>
 										</li>
 									</ul>
@@ -64,9 +65,9 @@
 										<li class="item_line m-head m-right">
 											<div class="column_2 column m-head">提交日期/<br />投资姓名</div>
 											<div class="column_3 column m-head">投资金额/<br />投资标期</div>
+											<div class="column_6 column m-head">审核状态/<br />审核信息</div>
 											<div class="column_4 column m-head">收款信息</div>
 											<div class="column_5 column m-head">结算金额/<br />返现金额</div>
-											<div class="column_6 column m-head">审核状态/<br />审核信息</div>
 											<div class="column_7 column m-head">备注及其他</div>
 											<div class="column_8 column m-head">操作</div>
 										</li>
@@ -80,15 +81,18 @@
 							<div class="mui-scroll">
 								<div class="mui-table-view">
 									<ul class="mui-table-view-left">
-										<li class="item_line m-head"><span class="column_1 column m-head">名称/<br />手机号</span></li>
+										<li class="item_line m-head">
+										    <div class="column_0 column m-head">序号</div>
+										    <div class="column_1 column m-head">名称/<br />手机号</div>
+										</li>
 									</ul>
 									<ul class="mui-table-view-right">
 										<li class="item_line m-head m-right">
 											<div class="column_2 column m-head">提交日期/<br />投资姓名</div>
 											<div class="column_3 column m-head">投资金额/<br />投资标期</div>
+											<div class="column_6 column m-head">审核状态/<br />审核信息</div>
 											<div class="column_4 column m-head">收款信息</div>
 											<div class="column_5 column m-head">结算金额/<br />返现金额</div>
-											<div class="column_6 column m-head">审核状态/<br />审核信息</div>
 											<div class="column_7 column m-head">备注及其他</div>
 											<div class="column_8 column m-head">操作</div>
 										</li>
@@ -199,7 +203,7 @@
 						mui.ajax(url, {
 							data: {
 								page: n,
-								pageSize: 12,
+								pageSize: 30,
 							},
 							dataType: 'json', //服务器返回json格式数据
 							type: 'get', //HTTP请求类型
@@ -216,22 +220,23 @@
 										var li_right = document.createElement('li');
 										li_left.className = 'item_line item' + data.results[i].id;
 										li_right.className = 'item_line m-right item' + data.results[i].id;
-										var left_html = '<div data-id=" ' + data.results[i].id + ' " class="column_1 column"><span class="item">' + data.results[i].project_title +
-											'</span><span class="item">' + data.results[i].invest_mobile + '</span></div>';
+										var left_html = '<div class="column_0 column">'+ (++i) +'</div>' +
+										                '<div data-id=" ' + data.results[i].id + ' " class="column_1 column"><span class="item">' + data.results[i].project_title +
+											            '</span><span class="item">' + data.results[i].invest_mobile + '</span></div>';
 
 										var right_html = '<div data-id=" ' + data.results[i].id + ' " class="column_2 column"><span class="item">' + data.results[i].invest_date + '</span>' +
 											'<span class="item">' + data.results[i].invest_name + '</span></div>' +
 											//投资金额/投资标期
 											'<div class="column_3 column"><span class="item">' + data.results[i].invest_amount + '</span>' +
 											'<span class="item">' + data.results[i].invest_term + '</span></div>' +
+											//审核状态/审核信息
+											'<div class="column_6 column"><span class="item state_'+ data.results[i].id +' state' + data.results[i].audit_state + ' ">' + data.results[i].audit_state_des + '</span>' +
+											'<span class="item refuse_'+ data.results[i].id +'">' + data.results[i].audit_reason + '</span></div>' +
 											//收款信息
 											'<div class="column_4 column"><span>' + data.results[i].zhifubao + '</span></div>' +
 											//结算返现
 											'<div class="column_5 column"><span class="item settle_'+ data.results[i].id +'">' + data.results[i].settle_amount + '</span>' +
 											'<span class="item pass_' + data.results[i].id + '">' + (data.results[i].return_amount == null?'无':data.results[i].return_amount) + '</span></div>' +
-											//审核状态/审核信息
-											'<div class="column_6 column"><span class="item state_'+ data.results[i].id +' state' + data.results[i].audit_state + ' ">' + data.results[i].audit_state_des + '</span>' +
-											'<span class="item refuse_'+ data.results[i].id +'">' + data.results[i].audit_reason + '</span></div>' +
 											//备注及其他
 											'<div class="column_7 column"><span>' + data.results[i].remark + '</div>' +
 											//操作

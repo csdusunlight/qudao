@@ -177,7 +177,7 @@
 												//是否主业呈现
 												'<div class="column_6 column"><div class="btn"><div data-btn="' + (data.results[i].id) + '" class="mui-switch show mui-switch-mini ' + (data.results[i].is_on ? "mui-active" : "") + ' "><div class="mui-switch-handle"></div></div></div></div>' +
 												//是否推荐
-												'<div class="column_7 column"><div class="btn1"><div data-id="' + (data.results[i].id) + '" data-recommend= "' + (data.results[i].is_recommend) + '" class="mui-switch recommend mui-switch-mini ' + (data.results[i].is_recommend ? "mui-active" : "") + ' "><div class="mui-switch-handle"></div></div></div></div>' +
+												'<div class="column_7 column"><div class="btn1"><div id="recom_switch_'+ data.results[i].id +'" data-id="' + (data.results[i].id) + '" data-recommend= "' + (data.results[i].is_recommend) + '" class="mui-switch recommend mui-switch-mini ' + (data.results[i].is_recommend ? "mui-active" : "") + ' "><div class="mui-switch-handle"></div></div></div></div>' +
 												//操作
 												'<div class="column_8 column"><span data-type="' + data.results[i].project_is_official + '" data-project="' + data.results[i].project + '" data-id="' + data.results[i].id + '" class="item1 pro_editor"> ' + (data.results[i].audit_state == 1 ? '查看' : '编辑') + ' </span></div>';
 											li_left.innerHTML = left_html;
@@ -232,6 +232,26 @@
 							timeout: 10000, //超时时间设置为10秒；
 							success: function(data) {
 								console.log("llc发送成功");
+								var recommend_dom = 'recom_switch_' + id;
+								var recommendActive = document.getElementById(recommend_dom).classList.contains("mui-active");
+                                if(recommendActive){
+                                      console.log("取消推荐");
+                                      mui.ajax('/restapi/sub/' + id + '/', {
+                                        data: {
+                                            'is_recommend': false
+                                        },
+                                        dataType: 'json', //服务器返回json格式数据
+                                        type: 'put', //HTTP请求类型
+                                        timeout: 10000, //超时时间设置为10秒；
+                                        success: function(data) {
+                                            console.log("llc发送成功");
+                                            mui('#' + recommend_dom).switch().toggle();;
+                                        },
+                                        error: function(xhr, type, errorThrown) {
+                                            console.log(xhr.responseText);
+                                        }
+                                    });
+                                }
 							},
 							error: function(xhr, type, errorThrown) {
 								console.log(xhr.responseText);

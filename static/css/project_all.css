@@ -223,6 +223,8 @@
 .finance__term{
 	display: table-cell;
 	vertical-align: middle;
+	box-sizing: border-box;
+	padding-left: 30px;
 }
 .finance__range{
 	display: table-cell;
@@ -239,9 +241,14 @@
 .finance__remark{
 	display: table-cell;
 	vertical-align: middle;
-	text-align: center;
+	padding-left: 90px;
 }
 .box{
 	display: table-cell;
 	vertical-align: middle;
+	line-height: 1px;
+}
+.box > img{
+	width: 120px;
+	height: 50px;
 }

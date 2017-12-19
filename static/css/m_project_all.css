@@ -104,6 +104,10 @@ ul,li {
     display: inline-block;
     text-align: center;
     width: 50%;
+    color: blue;
+}
+.go_homepage {
+    border-left: 1px solid #333;
 }
 .column_7>span{
 	/*display: block;*/

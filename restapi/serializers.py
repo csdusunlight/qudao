@@ -90,6 +90,7 @@ class SubscribeShipSerializer(serializers.ModelSerializer):
     project_picture = serializers.CharField(source='project.picture_url', read_only=True)
     project_marks = serializers.CharField(source='project.marks_list', read_only=True)
     project_is_official = serializers.CharField(source='project.is_official', read_only=True)
+    project_remark = serializers.CharField(source='project.remark', read_only=True)
     project_is_book = serializers.BooleanField(source='project.is_book', read_only=True)
     submit_num = serializers.IntegerField(source='project.points', read_only=True)
     necessary_fields = serializers.CharField(source='project.necessary_fields', read_only=True)

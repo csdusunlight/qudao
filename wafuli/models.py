@@ -94,6 +94,7 @@ class Project(models.Model):
     up_price = models.CharField(u"结算价格（收入）", max_length=40, blank=True)
     pinyin = models.CharField(u"拼音全拼", max_length=100)
     szm = models.CharField(u"首字母", max_length=20)
+    remark = models.CharField(u"项目备注", max_length=50, blank=True)
     def clean(self):
         if not self.pic:
             raise ValidationError({'pic': u'图片不能为空'})

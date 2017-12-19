@@ -214,11 +214,11 @@
 											//收款信息
 											'<div class="column_4 column"><span>' + data.results[i].zhifubao + '</span></div>' +
 											//结算返现
-											'<div class="column_5 column"><span class="item">' + data.results[i].settle_amount + '</span>' +
+											'<div class="column_5 column"><span class="item settle_'+ data.results[i].id +'">' + data.results[i].settle_amount + '</span>' +
 											'<span class="item pass_' + data.results[i].id + '">' + (data.results[i].return_amount == null?'无':data.results[i].return_amount) + '</span></div>' +
 											//审核状态/审核信息
-											'<div class="column_6 column"><span class="item state' + data.results[i].audit_state + ' ">' + data.results[i].audit_state_des + '</span>' +
-											'<span class="item">' + data.results[i].audit_reason + '</span></div>' +
+											'<div class="column_6 column"><span class="item state_'+ data.results[i].id +' state' + data.results[i].audit_state + ' ">' + data.results[i].audit_state_des + '</span>' +
+											'<span class="item refuse_'+ data.results[i].id +'">' + data.results[i].audit_reason + '</span></div>' +
 											//备注及其他
 											'<div class="column_7 column"><span>' + data.results[i].remark + '</div>' +
 											//操作
@@ -376,7 +376,6 @@
                     success: function(ret) {
                         if(ret.code == 0) {
                             var pass_dom = '.pass_' + _id;
-//                          console.log(mui(pass_dom)[0]);
                             mui(pass_dom)[0].innerText = return_amount;
                             mui('.popup.m-pass-proj')[0].style.display = 'none';
                             mui.alert('操作成功');
@@ -409,6 +408,13 @@
                     },
                     success: function(ret) {
                         if(ret.code == 0) {
+                            var settle_amount = '.settle_' + _id;
+                            var pass_dom = '.pass_' + _id;
+                            var state_dom = '.state_' + _id;
+                            mui(settle_amount)[0].innerText = settle_amount_02;
+                            mui(pass_dom)[0].innerText = return_amount_02;
+                            mui(state_dom)[0].innerText = '审核通过';
+                            mui(state_dom)[0].style.color = '#91c11d';
                             _that.parentNode.innerHTML = '<span data-id="' + _id + '" class="item pro_editor">查看</span>';
                             mui('.popup.m-pass-proj-02')[0].style.display = 'none';
                             mui.alert('操作成功');
@@ -439,6 +445,11 @@
                     },
                     success: function(ret) {
                         if(ret.code == 0) {
+                             var refuse_reason = '.refuse_' + _id;
+                             var state_dom = '.state_' + _id;
+                            mui(refuse_reason)[0].innerText = refuse_reason_02;
+                            mui(state_dom)[0].innerText = '审核未通过';
+                            mui(state_dom)[0].style.color = 'red';
                             _that.parentNode.innerHTML = '<span data-id="' + _id + '" class="item pro_editor">查看</span>';
                             mui('.popup.m-refuse-proj-02')[0].style.display = 'none';
                             mui.alert('操作成功');

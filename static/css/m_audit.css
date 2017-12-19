@@ -20,11 +20,15 @@
 }
 
 .item_line {
-	box-sizing: content-box;
-	padding: 1rem 0;
-	height: 40px;
+    display: table;
+	box-sizing: border-box;
+	/*padding: 1rem 0;*/
+	height: 6rem;
 	font-size: 0;
 	border-bottom: 1px solid #e4e4e4;
+}
+.item_line.m-head {
+    border-top: 1px solid #e4e4e4;
 }
 
 .item_line.m-right {
@@ -33,9 +37,9 @@
 }
 
 .column {
-	display: inline-block;
+	display: table-cell;
 	font-size: 0px;
-	vertical-align: top;
+	vertical-align: middle;
 }
 
 .column.m-head {
@@ -43,7 +47,7 @@
 }
 
 .column_1 {
-	width: 100%;
+	width: 10rem;
 }
 
 .column_2 {
@@ -100,11 +104,14 @@
 	font-size: 12px;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
+	white-space: normal;
 }
 .column_8 .item{
     display: inline-block;
+    margin-top: 1rem;
     width: 25%;
+    height: 4rem;
+    line-height: 4rem;
 }
 
 .state0 {

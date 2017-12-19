@@ -141,7 +141,7 @@
 		console.log(userlevel);
 		if(userlevel == '01') {
 			var data = '[results]<li class="finance">' +
-				'<a class="link_left" href="{project_strategy}" target="_blank"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo">' +
+				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="box"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
 				'<span class="finance__term finance__item">{project_term}</span><span class="finance__range finance__item">{project_investrange}</span>' +
 				'<span class="finance__price finance__item">{project_price01}</span><span class="finance__price02 finance__item">{project_cprice}</span>' +
 				'<span class="finance__remark finance__item">{project_remark}</span></a>' +
@@ -149,7 +149,7 @@
 				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank">进入推广主页</a></div></li>[/results]';
 		} else if(userlevel == '02') {
 			var data = '[results]<li class="finance">' +
-				'<a class="link_left" href="{project_strategy}" target="_blank"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo">' +
+				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="box"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
 				'<span class="finance__term finance__item">{project_term}</span><span class="finance__range finance__item">{project_investrange}</span>' +
 				'<span class="finance__price finance__item">{project_price02}</span><span class="finance__price02 finance__item">{project_cprice}</span>' +
 				'<span class="finance__remark finance__item">{project_remark}</span></a>' +
@@ -157,7 +157,7 @@
 				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank">进入推广主页</a></div></li>[/results]';
 		} else if(userlevel == '03') {
 			var data = '[results]<li class="finance">' +
-				'<a class="link_left" href="{project_strategy}" target="_blank"><img class="finance__img finance__item pic" src="{project_picture}" alt="商家logo">' +
+				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="box"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
 				'<span class="finance__term finance__item">{project_term}</span><span class="finance__range finance__item">{project_investrange}</span>' +
 				'<span class="finance__price finance__item">{project_price03}</span><span class="finance__price02 finance__item">{project_cprice}</span>' +
 				'<span class="finance__remark finance__item">{project_remark}</span></a>' +

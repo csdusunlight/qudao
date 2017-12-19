@@ -137,6 +137,7 @@
 	transition: box-shadow 0.4s ease;
 	overflow: hidden;
 	border-bottom: RGB(245, 245, 245);
+	display: table;
 }
 
 .finance:hover {
@@ -145,8 +146,10 @@
 
 .link_left {
 	width: 1120px;
+	display: inline-block;
 	float: left;
 	font-size: 0;
+	
 }
 
 .link_right {
@@ -156,18 +159,16 @@
 
 .finance__item {
 	display: inline-block;
-	/*width: 180px;*/
+	width: 180px;
 	font-size: 14px;
+	/*text-align: center;*/
 }
 
 .finance__price {
 	color: #ff9501;
 }
 
-.finance__term{
-	color: #ff9501;
-	vertical-align: middle;
-}
+.finance__term,
 .finance__price02 {
 	color: #ff9501;
 }
@@ -220,34 +221,27 @@
 	margin-top: 20px;
 }
 .finance__term{
-	width: 100px;
-	margin-left: 5px;
-	text-align: center;
+	display: table-cell;
+	vertical-align: middle;
 }
 .finance__range{
-	width: 100px;
-	margin-left: 70px;
-	text-align: center;
+	display: table-cell;
 	vertical-align: middle;
 }
 .finance__price{
-	width: 100px;
-	text-align: center;
-	margin-left: 80px;
-	text-align: center;
+	display: table-cell;
 	vertical-align: middle;
 }
 .finance__price02{
-	width: 180px;
-	text-align: center;
-	margin-left: 50px;
-	text-align: center;
+	display: table-cell;
 	vertical-align: middle;
 }
 .finance__remark{
-	width: 180px;
+	display: table-cell;
+	vertical-align: middle;
 	text-align: center;
-	margin-left: 70px;
-	text-align: center;
+}
+.box{
+	display: table-cell;
 	vertical-align: middle;
 }

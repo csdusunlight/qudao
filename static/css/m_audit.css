@@ -112,7 +112,7 @@
 }
 .column_8 .item{
     display: inline-block;
-    margin-top: 1rem;
+    /*margin-top: 1rem;*/
     width: 25%;
     height: 4rem;
     line-height: 4rem;

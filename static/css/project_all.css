@@ -186,69 +186,117 @@
 	height: 50px;
 	margin: 20px auto;
 	background: white;
+	display: table;
 }
 
 .c-item {
 	float: left;
-	width: 80px;
+	width: 150px;
 	height: 100%;
 	line-height: 50px;
 	text-align: center;
+	display: table-cell;
+	vertical-align: middle;
 }
 
 .c1 {
-	margin-left: 160px;
+	margin-left: 120px;
 }
 
 .c2 {
-	margin-left: 100px;
+	margin-left: 60px;
 }
 
 .c3 {
-	margin-left: 100px;
+	margin-left: 60px;
 }
 
 .c4 {
-	margin-left: 100px;
+	margin-left: 60px;
 }
 
 .c5 {
-	margin-left: 170px;
+	margin-left: 40px;
 }
 
-.pic{
-	width: 132px;
-	margin-top: 20px;
-}
-.finance__term{
+/*.finance__term{
 	display: table-cell;
 	vertical-align: middle;
 	box-sizing: border-box;
-	padding-left: 30px;
+	padding-left: 160px;
+	text-align: center;
 }
 .finance__range{
 	display: table-cell;
+	padding-left: 160px;
 	vertical-align: middle;
+	box-sizing: content-box;
 }
 .finance__price{
+	width: 170px;
 	display: table-cell;
 	vertical-align: middle;
+	box-sizing: border-box;
 }
 .finance__price02{
 	display: table-cell;
 	vertical-align: middle;
+	box-sizing: border-box;
 }
 .finance__remark{
 	display: table-cell;
 	vertical-align: middle;
 	padding-left: 90px;
+	box-sizing: border-box;
+}*/
+.item1{
+	width: 180px;
+	height: 60px;
+	text-align: center;
+	line-height: 60px;
+	float: left;
+	position: relative;left: -20px;
 }
-.box{
-	display: table-cell;
-	vertical-align: middle;
-	line-height: 1px;
+.item2{
+	width: 180px;
+	height: 60px;
+	text-align: center;
+	line-height: 60px;
+	float: left;
 }
-.box > img{
+.item3{
+	width: 180px;
+	height: 60px;
+	text-align: center;
+	line-height: 60px;
+	float: left;
+	margin-left: 30px;
+}
+.item4{
+	width: 180px;
+	height: 60px;
+	text-align: center;
+	line-height: 60px;
+	float: left;
+	margin-left: 30px;
+}
+.item5{
+	width: 180px;
+	height: 60px;
+	text-align: center;
+	line-height: 60px;
+	float: left;
+	margin-left: 30px;
+}
+.wrapperBox{
+	/*display: table-cell;
+	vertical-align: middle;*/
+	width: 120px;
+	height: 50px;
+	float: left;
+	position: relative;top: 5px;
+}
+.wrapperBox > img{
 	width: 120px;
 	height: 50px;
 }

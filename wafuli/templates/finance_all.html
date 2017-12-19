@@ -141,26 +141,26 @@
 		console.log(userlevel);
 		if(userlevel == '01') {
 			var data = '[results]<li class="finance">' +
-				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="box"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
-				'<span class="finance__term finance__item">{project_term}</span><span class="finance__range finance__item">{project_investrange}</span>' +
-				'<span class="finance__price finance__item">{project_price01}</span><span class="finance__price02 finance__item">{project_cprice}</span>' +
-				'<span class="finance__remark finance__item">{project_remark}</span></a>' +
+				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
+				'<div class="item1"><span class="finance__term finance__item">{project_term}</span></div><div class="item2"><span class="finance__range finance__item">{project_investrange}</span></div>' +
+				'<div class="item3"><span class="finance__price finance__item">{project_price01}</span></div><div class="item4"><span class="finance__price02 finance__item">{project_cprice}</span></div>' +
+				'<div class="item5"><span class="finance__remark finance__item">{project_remark}</span></div></a>' +
 				'<div class="link_right"><a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a>' +
 				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank">进入推广主页</a></div></li>[/results]';
 		} else if(userlevel == '02') {
 			var data = '[results]<li class="finance">' +
-				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="box"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
-				'<span class="finance__term finance__item">{project_term}</span><span class="finance__range finance__item">{project_investrange}</span>' +
-				'<span class="finance__price finance__item">{project_price02}</span><span class="finance__price02 finance__item">{project_cprice}</span>' +
-				'<span class="finance__remark finance__item">{project_remark}</span></a>' +
+				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
+				'<div class="item1"><span class="finance__term finance__item">{project_term}</span></div><div class="item2"><span class="finance__range finance__item">{project_investrange}</span></div>' +
+				'<div class="item3"><span class="finance__price finance__item">{project_price02}</span><div><div class="item4"><span class="finance__price02 finance__item">{project_cprice}</span></div>' +
+				'<div class="item5"><span class="finance__remark finance__item">{project_remark}</span></div></a>' +
 				'<div class="link_right"><a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a>' +
 				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank">进入推广主页</a></div></li>[/results]';
 		} else if(userlevel == '03') {
 			var data = '[results]<li class="finance">' +
-				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="box"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
-				'<span class="finance__term finance__item">{project_term}</span><span class="finance__range finance__item">{project_investrange}</span>' +
-				'<span class="finance__price finance__item">{project_price03}</span><span class="finance__price02 finance__item">{project_cprice}</span>' +
-				'<span class="finance__remark finance__item">{project_remark}</span></a>' +
+				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
+				'<div class="item1"><span class="finance__term finance__item">{project_term}</span></div><div class="item2"><span class="finance__range finance__item">{project_investrange}</span></div>' +
+				'<div class="item3"><span class="finance__price finance__item">{project_price03}</span></div><div class="item4"><span class="finance__price02 finance__item">{project_cprice}</span></div>' +
+				'<div class="item5"><span class="finance__remark finance__item">{project_remark}</span></div></a>' +
 				'<div class="link_right"><a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a>' +
 				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank">进入推广主页</a></div></li>[/results]';
 		}

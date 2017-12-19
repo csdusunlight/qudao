@@ -24,17 +24,20 @@
 }
 
 .item_line {
+    display: table;
 	width: 100%;
-	box-sizing: content-box;
-	padding: 1rem 0;
-	height: 4rem;
+	box-sizing: border-box;
+	/*padding: 1rem 0;*/
+	height: 6rem;
 	font-size: 0;
 	border-bottom: 1px solid #e4e4e4;
 }
-
+.item_line.m-head {
+    border-top: 1px solid #e4e4e4;
+}
 .item_line.m-right {
 	width: 56rem;
-	height: 4.05rem;
+	height: 6rem;
 	text-align: center;
 	display: table;
 }

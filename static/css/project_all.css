@@ -164,7 +164,10 @@
 	color: #ff9501;
 }
 
-.finance__term,
+.finance__term{
+	color: #ff9501;
+	vertical-align: middle;
+}
 .finance__price02 {
 	color: #ff9501;
 }
@@ -174,7 +177,7 @@
 }
 
 .add-project.true {
-	background-color: #e4e4e4;
+	background-color: orange;
 }
 
 .content-head {
@@ -225,22 +228,26 @@
 	width: 100px;
 	margin-left: 70px;
 	text-align: center;
+	vertical-align: middle;
 }
 .finance__price{
 	width: 100px;
 	text-align: center;
 	margin-left: 80px;
 	text-align: center;
+	vertical-align: middle;
 }
 .finance__price02{
 	width: 180px;
 	text-align: center;
 	margin-left: 50px;
 	text-align: center;
+	vertical-align: middle;
 }
 .finance__remark{
 	width: 180px;
 	text-align: center;
 	margin-left: 70px;
 	text-align: center;
+	vertical-align: middle;
 }

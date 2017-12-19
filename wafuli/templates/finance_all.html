@@ -18,6 +18,10 @@
 		.go_homepage {
 		    display: none;
 		}
+		.go:hover{
+			color: RGB(150,150,150);
+			text-decoration: underline;
+		}
 	</style>
 
 </head>
@@ -146,7 +150,7 @@
 				'<div class="item3"><span class="finance__price finance__item">{project_price01}</span></div><div class="item4"><span class="finance__price02 finance__item">{project_cprice}</span></div>' +
 				'<div class="item5"><span class="finance__remark finance__item">{project_remark}</span></div></a>' +
 				'<div class="link_right"><a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a>' +
-				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank">进入推广主页</a></div></li>[/results]';
+				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank"><span class="go">进入推广主页-></span></a></div></li>[/results]';
 		} else if(userlevel == '02') {
 			var data = '[results]<li class="finance">' +
 				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
@@ -154,7 +158,7 @@
 				'<div class="item3"><span class="finance__price finance__item">{project_price02}</span><div><div class="item4"><span class="finance__price02 finance__item">{project_cprice}</span></div>' +
 				'<div class="item5"><span class="finance__remark finance__item">{project_remark}</span></div></a>' +
 				'<div class="link_right"><a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a>' +
-				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank">进入推广主页</a></div></li>[/results]';
+				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank"><span class="go">进入推广主页-></span></a></div></li>[/results]';
 		} else if(userlevel == '03') {
 			var data = '[results]<li class="finance">' +
 				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
@@ -162,7 +166,7 @@
 				'<div class="item3"><span class="finance__price finance__item">{project_price03}</span></div><div class="item4"><span class="finance__price02 finance__item">{project_cprice}</span></div>' +
 				'<div class="item5"><span class="finance__remark finance__item">{project_remark}</span></div></a>' +
 				'<div class="link_right"><a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a>' +
-				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank">进入推广主页</a></div></li>[/results]';
+				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank"><span class="go">进入推广主页-></span></a></div></li>[/results]';
 		}
 		var url = "/restapi/sub/?page={page}&pageSize={pageSize}&is_official=2";
 

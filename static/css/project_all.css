@@ -131,12 +131,11 @@
 
 .finance {
 	padding: 10px;
-	margin-bottom: 10px;
 	width: 100%;
 	background-color: #fff;
 	transition: box-shadow 0.4s ease;
 	overflow: hidden;
-	border-bottom: RGB(245, 245, 245);
+	border-bottom: 1px solid RGB(245, 245, 245);
 	display: table;
 }
 
@@ -149,12 +148,12 @@
 	display: inline-block;
 	float: left;
 	font-size: 0;
-	
 }
 
 .link_right {
 	float: right;
 	width: 100px;
+	position: relative;right:20px;
 }
 
 .finance__item {
@@ -216,7 +215,7 @@
 }
 
 .c5 {
-	margin-left: 40px;
+	margin-left: 30px;
 }
 
 /*.finance__term{
@@ -282,11 +281,14 @@
 }
 .item5{
 	width: 180px;
-	height: 60px;
+	/*height: 60px;*/
 	text-align: center;
-	line-height: 60px;
+	line-height: 30px;
 	float: left;
-	margin-left: 30px;
+	margin-left: 10px;
+	/*white-space:nowrap;*/
+	word-wrap:break-word;
+	word-break:break-all;
 }
 .wrapperBox{
 	/*display: table-cell;
@@ -294,7 +296,7 @@
 	width: 120px;
 	height: 50px;
 	float: left;
-	position: relative;top: 5px;
+	position: relative;top: 5px;left: 5px;
 }
 .wrapperBox > img{
 	width: 120px;

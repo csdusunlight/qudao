@@ -48,7 +48,7 @@
 
 	<body>
 		<header id="header" class="mui-bar mui-bar-nav">
-			<a id="anchor" href="{% url 'account_index' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
+			<a id="anchor" href="{% url 'account_index' %}" class="mui-action-back2 mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
 			<h1 class="mui-title">数据管理</h1>
 		</header>
 
@@ -295,7 +295,23 @@
 					}
 				});
 			});
-
+            mui('.mui-bar').on('tap', '.mui-action-back2', function() {
+                var href = this.getAttribute("href");
+                mui.openWindow({
+                    url: href,
+                    styles: {
+                        top: 0,
+                        bottom: 0
+                    },
+                    show: {
+                        aniShow: 'slide-in-right',
+                    },
+                    waiting: {
+                        autoShow: false, //自动显示等待框
+                        title: '正在加载...', //等待对话框上显示的提示内容
+                    }
+                });
+            });
 			mui('.mui-table-view-right').on('tap', '.pro_editor', function() {
 
 				var project_id = this.getAttribute('data-id'); //获取自定义data-id属性

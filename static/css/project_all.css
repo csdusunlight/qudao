@@ -131,12 +131,11 @@
 
 .finance {
 	padding: 10px;
-	margin-bottom: 10px;
 	width: 100%;
 	background-color: #fff;
 	transition: box-shadow 0.4s ease;
 	overflow: hidden;
-	border-bottom: RGB(245, 245, 245);
+	border-bottom: 1px solid RGB(245, 245, 245);
 	display: table;
 }
 
@@ -149,12 +148,12 @@
 	display: inline-block;
 	float: left;
 	font-size: 0;
-	
 }
 
 .link_right {
 	float: right;
 	width: 100px;
+	position: relative;right:20px;
 }
 
 .finance__item {
@@ -186,14 +185,17 @@
 	height: 50px;
 	margin: 20px auto;
 	background: white;
+	display: table;
 }
 
 .c-item {
 	float: left;
-	width: 80px;
+	width: 150px;
 	height: 100%;
 	line-height: 50px;
 	text-align: center;
+	display: table-cell;
+	vertical-align: middle;
 }
 
 .c1 {
@@ -201,47 +203,102 @@
 }
 
 .c2 {
-	margin-left: 100px;
+	margin-left: 15px;
 }
 
 .c3 {
-	margin-left: 100px;
+	margin-left: 60px;
 }
 
 .c4 {
-	margin-left: 100px;
+	margin-left: 60px;
 }
 
 .c5 {
-	margin-left: 170px;
+	margin-left: 30px;
 }
 
-.pic{
-	width: 132px;
-	margin-top: 20px;
-}
-.finance__term{
+/*.finance__term{
 	display: table-cell;
 	vertical-align: middle;
+	box-sizing: border-box;
+	padding-left: 160px;
+	text-align: center;
 }
 .finance__range{
 	display: table-cell;
+	padding-left: 160px;
 	vertical-align: middle;
+	box-sizing: content-box;
 }
 .finance__price{
+	width: 170px;
 	display: table-cell;
 	vertical-align: middle;
+	box-sizing: border-box;
 }
 .finance__price02{
 	display: table-cell;
 	vertical-align: middle;
+	box-sizing: border-box;
 }
 .finance__remark{
 	display: table-cell;
 	vertical-align: middle;
+	padding-left: 90px;
+	box-sizing: border-box;
+}*/
+.item1{
+	width: 180px;
+	height: 60px;
 	text-align: center;
+	line-height: 60px;
+	float: left;
+	position: relative;left: 15px;
 }
-.box{
-	display: table-cell;
-	vertical-align: middle;
+.item2{
+	width: 180px;
+	height: 60px;
+	text-align: center;
+	line-height: 60px;
+	float: left;
+}
+.item3{
+	width: 180px;
+	height: 60px;
+	text-align: center;
+	line-height: 60px;
+	float: left;
+	margin-left: 30px;
+}
+.item4{
+	width: 180px;
+	height: 60px;
+	text-align: center;
+	line-height: 60px;
+	float: left;
+	margin-left: 30px;
+}
+.item5{
+	width: 180px;
+	/*height: 60px;*/
+	text-align: center;
+	line-height: 30px;
+	float: left;
+	margin-left: 10px;
+	/*white-space:nowrap;*/
+	word-wrap:break-word;
+	word-break:break-all;
+}
+.wrapperBox{
+	/*display: table-cell;
+	vertical-align: middle;*/
+	width: 120px;
+	height: 50px;
+	float: left;
+	position: relative;top: 5px;left: 5px;
+}
+.wrapperBox > img{
+	width: 120px;
+	height: 50px;
 }

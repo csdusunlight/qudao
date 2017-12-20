@@ -54,6 +54,7 @@
 }
 .column.column_8 {
     flex-direction: row;
+    justify-content: center;
     line-height: 46px;
 }
 .column.m-head {

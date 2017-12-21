@@ -12,15 +12,19 @@
         <link rel="stylesheet" href="{% static 'css/mui.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/m_project_all.css' %}">
         <script type="text/javascript" src="{% static  'js/rem.js'%}"></script>
-
+        <style type="text/css">
+        	.mui-content>.mui-table-view:first-child {
+        	    margin-top: 0;
+        	}
+        </style>
     </head>
 
     <body>
         <div class="mui-content">
-            <div id="search" class="searchBox">
+            <!--<div id="search" class="searchBox">
                 <input id="search_input" type="text" placeholder="点此进入搜索" />
                 <span id="search_btn" class="search-icon mui-icon mui-icon-search"></span>
-            </div>
+            </div>-->
             <div class="mui-table-view project-all-box">
                 <ul id="mui-table-view-left" class="mui-table-view-left">
                     <li class="item_line m-head">

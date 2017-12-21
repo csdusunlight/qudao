@@ -120,7 +120,11 @@
                                 csrfmiddlewaretoken:csrfmiddlewaretoken
                             },
                             success:function(ret){
-                                mui.alert(ret.msg);
+                                if (ret.code == 0) {
+                                    mui.alert('申请提现成功');
+                                } else {
+                                    mui.alert(ret.res_msg);
+                                }
                             },
                             error:function(){
                                 alert("请检查网络连接");

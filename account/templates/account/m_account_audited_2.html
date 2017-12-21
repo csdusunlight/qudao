@@ -34,15 +34,14 @@
 			    list-style: none;
 			    text-align: center;
 			    line-height: 40px;
-
 			}
 			.nav__item.on {
 			    color: #91C11D;
 			}
 			.nav__link {
-                display: block;
-                color: #333;
-            }
+			    display: block;
+			    color: #333;
+			}
 		</style>
 	</head>
 
@@ -53,8 +52,8 @@
 		</header>
 
 		<ul class="nav__head clearfix tc">
-            <li class="nav__item on">官方数据</li>
-            <li class="nav__item"><a class="nav__link" href="{% url 'account_audited_2' %}">自建数据</a></li>
+            <li class="nav__item"><a class="nav__link" href="{% url 'account_audited' %}">官方数据</a></a></li>
+            <li class="nav__item on">自建数据</li>
         </ul>
 
 		<div id="pullrefresh" class="mui-scroll-wrapper">
@@ -143,7 +142,7 @@
 		<script>
 		    var count = 1;
 		    var num = 1;
-		    var index = 0;
+		    var index = 1;
 			mui.init({
 			    pullRefresh: {
                     container: '#pullrefresh',
@@ -295,6 +294,7 @@
 					}
 				});
 			});
+
             mui('.mui-bar').on('tap', '.mui-action-back2', function() {
                 var href = this.getAttribute("href");
                 mui.openWindow({

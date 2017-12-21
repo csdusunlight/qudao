@@ -1,21 +1,24 @@
 .mui-table-view {
     overflow: hidden;
 }
-.mui-scroll .mui-table-view-left {
+.mui-table-view-left {
+    position: relative;
 	width: 25%;
 	float: left;
 	margin: 0;
 	padding: 0;
 	text-align: center;
+	background-color: #fff;
+	z-index: 100;
+	border-right: 1px solid RGB(233,233,233);
 }
 
 .mui-table-view-right {
-	width: 75%;
-	float: right;
+	/*width: 75%;*/
+	/*float: right;*/
 	margin: 0;
 	padding: 0;
 	overflow-x: scroll;
-	border-left: 1px solid RGB(233,233,233);
 }
 
 .mui-control-content {
@@ -23,10 +26,12 @@
 }
 
 .item_line {
-    display: table;
+    padding: 6px 0;
+    display: flex;
+    justify-content: space-around;
 	box-sizing: border-box;
 	/*padding: 1rem 0;*/
-	height: 80px;
+	height: 60px;
 	font-size: 0;
 	border-bottom: 1px solid #e4e4e4;
 }
@@ -36,22 +41,31 @@
 
 .item_line.m-right {
 	width: 64rem;
-	height: 80px;
+	height: 60px;
 	text-align: center;
 }
 
 .column {
-	display: table-cell;
+	display: flex;;
+	flex-direction: column;
+	justify-content: space-around;
 	font-size: 0px;
 	vertical-align: middle;
 }
-
+.column.column_8 {
+    flex-direction: row;
+    justify-content: center;
+    line-height: 46px;
+}
 .column.m-head {
 	font-size: 12px;
 }
-
+.column_0 {
+    width: 20%;
+    font-size: 12px;
+}
 .column_1 {
-	width: 10rem;
+	width: 80%;
 }
 
 .column_2 {
@@ -105,18 +119,17 @@
 }
 
 .item {
+    /*width: 8rem;*/
 	display: block;
 	font-size: 12px;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: normal;
+	white-space: nowrap;
 }
 .column_8 .item{
     display: inline-block;
-    /*margin-top: 1rem;*/
     width: 25%;
-    height: 4rem;
-    line-height: 4rem;
+    line-height: 47px;
 }
 
 .state0 {
@@ -134,7 +147,26 @@
 .state3 {
 	color: blue;
 }
+.mui-pull-bottom-wrapper {
+    text-align: center;
+}
 
+.deleteItem {
+    color: RGB(228, 44, 44);
+    text-decoration: underline;
+}
+.pro_editor{
+    color: blue;
+    text-decoration: underline;
+}
+.pro_pass_02{
+    text-decoration: underline;
+    color: blue;
+}
+.pro_refuse_02{
+    text-decoration: underline;
+    color: blue;
+}
 /*弹窗部分*/
 .popup {
     display: none;

@@ -47,6 +47,11 @@ ul,li {
 .item_line.m-right {
 	width: 60rem;
 	text-align: center;
+	border-left:2px solid RGB(233,233,233);
+}
+
+.item >a{
+	color: black;
 }
 
 .column {
@@ -59,6 +64,8 @@ ul,li {
 
 .column.m-head {
 	font-size: 12px;
+	background: RGB(145,193,29);
+	color: white;
 }
 .column_1.m-head {
     width: 10rem;

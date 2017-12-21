@@ -477,7 +477,8 @@ def bankcard(request):
     user = request.user
     card = user.user_bankcard.first()
     banks = BANK
-    return render(request, 'account/account_bankcard.html', {"card":card, 'banks':banks})
+    template = 'account/m_account_bankcard.html' if request.mobile else 'account/account_bankcard.html'
+    return render(request, template, {"card":card, 'banks':banks})
 
 def password_change(request):
     if not request.is_ajax():
@@ -606,7 +607,12 @@ def change_bankcard(request):
         return JsonResponse(result)
     else:
         banks = BANK
-        return render(request, 'account/m_account_change_bankcard.html', {'banks':banks})
+        if request.mobile:
+            return render(request, 'account/m_account_change_bankcard.html', {'banks':banks})
+        else:
+            user = request.user
+            card = user.user_bankcard.first()
+            return render(request, 'account/account_bankcard.html', {"card":card, 'banks':banks})
 
 @login_required
 def money(request):

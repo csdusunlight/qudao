@@ -572,6 +572,41 @@ def bind_bankcard(request):
                                        bank=bank, subbranch=subbranch)
         result['code'] = 0
     return JsonResponse(result)
+@login_required
+def change_bankcard(request):
+    if request.method == 'POST':
+        if not request.is_ajax():
+            raise Http404
+        result={}
+        user = request.user
+        card_number = request.POST.get("card_number", '')
+        real_name = request.POST.get("real_name", '')
+        bank = request.POST.get("bank", '')
+        subbranch = request.POST.get("subbranch",'')
+        telcode = request.POST.get("code", '')
+        ret = verifymobilecode(user.mobile,telcode)
+        if ret != 0:
+            result['code'] = 2
+            if ret == -1:
+                result['msg'] = u'请先获取手机验证码！'
+            elif ret == 1:
+                result['msg'] = u'手机验证码输入错误！'
+            elif ret == 2:
+                result['msg'] = u'手机验证码已过期，请重新获取'
+            return JsonResponse(result)
+        else:
+            card = user.user_bankcard.first()
+            card.card_number = card_number
+            card.real_name = real_name
+            card.bank = bank
+            card.subbranch = subbranch
+            card.save()
+            result['code'] = 0
+            result['msg'] = u"银行卡号更改成功！"
+        return JsonResponse(result)
+    else:
+        banks = BANK
+        return render(request, 'account/m_account_change_bankcard.html', {'banks':banks})
 
 @login_required
 def money(request):

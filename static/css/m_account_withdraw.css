@@ -1,0 +1,103 @@
+.mui-content {
+	/*padding: 0 1.875% 2rem;*/
+
+}
+/*帐号部分*/
+.zhanghu {
+	padding: 2rem 0 1rem;
+	background: #008fd7;
+	box-shadow: 0 1px 3px #e4e4e4;
+}
+.msg img {
+	float: left;
+	margin-left: 2rem;
+	margin-right: 1rem;
+	width: 20%;
+	border-radius: 50%;
+	/*height: 4rem;*/
+}
+.msg .text {
+	float: left;
+	margin-top: 0.5rem;
+	margin-left: 2rem;
+}
+.text p {
+		font-size: 1.2rem;
+		color: #333;
+		line-height: 2rem;
+}
+.text p span {
+	color: #fff;
+	font-size: 1.4rem;
+}
+.text a {
+	color: #fff;
+}
+
+.right {
+	display: block;
+	text-align: right;
+	font-size: 1.2rem;
+	line-height: 1rem;
+	color: #008fd7;
+	margin-right: 1.875%;
+}
+
+/*提现部分*/
+.mui-input-group {
+	background: #fff;
+/*	padding: 0 1.875% 0;*/
+
+}
+.mui-input-group:after {
+	left: 1.875%;
+	right: 1.875%;
+}
+.mui-input-row {
+	margin-top: 1rem;
+	height: 8rem !important;
+}
+.mui-input-group .mui-input-row:after {
+	height: 0 ;
+}
+.mui-input-row label {
+	height: 95px;
+	width: 95px;
+	background: url(../images/fubi.png) center center/60% auto no-repeat;
+}
+.mui-input-row input {
+	height: 8rem !important;
+	font-size: 4rem;
+}
+.mui-content>p {
+	padding: 0.2rem 1.875% 1rem;
+	background: #fff;
+	box-shadow: 0 1px 3px #e4e4e4;
+}
+.mui-content>p span {
+	display: inline-block;
+	width: 49%;
+}
+.mui-content>p span:last-child {
+	text-align: right;
+}
+.mui-content>button {
+	padding: 0;
+	width: 60%;
+	height: 3.4rem;
+	margin-top: 2rem;
+	margin-left: 20%;
+	font-size: 1.2rem;
+}
+::-webkit-input-placeholder { font-size: 2rem;line-height: 5rem;}
+::-moz-placeholder { font-size: 2rem;line-height: 5rem; } /* firefox 19+ */
+:-ms-input-placeholder { font-size: 2rem; line-height: 5rem;} /* ie */
+input:-moz-placeholder { font-size: 2rem; line-height: 5rem;}
+
+form {
+	width: 100%;
+	margin-left: 0;
+}
+.mui-input-group:after {
+	height: 1px;
+}

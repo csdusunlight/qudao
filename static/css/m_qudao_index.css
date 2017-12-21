@@ -82,9 +82,10 @@ body {
     display: inline-block;
     width: 2.4rem;
 }
-.today__item :nth-child(2){
+.today__item:nth-child(2){
 	margin-left: 0.6rem;
-}.today__item :nth-child(){
+}
+.today__item:nth-child(3){
 	margin-left: 0.7rem;
 }
 .today__img {

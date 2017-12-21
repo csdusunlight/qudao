@@ -98,7 +98,7 @@
 
 	<body>
 		<header id="header" class="mui-bar mui-bar-nav">
-			<a id="anchor" href="{% url 'account_index' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
 			<h1 class="mui-title" style="color: RGB(102,102,102);">{{investlog.project}}</h1>
 		</header>
 		<div class="mui-content" style="background: white;">
@@ -254,25 +254,6 @@
                     }
                 });
             });
-            var Url = document.getElementById("anchor").getAttribute("href");
-            console.log(Url);
-            mui('.mui-bar-nav').on('tap', '.mui-action-back', function() {
-				var Url = document.getElementById("anchor").getAttribute("href");
-				mui.openWindow({
-					url: Url,
-					styles: {
-						top: 0,
-						bottom: 0
-					},
-					show: {
-						aniShow: 'slide-in-right',
-					},
-					waiting: {
-						autoShow: false, //自动显示等待框
-						title: '正在加载...', //等待对话框上显示的提示内容
-					}
-				});
-			});
 		</script>
 	</body>
 

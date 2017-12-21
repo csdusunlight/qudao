@@ -1,0 +1,89 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <title>项目库</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+        <link rel="stylesheet" href="{% static 'css/mui.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/m_project_all.css' %}">
+        <script type="text/javascript" src="{% static  'js/rem.js'%}"></script>
+
+    </head>
+
+    <body>
+        <div class="mui-content">
+            <div id="search" class="searchBox">
+                <input id="search_input" type="text" placeholder="点此进入搜索" />
+                <span id="search_btn" class="search-icon mui-icon mui-icon-search"></span>
+            </div>
+            <div class="mui-table-view project-all-box">
+                <ul id="mui-table-view-left" class="mui-table-view-left">
+                    <li class="item_line m-head">
+                        <div class="column_1 column m-head">项目名称</div>
+                    </li>
+                    <ul id="left_box" class="left_ul">
+                        {% for item in projects %}
+                        <li class="item_line">
+                            <div class="column_1 column"><span class="item">{{item.title}}</span></div>
+                        </li>
+                        {%endfor%}
+                    </ul>
+                </ul>
+                <ul id="mui-table-view-right" class="mui-table-view-right">
+                    <li class="item_line m-head m-right">
+                        <div class="column_2 column m-head">推广标期</div>
+                        <div class="column_3 column m-head">投资档位</div>
+                        <div class="column_4 column m-head">结算价格</div>
+                        <div class="column_5 column m-head">客户指导价</div>
+                        <div class="column_6 column m-head">备注说明</div>
+                    </li>
+                    <ul id="right_box" class="right_ul">
+                        {% for item in projects %}
+                        <li class="item_line m-right">
+                            <div class="column_2 column"><span class="item">{{item.term}}</span></div>
+                            <div class="column_3 column"><span class="item">{{item.investrange}}</span></div>
+                            <div class="column_4 column"><a href="/account/login/?next=/project_all" class="item">登陆后查看</a></div>
+                            <div class="column_5 column"><a href="/account/login/?next=/project_all" class="item">登陆后查看</a></div>
+                            <div class="column_6 column"><span class="item">{{item.remark}}</span></div>
+                        </li>
+                        {%endfor%}
+                    </ul>
+                </ul>
+                </ul>
+            </div>
+            <footer>
+                <ul>
+                    <li class="footer__item">
+                        <a href="{%url 'index'%}">
+                            <i class="mui-icon mui-icon-home"></i>
+                            <span class="footer__txt">首页</span>
+                        </a>
+                    </li>
+                    <li class="footer__item on">
+                        <a href="{%url 'project_all'%}">
+                            <i class="mui-icon mui-icon-more"></i>
+                            <span class="footer__txt">项目库</span>
+                        </a>
+                    </li>
+                    <li class="footer__item">
+                        <a href="{%url 'account_index'%}">
+                            <i class="mui-icon mui-icon-person"></i>
+                            <span class="footer__txt">个人中心</span>
+                        </a>
+                    </li>
+                </ul>
+            </footer>
+
+            <script src="{% static 'js/mui.min.js' %}"></script>
+            <script type="text/javascript" charset="utf-8">
+                mui.init();
+            </script>
+
+    </body>
+
+</html>

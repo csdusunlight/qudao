@@ -35,7 +35,6 @@ def index(request):
     template = 'm_index.html' if request.mobile else 'index.html'
     return render(request, template, data)
 
-@login_required
 def project_all(request):
     if request.user.is_authenticated():
         template = 'm_project_repo.html' if request.mobile else 'project_repo.html'

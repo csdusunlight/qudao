@@ -37,9 +37,15 @@ def index(request):
 
 @login_required
 def project_all(request):
-    template = 'm_finance_all.html' if request.mobile else 'finance_all.html'
-    projects = Project.objects.filter(is_official=True,is_addedto_repo=True,state='10')
-    return render(request, template, {'projects':projects})
+    if request.user.is_authenticated():
+        template = 'm_project_repo.html' if request.mobile else 'project_repo.html'
+        return render(request, template)
+    else:
+        projects = Project.objects.filter(is_official=True,is_addedto_repo=True,state='10')
+        template = 'm_project_repo_nologin.html' if request.mobile else 'project_repo_nologin.html'
+        return render(request, template, {'projects':projects})
+    
+    
 def user_guide(request):
     return render(request, 'user_guide.html',  )
 def activity_rank(request):

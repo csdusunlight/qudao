@@ -701,9 +701,7 @@ def withdraw(request):
         user = request.user
         result = {'code':-1, 'res_msg':''}
         withdraw_amount = request.POST.get("amount", None)
-        varicode = request.POST.get('varicode', None)
-        hashkey = request.POST.get('hashkey', None)
-        if not (varicode and withdraw_amount and hashkey):
+        if not withdraw_amount:
             result['code'] = 3
             result['res_msg'] = u'传入参数不足！'
             return JsonResponse(result)
@@ -727,24 +725,18 @@ def withdraw(request):
             result['res_msg'] = u'请先绑定银行卡！'
             return JsonResponse(result)
 
-        ret = imageV(hashkey, varicode)
-        if ret != 0:
-            result['code'] = 2
-            result['res_msg'] = u'图形验证码输入错误！'
-            result.update(generateCap())
-        else:
+        try:
+            with transaction.atomic():
+                translist = charge_money(user, '1', withdraw_amount, u'提现')
+                event = WithdrawLog.objects.create(user=user, amount=withdraw_amount, audit_state='1')
+                result['code'] = 0
             try:
-                with transaction.atomic():
-                    translist = charge_money(user, '1', withdraw_amount, u'提现')
-                    event = WithdrawLog.objects.create(user=user, amount=withdraw_amount, audit_state='1')
-                    result['code'] = 0
-                try:
-                    sendWeixinNotify.delay([(request.user, event),], 'withdraw_apply')
-                except Exception, e:
-                    logger.error(e)
-            except:
-                result['code'] = -2
-                result['res_msg'] = u'提现失败！'
+                sendWeixinNotify.delay([(request.user, event),], 'withdraw_apply')
+            except Exception, e:
+                logger.error(e)
+        except:
+            result['code'] = -2
+            result['res_msg'] = u'提现失败！'
         return JsonResponse(result)
 
 

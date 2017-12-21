@@ -2,100 +2,102 @@
 <!doctype html>
 <html>
 
-    <head>
-        <meta charset="UTF-8">
-        <title>福利联盟</title>
-        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<head>
+		<meta charset="UTF-8">
+		<title>福利联盟</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 
-        <link rel="stylesheet" href="{% static 'css/mui.min.css' %}" />
-        <link rel="stylesheet" href="{% static 'css/m_qudao_index.css' %}" />
-        <link rel="stylesheet" href="{% static 'css/iconfont.css' %}" />
-        <script src="{% static 'js/flexible.js' %}"></script>
-    </head>
+		<link rel="stylesheet" href="{% static 'css/mui.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/m_qudao_index.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/iconfont.css' %}" />
+		<script src="{% static 'js/flexible.js' %}"></script>
+	</head>
 
-    <body>
-        <div class="mui-content">
-            <div class="top">
-                <img class="top__img" src="{{ad_list.0.pic.url}}" />
-                <div class="top__mask">
-                    <div class="top__mask-title">行业领先的互联网金融渠道分发机构</div>
-                    <p class="top__mask-txt">The industry leading Internet financial  channel distribution organization</p>
-                </div>
-            </div>
-            <div class="data-box">
-                <h2 class="data-title">截止至今日</h2>
-                <div class="total__box">
-                    <p class="total__item">渠道引入资金：<span class="total__item-num">{{invest_total}}万</span></p>
-                    <p class="total__item">渠道提现金额：<span class="total__item-num">{{with_total}}万</span></p>
-                    <p class="total__item">渠道引入用户：<span class="total__item-num">{{invite_total}}位</span></p>
-                    <p class="total__item">加入渠道数量：<span class="total__item-num">{{user_total}}位</span></p>
-                </div>
-            </div>
-            <div class="today-box">
-                <h2 class="data-title">今日推荐</h2>
-                <ul class="mui-table-view today">
-                    {% for item in recom_projects %}
-                        <li class="today__item mui-table-view-cell"><a href="{{item.strategy}}">
-                            <img class="today__img" src="{{item.picture_url}}"/>
-                            <span class="today__go ">查看攻略</span><span style="color: #91C11D;" class="mui-icon mui-icon-arrowthinright"></span>
-                        </a></li>
-                    {%endfor%}
-                </ul>
-            </div>
-            <div class="business-box">
-                <h1 class="data-title">优质合作平台</h1>
-                <div class="business">
-                    {% for item in platforms %}
-                    <div class="business__img-box">
-                            <img class="business__img" src="{{item.logo.url}}" alt="平台logo" />
-                    </div>
-                    {%endfor%}
-                </div>
-            </div>
-        </div>
-        <footer>
-            <ul>
-                <li class="footer__item on">
-                    <a href="{%url 'index'%}">
-                    <i class="mui-icon mui-icon-home"></i>
-                    <span class="footer__txt">首页</span>
-                    </a>
-                </li>
-                <li class="footer__item">
-                    <a href="{%url 'project_all'%}">
-                    <i class="mui-icon mui-icon-more"></i>
-                    <span class="footer__txt">项目库</span>
-                    </a>
-                </li>
-                <li class="footer__item">
-                    <a href="{%url 'account_index'%}">
-                    <i class="mui-icon mui-icon-person"></i>
-                    <span class="footer__txt">个人中心</span>
-                    </a>
-                </li>
-            </ul>
-       </footer>
-        <script src="{% static 'js/mui.min.js' %}"></script>
-        <script type="text/javascript">
-            mui.init();
-            mui('.today').on('tap', 'a', function() {
-                var url_gonglue = this.getAttribute('href');
-                mui.openWindow({
-                    url: url_gonglue,
-                    styles: {
-                        top: 0,
-                        bottom: 0
-                    },
-                    show: {
-                        aniShow: 'slide-in-right',
-                    },
-                    waiting: {
-                        autoShow: false, //自动显示等待框
-                        title: '正在加载...', //等待对话框上显示的提示内容
-                    }
-                });
-            });
-        </script>
-    </body>
+	<body>
+		<div class="mui-content">
+			<div class="top">
+				<img class="top__img" src="{{ad_list.0.pic.url}}" />
+				<div class="top__mask">
+					<div class="top__mask-title">行业领先的互联网金融渠道分发机构</div>
+					<p class="top__mask-txt">The industry leading Internet financial channel distribution organization</p>
+				</div>
+			</div>
+			<div class="data-box">
+				<h2 class="data-title">截止至今日</h2>
+				<div class="total__box">
+					<p class="total__item">渠道引入资金：<span class="total__item-num">{{invest_total}}万</span></p>
+					<p class="total__item">渠道提现金额：<span class="total__item-num">{{with_total}}万</span></p>
+					<p class="total__item">渠道引入用户：<span class="total__item-num">{{invite_total}}位</span></p>
+					<p class="total__item">加入渠道数量：<span class="total__item-num">{{user_total}}位</span></p>
+				</div>
+			</div>
+			<div class="today-box">
+				<h2 class="data-title">今日推荐</h2>
+				<ul class="mui-table-view today" style="padding-bottom: 0.2rem;">
+					{% for item in recom_projects %}
+					<li class="today__item">
+						<a href="{{item.strategy}}">
+							<img class="today__img" src="{{item.picture_url}}" />
+							<!--<span class="today__go ">查看攻略</span><span style="color: #91C11D;" class="mui-icon mui-icon-arrowthinright"></span>-->
+						</a>
+					</li>
+					{%endfor%}
+				</ul>
+			</div>
+			<div class="business-box">
+				<h1 class="data-title">优质合作平台</h1>
+				<div class="business">
+					{% for item in platforms %}
+					<div class="business__img-box">
+						<img class="business__img" src="{{item.logo.url}}" alt="平台logo" />
+					</div>
+					{%endfor%}
+				</div>
+			</div>
+		</div>
+		<footer>
+			<ul>
+				<li class="footer__item on">
+					<a href="{%url 'index'%}">
+						<i class="mui-icon mui-icon-home"></i>
+						<span class="footer__txt">首页</span>
+					</a>
+				</li>
+				<li class="footer__item">
+					<a href="{%url 'project_all'%}">
+						<i class="mui-icon mui-icon-more"></i>
+						<span class="footer__txt">项目库</span>
+					</a>
+				</li>
+				<li class="footer__item">
+					<a href="{%url 'account_index'%}">
+						<i class="mui-icon mui-icon-person"></i>
+						<span class="footer__txt">个人中心</span>
+					</a>
+				</li>
+			</ul>
+		</footer>
+		<script src="{% static 'js/mui.min.js' %}"></script>
+		<script type="text/javascript">
+			mui.init();
+			mui('.today').on('tap', 'a', function() {
+				var url_gonglue = this.getAttribute('href');
+				mui.openWindow({
+					url: url_gonglue,
+					styles: {
+						top: 0,
+						bottom: 0
+					},
+					show: {
+						aniShow: 'slide-in-right',
+					},
+					waiting: {
+						autoShow: false, //自动显示等待框
+						title: '正在加载...', //等待对话框上显示的提示内容
+					}
+				});
+			});
+		</script>
+	</body>
 
 </html>

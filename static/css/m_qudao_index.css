@@ -77,12 +77,21 @@ body {
     color: #FFBE00;
     font-size: 0.4rem;
 }
-.today__item {
+.today__item { 
     list-style: none;
+    display: inline-block;
+    width: 2.4rem;
+}
+.today__item:nth-child(2){
+	margin-left: 0.6rem;
+}
+.today__item:nth-child(3){
+	margin-left: 0.7rem;
 }
 .today__img {
     display: inline-block;
-    margin: 0 1rem;
+    /*margin: 0 1rem;*/
+   margin: 0 0.3rem;
     width: 2.4rem;
     height: 1rem;
     vertical-align: middle;

@@ -82,6 +82,11 @@ body {
     display: inline-block;
     width: 2.4rem;
 }
+.today__item :nth-child(2){
+	margin-left: 0.6rem;
+}.today__item :nth-child(){
+	margin-left: 0.7rem;
+}
 .today__img {
     display: inline-block;
     /*margin: 0 1rem;*/

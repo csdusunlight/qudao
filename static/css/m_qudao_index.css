@@ -66,9 +66,6 @@ body {
     padding: 10px 4% 0;
     background-color: #fff;
 }
-.today{
-	padding-bottom: 0.2rem;
-}
 .total__item {
     display: inline-block;
     width: 50%;
@@ -82,12 +79,6 @@ body {
 }
 .today__item {
     list-style: none;
-}
-.today__item:nth-child(2){
-	margin-left: 0.8rem;
-}
-.today__item:nth-child(2){
-	margin-left: 1rem;
 }
 .today__img {
     display: inline-block;

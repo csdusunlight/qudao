@@ -51,7 +51,7 @@ ul,li {
 }
 
 .item >a{
-	color: black;
+	text-decoration: underline;
 }
 
 .column {

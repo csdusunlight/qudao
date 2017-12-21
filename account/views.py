@@ -694,7 +694,8 @@ def withdraw(request):
 
         user = request.user
         card = user.user_bankcard.first()
-        return render(request,'account/withdraw.html',
+        template = 'account/m_withdraw.html' if request.mobile else 'account/withdraw.html'
+        return render(request, template,
                   {'hashkey':hashkey, 'codimg_url':codimg_url, "card":card})
     elif request.method == 'POST':
         user = request.user

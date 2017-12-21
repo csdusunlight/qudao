@@ -87,10 +87,10 @@ body {
     height: 1rem;
     vertical-align: middle;
 }
-.today__go {
+/*.today__go {
     display: inline-block;
     font-size: 0.4rem;
-}
+}*/
 .business-box {
     margin-top: 10px;
     padding: 10px 4% 0;

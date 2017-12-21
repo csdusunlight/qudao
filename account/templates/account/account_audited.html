@@ -299,7 +299,7 @@
             <div class="popup__detail">
                 <div class="popup__item">
                     <span class="popup__itemname">项目名称</span>
-                    <select class="project" placeholder="选择项目">
+                    <select disabled="disabled" class="project" placeholder="选择项目">
                     </select>
                 </div>
                 <div class="popup__item">
@@ -362,7 +362,7 @@
             <div class="popup__detail">
                 <div class="popup__item">
                     <span class="popup__itemname">项目名称</span>
-                    <select class="project_02" placeholder="选择项目">
+                    <select disabled="disabled" class="project_02" placeholder="选择项目">
                     </select>
                 </div>
                 <div class="popup__item">
@@ -696,25 +696,18 @@
         }
 
         $("#confirm_edit").click(function() {
-            var project = $(".project").val(),
-                date = $(".date").val(),
+            var date = $(".date").val(),
                 telnum = $(".telnum").val(),
                 term = $(".term").val(),
                 money = $(".money").val(),
                 zfb = $(".zfb").val(),
                 zfbname = $(".zfbname").val(),
                 remark = $(".remark").val();
-            console.log(project);
-            console.log(project_id+","+project+","+date+","+telnum+","+term+","+money+","+remark+",");
-            if(!project || !date || !telnum || !term || !money) {
-                alert("填写项不能为空");
+            if(!telnum) {
+                alert("提交手机号不能为空");
                 return;
             }
-            if(project == 0) {
-                alert("请选择项目");
-                return;
-            }
-            
+
 //          if(date.match(/^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/)) { 
 //              console.log('日期格式正确');
 //          } else { 
@@ -942,8 +935,8 @@
                 remark = $(".remark_02").val();
             console.log(project);
             console.log(project_id+","+project+","+date+","+telnum+","+term+","+money+","+remark+","+zfb+","+zfbname+",");
-            if(!project || !date || !telnum || !term || !money || !zfb || !zfbname) {
-                alert("填写项不能为空");
+            if(!telnum) {
+                alert("提交手机号不能为空");
                 return;
             }
             if(project == 0) {
@@ -1004,7 +997,6 @@
                         option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
                     }
                     $('.project').html(option_html);
-                    $('.project').searchableSelect();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR.responseText);
@@ -1022,7 +1014,6 @@
                         option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
                     }
                     $('.project_02').html(option_html);
-                    $('.project_02').searchableSelect();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR.responseText);

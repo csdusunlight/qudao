@@ -1,51 +1,68 @@
 li {
-    list-style: none;
+	list-style: none;
 }
-ul,li,p {
-    margin: 0;
-    padding: 0;
+
+ul,
+li,
+p {
+	margin: 0;
+	padding: 0;
 }
 
 body {
-    background-color: #fff;
+	background-color: #fff;
 }
+
 .mui-content {
-    padding-bottom: 60px;
+	padding-bottom: 60px;
 }
+
 .top {
-    position: relative;
+	position: relative;
 }
+
 .top__img {
-    width: 100%;
-    height: 4rem;
+	width: 100%;
+	height: 4rem;
 }
+
 .top__mask {
-    position: absolute;
-    top: 0.8rem;
-    left: 10%;
-    width: 80%;
-    height: 2.4rem;
-    text-align: center;
-    background-color: rgba(0,0,0,0.3);
+	position: absolute;
+	top: 0.8rem;
+	left: 10%;
+	width: 80%;
+	height: 2.4rem;
+	text-align: center;
+	background-color: rgba(0, 0, 0, 0.3);
 }
+
 .top__mask-title {
-    margin-top: 0.4rem;
-    font-size: 0.4rem;
-    color: #fff;
+	margin-top: 0.4rem;
+	font-size: 0.4rem;
+	color: #fff;
 }
+
 .top__mask-txt {
-    font-size: 0.3rem;
-    line-height: 0.5rem;
-    color: #fff;
+	font-size: 0.3rem;
+	line-height: 0.5rem;
+	color: #fff;
 }
+
+.mui-table-view-cell {
+	padding: 6px 7px;
+}
+
 .data-box {
-    position: relative;
-    padding: 10px 4% 0;
-    background-color: #fff;
+	position: relative;
+	padding: 10px 4% 0;
+	background-color: #fff;
 }
+
 .total__box {
-    font-size: 0;
+	font-size: 0;
 }
+
+
 /*.data-box:after {
     content: "";
     position: absolute;
@@ -55,96 +72,120 @@ body {
     height: 2px;
     background: linear-gradient(to right, #fff, #91C11D 50%,#fff);
 }*/
+
 .data-title {
-    margin: 0.1rem 0;
-    font-size: 0.4rem;
-    margin-bottom: 0.3rem;
-    color: #91C11D;
+	margin: 0.1rem 0;
+	font-size: 0.4rem;
+	margin-bottom: 0.3rem;
+	color: #91C11D;
 }
+
 .today-box {
-    margin-top: 10px;
-    padding: 10px 4% 0;
-    background-color: #fff;
+	margin-top: 10px;
+	padding: 10px 4% 0;
+	background-color: #fff;
 }
+
 .total__item {
-    display: inline-block;
-    width: 50%;
-    margin-bottom: 0.2rem;
-    font-size: 0.3rem;
-    color: #333;
+	display: inline-block;
+	width: 50%;
+	margin-bottom: 0.2rem;
+	font-size: 0.3rem;
+	color: #333;
 }
+
 .total__item-num {
-    color: #FFBE00;
-    font-size: 0.4rem;
+	color: #FFBE00;
+	font-size: 0.4rem;
 }
+
 .today__item {
-    list-style: none;
+	list-style: none;
+	width: 2.4rem;
+	height: 1rem;
+	display: inline-block;
 }
+
 .today__img {
-    display: inline-block;
-    margin: 0 1rem;
-    width: 2.4rem;
-    height: 1rem;
-    vertical-align: middle;
+	display: inline-block;
+	width: 2.4rem;
+	height: 1rem;
+	vertical-align: middle;
 }
-.today__go {
-    display: inline-block;
-    font-size: 0.4rem;
-}
+
+/*.today__go {
+	display: inline-block;
+	font-size: 0.4rem;
+}*/
+
 .business-box {
-    margin-top: 10px;
-    padding: 10px 4% 0;
-    background-color: #fff;
+	margin-top: 10px;
+	padding: 10px 4% 0;
+	background-color: #fff;
 }
+
 .business {
-    font-size: 0;
+	font-size: 0;
 }
+
 .business__img-box {
-    display: inline-block;
-    margin-bottom: 0.4rem;
-    width: 33.3333%;
-    text-align: center;
+	display: inline-block;
+	margin-bottom: 0.4rem;
+	width: 33.3333%;
+	text-align: center;
 }
+
 .business__img {
-    width: 2.4rem;
-    height: 1rem;
+	width: 2.4rem;
+	height: 1rem;
 }
+
+
 /*底部导航部分*/
+
 footer {
-    width: 100%;
-    height: 45px;
-    position: fixed;
-    bottom: 0;
-    font-size: 0;
-    background: #fff;
-    z-index: 1000;
-    border-top: 1px solid #e4e4e4;
+	width: 100%;
+	height: 45px;
+	position: fixed;
+	bottom: 0;
+	font-size: 0;
+	background: #fff;
+	z-index: 1000;
+	border-top: 1px solid #e4e4e4;
 }
+
 footer .footer__item {
-    width: 33.3333%;
-    display: inline-block;
-    font-size: 0;
-    text-align: center;
-    position: relative;
+	width: 33.3333%;
+	display: inline-block;
+	font-size: 0;
+	text-align: center;
+	position: relative;
 }
+
 footer .mui-icon {
-    font-size: 22px;
-    color: #8f8f8f;
+	font-size: 22px;
+	color: #8f8f8f;
 }
+
 .on .mui-icon {
-    color: #91C11D;
+	color: #91C11D;
 }
+
 .footer__txt {
-    display: block;
-    margin-top: -6px;
-    font-size: 14px;
-    color: #4d4d4d;
-    line-height: 20px;
+	display: block;
+	margin-top: -6px;
+	font-size: 14px;
+	color: #4d4d4d;
+	line-height: 20px;
 }
+
 .on .footer__txt {
-    color: #91C11D;
+	color: #91C11D;
 }
+
+
 /*样式重置*/
+
 .mui-table-view:before {
-    display: none;
+	display: none;
 }

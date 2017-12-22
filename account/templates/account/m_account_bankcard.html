@@ -109,7 +109,7 @@
           console.log()
 		var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 		mui.ajax({
-			url: '',
+			url: "{% url 'bind_bankcard' %}",
 			dataType:"json",
 			type:'POST',
 			data : {
@@ -120,13 +120,17 @@
               csrfmiddlewaretoken:csrfmiddlewaretoken
             },
 			success:function(ret){
-				mui.alert(ret.msg,callback=function(){
-					window.history.back();
-					return;
-				});
+			    if (ret.code == 0) {
+			        mui.alert(ret.res_msg,callback=function(){
+			        	window.history.back();
+			        	return;
+			        });
+			    } else{
+                    mui.alert(ret.res_msg)
+			    }
 			},
 			error:function(){
-				alert("请检查网络连接");
+				mui.alert("请检查网络连接");
 			}
 		});
 		});

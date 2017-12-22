@@ -135,7 +135,7 @@
 				}
 				var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 				mui.ajax({
-					url: '',
+					url: "{% url 'change_bankcard' %}",
 					dataType:"json",
 					type:'POST',
 					data : {
@@ -150,6 +150,8 @@
 						mui.alert(ret.msg,callback=function(){
 							if (ret.code==0){
 								window.history.back();
+							} else {
+							    mui.alert(ret.res_msg)
 							}
 						});
 					},

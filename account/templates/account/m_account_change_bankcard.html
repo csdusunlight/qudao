@@ -1,0 +1,186 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <!-- 优先使用 IE 最新版本和 Chrome -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <!-- 为移动设备添加 viewport -->
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <!-- 添加到主屏后的标题（iOS 6 新增） -->
+    <meta name="apple-mobile-web-app-title" content="">
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <!-- 添加智能 App 广告条 Smart App Banner（iOS 6+ Safari） -->
+    <meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <!--下面三个是清除缓存 微信浏览器缓存严重又无刷新；这个方法调试的时候很方便-->
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>银行卡更改</title>
+    <link href="{% static 'css/mui.min.css' %}" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/m_common.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/m_account_zhifubao.css' %}"/>
+</head>
+	<body>
+		<header id="header" class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">银行卡更改</h1>
+			<!--<a class="mui-icon mui-icon-paperplane mui-pull-right"></a>-->
+		</header>
+		<div class="mui-content">
+			<form class="mui-input-group">
+					{% csrf_token %}
+					<div class="mui-input-row">
+						<label>请选择银行</label>
+						<select id='bank'>
+                <option value ="0">请选择相应的开户行</option>
+                {% for x in banks %}
+                <option value="{{x.0}}">{{x.1}}</option>
+                {%endfor%}
+            </select>
+					</div>
+					<div class="mui-input-row">
+						<label>请填写支行</label>
+						<input id="subbranch" type="text" placeholder="请输入银行卡支行">
+					</div>
+					<div class="mui-input-row">
+						<label>持卡人姓名</label>
+						<input id="real_name" type="text" placeholder="请输入银行卡绑定的真实姓名">
+					</div>
+					<div class="mui-input-row">
+						<label>请输入卡号</label>
+						<input id="card_number"  maxlength="23" type="text" placeholder="请输入真实的银行卡帐号" onkeyup="this.value =this.value.replace(/\s/g,'').replace(/[^\d]/g,'').replace(/(\d{4})(?=\d)/g,'$1 ');">
+					</div>
+					<div class="mui-input-row">
+						<label>手机验证码</label>
+						<input id="telcode" type="text" placeholder="请输入验证码">
+						<button id="gettelcode" type="button" class=" huoqu mui-btn-blue mui-btn-outlined">获取验证码</button>
+					</div>
+
+
+				</form>
+
+				<button id="Btn" type="button" class="bottom mui-btn mui-btn-blue mui-btn-block">立即绑定</button>
+
+		</div>
+
+		<script src="{% static 'js/mui.min.js' %}"></script>
+	    <script type="text/javascript">
+	    	var sendtelcode_url = "{% url 'phoneImageV' %}";
+		    mui.init({
+				swipeBack:true //启用右滑关闭功能
+			});
+			var countdown=60;
+			function settime(val) {
+				if (countdown == 0) {
+					val.removeAttribute("disabled");
+					val.innerText="获取验证码";
+					countdown = 60;
+					return;
+				}
+				else {
+					val.setAttribute("disabled", true);
+					val.innerText="重新发送(" + countdown + ")";
+					countdown--;
+				}
+				setTimeout(function() {
+					settime(val)
+				},1000);
+			}
+			document.getElementById("gettelcode").addEventListener('tap', function() {
+				sendTelVerifyCodeImageV();
+				settime(this);
+			});
+			document.getElementById("Btn").addEventListener('tap', function() {
+				var subbranch = document.getElementById('subbranch').value;
+				var real_name = document.getElementById('real_name').value;
+				var card_number = document.getElementById('card_number').value;
+        var telcode = document.getElementById('telcode').value;
+
+				var bank = document.getElementById("bank").value;
+          console.log("bank:" + bank);
+
+				var re_account=/^[\u2E80-\u9FFF]+$/;	//验证中文
+				var re_number=/^[0-9]*$/;  //验证数字
+    		var re_card = /^[\d\s]+$/;  //验证银行卡号
+
+				if(bank == 0){
+          mui.alert("请选择相应的开户行");
+          return;
+        }
+				if (!subbranch || !real_name || !card_number || !telcode){
+					mui.alert("填写项不能为空！", '提示');
+					return;
+				}
+        if(!re_account.test(subbranch)){
+          mui.alert("请输入正确的支行名称");
+          return;
+        }
+        if(!re_account.test(real_name)){
+          mui.alert("请输入正确的银行卡绑定的真实姓名");
+          return;
+        }
+        if(!re_card.test(card_number)){
+          mui.alert("请输入正确格式的银行卡号");
+          return;
+        }
+				if(telcode.length!=6) {
+					mui.alert('您输入的手机验证码格式有误，请重新输入！', '提示');
+					return;
+				}
+				var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+				mui.ajax({
+					url: "{% url 'change_bankcard' %}",
+					dataType:"json",
+					type:'POST',
+					data : {
+						bank: bank,
+						subbranch: subbranch,
+						real_name: real_name,
+						card_number: card_number,
+            telcode: telcode,
+						csrfmiddlewaretoken:csrfmiddlewaretoken
+					},
+					success:function(ret){
+						mui.alert(ret.msg,callback=function(){
+							if (ret.code==0){
+								window.history.back();
+							} else {
+							    mui.alert(ret.res_msg)
+							}
+						});
+					},
+					error:function(){
+						alert("请检查网络连接");
+					}
+				});
+			});
+			var sendTelVerifyCodeImageV = function() {
+				mui.ajax({
+					url : sendtelcode_url,
+					data : {
+						'action' : 'change_bankcard',
+						},
+					timeout : 3000,
+					success : function(data) {
+						if (data.code != 0) {
+							mui.alert(data.message);
+						}
+						if (data.code == 1){
+							countdown = 0;
+						}
+					},
+					error:function(xhr,type,errorThrown){
+						mui.alert(type);
+					}
+				});
+			};
+		</script>
+	</body>
+
+</html>

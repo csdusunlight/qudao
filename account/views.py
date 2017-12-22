@@ -477,7 +477,8 @@ def bankcard(request):
     user = request.user
     card = user.user_bankcard.first()
     banks = BANK
-    return render(request, 'account/account_bankcard.html', {"card":card, 'banks':banks})
+    template = 'account/m_account_bankcard.html' if request.mobile else 'account/account_bankcard.html'
+    return render(request, template, {"card":card, 'banks':banks})
 
 def password_change(request):
     if not request.is_ajax():
@@ -572,6 +573,46 @@ def bind_bankcard(request):
                                        bank=bank, subbranch=subbranch)
         result['code'] = 0
     return JsonResponse(result)
+@login_required
+def change_bankcard(request):
+    if request.method == 'POST':
+        if not request.is_ajax():
+            raise Http404
+        result={}
+        user = request.user
+        card_number = request.POST.get("card_number", '')
+        real_name = request.POST.get("real_name", '')
+        bank = request.POST.get("bank", '')
+        subbranch = request.POST.get("subbranch",'')
+        telcode = request.POST.get("code", '')
+        ret = verifymobilecode(user.mobile,telcode)
+        if ret != 0:
+            result['code'] = 2
+            if ret == -1:
+                result['msg'] = u'请先获取手机验证码！'
+            elif ret == 1:
+                result['msg'] = u'手机验证码输入错误！'
+            elif ret == 2:
+                result['msg'] = u'手机验证码已过期，请重新获取'
+            return JsonResponse(result)
+        else:
+            card = user.user_bankcard.first()
+            card.card_number = card_number
+            card.real_name = real_name
+            card.bank = bank
+            card.subbranch = subbranch
+            card.save()
+            result['code'] = 0
+            result['msg'] = u"银行卡号更改成功！"
+        return JsonResponse(result)
+    else:
+        banks = BANK
+        if request.mobile:
+            return render(request, 'account/m_account_change_bankcard.html', {'banks':banks})
+        else:
+            user = request.user
+            card = user.user_bankcard.first()
+            return render(request, 'account/account_bankcard.html', {"card":card, 'banks':banks})
 
 @login_required
 def money(request):
@@ -653,15 +694,14 @@ def withdraw(request):
 
         user = request.user
         card = user.user_bankcard.first()
-        return render(request,'account/withdraw.html',
+        template = 'account/m_withdraw.html' if request.mobile else 'account/withdraw.html'
+        return render(request, template,
                   {'hashkey':hashkey, 'codimg_url':codimg_url, "card":card})
     elif request.method == 'POST':
         user = request.user
         result = {'code':-1, 'res_msg':''}
         withdraw_amount = request.POST.get("amount", None)
-        varicode = request.POST.get('varicode', None)
-        hashkey = request.POST.get('hashkey', None)
-        if not (varicode and withdraw_amount and hashkey):
+        if not withdraw_amount:
             result['code'] = 3
             result['res_msg'] = u'传入参数不足！'
             return JsonResponse(result)
@@ -685,24 +725,18 @@ def withdraw(request):
             result['res_msg'] = u'请先绑定银行卡！'
             return JsonResponse(result)
 
-        ret = imageV(hashkey, varicode)
-        if ret != 0:
-            result['code'] = 2
-            result['res_msg'] = u'图形验证码输入错误！'
-            result.update(generateCap())
-        else:
+        try:
+            with transaction.atomic():
+                translist = charge_money(user, '1', withdraw_amount, u'提现')
+                event = WithdrawLog.objects.create(user=user, amount=withdraw_amount, audit_state='1')
+                result['code'] = 0
             try:
-                with transaction.atomic():
-                    translist = charge_money(user, '1', withdraw_amount, u'提现')
-                    event = WithdrawLog.objects.create(user=user, amount=withdraw_amount, audit_state='1')
-                    result['code'] = 0
-                try:
-                    sendWeixinNotify.delay([(request.user, event),], 'withdraw_apply')
-                except Exception, e:
-                    logger.error(e)
-            except:
-                result['code'] = -2
-                result['res_msg'] = u'提现失败！'
+                sendWeixinNotify.delay([(request.user, event),], 'withdraw_apply')
+            except Exception, e:
+                logger.error(e)
+        except:
+            result['code'] = -2
+            result['res_msg'] = u'提现失败！'
         return JsonResponse(result)
 
 

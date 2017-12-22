@@ -1,0 +1,143 @@
+{% load staticfiles %}
+{% load myfilter %}
+<!DOCTYPE html>
+<html>
+
+    <head lang="en">
+        <meta charset="UTF-8">
+        <!-- 优先使用 IE 最新版本和 Chrome -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <!-- 为移动设备添加 viewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+        <!-- 添加到主屏后的标题（iOS 6 新增） -->
+        <meta name="apple-mobile-web-app-title" content="">
+        <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <!-- 设置苹果工具栏颜色 -->
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <!-- 添加智能 App 广告条 Smart App Banner（iOS 6+ Safari） -->
+        <meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">
+        <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+        <meta name="format-detection" content="telphone=no" />
+        <!--下面三个是清除缓存 微信浏览器缓存严重又无刷新；这个方法调试的时候很方便-->
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Cache-Control" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        <title></title>
+        <link href="{% static 'css/mui.min.css' %}" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/m_common.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/m_account_withdraw.css' %}" />
+
+    </head>
+
+    <body>
+        <header id="header" class="mui-bar mui-bar-nav">
+            <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+            <h1 class="mui-title">提现</h1>
+        </header>
+        <div class="mui-content">
+            <!--帐号部分-->
+            <div id="bank_card" class="zhanghu">
+                <div class="msg clearfix">
+          {%if card.bank %}
+                       <img src="/static/images/{{card.bank}}.png" />
+          {%endif%}
+                    <div class="text">
+                        {%if card %}
+                            <p><span>{{card.get_bank_display}}</span><br />
+                            <span><a>{{card.card_number}}</a></span></p>
+                        {%else%}
+                            <p><span>请点此绑定银行卡，并刷新该页面</span></p>
+                        {%endif%}
+                    </div>
+                </div>
+
+            </div>
+            <!--提现部分-->
+            <form class="mui-input-group">
+            {% csrf_token %}
+                <div class="mui-input-row">
+                    <label></label>
+                    <input id="with_amount" autofocus="autofocus" type="text" class="mui-input-clear" placeholder="请输入提现福币个数">
+                </div>
+            </form>
+            <p>
+                <span>可提现金额：<number>{{user.balance}}</number></span>
+                <span>最低提现10元</span>
+            </p>
+            <button id="Btn" type="button" class="mui-btn mui-btn-blue mui-btn-block">确认提现</button>
+
+            <div id="sheet1" class="mui-popover mui-popover-bottom mui-popover-action ">
+                <!-- 可选择菜单 -->
+                <ul class="mui-table-view">
+                  <li class="mui-table-view-cell">
+                    {%if card %}
+                                <a href="{% url 'change_bankcard' %}">更换银行卡</a>
+                            {%else%}
+                                <a href="{% url 'bind_bankcard' %}">绑定银行卡</a>
+                            {%endif%}
+                  </li>
+                </ul>
+                <!-- 取消菜单 -->
+                <ul class="mui-table-view">
+                  <li class="mui-table-view-cell">
+                    <a href="#sheet1"><b>取消</b></a>
+                  </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <script src="{% static 'js/mui.min.js' %}"></script>
+        <!--弹窗部分-->
+        <script type="text/javascript" charset="utf-8">
+            mui.init({
+                swipeBack: true //启用右滑关闭功能
+            });
+            var withdraw_url = "{%url 'account_withdraw' %}";
+            document.getElementById("Btn").addEventListener('tap', function() {
+                var amount = document.getElementById("with_amount").value;
+                amount = parseInt(amount);
+                if (isNaN(amount)){
+                    mui.alert('提现数量必须为整数！');
+                    return;
+                }
+                if (isNaN(amount) || (amount<10)) {
+                    mui.alert('提现金额应为大于等于为10的整数！');
+                    return;
+                }
+                var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+                var btnArray = ['否', '是'];
+                var confirm_str = "您提现的金额为人民币" + amount + "元，确认？"
+                mui.confirm(confirm_str, '提现确认', btnArray, function(e) {
+                    if (e.index == 1) {
+                        mui.ajax({
+                            url: withdraw_url,
+                            dataType:"json",
+                            type:'POST',
+                            data : {
+                                amount: amount,
+                                csrfmiddlewaretoken:csrfmiddlewaretoken
+                            },
+                            success:function(ret){
+                                if (ret.code == 0) {
+                                    mui.alert('申请提现成功');
+                                } else {
+                                    mui.alert(ret.res_msg);
+                                }
+                            },
+                            error:function(){
+                                alert("请检查网络连接");
+                            }
+                        });
+                    }
+                })
+            });
+            document.getElementById("bank_card").addEventListener('tap', function() {
+                mui('#sheet1').popover('toggle');
+            });
+
+        </script>
+    </body>
+
+</html>

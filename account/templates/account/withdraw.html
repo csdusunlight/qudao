@@ -126,26 +126,26 @@ function isadd(obj) {        //是否主页显示调用函数
 $(function(){
 	$('.back-a9').toggleClass("on");
 	$("#submit").click(function(){
-		varicode = $("#input_varicode").val();
+//		varicode = $("#input_varicode").val();
 		amount = $("#withdraw_amount").val();
-		amount = parseFloat(amount,0)
+		amount = parseFloat(amount,0);
 		if (isNaN(amount) || (amount<10)){
 			alert("提现金额最小为10元！");
 			return;
 		}
-		if (!varicode){
-			alert("验证码不能为空");
-			return;
-		}
+//		if (!varicode){
+//			alert("验证码不能为空");
+//			return;
+//		}
 		$("#rmb_with").text(amount)
 //		$(".popup1").css("display","block");
         $('.popup.m-withdraw').addClass('in');
 	});
     $('#edit_confirm').click(function(){
     	$(".popup1").hide();
-    	varicode = $("#input_varicode").val();
+//  	varicode = $("#input_varicode").val();
 		amount = $("#withdraw_amount").val();
-		hashkey = $("#id_hashkey").val();
+//		hashkey = $("#id_hashkey").val();
 		var post_url = "{%url 'account_withdraw' %}";
 		$.ajax({
 			url: post_url,
@@ -153,8 +153,8 @@ $(function(){
 			type:'POST',
 			data : {
 				'amount': amount,
-				'varicode': varicode,
-				'hashkey':hashkey,
+//				'varicode': varicode,
+//				'hashkey':hashkey,
 			},
 			success:function(ret){
 				if(ret.code==0){
@@ -163,13 +163,13 @@ $(function(){
 					window.location.href = "{% url 'account_money' %}";
 				}
 				else {
-					new_cptch_key = ret['key'];
-			        new_cptch_image = ret['image_url'];
-					key = $("#id_hashkey");
-			        img = $("#id_checkImg");
-			        key.attr("value", new_cptch_key);
-			        img.attr("src", new_cptch_image);
-					alert(ret.res_msg);
+//					new_cptch_key = ret['key'];
+//			        new_cptch_image = ret['image_url'];
+//					key = $("#id_hashkey");
+//			        img = $("#id_checkImg");
+//			        key.attr("value", new_cptch_key);
+//			        img.attr("src", new_cptch_image);
+//					alert(ret.res_msg);
 				}
 			},
 			error:function(){
@@ -254,7 +254,7 @@ $(function(){
                                     {%endif%}
                                 </div>
 
-                                <div class="Cash-input2">
+                                <!--<div class="Cash-input2">
                                 	<span>验证码：</span>
                                     <input id="input_varicode" type="text" />
                                     <div class="info-con">
@@ -263,7 +263,7 @@ $(function(){
        									<input id="id_hashkey" name="hashkey" type="hidden" value="{{ hashkey }}">
                                     	</div>
                                     </div>
-                                </div>
+                                </div>-->
                                 <input id="submit" type="submit" value="确  定" />
 
                         </div>

@@ -111,7 +111,7 @@
 		mui.ajax({
 			url: "{% url 'bind_bankcard' %}",
 			dataType:"json",
-			type:'POST',
+			type:'get',
 			data : {
               bank: bank,
               subbranch: subbranch,
@@ -121,7 +121,7 @@
             },
 			success:function(ret){
 			    if (ret.code == 0) {
-			        mui.alert(ret.res_msg,callback=function(){
+			        mui.alert('绑定成功',callback=function(){
 			        	window.history.back();
 			        	return;
 			        });

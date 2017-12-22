@@ -14,12 +14,15 @@
 				position: absolute;
 				left: 5px;
 			}
-			.add{
-				color: RGB(248,90,89);
+			
+			.add {
+				color: RGB(248, 90, 89);
 			}
-			.reduce{
-				color: RGB(234,240,254)
+			
+			.reduce {
+				color: RGB(234, 240, 254)
 			}
+			
 			.mui-pull-bottom-wrapper {
 				padding-top: 0.5rem;
 				text-align: center;
@@ -34,111 +37,92 @@
 			<!--<img src="{% static 'images/icon_03.jpg' %}" class="header_icon" />
 			<span class="header_audit">全部</span>-->
 		</header>
-		<div class="mui-content">
-			<div id="finance_slider" class="mui-slider mui-fullscreen" style="top: 0;">
-				<div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-				</div>
-				<div class="mui-slider-group">
-					<div id="item1" class="mui-slider-item mui-control-content mui-active">
-						<div id="scroll1" class="mui-scroll-wrapper">
-							<div class="mui-scroll">
-								<ul class="mui-table-view">
-									<!--<li class="mui-table-view-cell">
-								    	<span class="pro_name">项目名称</span>
-								    	<span class="pro_add pro_reduice">-1000.00</span>
-								    	<p class="pro_time">2017-10-10</p>
-								    	<span class="pro_num">200000</span>
-								    </li>-->
-								</ul>
-							</div>
-						</div>
-					</div>
-
-				</div>
+		<div id="pullrefresh" class="mui-scroll-wrapper" style="top:32px;">
+			<div class="mui-content">
+				<ul class="mui-table-view">
+					
+				</ul>
 			</div>
 		</div>
 
 		<script src="{% static 'js/mui.min.js' %}"></script>
-		<script src="{%static 'js/mui.pullToRefresh.js'%}"></script>
-		<script src="{%static 'js/mui.pullToRefresh.material.js'%}"></script>
+		<!--<script src="{%static 'js/mui.pullToRefresh.js'%}"></script>
+		<script src="{%static 'js/mui.pullToRefresh.material.js'%}"></script>-->
 		<script type="text/javascript">
-			mui.init();
-			(function($) {
-				//阻尼系数
-				var deceleration = mui.os.ios ? 0.003 : 0.0009;
-				$('.mui-scroll-wrapper').scroll({
-					bounce: true,
-					indicators: true, //是否显示滚动条
-					deceleration: deceleration
-				});
-				$.ready(function() {
-					//循环初始化所有上拉加载
-					$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
-						var count = 1;
-						$(pullRefreshEl).pullToRefresh({
-							up: {
-								auto: true,
-								callback: function() {
-									var self = this;
-									var ul = self.element.querySelector('.mui-table-view');
-									getList(this, ul, count++, index);
-
-								}
-							}
-						});
-					});
-				});
-				function getList(obj, ul, n, index) {
-						var url = '/restapi/translist/?user_mobile={{user.mobile}}';
-						mui.ajax(url, {
-							data: {
-								page: n,
-								pageSize: 12,
-							},
-							dataType: 'json', //服务器返回json格式数据
-							type: 'get', //HTTP请求类型
-							timeout: 3000, //超时时间设置为10秒；
-							success: function(data) {
-								console.log("这是data：", data.results);
-								if(!data.results.length) {
-									obj.endPullUpToRefresh(true);
-								} else {
-									obj.endPullUpToRefresh(false); //参数为true代表没有更多数据了。
-									var table = document.body.querySelector('.mui-table-view');
-									for(var i in data.results) {
-										//截取字符串
-										var Time = data.results[i].time.split("T");
-										console.log('transType值:', data.results[i].transType);
-										var transType = data.results[i].transType;
-										var li = document.createElement('li');
-										li.className = 'mui-table-view-cell';
-										str_html = '<span class=" pro_name">' + data.results[i].reason + '</span>' +
-											'<span data-isAdd="+ data.results[i].transType +" class="pro_add">' + (transType==0 ? '+' + data.results[i].transAmount : '-' + data.results[i].transAmount) +'</span>' +
-											'<p class="pro_time">' + Time[0] + '</p>' +
-											'<span  class="pro_num">' + data.results[i].user_balance + '</span>';
-
-										console.log(mui(".pro_add").data);
-										if (mui(".pro_add").transType==0) {
-											mui(".pro_add").classList.add("add");
-										} else if(mui(".pro_add").transType==1){
-											mui(".pro_add").classList.add("reduce");
-										}
-										
-										li.innerHTML = str_html;
-										ul.appendChild(li);
-									}
-
-								}
-							},
-							error: function(xhr, type, errorThrown) {
-								console.log("没有数据")
-								//没有更多数据
-								obj.endPullUpToRefresh(true);
-							}
-						});
+			var url = '/restapi/translist/?user_mobile={{user.mobile}}';
+			mui.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					up: {
+						auto: true,
+						contentrefresh: '正在加载...',
+						contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
+						callback: pullupRefresh
 					}
+				},
+				swipeBack: true //启用右滑关闭功能
+			});
 
-			})(mui);
+			//上拉加载
+			var count = 0;
+
+			function getList(n) {
+				mui.ajax(url, {
+					data: {
+						count: n,
+						type: 3,
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'get', //HTTP请求类型
+					timeout: 10000, //超时时间设置为10秒；
+					// 				    headers:{'Content-Type':'application/json'},
+					success: function(data) {
+						console.log("data数据：", data.results);
+						if(!data.results.length) {
+							mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+						} else {
+							mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
+							var table = document.querySelector(".mui-table-view");
+							for(var i in data.results) {
+								console.log("------------时间：",data.results[i].time)
+								var Time = data.results[i].time.split("T");//截取到年月日
+								console.log(Time);
+								console.log(Time[1]);
+								var T2 = Time[1].substring(0,5);//截取分钟
+								console.log(T2);
+								console.log('transType值:', data.results[i].transType);
+								var transType = data.results[i].transType;
+								var li = document.createElement("li");
+								li.className = "mui-table-view-cell";
+								str_html = '<span class=" pro_name">' + data.results[i].reason + '</span>' +
+									'<span data-isAdd="+ data.results[i].transType +" class="pro_add">' + (transType == 0 ? '+' + data.results[i].transAmount : '-' + data.results[i].transAmount) + '</span>' +
+									'<p class="pro_time">' + Time[0]+'&nbsp;'+ T2 +'</p>' +
+									'<span  class="pro_num">' + data.results[i].user_balance + '</span>';
+									
+									if(mui(".pro_add").transType == 0) {
+										mui(".pro_add").classList.add("add");
+									} else if(mui(".pro_add").transType == 1) {
+										mui(".pro_add").classList.add("reduce");
+									}
+									li.innerHTML = str_html;
+									table.appendChild(li);
+							}
+ 
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						console.log(xhr.responseText);
+					}
+				});
+			}
+
+			function pullupRefresh() {
+				if(count == 0) {
+					mui('#pullrefresh').pullRefresh().scrollTo(0, 0);
+				}
+				getList(count++);
+			}
+
 		</script>
 	</body>
 

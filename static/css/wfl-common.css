@@ -362,9 +362,9 @@ input[type="text"],select {
 /*footer部分*/
 .footer {
     width: 100%;
-    height: 100px;
+    height: 144px;
     margin-top: 40px;
-    text-align: center;
+    /*text-align: center;*/
     background-color: #1e1e1e;
     color: #fff;
 }
@@ -388,11 +388,24 @@ input[type="text"],select {
     padding: 30px 10px;
     height: 100px;
     background-color: #1e1e1e;
+   /*background: lawngreen;*/
 }
 .footer-left,
 .footer-middle,
 .footer-right {
     line-height: 40px;
+}
+.footer-btm{
+	display: inline-block;	
+}
+.QrBox{
+	position: absolute;right: 0;top: -5px;
+	width: 116px;
+	height: 116px;
+	/*background: lavender;*/
+}
+.QrBox >p{
+	position: absolute;bottom: -5px;
 }
 /*.footer {
     width: 100%;

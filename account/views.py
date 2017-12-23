@@ -345,14 +345,22 @@ def phoneImageV(request):
             result['message'] = u'该手机号码已申请！'
             result.update(generateCap())
             return JsonResponse(result)
-    elif action=='forgot_passwd':
+    elif action=='forgot_passwd' or 'reset_password':
         hashkey = request.GET.get('hashkey', None)
         response = request.GET.get('response', None)
-        if not (phone and hashkey and response):
-            raise Http404
+        if not (phone and hashkey):
+            return JsonResponse(result)
         ret = imageV(hashkey, response)
         if ret != 0:
+            result['code'] = 1
             result['message'] = u'图形验证码输入错误！'
+            result.update(generateCap())
+            return JsonResponse(result)
+        users = MyUser.objects.filter(mobile=phone)
+        if not users.exists():
+            result['code'] = 1
+            result['message'] = u'该手机号码尚未注册！'
+            result.update(generateCap())
             return JsonResponse(result)
     elif action=="change_bankcard":
         if not request.user.is_authenticated():

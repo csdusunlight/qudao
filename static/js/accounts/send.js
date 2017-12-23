@@ -33,7 +33,7 @@ $(function() {
 				dataType : 'json',
 				timeout : 3000,
 				success : function(data) {
-					if (data.code == '1') {
+					if (data.code == '0') {
 						alert('验证码发送成功！');
 						settime($('#action-send-code-imagvalidate')[0]);
 					} else {

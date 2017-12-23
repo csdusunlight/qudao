@@ -81,13 +81,13 @@
 					type:'POST',
 					timeout : 3000,
 					success : function(ret) {
-						mui.alert('重置成功',callback=function(){
-							if (ret.code==0){
-								window.history.back();
-							}else{
-                                mui.alert(ret.res_msg);
-                            }
-						});
+						if (ret.code==0){
+						    mui.alert('重置成功',callback=function(){
+						        window.history.back();
+						    })
+						}else{
+                            mui.alert(ret.res_msg);
+                        }
 					},
 					error:function(xhr,type,errorThrown){
 						mui.alert(type);

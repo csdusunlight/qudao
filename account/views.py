@@ -354,6 +354,12 @@ def phoneImageV(request):
         if ret != 0:
             result['message'] = u'图形验证码输入错误！'
             return JsonResponse(result)
+    elif action=="change_bankcard":
+        if not request.user.is_authenticated():
+            result['code'] = 1
+            result['message'] = u"尚未登录"
+            return JsonResponse(result)
+        phone = request.user.mobile
     stamp = str(phone)
     lasttime = request.session.get(stamp, None)
     now = int(ttime.time())

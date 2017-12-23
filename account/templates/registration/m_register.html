@@ -167,9 +167,9 @@
 			}
 
 			
-			var phone = document.getElementById("phone").value;
 
 			function sendCode(thisBtn) {
+			  var phone = document.getElementById("phone").value;
 				var url = "{% url 'phoneImageV' %}";
 				console.log(url);
 

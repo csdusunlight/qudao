@@ -184,7 +184,7 @@
 					timeout: 10000, //超时时间设置为10秒；
 					success: function(data) {
 						console.log(data)
-						if(data.code == "1") {
+						if(data.code == "0") {
 							mui.alert("验证码发送成功");
 							settime(document.getElementById("setBtn"));
 						} else {

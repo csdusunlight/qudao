@@ -5,8 +5,16 @@
 /*帐号部分*/
 .zhanghu {
 	padding: 2rem 0 1rem;
-	background: #008fd7;
+	background: #91C11D;
 	box-shadow: 0 1px 3px #e4e4e4;
+}
+#Btn {
+    background-color: #91C11D;
+    border-color: #91C11D;
+}
+#Btn:active {
+    background-color: #79a11a;
+    border-color: #79a11a;
 }
 .msg img {
 	float: left;

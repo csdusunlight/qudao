@@ -149,17 +149,16 @@
 					success : function(data) {
 						if (data.code != 0) {
 							console.log(data.message);
+							mui.alert(data.message);
 							var new_cptch_key = data.key;
 					        var new_cptch_image = data.image_url;
 					        key = document.getElementById("id_hashkey");
 							img = document.getElementById("id_checkImg");
 							key.value = new_cptch_key;
 							img.src = new_cptch_image;
-						} else if (data.code == 1){
+						} else if (data.code == 0){
 							countdown = 0;
-							mui.alert(data.message);
-						} else {
-						    mui.alert(data.message);
+							mui.alert('发送成功');
 						}
 					},
 					error:function(xhr,type,errorThrown){

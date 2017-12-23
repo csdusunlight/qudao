@@ -155,9 +155,11 @@
 							img = document.getElementById("id_checkImg");
 							key.value = new_cptch_key;
 							img.src = new_cptch_image;
-						}
-						if (data.code == 1){
+						} else if (data.code == 1){
 							countdown = 0;
+							mui.alert(data.message);
+						} else {
+						    mui.alert(data.message);
 						}
 					},
 					error:function(xhr,type,errorThrown){

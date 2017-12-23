@@ -63,7 +63,9 @@
 .mui-input-row label {
 	height: 95px;
 	width: 95px;
-	background: url(../images/fubi.png) center center/60% auto no-repeat;
+	font-size: 60px;
+	line-height: 95px;
+	/*background: url(../images/fubi.png) center center/60% auto no-repeat;*/
 }
 .mui-input-row input {
 	height: 8rem !important;

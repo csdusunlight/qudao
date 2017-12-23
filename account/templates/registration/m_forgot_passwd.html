@@ -148,6 +148,7 @@
 					timeout : 3000,
 					success : function(data) {
 						if (data.code != 0) {
+						    countdown = 0;
 							console.log(data.message);
 							mui.alert(data.message);
 							var new_cptch_key = data.key;
@@ -157,7 +158,6 @@
 							key.value = new_cptch_key;
 							img.src = new_cptch_image;
 						} else if (data.code == 0){
-							countdown = 0;
 							mui.alert('发送成功');
 						}
 					},

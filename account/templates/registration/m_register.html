@@ -143,7 +143,7 @@
 				</table>
 			</form>
 		</div>
-
+    {% include "m_footer.html" %}
 		<script src="{% static 'js/mui.min.js' %}"></script>
 		<script type="text/javascript">
 			mui.init()
@@ -167,9 +167,9 @@
 			}
 
 			
-			var phone = document.getElementById("phone").value;
 
 			function sendCode(thisBtn) {
+			  var phone = document.getElementById("phone").value;
 				var url = "{% url 'phoneImageV' %}";
 				console.log(url);
 
@@ -184,7 +184,7 @@
 					timeout: 10000, //超时时间设置为10秒；
 					success: function(data) {
 						console.log(data)
-						if(data.code == "1") {
+						if(data.code == "0") {
 							mui.alert("验证码发送成功");
 							settime(document.getElementById("setBtn"));
 						} else {
@@ -233,9 +233,9 @@
 						"qq_number": qq,
 						"qq_name": qqName,
 						"profile": introduce,
-//						"checkNum": checkNum,
+						"checkNum": checkNum,
 						"password": pwd,
-//						"phone": phone,
+						"phone": phone,
 					},
 					dataType: 'json', //服务器返回json格式数据
 					type: 'post', //HTTP请求类型

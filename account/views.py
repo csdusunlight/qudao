@@ -328,7 +328,7 @@ def phoneImageV(request):
     if not request.is_ajax():
         raise Http404
     action = request.GET.get('action', None)
-    result = {'code':'0', 'message':'hi!'}
+    result = {'code':'2',}
     phone = request.GET.get('phone', None)
     if action=='register':
 #         hashkey = request.GET.get('hashkey', None)
@@ -382,7 +382,8 @@ def phoneImageV(request):
     ret = sendmsg_bydhst(phone)
     if ret:
         logger.info('Varifing code has been send to:' + phone)
-        result['code'] = '1'
+        result['code'] = 0
+        result['message'] = u"发送验证码成功！"
         MobileCode.objects.create(mobile=phone,rand_code=ret,remote_ip=remote_ip)
         request.session[stamp] = now
     else:

@@ -81,7 +81,7 @@
 					type:'POST',
 					timeout : 3000,
 					success : function(ret) {
-						mui.alert(ret.msg,callback=function(){
+						mui.alert('重置成功',callback=function(){
 							if (ret.code==0){
 								window.history.back();
 							}else{

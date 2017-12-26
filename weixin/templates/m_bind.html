@@ -65,7 +65,9 @@
 					timeout : 3000,
 					success : function(data) {
 						if (data.code == '0') {
-							window.location.href = data.url;
+							mui.alert("绑定成功！",callback=function(){
+								window.location.href = data.url;
+							});
 						}
 						else {
 							mui.alert(data.msg);

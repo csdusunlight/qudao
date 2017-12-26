@@ -325,8 +325,8 @@ def callbackby189(request):
     return JsonResponse(result)
 
 def phoneImageV(request):
-    if not request.is_ajax():
-        raise Http404
+#     if not request.is_ajax():
+#         raise Http404
     action = request.GET.get('action', None)
     result = {'code':'2',}
     phone = request.GET.get('phone', None)
@@ -345,7 +345,7 @@ def phoneImageV(request):
             result['message'] = u'该手机号码已申请！'
             result.update(generateCap())
             return JsonResponse(result)
-    elif action=='forgot_passwd' or 'reset_password':
+    elif action=='forgot_passwd' or action=='reset_password':
         hashkey = request.GET.get('hashkey', None)
         response = request.GET.get('response', None)
         if not (phone and hashkey):

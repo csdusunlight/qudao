@@ -28,6 +28,9 @@
 .head__link {
     display: block;
 }
+.head__item:hover {
+    color: #ffbe00;
+}
 .head__item:active {
     background-color: #e7e7e7;
 } 

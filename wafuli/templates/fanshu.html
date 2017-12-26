@@ -13,9 +13,13 @@
     <body>
         {% include "header.html" %}
         <div class="head__box">
-            <h1 class="head__title">创新制作：番薯主页</h1>
+            <h1 class="head__title">创新之作：番薯主页</h1>
             <ul class="head__itembox">
+                {% if not user.is_authenticated %}
+                <li class="head__item"><a target="_blank" class="head__link" href="/account/login/?next=/fanshu/">去使用</a></li>
+                {% else %}
                 <li class="head__item"><a target="_blank" class="head__link" href="http://{{user.domain_name}}.51fanshu.com">去使用</a></li>
+                {% endif %}
                 <li class="head__item"><a target="_blank" class="head__link" href="{% url 'user_guide'  %}">使用方法</a></li>
                 <li class="head__item"><a target="_blank" class="head__link" href="http://feel.51fanshu.com/">电脑端预览</a></li>
                 <li class="head__item m-mobile" >

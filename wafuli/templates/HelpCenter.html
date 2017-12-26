@@ -164,5 +164,11 @@
          <div style="clear:both"></div>
 		<!--底部-->
 		 {% include "footer.html" %}
+		 <script src="/static/js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('.nav__item:eq(3)').addClass('active');
+            });
+        </script>
 	</body>
 </html>

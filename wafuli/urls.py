@@ -24,4 +24,5 @@ urlpatterns = [
 #     url(r'^activity_rank/$', 'wafuli.views.activity_rank', name='activity_rank'),
     url(r'^cooperate/$',TemplateView.as_view(template_name='cooperation.html'), name='cooperate'), 
     url(r'^helpCenter/$',TemplateView.as_view(template_name='HelpCenter.html'), name='helpCenter'),
+    url(r'^fanshu/$',TemplateView.as_view(template_name='fanshu.html'), name='fanshu'),
 ]

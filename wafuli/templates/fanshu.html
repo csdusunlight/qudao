@@ -1,0 +1,112 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>挖福利-专业的互联网福利体验平台！</title>
+        <meta name="keywords" content="挖福利，我要挖福利，p2p理财平台，p2p投资理财，p2p投资理财平台，小额投资理财，个人投资理财，互联网理财产品，互联网理财平台，互联网金融平台，互联网金融产品，网络理财产品，网赚" />
+        <meta name="description" content="挖福利从用户角度出发，致力于对整合对用户有价值的互联网福利产品，打造全国首家专业的互联网福利产品体验平台。" />
+        <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/wfl-common.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/fanshu.css"/>
+    </head>
+    <body>
+        {% include "header.html" %}
+        <div class="head__box">
+            <h1 class="head__title">创新制作：番薯主页</h1>
+            <ul class="head__itembox">
+                <li class="head__item"><a target="_blank" class="head__link" href="http://{{user.domain_name}}.51fanshu.com">去使用</a></li>
+                <li class="head__item"><a target="_blank" class="head__link" href="{% url 'user_guide'  %}">使用方法</a></li>
+                <li class="head__item"><a target="_blank" class="head__link" href="http://feel.51fanshu.com/">电脑端预览</a></li>
+                <li class="head__item m-mobile" >
+                    <a class="head__link m-mobile">手机端预览</a>
+                    <div class="head__ewm"></div>
+                </li>
+            </ul>
+        </div>
+        <div>
+            <div class="wfl-wrap">
+                <h2 class="wrap__title">个性功能</h2>
+                <ul class="function">
+                	<li class="fun__item">
+                	    <div class="fun__icon"></div>
+                	    <p class="fun__txt">免费网站<br />帮助打造个人品牌</p>
+                	</li>
+                	<li class="fun__item">
+                	    <div class="fun__icon"></div>
+                        <p class="fun__txt">个性化设置<br />多种背景皮肤可选</p>
+                    </li>
+                	<li class="fun__item">
+                	    <div class="fun__icon"></div>
+                        <p class="fun__txt">清单、价格、攻略、<br />预约、交单、一网打尽</p>
+                    </li>
+                	<li class="fun__item">
+                	    <div class="fun__icon"></div>
+                        <p class="fun__txt">优质直签项目<br />大量价格美丽的一手项目</p>
+                    </li>
+                	<li class="fun__item">
+                	    <div class="fun__icon"></div>
+                        <p class="fun__txt">修改实时生效<br />数据云端同步</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div style="background-color: #91C11D;">
+            <div class="wfl-wrap">
+                <h2 class="wrap__title m-brand">品牌特点</h2>
+                <ul class="brand">
+                    <li class="brand__item">
+                        <div class="brand__icon"></div>
+                        <p class="brand__txt">三年深耕<br />行业领先</p>
+                    </li>
+                    <li class="brand__item">
+                        <div class="brand__icon"></div>
+                        <p class="brand__txt">隔天结算<br />当天到账</p>
+                    </li>
+                    <li class="brand__item">
+                        <div class="brand__icon"></div>
+                        <p class="brand__txt">一手资源<br />优势价格</p>
+                    </li>
+                    <li class="brand__item">
+                        <div class="brand__icon"></div>
+                        <p class="brand__txt">专业团队<br />全天服务</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <div class="wfl-wrap">
+                <h2 class="wrap__title">特色栏目</h2>
+                <ul class="column">
+                    <li class="column__item">
+                        <div class="column__icon"></div>
+                        <p class="column__txt">移动端发展</p>
+                    </li>
+                    <li class="column__item">
+                        <div class="column__icon">敬请<br />期待</div>
+                        <p class="column__txt">渠道扩展</p>
+                    </li>
+                    <li class="column__item">
+                        <div class="column__icon">敬请<br />期待</div>
+                        <p class="column__txt">CMS发展</p>
+                    </li>
+                    <li class="column__item">
+                        <div class="column__icon">敬请<br />期待</div>
+                        <p class="column__txt">内容发展</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        
+        {% include "footer.html" %}
+
+        <script src="/static/js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('.nav__item:eq(2)').addClass('active');
+            });
+        </script>
+
+    </body>
+</html>

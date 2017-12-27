@@ -7,6 +7,7 @@ from account.models import MyUser, ApplyLog
 from .models import WeiXinUser
 from django.views.decorators.csrf import csrf_exempt
 from wafuli_admin.models import Dict
+from dragon.settings import APPID
 logger = logging.getLogger('wafuli')
 from account.varify import httpconn, verifymobilecode
 from django.conf import settings
@@ -162,8 +163,8 @@ def autoreply(request):
         user = WeiXinUser.objects.filter(openid=openid).first()
         if user is None:
             content = '''您好,欢迎来到福利联盟微信公众号!
-请先<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd810195ad465b0d0&redirect_uri=http%3A%2F%2Ftest.fuliunion.com%2Fweixin%2Fbind-user%2F&response_type=code&scope=snsapi_userinfo">绑定福利联盟账号</a>，您将收到实时的交单、提现、审核等消息通知。
-您也可以<a href="http://test.fuliunion.com/project_all">查看项目清单</a>。'''
+请先<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2Ftest.fuliunion.com%2Fweixin%2Fbind-user%2F&response_type=code&scope=snsapi_userinfo">绑定福利联盟账号</a>，您将收到实时的交单、提现、审核等消息通知。
+您也可以<a href="http://test.fuliunion.com/project_all">查看项目清单</a>。'''.format(appid=APPID)
             replyMsg = TextMsg(toUser, fromUser, content)
             return replyMsg.send()
         if msg_type == 'text':

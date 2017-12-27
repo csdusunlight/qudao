@@ -165,7 +165,7 @@ def autoreply(request):
             prolist = list(Project.objects.filter(is_official=True, title__contains=message))
             for pro in prolist:
                 content += '\n' if content else ''
-                content += pro.title + '：' + pro.strategy
+                content += pro.title + u'：' + pro.strategy
                 if weixin_user:
                     userlevel = weixin_user.user.level
                     price = getattr(pro, 'price' + userlevel)

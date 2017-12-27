@@ -33,6 +33,7 @@ def weixin(request):
             raise Http404
     else:
         othercontent = autoreply(request)
+        logger.error(othercontent)
         return HttpResponse(othercontent)
 
 def bind_user(request):

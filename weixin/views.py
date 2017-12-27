@@ -7,7 +7,9 @@ from account.models import MyUser, ApplyLog
 from .models import WeiXinUser
 from django.views.decorators.csrf import csrf_exempt
 from wafuli_admin.models import Dict
-from dragon.settings import APPID
+from dragon.settings import APPID, FULIUNION_DOMAIN
+from django.core.urlresolvers import reverse
+from wafuli.models import Project, SubscribeShip
 logger = logging.getLogger('wafuli')
 from account.varify import httpconn, verifymobilecode
 from django.conf import settings
@@ -153,48 +155,34 @@ def autoreply(request):
         ToUserName = xmlData.find('ToUserName').text
         FromUserName = xmlData.find('FromUserName').text
         CreateTime = xmlData.find('CreateTime').text
-        MsgType = xmlData.find('MsgType').text
-        MsgId = xmlData.find('MsgId').text
+        message = xmlData.find('MsgId').text
 
         toUser = FromUserName
         fromUser = ToUserName
-        
         openid = toUser
-        user = WeiXinUser.objects.filter(openid=openid).first()
-        if user is None:
-            content = '''您好,欢迎来到福利联盟微信公众号!
+        weixin_user = WeiXinUser.objects.filter(openid=openid).first()
+        content = ''
+        if msg_type == 'text':
+            prolist = list(Project.objects.filter(is_official=True, title__contains=message))
+            for pro in prolist:
+                content += '\n' if content else ''
+                content += pro.title + '：' + pro.strategy
+            if weixin_user:
+                userlevel = weixin_user.user.level
+                price = getattr(pro, 'price' + userlevel)
+                content += ' ' + price
+        if content == '':
+            project_repo_url = 'http://' + FULIUNION_DOMAIN + reverse('project_all')
+            content = '项目清单：' + project_repo_url
+            if weixin_user is None:
+                content = '''您好,欢迎来到福利联盟微信公众号!
 请先<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2Ftest.fuliunion.com%2Fweixin%2Fbind-user%2F&response_type=code&scope=snsapi_userinfo">绑定福利联盟账号</a>，您将收到实时的交单、提现、审核等消息通知。
 您也可以<a href="http://test.fuliunion.com/project_all">查看项目清单</a>。'''.format(appid=APPID)
-            replyMsg = TextMsg(toUser, fromUser, content)
-            return replyMsg.send()
-        if msg_type == 'text':
-            replyMsg = TextMsg(toUser, fromUser, content)
-            return replyMsg.send()
-        elif msg_type == 'image':
-            content = "图片已收到,谢谢"
-            replyMsg = TextMsg(toUser, fromUser, content)
-            return replyMsg.send()
-        elif msg_type == 'voice':
-            content = "语音已收到,谢谢"
-            replyMsg = TextMsg(toUser, fromUser, content)
-            return replyMsg.send()
-        elif msg_type == 'video':
-            content = "视频已收到,谢谢"
-            replyMsg = TextMsg(toUser, fromUser, content)
-            return replyMsg.send()
-        elif msg_type == 'shortvideo':
-            content = "小视频已收到,谢谢"
-            replyMsg = TextMsg(toUser, fromUser, content)
-            return replyMsg.send()
-        elif msg_type == 'location':
-            content = "位置已收到,谢谢"
-            replyMsg = TextMsg(toUser, fromUser, content)
-            return replyMsg.send()
-        else:
-            msg_type == 'link'
-            content = "链接已收到,谢谢"
-            replyMsg = TextMsg(toUser, fromUser, content)
-            return replyMsg.send()
+            else:
+               project_repo_url = 'http://' + FULIUNION_DOMAIN + reverse('project_all')
+               content = '项目清单：' + project_repo_url
+        replyMsg = TextMsg(toUser, fromUser, content)
+        return replyMsg.send()
 
     except Exception, Argment:
         return Argment

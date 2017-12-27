@@ -33,7 +33,6 @@ def weixin(request):
             raise Http404
     else:
         othercontent = autoreply(request)
-        logger.error(othercontent)
         return HttpResponse(othercontent)
 
 def bind_user(request):
@@ -176,7 +175,7 @@ def autoreply(request):
             project_repo_url = 'http://' + FULIUNION_DOMAIN + reverse('project_all')
             if weixin_user is None:
                 content = '''您好,欢迎来到福利联盟微信公众号!
-请先<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2Ftest.fuliunion.com%2Fweixin%2Fbind-user%2F&response_type=code&scope=snsapi_userinfo">绑定福利联盟账号</a>，您将收到实时的交单、提现、审核等消息通知。
+请先<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx76aa03447c27f99d&redirect_uri=http%3A%2F%2Ftest.fuliunion.com%2Fweixin%2Fbind-user%2F%3Fto_url%3Daccount_index&response_type=code&scope=snsapi_userinfo">绑定福利联盟账号</a>，您将收到实时的交单、提现、审核等消息通知。
 您也可以<a href="http://test.fuliunion.com/project_all">查看项目清单</a>。'''.format(appid=APPID)
             else:
                project_repo_url = 'http://' + FULIUNION_DOMAIN + reverse('project_all')

@@ -179,7 +179,7 @@ def autoreply(request):
 您也可以<a href="http://test.fuliunion.com/project_all">查看项目清单</a>。'''.format(appid=APPID)
             else:
                project_repo_url = 'http://' + FULIUNION_DOMAIN + reverse('project_all')
-               content = '项目清单：' + project_repo_url
+               content = '项目清单：' + project_repo_url.encode('utf-8')
     except Exception, e:
         logger.error(e)
         content = "公众号繁忙，请稍后再试"

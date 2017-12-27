@@ -14,19 +14,23 @@ from django.contrib.auth import login as auth_login
 
 @csrf_exempt
 def weixin(request):
-    token = '1hblsqTsdfsdfsd'
-    timestamp = str(request.GET.get('timestamp'))
-    nonce = str(request.GET.get('nonce'))
-    signature = str(request.GET.get('signature'))
-    echostr = str(request.GET.get('echostr'))
-    paralist = [token,timestamp,nonce]
-    paralist.sort()
-    parastr = ''.join(paralist)
-    siggen = hashlib.sha1(parastr).hexdigest()
-    if siggen==signature:
-        return HttpResponse(echostr)
+    if request.method == 'GET':
+        token = '1hblsqTsdfsdfsd'
+        timestamp = str(request.GET.get('timestamp'))
+        nonce = str(request.GET.get('nonce'))
+        signature = str(request.GET.get('signature'))
+        echostr = str(request.GET.get('echostr'))
+        paralist = [token,timestamp,nonce]
+        paralist.sort()
+        parastr = ''.join(paralist)
+        siggen = hashlib.sha1(parastr).hexdigest()
+        if siggen==signature:
+            return HttpResponse(echostr)
+        else:
+            raise Http404
     else:
-        raise Http404
+        othercontent = autoreply(request)
+        return HttpResponse(othercontent)
 
 def bind_user(request):
     if request.method == 'POST':

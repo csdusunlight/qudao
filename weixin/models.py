@@ -13,3 +13,5 @@ class WeiXinUser(models.Model):
     country = models.CharField(u'国家', max_length=50)
     headimgurl = models.CharField(u'头像', max_length=200)
     unionid = models.CharField(u'unionid', max_length=50, )
+    def __unicode__(self):
+        return self.nickname

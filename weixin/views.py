@@ -167,10 +167,10 @@ def autoreply(request):
             for pro in prolist:
                 content += '\n' if content else ''
                 content += pro.title + '：' + pro.strategy
-            if weixin_user:
-                userlevel = weixin_user.user.level
-                price = getattr(pro, 'price' + userlevel)
-                content += ' ' + price
+                if weixin_user:
+                    userlevel = weixin_user.user.level
+                    price = getattr(pro, 'price' + userlevel)
+                    content += ' ' + price
         if content == '':
             project_repo_url = 'http://' + FULIUNION_DOMAIN + reverse('project_all')
             if weixin_user is None:

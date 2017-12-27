@@ -157,14 +157,17 @@ def autoreply(request):
 
         toUser = FromUserName
         fromUser = ToUserName
-
-        if msg_type == 'text':
-            content = "您好,欢迎来到Python大学习!希望我们可以一起进步!"
+        
+        openid = toUser
+        user = WeiXinUser.objects.filter(openid=openid).first()
+        if user is None:
+            content = '您好,欢迎来到福利联盟!您好，欢迎关注福利联盟微信公众号！请先<a href="https://open.weixin.qq.com/connect/oauth2/authorize?\
+            appid=wxd810195ad465b0d0&redirect_uri=http%3A%2F%2Fwww.fuliunion.com%2Fweixin%2Fbind-user%2F&response_type=code&scope=snsapi_userinfo">绑定福利联盟账号</a>，您将收到实时的交单、提现、审核等消息通知。您也可以<a href="http://www.fuliunion.com/project_all">查看项目清单</a>。'
             replyMsg = TextMsg(toUser, fromUser, content)
-            print "成功了!!!!!!!!!!!!!!!!!!!"
-            print replyMsg
             return replyMsg.send()
-
+        if msg_type == 'text':
+            replyMsg = TextMsg(toUser, fromUser, content)
+            return replyMsg.send()
         elif msg_type == 'image':
             content = "图片已收到,谢谢"
             replyMsg = TextMsg(toUser, fromUser, content)
@@ -221,4 +224,4 @@ class TextMsg(Msg):
         <Content><![CDATA[{Content}]]></Content>
         </xml>
         """
-        return XmlForm.format(**self.__dict)    
+        return XmlForm.format(**self.__dict)

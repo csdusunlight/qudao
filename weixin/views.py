@@ -155,7 +155,7 @@ def autoreply(request):
         ToUserName = xmlData.find('ToUserName').text
         FromUserName = xmlData.find('FromUserName').text
         CreateTime = xmlData.find('CreateTime').text
-        message = xmlData.find('Content').text
+        message = xmlData.find('Content').text.decode('utf-8')
 
         toUser = FromUserName
         fromUser = ToUserName

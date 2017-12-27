@@ -161,8 +161,11 @@ def autoreply(request):
         openid = toUser
         user = WeiXinUser.objects.filter(openid=openid).first()
         if user is None:
-            content = '您好,欢迎来到福利联盟!您好，欢迎关注福利联盟微信公众号！请先<a href="https://open.weixin.qq.com/connect/oauth2/authorize?\
-            appid=wxd810195ad465b0d0&redirect_uri=http%3A%2F%2Fwww.fuliunion.com%2Fweixin%2Fbind-user%2F&response_type=code&scope=snsapi_userinfo">绑定福利联盟账号</a>，您将收到实时的交单、提现、审核等消息通知。您也可以<a href="http://www.fuliunion.com/project_all">查看项目清单</a>。'
+            content = '''
+                                您好,欢迎来到福利联盟微信公众号!
+                                请先<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd810195ad465b0d0&redirect_uri=http%3A%2F%2Fwww.fuliunion.com%2Fweixin%2Fbind-user%2F&response_type=code&scope=snsapi_userinfo">绑定福利联盟账号</a>，您将收到实时的交单、提现、审核等消息通知。
+                                您也可以<a href="http://test.fuliunion.com/project_all">查看项目清单</a>。
+            '''
             replyMsg = TextMsg(toUser, fromUser, content)
             return replyMsg.send()
         if msg_type == 'text':

@@ -175,18 +175,17 @@ def autoreply(request):
         if content == '':
             project_repo_url = 'http://' + FULIUNION_DOMAIN + reverse('project_all')
             if weixin_user is None:
-                content = u'''您好,欢迎来到福利联盟微信公众号!
+                content = '''您好,欢迎来到福利联盟微信公众号!
 请先<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2Ftest.fuliunion.com%2Fweixin%2Fbind-user%2F&response_type=code&scope=snsapi_userinfo">绑定福利联盟账号</a>，您将收到实时的交单、提现、审核等消息通知。
 您也可以<a href="http://test.fuliunion.com/project_all">查看项目清单</a>。'''.format(appid=APPID)
             else:
                project_repo_url = 'http://' + FULIUNION_DOMAIN + reverse('project_all')
-               content = u'项目清单：' + project_repo_url
-        replyMsg = TextMsg(toUser, fromUser, content)
-        return replyMsg.send()
-
+               content = '项目清单：' + project_repo_url
     except Exception, e:
         logger.error(e)
-        return u"公众号繁忙，请稍后再试"
+        content = "公众号繁忙，请稍后再试"
+    replyMsg = TextMsg(toUser, fromUser, content)
+    return replyMsg.send()
 
 class Msg(object):
     def __init__(self, xmlData):

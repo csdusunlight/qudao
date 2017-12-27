@@ -184,8 +184,9 @@ def autoreply(request):
         replyMsg = TextMsg(toUser, fromUser, content)
         return replyMsg.send()
 
-    except Exception, Argment:
-        return Argment
+    except Exception, e:
+        logger.error(e)
+        return "公众号繁忙，请稍后再试"
 
 class Msg(object):
     def __init__(self, xmlData):

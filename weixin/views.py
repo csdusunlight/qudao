@@ -155,8 +155,7 @@ def autoreply(request):
         ToUserName = xmlData.find('ToUserName').text
         FromUserName = xmlData.find('FromUserName').text
         CreateTime = xmlData.find('CreateTime').text
-        message = xmlData.find('Content').text.decode('utf-8')
-
+        message = xmlData.find('Content').text
         toUser = FromUserName
         fromUser = ToUserName
         openid = toUser
@@ -174,16 +173,16 @@ def autoreply(request):
         if content == '':
             project_repo_url = 'http://' + FULIUNION_DOMAIN + reverse('project_all')
             if weixin_user is None:
-                content = '''您好,欢迎来到福利联盟微信公众号!
+                content = u'''您好,欢迎来到福利联盟微信公众号!
 请先<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx76aa03447c27f99d&redirect_uri=http%3A%2F%2Ftest.fuliunion.com%2Fweixin%2Fbind-user%2F%3Fto_url%3Daccount_index&response_type=code&scope=snsapi_userinfo">绑定福利联盟账号</a>，您将收到实时的交单、提现、审核等消息通知。
 您也可以<a href="http://test.fuliunion.com/project_all">查看项目清单</a>。'''.format(appid=APPID)
             else:
                project_repo_url = 'http://' + FULIUNION_DOMAIN + reverse('project_all')
-               content = '项目清单：' + project_repo_url.encode('utf-8')
+               content = u'项目清单：' + project_repo_url
     except Exception, e:
         logger.error(e)
-        content = "公众号繁忙，请稍后再试"
-    replyMsg = TextMsg(toUser, fromUser, content)
+        content = u"公众号繁忙，请稍后再试"
+    replyMsg = TextMsg(toUser, fromUser, content.encode('utf-8'))
     return replyMsg.send()
 
 class Msg(object):

@@ -132,7 +132,7 @@ def channel(request):
         return JsonResponse(ret)
     else:
         if request.mobile:
-            redirect("http://{userdomain}.{domain}/quick-submit".format(userdomain=request.user.domain_name, domain=FANSHU_DOMAIN))
+            return redirect("http://{userdomain}.{domain}/quick-submit".format(userdomain=request.user.domain_name, domain=FANSHU_DOMAIN))
         else:
             plist = list(Project.objects.filter(state__in=['10','20']).filter(Q(is_official=True)|Q(user=request.user)))    #jzy
             for p in plist:

@@ -167,7 +167,7 @@ def autoreply(request):
             try:
                 obj = Reply_KeyWords.objects.get(key=message)
                 if obj.url:
-                    content = '<a href={url}>'.format(url=obj.url) + obj.message +'</a>'
+                    content = '<a href="{url}">'.format(url=obj.url) + obj.message +'</a>'
                 else:
                     content = obj.message
             except Reply_KeyWords.DoesNotExist:

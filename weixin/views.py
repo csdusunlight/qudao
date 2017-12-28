@@ -155,13 +155,14 @@ def autoreply(request):
         ToUserName = xmlData.find('ToUserName').text
         FromUserName = xmlData.find('FromUserName').text
         CreateTime = xmlData.find('CreateTime').text
-        message = xmlData.find('Content').text
         toUser = FromUserName
         fromUser = ToUserName
         openid = toUser
         weixin_user = WeiXinUser.objects.filter(openid=openid).first()
         content = ''
+        project_repo_url = 'http://' + FULIUNION_DOMAIN + reverse('project_all')
         if msg_type == 'text':
+            message = xmlData.find('Content').text
             prolist = list(Project.objects.filter(is_official=True, title__contains=message))
             for pro in prolist:
                 content += '\n' if content else ''
@@ -170,12 +171,19 @@ def autoreply(request):
                     userlevel = weixin_user.user.level
                     price = getattr(pro, 'price' + userlevel)
                     content += ' ' + price
+        elif msg_type == 'event':
+            event = xmlData.find('Evemt').text
+            if event == 'subscribe':
+                content = u'''您好,欢迎来到福利联盟微信公众号!
+请先<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2F{domain}%2Fweixin%2Fbind-user%2F%3Fto_url%3Daccount_index&response_type=code&scope=snsapi_userinfo">绑定福利联盟账号</a>，您将收到实时的交单、提现、审核等消息通知。
+您还可以<a href="http://test.fuliunion.com/project_all">查看项目清单</a>。'''.format(appid=APPID, domain=FULIUNION_DOMAIN)
+        
         if content == '':
-            project_repo_url = 'http://' + FULIUNION_DOMAIN + reverse('project_all')
             if weixin_user is None:
                 content = u'''您好,欢迎来到福利联盟微信公众号!
-请先<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx76aa03447c27f99d&redirect_uri=http%3A%2F%2Ftest.fuliunion.com%2Fweixin%2Fbind-user%2F%3Fto_url%3Daccount_index&response_type=code&scope=snsapi_userinfo">绑定福利联盟账号</a>，您将收到实时的交单、提现、审核等消息通知。
-您也可以<a href="http://test.fuliunion.com/project_all">查看项目清单</a>。'''.format(appid=APPID)
+请先<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2F{domain}%2Fweixin%2Fbind-user%2F%3Fto_url%3Daccount_index&response_type=code&scope=snsapi_userinfo">绑定福利联盟账号</a>，您将收到实时的交单、提现、审核等消息通知。
+您还可以<a href="http://test.fuliunion.com/project_all">查看项目清单</a>。'''.format(appid=APPID, domain=FULIUNION_DOMAIN)
+            
             else:
                project_repo_url = 'http://' + FULIUNION_DOMAIN + reverse('project_all')
                content = u'项目清单：' + project_repo_url

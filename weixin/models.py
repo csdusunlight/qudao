@@ -19,7 +19,7 @@ class WeiXinUser(models.Model):
 class Reply_KeyWords(models.Model):
     key = models.CharField(u"关键词",primary_key=True, blank=False, max_length=20)
     message = models.CharField(u"回复内容",max_length=200)
-    url = models.URLField(u"超链接", max_length=200, blank=True)
+    url = models.URLField(u"超链接", max_length=500, blank=True)
     def __unicode__(self):
         return self.key + self.message
     class Meta:

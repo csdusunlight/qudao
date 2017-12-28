@@ -1,0 +1,77 @@
+{% load staticfiles %}
+<!doctype html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>福利联盟</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+        <link rel="stylesheet" href="{% static 'css/mui.min.css' %}" />
+        <script src="{% static 'js/flexible.js' %}"></script>
+        <style type="text/css">
+            body {
+                background-color: #fff;
+            }
+            .mui-content {
+                margin-top: 40px;
+                background-color: #fff;
+            }
+        	.link-item {
+        	    padding-left: 20px;
+        	    font-size: 0.5rem;
+        	    line-height: 1rem;
+        	    color: #333;
+        	    
+        	}
+        	.link-txt {
+        	    color: #91C11D;
+        	}
+        	.ewm-link {
+        	    display: block;
+        	    max-width: 80%;
+        	    margin: 0 auto;
+        	}
+        	.good-title {
+        	    margin: 1rem 1rem 0.4rem 1rem;
+        	    font-size: 0.6rem;
+        	    line-height: 1rem;
+        	    font-weight: normal;
+        	    text-align: center;
+        	    border: 1px solid #e4e4e4;
+        	    border-radius: 10px;
+        	}
+        	.good-item {
+        	    max-width: 60%;
+        	    display: block;
+        	    margin: 10px auto;
+        	}
+        </style>
+    </head>
+
+    <body>
+        <header id="header" class="mui-bar mui-bar-nav">
+            <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+            <h1 class="mui-title">联系我们</h1>
+        </header>
+        <div class="mui-content">
+            <p class="link-item">客服电话：<number class="link-txt">073185713235</number></p>
+            <p class="link-item">客服QQ：<number class="link-txt">406051223  /  82804058</number></p>
+            <p class="link-item">微信号：<number class="link-txt">18075173953</number></p>
+            <img class="ewm-link" src="{% static 'images/ewm_link.jpg' %}" alt="" />
+            <div>
+                <h2 class="good-title">我们的优势</h2>
+                <img class="good-item" src="{% static 'images/pic1_04.jpg' %}" />
+                <img class="good-item" src="{% static 'images/pic2_06.jpg' %}" />
+                <img class="good-item" src="{% static 'images/pic3_04.jpg' %}" />
+                <img class="good-item" src="{% static 'images/pic4_06.jpg' %}" />
+            </div>
+        </div>    
+        {% include "m_footer.html" %}
+        <script src="{% static 'js/mui.min.js' %}"></script>
+        <script type="text/javascript">
+            mui.init();
+        </script>
+    </body>
+
+</html>

@@ -122,7 +122,23 @@
 				}
 				getList(count++);
 			}
-
+            mui('.mui-bar').on('tap', '.mui-action-back', function() {
+                var href = this.getAttribute("href");
+                mui.openWindow({
+                    url: href,
+                    styles: {
+                        top: 0,
+                        bottom: 0
+                    },
+                    show: {
+                        aniShow: 'slide-in-right',
+                    },
+                    waiting: {
+                        autoShow: false, //自动显示等待框
+                        title: '正在加载...', //等待对话框上显示的提示内容
+                    }
+                });
+            });
 		</script>
 	</body>
 

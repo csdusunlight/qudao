@@ -186,7 +186,7 @@ def autoreply(request):
             
             else:
                project_repo_url = 'http://' + FULIUNION_DOMAIN + reverse('project_all')
-               content = u'项目清单：' + project_repo_url
+               content = u'抱歉，您要查找的项目已结束或不存在。在推项目清单：' + project_repo_url
     except Exception, e:
         logger.error(e)
         content = u"公众号繁忙，请稍后再试"

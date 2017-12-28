@@ -172,7 +172,7 @@ def autoreply(request):
                     price = getattr(pro, 'price' + userlevel)
                     content += ' ' + price
         elif msg_type == 'event':
-            event = xmlData.find('Evemt').text
+            event = xmlData.find('Event').text
             if event == 'subscribe':
                 content = u'''您好,欢迎来到福利联盟微信公众号!
 请先<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2F{domain}%2Fweixin%2Fbind-user%2F%3Fto_url%3Daccount_index&response_type=code&scope=snsapi_userinfo">绑定福利联盟账号</a>，您将收到实时的交单、提现、审核等消息通知。

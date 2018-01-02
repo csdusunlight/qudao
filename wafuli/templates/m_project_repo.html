@@ -12,11 +12,16 @@
 		<link rel="stylesheet" href="{% static 'css/mui.min.css' %}">
 		<link rel="stylesheet" href="{% static 'css/m_project_all.css' %}">
 		<script type="text/javascript" src="{% static  'js/rem.js'%}"></script>
-		
+		<style>
+			.state10{
+				background: url(../../static/images/over.png) center center no-repeat;
+			}
+		</style>
 	</head>
 
 	<body>
             <div class="mui-content">
+            	
                 <div id="search" class="searchBox">
                 	<input id="search_input" type="text" placeholder="点此进入搜索" />
                 	<span id="search_btn" class="search-icon mui-icon mui-icon-search"></span>
@@ -100,7 +105,7 @@
                             for(var i in data.results) {
                                 var li_left = document.createElement('li');
                                 var li_right = document.createElement('li');
-                                li_left.className = 'item_line';
+                                li_left.className = 'item_line state'+data.results[i].project_state+' ';
                                 li_right.className = 'item_line m-right';
                                 var left_html = '<div class="column_1 column"><span class="item"><a href="' + data.results[i].project_strategy + '">' + data.results[i].project_title + '</a></span></div>';
 

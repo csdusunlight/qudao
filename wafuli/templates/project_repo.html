@@ -14,6 +14,7 @@
 		.state20 {
 			pointer-events: none;
 			background-color: #e4e4e4 !important;
+			background: url(../../static/images/over.png) center center no-repeat;
 		}
 		.go_homepage {
 		    display: none;
@@ -145,7 +146,7 @@
 		console.log(userlevel);
 		if(userlevel == '01') {
 			var data = '[results]<li class="finance">' +
-				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
+				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox state'+data.results[i].project_state+'"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
 				'<div class="item1"><span class="finance__term finance__item">{project_term}</span></div><div class="item2"><span class="finance__range finance__item">{project_investrange}</span></div>' +
 				'<div class="item3"><span class="finance__price finance__item">{project_price01}</span></div><div class="item4"><span class="finance__price02 finance__item">{project_cprice}</span></div>' +
 				'<div class="item5"><span class="finance__remark finance__item">{project_remark}</span></div></a>' +
@@ -153,7 +154,7 @@
 				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank"><span class="go">进入推广主页-></span></a></div></li>[/results]';
 		} else if(userlevel == '02') {
 			var data = '[results]<li class="finance">' +
-				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
+				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox state'+data.results[i].project_state+'"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
 				'<div class="item1"><span class="finance__term finance__item">{project_term}</span></div><div class="item2"><span class="finance__range finance__item">{project_investrange}</span></div>' +
 				'<div class="item3"><span class="finance__price finance__item">{project_price02}</span><div><div class="item4"><span class="finance__price02 finance__item">{project_cprice}</span></div>' +
 				'<div class="item5"><span class="finance__remark finance__item">{project_remark}</span></div></a>' +
@@ -161,7 +162,7 @@
 				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank"><span class="go">进入推广主页-></span></a></div></li>[/results]';
 		} else if(userlevel == '03') {
 			var data = '[results]<li class="finance">' +
-				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
+				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox state'+data.results[i].project_state+'"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
 				'<div class="item1"><span class="finance__term finance__item">{project_term}</span></div><div class="item2"><span class="finance__range finance__item">{project_investrange}</span></div>' +
 				'<div class="item3"><span class="finance__price finance__item">{project_price03}</span></div><div class="item4"><span class="finance__price02 finance__item">{project_cprice}</span></div>' +
 				'<div class="item5"><span class="finance__remark finance__item">{project_remark}</span></div></a>' +

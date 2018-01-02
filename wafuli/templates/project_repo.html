@@ -13,7 +13,7 @@
 	<style type="text/css">
 		.state20 {
 			pointer-events: none;
-			background: url(../../static/images/over.png) center center no-repeat;
+			/*background-color: #e4e4e4 !important;*/
 		}
 		.go_homepage {
 		    display: none;
@@ -21,6 +21,20 @@
 		.go:hover{
 			color: RGB(150,150,150);
 			text-decoration: underline;
+		}
+		.over{
+			width: 46px;
+			height: 20px;
+			background: #b3b3b3;
+			border-radius: 2px;
+			text-align: center;
+			line-height: 22px;
+			position: absolute;right: 0;top: 0;
+			z-index: 9;
+		}
+		.over span{
+			color: white !important;
+			font-size: 12px;
 		}
 	</style>
 
@@ -145,7 +159,7 @@
 		console.log(userlevel);
 		if(userlevel == '01') {
 			var data = '[results]<li class="finance">' +
-				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox state{project_state}"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
+				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox"><div class="over" data-state={project_state}><span>已结束</span></div><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
 				'<div class="item1"><span class="finance__term finance__item">{project_term}</span></div><div class="item2"><span class="finance__range finance__item">{project_investrange}</span></div>' +
 				'<div class="item3"><span class="finance__price finance__item">{project_price01}</span></div><div class="item4"><span class="finance__price02 finance__item">{project_cprice}</span></div>' +
 				'<div class="item5"><span class="finance__remark finance__item">{project_remark}</span></div></a>' +
@@ -153,7 +167,7 @@
 				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank"><span class="go">进入推广主页-></span></a></div></li>[/results]';
 		} else if(userlevel == '02') {
 			var data = '[results]<li class="finance">' +
-				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox state{project_state}"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
+				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox"><div class="over" data-state={project_state}><span>已结束</span></div><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
 				'<div class="item1"><span class="finance__term finance__item">{project_term}</span></div><div class="item2"><span class="finance__range finance__item">{project_investrange}</span></div>' +
 				'<div class="item3"><span class="finance__price finance__item">{project_price02}</span><div><div class="item4"><span class="finance__price02 finance__item">{project_cprice}</span></div>' +
 				'<div class="item5"><span class="finance__remark finance__item">{project_remark}</span></div></a>' +
@@ -161,7 +175,7 @@
 				'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank"><span class="go">进入推广主页-></span></a></div></li>[/results]';
 		} else if(userlevel == '03') {
 			var data = '[results]<li class="finance">' +
-				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox state{project_state}"><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
+				'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox"><div class="over" data-state={project_state}><span>已结束</span></div><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
 				'<div class="item1"><span class="finance__term finance__item">{project_term}</span></div><div class="item2"><span class="finance__range finance__item">{project_investrange}</span></div>' +
 				'<div class="item3"><span class="finance__price finance__item">{project_price03}</span></div><div class="item4"><span class="finance__price02 finance__item">{project_cprice}</span></div>' +
 				'<div class="item5"><span class="finance__remark finance__item">{project_remark}</span></div></a>' +
@@ -176,6 +190,13 @@
 				$(this).parent().find('.go_homepage').show()
 			})
 //			$('.state20').text('已结束');
+			var state = $(".over").attr("data-state");
+			if (state == 20) {
+				$(".over").css("display","block");
+			} else{
+				$(".over").css("display","none");
+			}
+			
 			$('.oneline').each(function(index, el) { //单行
 				if($(this).height() > 30) {
 					$(this).addClass('one-line')

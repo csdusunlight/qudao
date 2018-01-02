@@ -13,7 +13,6 @@
 	<style type="text/css">
 		.state20 {
 			pointer-events: none;
-			background-color: #e4e4e4 !important;
 			background: url(../../static/images/over.png) center center no-repeat;
 		}
 		.go_homepage {
@@ -176,7 +175,7 @@
 				this.innerText = '取消添加';
 				$(this).parent().find('.go_homepage').show()
 			})
-			$('.state20').text('已结束');
+//			$('.state20').text('已结束');
 			$('.oneline').each(function(index, el) { //单行
 				if($(this).height() > 30) {
 					$(this).addClass('one-line')

@@ -192,12 +192,13 @@
 //			$('.state20').text('已结束');
 
 			/**************添加已结束标识***************/
-			var state = $(".over").attr("data-state");
-			if (state == 20) {
-				$(".over").css("display","block");
-			} else{
-				$(".over").css("display","none");
-			}
+			$(".over").each(function(){
+				if ($(this).attr("data-state") == 20) {
+					$(this).css("display","block");
+				} else{
+					$(this).css("display","none");
+				}
+			});
 			
 			$('.oneline').each(function(index, el) { //单行
 				if($(this).height() > 30) {

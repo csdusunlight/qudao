@@ -4,7 +4,7 @@ Created on 2017年3月30日
 
 @author: lch
 '''
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http.response import JsonResponse, HttpResponse, Http404
 from wafuli.models import InvestLog, Project
 from account.models import DBlock
@@ -12,7 +12,7 @@ from django.db import transaction
 import traceback
 import xlrd
 import os
-from dragon.settings import STATIC_DIR
+from dragon.settings import STATIC_DIR, FANSHU_DOMAIN
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import StringIO
@@ -131,11 +131,14 @@ def channel(request):
         ret.update(code=0,sun=succ_num, dup1=duplic_num1, dup2=duplic_num2, anum=nrows-1, dupstr=duplic_mobile_list_str)
         return JsonResponse(ret)
     else:
-        plist = list(Project.objects.filter(state__in=['10','20']).filter(Q(is_official=True)|Q(user=request.user)))    #jzy
-        for p in plist:
-            if not p.is_official:
-                p.title = u"自建：" + p.title
-        return render(request, 'account/account_submit.html', {'plist':plist})
+        if request.mobile:
+            return redirect("http://{userdomain}.{domain}/quick-submit".format(userdomain=request.user.domain_name, domain=FANSHU_DOMAIN))
+        else:
+            plist = list(Project.objects.filter(state__in=['10','20']).filter(Q(is_official=True)|Q(user=request.user)))    #jzy
+            for p in plist:
+                if not p.is_official:
+                    p.title = u"自建：" + p.title
+            return render(request, 'account/account_submit.html', {'plist':plist})
 
 @login_required
 def submit_itembyitem(request):

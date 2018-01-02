@@ -3,7 +3,9 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title></title>
+		<title>常见问题</title>
+        <meta name="keywords" content="福利联盟，p2p理财平台，p2p投资理财，p2p投资理财平台，小额投资理财，个人投资理财，互联网理财产品，互联网理财平台，互联网金融平台，互联网金融产品，网络理财产品，网赚" />
+        <meta name="description" content="福利联盟是行业领先的P2P渠道分发机构。" />
 		<link rel="stylesheet" href="{% static 'css/wfl-common.css' %}" />
 		<!--<link rel="stylesheet" href="css/HelpCenter.css" />-->
 		<link rel="stylesheet" href="{% static 'css/HelpCenter.css' %}" />
@@ -164,5 +166,11 @@
          <div style="clear:both"></div>
 		<!--底部-->
 		 {% include "footer.html" %}
+		 <script src="/static/js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('.nav__item:eq(3)').addClass('active');
+            });
+        </script>
 	</body>
 </html>

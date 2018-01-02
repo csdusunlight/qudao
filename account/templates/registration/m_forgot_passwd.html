@@ -42,6 +42,7 @@
 				</div>
 			</div>
 		</div>
+		{% include "m_footer.html" %}
 		<script src="{% static 'js/mui.min.js' %}"></script>
 		<script src="{%static 'js/accounts/user-validate.js'%}"></script>
 		<script type="text/javascript" charset="utf-8">
@@ -80,13 +81,13 @@
 					type:'POST',
 					timeout : 3000,
 					success : function(ret) {
-						mui.alert(ret.msg,callback=function(){
-							if (ret.code==0){
-								window.history.back();
-							}else{
-                                mui.alert(ret.res_msg);
-                            }
-						});
+						if (ret.code==0){
+						    mui.alert('重置成功',callback=function(){
+						        window.history.back();
+						    })
+						}else{
+                            mui.alert(ret.res_msg);
+                        }
 					},
 					error:function(xhr,type,errorThrown){
 						mui.alert(type);
@@ -147,16 +148,17 @@
 					timeout : 3000,
 					success : function(data) {
 						if (data.code != 0) {
+						    countdown = 0;
 							console.log(data.message);
+							mui.alert(data.message);
 							var new_cptch_key = data.key;
 					        var new_cptch_image = data.image_url;
 					        key = document.getElementById("id_hashkey");
 							img = document.getElementById("id_checkImg");
 							key.value = new_cptch_key;
 							img.src = new_cptch_image;
-						}
-						if (data.code == 1){
-							countdown = 0;
+						} else if (data.code == 0){
+							mui.alert('发送成功');
 						}
 					},
 					error:function(xhr,type,errorThrown){

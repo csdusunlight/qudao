@@ -32,7 +32,7 @@
 
     <body>
         <header id="header" class="mui-bar mui-bar-nav">
-            <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+            <a href="{% url 'account_index' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
             <h1 class="mui-title">提现</h1>
         </header>
         <div class="mui-content">
@@ -57,15 +57,15 @@
             <form class="mui-input-group">
             {% csrf_token %}
                 <div class="mui-input-row">
-                    <label></label>
-                    <input id="with_amount" autofocus="autofocus" type="text" class="mui-input-clear" placeholder="请输入提现福币个数">
+                    <label>￥</label>
+                    <input id="with_amount" autofocus="autofocus" type="text" class="mui-input-clear" placeholder="请输入提现金额">
                 </div>
             </form>
             <p>
                 <span>可提现金额：<number>{{user.balance}}</number></span>
                 <span>最低提现10元</span>
             </p>
-            <button id="Btn" type="button" class="mui-btn mui-btn-blue mui-btn-block">确认提现</button>
+            <button id="Btn" type="button" class="mui-btn mui-btn-green mui-btn-block">确认提现</button>
 
             <div id="sheet1" class="mui-popover mui-popover-bottom mui-popover-action ">
                 <!-- 可选择菜单 -->
@@ -86,7 +86,7 @@
                 </ul>
             </div>
         </div>
-
+        {% include "m_footer.html" %}
 
         <script src="{% static 'js/mui.min.js' %}"></script>
         <!--弹窗部分-->
@@ -136,7 +136,23 @@
             document.getElementById("bank_card").addEventListener('tap', function() {
                 mui('#sheet1').popover('toggle');
             });
-
+            mui('.mui-bar').on('tap', '.mui-action-back', function() {
+                var href = this.getAttribute("href");
+                mui.openWindow({
+                    url: href,
+                    styles: {
+                        top: 0,
+                        bottom: 0
+                    },
+                    show: {
+                        aniShow: 'slide-in-right',
+                    },
+                    waiting: {
+                        autoShow: false, //自动显示等待框
+                        title: '正在加载...', //等待对话框上显示的提示内容
+                    }
+                });
+            });
         </script>
     </body>
 

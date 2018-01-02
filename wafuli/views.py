@@ -79,3 +79,6 @@ def display_qualification(request):
         img_list.append({'name':name,'url':url})
     return render(request, 'screenshot.html', {'img_list':img_list})
 
+def cooperate(request):
+    template = 'm_cooperation.html' if request.mobile else 'cooperation.html'
+    return render(request, template)

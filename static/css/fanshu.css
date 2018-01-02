@@ -1,0 +1,204 @@
+.head__box {
+    padding-top: 85px;
+    height: 350px;
+    background: url(../images/banner-fanshu.png) center center/auto 100% no-repeat;
+}
+.head__title {
+    color: #000;
+    font-size: 50px;
+    line-height: 1;
+    text-align: center;
+}
+.head__itembox {
+    margin-top: 95px;
+    text-align: center;
+    font-size: 0;
+}
+.head__item {
+    display: inline-block;
+    margin: 0 26px;
+    width: 170px;
+    line-height: 50px;
+    text-align: center;
+    border-radius: 10px;
+    background-color: #fff;
+    color: #91c11d;
+    transition: all 0.3s ease-in;
+}
+.head__link {
+    display: block;
+}
+.head__item:hover {
+    color: #ffbe00;
+}
+.head__item:active {
+    background-color: #e7e7e7;
+} 
+.head__item.m-mobile {
+    position: relative;
+}
+.head__ewm {
+    position: absolute;
+    left: -60px;
+    top: 70px;
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+    border: 1px solid #e4e4e4;
+    visibility: hidden;
+    opacity: 0;
+    background: url(../images/ewm-fanshu.png) center center/auto auto no-repeat #fff;
+    transition: all 0.4s ease-in;
+}
+.head__ewm:before {
+    content: '';
+    display: block;
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    top: -7px;
+    left: 140px;
+    transform: rotate(45deg);
+    background: white;
+    border-top: 1px solid #e4e4e4;
+    border-left: 1px solid #e4e4e4;
+}
+.head__link.m-mobile:hover + .head__ewm,
+.head__ewm:hover {
+    visibility: visible;
+    opacity: 1;
+}
+
+.wfl-wrap {
+    margin-top: 0;
+    padding: 86px 0 90px;
+}
+.wrap__title {
+    margin: 0 auto;
+    width: 250px;
+    line-height: 50px;
+    text-align: center;
+    color: #fff;
+    background-color: #91C11D;
+    border-radius: 8px;
+}
+.wrap__title.m-brand {
+    color: #91C11D;
+    background-color: #fff;
+}
+.function {
+    margin-top: 68px;
+    font-size: 0;
+}
+.fun__item {
+    display: inline-block;
+    height: 180px;
+    width: 20%;
+    color: #91c11d;
+}
+.fun__icon {
+    margin: 0 auto;
+    width: 122px;
+    height: 122px;
+    border: 4px solid #91C11D;
+    border-radius: 50%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+.fun__txt {
+    margin-top: 8px;
+    font-size: 16px;
+    line-height: 26px;
+    text-align: center;
+    
+}
+.fun__item:nth-child(1) .fun__icon {
+    background-image: url(../images/fun-icon-1.png);
+}
+.fun__item:nth-child(2) .fun__icon {
+    background-image: url(../images/fun-icon-2.png);
+}
+.fun__item:nth-child(3) .fun__icon {
+    background-image: url(../images/fun-icon-3.png);
+}
+.fun__item:nth-child(4) .fun__icon {
+    background-image: url(../images/fun-icon-4.png);
+}
+.fun__item:nth-child(5) .fun__icon {
+    background-image: url(../images/fun-icon-5.png);
+}
+.brand {
+    margin-top: 68px;
+    font-size: 0;
+}
+.brand__item {
+    display: inline-block;
+    height: 122px;
+    width: 25%;
+    color: #fff;
+}
+.brand__icon {
+    float: left;
+    margin-left: 50px;
+    margin-right: 26px;
+    width: 122px;
+    height: 122px;
+    border: 4px solid #fff;
+    border-radius: 50%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+.brand__txt {
+    margin-top: 36px;
+    font-size: 16px;
+    line-height: 26px;
+    text-align: left;
+    
+}
+.brand__item:nth-child(1) .brand__icon {
+    background-image: url(../images/brand-icon-1.png);
+}
+.brand__item:nth-child(2) .brand__icon {
+    background-image: url(../images/brand-icon-2.png);
+}
+.brand__item:nth-child(3) .brand__icon {
+    background-image: url(../images/brand-icon-3.png);
+}
+.brand__item:nth-child(4) .brand__icon {
+    background-image: url(../images/brand-icon-4.png);
+}
+.column {
+    margin-top: 68px;
+    font-size: 0;
+}
+.column__item {
+    display: inline-block;
+    height: 122px;
+    width: 25%;
+    color: #91C11D;
+}
+.column__icon {
+    float: left;
+    margin-left: 50px;
+    margin-right: 26px;
+    width: 122px;
+    height: 122px;
+    font-size: 24px;
+    line-height: 34px;
+    text-align: center;
+    padding-top: 24px;
+    border: 4px solid #91C11D;
+    border-radius: 50%;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+.column__txt {
+    margin-top: 48px;
+    font-size: 16px;
+    line-height: 26px;
+    text-align: left;
+    
+}
+.column__item:nth-child(1) .column__icon {
+    background-image: url(../images/column-icon-1.png);
+}

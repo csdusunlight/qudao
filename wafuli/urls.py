@@ -17,11 +17,12 @@ from wafuli import views
 # ]
 urlpatterns = [
     url(r'^$', 'wafuli.views.index', name='index'),
-    url(r'^project_all$', 'wafuli.views.project_all', name='project_all'),
+    url(r'^project_all/$', 'wafuli.views.project_all', name='project_all'),
     url(r'^user_guide/$', 'wafuli.views.user_guide', name='user_guide'),
     url(r'^screenshot/$', 'wafuli.views.display_screenshot', name='screenshot'),
     url(r'^qualification/$', 'wafuli.views.display_qualification', name='qualification'),
 #     url(r'^activity_rank/$', 'wafuli.views.activity_rank', name='activity_rank'),
-    url(r'^cooperate/$',TemplateView.as_view(template_name='cooperation.html'), name='cooperate'), 
+    url(r'^cooperate/$',views.cooperate, name='cooperate'), 
     url(r'^helpCenter/$',TemplateView.as_view(template_name='HelpCenter.html'), name='helpCenter'),
+    url(r'^fanshu/$',TemplateView.as_view(template_name='fanshu.html'), name='fanshu'),
 ]

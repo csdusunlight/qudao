@@ -22,7 +22,7 @@
 				{% csrf_token %}
 				<div class="mui-input-row">
 					<label><i class="icon iconfont">&#xe637;</i></label>
-					<input id='mobile' type="text" maxlength=11 class="mui-input" placeholder="11位手机号" value={{mobile}}>
+					<input id='mobile' type="text" maxlength=11 class="mui-input" placeholder="挖福利注册账号（11位手机号）" value={{mobile}}>
 				</div>
 				<div class="yanzhengma mui-input-row">
 					<label><i class="icon iconfont">&#xe61a;</i></label>
@@ -65,7 +65,9 @@
 					timeout : 3000,
 					success : function(data) {
 						if (data.code == '0') {
-							window.location.href = data.url;
+							mui.alert("绑定成功！",callback=function(){
+								window.location.href = data.url;
+							});
 						}
 						else {
 							mui.alert(data.msg);
@@ -110,7 +112,7 @@
 						},
 					timeout : 3000,
 					success : function(data) {
-						if (data.code != 1) {
+						if (data.code != 0) {
 							mui.alert(data.message);
 							countdown = 0;
 						}

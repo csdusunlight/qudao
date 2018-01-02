@@ -7,6 +7,10 @@ from account.models import MyUser, ApplyLog
 from .models import WeiXinUser
 from django.views.decorators.csrf import csrf_exempt
 from wafuli_admin.models import Dict
+from dragon.settings import APPID, FULIUNION_DOMAIN
+from django.core.urlresolvers import reverse
+from wafuli.models import Project, SubscribeShip
+from weixin.models import Reply_KeyWords
 logger = logging.getLogger('wafuli')
 from account.varify import httpconn, verifymobilecode
 from django.conf import settings
@@ -14,19 +18,23 @@ from django.contrib.auth import login as auth_login
 
 @csrf_exempt
 def weixin(request):
-    token = '1hblsqTsdfsdfsd'
-    timestamp = str(request.GET.get('timestamp'))
-    nonce = str(request.GET.get('nonce'))
-    signature = str(request.GET.get('signature'))
-    echostr = str(request.GET.get('echostr'))
-    paralist = [token,timestamp,nonce]
-    paralist.sort()
-    parastr = ''.join(paralist)
-    siggen = hashlib.sha1(parastr).hexdigest()
-    if siggen==signature:
-        return HttpResponse(echostr)
+    if request.method == 'GET':
+        token = '1hblsqTsdfsdfsd'
+        timestamp = str(request.GET.get('timestamp'))
+        nonce = str(request.GET.get('nonce'))
+        signature = str(request.GET.get('signature'))
+        echostr = str(request.GET.get('echostr'))
+        paralist = [token,timestamp,nonce]
+        paralist.sort()
+        parastr = ''.join(paralist)
+        siggen = hashlib.sha1(parastr).hexdigest()
+        if siggen==signature:
+            return HttpResponse(echostr)
+        else:
+            raise Http404
     else:
-        raise Http404
+        othercontent = autoreply(request)
+        return HttpResponse(othercontent)
 
 def bind_user(request):
     if request.method == 'POST':
@@ -136,4 +144,90 @@ def sendWeixinTemplate():
         kwarg.update(data=data, touser=openid)
         ret = httpconn(url, kwarg, 1)
         logger.info(ret)
-    
+ 
+
+import xml.etree.ElementTree as ET
+def autoreply(request):
+    try:
+        webData = request.body
+        xmlData = ET.fromstring(webData)
+
+        msg_type = xmlData.find('MsgType').text
+        ToUserName = xmlData.find('ToUserName').text
+        FromUserName = xmlData.find('FromUserName').text
+        CreateTime = xmlData.find('CreateTime').text
+        toUser = FromUserName
+        fromUser = ToUserName
+        openid = toUser
+        weixin_user = WeiXinUser.objects.filter(openid=openid).first()
+        content = ''
+        project_repo_url = 'http://' + FULIUNION_DOMAIN + reverse('project_all')
+        if msg_type == 'text':
+            message = xmlData.find('Content').text
+            try:
+                obj = Reply_KeyWords.objects.get(key=message)
+                if obj.url:
+                    content = '<a href="{url}">'.format(url=obj.url) + obj.message +'</a>'
+                else:
+                    content = obj.message
+            except Reply_KeyWords.DoesNotExist:
+                pass
+            if content == '':
+                prolist = list(Project.objects.filter(is_official=True, title__contains=message))
+                for pro in prolist:
+                    content += '\n' if content else ''
+                    content += pro.title + u'：' + pro.strategy
+                    if weixin_user:
+                        userlevel = weixin_user.user.level
+                        price = getattr(pro, 'price' + userlevel)
+                        content += ' ' + price
+        elif msg_type == 'event':
+            event = xmlData.find('Event').text
+            if event == 'subscribe':
+                content = u'''您好,欢迎来到福利联盟微信公众号!
+请先<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2F{domain}%2Fweixin%2Fbind-user%2F%3Fto_url%3Daccount_index&response_type=code&scope=snsapi_userinfo">绑定福利联盟账号</a>，您将收到实时的交单、提现、审核等消息通知。
+您还可以<a href="http://{domain}/project_all">查看项目清单</a>。'''.format(appid=APPID, domain=FULIUNION_DOMAIN)
+        
+        if content == '':
+            if weixin_user is None:
+                content = u'''您好,欢迎来到福利联盟微信公众号!
+请先<a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2F{domain}%2Fweixin%2Fbind-user%2F%3Fto_url%3Daccount_index&response_type=code&scope=snsapi_userinfo">绑定福利联盟账号</a>，您将收到实时的交单、提现、审核等消息通知。
+您还可以<a href="http://{domain}/project_all">查看项目清单</a>。'''.format(appid=APPID, domain=FULIUNION_DOMAIN)
+            
+            else:
+               project_repo_url = 'http://' + FULIUNION_DOMAIN + reverse('project_all')
+               content = u'抱歉，您要查找的项目已结束或不存在。在推项目清单：' + project_repo_url
+    except Exception, e:
+        logger.error(e)
+        content = u"公众号繁忙，请稍后再试"
+    replyMsg = TextMsg(toUser, fromUser, content.encode('utf-8'))
+    return replyMsg.send()
+
+class Msg(object):
+    def __init__(self, xmlData):
+        self.ToUserName = xmlData.find('ToUserName').text
+        self.FromUserName = xmlData.find('FromUserName').text
+        self.CreateTime = xmlData.find('CreateTime').text
+        self.MsgType = xmlData.find('MsgType').text
+        self.MsgId = xmlData.find('MsgId').text
+
+import time
+class TextMsg(Msg):
+    def __init__(self, toUserName, fromUserName, content):
+        self.__dict = dict()
+        self.__dict['ToUserName'] = toUserName
+        self.__dict['FromUserName'] = fromUserName
+        self.__dict['CreateTime'] = int(time.time())
+        self.__dict['Content'] = content
+
+    def send(self):
+        XmlForm = """
+        <xml>
+        <ToUserName><![CDATA[{ToUserName}]]></ToUserName>
+        <FromUserName><![CDATA[{FromUserName}]]></FromUserName>
+        <CreateTime>{CreateTime}</CreateTime>
+        <MsgType><![CDATA[text]]></MsgType>
+        <Content><![CDATA[{Content}]]></Content>
+        </xml>
+        """
+        return XmlForm.format(**self.__dict)

@@ -1,0 +1,192 @@
+{%load staticfiles%}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+        <title>自助交单</title>
+        <link href="{% static 'css/mui.min.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/mui.indexedlist.css' %}" rel="stylesheet" />
+        <script src="{% static 'js/flexible.js' %}"></script>
+        <style>
+            html,
+            body {
+                height: 100%;
+                overflow: hidden;
+            }
+            .mui-bar {
+                -webkit-box-shadow: none;
+                box-shadow: none;
+            }
+            .mui-indexed-list-item {
+                font-size: 0.5rem;
+            }
+            .project__img {
+                display: inline-block;
+                height: 20px;
+                width: auto;
+                vertical-align: middle;
+            }
+            .mui-indexed-list-group, .mui-indexed-list-item {
+                padding-right: 30px;
+            }
+            .mui-icon-search {
+                position: absolute;
+                left: 10px;
+                top: 4px;
+            }
+            .mui-indexed-list-bar {
+                width: 0.8rem;
+            }
+            .mui-indexed-list-bar a {
+                font-size: 0.6rem;
+            }
+            .proj-search {
+                padding-left: 40px !important;
+            }
+            .lookup {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                font-size: 0.4rem;
+                color: #febe00;
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+
+    <body>
+        <header class="mui-bar mui-bar-nav">
+            <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+            <h1 class="mui-title">选择交单项目</h1>
+            <!--<a class="lookup">查单入口</a>-->
+        </header>
+        <div class="mui-content">
+            <div id='list' class="mui-indexed-list">
+                <!--<div class="mui-indexed-list-search mui-input-row mui-search">
+                    <input type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="搜索项目">
+                </div>-->
+                <div class="mui-indexed-list-search mui-input-row">
+                    <span class="search-icon mui-icon mui-icon-search"></span>
+                    <input type="search" class="proj-search mui-input-clear mui-indexed-list-search-input" placeholder="搜索项目">
+                </div>
+                <div class="mui-indexed-list-bar">
+                    {% for k,v in projects.items%}
+                        <a>{{k}}</a>
+                    {%endfor%}
+                </div>
+                <div class="mui-indexed-list-alert"></div>
+                <div class="mui-indexed-list-inner">
+                    <div class="mui-indexed-list-empty-alert">没有数据</div>
+                    <ul class="mui-table-view list-box">
+                        {% for k,v in projects.items%}
+                            <li data-group="{{k}}" class="mui-table-view-divider mui-indexed-list-group">{{k}}</li>
+                            {% for item in v %}
+                            <li data-value="{{item.szm}}" data-tags="{{item.pinyin}}" class="mui-table-view-cell mui-indexed-list-item">
+                                <a class="proj-link" href="/account/detail/project/{{item.id}}">
+                                    <img class="project__img" src="{{item.logo}}" alt="" />
+                                    <span>{{item.title}}</span>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        {%endfor%}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% include "m_footer.html" %}
+        <script src="{% static 'js/mui.min.js' %}"></script>
+        <script src="{% static 'js/mui.indexedlist.js' %}"></script>
+        <script type="text/javascript" charset="utf-8">
+           	mui.init({
+   				beforeback: function(){
+   					var is_back = true;
+   					var refer = document.referrer;
+   					if(refer){
+   						var flag = refer.indexOf("51fanshu.com");
+   						var flag2 = refer.indexOf("fuliunion.com");
+   						if (flag===-1 && flag2===-1){
+   							is_back = false;
+   						}
+   						else {
+   							is_back = true;
+   						}
+   					}
+   					else {
+   						is_back = false;
+   					}
+   					if (is_back){
+   						return true;
+   					}
+   					else{
+   						mui.openWindow({
+   				            url: "/",
+   				            styles: {
+   				                top: 0,
+   				                bottom: 0
+   				            },
+   				            show: {
+   				                aniShow: 'slide-in-right',
+   				            },
+   				            waiting: {
+   				                autoShow: false, //自动显示等待框
+   				                title: '正在加载...', //等待对话框上显示的提示内容
+   				            }
+   				        });
+   						return false;
+   					}
+   				}
+   			});
+            mui.ready(function() {
+//              var newItem=document.createElement("li");
+//              newItem.className = 'mui-table-view-divider mui-indexed-list-group';
+//              newItem.setAttribute('data-group', 'B');
+//              var textnode=document.createTextNode("B");
+//              newItem.appendChild(textnode);
+//              mui('.list-box')[0].insertBefore(newItem,mui('.list-B')[0]);
+                
+                var header = document.querySelector('header.mui-bar');
+                var list = document.getElementById('list');
+                //calc hieght
+                list.style.height = (document.body.offsetHeight - header.offsetHeight) + 'px';
+                //create
+                window.indexedList = new mui.IndexedList(list);
+                
+                mui('.list-box').on('tap', '.proj-link', function(){       //项目跳转
+                    var project_url = this.getAttribute('href');
+                    mui.openWindow({
+                        url: project_url,
+                        styles: {
+                            top: 0,
+                            bottom: 0
+                        },
+                        show: {
+                            aniShow: 'slide-in-right',
+                        },
+                        waiting: {
+                            autoShow: false, //自动显示等待框
+                            title: '正在加载...', //等待对话框上显示的提示内容
+                        }
+                    });
+                })
+                mui('.mui-bar').on('tap', '.lookup', function(){       
+                    mui.openWindow({
+                        url: '/lookup/',
+                        styles: {
+                            top: 0,
+                            bottom: 0
+                        },
+                        show: {
+                            aniShow: 'slide-in-right',
+                        },
+                        waiting: {
+                            autoShow: false, //自动显示等待框
+                            title: '正在加载...', //等待对话框上显示的提示内容
+                        }
+                    });
+                })
+            });
+        </script>
+    </body>
+
+</html>

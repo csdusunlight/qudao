@@ -167,6 +167,7 @@ SUB_WAY = (
     ('1', u'主页提交'),
     ('2', u'逐条提交'),
     ('3', u'表格提交'),
+    ('4', u'移动端自助提交'),
 )
 class InvestLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="investlog_submit")

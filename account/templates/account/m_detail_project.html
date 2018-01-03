@@ -108,63 +108,54 @@
             <h1 class="mui-title">{{project.title}}</h1>
         </header>
         <div class="mui-content">
-            <div id="" class="mui-slider mui-fullscreen">
-
-                <div class="mui-slider-group">
-                    
-                    <div id="item3" style="overflow-y: scroll;" class="mui-slider-item mui-control-content" value="2">
-                        <form class="f">
-                            {% csrf_token %}
-                            <div class="limit-input input-box" data-limit="5">
-                                <label class="input-title">提交手机号&nbsp;&nbsp;</label>
-                                <input id="telnum" class="form-test" data-form="required isPhone" type="text" maxlength=11 placeholder="平台注册手机号，限11字符">
-                                <p class="input-tips">提示内容部分</p>
-                            </div>
-                            <div class="limit-input input-box" data-limit="0">
-                                <label class="input-title">投资姓名</label>
-                                <input id="invest_account" class="form-test" data-form="required" type="text" maxlength="11" placeholder="平台注册用户名/姓名，限11字符">
-                                <p class="input-tips">提示内容部分</p>
-                            </div>
-                            <div class="limit-input input-box" data-limit="1">
-                              <label class="input-title">投资金额（元）</label>
-                              <input type="text" class="form-test" data-form="required isNum" maxlength="10" placeholder="请填写纯数字 如1000，限10字符" id="amount">
-                              <p class="input-tips">提示内容部分</p>
-                            </div>
-                            <div class="limit-input input-box" data-limit="2">
-                              <label class="input-title">投资标期（天）</label>
-                              <input type="text" class="form-test" data-form="required isNum" placeholder="请填写纯数字 如30" id="term">
-                              <p class="input-tips">提示内容部分</p>
-                            </div>
-                            <div class="limit-input input-box" data-limit="3">
-                              <label class="input-title">投资日期&nbsp;&nbsp;</label>
-                              <input type="date" class="form-test" data-form="required" placeholder="请选择投资日期" id="date">
-                              <p class="input-tips">提示内容部分</p>
-                            </div>
-                            <div class="input-box zfb-box">
-                              <label class="input-title">收款信息&nbsp;&nbsp;</label>
-                              <input type="text" maxlength="64" placeholder="收款帐号 如支付宝、qq等，限64字符" id="zfb">
-                            </div>
-                            <div class="mui-input-row isfutou-item input-box">
-                                <div class="mui-input-row mui-radio">
-                                    <label style="display: inline-block;">首投</label>
-                                    <input name="is_futou" checked="checked" type="radio" value="1">
-                                </div>
-                                <div class="mui-input-row mui-radio">
-                                    <label style="display: inline-block;">复投</label>
-                                    <input name="is_futou" type="radio" value="2">
-                                </div>
-                            </div>
-                            
-                            <div class="input-box beizhu">
-                                <label class="input-title">备注：</label>
-                                <input type="text" maxlength="100" placeholder="可不填，限100字符" id="remark">
-                            </div>
-                        </form>
-                        <button id="submit_btn" type="button" class="mui-btn mui-btn-blue">确认提交</button>
-                    </div>       
-        
+            <form class="f">
+                {% csrf_token %}
+                <div class="limit-input input-box" data-limit="5">
+                    <label class="input-title">提交手机号&nbsp;&nbsp;</label>
+                    <input id="telnum" class="form-test" data-form="required isPhone" type="text" maxlength=11 placeholder="平台注册手机号，限11字符">
+                    <p class="input-tips">提示内容部分</p>
                 </div>
-            </div>
+                <div class="limit-input input-box" data-limit="0">
+                    <label class="input-title">投资姓名</label>
+                    <input id="invest_account" class="form-test" data-form="required" type="text" maxlength="11" placeholder="平台注册用户名/姓名，限11字符">
+                    <p class="input-tips">提示内容部分</p>
+                </div>
+                <div class="limit-input input-box" data-limit="1">
+                  <label class="input-title">投资金额（元）</label>
+                  <input type="text" class="form-test" data-form="required isNum" maxlength="10" placeholder="请填写纯数字 如1000，限10字符" id="amount">
+                  <p class="input-tips">提示内容部分</p>
+                </div>
+                <div class="limit-input input-box" data-limit="2">
+                  <label class="input-title">投资标期（天）</label>
+                  <input type="text" class="form-test" data-form="required isNum" placeholder="请填写纯数字 如30" id="term">
+                  <p class="input-tips">提示内容部分</p>
+                </div>
+                <div class="limit-input input-box" data-limit="3">
+                  <label class="input-title">投资日期&nbsp;&nbsp;</label>
+                  <input type="date" class="form-test" data-form="required" placeholder="请选择投资日期" id="date">
+                  <p class="input-tips">提示内容部分</p>
+                </div>
+                <div class="input-box zfb-box">
+                  <label class="input-title">收款信息&nbsp;&nbsp;</label>
+                  <input type="text" maxlength="64" placeholder="收款帐号 如支付宝、qq等，限64字符" id="zfb">
+                </div>
+                <div class="mui-input-row isfutou-item input-box">
+                    <div class="mui-input-row mui-radio">
+                        <label style="display: inline-block;">首投</label>
+                        <input name="is_futou" checked="checked" type="radio" value="1">
+                    </div>
+                    <div class="mui-input-row mui-radio">
+                        <label style="display: inline-block;">复投</label>
+                        <input name="is_futou" type="radio" value="2">
+                    </div>
+                </div>
+                
+                <div class="input-box beizhu">
+                    <label class="input-title">备注：</label>
+                    <input type="text" maxlength="100" placeholder="可不填，限100字符" id="remark">
+                </div>
+            </form>
+            <button id="submit_btn" type="button" class="mui-btn mui-btn-blue">确认提交</button>
         </div>
         <script src="{%static 'js/mui.min.js'%}"></script>
         <!--弹窗部分-->

@@ -272,7 +272,6 @@
         
         
         var project_id = '{{id}}';
-        mui('input[value="1"]')[0].setAttribute("checked","checked");
         
         document.getElementById("submit_btn").addEventListener('tap', function() {
             isInputTrue = true;
@@ -344,20 +343,7 @@
 
         
         </script>
-    {%if back %}
-        <script>
-        mui.back = function(){
-            var history = window.history;
-            if (history.length > 3 ){
-                history.go(-3);
-            }
-            else{
-                history.back();
-            }
-        };
-        
-        </script>
-    {%endif%}
+
     {% include "m_footer.html" %}
     </body>
 </html>

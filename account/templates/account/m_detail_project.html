@@ -1,0 +1,379 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <!-- 优先使用 IE 最新版本和 Chrome -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <!-- 为移动设备添加 viewport -->
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <!-- 添加到主屏后的标题（iOS 6 新增） -->
+    <meta name="apple-mobile-web-app-title" content="">
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <!-- 添加智能 App 广告条 Smart App Banner（iOS 6+ Safari） -->
+    <meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <!--下面三个是清除缓存 微信浏览器缓存严重又无刷新；这个方法调试的时候很方便-->
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>信息登记</title>
+    <link href="{%static 'css/mui.css'%}" rel="stylesheet"/>
+    <!--<link rel="stylesheet" type="text/css" href="{%static 'css/m_common.css'%}"/>-->
+    <link rel="stylesheet" type="text/css" href="{%static 'css/m_expsubmit_project-11.30.css'%}"/>
+    <style type="text/css">
+        .limit-input {
+            /*display: none;*/
+        }
+        #choose {
+            /*display: none;*/
+        }
+        
+        canvas {
+            width: 100%;
+            border: 1px solid #000000;
+        }
+        
+        .img-list {
+            width: 25.2rem;
+            margin: 2rem auto 1rem;
+        }
+        
+        .img-list li {
+            position: relative;
+            display: inline-block;
+            width: 6rem;
+            height: 6rem;
+            margin: 0.2rem 0.2rem 1.6rem 0.2rem;
+            border: 1px solid rgb(100, 149, 198);
+            background: #fff no-repeat center;
+            background-size: cover;
+        }
+        
+        .progress {
+            position: absolute;
+            width: 100%;
+            height: 20px;
+            line-height: 20px;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(100, 149, 198, .5);
+        }
+        
+        .progress span {
+            display: block;
+            width: 0;
+            height: 100%;
+            background-color: rgb(100, 149, 198);
+            text-align: center;
+            color: #FFF;
+            font-size: 13px;
+        }
+        
+        .size {
+            position: absolute;
+            width: 100%;
+            height: 15px;
+            line-height: 15px;
+            bottom: -18px;
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .tips {
+            display: block;
+            text-align: center;
+            font-size: 13px;
+            margin: 10px;
+            color: #999;
+        }
+        .img-btnbox {
+            text-align: center;
+        }
+        .mui-radio {
+            display: inline-block;
+            width: 48%;
+        }
+    </style>
+</head>
+
+    <body>
+        <header id="header" class="mui-bar mui-bar-nav">
+            <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+            <h1 class="mui-title">{{project.title}}</h1>
+        </header>
+        <div class="mui-content">
+            <div id="" class="mui-slider mui-fullscreen">
+
+                <div class="mui-slider-group">
+                    
+                    <div id="item3" style="overflow-y: scroll;" class="mui-slider-item mui-control-content" value="2">
+                        <form class="f">
+                            {% csrf_token %}
+                            <div class="limit-input input-box" data-limit="5">
+                                <label class="input-title">提交手机号&nbsp;&nbsp;</label>
+                                <input id="telnum" class="form-test" data-form="required isPhone" type="text" maxlength=11 placeholder="平台注册手机号，限11字符">
+                                <p class="input-tips">提示内容部分</p>
+                            </div>
+                            <div class="limit-input input-box" data-limit="0">
+                                <label class="input-title">投资姓名</label>
+                                <input id="invest_account" class="form-test" data-form="required" type="text" maxlength="11" placeholder="平台注册用户名/姓名，限11字符">
+                                <p class="input-tips">提示内容部分</p>
+                            </div>
+                            <div class="limit-input input-box" data-limit="1">
+                              <label class="input-title">投资金额（元）</label>
+                              <input type="text" class="form-test" data-form="required isNum" maxlength="10" placeholder="请填写纯数字 如1000，限10字符" id="amount">
+                              <p class="input-tips">提示内容部分</p>
+                            </div>
+                            <div class="limit-input input-box" data-limit="2">
+                              <label class="input-title">投资标期（天）</label>
+                              <input type="text" class="form-test" data-form="required isNum" placeholder="请填写纯数字 如30" id="term">
+                              <p class="input-tips">提示内容部分</p>
+                            </div>
+                            <div class="limit-input input-box" data-limit="3">
+                              <label class="input-title">投资日期&nbsp;&nbsp;</label>
+                              <input type="date" class="form-test" data-form="required" placeholder="请选择投资日期" id="date">
+                              <p class="input-tips">提示内容部分</p>
+                            </div>
+                            <div class="input-box zfb-box">
+                              <label class="input-title">收款信息&nbsp;&nbsp;</label>
+                              <input type="text" maxlength="64" placeholder="收款帐号 如支付宝、qq等，限64字符" id="zfb">
+                            </div>
+                            <div class="mui-input-row isfutou-item input-box">
+                                <div class="mui-input-row mui-radio">
+                                    <label style="display: inline-block;">首投</label>
+                                    <input name="is_futou" checked="checked" type="radio" value="1">
+                                </div>
+                                <div class="mui-input-row mui-radio">
+                                    <label style="display: inline-block;">复投</label>
+                                    <input name="is_futou" type="radio" value="2">
+                                </div>
+                            </div>
+                            
+                            <div class="input-box beizhu">
+                                <label class="input-title">备注：</label>
+                                <input type="text" maxlength="100" placeholder="可不填，限100字符" id="remark">
+                            </div>
+                        </form>
+                        <button id="submit_btn" type="button" class="mui-btn mui-btn-blue">确认提交</button>
+                    </div>       
+        
+                </div>
+            </div>
+        </div>
+        <script src="{%static 'js/mui.min.js'%}"></script>
+        <!--弹窗部分-->
+        <script type="text/javascript" charset="utf-8">
+                mui.init({
+                    swipeBack:false //启用右滑关闭功能
+                });
+                
+                //      检验填写格式
+        var isInputTrue = true;        //填写格式是否正确
+        var validate = (function(){
+            var instructions = {
+                required:"不能为空!",
+                isPhone:"手机号不正确!",
+                isNum:"必须为数字格式",
+                isDate:"日期格式不正确",
+                isQQ:"QQ号码不正确"
+            };
+            var types = {
+                required:function(value){
+                    if(value==null||value.length===0){
+                        return false;
+                    }
+                    return true;
+                },
+                isNum:function(value){
+                    var reg = /^\d+(\.\d+)?$/;
+                    if(reg.test(value)){
+                        return true;
+                    }
+                    return false;
+                },
+                isPhone:function(value){
+                    var reg = /^1[34578]\d{9}$/;
+                    if(reg.test(value)){
+                        return true;
+                    }
+                    return false;
+                },
+                isDate:function(value){
+                    var reg = /^(\d{4})-(\d{2})-(\d{2})$/;
+                    if(reg.test(value)){
+                        return true;
+                    }
+                    return false;
+                },
+                isQQ:function(value){
+                    var reg = /[1-9][0-9]{4,14}$/;
+                    if(reg.test(value)){
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            return function(value,type){ //type为检测类型,value为检测的值
+                if(!types[type]){
+                    throw "检测类型不存在";
+                }
+                if(!types[type](value)){
+                    return instructions[type];
+                }
+                return false;
+            }
+        })();
+        function detect (value,types){
+            var result;
+            if(!(types instanceof Array)){
+                throw "检测类型只能为数组";
+            }
+            for(var type of types){
+                var msg = validate(value,type);
+                if(!!msg){
+                    return msg;
+                } 
+            }
+            return false;
+        }
+        
+        mui('.form-test').each(function(){
+            this.onblur = function(){
+                var value = this.value;
+                var test_type = this.getAttribute('data-form').split(' ');
+                console.log(value, test_type);
+                var result = detect(value, test_type);
+                console.log(result);
+                if (result) {
+                    this.parentNode.lastElementChild.innerText = result;
+                    this.parentNode.lastElementChild.style.display = 'block';
+                } else{
+                    this.parentNode.lastElementChild.style.display = 'none';
+                }
+            }
+        })
+        
+        
+    //  document.getElementById('submit_btn').addEventListener('tap', function(){
+    //      mui('.form-test').each(function(){
+    //          var value = this.value;
+    //          var test_type = this.getAttribute('data-form').split(' ');
+    //          console.log(value, test_type);
+    //          var result = detect(value, test_type);
+    //          console.log(result);
+    //          if (result) {
+    //              this.parentNode.lastElementChild.innerText = result;
+    //              this.parentNode.lastElementChild.style.display = 'block';
+    //          } else{
+    //              this.parentNode.lastElementChild.style.display = 'none';
+    //          }
+    //      })
+    //  })
+//      检验填写格式---end
+                
+
+        
+        
+        var project_id = '{{id}}';
+        var limit_str;
+        var limit;
+        var limit_id;
+        var is_futou;
+        mui('input[value="1"]')[0].setAttribute("checked","checked");
+        
+        document.getElementById("submit_btn").addEventListener('tap', function() {
+            isInputTrue = true;
+            mui('.form-test').each(function(){
+//              if (this.parentNode.style.display == 'block') {
+                    var value = this.value;
+                    var test_type = this.getAttribute('data-form').split(' ');
+                    console.log(value, test_type);
+                    var result = detect(value, test_type);
+                    console.log(result);
+                    if (result) {
+                        this.parentNode.lastElementChild.innerText = result;
+                        this.parentNode.lastElementChild.style.display = 'block';
+                        isInputTrue = false;
+                        return;
+                    } else{
+                        this.parentNode.lastElementChild.style.display = 'none';
+                    }
+//              }
+            })
+            
+            var invest_mobile = document.getElementById('telnum').value, 
+                invest_name = document.getElementById('invest_account').value,
+                invest_amount = document.getElementById('amount').value,
+                invest_term = document.getElementById('term').value,
+                invest_date = document.getElementById('date').value,
+                zhifubao = document.getElementById('zfb').value,
+                submit_type = mui('input[name="is_futou"]:checked')[0].value,
+                remark = document.getElementById('remark').value;
+            console.log('isInputTrue: '+isInputTrue);
+            if (!isInputTrue) {
+                mui.alert("填写格式不正确，请检查格式后重新提交！");
+                return;
+            } else {
+                
+                var submit_url = "{% url 'submitOrder' %}";
+                mui.ajax(submit_url,{
+                    data: {
+                        'project': project_id,
+                        'invest_mobile': invest_mobile,
+                        'invest_name': invest_name,
+                        'invest_amount': invest_amount,
+                        'invest_term': invest_term,
+                        'invest_date': invest_date,
+                        'submit_type': submit_type,
+                        'zhifubao': zhifubao,
+                        'remark': remark,
+                    },
+                    dataType:'json',//服务器返回json格式数据
+                    type:'post',//HTTP请求类型
+                    timeout:10000,//超时时间设置为10秒；
+                    success:function(ret){
+                        if(ret.code == 0) {
+                            mui.alert("提交成功");
+                            document.getElementById('invest_account').value = '';
+                            document.getElementById('telnum').value = '';
+                            document.getElementById("img-list").innerHTML = "";
+                            file_list = [];
+                            document.getElementById("upload").value = "";
+                        }else{
+                            mui.alert(ret.msg);
+                        }
+                    },
+                    error:function(xhr,type,errorThrown){
+                        console.log(xhr.responseText);
+                    }
+                });
+            }
+            
+        });
+
+
+        
+        </script>
+    {%if back %}
+        <script>
+        mui.back = function(){
+            var history = window.history;
+            if (history.length > 3 ){
+                history.go(-3);
+            }
+            else{
+                history.back();
+            }
+        };
+        
+        </script>
+    {%endif%}
+    {% include "m_footer.html" %}
+    </body>
+</html>

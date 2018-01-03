@@ -65,4 +65,8 @@ urlpatterns = [
     url(r'^delete_selfproject/(?P<id>[0-9]+)/$', 'account.project.delete_selfproject', name='delete_selfproject'),
     
     url(r'^detail_investlog/(?P<id>[0-9]+)/$', 'account.views.detail_investlog', name='detail_investlog'),
+    
+    url(r'^quick-submit/$', 'account.views.quick_sumbit', name='quick_submit'),
+    url(r'^detail/project/(?P<id>[0-9]+)/$', 'account.views.detail_project', name='detail_project'),
+    url(r'^submitOrder/$', 'account.views.submitOrder', name='submitOrder'),
 ]

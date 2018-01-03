@@ -16,6 +16,12 @@
         	.mui-content>.mui-table-view:first-child {
         	    margin-top: 0;
         	}
+        	.state20{
+				background: url(../../static/images/over.png) center center no-repeat;
+			}
+			.opa20{
+				opacity: 0.4;
+			}
         </style>
     </head>
 
@@ -32,8 +38,8 @@
                     </li>
                     <ul id="left_box" class="left_ul">
                         {% for item in projects %}
-                        <li class="item_line">
-                            <div class="column_1 column"><span class="item">{{item.title}}</span></div>
+                        <li class="item_line state{{item.state}}">
+                            <div class="column_1 column"><span class="item opa{{item.state}}">{{item.title}}</span></div>
                         </li>
                         {%endfor%}
                     </ul>

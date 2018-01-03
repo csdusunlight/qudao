@@ -1072,12 +1072,13 @@ def detail_investlog(request, id):
 @login_required
 def quick_sumbit(request):
     user = request.user
-    subs = SubscribeShip.objects.filter(user=user, is_on=True).select_related('project').order_by('project__szm')
+    projects = Project.objects.filter(Q(user=user)|Q(is_official=True)).filter(state__in=['10', '20']).order_by('szm')
     dic = OrderedDict()
-    for sub in subs:
-        project = sub.project
+    for project in projects:
         id = project.id
         title = project.title
+        if project.user == user and project.is_official==False:
+            title += u"（自建项目）"
         logo = project.picture_url()
         szm = project.szm
         pinyin = project.pinyin

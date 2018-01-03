@@ -1097,22 +1097,7 @@ def quick_sumbit(request):
 @login_required
 def detail_project(request, id):
     project = Project.objects.get(id=id)
-    sub = SubscribeShip.objects.get(project=id,user=request.user)
-    intrest = sub.intrest if sub.intrest else project.intrest
-    price = sub.price if sub.price else project.cprice
-    is_fanshu = 0
-    kwargs = {'id':id, 'project':project, 'intrest':intrest, 'price':price,}
-    strategy =  project.strategy
-    if FANSHU_DOMAIN in strategy and '/' in strategy:
-        is_fanshu = 1
-        try:
-            spl = strategy.split('/')
-            pk = spl[-1] or spl[-2]
-            doc = Document.objects.get(id=pk)
-            kwargs.update(doc=doc)
-        except:
-            pass
-    kwargs.update(is_fanshu=is_fanshu)
+    kwargs = {'id':id, 'project':project}
     template = 'account/m_detail_project.html'
     return render(request, template , kwargs)
 

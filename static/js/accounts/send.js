@@ -128,7 +128,7 @@ $(function() {
 	$('#yanzhengma_button').bind('click',function() {
 		actionType = "change_bankcard";
 		actionurl = get_code_url;
-		phoneNum = phoneNum;coderefresh_url
+		phoneNum = phoneNum;
 		sendTelVerifyCodeImageV(phoneNum, actionType, actionurl);
 	});
 

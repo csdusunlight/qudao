@@ -99,12 +99,13 @@
 			$('.nav__item:eq(1)').addClass('active');
 		});
 
-		var state = $(".over").attr("data-state");
-		if(state == 20) {
-			$(".over").css("display", "block");
-		} else {
-			$(".over").css("display", "none");
-		}
+		$(".over").each(function(){
+			if ($(this).attr("data-state") == 20) {
+				$(this).css("display", "block");
+			} else{
+				$(this).css("display", "none");
+			}			
+		});
 
 		function tounicode(data) {
 			if(data == '') return '请输入汉字';

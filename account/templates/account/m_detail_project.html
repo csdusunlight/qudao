@@ -115,11 +115,6 @@
                     <input id="telnum" class="form-test" data-form="required isPhone" type="text" maxlength=11 placeholder="平台注册手机号，限11字符">
                     <p class="input-tips">提示内容部分</p>
                 </div>
-                <div class="limit-input input-box" data-limit="0">
-                    <label class="input-title">投资姓名</label>
-                    <input id="invest_account" class="form-test" data-form="required" type="text" maxlength="11" placeholder="平台注册用户名/姓名，限11字符">
-                    <p class="input-tips">提示内容部分</p>
-                </div>
                 <div class="limit-input input-box" data-limit="1">
                   <label class="input-title">投资金额（元）</label>
                   <input type="text" class="form-test" data-form="required isNum" maxlength="10" placeholder="请填写纯数字 如1000，限10字符" id="amount">
@@ -134,6 +129,11 @@
                   <label class="input-title">投资日期&nbsp;&nbsp;</label>
                   <input type="date" class="form-test" data-form="required" placeholder="请选择投资日期" id="date">
                   <p class="input-tips">提示内容部分</p>
+                </div>
+                <div class="input-box zfb-box">
+                    <label class="input-title">投资姓名</label>
+                    <input id="invest_account" type="text" maxlength="11" placeholder="平台注册用户名/姓名，限11字符">
+                    <p class="input-tips">提示内容部分</p>
                 </div>
                 <div class="input-box zfb-box">
                   <label class="input-title">收款信息&nbsp;&nbsp;</label>
@@ -333,9 +333,6 @@
                             mui.alert("提交成功");
                             document.getElementById('invest_account').value = '';
                             document.getElementById('telnum').value = '';
-                            document.getElementById("img-list").innerHTML = "";
-                            file_list = [];
-                            document.getElementById("upload").value = "";
                         }else{
                             mui.alert(ret.msg);
                         }

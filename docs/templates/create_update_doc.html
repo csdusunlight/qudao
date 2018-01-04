@@ -36,7 +36,7 @@
                     <span class="switch__name">是否公开文档&nbsp;</span>
                     <span data-isadd="{{doc.is_on}}" class="home switch {{doc.is_on}}" onclick="isadd(this)"></span>
                 </div>
-                <a data-close="{{close_time}}" class="close-time header__btn">定时关闭</a>
+                <a data-close="{{doc.close_time}}" class="close-time header__btn">定时关闭</a>
                 <a class="doc_secret header__btn">加密文档</a>
                 <div class="doc__private">
                     <p class="switch-secret">
@@ -322,7 +322,13 @@
             
         }
     }
-    
+    console.log($('.close-time').data('close'));
+    if($('.close-time').data('close')) {
+        $('.close-time').text('已定时');
+        $('.date-choose').val($('.close-time').data('close'));
+    } else {
+        $('.close-time').text('定时关闭');
+    }
     $('.close-time').click(function(){
         $('.popup.m-choose-date').addClass('in');
     })
@@ -331,6 +337,43 @@
       ,type: 'datetime'
       ,format: 'yyyy-MM-ddTHH:mm'
     });
+    $('#confirm_date').click(function(){
+        var time_key = $('.date-choose').val();
+        if(time_key) {
+            $.ajax({
+                url: "/restapi/docs/" + doc_id + "/",
+                dataType: "json",
+                type:"put",
+                data: {
+                    'close_time': time_key
+                },
+                success: function(ret) {
+                    $('.close-time').text('已定时');
+                    $('.popup.m-choose-date').removeClass('in');
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
+        } else {
+            $.ajax({
+                url: "/restapi/docs/" + doc_id + "/",
+                dataType: "json",
+                type:"put",
+                data: {
+                    'close_time': time_key
+                },
+                success: function(ret) {
+                    $('.close-time').text('定时关闭');
+                    $('.popup.m-choose-date').removeClass('in');
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
+        }
+        
+    })
 </script>
 
 </body>

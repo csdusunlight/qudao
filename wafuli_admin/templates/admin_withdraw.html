@@ -250,7 +250,21 @@
     $('#withdraw').click(function(){
        var is_sure = confirm('确定是否一键提现？');
        if (is_sure == true) {
-           alert('true')
+           $.ajax({
+                url: "{% url 'batch_withdraw' %}",
+                dataType: "json",
+                type:"get",
+                success: function(ret) {
+                    if(ret.code == 0) {
+                        alert('一键提现成功');
+                    } else {
+                        alert('截获bug一枚，请火速联系前端哥哥')
+                    }
+                },
+                error: function() {
+                    alert("截获bug一枚，请火速联系前端哥哥");
+                }
+            });
        }
    })
  });
@@ -332,7 +346,7 @@
    <a id="input_clone" class="input-clone">选择文件</a>
    <p class="hint-box">已选择表格：<b id="hint" class="hint">无</b></p>
    <input id="import" type="button" value="导入" />
-   <input id="withdraw" type="button" value="一键提现" />
+   <input style="float: right;" id="withdraw" type="button" value="一键提现" />
  </div>
 </form>
 </div>

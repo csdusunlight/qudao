@@ -22,9 +22,12 @@ class Command(BaseCommand):
             card = user.user_bankcard.first()
             if not card:
                 continue
-            with transaction.atomic():
-                amount = user.balance
-                charge_money(user, '1', amount, u'系统自动提现')
-                WithdrawLog.objects.create(user=user, amount=amount, audit_state='1')
+            try:
+                with transaction.atomic():
+                    amount = user.balance
+                    charge_money(user, '1', amount, u'系统自动提现')
+                    WithdrawLog.objects.create(user=user, amount=amount, audit_state='1')
+            except:
+                continue
         end_time = time.time()
         logger.info("******Auto-withdrawing is finished, time:%s*********",end_time-begin_time)

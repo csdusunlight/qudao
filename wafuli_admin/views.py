@@ -1335,3 +1335,21 @@ def send_multiple_msg(request):
 
 def award_logs(request):
     return render(request,"award_logs.html",)
+
+@login_required
+def batch_withdraw(request):
+    if not request.user.is_staff or not request.is_ajax():
+        raise Http404
+    users = MyUser.objects.filter(balance__gte=10, is_autowith=True)
+    for user in users:
+        card = user.user_bankcard.first()
+        if not card:
+            continue
+        try:
+            with transaction.atomic():
+                amount = user.balance
+                charge_money(user, '1', amount, u'系统自动提现')
+                WithdrawLog.objects.create(user=user, amount=amount, audit_state='1')
+        except:
+            continue
+    

@@ -13,6 +13,7 @@
     <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
     <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
     <script type="text/javascript" charset="utf-8" src="{% static 'ueditor/lang/zh-cn/zh-cn.js' %}"></script>
+    <script type="text/javascript" charset="utf-8" src="{% static 'laydate/laydate.js' %}"></script>
 
     <style type="text/css">
     </style>
@@ -32,6 +33,7 @@
                     <span class="switch__name">是否公开文档&nbsp;</span>
                     <span data-isadd="{{doc.is_on}}" class="home switch {{doc.is_on}}" onclick="isadd(this)"></span>
                 </div>
+                <a class="close-time header__btn">定时关闭</a>
                 <a class="doc_secret header__btn">加密文档</a>
                 <div class="doc__private">
                     <p class="switch-secret">
@@ -71,6 +73,20 @@
             <div class="popup__btnbox">
                 <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
                 <a id="confirm_delete" class="btn m-green popup__close-btn">确认</a>
+            </div>
+        </div>
+    </div>
+    <div class="popup m-choose-date">
+        <div class="popup__content" style="width: 400px;">
+            <div class="popup__top">
+                <h2 class="popup__title">设置文档关闭时间</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+            </div>
+            <div class="popup__detail">
+                <input type="text" class="date-choose" placeholder="请选择日期" id="date_choose">
+            </div>
+            <div class="popup__btnbox">
+                <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
+                <a id="confirm_date" class="btn m-green popup__close-btn">确认</a>
             </div>
         </div>
     </div>
@@ -302,6 +318,14 @@
             
         }
     }
+    
+    $('.close-time').click(function(){
+        $('.popup.m-choose-date').addClass('in');
+    })
+    laydate.render({
+      elem: '#date_choose' //指定元素
+      ,type: 'datetime'
+    });
 </script>
 
 </body>

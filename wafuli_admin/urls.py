@@ -31,6 +31,8 @@ urlpatterns = [
     url(r'^export_charge/$', 'wafuli_admin.views.export_charge_excel', name='export_charge_excel'),
     
     url(r'^award_logs/$', 'wafuli_admin.views.award_logs', name='award_logs'),
+    
+    url(r'^batch_withdraw/$', 'wafuli_admin.views.batch_withdraw', name='batch_withdraw'),
 ]
 
 

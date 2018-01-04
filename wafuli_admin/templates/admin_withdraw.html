@@ -246,7 +246,13 @@
    choose_file.onclick = function() {
      document.getElementById("fileupload1").click();
    }
-
+    
+    $('#withdraw').click(function(){
+       var is_sure = confirm('确定是否一键提现？');
+       if (is_sure == true) {
+           alert('true')
+       }
+   })
  });
 </script>
 {% endblock js %}
@@ -326,6 +332,7 @@
    <a id="input_clone" class="input-clone">选择文件</a>
    <p class="hint-box">已选择表格：<b id="hint" class="hint">无</b></p>
    <input id="import" type="button" value="导入" />
+   <input id="withdraw" type="button" value="一键提现" />
  </div>
 </form>
 </div>

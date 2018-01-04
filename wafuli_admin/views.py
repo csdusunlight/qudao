@@ -1352,4 +1352,4 @@ def batch_withdraw(request):
                 WithdrawLog.objects.create(user=user, amount=amount, audit_state='1')
         except:
             continue
-    
+    return JsonResponse({'code':0})

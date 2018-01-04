@@ -36,7 +36,7 @@
                     <span class="switch__name">是否公开文档&nbsp;</span>
                     <span data-isadd="{{doc.is_on}}" class="home switch {{doc.is_on}}" onclick="isadd(this)"></span>
                 </div>
-                <a data-close="{{doc.close_time}}" class="close-time header__btn">定时关闭</a>
+                <a data-close="{{doc.close_time| date:'Y-m-d\Th:i'}}" class="close-time header__btn">定时关闭</a>
                 <a class="doc_secret header__btn">加密文档</a>
                 <div class="doc__private">
                     <p class="switch-secret">

@@ -1072,12 +1072,13 @@ def detail_investlog(request, id):
 @login_required
 def quick_sumbit(request):
     user = request.user
-    subs = SubscribeShip.objects.filter(user=user, is_on=True).select_related('project').order_by('project__szm')
+    projects = Project.objects.filter(Q(user=user)|Q(is_official=True)).filter(state__in=['10', '20']).order_by('szm')
     dic = OrderedDict()
-    for sub in subs:
-        project = sub.project
+    for project in projects:
         id = project.id
         title = project.title
+        if project.user == user and project.is_official==False:
+            title += u"（自建项目）"
         logo = project.picture_url()
         szm = project.szm
         pinyin = project.pinyin
@@ -1096,22 +1097,7 @@ def quick_sumbit(request):
 @login_required
 def detail_project(request, id):
     project = Project.objects.get(id=id)
-    sub = SubscribeShip.objects.get(project=id,user=request.user)
-    intrest = sub.intrest if sub.intrest else project.intrest
-    price = sub.price if sub.price else project.cprice
-    is_fanshu = 0
-    kwargs = {'id':id, 'project':project, 'intrest':intrest, 'price':price,}
-    strategy =  project.strategy
-    if FANSHU_DOMAIN in strategy and '/' in strategy:
-        is_fanshu = 1
-        try:
-            spl = strategy.split('/')
-            pk = spl[-1] or spl[-2]
-            doc = Document.objects.get(id=pk)
-            kwargs.update(doc=doc)
-        except:
-            pass
-    kwargs.update(is_fanshu=is_fanshu)
+    kwargs = {'id':id, 'project':project}
     template = 'account/m_detail_project.html'
     return render(request, template , kwargs)
 

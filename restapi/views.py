@@ -105,7 +105,7 @@ class InvestlogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsOwnerOrStaff,)
     serializer_class = InvestLogSerializer
     def perform_update(self, serializer):
-        if serializer.validated_data.has_key('project') or serializer.validated_data.has_key('project'):
+        if serializer.validated_data.has_key('project') or serializer.validated_data.has_key('invest_mobile'):
             project = serializer.validated_data['project']
             id = serializer.instance.id
             invest_mobile = serializer.validated_data['invest_mobile']

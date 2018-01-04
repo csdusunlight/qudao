@@ -16,6 +16,9 @@
     <script type="text/javascript" charset="utf-8" src="{% static 'laydate/laydate.js' %}"></script>
 
     <style type="text/css">
+        .layui-laydate-list li:nth-of-type(3) {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -33,7 +36,7 @@
                     <span class="switch__name">是否公开文档&nbsp;</span>
                     <span data-isadd="{{doc.is_on}}" class="home switch {{doc.is_on}}" onclick="isadd(this)"></span>
                 </div>
-                <a class="close-time header__btn">定时关闭</a>
+                <a data-close="{{close_time}}" class="close-time header__btn">定时关闭</a>
                 <a class="doc_secret header__btn">加密文档</a>
                 <div class="doc__private">
                     <p class="switch-secret">
@@ -83,6 +86,7 @@
             </div>
             <div class="popup__detail">
                 <input type="text" class="date-choose" placeholder="请选择日期" id="date_choose">
+                <p style="font-size: 12px;">*清空时间点击确定按钮即可取消定时，定时关闭可能有5分钟左右的时差</p>
             </div>
             <div class="popup__btnbox">
                 <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
@@ -325,6 +329,7 @@
     laydate.render({
       elem: '#date_choose' //指定元素
       ,type: 'datetime'
+      ,format: 'yyyy-MM-ddTHH:mm'
     });
 </script>
 

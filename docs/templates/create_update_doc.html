@@ -296,6 +296,7 @@
                     console.log('关闭');
                     $(obj).data('isadd', 'False');
                     $(obj).removeClass('True').addClass('False');
+                    $('.close-time').hide();
                 },
                 error: function() {
                     alert("请检查网络连接");
@@ -314,6 +315,7 @@
                     console.log('开启');
                     $(obj).data('isadd', 'True');
                     $(obj).removeClass('False').addClass('True');
+                    $('.close-time').show();
                 },
                 error: function() {
                     alert("请检查网络连接");
@@ -322,6 +324,13 @@
             
         }
     }
+    
+    if ($('.home').data('isadd') == 'True') {
+    	$('.close-time').show();
+    } else{
+    	$('.close-time').hide();
+    }
+    
     console.log($('.close-time').data('close'));
     if($('.close-time').data('close')) {
         $('.close-time').text('已定时');

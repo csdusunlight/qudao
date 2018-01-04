@@ -1,3 +1,4 @@
+#coding:utf-8
 '''
 Created on 20160417
 
@@ -10,6 +11,7 @@ from django.db import connection
 from django.db.models import Sum, Count,Avg
 from wafuli.models import Project, WithdrawLog, InvestLog
 from activity.models import IPAward, IPLog
+from docs.models import Document
 logger = logging.getLogger("wafuli")
 from django.core.management.base import BaseCommand, CommandError
 from account.models import MyUser, Userlogin, ApplyLog
@@ -66,6 +68,9 @@ class Command(BaseCommand):
         global_statis.user_total = MyUser.objects.count() + 300
         global_statis.invite_total = (invest_total.get('count') or 0) + 4180000
         global_statis.save()
+        
+        #文档定时关闭
+        Document.objects.filter(close_time__lte=datetime.datetime.now(), is_on=True).update(is_on=False, close_time=None)
         
         end_time = time.time()
         logger.info("******Statistics is finished, time:%s*********",end_time-begin_time)

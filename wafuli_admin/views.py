@@ -628,7 +628,6 @@ def admin_user(request):
         elif type == 2:
             obj_user.is_active = False
             obj_user.save(update_fields=['is_active'])
-            auth_logout(request)
             admin_investlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, type='2', remark=u"加黑")
             res['code'] = 0
         elif type == 3:

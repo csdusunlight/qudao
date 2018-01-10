@@ -370,6 +370,7 @@ def export_investlog(request):
         user_level = con.user.level
         result = ''
         settle_amount = ''
+        settle_price = con.get_project_price()
         reason = con.audit_reason
         submit_type = con.get_submit_type_display()
         if con.audit_state=='0':
@@ -377,11 +378,11 @@ def export_investlog(request):
             settle_amount = str(con.settle_amount)
         elif con.audit_state=='2':
             result = u'否'
-        data.append([id, project_name, invest_date, qq_number,user_level, invest_mobile, invest_name, term,
+        data.append([id, project_name, invest_date, qq_number,user_level, settle_price, invest_mobile, invest_name, term,
                      invest_amount, submit_type, remark, result, settle_amount, reason])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
-    title_row = [u'记录ID',u'项目名称',u'投资日期', u'QQ', u'用户类型', u'投资手机号', u'投资姓名' ,u'投资期限' ,u'投资金额',u'投资类型', u'备注',
+    title_row = [u'记录ID',u'项目名称',u'投资日期', u'QQ', u'用户类型', u'结算价格', u'投资手机号', u'投资姓名' ,u'投资期限' ,u'投资金额',u'投资类型', u'备注',
                  u'审核通过',u'结算金额',u'拒绝原因']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
@@ -477,7 +478,7 @@ def import_investlog(request):
     table = data.sheets()[0]
     nrows = table.nrows
     ncols = table.ncols
-    if ncols!=14:
+    if ncols!=15:
         ret['msg'] = u"文件格式与模板不符，请在导出的待审核记录表中更新后将文件导入！"
         return JsonResponse(ret)
     rtable = []
@@ -494,7 +495,7 @@ def import_investlog(request):
                 elif j==1:
                     project = cell.value
                     temp.append(project)
-                elif j==11:
+                elif j==12:
                     result = cell.value.strip()
                     if result == u"是":
                         result = 1
@@ -505,14 +506,14 @@ def import_investlog(request):
                     else:
                         raise Exception(u"审核结果必须为是,否或复审。")
                     temp.append(result)
-                elif j==12:
+                elif j==13:
                     return_amount = 0
                     if cell.value:
                         return_amount = Decimal(cell.value)
                     elif result==1:
                         raise Exception(u"审核结果为是时，返现金额不能为空或零。")
                     temp.append(return_amount)
-                elif j==13:
+                elif j==14:
                     reason = cell.value
                     temp.append(reason)
                 else:

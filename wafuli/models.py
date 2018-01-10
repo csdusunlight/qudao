@@ -144,6 +144,9 @@ class SubscribeShip(models.Model):
     is_on = models.BooleanField(u"是否在主页显示",default=True)
     is_recommend = models.BooleanField(u"是否放到推荐位置",default=False)
     intrest = models.CharField(u"预期年化", max_length=20)
+    def get_project_price(self):
+        level = self.user.level
+        return getattr(self.project, 'price'+str(level))
     def __unicode__(self):
         return self.user.mobile + self.project.title
     class Meta:
@@ -213,6 +216,9 @@ class InvestLog(models.Model):
             return mobile[:3] + '****' + mobile[-4:]
         else:
             return mobile
+    def get_project_price(self):
+        level = self.user.level
+        return getattr(self.project, 'price'+str(level))
 
 STATE = (
     ('0', u'置顶'),

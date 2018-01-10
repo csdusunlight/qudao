@@ -45,6 +45,7 @@ class InvestLogSerializer(serializers.ModelSerializer):
     other_remark = serializers.CharField(source='get_other_and_remark', read_only=True)
     submit_type_des = serializers.CharField(source='get_submit_type_display', read_only=True)
     submit_way_des = serializers.CharField(source='get_submit_way_display', read_only=True)
+    project_price = serializers.CharField(source='get_project_price', read_only=True)
     class Meta:
         model = InvestLog
         fields = '__all__'
@@ -76,9 +77,7 @@ class SubscribeShipSerializer(serializers.ModelSerializer):
     project_channel = serializers.CharField(source='project.channel', read_only=True)
     project_title = serializers.CharField(source='project.title', read_only=True)
     project_intro = serializers.CharField(source='project.introduction', read_only=True)
-    project_price01 = serializers.CharField(source='project.price01', read_only=True)
-    project_price02 = serializers.CharField(source='project.price02', read_only=True)
-    project_price03 = serializers.CharField(source='project.price03', read_only=True)
+    project_price = serializers.CharField(source='get_project_price', read_only=True)
     project_cprice = serializers.CharField(source='project.cprice', read_only=True)
     project_shortprice = serializers.CharField(source='project.shortprice', read_only=True)
     project_investrange = serializers.CharField(source='project.investrange', read_only=True)

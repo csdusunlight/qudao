@@ -143,3 +143,8 @@
 }
 
 /*我的项目---end*/
+/*样式覆盖*/
+.table td {
+    border-bottom: none;
+    word-break: break-word;
+}

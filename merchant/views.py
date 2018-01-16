@@ -8,6 +8,7 @@ import datetime
 from django.http.response import JsonResponse
 from decimal import Decimal
 import logging
+from merchant.margin_transaction import charge_margin
 logger = logging.getLogger('wafuli')
 # Create your views here.
 @transaction.atomic
@@ -64,7 +65,7 @@ def preaudit_investlog(request):
                 res['code'] = -3
                 res['res_msg'] = u"操作失败，返现重复！"
             else:
-                translist = charge_money(investlog_user, '0', cash, project_title)  #jzy
+                translist = charge_margin(investlog_user, '0', cash, project_title)
                 investlog.audit_state = '0'
                 investlog.settle_amount = cash
                 translist.investlog = investlog

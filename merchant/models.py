@@ -33,12 +33,12 @@ AUDIT_STATE = (
     ('2', u'审核未通过'),
 )    
 class Margin_AuditLog(models.Model):
-    user = models.ForeignKey(MyUser, related_name="margin_withdrawlog")
+    user = models.ForeignKey(MyUser, related_name="margin_auditlog")
     type = models.CharField(max_length=2, choices=TRANS_TYPE, verbose_name=u"变动类型")
     submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
     audit_time = models.DateTimeField(u'审核时间', null=True, blank=True)
     amount = models.DecimalField(u'数值', max_digits=10, decimal_places=2)
-    admin_user = models.ForeignKey(MyUser, related_name="withdrawlog_admin", null=True)
+    admin_user = models.ForeignKey(MyUser, related_name="admin_margin_auditlog", null=True)
     audit_reason = models.CharField(u"审核原因", max_length=30)
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
     class Meta:

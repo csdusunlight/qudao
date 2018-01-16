@@ -5,12 +5,12 @@ Created on 20160318
 '''
 #type_add = '0'
 #type_min = '1'
+from wafuli.models import TransList
 from account.models import MyUser
 import logging
 from django.db import transaction
 from django.db.models import F
 from decimal import Decimal
-from merchant.models import Margin_Translog
 logger = logging.getLogger('wafuli')
 
 def charge_money(user, type, amount, reason, reverse=False, remark=''):
@@ -20,12 +20,14 @@ def charge_money(user, type, amount, reason, reverse=False, remark=''):
     if amount <= 0:
         raise Exception('Charge_money amount can not be less or equal to 0')
     with transaction.atomic():
-        user.refresh_from_db()
-        trans = Margin_Translog.objects.create(user=user, transType=type, initAmount = user.balance, 
+        user = MyUser.objects.get(id=user.id)
+        trans = TransList.objects.create(user=user, transType=type, initAmount = user.balance, 
                           transAmount=amount, reason=reason, remark=remark)
         if type == '0':
-            user.margin_account = F('margin_account') + amount
-            user.save(update_fields=['margin_account'])
+            user.balance = F('balance') + amount
+            if not reverse:
+                user.accu_income = F('accu_income') + amount
+            user.save(update_fields=['accu_income','balance'])
         elif user.balance < amount:
             raise ValueError('The account ' + user.mobile + '\'s balance is not enough!')
         else:

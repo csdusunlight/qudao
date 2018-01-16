@@ -15,8 +15,9 @@ logger = logging.getLogger('wafuli')
 def preaudit_investlog(request):
     admin_user = request.user
     if request.method == "GET":
+        print reverse('merchant:preaudit_investlog')
         if not ( admin_user.is_authenticated() and admin_user.is_staff):
-            return redirect(reverse('admin:login') + "?next=" + reverse('preaudit_investlog'))
+            return redirect(reverse('admin:login') + "?next=" + reverse('merchant:preaudit_investlog'))
         item_list = InvestLog.objects.filter(user=admin_user, category='merchant', audit_state__in=['1','3'], submit_time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
         project_list = ()
         for item in item_list:

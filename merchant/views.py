@@ -85,3 +85,6 @@ def preaudit_investlog(request):
             investlog.admin_user = admin_user
             investlog.save()
         return JsonResponse(res)
+    
+    def fangdan_audit(request):
+        return render(request, 'merchant/fangdan_audited.html')

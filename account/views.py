@@ -1142,7 +1142,7 @@ def submitOrder(request):
                              invest_name=invest_name, remark=remark, qq_number=qq_number, expect_amount=expect_amount,
                              zhifubao=zhifubao, invest_amount=invest_amount, submit_type=submit_type,
                               invest_term=invest_term, is_official=project.is_official,
-                              submit_way='4', is_selfsub=True, audit_state='1')
+                              submit_way='4', audit_state='1')
     #活动插入
 #     on_submit(request, request.user, investlog)
     #活动插入结束

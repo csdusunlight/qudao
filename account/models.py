@@ -85,6 +85,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         related_name="user_set", related_query_name="user")
     is_autowith = models.BooleanField(u'是否自动提现', default=True)
     is_book_email_notice = models.BooleanField(u'是否预约单邮件通知', default=True)
+    margin_account = models.DecimalField(u'保证金账户余额', default = Decimal(0), max_digits=10, decimal_places=2)
+    
     objects = MyUserManager()
 
     USERNAME_FIELD = 'mobile'
@@ -174,7 +176,7 @@ class MobileCode(models.Model):
 
 
 class AdminPermission(models.Model):
-    code = models.CharField(unique=True, max_length=3)
+    code = models.CharField(unique=True, max_length=20)
     name = models.CharField('name', max_length=255)
     def __unicode__(self):
         return self.code + ',' + self.name

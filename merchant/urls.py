@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [
 #     url(r'^$', 'wafuli_admin.views.index', name='admin_index'),
     url(r'^preaudit_investlog/$', views.preaudit_investlog, name='preaudit_investlog'),
-    url(r'^fangdan_audit/$', 'merchant.views.fangdan_audit', name='fangdan_audit'),
+    url(r'^fangdan_audit/$', views.fangdan_audit, name='fangdan_audit'),
 ]
 
 

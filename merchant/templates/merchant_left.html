@@ -1,0 +1,13 @@
+{% load staticfiles %}
+<div class="leftnav">
+	<ul>
+	   	<li class="back-a1 account-navbox"><a href="#" class="account-nav">推客中心</a></li>
+	   	<li class="back-a2 account-navbox"><a href="#" class="account-nav">项目管理</a></li>
+	   	<li class="back-a3 account-navbox"><a href="{% url 'merchant:fangdan_audit' %}" class="account-nav">安全中心</a></li>
+	   </ul>
+</div>
+<script>
+$(function(){
+	$('.nav__item:eq(6)').addClass('active');
+});
+</script>

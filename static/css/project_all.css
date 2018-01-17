@@ -252,44 +252,70 @@
 	width: 180px;
 	height: 60px;
 	text-align: center;
-	line-height: 60px;
 	float: left;
 	position: relative;left: 15px;
 }
+.item1 > span{
+	height: 80px;
+	color: black;
+	display: table-cell;
+	vertical-align: middle;
+}
+
 .item2{
 	width: 180px;
 	height: 60px;
 	text-align: center;
-	line-height: 60px;
 	float: left;
+}
+.item2 > span{
+	height: 80px;
+	color: black;
+	display: table-cell;
+	vertical-align: middle;
 }
 .item3{
 	width: 180px;
 	height: 60px;
 	text-align: center;
-	line-height: 60px;
 	float: left;
 	margin-left: 30px;
+}
+.item3 > span{
+	height: 80px;
+	color: black;
+	display: table-cell;
+	vertical-align: middle;
 }
 .item4{
 	width: 180px;
 	height: 60px;
 	text-align: center;
-	line-height: 60px;
 	float: left;
 	margin-left: 30px;
+}
+.item4 > span{
+	height: 80px;
+	color: black;
+	display: table-cell;
+	vertical-align: middle;
 }
 .item5{
 	width: 180px;
 	/*height: 60px;*/
 	text-align: center;
-	line-height: 30px;
+	line-height: 60px;
 	float: left;
 	margin-left: 10px;
 	/*white-space:nowrap;*/
 	word-wrap:break-word;
 	word-break:break-all;
 }
+.item5 > span{
+	color: RGB(145,193,29);
+	
+}
+
 .wrapperBox{
 	/*display: table-cell;
 	vertical-align: middle;*/

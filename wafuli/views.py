@@ -44,7 +44,6 @@ def project_all(request):
         template = 'm_project_repo_nologin.html' if request.mobile else 'project_repo_nologin.html'
         return render(request, template, {'projects':projects})
     
-    
 def user_guide(request):
     return render(request, 'user_guide.html',  )
 def activity_rank(request):

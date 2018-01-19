@@ -94,7 +94,7 @@ class Project(models.Model):
     investrange = models.CharField(u"投资额度区间", max_length=20)
     intrest = models.CharField(u"预期年化", max_length=20)
     necessary_fields = models.CharField(u"必填字段", max_length=50,help_text=u"投资用户名(0)，投资金额(1)，投资标期(2)，投资日期(3)，\
-                支付宝信息(4)，投资手机号(5)，预期返现金额(6)，QQ号(7)，投资截图(8)，字段以英文逗号隔开，如0,1,2,3,4,5", default = '0,1,2,3,4,5')
+                支付宝信息(4)，投资手机号(5)，预期返现金额(6)，QQ号(7)，投资截图(8)，字段以英文逗号隔开，如0,1,2,3,4,5", default = '1,2,3,4,5,6')
     subscribers = models.ManyToManyField(MyUser, through='SubscribeShip')
     points = models.IntegerField(u"参与人数", default=0)
     channel = models.CharField(u"项目来源（上游渠道）", max_length=20, blank=True)
@@ -275,8 +275,11 @@ class TransList(models.Model):
     reason = models.CharField(max_length=20, verbose_name=u"变动原因")
     remark = models.CharField(u"备注", max_length=100, blank=True)
     transType = models.CharField(max_length=2, choices=TRANS_TYPE, verbose_name=u"变动类型")
-    investlog = models.ForeignKey(InvestLog, related_name="translist", null=True,on_delete=models.SET_NULL)
-    adminlog = models.ForeignKey(AdminLog, related_name="translist", null=True,on_delete=models.SET_NULL)
+    content_type = models.ForeignKey(ContentType,null=True,blank=True)
+    object_id = models.PositiveIntegerField(null=True,blank=True)
+    auditlog = GenericForeignKey('content_type', 'object_id')
+#     investlog = models.ForeignKey(InvestLog, related_name="translist", null=True,on_delete=models.SET_NULL)
+#     adminlog = models.ForeignKey(AdminLog, related_name="translist", null=True,on_delete=models.SET_NULL)
     def __unicode__(self):
         return u"%s:%s了%s现金 提交时间%s" % (self.user, self.get_transType_display(),self.transAmount,
                                        self.user_event.time if self.user_event else "")

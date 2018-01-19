@@ -707,14 +707,10 @@ def get_user_money_page(request):
 @login_required
 def withdraw(request):
     if request.method == 'GET':
-        hashkey = CaptchaStore.generate_key()
-        codimg_url = captcha_image_url(hashkey)
-
         user = request.user
         card = user.user_bankcard.first()
         template = 'account/m_withdraw.html' if request.mobile else 'account/withdraw.html'
-        return render(request, template,
-                  {'hashkey':hashkey, 'codimg_url':codimg_url, "card":card})
+        return render(request, template,{"card":card})
     elif request.method == 'POST':
         user = request.user
         result = {'code':-1, 'res_msg':''}
@@ -747,6 +743,8 @@ def withdraw(request):
             with transaction.atomic():
                 translist = charge_money(user, '1', withdraw_amount, u'提现')
                 event = WithdrawLog.objects.create(user=user, amount=withdraw_amount, audit_state='1')
+                translist.auditlog = event
+                translist.save()
                 result['code'] = 0
             try:
                 sendWeixinNotify.delay([(request.user, event),], 'withdraw_apply')

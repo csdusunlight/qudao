@@ -203,7 +203,7 @@
 }
 
 .c2 {
-	margin-left: 15px;
+	margin-left: 20px;
 }
 
 .c3 {
@@ -265,6 +265,7 @@
 	width: 160px;
 	text-align: center;
 	float: left;
+	margin-left: 30px;
 }
 .item2 > span{
 	display: table-cell;
@@ -279,7 +280,7 @@
 	height: 60px;
 	text-align: center;
 	float: left;
-	margin-left: 30px;
+	margin-left: 45px;
 }
 .item3 > span{
 	display: table-cell;
@@ -306,13 +307,20 @@
 	width: 180px;
 	/*height: 60px;*/
 	text-align: center;
-	line-height: 60px;
 	float: left;
 	margin-left: 10px;
 	/*white-space:nowrap;*/
 	word-wrap:break-word;
 	word-break:break-all;
 }
+
+.item5 > span{
+	display: table-cell;
+	vertical-align: middle;
+	height: 60px;
+	color: black;
+}
+
 .wrapperBox{
 	/*display: table-cell;
 	vertical-align: middle;*/

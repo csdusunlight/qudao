@@ -46,7 +46,7 @@ def index(request):
     total['with_count'] = dict_with.get('cou')
     total['with_total'] = dict_with.get('sum') or 0
 
-    dict_ret = InvestLog.objects.filter(is_official=True,audit_state='0').\
+    dict_ret = InvestLog.objects.filter(category='official',audit_state='0').\
             aggregate(cou=Count('user',distinct=True),sum=Sum('settle_amount'))
     total['ret_count'] = dict_ret.get('cou')
     total['ret_total'] = dict_ret.get('sum') or 0
@@ -112,7 +112,7 @@ def admin_invest(request):
     if request.method == "GET":
         if not ( admin_user.is_authenticated() and admin_user.is_staff):
             return redirect(reverse('admin:login') + "?next=" + reverse('admin_project'))
-        item_list = InvestLog.objects.filter(is_official=True, audit_state__in=['1','3'], submit_time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
+        item_list = InvestLog.objects.filter(category='official', audit_state__in=['1','3'], submit_time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
         print item_list
         project_list = ()
         for item in item_list:

@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 import datetime
 from django.core.urlresolvers import reverse
+from public.pinyin import PinYin
 def get_today():
     return datetime.date.today()
 AUDIT_STATE = (
@@ -102,11 +103,19 @@ class Project(models.Model):
     pinyin = models.CharField(u"拼音全拼", max_length=100)
     szm = models.CharField(u"首字母", max_length=20)
     remark = models.CharField(u"项目备注", max_length=50, blank=True)
+    broker_rate = models.SmallIntegerField(u"佣金比例，百分数", default=0)
+    def save(self, force_insert=False, force_update=False, using=None, 
+             update_fields=None):
+        pyin = PinYin()
+        pyin.load_word()
+        self.szm, self.pinyin = pyin.hanzi2pinyin_split(self.title)
+        return models.Model.save(self, force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
     def clean(self):
-        if not self.pic:
-            raise ValidationError({'pic': u'图片不能为空'})
-        elif self.pic.size > 30000:
-            raise ValidationError({'pic': u'图片大小不能超过30k'})
+        if not self.company:
+            if not self.pic:
+                raise ValidationError({'pic': u'图片不能为空'})
+            elif self.pic.size > 30000:
+                raise ValidationError({'pic': u'图片大小不能超过30k'})
     class Meta:
         verbose_name = u"理财项目"
         verbose_name_plural = u"理财项目"

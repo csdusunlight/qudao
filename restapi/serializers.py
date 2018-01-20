@@ -30,7 +30,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = '__all__'
-        read_only_fields = ('user', 'pub_date', 'state', 'is_official')
+        read_only_fields = ('user', 'pub_date', 'state', 'is_official', 'category')
         
 class InvestLogSerializer(serializers.ModelSerializer):
     project_title = serializers.CharField(source='project.title', read_only=True)
@@ -50,7 +50,7 @@ class InvestLogSerializer(serializers.ModelSerializer):
         model = InvestLog
         fields = '__all__'
         read_only_fields = ('audit_date','submit_time','user','qq_number','qq_name','user_level',
-                             'user_mobile', 'settle_amount','return_amount', "admin_user", "is_official")
+                             'user_mobile', 'settle_amount','return_amount', "admin_user", "is_official",'category')
 class TransListSerializer(serializers.ModelSerializer):
     mobile = serializers.CharField(source='user.mobile', read_only=True)
     user_balance = serializers.CharField(source='balance', read_only=True)
@@ -73,7 +73,7 @@ class ApplyLogSerializer(serializers.ModelSerializer):
         exclude = ('password',)
 # SubscribeShip
 class SubscribeShipSerializer(serializers.ModelSerializer):
-    project_source = serializers.CharField(source='project.is_official', read_only=True)
+    project_category = serializers.CharField(source='project.category', read_only=True)
     project_channel = serializers.CharField(source='project.channel', read_only=True)
     project_title = serializers.CharField(source='project.title', read_only=True)
     project_intro = serializers.CharField(source='project.introduction', read_only=True)

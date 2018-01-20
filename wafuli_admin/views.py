@@ -25,7 +25,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.db import transaction
-from public.tools import has_permission
+from public.tools import has_post_permission
 from decimal import Decimal
 from weixin.tasks import sendWeixinNotify
 # Create your views here.
@@ -106,7 +106,7 @@ def admin_private(request):
     return render(request,"admin_private.html",)
 
 @transaction.atomic
-@has_permission('002')
+@has_post_permission('002')
 def admin_invest(request):
     admin_user = request.user
     if request.method == "GET":
@@ -166,8 +166,8 @@ def admin_invest(request):
                 translist = charge_money(investlog_user, '0', cash, project_title)  #jzy
                 investlog.audit_state = '0'
                 investlog.settle_amount = cash
-                translist.investlog = investlog
-                translist.save(update_fields=['investlog'])
+                translist.auditlog = investlog
+                translist.save()
 #                 #活动插入
 #                 on_audit_pass(request, investlog)
 #                 #活动插入结束
@@ -370,6 +370,7 @@ def export_investlog(request):
         user_level = con.user.level
         result = ''
         settle_amount = ''
+        settle_price = con.get_project_price()
         reason = con.audit_reason
         submit_type = con.get_submit_type_display()
         if con.audit_state=='0':
@@ -377,11 +378,11 @@ def export_investlog(request):
             settle_amount = str(con.settle_amount)
         elif con.audit_state=='2':
             result = u'否'
-        data.append([id, project_name, invest_date, qq_number,user_level, invest_mobile, invest_name, term,
+        data.append([id, project_name, invest_date, qq_number,user_level, settle_price, invest_mobile, invest_name, term,
                      invest_amount, submit_type, remark, result, settle_amount, reason])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
-    title_row = [u'记录ID',u'项目名称',u'投资日期', u'QQ', u'用户类型', u'投资手机号', u'投资姓名' ,u'投资期限' ,u'投资金额',u'投资类型', u'备注',
+    title_row = [u'记录ID',u'项目名称',u'投资日期', u'QQ', u'用户类型', u'结算价格', u'投资手机号', u'投资姓名' ,u'投资期限' ,u'投资金额',u'投资类型', u'备注',
                  u'审核通过',u'结算金额',u'拒绝原因']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
@@ -464,7 +465,7 @@ def export_charge_excel(request):
     return response
 
 @csrf_exempt
-@has_permission('002')
+@has_post_permission('002')
 def import_investlog(request):
     admin_user = request.user
     ret = {'code':-1}
@@ -477,7 +478,7 @@ def import_investlog(request):
     table = data.sheets()[0]
     nrows = table.nrows
     ncols = table.ncols
-    if ncols!=14:
+    if ncols!=15:
         ret['msg'] = u"文件格式与模板不符，请在导出的待审核记录表中更新后将文件导入！"
         return JsonResponse(ret)
     rtable = []
@@ -494,7 +495,7 @@ def import_investlog(request):
                 elif j==1:
                     project = cell.value
                     temp.append(project)
-                elif j==11:
+                elif j==12:
                     result = cell.value.strip()
                     if result == u"是":
                         result = 1
@@ -505,14 +506,14 @@ def import_investlog(request):
                     else:
                         raise Exception(u"审核结果必须为是,否或复审。")
                     temp.append(result)
-                elif j==12:
+                elif j==13:
                     return_amount = 0
                     if cell.value:
                         return_amount = Decimal(cell.value)
                     elif result==1:
                         raise Exception(u"审核结果为是时，返现金额不能为空或零。")
                     temp.append(return_amount)
-                elif j==13:
+                elif j==14:
                     reason = cell.value
                     temp.append(reason)
                 else:
@@ -541,8 +542,8 @@ def import_investlog(request):
                     translist = charge_money(investlog_user, '0', amount, row[1])
                     investlog.audit_state = '0'
                     investlog.settle_amount = amount
-                    translist.investlog = investlog
-                    translist.save(update_fields=['investlog'])
+                    translist.auditlog = investlog
+                    translist.save()
 #                     #活动插入
 #                     on_audit_pass(request, investlog)
 #                     #活动插入结束
@@ -564,7 +565,7 @@ def import_investlog(request):
     return JsonResponse(ret)
 
 @transaction.atomic
-@has_permission("005")
+@has_post_permission("005")
 def admin_user(request):
     admin_user = request.user
     if request.method == "GET":
@@ -620,15 +621,14 @@ def admin_user(request):
             elif mcash > 0:
                 translist = charge_money(obj_user, '1', mcash, reason)
             adminlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=reason, type='1')
-            translist.adminlog = adminlog
-            translist.save(update_fields=['adminlog'])
+            translist.auditlog = adminlog
+            translist.save()
             res['code'] = 0
 
 
         elif type == 2:
             obj_user.is_active = False
             obj_user.save(update_fields=['is_active'])
-            auth_logout(request)
             admin_investlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, type='2', remark=u"加黑")
             res['code'] = 0
         elif type == 3:
@@ -756,7 +756,7 @@ def get_admin_user_page(request):
     return JsonResponse(res)
 
 @transaction.atomic
-@has_permission('004')
+@has_post_permission('004')
 def admin_withdraw(request):
     admin_user = request.user
     if request.method == "GET":
@@ -1010,7 +1010,7 @@ def export_withdrawlog(request):
     return response
 
 @csrf_exempt
-@has_permission('004')
+@has_post_permission('004')
 def import_withdrawlog(request):
     admin_user = request.user
 
@@ -1335,3 +1335,21 @@ def send_multiple_msg(request):
 
 def award_logs(request):
     return render(request,"award_logs.html",)
+
+@login_required
+def batch_withdraw(request):
+    if not request.user.is_staff or not request.is_ajax():
+        raise Http404
+    users = MyUser.objects.filter(balance__gte=10, is_autowith=True)
+    for user in users:
+        card = user.user_bankcard.first()
+        if not card:
+            continue
+        try:
+            with transaction.atomic():
+                amount = user.balance
+                charge_money(user, '1', amount, u'系统自动提现')
+                WithdrawLog.objects.create(user=user, amount=amount, audit_state='1')
+        except:
+            continue
+    return JsonResponse({'code':0})

@@ -44,6 +44,9 @@ from decimal import Decimal
 import random
 import re
 from weixin.tasks import sendWeixinNotify
+from collections import OrderedDict
+from dragon.settings import FANSHU_DOMAIN
+from docs.models import Document
 
 @sensitive_post_parameters()
 @csrf_protect
@@ -704,14 +707,10 @@ def get_user_money_page(request):
 @login_required
 def withdraw(request):
     if request.method == 'GET':
-        hashkey = CaptchaStore.generate_key()
-        codimg_url = captcha_image_url(hashkey)
-
         user = request.user
         card = user.user_bankcard.first()
         template = 'account/m_withdraw.html' if request.mobile else 'account/withdraw.html'
-        return render(request, template,
-                  {'hashkey':hashkey, 'codimg_url':codimg_url, "card":card})
+        return render(request, template,{"card":card})
     elif request.method == 'POST':
         user = request.user
         result = {'code':-1, 'res_msg':''}
@@ -744,6 +743,8 @@ def withdraw(request):
             with transaction.atomic():
                 translist = charge_money(user, '1', withdraw_amount, u'提现')
                 event = WithdrawLog.objects.create(user=user, amount=withdraw_amount, audit_state='1')
+                translist.auditlog = event
+                translist.save()
                 result['code'] = 0
             try:
                 sendWeixinNotify.delay([(request.user, event),], 'withdraw_apply')
@@ -1066,3 +1067,100 @@ def detail_investlog(request, id):
 #     kwargs.update(companies=companies)
 #     return render(request, 'account/project_add.html', kwargs)
 
+@login_required
+def quick_sumbit(request):
+    user = request.user
+    projects = Project.objects.filter(Q(user=user)|Q(is_official=True)).filter(state__in=['10', '20']).order_by('szm')
+    dic = OrderedDict()
+    for project in projects:
+        id = project.id
+        title = project.title
+        if project.user == user and project.is_official==False:
+            title += u"（自建项目）"
+        logo = project.picture_url()
+        szm = project.szm
+        pinyin = project.pinyin
+        necessary_fields = project.necessary_fields
+        is_multisub_allowed = project.is_multisub_allowed
+        key = szm[0:1]
+        param = {}
+        param.update(id=id, title=title, logo=logo, szm=szm, pinyin=pinyin, necessary_fields=necessary_fields,
+                     is_multisub_allowed = is_multisub_allowed)
+        prolist = dic.get(key, [])
+        if not prolist:
+            dic[key] = prolist
+        prolist.append(param)
+    template = 'account/m_quicksub.html'
+    return render(request, template, {'projects':dic})
+@login_required
+def detail_project(request, id):
+    project = Project.objects.get(id=id)
+    kwargs = {'id':id, 'project':project}
+    template = 'account/m_detail_project.html'
+    return render(request, template , kwargs)
+
+@csrf_exempt
+@transaction.atomic
+@login_required_ajax
+def submitOrder(request):
+    result = {}
+    project_id = request.POST.get('project')
+    invest_amount = request.POST.get('invest_amount')
+    invest_term = request.POST.get('invest_term')
+    invest_date = request.POST.get('invest_date')
+    zhifubao = request.POST.get('zhifubao', '')
+    qq_number = request.POST.get('qq_number', '')
+    expect_amount = request.POST.get('expect_amount', '')
+    invest_name = request.POST.get('invest_name', '')
+    invest_mobile = request.POST.get('invest_mobile')
+    remark = request.POST.get('remark', '')
+    invest_amount = None if invest_amount=='' else invest_amount
+    invest_term = None if invest_term=='' else invest_term
+    invest_date = date.today() if invest_date=='' else invest_date
+    submit_type = request.POST.get('submit_type', '1')
+    project = Project.objects.get(id=project_id)
+#     fields = re.split(r'[\s,]+', project.necessary_fields)
+    if not ( project_id and invest_mobile ):
+        result['code'] = 0
+        result['msg'] = u"请提交投资手机号"
+        return JsonResponse(result)
+    if invest_date:
+        invest_date = datetime.strptime(invest_date, "%Y-%m-%d")
+    if not project.is_multisub_allowed or submit_type=='1':
+        if project.company is None:
+            queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project=project)
+        else:
+            queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id)
+        if queryset.exclude(audit_state='2').exists():
+            result['code'] = 1
+            result['msg'] = u"该手机号（首投）已提交过，请勿重复提交"
+            return JsonResponse(result)
+
+    investlog=InvestLog.objects.create(user=request.user,project_id=project_id, invest_mobile=invest_mobile, invest_date=invest_date,
+                             invest_name=invest_name, remark=remark, qq_number=qq_number, expect_amount=expect_amount,
+                             zhifubao=zhifubao, invest_amount=invest_amount, submit_type=submit_type,
+                              invest_term=invest_term, is_official=project.is_official,
+                              submit_way='4', audit_state='1')
+    #活动插入
+#     on_submit(request, request.user, investlog)
+    #活动插入结束
+    
+#     imgurl_list = []
+#     if len(request.FILES)>6:
+#         result = {'code':-2, 'msg':u"上传图片数量不能超过6张"}
+#         return JsonResponse(result)
+#     for key in request.FILES:
+#         block = request.FILES[key]
+#         if block.size > 100*1024:
+#             result = {'code':-1, 'msg':u"每张图片大小不能超过100k，请重新上传"}
+#             return JsonResponse(result)
+#     for key in request.FILES:
+#         block = request.FILES[key]
+#         imgurl = saveImgAndGenerateUrl(key, block, 'screenshot')
+#         imgurl_list.append(imgurl)
+#     if imgurl_list:
+#         invest_image = ';'.join(imgurl_list)
+#         investlog.invest_image = invest_image
+#         investlog.save(update_fields=['invest_image',])
+    result['code'] = 0
+    return JsonResponse(result)

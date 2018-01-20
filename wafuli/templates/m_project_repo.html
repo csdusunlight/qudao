@@ -115,13 +115,7 @@
                                 var right_html = '<div class="column_2 column"><span class="item">' + data.results[i].project_term + '</span></div>' +
                                     '<div class="column_3 column"><span class="item">' + data.results[i].project_investrange + '</span></div>' +
                                     '<div class="column_4 column"><span class="item">';
-                                    if(user_level == 01) {
-                                        right_html += data.results[i].project_price01;
-                                    } else if (user_level == 02) {
-                                        right_html += data.results[i].project_price02;
-                                    } else if (user_level == 03) {
-                                        right_html += data.results[i].project_price03;
-                                    }
+                                right_html += data.results[i].project_price;
                                     right_html += '</span></div>' +
 //                                  '<div class="column_5 column"><span class="item">' + data.results[i].project_cprice + '</span></div>' +
                                     '<div class="column_6 column"><span class="item">'+data.results[i].project_remark+'</div>' +

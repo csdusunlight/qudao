@@ -14,6 +14,7 @@ class Document(RandomPrimaryIdModel):
     is_on = models.BooleanField(u"开启/关闭", default=True)
     secret = models.CharField(u"密码", max_length=20, blank=True)
     is_star = models.BooleanField(u"标签", default=False)
+    close_time = models.DateTimeField(u"定时关闭时间", null=True, blank=True)
     def __unicode__(self):
         return self.user.username + self.title
     def fanshu_url(self):

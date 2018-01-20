@@ -117,7 +117,7 @@ def channel(request):
                     duplicate_mobile_list.append(mob)
                 else:
                     item = rtable[i]
-                    obj = InvestLog(user=request.user, invest_mobile=mob, project=project, is_official=project.is_official,is_selfsub=True,
+                    obj = InvestLog(user=request.user, invest_mobile=mob, project=project, is_official=project.is_official,
                                     invest_amount=item[3],invest_term=item[4],invest_date=item[0],invest_name=item[2],submit_way='3',
                                     audit_state='1',zhifubao=item[5],remark=item[6],submit_type='1')
                     log_list.append(obj)
@@ -174,7 +174,7 @@ def submit_itembyitem(request):
                     exist_phone = exist_phone + project.title + invest_mobile + ";"   #jzy
                     continue
             InvestLog.objects.create(user=request.user, project=project, invest_date=time, invest_mobile=invest_mobile, invest_term=term,
-                             invest_amount=Decimal(amount), audit_state='1', is_official=project.is_official, is_selfsub=True,
+                             invest_amount=Decimal(amount), audit_state='1', is_official=project.is_official,
                              zhifubao=zhifubao, invest_name=invest_name, remark=remark, submit_type=submit_type,submit_way='2',)
             suc_num += 1
             project.points = F('points') + 1

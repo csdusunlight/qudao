@@ -1,0 +1,221 @@
+﻿body {
+	background: #fff;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+td {
+    border: 1px solid #ddd;
+}
+a,span,p {
+    max-width: 100%;
+    word-wrap: break-word;
+}
+input,textarea {
+    box-sizing: border-box;
+}
+.mui-content {
+	/*padding: 0 1.875% 0;*/
+	background: #fff;
+	padding-bottom: 2rem;
+}
+.mui-input-group {
+	margin-top: 3rem;
+}
+.mui-row {
+	margin-top: 1rem;
+}
+.mui-row li {
+	list-style: none;
+}
+.mui-row li h5 {
+	font-size: 17px;
+	text-align: right;
+	padding-right: 3px;
+}
+.mui-radio input[type=radio] {
+	top: -6px;
+}
+.mui-radio label {
+	margin-left: 40px;
+}
+.mui-radio label {
+	padding-right: 0;
+	margin-left: 40px;
+}
+.mui-checkbox label, .mui-radio label {
+	display: inline;
+}
+.mui-radio input[type=radio] {
+	padding-left: 0;
+}
+.mui-radio input[type=radio]:before {
+	position: relative;
+	top: 4px;
+	font-size: 20px;
+}
+.mui-radio input[type=radio]:checked:before {
+	color: #008fd7;
+	content: '\e442';
+}
+
+.beizhu {
+	margin-top: 2rem !important;
+	margin-bottom: 0 !important;
+}
+.beizhu p {
+	font-size: 1.4rem;
+	line-height: 2rem;
+	/*padding-left: 11px;*/
+}
+textarea {
+	width: 90%;
+	margin-top: 1rem;
+	/*margin-left: 3%;*/
+	height: 10rem;
+}
+.mui-content button {
+	padding: 0;
+	width: 60%;
+	height: 3.4rem;
+	margin-top: 2rem;
+	margin-left: 20%;
+	font-size: 1.2rem;
+}
+
+form {
+	width: 100%;
+	margin-left: 0;
+}
+
+.iframe-box {
+    position: relative;
+    height: 100%;
+    -webkit-overflow-scrolling: touch;  
+    overflow-y: scroll;
+    width: 100%;
+}
+.iframe-top {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px 10px 10px 30px;
+    width: 100%;
+    height: 60px;
+    background-color: rgba(0,0,0,0.1);
+    font-size: 0;
+}
+.iframe__price {
+    margin: 0;
+    line-height: 20px;
+    font-size: 14px;
+}
+.iframe__invest {
+    margin: 0;
+    line-height: 20px;
+    font-size: 10px;
+}
+.invest-num,
+.price-num {
+    font-size: 16px;
+    color: #91C11D;
+}
+
+/*.iframe-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 180px;
+    background-color: #fff;
+}*/
+.iframe,
+.doc__box {
+    width: 100% !important;
+    height: 100%;
+    margin-top: 1px;
+    border: none;
+    /*overflow-y: scroll;*/
+}
+.doc__box {
+    padding: 80px 25px 20px;
+    overflow-y: scroll;
+    box-sizing: border-box;
+}
+.doc__title {
+    width: 100%;
+    padding-bottom: 10px;
+    margin: 0;
+    line-height: 30px;
+    font-size: 20px;
+    color: #222;
+    font-weight: 700;
+    border-bottom: 1px solid #e4e4e4;
+}
+.doc__detail {
+    margin-top: 20px;
+}
+.doc__detail img {
+    max-width: 100%;
+    height: auto !important;
+}
+/*样式覆盖*/
+form.mui-input-group .mui-input-row:after {
+	left: 15px;
+	right: 15px;
+}
+.mui-input-row label {
+	padding-right: 24px;
+	text-align: right;
+}
+.mui-input-row label {
+	width: 45%;
+}
+.mui-input-row label~input {
+	width: 55%;
+}
+.mui-input-row .choose {
+	width: 55%;
+	background: url(../images/select-icon.png) 90% center/20px auto no-repeat;
+}
+.input-title {
+    position: relative;
+    color: #222;
+    font-size: 16px;
+}
+.input-title:before {
+    content: '*';
+    position: absolute;
+    top: -3px;
+    left: -10px;
+    color: red;
+}
+.zfb-box .input-title:before,
+.beizhu .input-title:before {
+    display: none;
+}
+input {
+    display: block;
+    margin: 10px 0 4px !important;
+    width: 90% !important;
+}
+.input-box {
+    padding-left: 5%;
+    margin-top: 20px;
+}
+.input-tips {
+    display: none;
+    color: red;
+    font-size: 12px;
+}
+.mui-radio input[type=radio] {
+    left: 40px;
+}
+.mui-input-row label {
+    padding: 11px 0;
+}
+.mui-input-group input {
+    border: 1px solid rgba(0,0,0,.2);
+}

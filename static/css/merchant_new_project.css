@@ -1,0 +1,63 @@
+.wrapperBox{
+	width: 100%;
+}
+.wrapper{
+	width: 600px;
+	height: 600px;
+	margin: 0 auto;
+}
+.project{
+	margin-top: 10px;
+	padding: 15px 10px;
+}
+.pro_title span{
+	font-size: 18px;
+}
+.pro_left{
+	width: 30%;
+	height: 100%;
+	background: blue;
+}
+.pro_right{
+	width: 70%;
+	display: inline-block;
+}
+.pro_right input[type=text]{
+	width: 100%;
+	height: 52px;
+	border-radius: 10px;
+	margin-left: 60px;
+}
+.btn{
+	width: 262px;
+	height: 52px;
+	display: block;
+	margin: 30px auto;
+	border: none;
+	color: black;
+	border-radius: 10px;
+	background: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

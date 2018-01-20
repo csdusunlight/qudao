@@ -15,6 +15,7 @@ AUDIT_STATE = (
     ('1', u'待审核'),
     ('2', u'审核未通过'),
     ('3', u'复审'),
+    ('4', u'预审'),
 )    
 class Company(models.Model):
     name = models.CharField(u"平台名称(必填)",max_length=100,unique=True)
@@ -63,12 +64,18 @@ Project_TYPE = (
     ('2', u'稳健投资'),
     ('3', u'高收益区'),
 )
+Project_CATE = (
+    ('official', u'官方项目'),
+    ('self', u'自建项目'),
+    ('merchant', u'商家项目'),
+)
 class Project(models.Model):
     title = models.CharField(max_length=20, verbose_name=u"标题")
     priority = models.IntegerField(u"优先级",default=3)
     pub_date = models.DateTimeField(u"创建时间", default=timezone.now)
     user = models.ForeignKey(MyUser, null=True, related_name="created_projects")
     is_official = models.BooleanField(u"是否官方项目", default=False)
+    category = models.CharField(u"项目属性", max_length=20, choices=Project_CATE)
     is_addedto_repo = models.BooleanField(u"是否加入项目库", default=True)
     is_book = models.BooleanField(u"是否需要预约", default=False)
     state = models.CharField(u"项目状态", max_length=2, choices=Project_STATE, default='10')
@@ -78,16 +85,16 @@ class Project(models.Model):
     type = models.CharField(u"项目类别", max_length=1, choices=Project_TYPE, blank=True)
     is_multisub_allowed = models.BooleanField(u"是否允许同一手机号多次提交", default=False)
     introduction = models.TextField(u"项目简介",max_length=100,blank=True)
-    price01 = models.CharField(u"一级代理价格",max_length=20, blank=True)
-    price02 = models.CharField(u"二级代理价格",max_length=20, blank=True)
-    price03 = models.CharField(u"三级代理价格",max_length=20, blank=True)
+    price01 = models.CharField(u"一级代理价格",max_length=25, blank=True)
+    price02 = models.CharField(u"二级代理价格",max_length=25, blank=True)
+    price03 = models.CharField(u"三级代理价格",max_length=25, blank=True)
     cprice = models.CharField(u"客户指导价",max_length=40)
     shortprice = models.CharField(u"客户指导价简洁展示",max_length=20, help_text=u"格式必须为投资xxxx返xx，如投资1000返10")
     term = models.CharField(u"标期长度", max_length=20)
     investrange = models.CharField(u"投资额度区间", max_length=20)
     intrest = models.CharField(u"预期年化", max_length=20)
     necessary_fields = models.CharField(u"必填字段", max_length=50,help_text=u"投资用户名(0)，投资金额(1)，投资标期(2)，投资日期(3)，\
-                支付宝信息(4)，投资手机号(5)，预期返现金额(6)，QQ号(7)，投资截图(8)，字段以英文逗号隔开，如0,1,2,3,4,5", default = '0,1,2,3,4,5')
+                支付宝信息(4)，投资手机号(5)，预期返现金额(6)，QQ号(7)，投资截图(8)，字段以英文逗号隔开，如0,1,2,3,4,5", default = '1,2,3,4,5,6')
     subscribers = models.ManyToManyField(MyUser, through='SubscribeShip')
     points = models.IntegerField(u"参与人数", default=0)
     channel = models.CharField(u"项目来源（上游渠道）", max_length=20, blank=True)
@@ -144,6 +151,9 @@ class SubscribeShip(models.Model):
     is_on = models.BooleanField(u"是否在主页显示",default=True)
     is_recommend = models.BooleanField(u"是否放到推荐位置",default=False)
     intrest = models.CharField(u"预期年化", max_length=20)
+    def get_project_price(self):
+        level = self.user.level
+        return getattr(self.project, 'price'+str(level))
     def __unicode__(self):
         return self.user.mobile + self.project.title
     class Meta:
@@ -167,6 +177,7 @@ SUB_WAY = (
     ('1', u'主页提交'),
     ('2', u'逐条提交'),
     ('3', u'表格提交'),
+    ('4', u'移动端自助提交'),
 )
 class InvestLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="investlog_submit")
@@ -174,7 +185,7 @@ class InvestLog(models.Model):
     submit_type = models.CharField(max_length=10, choices=SUB_TYPE, verbose_name=u"首投/复投")
     submit_way = models.CharField(max_length=10, choices=SUB_WAY, verbose_name=u"提交入口")
     is_official = models.BooleanField(u'是否官方项目',)
-    is_selfsub = models.BooleanField(u'是否渠道用户自己提交的',default=False)
+    category = models.CharField(u"项目属性", max_length=20, choices=Project_CATE)
     submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
     invest_mobile = models.CharField(u"投资手机号", max_length=11)
     invest_name = models.CharField(u"投资用户名/姓名0", max_length=11, blank=True)
@@ -192,6 +203,7 @@ class InvestLog(models.Model):
     audit_reason = models.CharField(u"审核原因", max_length=30, blank=True)
     settle_amount = models.DecimalField(u'结算金额', max_digits=10, decimal_places=2, default=0)
     return_amount = models.DecimalField(u'返现金额', max_digits=10, decimal_places=2, null=True)
+    broker_amount = models.DecimalField(u'佣金', max_digits=10, decimal_places=2, null=True)
     remark = models.CharField(u"备注", max_length=100, blank=True)
     def __unicode__(self):
         return u"来自渠道用户：%s 的投资数据提交：%s" % (self.user, self.invest_amount)
@@ -212,6 +224,9 @@ class InvestLog(models.Model):
             return mobile[:3] + '****' + mobile[-4:]
         else:
             return mobile
+    def get_project_price(self):
+        level = self.user.level
+        return getattr(self.project, 'price'+str(level))
 
 STATE = (
     ('0', u'置顶'),
@@ -260,8 +275,11 @@ class TransList(models.Model):
     reason = models.CharField(max_length=20, verbose_name=u"变动原因")
     remark = models.CharField(u"备注", max_length=100, blank=True)
     transType = models.CharField(max_length=2, choices=TRANS_TYPE, verbose_name=u"变动类型")
-    investlog = models.ForeignKey(InvestLog, related_name="translist", null=True,on_delete=models.SET_NULL)
-    adminlog = models.ForeignKey(AdminLog, related_name="translist", null=True,on_delete=models.SET_NULL)
+    content_type = models.ForeignKey(ContentType,null=True,blank=True)
+    object_id = models.PositiveIntegerField(null=True,blank=True)
+    auditlog = GenericForeignKey('content_type', 'object_id')
+#     investlog = models.ForeignKey(InvestLog, related_name="translist", null=True,on_delete=models.SET_NULL)
+#     adminlog = models.ForeignKey(AdminLog, related_name="translist", null=True,on_delete=models.SET_NULL)
     def __unicode__(self):
         return u"%s:%s了%s现金 提交时间%s" % (self.user, self.get_transType_display(),self.transAmount,
                                        self.user_event.time if self.user_event else "")

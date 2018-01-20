@@ -146,7 +146,7 @@
     {% include "m_footer.html" %}
 		<script src="{% static 'js/mui.min.js' %}"></script>
 		<script type="text/javascript">
-			mui.init()
+			mui.init();
 			//发送验证码
 			var countdown = 60;
 			function settime(val) {
@@ -233,9 +233,9 @@
 						"qq_number": qq,
 						"qq_name": qqName,
 						"profile": introduce,
-						"checkNum": checkNum,
+						"code": checkNum,
 						"password": pwd,
-						"phone": phone,
+						"mobile": phone,
 					},
 					dataType: 'json', //服务器返回json格式数据
 					type: 'post', //HTTP请求类型
@@ -243,7 +243,6 @@
 					success: function(data) {
 						console.log(data)
 
-						mui.alert("申请成功，请等待短信通知");
 						
 						if(data.code == 0) {
 							mui.alert("申请成功，请等待短信通知");

@@ -13,8 +13,12 @@
     <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
     <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
     <script type="text/javascript" charset="utf-8" src="{% static 'ueditor/lang/zh-cn/zh-cn.js' %}"></script>
+    <script type="text/javascript" charset="utf-8" src="{% static 'laydate/laydate.js' %}"></script>
 
     <style type="text/css">
+        .layui-laydate-list li:nth-of-type(3) {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -32,6 +36,7 @@
                     <span class="switch__name">是否公开文档&nbsp;</span>
                     <span data-isadd="{{doc.is_on}}" class="home switch {{doc.is_on}}" onclick="isadd(this)"></span>
                 </div>
+                <a data-close="{{doc.close_time| date:'Y-m-d\Th:i'}}" class="close-time header__btn">定时关闭</a>
                 <a class="doc_secret header__btn">加密文档</a>
                 <div class="doc__private">
                     <p class="switch-secret">
@@ -71,6 +76,21 @@
             <div class="popup__btnbox">
                 <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
                 <a id="confirm_delete" class="btn m-green popup__close-btn">确认</a>
+            </div>
+        </div>
+    </div>
+    <div class="popup m-choose-date">
+        <div class="popup__content" style="width: 400px;">
+            <div class="popup__top">
+                <h2 class="popup__title">设置文档关闭时间</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+            </div>
+            <div class="popup__detail">
+                <input type="text" class="date-choose" placeholder="请选择日期" id="date_choose">
+                <p style="font-size: 12px;">*清空时间点击确定按钮即可取消定时，定时关闭可能有10分钟左右的时差</p>
+            </div>
+            <div class="popup__btnbox">
+                <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
+                <a id="confirm_date" class="btn m-green popup__close-btn">确认</a>
             </div>
         </div>
     </div>
@@ -276,6 +296,7 @@
                     console.log('关闭');
                     $(obj).data('isadd', 'False');
                     $(obj).removeClass('True').addClass('False');
+                    $('.close-time').hide();
                 },
                 error: function() {
                     alert("请检查网络连接");
@@ -294,6 +315,7 @@
                     console.log('开启');
                     $(obj).data('isadd', 'True');
                     $(obj).removeClass('False').addClass('True');
+                    $('.close-time').show();
                 },
                 error: function() {
                     alert("请检查网络连接");
@@ -302,6 +324,65 @@
             
         }
     }
+    
+    if ($('.home').data('isadd') == 'True') {
+    	$('.close-time').show();
+    } else{
+    	$('.close-time').hide();
+    }
+    
+    console.log($('.close-time').data('close'));
+    if($('.close-time').data('close')) {
+        $('.close-time').text('已定时');
+        $('.date-choose').val($('.close-time').data('close'));
+    } else {
+        $('.close-time').text('定时关闭');
+    }
+    $('.close-time').click(function(){
+        $('.popup.m-choose-date').addClass('in');
+    })
+    laydate.render({
+      elem: '#date_choose' //指定元素
+      ,type: 'datetime'
+      ,format: 'yyyy-MM-ddTHH:mm'
+    });
+    $('#confirm_date').click(function(){
+        var time_key = $('.date-choose').val();
+        if(time_key) {
+            $.ajax({
+                url: "/restapi/docs/" + doc_id + "/",
+                dataType: "json",
+                type:"put",
+                data: {
+                    'close_time': time_key
+                },
+                success: function(ret) {
+                    $('.close-time').text('已定时');
+                    $('.popup.m-choose-date').removeClass('in');
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
+        } else {
+            $.ajax({
+                url: "/restapi/docs/" + doc_id + "/",
+                dataType: "json",
+                type:"put",
+                data: {
+                    'close_time': time_key
+                },
+                success: function(ret) {
+                    $('.close-time').text('定时关闭');
+                    $('.popup.m-choose-date').removeClass('in');
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
+        }
+        
+    })
 </script>
 
 </body>

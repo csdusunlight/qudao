@@ -12,6 +12,8 @@ from merchant.models import Margin_AuditLog, Apply_Project
 from merchant.margin_transaction import charge_margin
 import datetime
 from wafuli.models import Project
+from django.db.models import F
+from django.views.decorators.csrf import csrf_exempt
 
 
 @transaction.atomic
@@ -56,7 +58,8 @@ def admin_merchant(request):
         withdrawlog.admin_user = admin_user
         withdrawlog.save(update_fields=['audit_state','audit_time','audit_reason'])
         return JsonResponse(res)
-    
+
+@csrf_exempt
 @transaction.atomic
 @has_post_permission('004')
 def admin_project(request):
@@ -66,21 +69,22 @@ def admin_project(request):
     elif request.method == "POST":
         res = {}
         id = request.POST.get('id', None)
-        obj = Apply_Project.objects.get(id=id)
         type = request.POST.get('type', None)
         if not id or not type:
             res['code'] = -2
             res['res_msg'] = u'传入参数不足，请联系技术人员！'
             return JsonResponse(res)
+        obj = Apply_Project.objects.get(id=id)
+        if obj.audit_state != '1':
+            res['code'] = 4
+            res['res_msg'] = u'该项目已被审核过'
+            return JsonResponse(res)
+        type = int(type)
         if type==1:
             obj.audit_state = '0'
             res['code'] = 0
-            Project.objects.create(title=obj.title, user=obj.user, category='official', is_addedto_repo=True, state='00',
+            Project.objects.create(title=obj.title, user=obj.user, is_official=True, category='official', is_addedto_repo=True, state='00',
                                    strategy=obj.strategy.fanshu_url())
-            appuser = obj.user
-            appuser.with_total = F('with_total')
-            appuser.save(update_fields=['with_total'])
-
         elif type == 2:
             reason = request.POST.get('reason', '')
             if not reason:
@@ -89,9 +93,11 @@ def admin_project(request):
                 return JsonResponse(res)
             obj.audit_state = '2'
             obj.audit_reason = reason
-            charge_margin(obj.user, '0', obj.amount, u'冲账', True, reason)
             res['code'] = 0
-            
+        else:
+            res['code'] = 3
+            res['res_msg'] = u'type错误'
+            return JsonResponse(res)    
         obj.audit_time = datetime.datetime.now()
         obj.admin_user = admin_user
         obj.save(update_fields=['audit_state','audit_time','audit_reason'])

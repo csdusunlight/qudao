@@ -8,6 +8,7 @@ from rest_framework import serializers
 from merchant.models import Apply_Project, Margin_Translog, Margin_AuditLog
 class ApplyProjectSerializer(serializers.ModelSerializer):
     state_des = serializers.CharField(source="get_audit_state_display", read_only=True)
+    strategy_url = serializers.CharField(source="strategy.fanshu_url", read_only=True)
     class Meta:
         model = Apply_Project
         fields = '__all__'

@@ -79,9 +79,11 @@ def preaudit_investlog(request):
                 investlog.audit_state = '4'
                 investlog.settle_amount = cash
                 broker_amount = cash * 2.0/100
-                translist = charge_margin(investlog_user, '1', broker_amount, "佣金")
-#                 translist.auditlog = investlog
-#                 translist.save(update_fields=['investlog'])
+                translist2 = charge_margin(investlog_user, '1', broker_amount, "佣金")
+                translist.auditlog = investlog
+                translist2.auditlog = investlog
+                translist.save()
+                translist2.save()
 #                 #活动插入
 #                 on_audit_pass(request, investlog)
 #                 #活动插入结束

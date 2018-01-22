@@ -67,6 +67,7 @@ class Apply_Project(models.Model):
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
     admin_user = models.ForeignKey(MyUser, related_name="admin_apply_project", null=True, default=None)
     audit_time = models.DateTimeField(u'审核时间', null=True, default=None)
+    is_book = models.BooleanField(u"是否限量/需要预约", default=False)
     class Meta:
         verbose_name = u"放单申请"
         verbose_name_plural = u"放单申请"

@@ -99,6 +99,14 @@ def preaudit_investlog(request):
             investlog.audit_time = datetime.datetime.now()
             investlog.save()
         return JsonResponse(res)
+def merchant_index(request):
+    return render(request, 'merchant_index.html')
+def bail_manage(request):
+    return render(request, 'bail_manage.html')
+def proj_manage(request):
+    return render(request, 'proj_manage.html')    
+def fangdan_audit(request):
+    return render(request, 'fangdan_audited.html')
     
 @login_required
 def merchant(request):

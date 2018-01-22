@@ -2,10 +2,11 @@
 from django.db import models
 from account.models import MyUser
 from django.utils import timezone
-from wafuli.models import Company
+from wafuli.models import Company, Project
 from docs.models import Document
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.db.models.deletion import SET_NULL
 
 # Create your models here.
 TRANS_TYPE = (
@@ -68,6 +69,7 @@ class Apply_Project(models.Model):
     admin_user = models.ForeignKey(MyUser, related_name="admin_apply_project", null=True, default=None)
     audit_time = models.DateTimeField(u'审核时间', null=True, default=None)
     is_book = models.BooleanField(u"是否限量/需要预约", default=False)
+    project = models.ForeignKey(Project, on_delete=SET_NULL, null=True)
     class Meta:
         verbose_name = u"放单申请"
         verbose_name_plural = u"放单申请"

@@ -30,7 +30,7 @@
                     <li>已结束</li>
                     <li>已拒绝</li>
                 </ul>
-                <a href="#">
+                <a href="/merchant/proj_add/">
                     <div class="tab-right">
                         <label>+</label>
                         新建项目申请
@@ -53,26 +53,39 @@
     <script>
         $(function () {
             //全部数据：
-            let data = '<table width="100%"><thead><tr><th>项目名称</th><th>攻略投资</th>' +
-                '<th>结算价格</th><th>标期<th>数据结算周期</th><th>是否限量</th><th>项目状态</th><th>浏览量</th><th>操作</th></tr></thead><tbody>' +
-                '[results]<tr><td>{title}</td><td>{strategy_url}</td><td>{price}</td><td>{settle_period}</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr>[/results]' +
+            let allData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
+                '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">项目状态</th><th width="12.5%">浏览量</th><th width="12.5%">操作</th></tr></thead><tbody>' +
+                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{state_des}</td><td class="td1">325</td><td class="td1 operate" data-status="{audit_state}"></td></tr>[/results]' +
                 '</tbody></table>';
             //正在进行数据：   
-            let passData = '<table width="100%"><thead><tr><th width="15%">项目</th><th width="15%">投资时间</th>' +
-                '<th width="15%">投资金额</th><th width="15%">状态<th width="25%">备注</th><th width="15%">修改</th></tr></thead><tbody>' +
-                '[results]<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_amount}</td><td>{state_desc}</td><td>{remark}</td></tr>[/results]' +
+            let passData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
+                '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">项目状态</th><th width="12.5%">浏览量</th><th width="12.5%">操作</th></tr></thead><tbody>' +
+                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{state_des}</td><td class="td1">325</td><td class="td1"><a>点击结束</a></td></tr>[/results]' +
                 '</tbody></table>';
-
-            /*// 申请中数据：    
-            let auditData =     
+            // 申请中数据：    
+            let auditData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
+                '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">项目状态</th><th width="12.5%">浏览量</th><th width="12.5%">操作</th></tr></thead><tbody>' +
+                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{state_des}</td><td class="td1">325</td><td class="td1"><a>点击结束</a></td></tr>[/results]' +
+                '</tbody></table>';
             //已结束
-            let endData = 
+            let endData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
+                '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">项目状态</th><th width="12.5%">浏览量</th><th width="12.5%">操作</th></tr></thead><tbody>' +
+                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{state_des}</td><td class="td1">325</td><td class="td1"><a>点击结束</a></td></tr>[/results]' +
+                '</tbody></table>';
             //已拒绝
-            // let refuseData =*/
+            let refuseData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
+                '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">项目状态</th><th width="12.5%">浏览量</th><th width="12.5%">操作</th></tr></thead><tbody>' +
+                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{state_des}</td><td class="td1">325</td><td class="td1"><a></a></td></tr>[/results]' +
+                '</tbody></table>';
             //回调函数
             function pagecallback() {
                 console.log("这是一个回调函数");
-                
+                let state = $(".operate").attr("data-status");
+                if (state == 0) {
+                    $(".operate").html("<a class='clickEnd'>点击操作</a>")
+                } else {
+                    $(".operate").html("<a>----</a>")
+                }
             }
 
 
@@ -83,13 +96,40 @@
                 pageId: $("#page"),
                 pageSize: 6,
                 run: true,
-                content: data,
+                content: allData,
                 complete: pagecallback,
             });
             $(".tab>li").click(function () {
-                console.log(123);
+                let index = $(this).index();
+                console.log("当前的index:", index);
                 $(this).addClass("active").siblings().removeClass("active");
-
+                //根据li的index判断加载模块
+                if (index == 0) {           // 全部数据
+                    var pdata = allData;
+                    // var  dataUrl = '/merchant/apply_projects/?page={page}&pageSize={pageSize}';
+                    var dataUrl = url;
+                } else if (index == 1) {       // 正在进行
+                    var pdata = passData;
+                    var dataUrl = url + "&audit_state=0";
+                } else if (index == 2) {       //申请中(待审核数据)
+                    var pdata = auditData;
+                    var dataUrl = url + "&audit_state=1";
+                } else if (index == 3) {       //已结束
+                    var padata = endData;
+                    var dataUrl = url + "&audit_state=3";
+                } else if (index == 4) {       //已拒绝
+                    var padata = refuseData;
+                    var dataUrl = url + "&audit_state=2";
+                }
+                $("#page").empty();
+                $("#pagedata").ajaxPage({
+                    url: dataUrl,
+                    pageId: $("#page"),
+                    pageSize: 6,
+                    run: true,
+                    content: pdata,
+                    complete: pagecallback,
+                });
             });
 
         });

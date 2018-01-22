@@ -129,22 +129,22 @@
 
 <body>
 <!--头部-->
-{% include "header.html" %}
+{% include "merchant_header.html" %}
 <!--内容-->
 <div class="Content">
-{% include "account/left.html" %}
+{% include "merchant_left.html" %}
 <div class="RightCont">
-    <div style="margin-bottom: 20px;" class="data-intro">
+    <!--<div style="margin-bottom: 20px;" class="data-intro">
         <h3>操作说明：</h3>
         <p style="margin-left: 30px;">官方数据的<span class="handle-mark">删除</span>、<span class="handle-mark">编辑</span>、<span class="handle-mark">提交截图</span>等操作位于未审核选项下，<span class="handle-mark">审核</span>位于已通过选项下；</p>
         <p style="margin-left: 30px;">自建数据的<span class="handle-mark">删除</span>、<span class="handle-mark">编辑</span>、<span class="handle-mark">审核</span>、<span class="handle-mark">拒绝</span>、<span class="handle-mark">提交截图</span>等操作位于未审核选项下；</p>
-    </div>
+    </div>-->
     <div class="table" style="position: relative;">
         <h2 class="table__title">官方数据</h2>
-        <ul class="today-detail">
+        <!--<ul class="today-detail">
             <li class="today-detail-item">今日提交<span class="today-num">{{submit_num}}</span>项</li><li class="today-detail-item">通过<span class="today-num">{{pass_num}}</span>项</li>
             <li class="today-detail-item">复审<span class="today-num">{{check_num}}</span>项</li><li class="today-detail-item">拒绝<span class="today-num">{{refuse_num}}</span>项</li>
-        </ul>
+        </ul>-->
         <div class="search">
             <div class="search__item">
                 <span class="search__name">项目名称：</span>
@@ -660,38 +660,7 @@
                     alert(jqXHR.responseText);
                 }
             });
-            
-//          $('.popup.m-edit-proj').addClass('in');
-//          project_id = id;
-//          edit_parent = $(obj).parent().parent().parent();
-//          var parent_dom = $(edit_parent);
-//          console.log(parent_dom);
-//          var children0 = parent_dom.find("td").eq(0).text(),
-//              children1 = parent_dom.find("td").eq(1).text(),
-//              children2 = parent_dom.find("td").eq(2).text(),
-//              children3 = parent_dom.find("td").eq(3).text(),
-//              children4 = parent_dom.find("td").eq(4).text(),
-//              children5 = parent_dom.find("td").eq(5).text(),
-//              children6 = parent_dom.find("td").eq(6).text(),
-//              children7 = parent_dom.find("td").eq(7).data('remark');
-//                              console.log(children0+", "+children1+", "+children2+", "+children3+", "+children4+", "+children5+", ");
-//          var option_val;
-//          var options = $(".project option");
-//          for(var i = 0; i < options.length; i++) {
-//              if($(options)[i].text == children0) {
-//                  option_val = options[i].value;
-//              }
-//
-//          }
-//          console.log(option_val);
-//          $(".project").val(option_val);
-//          $(".date").val(children1);
-//          $(".telnum").val(children2);
-//          $(".zfbname").val(children3);
-//          $(".money").val(children4);
-//          $(".term").val(children5);
-//          $(".zfb").val(children6);
-//          $(".remark").val(children7);
+           
 
         }
 
@@ -708,12 +677,6 @@
                 return;
             }
 
-//          if(date.match(/^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/)) { 
-//              console.log('日期格式正确');
-//          } else { 
-//              alert('日期格式不符合规范'); 
-//              return;
-//          }
             var re_date = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/, //验证日期
                 re_phone = /^1[1,2,3,4,6,5,7,8,9]\d{9}$/, //验证手机号
                 re_amount = /^\d+(\.\d+)?$/; //验证数字格式
@@ -978,7 +941,7 @@
 //      编辑/删除部分（自建）---end
         
         $(function(){
-            $('.back-a5').toggleClass("on");
+            $('.back-a3').toggleClass("on");
             
             $(".RightCont").on("focus", ".date_picker", function() {
                 $('.date_selector').remove();
@@ -1027,27 +990,6 @@
                 state_1 = $(this).data('state') + '';
                 console.log(state_1)
                 $('#search').click();
-//              var search_data = data;
-//              switch (state_1){
-//              	case 0:
-//              	    search_data = data0;
-//              		break;
-//                  case 1:
-//                      search_data = data1;
-//                      break;
-//                  case 2:
-//                      search_data = data2;
-//                      break;
-//              }
-//              $("#page").empty();
-//              $("#pagedata").ajaxPage({
-//                  url: url + '&audit_state=' + state_1,
-//                  pageId: $("#page"),
-//                  pageSize: 10,
-//                  run: true,
-//                  content: search_data,
-//                  complete:pagecallback,
-//              });
             })
             $('.search_today').click(function(){
                 var date = new Date();
@@ -1142,17 +1084,7 @@
                     telnum_sub = $("#telnum_sub").val(),
                     zhifubao = $("#zhifubao").val(),
                     state = state_1;
-                    
-//              if(!submit_date0 || !submit_date1) {
-//                  alert('请先选择提交日期区间，再进行导出');
-//                  return;
-//              }
-//              var date_diff = DateDiff(submit_date1,submit_date0);
-//              console.log(date_diff);
-//              if (date_diff<0 || date_diff>5) {
-//              	alert('选择的提交日期区间不能超过5天');
-//              	return;
-//              }
+                   
                 
                 html += '<input name="is_official" type="hidden" value="true"/>';
                 if(proj_name) {
@@ -1298,17 +1230,7 @@
                     zhifubao = $("#zhifubao_02").val(),
                     project_channel = $("#project_channel_02").val(),
                     state = state_2;
-                    
-//              if(!invest_date0 || !invest_date1) {
-//                  alert('请先选择投资日期区间，再进行导出');
-//                  return;
-//              }
-//              var date_diff = DateDiff(invest_date1,invest_date0);
-//              console.log(date_diff);
-//              if (date_diff<0 || date_diff>5) {
-//                  alert('选择的投资日期区间不能超过5天');
-//                  return;
-//              }
+                   
                 
                 html += '<input name="is_official" type="hidden" value="false"/>';
                 if(proj_name) {

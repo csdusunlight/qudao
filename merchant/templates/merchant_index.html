@@ -1,0 +1,27 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户中心</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+
+</head>
+
+<body>
+<!--头部-->
+{% include "merchant_header.html" %}
+<!--内容-->
+<div class="Content">
+{% include "merchant_left.html" %}
+<p>这是推客中心</p>
+</div>
+{% include "footer.html" %}
+
+<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+</body>
+</html>

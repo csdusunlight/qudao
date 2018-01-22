@@ -6,14 +6,11 @@ from public.pinyin import PinYin
 
 class ProjectAdmin(admin.ModelAdmin):
     readonly_fields = ('user','pub_date','pinyin','szm')
-    list_display = ('title','is_official','is_addedto_repo','state','user','id')
-    list_filter = ['is_official', 'is_addedto_repo']
+    list_display = ('title','is_official','category','is_addedto_repo','state','user','id')
+    list_filter = ['is_official', 'is_addedto_repo', 'category']
     search_fields = ['title',]
     def save_model(self, request, obj, form, change):
-        pyin = PinYin()
-        pyin.load_word()
-        obj.szm, obj.pinyin = pyin.hanzi2pinyin_split(obj.title)
-        super(ProjectAdmin,self).save_model (request, obj, form, change)
+        admin.ModelAdmin.save_model(self, request, obj, form, change)
         if not change:
             obj.user = request.user
             obj.save(update_fields=['user',])

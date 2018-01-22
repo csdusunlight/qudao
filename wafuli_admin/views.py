@@ -25,7 +25,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.db import transaction
-from public.tools import has_permission
+from public.tools import has_post_permission
 from decimal import Decimal
 from weixin.tasks import sendWeixinNotify
 # Create your views here.
@@ -46,7 +46,7 @@ def index(request):
     total['with_count'] = dict_with.get('cou')
     total['with_total'] = dict_with.get('sum') or 0
 
-    dict_ret = InvestLog.objects.filter(is_official=True,audit_state='0').\
+    dict_ret = InvestLog.objects.filter(category='official',audit_state='0').\
             aggregate(cou=Count('user',distinct=True),sum=Sum('settle_amount'))
     total['ret_count'] = dict_ret.get('cou')
     total['ret_total'] = dict_ret.get('sum') or 0
@@ -106,13 +106,13 @@ def admin_private(request):
     return render(request,"admin_private.html",)
 
 @transaction.atomic
-@has_permission('002')
+@has_post_permission('002')
 def admin_invest(request):
     admin_user = request.user
     if request.method == "GET":
         if not ( admin_user.is_authenticated() and admin_user.is_staff):
             return redirect(reverse('admin:login') + "?next=" + reverse('admin_project'))
-        item_list = InvestLog.objects.filter(is_official=True, audit_state__in=['1','3'], submit_time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
+        item_list = InvestLog.objects.filter(category='official', audit_state__in=['1','3'], submit_time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
         print item_list
         project_list = ()
         for item in item_list:
@@ -166,8 +166,8 @@ def admin_invest(request):
                 translist = charge_money(investlog_user, '0', cash, project_title)  #jzy
                 investlog.audit_state = '0'
                 investlog.settle_amount = cash
-                translist.investlog = investlog
-                translist.save(update_fields=['investlog'])
+                translist.auditlog = investlog
+                translist.save()
 #                 #活动插入
 #                 on_audit_pass(request, investlog)
 #                 #活动插入结束
@@ -465,7 +465,7 @@ def export_charge_excel(request):
     return response
 
 @csrf_exempt
-@has_permission('002')
+@has_post_permission('002')
 def import_investlog(request):
     admin_user = request.user
     ret = {'code':-1}
@@ -542,8 +542,8 @@ def import_investlog(request):
                     translist = charge_money(investlog_user, '0', amount, row[1])
                     investlog.audit_state = '0'
                     investlog.settle_amount = amount
-                    translist.investlog = investlog
-                    translist.save(update_fields=['investlog'])
+                    translist.auditlog = investlog
+                    translist.save()
 #                     #活动插入
 #                     on_audit_pass(request, investlog)
 #                     #活动插入结束
@@ -565,7 +565,7 @@ def import_investlog(request):
     return JsonResponse(ret)
 
 @transaction.atomic
-@has_permission("005")
+@has_post_permission("005")
 def admin_user(request):
     admin_user = request.user
     if request.method == "GET":
@@ -621,8 +621,8 @@ def admin_user(request):
             elif mcash > 0:
                 translist = charge_money(obj_user, '1', mcash, reason)
             adminlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=reason, type='1')
-            translist.adminlog = adminlog
-            translist.save(update_fields=['adminlog'])
+            translist.auditlog = adminlog
+            translist.save()
             res['code'] = 0
 
 
@@ -756,7 +756,7 @@ def get_admin_user_page(request):
     return JsonResponse(res)
 
 @transaction.atomic
-@has_permission('004')
+@has_post_permission('004')
 def admin_withdraw(request):
     admin_user = request.user
     if request.method == "GET":
@@ -1010,7 +1010,7 @@ def export_withdrawlog(request):
     return response
 
 @csrf_exempt
-@has_permission('004')
+@has_post_permission('004')
 def import_withdrawlog(request):
     admin_user = request.user
 

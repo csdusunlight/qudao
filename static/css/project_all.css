@@ -252,17 +252,28 @@
 	width: 180px;
 	height: 60px;
 	text-align: center;
-	line-height: 60px;
 	float: left;
 	position: relative;left: 15px;
 }
+.item1 > span{
+	display: table-cell;
+	vertical-align: middle;
+	height: 60px;
+	color: black;
+}
 .item2{
 	width: 180px;
-	height: 60px;
 	text-align: center;
 	line-height: 60px;
 	float: left;
 }
+.item2 > span{
+	display: table-cell;
+	vertical-align: middle;
+	height: 60px;
+	color: black;
+}
+
 .item3{
 	width: 180px;
 	height: 60px;
@@ -271,6 +282,13 @@
 	float: left;
 	margin-left: 30px;
 }
+.item3 > span{
+	display: table-cell;
+	vertical-align: middle;
+	height: 60px;
+	color: black;
+}
+
 .item4{
 	width: 180px;
 	height: 60px;
@@ -279,11 +297,18 @@
 	float: left;
 	margin-left: 30px;
 }
+.item4 > span{
+	display: table-cell;
+	vertical-align: middle;
+	height: 60px;
+	color: black;
+}
+
 .item5{
 	width: 180px;
 	/*height: 60px;*/
 	text-align: center;
-	line-height: 30px;
+	line-height: 60px;
 	float: left;
 	margin-left: 10px;
 	/*white-space:nowrap;*/
@@ -297,6 +322,7 @@
 	height: 50px;
 	float: left;
 	position: relative;top: 5px;left: 5px;
+	color: #ff9501;
 }
 .wrapperBox > img{
 	width: 120px;

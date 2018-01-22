@@ -5,7 +5,7 @@ Created on 2017年9月11日
 @author: lch
 '''
 from django.http.response import HttpResponse
-def has_permission(code):
+def has_post_permission(code):
     def decorator(view):
         def wrapper(request, *args, **kw):
             user = request.user
@@ -16,6 +16,16 @@ def has_permission(code):
         return wrapper
     return decorator
 
+def has_permission(code):
+    def decorator(view):
+        def wrapper(request, *args, **kw):
+            user = request.user
+            if user.has_admin_perms(code):
+                return view(request, *args, **kw)
+            else:
+                return HttpResponse(status=403)
+        return wrapper
+    return decorator
 def login_required_ajax(function=None,redirect_field_name=None): 
     """
     Just make sure the user is authenticated to access a certain ajax view Otherwise return a HttpResponse 401 

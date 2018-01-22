@@ -1,26 +1,99 @@
 {% load staticfiles %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>用户中心</title>
-<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
-
-<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
-
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>用户中心</title>
+    <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/merchant_myproject.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+    <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
 </head>
 
 <body>
-<!--头部-->
-{% include "merchant_header.html" %}
-<!--内容-->
-<div class="Content">
-<p>这是项目管理</p>
-</div>
-{% include "footer.html" %}
+    <!--头部-->
+    {% include "merchant_header.html" %}
+    <!--内容-->
+    <div class="Content">
+        <!-- {% include "merchant_left.html" %}-->
+        <!-- <p>这是项目管理</p> -->
+        <div class="wrapperBox">
+            <div class="wrapper">
+                <ul class="tab">
+                    <li class="active">全部</li>
+                    <li>正在进行</li>
+                    <li>申请中</li>
+                    <li>已结束</li>
+                    <li>已拒绝</li>
+                </ul>
+                <a href="#">
+                    <div class="tab-right">
+                        <label>+</label>
+                        新建项目申请
+                    </div>
+                </a>
+            </div>
 
-<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+            <div class="contentBox">
+                <div id="pagedata"></div>
+                <div class="Page-in1">
+                    <div class="page" id="page"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "footer.html" %}
+
+    <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+    <!-- 项目管理js部分 -->
+    <script>
+        $(function () {
+            //全部数据：
+            let data = '<table width="100%"><thead><tr><th>项目名称</th><th>攻略投资</th>' +
+                '<th>结算价格</th><th>标期<th>数据结算周期</th><th>是否限量</th><th>项目状态</th><th>浏览量</th><th>操作</th></tr></thead><tbody>' +
+                '[results]<tr><td>{title}</td><td>{strategy_url}</td><td>{price}</td><td>{settle_period}</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr>[/results]' +
+                '</tbody></table>';
+            //正在进行数据：   
+            let passData = '<table width="100%"><thead><tr><th width="15%">项目</th><th width="15%">投资时间</th>' +
+                '<th width="15%">投资金额</th><th width="15%">状态<th width="25%">备注</th><th width="15%">修改</th></tr></thead><tbody>' +
+                '[results]<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_amount}</td><td>{state_desc}</td><td>{remark}</td></tr>[/results]' +
+                '</tbody></table>';
+
+            /*// 申请中数据：    
+            let auditData =     
+            //已结束
+            let endData = 
+            //已拒绝
+            // let refuseData =*/
+            //回调函数
+            function pagecallback() {
+                console.log("这是一个回调函数");
+                
+            }
+
+
+            const url = '/merchant/apply_projects/?page={page}&pageSize={pageSize}';
+            //获取全部数据：
+            $("#pagedata").ajaxPage({
+                url: url,
+                pageId: $("#page"),
+                pageSize: 6,
+                run: true,
+                content: data,
+                complete: pagecallback,
+            });
+            $(".tab>li").click(function () {
+                console.log(123);
+                $(this).addClass("active").siblings().removeClass("active");
+
+            });
+
+        });
+    </script>
 </body>
+
 </html>

@@ -1,0 +1,118 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>用户中心</title>
+	<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/merchant_new_project.css' %}" />
+	<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+	<style>
+		.Content {
+			width: 1250px;
+			min-height: 700px;
+			margin: 24px auto;
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body>
+	<!--头部-->
+	{% include "merchant_header.html" %}
+	<!--内容-->
+	<div class="Content">
+		<div class="wrapperBox">
+			<div class="wrapper">
+				<from class="myFrom">
+					<div class="pro pro_title">
+						<span>新建项目</span>
+					</div>
+					<div class="pro pro_name">
+						<span>项目名称</span>
+						<div class="pro_right" style="margin-left: 25px;">
+							<input type="text" name="project" id="project" placeholder="请输入项目名称" />
+						</div>
+					</div>
+					<div class="pro pro_link">
+						<span>攻略链接</span>
+						<div class="pro_right" style="margin-left: 25px;">
+							<input type="text" name="url" id="url" placeholder="请输入攻略链接" />
+						</div>
+					</div>
+					<div class="pro pro_price">
+						<span>结算价格</span>
+						<div class="pro_right" style="margin-left: 26px;">
+							<input type="text" name="price" id="price" placeholder="请输入结算价格" />
+						</div>
+					</div>
+					<div class="pro pro_cycle">
+						<span>项目结算周期</span>
+						<div class="pro_right">
+							<input type="text" name="cycle" id="cycle" placeholder="请输入项目结算周期" />
+						</div>
+					</div>
+					<div class="pro pro_num">
+						<span>是否限量</span>
+						<div class="pro_right">
+							<input type="radio" name="num" style="margin-left: 100px;" />是
+							<input type="radio" name="num" style="margin-left: 150px;" />否
+						</div>
+					</div>
+					<div class="pro pro_remark">
+						<span>备注说明</span>
+						<div class="pro_right" style="margin-left: 25px;">
+							<input type="text" name="remark" id="remark" placeholder="请输入备注说明" />
+						</div>
+					</div>
+					<button class="btn">提交申请</button>
+				</from>
+			</div>
+		</div>
+
+	</div>
+	{% include "footer.html" %}
+
+	<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+	<script>
+		$(function () {
+
+			$(".btn").click(function () {
+				let rideo = $("input:radio:checked").val();
+				let project = $("#project").val();
+				let url = $("#url").val();
+				let price = $("#price").val();
+				let cycle = $("#cycle").val();
+				let remark = $("#remark").val();
+
+				$.ajax({
+					url: url,
+					type: 'post',
+					async: false,
+					data: {
+						"title": project,        //项目名称
+						"settle_period":cycle,   //项目结算周期
+						"remark": remark,    	 //备注说明
+						"strategy_url":url,		 //攻略链接
+
+					},
+					timeout: 5000, //超时时间
+					dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
+					success: function (data) {
+						alert("提交成功");
+						
+					},
+					error: function (xhr, textStatus) {
+						alert(xhr.responseText);
+					}
+				});
+
+			});
+		});
+	</script>
+</body>
+
+</html>

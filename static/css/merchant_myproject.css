@@ -3,8 +3,7 @@
 }
 .wrapper{
 	width: 1300px;
-	height: 800px;
-	margin: 80px auto;
+	margin: 50px auto;
 	/*background: lightblue;*/
 	position: relative;
 }
@@ -29,7 +28,7 @@
 	background: lightgreen;
 }
 .tab-right{
-	width: 150px;
+	width: 200px;
 	height: 42px;
 	line-height: 42px;
 	background: white;

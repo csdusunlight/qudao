@@ -103,6 +103,8 @@ def bail_manage(request):
     return render(request, 'bail_manage.html')
 def proj_manage(request):
     return render(request, 'proj_manage.html')    
+def proj_add(request):
+    return render(request, 'proj_add.html')
 def fangdan_audit(request):
     return render(request, 'fangdan_audited.html')
     

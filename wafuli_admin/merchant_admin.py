@@ -83,8 +83,9 @@ def admin_project(request):
         if type==1:
             obj.audit_state = '0'
             res['code'] = 0
-            Project.objects.create(title=obj.title, user=obj.user, is_official=True, category='official', is_addedto_repo=True, state='00',
+            project = Project.objects.create(title=obj.title, user=obj.user, is_official=True, category='official', is_addedto_repo=True, state='00',
                                    strategy=obj.strategy.fanshu_url())
+            obj.project = project
         elif type == 2:
             reason = request.POST.get('reason', '')
             if not reason:
@@ -100,5 +101,5 @@ def admin_project(request):
             return JsonResponse(res)    
         obj.audit_time = datetime.datetime.now()
         obj.admin_user = admin_user
-        obj.save(update_fields=['audit_state','audit_time','audit_reason'])
+        obj.save(update_fields=['audit_state','audit_time','audit_reason','project'])
         return JsonResponse(res)

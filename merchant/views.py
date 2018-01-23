@@ -70,16 +70,23 @@ def preaudit_investlog(request):
                 res['code'] = -3
                 res['res_msg'] = u'该项目已审核过，不要重复审核！'
                 return JsonResponse(res)
-            if investlog.auditlog:
-                logger.critical("Returning cash is repetitive!!!")
+            if not investlog.audit_step in ['0']:
                 res['code'] = -3
+                res['res_msg'] = u'该项目已预审核过，不要重复审核！'
+                return JsonResponse(res)
+            if investlog.audit_state == '1' and investlog.translist.exists():
+                logger.critical("Returning cash is repetitive!!!")
+                res['code'] = -5
                 res['res_msg'] = u"操作失败，返现重复！"
             else:
+                investlog.preaudit_state = '0'
                 translist = charge_margin(investlog_user, '1', cash, project_title)
-                investlog.audit_state = '4'
-                investlog.settle_amount = cash
-                broker_amount = cash * 2.0/100
-                translist2 = charge_margin(investlog_user, '1', broker_amount, "佣金")
+                investlog.presettle_amount = cash
+                broker_rate = investlog.project.broker_rate
+                broker_amount = cash * broker_rate/100
+                investlog.broker_amount = broker_amount
+                if broker_amount > 0:
+                    translist2 = charge_margin(investlog_user, '1', broker_amount, "佣金")
                 translist.auditlog = investlog
                 translist2.auditlog = investlog
                 translist.save()
@@ -89,14 +96,14 @@ def preaudit_investlog(request):
 #                 #活动插入结束
                 res['code'] = 0
         elif type==2:
-            investlog.audit_state = '2'
+            investlog.preaudit_state = '2'
             res['code'] = 0
         elif type==3:
-            investlog.audit_state = '3'
+            investlog.preaudit_state = '3'
             res['code'] = 0
         investlog.audit_reason = reason
         if res['code'] == 0:
-            investlog.audit_time = datetime.datetime.now()
+            investlog.preaudit_time = datetime.datetime.now()
             investlog.save()
         return JsonResponse(res)
 def merchant_index(request):

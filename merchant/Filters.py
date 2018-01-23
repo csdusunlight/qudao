@@ -9,6 +9,8 @@ from account.models import MyUser
 from merchant.models import Apply_Project, Margin_Translog, Margin_AuditLog
 
 class ApplyProjectFilter(django_filters.rest_framework.FilterSet):
+    qq_number = django_filters.CharFilter('user', lookup_expr='qq_number')
+    qq_name = django_filters.CharFilter('user', lookup_expr='qq_name__contains')
     submittime = django_filters.DateFromToRangeFilter(name="submit_time")
     audittime = django_filters.DateTimeFromToRangeFilter(name="audit_time")
     auditdate = django_filters.DateFromToRangeFilter(name="audit_time")

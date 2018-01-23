@@ -1144,23 +1144,24 @@ def submitOrder(request):
     #活动插入
 #     on_submit(request, request.user, investlog)
     #活动插入结束
-    
-#     imgurl_list = []
-#     if len(request.FILES)>6:
-#         result = {'code':-2, 'msg':u"上传图片数量不能超过6张"}
-#         return JsonResponse(result)
-#     for key in request.FILES:
-#         block = request.FILES[key]
-#         if block.size > 100*1024:
-#             result = {'code':-1, 'msg':u"每张图片大小不能超过100k，请重新上传"}
-#             return JsonResponse(result)
-#     for key in request.FILES:
-#         block = request.FILES[key]
-#         imgurl = saveImgAndGenerateUrl(key, block, 'screenshot')
-#         imgurl_list.append(imgurl)
-#     if imgurl_list:
-#         invest_image = ';'.join(imgurl_list)
-#         investlog.invest_image = invest_image
-#         investlog.save(update_fields=['invest_image',])
+
     result['code'] = 0
     return JsonResponse(result)
+
+@csrf_exempt
+@login_required_ajax
+def reaudit(request):
+    res = {}
+    id = request.POST.get('id')
+    reason = request.POST.get('reason')
+    if not id or not reason:
+        res['code'] = 1
+        res['msg'] = u"参数不足"
+        return JsonResponse(res)
+    log = InvestLog.objects.get(user=request.user, id=id)
+    log.reaudit_reason = reason
+    log.audit_state = '3'
+    log.save(update_fields=['audit_state', 'reaudit_reason'])
+    res['code'] = 0
+    return JsonResponse(res)
+    

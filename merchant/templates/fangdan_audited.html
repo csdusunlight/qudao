@@ -5,13 +5,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>用户中心</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/add-img.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.searchableSelect.css' %}" />
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />-->
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
@@ -19,7 +16,7 @@
 <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.searchableSelect.js' %}"></script>
 <style type="text/css">
-	.handle {
+	/*.handle {
 	    position: relative;
 	    text-decoration: underline;
 	}
@@ -37,7 +34,7 @@
 	}
 	.handle:hover .handle-box {
 	    right: 0;
-	}
+	}*/
 	.state0 {
         color: #91c11d;
     }
@@ -74,7 +71,7 @@
         color: #fff;
         background-color: #91C11D;
     }
-    .day-search-box {
+    /*.day-search-box {
         width: 100px;
         display: inline-block;
         font-size: 0px;
@@ -87,8 +84,8 @@
         color: #91C11D;
         text-align: center;;
         cursor: pointer;
-    }
-    .today-detail {
+    }*/
+    /*.today-detail {
         position: absolute;
         right: 0;
         top: 14px;
@@ -108,8 +105,7 @@
         margin: 0 4px;
         font-size: 16px;
         color: #ffbe00;
-    }
-    .
+    }*/
     .return-amount {
         color: #ffbe00;
     }
@@ -117,9 +113,9 @@
         color: #91C11D;
     }
     
-    .handle-mark {
+    /*.handle-mark {
         color: #91c11d;
-    }
+    }*/
     .searchable-select {
         width: 300px;
     }
@@ -132,93 +128,7 @@
 {% include "merchant_header.html" %}
 <!--内容-->
 <div class="Content">
-<div class="RightCont">
-    <!--<div style="margin-bottom: 20px;" class="data-intro">
-        <h3>操作说明：</h3>
-        <p style="margin-left: 30px;">官方数据的<span class="handle-mark">删除</span>、<span class="handle-mark">编辑</span>、<span class="handle-mark">提交截图</span>等操作位于未审核选项下，<span class="handle-mark">审核</span>位于已通过选项下；</p>
-        <p style="margin-left: 30px;">自建数据的<span class="handle-mark">删除</span>、<span class="handle-mark">编辑</span>、<span class="handle-mark">审核</span>、<span class="handle-mark">拒绝</span>、<span class="handle-mark">提交截图</span>等操作位于未审核选项下；</p>
-    </div>-->
-    <div class="table" style="position: relative;">
-        <h2 class="table__title">官方数据</h2>
-        <!--<ul class="today-detail">
-            <li class="today-detail-item">今日提交<span class="today-num">{{submit_num}}</span>项</li><li class="today-detail-item">通过<span class="today-num">{{pass_num}}</span>项</li>
-            <li class="today-detail-item">复审<span class="today-num">{{check_num}}</span>项</li><li class="today-detail-item">拒绝<span class="today-num">{{refuse_num}}</span>项</li>
-        </ul>-->
-        <div class="search">
-            <div class="search__item">
-                <span class="search__name">项目名称：</span>
-                <input type="text" id="proj_name" />
-            </div>
-            <div class="search__item" style="display: none;">
-                <span class="search__name">投资日期：</span>
-                <div class="time-input-box"><input type="text" class="date_picker time-input" id="invest_date0" /></div> ——
-                <div class="time-input-box"><input type="text" class="date_picker time-input" id="invest_date1" /></div>
-            </div>
-            <div class="search__item">
-                <span class="search__name">提交日期：</span>
-                <div class="time-input-box"><input type="text" class="date_picker time-input" id="submit_date0" /></div> ——
-                <div class="time-input-box"><input type="text" class="date_picker time-input" id="submit_date1" /></div>
-            </div>
-            <div class="search__item">
-                <span class="search__name">提交手机号：</span>
-                <input type="text" id="telnum_sub" />
-            </div>
-            <div style="display: none;" class="search__item">
-                <span class="search__name">收款信息：</span>
-                <input type="text" id="zhifubao" />
-            </div>
-            <div class="search__item">
-                <span class="search__name">审核日期：</span>
-                <div class="time-input-box"><input type="text" class="date_picker time-input" id="audit_date0" /></div> ——
-                <div class="time-input-box"><input type="text" class="date_picker time-input" id="audit_date1" /></div>
-            </div>
-            <div class="day-search-box">
-                <span class="search_today">今日</span>
-                <span class="search_yes">昨日</span>
-            </div>
-            <div style="width: 400px;margin-left: 110px;" class="search__item">
-                <ul class="state-tabbox">
-                    <li data-state = "" class="state-tab on">全部</li>
-                    <li data-state = "1" class="state-tab">未审核</li>
-                    <li data-state = "3" class="state-tab">复审中</li>
-                    <li data-state = "0" class="state-tab">已通过</li>
-                    <li data-state = "2" class="state-tab">已拒绝</li>
-                </ul>
-            </div>
-            <div style="display: none;" class="search__item">
-                <span class="search__name">审核状态：</span>
-                <select name="select_status" id="state">
-                    <option value="">全部</option>
-                    <option value="1">未审核</option>
-                    <option value="0">已通过</option>
-                    <option value="2">已拒绝</option>
-                    <!--<option value="3">已删除</option>-->
-                </select>
-            </div>
-        </div>
-        <div class="handle clearfix">
-            <div class="handle__in l">
-                <input style="display: none;" id="fileupload" name="file" type="file" onchange='hint.innerHTML = this.files[0].name;' />
-                <a id="input_clone" class="btn m-green m-choose">选择文件</a>
-                <p class="hint-box">已选择表格：<b id="hint" class="hint">无</b></p>
-                <a id="import" class="btn m-green m-import">返现金额导入</a>
-            </div>
-            <div class="handle__out r">
-                <a id="search" class="btn m-green m-search">搜索</a>
-                <a id="export" class="btn m-green m-export">导出</a>
-            </div>
-        </div>
-        
-        <div id="pagedata">
-        </div>
-        <div class="changes-p">
-            <div class="page" id="page">
-            </div>
-        </div>
-                            
-
-    </div>
-    <div class="table" style="margin-top: 20px;">
+    <div class="table">
         <h2 class="table__title">自建数据</h2>
         <div class="search">
             <div class="search__item">
@@ -289,117 +199,7 @@
                             
 
     </div>
-    
-    <div class="popup m-edit-proj">
-        <div class="popup__content" style="width: 600px;">
-            <div class="popup__top">
-                <h2 class="popup__title">编辑官方数据</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
-            </div>
-            <div class="popup__detail">
-                <div class="popup__item">
-                    <span class="popup__itemname">项目名称</span>
-                    <select disabled="disabled" class="project" placeholder="选择项目">
-                    </select>
-                </div>
-                <div class="popup__item">
-                    <span class="popup__itemname">投资日期：</span>
-                    <input type="text" class="date date_picker" placeholder="选择投资日期" />
-                </div>
-                <div class="popup__item">
-                    <span class="popup__itemname">提交手机：</span>
-                    <input type="text" class="telnum" placeholder="填写提交手机号" />
-                </div>
-                <div class="popup__item">
-                    <span class="popup__itemname">投资姓名：</span>
-                    <input type="text" class="zfbname" placeholder="填写投资姓名" />
-                </div>
-                <div class="popup__item">
-                    <span class="popup__itemname">投资金额：</span>
-                    <input type="text" class="money" placeholder="填写投资金额" />
-                </div>
-                <div class="popup__item">
-                    <span class="popup__itemname">投资标期：</span>
-                    <input type="text" class="term" placeholder="填写投资标期" />
-                </div>
-                <div class="popup__item">
-                    <span class="popup__itemname">收款信息：</span>
-                    <input type="text" class="zfb" placeholder="填写收款支付宝" />
-                </div>
-                <div class="popup__item">
-                    <span class="popup__itemname">备注：</span>
-                    <input type="text" class="remark" placeholder="填写备注" />
-                </div>
-            </div>
-            <div class="popup__btnbox">
-                <a id="cancel" class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
-                <a id="confirm_edit" class="btn m-green popup__close-btn">确认</a>
-            </div>
-        </div>
-    </div>
-    <div class="popup m-pass-proj">
-        <div class="popup__content" style="width: 600px;">
-            <div class="popup__top">
-                <h2 class="popup__title">数据返现</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
-            </div>
-            <div class="popup__detail">
-                <div class="popup__item">
-                    <span class="popup__itemname">返现金额：</span>
-                    <input type="text" class="return_amount" value="0" onkeyup="this.value=this.value.replace(/[^\-?\d.]/g,'')" placeholder="填写投资金额" />
-                </div>
-            </div>
-            <div class="popup__btnbox">
-                <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
-                <a id="confirm_pass" class="btn m-green popup__close-btn">确认</a>
-            </div>
-        </div>
-    </div>
-    <div class="popup m-edit-proj_02">
-        <div class="popup__content" style="width: 600px;">
-            <div class="popup__top">
-                <h2 class="popup__title">编辑自建数据</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
-            </div>
-            <div class="popup__detail">
-                <div class="popup__item">
-                    <span class="popup__itemname">项目名称</span>
-                    <select disabled="disabled" class="project_02" placeholder="选择项目">
-                    </select>
-                </div>
-                <div class="popup__item">
-                    <span class="popup__itemname">投资日期：</span>
-                    <input type="text" class="date_02 date_picker" placeholder="选择投资日期" />
-                </div>
-                <div class="popup__item">
-                    <span class="popup__itemname">提交手机：</span>
-                    <input type="text" class="telnum_02" placeholder="填写提交手机号" />
-                </div>
-                <div class="popup__item">
-                    <span class="popup__itemname">投资姓名：</span>
-                    <input type="text" class="zfbname_02" placeholder="填写投资姓名" />
-                </div>
-                <div class="popup__item">
-                    <span class="popup__itemname">投资金额：</span>
-                    <input type="text" class="money_02" placeholder="填写投资金额" />
-                </div>
-                <div class="popup__item">
-                    <span class="popup__itemname">投资标期：</span>
-                    <input type="text" class="term_02" placeholder="填写投资标期" />
-                </div>
-                <div class="popup__item">
-                    <span class="popup__itemname">收款信息：</span>
-                    <input type="text" class="zfb_02" placeholder="填写投资金额" />
-                </div>
-                <div class="popup__item">
-                    <span class="popup__itemname">备注：</span>
-                    <input type="text" class="remark_02" placeholder="填写备注" />
-                </div>
-            </div>
-            <div class="popup__btnbox">
-                <a id="cancel_02" class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
-                <a id="confirm_edit_02" class="btn m-green popup__close-btn">确认</a>
-            </div>
-        </div>
-    </div>
-    <div class="popup m-del-proj">
+    <!--<div class="popup m-del-proj">
         <div class="popup__content" style="width: 600px;">
             <div class="popup__top">
                 <h2 class="popup__title">删除数据</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
@@ -412,29 +212,8 @@
                 <a id="confirm_delete" class="btn m-green popup__close-btn">确认</a>
             </div>
         </div>
-    </div>
-    <div class="popup m-add-img">
-        <div class="popup__content" style="width: 600px;">
-            <div class="popup__top">
-                <h2 class="popup__title">上传截图</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
-            </div>
-            <div class="popup__detail">
-                <div class="img-up">
-                    <input type="file" name="picfile" id="choose" accept="image/jpeg,image/png" multiple>
-                    <ul class="img-list"></ul>
-                    <div class="img-btn">
-                            <a id="clear_img" onclick="clearBtn()">清除截图</a>
-                            <a id="upload">上传截图</a>
-                    </div>
-                    <span class="tips">图片格式限jpg和png，最多可上传6张</span>
-                </div>
-            </div>
-            <div class="popup__btnbox">
-                <a id="cancel_add-img" class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
-                <a id="confirm_add-img" class="btn m-green popup__close-btn">确认</a>
-            </div>
-        </div>
-    </div>
+    </div>-->
+   
     <div class="popup m-pass-proj-02">
         <div class="popup__content" style="width: 600px;">
             <div class="popup__top">
@@ -473,7 +252,23 @@
             </div>
         </div>
     </div>
-</div>
+    <div class="popup m-again-proj-02">
+        <div class="popup__content" style="width: 600px;">
+            <div class="popup__top">
+                <h2 class="popup__title">进入复审</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+            </div>
+            <div class="popup__detail">
+                <div class="popup__item">
+                    <span class="popup__itemname">复审原因：</span>
+                    <input type="text" class="again_reason_02" placeholder="填写复审原因" />
+                </div>
+            </div>
+            <div class="popup__btnbox">
+                <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
+                <a id="confirm_again_02" class="btn m-green popup__close-btn">确认</a>
+            </div>
+        </div>
+    </div>
 </div>
 <iframe id="myIFrame" scrolling="yes" src="abount:blank" style="display:none" frameborder=1></iframe>
 {% include "footer.html" %}
@@ -481,51 +276,7 @@
 <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
 <script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
-<script type="text/javascript" src="{% static 'js/add-img.js' %}"></script>
 <script type="text/javascript">
-
-//  全部
-    var data = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>审核状态</th><th>结算金额</th><th>返现金额</th><th class="w-zfb">审核信息</th><th class="w-remark">备注及其他</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time state{audit_state}">{audit_state_des}</td><td>{settle_amount}</td>'+
-        '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
-//  未审核
-    var data1 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td data-remark="{remark}">{other_remark}</td>' +
-//      '<td id="item_{id}"><a class="fyin" onclick="removeData(this,{id})">删除' +
-//      '</a>│<a class="jion-s" onclick="editData(this,{id})">编辑' +
-//      '</a>│<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
-//      '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span></td>'+
-        '<td class="handle">详情<div class="handle-box"><a onclick="removeData(this,{id})">删除</a> | '+
-        '<a onclick="editData(this,{id})">编辑</a> | '+
-        '<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
-        '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span></div></td>'+
-        '</tr>[/results]</table>';
-//  已通过
-    var data0 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资金额</th><th>投资标期</th><th>审核时间</th>' +
-        '<th>结算金额</th><th>返现金额</th><th class="w-zfb">收款信息</th><th>审核说明</th><th class="w-remark">备注及其他</th><th>操作</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td>' +
-        '<td class="submit-time">{audit_time}</td><td>{settle_amount}</td><td class="return-txt">{return_amount}</td><td>{zhifubao}</td><td>{audit_reason}</td><td>{other_remark}</td>'+
-        '<td data-return="{return_amount}" class="return-amount"><a class="handle" onclick="pass(this,{id})">返现</a></td></tr>[/results]</table>';
-//  已拒绝
-    var data2 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>审核时间</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td class="submit-time">{audit_time}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
-//  复审
-    var data3 = '<table width="100%"><tr><th>项目名称3</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">复审原因</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{audit_reason}</td><td data-remark="{remark}">{other_remark}</td>' +
-        '<td class="handle">详情<div class="handle-box"><a onclick="removeData(this,{id})">删除</a> | '+
-        '<a onclick="editData(this,{id})">编辑</a> | '+
-        '<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
-        '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span></div></td>'+
-        '</tr>[/results]</table>';
-    
 //  全部
     var data_user = '<table width="100%"><tr><th>项目名称</th><th>项目来源</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
         '<th>投资金额</th><th>投资标期</th><th>审核状态</th><th>结算金额</th><th>返现金额</th><th class="w-remark">备注及其他</th></tr>[results]' +
@@ -537,17 +288,8 @@
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{project_channel}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td data-remark="{remark}">{other_remark}</td>' +
-//      '<td id="item_{id}"><a class="fyin" onclick="removeData_02(this,{id})">删除' +
-//      '</a>│<a class="jion-s" onclick="editData_02(this,{id})">编辑'+
-//      '</a>│<a class="jion-s" onclick="pass_02(this,{id})">返现'+
-//      '</a>│<a class="jion-s" onclick="refuse_02(this,{id})">拒绝'+
-//      '</a>│<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
-//      '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span></td>'+
-        '<td class="handle">详情<div class="handle-box"><a onclick="removeData_02(this,{id})">删除</a> | '+
-        '<a onclick="editData_02(this,{id})">编辑</a> | <a onclick="pass_02(this,{id})">审核</a> | '+
-        '<a onclick="refuse_02(this,{id})">拒绝</a> | '+
-        '<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
-        '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span></div></td>'+
+        '<td><a onclick="pass_02(this,{id})">审核</a> | <a onclick="again_02(this,{id})">复审</a> | '+
+        '<a onclick="refuse_02(this,{id})">拒绝</a></td>'+
         '</tr>[/results]</table>';
 //  已通过
     var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>项目来源</th><th>提交日期</th><th>提交手机号</th>' +
@@ -565,789 +307,332 @@
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{other_remark}</td></tr>[/results]</table>';
 
-        var url = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=true&user={{user.id}}";
-        var url2 = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=false&user={{user.id}}";
-        
-        function pagecallback() {
-            $('.is-img').each(function() {
-                if ($(this).data('isimg') == "") {
-                    $(this).find('.img-have').hide();
-                } else {
-                    $(this).find('.img-submit').hide();
-                }
-            })
-            $('.submit-time').each(function(){
-                var submit_time = $(this).text().split('T');
-                $(this).text(submit_time[0]);
-            })
-            $('.return-txt').each(function(){
-                if ($(this).text() == 'null') {
-                    $(this).text('');
-                }
-            })
-            $('.return-amount').each(function(){
-                if ($(this).data('return') != null) {
-                	$(this).find('.handle').text('已返');
-                	$(this).addClass('m-success');
-                }
-            })
-        }
-        $("#pagedata").ajaxPage({
-            url: url,
-            pageId: $("#page"),
-            pageSize: 10,
-            run: true,
-            content: data,
-            complete:pagecallback,
-        });
-        $("#pagedata2").ajaxPage({
-            url: url2,
-            pageId: $("#page2"),
-            pageSize: 10,
-            run: true,
-            content: data_user,
-            complete:pagecallback,
-        });
-        var parent_all;
-        var delete_id;
-        var parent_del;
-        //          编辑/删除数据部分(官方)
-        var pass_id;
-        function pass (obj,id) {
-            parent_all = $(obj).parent();
-            pass_id = id;
-            $(".return_amount").val('0');
-            $('.popup.m-pass-proj').addClass('in');
-        }
-        
-        function removeData (obj,id) {
-            parent_del = $(obj);
-            delete_id = id;
-            $('.popup.m-del-proj').addClass('in');
-        }
-        
-        var addimg_id;
-        var addimg_parent;
-        function addImg (obj,id) {
-            addimg_parent = $(obj).parent();
-            addimg_id = id;
-            clearBtn();
-            $('.popup.m-add-img').addClass('in');
-        }
-        var project_id;
-        var edit_parent;
-        function editData(obj, id) {
-            project_id = id;
-            edit_parent = $(obj).parent().parent().parent();
-            $.ajax({
-                url: "/restapi/investlogs/" + project_id + "/",
-                dataType: "json",
-                type: 'get',
-                success: function(ret) {
-                    $(".project").val(ret.project);
-                    $(".date").val(ret.invest_date);
-                    $(".telnum").val(ret.invest_mobile);
-                    $(".zfbname").val(ret.invest_name);
-                    $(".money").val(ret.invest_amount);
-                    $(".term").val(ret.invest_term);
-                    $(".zfb").val(ret.zhifubao);
-                    $(".remark").val(ret.remark);
-                    $('.popup.m-edit-proj').addClass('in');
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR.responseText);
-                    alert(jqXHR.responseText);
-                }
-            });
-           
-
-        }
-
-        $("#confirm_edit").click(function() {
-            var date = $(".date").val(),
-                telnum = $(".telnum").val(),
-                term = $(".term").val(),
-                money = $(".money").val(),
-                zfb = $(".zfb").val(),
-                zfbname = $(".zfbname").val(),
-                remark = $(".remark").val();
-            if(!telnum) {
-                alert("提交手机号不能为空");
-                return;
-            }
-
-            var re_date = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/, //验证日期
-                re_phone = /^1[1,2,3,4,6,5,7,8,9]\d{9}$/, //验证手机号
-                re_amount = /^\d+(\.\d+)?$/; //验证数字格式
-            if(!re_date.test(date)) {
-                alert('日期格式不正确，请重新选择');
-                return;
-            }
-            if(!re_phone.test(telnum)) {
-                alert('手机号格式不正确');
-                return;
-            }
-            if(!re_amount.test(term)) {
-                alert('标期必须为纯数字格式');
-                return;
-            }
-            if(!re_amount.test(money)) {
-                alert('金额必须为纯数字格式');
-                return;
-            }
-
-            $.ajax({
-                url: "/restapi/investlogs/" + project_id + "/",
-                dataType: "json",
-                type: 'put',
-                data: {
-                    'invest_date': date,
-                    'invest_mobile': telnum,
-                    'invest_term': term,
-                    'invest_amount': money,
-                    'zhifubao': zfb,
-                    'invest_name': zfbname,
-                    'remark': remark
-                },
-                success: function(ret) {
-                    var parent_dom = $(edit_parent);
-                    parent_dom.find("td").eq(0).text(ret.project_title);
-                    parent_dom.find("td").eq(1).text(ret.invest_date);
-                    parent_dom.find("td").eq(2).text(ret.invest_mobile);
-                    parent_dom.find("td").eq(3).text(ret.invest_name);
-                    parent_dom.find("td").eq(4).text(ret.invest_amount);
-                    parent_dom.find("td").eq(5).text(ret.invest_term);
-                    parent_dom.find("td").eq(6).text(ret.zhifubao);
-                    parent_dom.find("td").eq(7).text(ret.other_remark);
-                    alert('操作成功');
-                    $('.popup.m-edit-proj').removeClass('in');
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR.responseText);
-                    alert(jqXHR.responseText);
-                }
-            });
-        });
-        
-        $('#confirm_pass').click(function() {       //官方数据确认返现
-            var return_amount = $(".return_amount").val();
-            if(!return_amount) {
-                alert('填写项不能为空')
-                return;
-            }
-            console.log(return_amount)
-            $.ajax({
-                url: "/account/admin_invest/" + pass_id + "/",
-                dataType: "json",
-                type: "post",
-                data: {
-                    'return_amount': return_amount,
-//                  'audit_state': 0,
-                },
-                success: function(ret) {
-                    if(ret.code == 0) {
-                        parent_all.find('.handle').text('已返');
-                        parent_all.addClass('m-success');
-                        parent_all.parent().find('td').eq(7).text(return_amount);
-                        $('.popup.m-pass-proj').removeClass('in');
-                    } else {
-                        console.log(ret.res_msg);
-                    }
-                },
-                error: function() {
-                    alert("请检查网络连接");
-                }
-            });
-        });
-//      编辑/删除部分（官方）---end
-
-        //          编辑/删除数据部分(自建)
-        
-        
-        function removeData_02 (obj,id) {
-            delete_id = id;
-            parent_del = $(obj);
-            $('.popup.m-del-proj').addClass('in');
-        }
-        $('#confirm_delete').click(function(){
-            $.ajax({
-                url:"/restapi/investlogs/" + delete_id + "/",
-                type:"delete",
-                dataType: "json",
-                success: function(ret) {
-                    console.log('删除成功');
-                    parent_del.parent().parent().parent().remove();
-                    $('.popup.m-del-proj').removeClass('in');
-                },
-                error: function() {
-                    alert("请检查网络连接");
-                }
-            });
-        })
-        
-//      var pass_id;
-        function pass_02 (obj,id) {
-            pass_id = id;
-            $(".settle_amount_02").val('');
-            $(".return_amount_02").val('');
-            $('.popup.m-pass-proj-02').addClass('in');
-        }
-        $('#confirm_pass_02').click(function() {
-            var settle_amount = $(".settle_amount_02").val();
-            var return_amount = $(".return_amount_02").val();
-            if(!settle_amount || !return_amount) {
-                alert('填写项不能为空')
-                return;
-            }
-            console.log(settle_amount + ', ' + return_amount)
-            $.ajax({
-                url: "/account/admin_invest/" + pass_id + "/",
-                dataType: "json",
-                type: "post",
-                data: {
-                    'settle_amount': settle_amount,
-                    'return_amount': return_amount,
-                    'audit_state': 0,
-                },
-                success: function(ret) {
-                    if(ret.code == 0) {
-                        alert('操作成功');
-                        $('.popup.m-pass-proj-02').removeClass('in');
-                    } else {
-                        console.log(ret.res_msg);
-                    }
-                },
-                error: function() {
-                    alert("请检查网络连接");
-                }
-            });
-        });
-        
-        var refuse_id;
-        function refuse_02 (obj,id) {
-            refuse_id = id;
-            $(".refuse_reason_02").val('');
-            $('.popup.m-refuse-proj-02').addClass('in');
-        }
-        $('#confirm_refuse_02').click(function() {
-            var refuse_reason = $(".refuse_reason_02").val();
-            if(!refuse_reason) {
-                alert('拒绝原因不能为空')
-                return;
-            }
-            console.log(refuse_reason);
-            $.ajax({
-                url: "/account/admin_invest/" + refuse_id + "/",
-                dataType: "json",
-                type: "post",
-                data: {
-                    'audit_reason': refuse_reason,
-                    'audit_state': 2,
-                },
-                success: function(ret) {
-                    if(ret.code == 0) {
-                        alert('操作成功');
-                        $('.popup.m-refuse-proj-02').removeClass('in');
-                    } else {
-                        console.log(ret.res_msg);
-                    }
-                },
-                error: function() {
-                    alert("请检查网络连接");
-                }
-            });
-        });
-        
-        var project_id_02;
-        var edit_parent_02;
-        function editData_02(obj, id) {
-            project_id = id;
-            edit_parent_02 = $(obj).parent().parent().parent();
-            $.ajax({
-                url: "/restapi/investlogs/" + project_id + "/",
-                dataType: "json",
-                type: 'get',
-                success: function(ret) {
-                    $(".project_02").val(ret.project);
-                    $(".date_02").val(ret.invest_date);
-                    $(".telnum_02").val(ret.invest_mobile);
-                    $(".zfbname_02").val(ret.invest_name);
-                    $(".money_02").val(ret.invest_amount);
-                    $(".term_02").val(ret.invest_term);
-                    $(".zfb_02").val(ret.zhifubao);
-                    $(".remark_02").val(ret.remark);
-                    $('.popup.m-edit-proj_02').addClass('in');
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR.responseText);
-                    alert(jqXHR.responseText);
-                }
-            });
-        }
-
-        $("#confirm_edit_02").click(function() {
-            var project = $(".project_02").val(),
-                date = $(".date_02").val(),
-                telnum = $(".telnum_02").val(),
-                term = $(".term_02").val(),
-                money = $(".money_02").val(),
-                zfb = $(".zfb_02").val(),
-                zfbname = $(".zfbname_02").val(),
-                remark = $(".remark_02").val();
-            console.log(project);
-            console.log(project_id+","+project+","+date+","+telnum+","+term+","+money+","+remark+","+zfb+","+zfbname+",");
-            if(!telnum) {
-                alert("提交手机号不能为空");
-                return;
-            }
-            if(project == 0) {
-                alert("请选择项目");
-                return;
-            }
-
-            $.ajax({
-                url: "/restapi/investlogs/" + project_id + "/",
-                dataType: "json",
-                type: 'put',
-                data: {
-                    'invest_date': date,
-                    'invest_mobile': telnum,
-                    'invest_term': term,
-                    'invest_amount': money,
-                    'zhifubao': zfb,
-                    'invest_name': zfbname,
-                    'remark': remark
-                },
-                success: function(ret) {
-                        alert("更改数据成功！");
-                        var parent_dom = $(edit_parent_02);
-                        parent_dom.find("td").eq(0).text(ret.project_title);
-                        parent_dom.find("td").eq(1).text(ret.project_channel);
-                        parent_dom.find("td").eq(2).text(ret.invest_date);
-                        parent_dom.find("td").eq(3).text(ret.invest_mobile);
-                        parent_dom.find("td").eq(4).text(ret.invest_name);
-                        parent_dom.find("td").eq(5).text(ret.invest_amount);
-                        parent_dom.find("td").eq(6).text(ret.invest_term);
-                        parent_dom.find("td").eq(7).text(ret.zhifubao);
-                        parent_dom.find("td").eq(8).text(ret.other_remark);
-                        $('.popup.m-edit-proj_02').removeClass('in');
-                },
-                error: function() {
-                    alert("请检查网络连接");
-                }
-            });
-        });
-//      编辑/删除部分（自建）---end
-        
-        $(function(){
-            $('.back-a3').toggleClass("on");
-            
-            $(".RightCont").on("focus", ".date_picker", function() {
-                $('.date_selector').remove();
-                $(this).date_input();
-            })
-            
-            $.ajax({
-                url:"/restapi/projects/?is_official=true&pageSize=999",
-                type:"get",
-                dataType: "json",
-                success: function(ret) {
-                    console.log(ret.results);
-                    var option_html = '';
-                    for (var i = 0; i < ret.results.length; i++) {
-                        option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
-                    }
-                    $('.project').html(option_html);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR.responseText);
-                    console.log("数据错误is_official=true");
-                }
-            });
-            $.ajax({
-                url:"/restapi/projects/?is_official=false&pageSize=999",
-                type:"get",
-                dataType: "json",
-                success: function(ret) {
-                    console.log(ret.results);
-                    var option_html = '';
-                    for (var i = 0; i < ret.results.length; i++) {
-                        option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
-                    }
-                    $('.project_02').html(option_html);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR.responseText);
-                    console.log("数据错误is_official=false");
-                }
-            });
-            
-//          官方数据
-            var state_1 = '';
-            $('.state-tab').click(function(){
-                $(this).addClass('on').siblings().removeClass('on');
-                state_1 = $(this).data('state') + '';
-                console.log(state_1)
-                $('#search').click();
-            })
-            $('.search_today').click(function(){
-                var date = new Date();
-                var date_yes = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
-                $("#audit_date0").val(date_yes);
-                $("#audit_date1").val(date_yes);
-                $("#search").click();
-            })
-            $('.search_yes').click(function(){
-                var date = new Date();
-                var now_time = date.getTime();
-                date.setTime(now_time - 1 * (24 * 60 * 60 * 1000));
-                var date_yes = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
-                $("#audit_date0").val(date_yes);
-                $("#audit_date1").val(date_yes);
-                $("#search").click();
-            })
-            $("#search").click(function() {
-                var proj_name = $("#proj_name").val(),
-                    invest_date0 = $("#invest_date0").val(),
-                    invest_date1 = $("#invest_date1").val(),
-                    submit_date0 = $("#submit_date0").val(),
-                    submit_date1 = $("#submit_date1").val(),
-                    audit_date0 = $("#audit_date0").val(),
-                    audit_date1 = $("#audit_date1").val(),
-                    telnum_sub = $("#telnum_sub").val(),
-                    zhifubao = $("#zhifubao").val(),
-                    state = state_1;
-                var newurl = url;
-                if(proj_name) {
-                    newurl += "&project_title_contains=" + proj_name;
-                }
-                if(invest_date0) {
-                    newurl += "&investtime_0=" + invest_date0;
-                }
-                if(invest_date1) {
-                    newurl += "&investtime_1=" + invest_date1;
-                }
-                if(submit_date0) {
-                    newurl += "&submittime_0=" + submit_date0;
-                }
-                if(submit_date1) {
-                    newurl += "&submittime_1=" + submit_date1;
-                }
-                if(audit_date0) {
-                    newurl += "&auditdate_0=" + audit_date0;
-                }
-                if(audit_date1) {
-                    newurl += "&auditdate_1=" + audit_date1;
-                }
-                if(telnum_sub) {
-                    newurl += "&invest_mobile=" + telnum_sub;
-                }
-                if(zhifubao) {
-                    newurl += "&zhifubao_contains=" + zhifubao;
-                }
-                if(state != '') {
-                    newurl += "&audit_state=" + state;
-                }
-                
-                var search_data = data;
-                if(state == '0') {
-                    search_data = data0;
-                } else if(state == '1') {
-                    search_data = data1;
-                } else if(state == '2') {
-                    search_data = data2;
-                } else if(state == '3') {
-                    search_data = data3;
-                }
-                
-                console.log(newurl);
-                $("#page").empty();
-                $("#pagedata").ajaxPage({
-                    url: newurl,
-                    pageId: $("#page"),
-                    pageSize: 10,
-                    run: true,
-                    content: search_data,
-                    complete:pagecallback,
-                });
-            });
-            $("#export").click(function() {
-                var html = '<form action="' + "{% url 'export_investlog' %}" + '" method="get" target="_self" id="postData_form">';
-                var proj_name = $("#proj_name").val(),
-                    invest_date0 = $("#invest_date0").val(),
-                    invest_date1 = $("#invest_date1").val(),
-                    submit_date0 = $("#submit_date0").val(),
-                    submit_date1 = $("#submit_date1").val(),
-                    audit_date0 = $("#audit_date0").val(),
-                    audit_date1 = $("#audit_date1").val(),
-                    telnum_sub = $("#telnum_sub").val(),
-                    zhifubao = $("#zhifubao").val(),
-                    state = state_1;
-                   
-                
-                html += '<input name="is_official" type="hidden" value="true"/>';
-                if(proj_name) {
-                    html += '<input name="project_title_contains" type="hidden" value="' + proj_name + '"/>';
-                }
-                if(invest_date0 && invest_date1) {
-                    html += '<input name="investtime_0" type="hidden" value="' + invest_date0 + '"/>';
-                    html += '<input name="investtime_1" type="hidden" value="' + invest_date1 + '"/>';
-                }
-                if(submit_date0 && submit_date1) {
-                    html += '<input name="submittime_0" type="hidden" value="' + submit_date0 + '"/>';
-                    html += '<input name="submittime_1" type="hidden" value="' + submit_date1 + '"/>';
-                }
-                if(audit_date0 && audit_date1) {
-                    html += '<input name="auditdate_0" type="hidden" value="' + audit_date0 + '"/>';
-                    html += '<input name="auditdate_1" type="hidden" value="' + audit_date1 + '"/>';
-                }
-                if(telnum_sub) {
-                    html += '<input name="invest_mobile" type="hidden" value="' + telnum_sub + '"/>';
-                }
-                if(zhifubao) {
-                    html += '<input name="zhifubao" type="hidden" value="' + zhifubao + '"/>';
-                }
-                if(state) {
-                    html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
-                }
-                
-                html += '</form>';
-                var iframe = document.getElementById('myIFrame');
-                iframe.contentWindow.document.open();
-                iframe.contentWindow.document.write(html);
-                iframe.contentWindow.document.close();
-                document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
-            });
-            $('#import').click(function() {
-                var fileElementId = 'fileupload';
-                if(!document.getElementById(fileElementId).value) {
-                    alert("请先选择文件");
-                    return;
-                }
-                $.ajaxFileUpload({
-                    url: "{% url 'import_investlog' %}",
-                    secureuri: false,
-                    fileElementId: fileElementId, //file标签的id
-                    dataType: 'json', //返回数据的类型
-                    data: {}, //一同上传的数据
-                    success: function(data, status) {
-                        if(data.code == 0) {
-                            alert("导入成功！ 数量：" + data.num);
-                        } else {
-                            alert(data.msg + " 成功数量：" + data.num);
-                        }
-                    },
-                    error: function(data, status, e) {
-                        alert(e);
-                    }
-                });
-                //  hint.innerHTML = '无';
-            });
+    var url2 = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=false&user={{user.id}}";
     
-            var choose_file = document.getElementById("input_clone");
-            var hint = document.getElementById("hint");
-            choose_file.onclick = function() {
-                document.getElementById("fileupload").click();
+    function pagecallback() {
+        $('.submit-time').each(function(){
+            var submit_time = $(this).text().split('T');
+            $(this).text(submit_time[0]);
+        })
+        $('.return-txt').each(function(){
+            if ($(this).text() == 'null') {
+                $(this).text('');
             }
-//          官方数据---end
-            var state_2 = '';
-            $('.state-tab-2').click(function(){
-                $(this).addClass('on').siblings().removeClass('on');
-                state_2 = $(this).data('state') + '';
-                console.log(state_2)
-                $('#search_02').click();
-            })
-            $("#search_02").click(function() {
-                var proj_name = $("#proj_name_02").val(),
-                    invest_date0 = $("#invest_date0_02").val(),
-                    invest_date1 = $("#invest_date1_02").val(),
-                    submit_date0 = $("#submit_date0_02").val(),
-                    submit_date1 = $("#submit_date1_02").val(),
-                    telnum_sub = $("#telnum_sub_02").val(),
-                    zhifubao = $("#zhifubao_02").val(),
-                    project_channel = $("#project_channel_02").val(),
-                    state = state_2;
-                var newurl = url2;
-                if(proj_name) {
-                    newurl += "&project_title_contains=" + proj_name;
+        })
+        $('.return-amount').each(function(){
+            if ($(this).data('return') != null) {
+            	$(this).find('.handle').text('已返');
+            	$(this).addClass('m-success');
+            }
+        })
+    }
+
+    $("#pagedata2").ajaxPage({
+        url: url2,
+        pageId: $("#page2"),
+        pageSize: 10,
+        run: true,
+        content: data_user,
+        complete:pagecallback,
+    });
+    var parent_del;
+    var base_id;
+    var parent_dom;
+
+    //          编辑/删除数据部分(自建)
+//  function removeData_02 (obj,id) {
+//      base_id = id;
+//      parent_del = $(obj);
+//      $('.popup.m-del-proj').addClass('in');
+//  }
+//  $('#confirm_delete').click(function(){
+//      $.ajax({
+//          url:"/restapi/investlogs/" + base_id + "/",
+//          type:"delete",
+//          dataType: "json",
+//          success: function(ret) {
+//              console.log('删除成功');
+//              parent_del.parent().parent().parent().remove();
+//              $('.popup.m-del-proj').removeClass('in');
+//          },
+//          error: function() {
+//              alert("请检查网络连接");
+//          }
+//      });
+//  })
+    
+    function pass_02 (obj,id) {
+        base_id = id;
+        $(".settle_amount_02").val('');
+        $(".return_amount_02").val('');
+        $('.popup.m-pass-proj-02').addClass('in');
+    }
+    $('#confirm_pass_02').click(function() {
+        var settle_amount = $(".settle_amount_02").val();
+        var return_amount = $(".return_amount_02").val();
+        if(!settle_amount || !return_amount) {
+            alert('填写项不能为空')
+            return;
+        }
+        console.log(settle_amount + ', ' + return_amount)
+        $.ajax({
+            url: "/merchant/preaudit_investlog/",
+            dataType: "json",
+            type: "post",
+            data: {
+                'id': base_id,
+                'cash': return_amount,
+                'type': 0,
+            },
+            success: function(ret) {
+                if(ret.code == 0) {
+                    alert('操作成功');
+                    $('.popup.m-pass-proj-02').removeClass('in');
+                } else {
+                    console.log(ret.res_msg);
                 }
-                if(invest_date0) {
-                    newurl += "&investtime_0=" + invest_date0;
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+    });
+    
+    function refuse_02 (obj,id) {
+        base_id = id;
+        $(".refuse_reason_02").val('');
+        $('.popup.m-refuse-proj-02').addClass('in');
+    }
+    $('#confirm_refuse_02').click(function() {
+        var refuse_reason = $(".refuse_reason_02").val();
+        if(!refuse_reason) {
+            alert('拒绝原因不能为空')
+            return;
+        }
+        console.log(refuse_reason);
+        $.ajax({
+            url: "/merchant/preaudit_investlog/",
+            dataType: "json",
+            type: "post",
+            data: {
+                'id': base_id,
+                'reason': refuse_reason,
+                'type': 2,
+            },
+            success: function(ret) {
+                if(ret.code == 0) {
+                    alert('操作成功');
+                    $('.popup.m-refuse-proj-02').removeClass('in');
+                } else {
+                    console.log(ret.res_msg);
                 }
-                if(invest_date1) {
-                    newurl += "&investtime_1=" + invest_date1;
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+    });
+    function again_02 (obj,id) {
+        base_id = id;
+        $(".again_reason_02").val('');
+        $('.popup.m-again-proj-02').addClass('in');
+    }
+    $('#confirm_again_02').click(function() {
+        var again_reason = $(".again_reason_02").val();
+        if(!again_reason) {
+            alert('拒绝原因不能为空')
+            return;
+        }
+        console.log(again_reason);
+        $.ajax({
+            url: "/merchant/preaudit_investlog/",
+            dataType: "json",
+            type: "post",
+            data: {
+                'id': base_id,
+                'reason': again_reason,
+                'type': 3,
+            },
+            success: function(ret) {
+                if(ret.code == 0) {
+                    alert('操作成功');
+                    $('.popup.m-again-proj-02').removeClass('in');
+                } else {
+                    console.log(ret.res_msg);
                 }
-                if(submit_date0) {
-                    newurl += "&submittime_0=" + submit_date0;
-                }
-                if(submit_date1) {
-                    newurl += "&submittime_1=" + submit_date1;
-                }
-                if(telnum_sub) {
-                    newurl += "&invest_mobile=" + telnum_sub;
-                }
-                if(zhifubao) {
-                    newurl += "&zhifubao_contains=" + zhifubao;
-                }
-                if(project_channel) {
-                    newurl += "&project_channel_contains=" + project_channel;
-                }
-                if(state) {
-                    newurl += "&audit_state=" + state;
-                }
-                
-                var search_data = data_user;
-                if(state == '0') {
-                    search_data = data_user0;
-                } else if(state == '1') {
-                    search_data = data_user1;
-                } else if(state == '2') {
-                    search_data = data_user2;
-                } else if(state == '3') {
-                    search_data = data_user3;
-                }
-                
-                console.log(newurl);
-                $("#page2").empty();
-                $("#pagedata2").ajaxPage({
-                    url: newurl,
-                    pageId: $("#page2"),
-                    pageSize: 10,
-                    run: true,
-                    content: search_data,
-                    complete:pagecallback,
-                });
-            });
-            $("#export_02").click(function() {
-                var html = '<form action="' + "{% url 'export_investlog' %}" + '" method="get" target="_self" id="postData_form">';
-                var proj_name = $("#proj_name_02").val(),
-                    invest_date0 = $("#invest_date0_02").val(),
-                    invest_date1 = $("#invest_date1_02").val(),
-                    submit_date0 = $("#submit_date0_02").val(),
-                    submit_date1 = $("#submit_date1_02").val(),
-                    telnum_sub = $("#telnum_sub_02").val(),
-                    zhifubao = $("#zhifubao_02").val(),
-                    project_channel = $("#project_channel_02").val(),
-                    state = state_2;
-                   
-                
-                html += '<input name="is_official" type="hidden" value="false"/>';
-                if(proj_name) {
-                    html += '<input name="project_title_contains" type="hidden" value="' + proj_name + '"/>';
-                }
-                if(invest_date0 && invest_date1) {
-                    html += '<input name="investtime_0" type="hidden" value="' + invest_date0 + '"/>';
-                    html += '<input name="investtime_1" type="hidden" value="' + invest_date1 + '"/>';
-                }
-                if(submit_date0 && submit_date1) {
-                    html += '<input name="submittime_0" type="hidden" value="' + submit_date0 + '"/>';
-                    html += '<input name="submittime_1" type="hidden" value="' + submit_date1 + '"/>';
-                }
-                if(telnum_sub) {
-                    html += '<input name="invest_mobile" type="hidden" value="' + telnum_sub + '"/>';
-                }
-                if(zhifubao) {
-                    html += '<input name="zhifubao_contains" type="hidden" value="' + zhifubao + '"/>';
-                }
-                if(project_channel) {
-                    html += '<input name="project_channel_02" type="hidden" value="' + project_channel + '"/>';
-                }
-                if(state) {
-                    html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
-                }
-                
-                html += '</form>';
-                var iframe = document.getElementById('myIFrame');
-                iframe.contentWindow.document.open();
-                iframe.contentWindow.document.write(html);
-                iframe.contentWindow.document.close();
-                document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
-            });
-            $('#import_02').click(function() {
-                var fileElementId = 'fileupload2';
-                if(!document.getElementById(fileElementId).value) {
-                    alert("请先选择文件");
-                    return;
-                }
-                $.ajaxFileUpload({
-                    url: "{% url 'import_investlog' %}",
-                    secureuri: false,
-                    fileElementId: fileElementId, //file标签的id
-                    dataType: 'json', //返回数据的类型
-                    data: {}, //一同上传的数据
-                    success: function(data, status) {
-                        if(data.code == 0) {
-                            alert("导入成功！ 数量：" + data.num);
-                        } else {
-                            alert(data.msg + " 成功数量：" + data.num);
-                        }
-                    },
-                    error: function(data, status, e) {
-                        alert(e);
-                    }
-                });
-                //  hint.innerHTML = '无';
-            });
-            var choose_file_02 = document.getElementById("input_clone_02");
-            var hint_02 = document.getElementById("hint_02");
-            choose_file_02.onclick = function() {
-                document.getElementById("fileupload2").click();
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+    });
+
+//      编辑/删除部分（自建）---end
+    
+    $(function(){
+        $('.nav__item:eq(3)').addClass('active');
+        
+        $(".table").on("focus", ".date_picker", function() {
+            $('.date_selector').remove();
+            $(this).date_input();
+        })
+
+        var state_2 = '';
+        $('.state-tab-2').click(function(){
+            $(this).addClass('on').siblings().removeClass('on');
+            state_2 = $(this).data('state') + '';
+            console.log(state_2)
+            $('#search_02').click();
+        })
+        $("#search_02").click(function() {
+            var proj_name = $("#proj_name_02").val(),
+                invest_date0 = $("#invest_date0_02").val(),
+                invest_date1 = $("#invest_date1_02").val(),
+                submit_date0 = $("#submit_date0_02").val(), 
+                submit_date1 = $("#submit_date1_02").val(),
+                telnum_sub = $("#telnum_sub_02").val(),
+                zhifubao = $("#zhifubao_02").val(),
+                project_channel = $("#project_channel_02").val(),
+                state = state_2;
+            var newurl = url2;
+            if(proj_name) {
+                newurl += "&project_title_contains=" + proj_name;
+            }
+            if(invest_date0) {
+                newurl += "&investtime_0=" + invest_date0;
+            }
+            if(invest_date1) {
+                newurl += "&investtime_1=" + invest_date1;
+            }
+            if(submit_date0) {
+                newurl += "&submittime_0=" + submit_date0;
+            }
+            if(submit_date1) {
+                newurl += "&submittime_1=" + submit_date1;
+            }
+            if(telnum_sub) {
+                newurl += "&invest_mobile=" + telnum_sub;
+            }
+            if(zhifubao) {
+                newurl += "&zhifubao_contains=" + zhifubao;
+            }
+            if(project_channel) {
+                newurl += "&project_channel_contains=" + project_channel;
+            }
+            if(state) {
+                newurl += "&audit_state=" + state;
             }
             
-    //      图片上传部分
-            $('#confirm_add-img').click(function(){
-                var xhr = new XMLHttpRequest();
-                var formdata = getFormData();
-//              var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
-                var telnum = $('input#telnum').val();
-                var remark = $('input#remark').val();
-                if(file_list.length == 0) {
-                    alert("请上传任务完成截图");
-                    return;
-                }
-                console.log(file_list);
-                for(i in file_list) {
-                    formdata.append(file_list[i].name, file_list[i].blob);
-                }
-                formdata.append('id', addimg_id);
-//              formdata.append('telnum', telnum);
-//              formdata.append('remark', remark);
-//              formdata.append('csrfmiddlewaretoken', csrfmiddlewaretoken);
-                var addimg_url = "{%url 'submit_screenshot' %}";
-                console.log(addimg_url);
-                xhr.open('post', addimg_url);
-                xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-//              maskIn();
-                xhr.onreadystatechange = function() {
-//                  $(".img-mask").css("display", "none");
-                    if(xhr.readyState == 4 && xhr.status == 200) {
-                        var ret = JSON.parse(xhr.responseText);
-                        if(ret.code == 0) {
-                            alert('上传截图成功');
-                            $('.popup.m-add-img').removeClass('in');
-                            addimg_parent.find('.img-submit').hide();
-                            addimg_parent.find('.img-have').show();
-                        } else {
-                            alert(ret.msg)
-                        }
+            var search_data = data_user;
+            if(state == '0') {
+                search_data = data_user0;
+            } else if(state == '1') {
+                search_data = data_user1;
+            } else if(state == '2') {
+                search_data = data_user2;
+            } else if(state == '3') {
+                search_data = data_user3;
+            }
+            
+            console.log(newurl);
+            $("#page2").empty();
+            $("#pagedata2").ajaxPage({
+                url: newurl,
+                pageId: $("#page2"),
+                pageSize: 10,
+                run: true,
+                content: search_data,
+                complete:pagecallback,
+            });
+        });
+        $("#export_02").click(function() {
+            var html = '<form action="' + "{% url 'export_investlog' %}" + '" method="get" target="_self" id="postData_form">';
+            var proj_name = $("#proj_name_02").val(),
+                invest_date0 = $("#invest_date0_02").val(),
+                invest_date1 = $("#invest_date1_02").val(),
+                submit_date0 = $("#submit_date0_02").val(),
+                submit_date1 = $("#submit_date1_02").val(),
+                telnum_sub = $("#telnum_sub_02").val(),
+                zhifubao = $("#zhifubao_02").val(),
+                project_channel = $("#project_channel_02").val(),
+                state = state_2;
+               
+            
+            html += '<input name="is_official" type="hidden" value="false"/>';
+            if(proj_name) {
+                html += '<input name="project_title_contains" type="hidden" value="' + proj_name + '"/>';
+            }
+            if(invest_date0 && invest_date1) {
+                html += '<input name="investtime_0" type="hidden" value="' + invest_date0 + '"/>';
+                html += '<input name="investtime_1" type="hidden" value="' + invest_date1 + '"/>';
+            }
+            if(submit_date0 && submit_date1) {
+                html += '<input name="submittime_0" type="hidden" value="' + submit_date0 + '"/>';
+                html += '<input name="submittime_1" type="hidden" value="' + submit_date1 + '"/>';
+            }
+            if(telnum_sub) {
+                html += '<input name="invest_mobile" type="hidden" value="' + telnum_sub + '"/>';
+            }
+            if(zhifubao) {
+                html += '<input name="zhifubao_contains" type="hidden" value="' + zhifubao + '"/>';
+            }
+            if(project_channel) {
+                html += '<input name="project_channel_02" type="hidden" value="' + project_channel + '"/>';
+            }
+            if(state) {
+                html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
+            }
+            
+            html += '</form>';
+            var iframe = document.getElementById('myIFrame');
+            iframe.contentWindow.document.open();
+            iframe.contentWindow.document.write(html);
+            iframe.contentWindow.document.close();
+            document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+        });
+        $('#import_02').click(function() {
+            var fileElementId = 'fileupload2';
+            if(!document.getElementById(fileElementId).value) {
+                alert("请先选择文件");
+                return;
+            }
+            $.ajaxFileUpload({
+                url: "{% url 'import_investlog' %}",
+                secureuri: false,
+                fileElementId: fileElementId, //file标签的id
+                dataType: 'json', //返回数据的类型
+                data: {}, //一同上传的数据
+                success: function(data, status) {
+                    if(data.code == 0) {
+                        alert("导入成功！ 数量：" + data.num);
+                    } else {
+                        alert(data.msg + " 成功数量：" + data.num);
                     }
-                };
-        
-                xhr.send(formdata);
-            })
-    //      图片上传部分---end
-        })
-        
-        //计算天数差的函数，通用  
-        function DateDiff(sDate1, sDate2) { //sDate1和sDate2是2002-12-18格式  
-            var aDate, oDate1, oDate2, iDays
-            aDate = sDate1.split("-")
-            oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]) //转换为12-18-2002格式  
-            aDate = sDate2.split("-")
-            oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])
-            iDays = parseInt((oDate1 - oDate2) / 1000 / 60 / 60 / 24) //把相差的毫秒数转换为天数  
-            return iDays
+                },
+                error: function(data, status, e) {
+                    alert(e);
+                }
+            });
+            //  hint.innerHTML = '无';
+        });
+        var choose_file_02 = document.getElementById("input_clone_02");
+        var hint_02 = document.getElementById("hint_02");
+        choose_file_02.onclick = function() {
+            document.getElementById("fileupload2").click();
         }
+        
+    })
+    
+    //计算天数差的函数，通用  
+//      function DateDiff(sDate1, sDate2) { //sDate1和sDate2是2002-12-18格式  
+//          var aDate, oDate1, oDate2, iDays
+//          aDate = sDate1.split("-")
+//          oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]) //转换为12-18-2002格式  
+//          aDate = sDate2.split("-")
+//          oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])
+//          iDays = parseInt((oDate1 - oDate2) / 1000 / 60 / 60 / 24) //把相差的毫秒数转换为天数  
+//          return iDays
+//      }
 </script>
 </body>
 </html>

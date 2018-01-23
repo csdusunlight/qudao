@@ -203,7 +203,7 @@
 }
 
 .c2 {
-	margin-left: 15px;
+	margin-left: 20px;
 }
 
 .c3 {
@@ -249,47 +249,84 @@
 	box-sizing: border-box;
 }*/
 .item1{
-	width: 180px;
+	width: 160px;
 	height: 60px;
 	text-align: center;
-	line-height: 60px;
 	float: left;
 	position: relative;left: 15px;
 }
-.item2{
-	width: 180px;
+.item1 > span{
+	display: table-cell;
+	vertical-align: middle;
 	height: 60px;
-	text-align: center;
-	line-height: 60px;
-	float: left;
+	color: black;
 }
+.item2{
+	width: 160px;
+	text-align: center;
+	float: left;
+	margin-left: 30px;
+}
+.item2 > span{
+	display: table-cell;
+	vertical-align: middle;
+	height: 60px;
+	color: black;
+	margin-left: 30px;
+}
+
 .item3{
 	width: 180px;
 	height: 60px;
 	text-align: center;
-	line-height: 60px;
 	float: left;
-	margin-left: 30px;
+	margin-left: 45px;
 }
+.item3 > a{
+	line-height: 60px;
+} 
+.item3 > span{
+	display: table-cell;
+	vertical-align: middle;
+	height: 60px;
+	color: black;
+}
+
 .item4{
 	width: 180px;
 	height: 60px;
 	text-align: center;
-	line-height: 60px;
 	float: left;
 	margin-left: 30px;
 }
+.item4 > a{
+	line-height: 60px;
+}
+.item4 > span{
+	display: table-cell;
+	vertical-align: middle;
+	height: 60px;
+	color: black;
+}
+
 .item5{
 	width: 180px;
 	/*height: 60px;*/
 	text-align: center;
-	line-height: 30px;
 	float: left;
 	margin-left: 10px;
 	/*white-space:nowrap;*/
 	word-wrap:break-word;
 	word-break:break-all;
 }
+
+.item5 > span{
+	display: table-cell;
+	vertical-align: middle;
+	height: 60px;
+	color: black;
+}
+
 .wrapperBox{
 	/*display: table-cell;
 	vertical-align: middle;*/
@@ -297,6 +334,7 @@
 	height: 50px;
 	float: left;
 	position: relative;top: 5px;left: 5px;
+	color: #ff9501;
 }
 .wrapperBox > img{
 	width: 120px;

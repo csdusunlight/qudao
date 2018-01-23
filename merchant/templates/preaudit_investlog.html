@@ -207,13 +207,15 @@
                 <h2 class="popup__title">审核通过</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
             </div>
             <div class="popup__detail">
-                <div class="popup__item">
+                <!--<div class="popup__item">
                     <span class="popup__itemname">结算金额：</span>
                     <input type="text" class="settle_amount_02" placeholder="填写投资金额" />
-                </div>
+                </div>-->
                 <div class="popup__item">
                     <span class="popup__itemname">返现金额：</span>
                     <input type="text" class="return_amount_02" placeholder="填写投资金额" />
+                    <span style="display: block;text-align:right; margin-right: 32px;">每笔返现扣除2%手续费</span>
+                    <p class="process-money"></p>
                 </div>
             </div>
             <div class="popup__btnbox">
@@ -375,18 +377,18 @@
     
     function pass_02 (obj,id) {
         base_id = id;
-        $(".settle_amount_02").val('');
+//      $(".settle_amount_02").val('');
         $(".return_amount_02").val('');
         $('.popup.m-pass-proj-02').addClass('in');
     }
     $('#confirm_pass_02').click(function() {
-        var settle_amount = $(".settle_amount_02").val();
+//      var settle_amount = $(".settle_amount_02").val();
         var return_amount = $(".return_amount_02").val();
-        if(!settle_amount || !return_amount) {
-            alert('填写项不能为空')
+        if(!return_amount || !Number(return_amount)) {
+            alert('返现金额不能为空，且必须为数字格式')
             return;
         }
-        console.log(settle_amount + ', ' + return_amount)
+        console.log(return_amount)
         $.ajax({
             url: "/merchant/preaudit_investlog/",
             dataType: "json",
@@ -409,6 +411,14 @@
             }
         });
     });
+    $('.return_amount_02').keyup(function(){
+        var value = $(".return_amount_02").val();
+        if(Number(value)) {
+            $('.process-money').text('预计扣除手续费：'+ parseInt(value*0.02) +'元')
+        } else {
+            $('.process-money').text('返现金额请输入纯数字格式');
+        }
+    })
     
     function refuse_02 (obj,id) {
         base_id = id;
@@ -631,6 +641,8 @@
         var choose_file_02 = document.getElementById("input_clone_02");
         var hint_02 = document.getElementById("hint_02");
         choose_file_02.onclick = function() {
+            console.log(document.getElementById("fileupload2").files);
+            document.getElementById("fileupload2").value = '';
             document.getElementById("fileupload2").click();
         }
         document.getElementById("fileupload2").onchange = function(){

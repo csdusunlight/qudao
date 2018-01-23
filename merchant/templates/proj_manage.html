@@ -12,6 +12,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
     <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+    <style>
+        .page{
+            margin-top: 20px;
+        }
+    </style>
 </head>
 
 <body>
@@ -25,9 +30,8 @@
             <div class="wrapper">
                 <ul class="tab">
                     <li class="active">全部</li>
-                    <li>正在进行</li>
+                    <li>已通过</li>
                     <li>申请中</li>
-                    <li>已结束</li>
                     <li>已拒绝</li>
                 </ul>
                 <a href="/merchant/proj_add/">
@@ -60,22 +64,17 @@
             //正在进行数据：   
             let passData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
                 '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">项目状态</th><th width="12.5%">浏览量</th><th width="12.5%">操作</th></tr></thead><tbody>' +
-                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{state_des}</td><td class="td1">325</td><td class="td1"><a>点击结束</a></td></tr>[/results]' +
+                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{project_state_des}</td><td class="td1">325</td><td class="td1"><a class="clickEnd">点击结束</a></td></tr>[/results]' +
                 '</tbody></table>';
             // 申请中数据：    
             let auditData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
-                '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">项目状态</th><th width="12.5%">浏览量</th><th width="12.5%">操作</th></tr></thead><tbody>' +
-                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{state_des}</td><td class="td1">325</td><td class="td1"><a>点击结束</a></td></tr>[/results]' +
-                '</tbody></table>';
-            //已结束
-            let endData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
-                '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">项目状态</th><th width="12.5%">浏览量</th><th width="12.5%">操作</th></tr></thead><tbody>' +
-                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{state_des}</td><td class="td1">325</td><td class="td1"><a>点击结束</a></td></tr>[/results]' +
+                '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">浏览量</th></tr></thead><tbody>' +
+                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">325</td></tr>[/results]' +
                 '</tbody></table>';
             //已拒绝
             let refuseData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
-                '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">项目状态</th><th width="12.5%">浏览量</th><th width="12.5%">操作</th></tr></thead><tbody>' +
-                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{state_des}</td><td class="td1">325</td><td class="td1"><a></a></td></tr>[/results]' +
+                '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">浏览量</th></tr></thead><tbody>' +
+                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">325</td></tr>[/results]' +
                 '</tbody></table>';
             //回调函数
             function pagecallback() {
@@ -84,12 +83,12 @@
                 if (state == 0) {
                     $(".operate").html("<a class='clickEnd'>点击操作</a>")
                 } else {
-                    $(".operate").html("<a>----</a>")
+                    $(".operate").html("<span>----</span>")
                 }
             }
 
 
-            const url = '/merchant/apply_projects/?page={page}&pageSize={pageSize}';
+            const url = '/merchant/apply_projects/'+'?page={page}&pageSize={pageSize}';
             //获取全部数据：
             $("#pagedata").ajaxPage({
                 url: url,
@@ -104,9 +103,9 @@
                 console.log("当前的index:", index);
                 $(this).addClass("active").siblings().removeClass("active");
                 //根据li的index判断加载模块
-                if (index == 0) {           // 全部数据
+                if (index == 0) {              // 全部数据
                     var pdata = allData;
-                    // var  dataUrl = '/merchant/apply_projects/?page={page}&pageSize={pageSize}';
+                    var  dataUrl = url;
                     var dataUrl = url;
                 } else if (index == 1) {       // 正在进行
                     var pdata = passData;
@@ -114,11 +113,8 @@
                 } else if (index == 2) {       //申请中(待审核数据)
                     var pdata = auditData;
                     var dataUrl = url + "&audit_state=1";
-                } else if (index == 3) {       //已结束
-                    var padata = endData;
-                    var dataUrl = url + "&audit_state=3";
-                } else if (index == 4) {       //已拒绝
-                    var padata = refuseData;
+                }  else if (index == 3) {       //已拒绝
+                    var pdata = refuseData;
                     var dataUrl = url + "&audit_state=2";
                 }
                 $("#page").empty();

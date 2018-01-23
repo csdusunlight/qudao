@@ -8,7 +8,7 @@
 	position: relative;
 }
 .tab{
-	width: 497px;
+	width: 398px;
 	height: 42px;
 	border: 1px solid gray;
 }
@@ -21,11 +21,12 @@
 	border-right: 1px solid gray;
 	cursor: pointer;
 }
-.tab li:nth-child(5){
+.tab li:nth-child(4){
 	border: none;
 }
 .active{
-	background: lightgreen;
+	background: RGB(145,193,29);
+	color: white;
 }
 .tab-right{
 	width: 200px;

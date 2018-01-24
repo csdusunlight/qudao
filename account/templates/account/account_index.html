@@ -147,7 +147,7 @@ $(function(){
         success: function(ret) {
             if (ret.results.length != 0){
                 var notice_num = 1;
-                
+                var notice_popup_num = 1;
 //                  deleteCookie();
                 
                 var first_time = getCookie('first_time');
@@ -173,9 +173,9 @@ $(function(){
                     notice_txt += '<li class="notice__item">';
                     if (ret.results[i].state == 0) {
                         notice_txt += '<span style="color:#f95a5a">【置顶】</span>';
-                        notice_top += '<p>' + ret.results[i].content +'</p>';
+                        notice_top += '<p><span>'+ (notice_popup_num++) +'、</span>' + ret.results[i].content +'</p>';
                     } else{
-                        notice_txt += '<span>'+ notice_num++ +'</span>、';
+                        notice_txt += '<span>'+ (notice_num++) +'</span>、';
                     }
                     notice_txt += ret.results[i].content +'</li>';
                 }

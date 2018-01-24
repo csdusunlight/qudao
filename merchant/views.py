@@ -116,6 +116,9 @@ def stop_project(request):
     apply_project = Apply_Project.objects.get(id=id, user=request.user)
     doc = apply_project.strategy
     project = apply_project.project
+    if not project or project.state!='10':
+        res['code'] = 1
+        res['msg'] = u"非进行中项目，不可停止"
     assert(project.user==request.user)
     project.state = '20'
     doc.is_on = False

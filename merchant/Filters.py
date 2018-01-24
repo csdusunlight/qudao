@@ -17,6 +17,7 @@ class ApplyProjectFilter(django_filters.rest_framework.FilterSet):
     project_title_contains = django_filters.CharFilter(name="project", lookup_expr='title__contains')
     user_mobile = django_filters.CharFilter(name="user", lookup_expr='mobile')
     user_level = django_filters.CharFilter(name="user", lookup_expr='level')
+    project_state = django_filters.CharFilter(name="project", lookup_expr='state')
     class Meta:
         model = Apply_Project
         exclude = ['submit_time', 'audit_time']

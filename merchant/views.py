@@ -19,6 +19,7 @@ from rest_framework.filters import SearchFilter
 from public.Paginations import MyPageNumberPagination
 from merchant.Filters import ApplyProjectFilter, TranslogFilter,\
     MarginAuditLogFilter
+from django.views.decorators.csrf import csrf_exempt
 logger = logging.getLogger('wafuli')
 # Create your views here.
 @transaction.atomic
@@ -106,6 +107,23 @@ def preaudit_investlog(request):
             investlog.preaudit_time = datetime.datetime.now()
             investlog.save()
         return JsonResponse(res)
+    
+@csrf_exempt
+def stop_project(request):
+    res = {}
+    id = request.POST.get('id')
+    id = int(id)
+    apply_project = Apply_Project.objects.get(id=id, user=request.user)
+    doc = apply_project.strategy
+    project = apply_project.project
+    assert(project.user==request.user)
+    project.state = '20'
+    doc.is_on = False
+    project.save(update_fields=['state'])
+    doc.save(update_fields=['is_on'])
+    res['code'] = 0
+    return JsonResponse(res)
+        
 def merchant_index(request):
     return render(request, 'merchant_index.html')
 def bail_manage(request):

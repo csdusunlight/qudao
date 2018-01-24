@@ -70,7 +70,7 @@
 					<div class="pro pro_remark">
 						<span>备注说明</span>
 						<div class="pro_right" style="margin-left: 25px;">
-							<input type="text" name="remark" id="remark" placeholder="请输入备注说明" />
+							<input type="text" name="remark" id="remark" placeholder="请输入备注说明  非必填" />
 						</div>
 					</div>
 					<!-- <button class="btn">提交申请</button> -->
@@ -78,7 +78,7 @@
 				</from>
 			</div>
 		</div>
-
+		
 	</div>
 	{% include "footer.html" %}
 
@@ -117,7 +117,17 @@
 				let remark = $("#remark").val();
 				
 				if(strategy_url == 0){
-					alert("请选择项目");
+					alert("请选择项目攻略链接");
+					return;
+				}
+				//输入框不能为零
+				if (!project || price || cycle) {
+					alert("输入框不能为空");
+					return;
+				}
+				if (!radio) {
+					alert("请选择是否限量");
+					return;
 				}
 
 				//获取url

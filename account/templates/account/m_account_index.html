@@ -130,6 +130,9 @@
 				text-align: center;
 				line-height: 3rem;
 			}
+			.mui-popup-text {
+			    text-align: left;
+			}
 		</style>
 	</head>
 
@@ -209,6 +212,96 @@
 		<script src="{% static 'js/mui.min.js' %}"></script>
 		<script type="text/javascript">
 			mui.init();
+//			弹窗提示置顶消息部分
+            var notice_flag = 0;
+            var notice_top = '';
+            var date = new Date();
+            var now_time = date.getTime();
+            function saveCookie() {
+                var date = new Date();
+                //  date.setDate(date.getDate()+1);
+                date.setTime(date.getTime() + 1 * (24 * 60 * 60 * 1000));
+                //将cookie保存1天
+                setCookie("first_time", now_time, date.toUTCString(), "", "", "");
+            }
+        
+            function setCookie(name, value, expires, path, domain, secure) {
+                document.cookie = name + "=" + encodeURI(value) +
+                    ((expires) ? "; expires=" + expires : "") +
+                    ((path) ? "; path=" + path : "") +
+                    ((domain) ? "; domain=" + domain : "") +
+                    ((secure) ? "; secure=" + secure : "");
+            }
+        
+            function getCookie(cName) {
+                var cookieString = decodeURI(document.cookie);
+                var cookieArray = cookieString.split("; ");
+                for(var i = 0; i < cookieArray.length; i++) {
+                    var cookieNum = cookieArray[i].split("=");
+                    var cookieName = cookieNum[0];
+                    var cookieValue = cookieNum[1];
+        
+                    if(cookieName == cName) {
+                        return cookieValue;
+                    }
+                }
+                return false;
+            }
+            //删除Cookie就是简单的将cookie的expires属性设置为一个过去的时间即可。
+            function deleteCookie() {
+                var date = new Date();
+                date.setTime(date.getTime() - 1000);
+                setCookie("first_time", date.getTime(), date.toUTCString(), "", "", "");
+            }
+        
+        
+            
+            var con1 = document.getElementById('con1');
+            var notice_txt = '';
+            mui.ajax('/restapi/announcement/?ordering=state', {
+                dataType: 'json', //服务器返回json格式数据
+                type: 'get', //HTTP请求类型
+                timeout: 3000, //超时时间设置为10秒；
+                success: function(ret) {
+                    if (ret.results.length != 0){
+                        var notice_num = 1;
+                        var notice_popup_num = 1;
+//                      deleteCookie();
+                        
+                        var first_time = getCookie('first_time');
+                        date.setTime(first_time);
+                        var date_cookie = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+                        date.setTime(now_time);
+                        var date_now = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+                        console.log(date_cookie);
+                        console.log(date_now);
+                        if (first_time && date_now == date_cookie) {
+                            console.log('已有');
+                            notice_flag = 0;
+                        } else{
+                            console.log('还未');
+                            saveCookie();
+                            notice_flag = 1;
+                        }
+                        
+                        for (var i in ret.results) {
+                            if (ret.results[i].state == 0) {
+                                notice_top += '<p><span>'+ (notice_popup_num++) +'、</span>' + ret.results[i].content +'</p>';
+                            }
+                        }
+                        if (notice_flag == 1 && notice_top != '') {
+                            mui.alert(notice_top,'重要通知');
+                        }
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
+                    mui.alert("数据错误");
+                }
+
+            });
+            
+//          置顶消息----------end
 			var hUrl = document.getElementById("Alink").getAttribute("href");
 			console.log(hUrl);
 			mui('.mui-table-view-cell').on('tap', '.Alink', function() {

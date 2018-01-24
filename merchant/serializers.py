@@ -11,6 +11,9 @@ class ApplyProjectSerializer(serializers.ModelSerializer):
     strategy_url = serializers.CharField(source="strategy.fanshu_url", read_only=True)
     project_state = serializers.CharField(source="project.state", read_only=True)
     project_state_des = serializers.CharField(source="project.get_state_display", read_only=True)
+    user_mobile = serializers.CharField(source="user.mobile", read_only=True)
+    qq_number = serializers.CharField(source="user.qq_number", read_only=True)
+    qq_name = serializers.CharField(source="user.qq_name", read_only=True)
     class Meta:
         model = Apply_Project
         fields = '__all__'

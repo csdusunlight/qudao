@@ -101,13 +101,26 @@
 .passBox p{
     font-size: 18px;
     margin-left: 220px;
-    margin-top: 50px;
+    margin-top: 20px;
+}
+.cashBox{
+    margin-top: 20px;
+    padding: 15px 15px;
+    padding-left: 160px;
+}
+.cashBox span{
+    font-size: 16px;
+}
+.cash{
+    width: 180px;
+    height: 30px;
+    margin-left: 10px;
 }
 .btn{
     width: 130px;
     height: 40px;
     display: inline-block;
-    margin-top: 60px;
+    margin-top: 40px;
     margin-left: 110px;
     background: RGB(22,155,212);
     border: none;
@@ -122,6 +135,12 @@
     background:RGBa(128,128,128,.3);
     display: none;
 }
+.reson{
+    width: 300px;
+    height: 30px;
+    margin-left: 150px;
+    margin-top: 30px;
+}
 .refuseBox{
     width: 600px;
     height: 300px;
@@ -135,7 +154,7 @@
 .refuseBox p{
     font-size: 18px;
     margin-left: 220px;
-    margin-top: 50px;
+    margin-top: 30px;
 }
 .btn:hover {
     transform: translateY(-4px);

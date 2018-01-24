@@ -6,15 +6,15 @@
     //待审核数据
     const auditData = '<table width="100%"><tr><th width="10%">QQ/QQ昵称</th><th width="10%">手机号</th><th width="10%">项目名称</th><th width="15%">攻略链接</th><th width="6%">结算价格</th>' +
         '<th width="10%">数据结算周期</th><th width="13%">提交时间</th><th width="8%">处理状态</th><th width="10%">备注说明</th><th width="8%">操作</th>' +
-        '[results]<tr><td>1</td><td>{user.mobile}</td><td>{title}</td><td>{strategy_url}</td>' +
+        '[results]<tr><td>1</td><td>{mobile}</td><td>{title}</td><td>{strategy_url}</td>' +
         '<td>{price}</td><td>{settle_period}</td><td class="subtime">{submit_time}</td><td>{state_des}</td><td>{remark}</td>' +
-        '<td><a class="pass">同意</a>|<a class="refuse">拒绝</a></td></tr>[/results]</table>';
+        '<td data-id="{id}"><a class="pass">同意</a>|<a class="refuse">拒绝</a></td></tr>[/results]</table>';
     //审核通过数据
     const passData = '<table width="100%"><tr><th width="10%">QQ/QQ昵称</th><th width="10%">手机号</th><th width="10%">项目名称</th><th width="15%">攻略链接</th><th width="6%">结算价格</th>' +
         '<th width="10%">数据结算周期</th><th width="13%">提交时间</th><th width="8%">处理状态</th><th>处理时间</th><th width="10%">备注说明</th>' +
         '[results]<tr><td>1</td><td>{user.mobile}</td><td>{title}</td><td>{strategy_url}</td><td>{price}</td>' +
-        '<td>{settle_period}</td><td class="subtime">{submit_time}</td><td>{state_des}</td><td class="adt_time">{audit_time}</td><td>{remark}</td>' +
-        '<td><a>同意</a>|<a>拒绝</a></td></tr>[/results]</table>';
+        '<td>{settle_period}</td><td class="subtime">{submit_time}</td><td>{project_state_des}</td><td class="adt_time">{audit_time}</td><td>{remark}</td>' +
+        '</tr>[/results]</table>';
     //审核未通过数据
     const refuseData = '<table width="100%"><tr><th>QQ/QQ昵称</th><th>手机号</th><th>项目名称</th><th>攻略链接</th><th>结算价格</th>' +
         '<th>数据结算周期</th><th>提交时间</th><th>处理状态</th><th>处理时间</th><th>拒绝原因</th><th>备注说明</th>' +
@@ -58,8 +58,8 @@
             let operate_1 = $(".operate_date1").val();
             //获取手机号、QQ号、QQ昵称、处理状态
             let phone = $(".phoneNum").val();
-            let qq = $(".qqNum").val();
-            let qqName = $(".qqName").val();
+            let qq_number = $(".qqNum").val();
+            let qq_name = $(".qqName").val();
             let state = $(".seltBox option:selected").val();
 
             var newUrl = url;
@@ -77,6 +77,12 @@
             }
             if (phone) {
                 newUrl += '&user_mobile=' + phone;
+            }
+            if (qq_name) {
+                newUrl += '&qq_name=' + qq_name;
+            }
+            if (qq_number) {
+                newUrl += '&qq_number=' + qq_number;
             }
             if (state) {
                 newUrl += '&audit_state=' + state;
@@ -110,6 +116,35 @@
         $(".cancel").click(function () {
             $(".mask").hide();
         });
+        //同意ajax
+        $(".sure").click(function () {
+            //获取当前id
+            let cash = $(".cash").val();
+            let id = $('.pass').parent().attr("data-id");
+            console.log(id);
+            $.ajax({
+                url: '/Admin/admin_project/',
+                type: "post", //提交方式post
+                async: true, //是否同步
+                data: {
+                    "type": 1,
+                    "id": id,
+                    "broker_rate": cash
+                },
+                timeout: 5000, //超出时间
+                dataType: 'json', //返回数据格式Json
+                success: function (ret) {
+                    if (ret.code == 0) {
+                        alert("已同意");
+                        $(".mask").hide();
+                    }
+
+                },
+                error: function (xhr, textStatus) {
+                    console.log('错误:' + xhr.responseText);
+                }
+            });
+        });
         //拒绝 模态框出现
         $("#pagedata").on('click', '.refuse', function () {
             $(".msk").show();
@@ -118,29 +153,34 @@
         $(".cCancel").click(function () {
             $('.msk').hide();
         });
-        //同意ajax
-        $(".sure").click(function () {
-            // alert('llc');
+        //拒绝弹窗的确定ajax
+        $('.cSure').click(function () {
+            //获取当前id
+            let id = $('.pass').parent().attr("data-id");
+            console.log(id);
+            let reason = $(".reson").val();
             $.ajax({
-                url: url,
+                url: '/Admin/admin_project/',
                 type: "post", //提交方式post
                 async: true, //是否同步
                 data: {
-                   
+                    "type": 2,
+                    "id": id,
+                    "reason": reason
                 },
                 timeout: 5000, //超出时间
                 dataType: 'json', //返回数据格式Json
                 success: function (ret) {
                     if (ret.code == 0) {
-                        $(".mask").hide();
-
+                        alert("已拒绝");
+                        $(".msk").hide();
                     }
-
                 },
                 error: function (xhr, textStatus) {
                     console.log('错误:' + xhr.responseText);
                 }
             });
+
         });
 
     });
@@ -207,21 +247,40 @@
             </div>
         </div>
     </div>
+    <!-- 
+     ---@llc
+     ---审核同意弹出的模态框  
+     -->
     <div class="mask">
         <div class="passBox">
             <span class="tips">提示</span>
-            <p>是否同意该条数据？</p>
+            <p>同意该条数据并输入佣金</p>
+            <div class="cashBox">
+                <span>请输入佣金:</span>
+                <input type="text" class="cash" />
+            </div>
             <input type="button" value="确定" class="btn sure">
             <input type="button" value="取消" class="btn cancel">
         </div>
     </div>
+    <!-- 
+     ---@llc
+     ---拒绝审核弹出的模态框  
+     -->
     <div class="msk">
         <div class="refuseBox">
             <span class="tips">提示</span>
             <p>是否拒绝该条数据？</p>
+            <div class="resonBox">
+                <input type="text" class="reson" placeholder="请输入拒绝原因">
+            </div>
             <input type="button" value="确定" class="btn cSure">
             <input type="button" value="取消" class="btn cCancel">
         </div>
     </div>
 </div>
+<!-- 
+
+
+ -->
 {% endblock %}

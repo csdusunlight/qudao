@@ -17,6 +17,9 @@
 			margin: 24px auto;
 			overflow: hidden;
 		}
+		.btn{
+			cursor: pointer
+		}
 	</style>
 </head>
 
@@ -70,7 +73,8 @@
 							<input type="text" name="remark" id="remark" placeholder="请输入备注说明" />
 						</div>
 					</div>
-					<button class="btn">提交申请</button>
+					<!-- <button class="btn">提交申请</button> -->
+					<input type="button" value="提交申请" class="btn">
 				</from>
 			</div>
 		</div>
@@ -124,8 +128,8 @@
 					async: false,
 					data: {
 						"title": project,        //项目名称
-						"strategy": strategy_url,		 //攻略链接
-						"price": price,				 //结算价格
+						"strategy": strategy_url,	//攻略链接
+						"price": price,			   //结算价格
 						"settle_period": cycle,   //项目结算周期
 						"remark": remark,    	 //备注说明
 						"is_book": radio,		//是否限量
@@ -134,6 +138,7 @@
 					dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
 					success: function (data) {
 						alert("提交成功");
+						window.location.href = window.location.href;
 					},
 					error: function (xhr, textStatus) {
 						alert(xhr.responseText);

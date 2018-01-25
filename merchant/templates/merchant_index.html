@@ -21,7 +21,7 @@
         <div class="wrapperBox">
             <nav>
                 <span class="amount">
-                    <span>账户保证金余额：10000元</span>
+                    <span>账户保证金余额：{{user.margin_account}}元</span>
                 </span>
                 <input type="button" class="btn add" value="充值">
                 <input type="button" class="btn wit" value="提现保证金">
@@ -54,7 +54,7 @@
 
         <!-- 充值弹窗 -->
         <div class="addMsk">
-            <div clatabdataBox ">
+            <div class="dataBox">
                 <span class="card ">充值银行卡</span>
                 <div class="data ">
                     <table width="100% ">
@@ -97,8 +97,6 @@
     <script type="text/javascript " src="{% static 'js/wfl-common.js' %} "></script>
     <script>
         $(function () {
-            
-
 
 
             $(".add ").click(function () {
@@ -112,27 +110,39 @@
                 $(".witMsk ").show();
             });
             $(".send ").click(function () {
+                const amount = $(".witamount ").val();
+                const remark = $(".remark").val();
                 $(".witMsk ").hide();
-                // $.ajax({
-                //     url: '/restapi/docs/',
-                //     type: 'post',
-                //     async: false,
-                //     timeout: 5000, //超时时间
-                //     dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
-                //     data:{
+                $.ajax({
+                    url: '/merchant/index/',
+                    type: 'post',
+                    async: false,
+                    timeout: 5000, //超时时间
+                    dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
+                    data: {
+                        'type': 1,
+                        'remark': remark,
+                        "amount": amount
+                    },
+                    success: function (ret) {
+                        if (ret.code == 0) {
+                            alert("提交提现申请，请等待");
+                            $(".witMsk ").hide();
+                        }
 
-                //     },
-                //     success: function (ret) {
-                //         $(".witMsk ").hide();
-                //     },
-                //     error: function (xhr, textStatus) {
-                //         alert(xhr.responseText);
-                //     }
-                // });
+                    },
+                    error: function (xhr, textStatus) {
+                        alert(xhr.responseText);
+                    }
+                });
             });
 
         });
     </script>
 </body>
+<!-- type:1
+    amount,
+    remark
+-->
 
 </html>

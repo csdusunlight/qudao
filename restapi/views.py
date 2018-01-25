@@ -46,7 +46,7 @@ class ProjectList(BaseViewMixin, generics.ListCreateAPIView):
     search_fields = ('title', 'introduction')
     pagination_class = MyPageNumberPagination
     def perform_create(self, serializer):
-        obj = serializer.save(is_official=False, category='self', user=self.request.user, state='10')
+        obj = serializer.save(is_official=False, category='self', is_addedto_repo=False, user=self.request.user, state='10')
         SubscribeShip.objects.create(project=obj, user=self.request.user)
 
 class ProjectDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):

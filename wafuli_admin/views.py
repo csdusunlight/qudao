@@ -137,7 +137,6 @@ def admin_invest(request):
             return JsonResponse(res)
         investlog = InvestLog.objects.get(id=investlog_id)
         investlog_user = investlog.user
-        card = investlog_user.user_bankcard.first()
 
         project = investlog.project
         project_title = project.title
@@ -158,14 +157,14 @@ def admin_invest(request):
                 res['code'] = -3
                 res['res_msg'] = u'该项目已审核过，不要重复审核！'
                 return JsonResponse(res)
-            if investlog.translist.exists():
+            if investlog.audit_state == '1' and investlog.translist.exists():
                 logger.critical("Returning cash is repetitive!!!")
                 res['code'] = -3
                 res['res_msg'] = u"操作失败，返现重复！"
             else:
                 translist = charge_money(investlog_user, '0', cash, project_title)  #jzy
                 investlog.audit_state = '0'
-                investlog.settle_amount = cash
+                investlog.settle_amount += cash
                 translist.auditlog = investlog
                 translist.save()
 #                 #活动插入
@@ -173,7 +172,8 @@ def admin_invest(request):
 #                 #活动插入结束
                 res['code'] = 0
         elif type==2:
-            investlog.audit_state = '2'
+            if investlog.settle_amount == 0:
+                investlog.audit_state = '2'
             res['code'] = 0
         elif type==3:
             investlog.audit_state = '3'

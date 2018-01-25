@@ -1,26 +1,200 @@
 {% load staticfiles %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>用户中心</title>
-<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
-
-<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
-
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>用户中心</title>
+    <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/merchant_myproject.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+    <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+    <style>
+        .page {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 
 <body>
-<!--头部-->
-{% include "merchant_header.html" %}
-<!--内容-->
-<div class="Content">
-<p>这是项目管理</p>
-</div>
-{% include "footer.html" %}
+    <!--头部-->
+    {% include "merchant_header.html" %}
+    <!--内容-->
+    <div class="Content">
+        <!-- {% include "merchant_left.html" %}-->
+        <!-- <p>这是项目管理</p> -->
+        <div class="wrapperBox">
+            <div class="wrapper">
+                <ul class="tab">
+                    <li class="active">全部</li>
+                    <li>已通过</li>
+                    <li>申请中</li>
+                    <li>已拒绝</li>
+                </ul>
+                <a href="/merchant/proj_add/">
+                    <div class="tab-right">
+                        <label>+</label> 新建项目申请
+                    </div>
+                </a>
+            </div>
 
-<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+            <div class="contentBox">
+                <div id="pagedata"></div>
+                <div class="Page-in1">
+                    <div class="page" id="page"></div>
+                </div>
+            </div>
+        </div>
+        <!-- 点击 操作模态框 -->
+        <div class="opMsk">
+            <div class="dataBox">
+                <p>提示</p>
+                <span class="tips"></span>
+                <input type="button" class="btn send" value="确定">
+                <input type="button" class="btn cancel" value="取消">
+            </div>
+        </div>
+    </div>
+    {% include "footer.html" %}
+
+    <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+    <!-- 项目管理js部分 -->
+    <script>
+        $(function () {
+            //全部数据：
+            let allData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
+                '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">项目状态</th><th width="12.5%">浏览量</th><th width="12.5%">操作</th></tr></thead><tbody>' +
+                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{state_des}</td><td class="td1">325</td><td class="td1 operate" data-id={id} data-state="{audit_state}"></td></tr>[/results]' +
+                '</tbody></table>';
+            //正在进行数据：   
+            let passData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
+                '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">项目状态</th><th width="12.5%">浏览量</th></tr></thead><tbody>' +
+                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{project_state_des}</td><td class="td1">325</td></tr>[/results]' +
+                '</tbody></table>';
+            // 申请中数据：    
+            let auditData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
+                '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">浏览量</th></tr></thead><tbody>' +
+                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">325</td></tr>[/results]' +
+                '</tbody></table>';
+            //已拒绝
+            let refuseData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
+                '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">浏览量</th></tr></thead><tbody>' +
+                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">325</td></tr>[/results]' +
+                '</tbody></table>';
+            //回调函数
+            function pagecallback() {
+                console.log("这是一个回调函数");
+                $(".operate").each(function () {
+                    let state = $(this).attr("data-state");
+                    if (state == "0") {
+                        $(this).html("<a class='clickEnd'>点击结束</a>")
+                    } else {
+                        $(this).html("<a>----</a>")
+                    }
+                });
+            }
+
+
+            const url = '/merchant/apply_projects/' + '?page={page}&pageSize={pageSize}';
+            //获取全部数据：
+            $("#pagedata").ajaxPage({
+                url: url,
+                pageId: $("#page"),
+                pageSize: 6,
+                run: true,
+                content: allData,
+                complete: pagecallback,
+            });
+            $(".tab>li").click(function () {
+                let index = $(this).index();
+                console.log("当前的index:", index);
+                $(this).addClass("active").siblings().removeClass("active");
+                //根据li的index判断加载模块
+                if (index == 0) { // 全部数据
+                    var pdata = allData;
+                    var dataUrl = url;
+                    var dataUrl = url;
+                } else if (index == 1) { // 正在进行
+                    var pdata = passData;
+                    var dataUrl = url + "&audit_state=0";
+                } else if (index == 2) { //申请中(待审核数据)
+                    var pdata = auditData;
+                    var dataUrl = url + "&audit_state=1";
+                } else if (index == 3) { //已拒绝
+                    var pdata = refuseData;
+                    var dataUrl = url + "&audit_state=2";
+                }
+                $("#page").empty();
+                $("#pagedata").ajaxPage({
+                    url: dataUrl,
+                    pageId: $("#page"),
+                    pageSize: 6,
+                    run: true,
+                    content: pdata,
+                    complete: pagecallback,
+                });
+            });
+
+            /*******************模态框部分********************/
+            //点击结束 模态框出现 
+            var sId;
+            $(".contentBox").on('click', '.clickEnd', function () {
+                //获取当前数据id
+                sId = $(this).parent().attr("data-id");
+                //模态框出现
+                $(".opMsk").show();
+                $(".tips").empty();
+                //ajax获取项目名称
+                $.ajax({
+                    url: '/merchant/apply_projects/' + sId,
+                    type: "get", //提交方式post
+                    async: true, //是否同步
+                    timeout: 5000, //超出时间
+                    dataType: 'json', //返回数据格式Json
+                    success: function (ret) {
+                        var str_html = '是否结束' + ret.title + '？';
+                        $(".tips").append(str_html);
+                    },
+                    error: function (xhr, textStatus) {
+                        console.log('错误:' + xhr.responseText);
+                    }
+                });
+            });
+            //点击取消 模态框消失
+            $(".cancel").click(function () {
+                $(".opMsk").hide();
+            });
+
+            $(".send").click(function () {
+                console.log(sId);
+                $.ajax({
+                    url: '/merchant/stop_project/',
+                    type: "post", //提交方式post
+                    async: true, //是否同步
+                    timeout: 5000, //超出时间
+                    dataType: 'json', //返回数据格式Json
+                    data: {
+                        "id": sId
+                    },
+                    success: function (ret) {
+                        if (ret.code == 0) {
+                            alert("已结束");
+                            $(".opMsk").hide();
+                        }
+
+                    },
+                    error: function (xhr, textStatus) {
+                        console.log('错误:' + xhr.responseText);
+                    }
+                });
+
+            })
+
+        });
+    </script>
 </body>
+
 </html>

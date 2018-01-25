@@ -40,10 +40,9 @@ def project_all(request):
         template = 'm_project_repo.html' if request.mobile else 'project_repo.html'
         return render(request, template)
     else:
-        projects = Project.objects.filter(is_official=True,is_addedto_repo=True)
+        projects = Project.objects.filter(is_official=True,is_addedto_repo=True, state__in=['10', '20'])
         template = 'm_project_repo_nologin.html' if request.mobile else 'project_repo_nologin.html'
         return render(request, template, {'projects':projects})
-    
     
 def user_guide(request):
     return render(request, 'user_guide.html',  )

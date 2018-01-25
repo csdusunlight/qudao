@@ -19,6 +19,7 @@ from rest_framework.filters import SearchFilter
 from public.Paginations import MyPageNumberPagination
 from merchant.Filters import ApplyProjectFilter, TranslogFilter,\
     MarginAuditLogFilter
+from django.views.decorators.csrf import csrf_exempt
 logger = logging.getLogger('wafuli')
 # Create your views here.
 @transaction.atomic
@@ -70,39 +71,70 @@ def preaudit_investlog(request):
                 res['code'] = -3
                 res['res_msg'] = u'该项目已审核过，不要重复审核！'
                 return JsonResponse(res)
-            if investlog.auditlog:
-                logger.critical("Returning cash is repetitive!!!")
+            if not investlog.audit_step in ['0']:
                 res['code'] = -3
+                res['res_msg'] = u'该项目已预审核过，不要重复审核！'
+                return JsonResponse(res)
+            if investlog.audit_state == '1' and investlog.translist.exists():
+                logger.critical("Returning cash is repetitive!!!")
+                res['code'] = -5
                 res['res_msg'] = u"操作失败，返现重复！"
             else:
+                investlog.preaudit_state = '0'
                 translist = charge_margin(investlog_user, '1', cash, project_title)
-                investlog.audit_state = '4'
-                investlog.settle_amount = cash
-                broker_amount = cash * 2.0/100
-                translist = charge_margin(investlog_user, '1', broker_amount, "佣金")
-#                 translist.auditlog = investlog
-#                 translist.save(update_fields=['investlog'])
+                investlog.presettle_amount = cash
+                broker_rate = investlog.project.broker_rate
+                broker_amount = cash * broker_rate/100
+                investlog.broker_amount = broker_amount
+                if broker_amount > 0:
+                    translist2 = charge_margin(investlog_user, '1', broker_amount, "佣金")
+                translist.auditlog = investlog
+                translist2.auditlog = investlog
+                translist.save()
+                translist2.save()
 #                 #活动插入
 #                 on_audit_pass(request, investlog)
 #                 #活动插入结束
                 res['code'] = 0
         elif type==2:
-            investlog.audit_state = '2'
+            investlog.preaudit_state = '2'
             res['code'] = 0
         elif type==3:
-            investlog.audit_state = '3'
+            investlog.preaudit_state = '3'
             res['code'] = 0
         investlog.audit_reason = reason
         if res['code'] == 0:
-            investlog.audit_time = datetime.datetime.now()
+            investlog.preaudit_time = datetime.datetime.now()
             investlog.save()
         return JsonResponse(res)
+    
+@csrf_exempt
+def stop_project(request):
+    res = {}
+    id = request.POST.get('id')
+    id = int(id)
+    apply_project = Apply_Project.objects.get(id=id, user=request.user)
+    doc = apply_project.strategy
+    project = apply_project.project
+    if not project or project.state!='10':
+        res['code'] = 1
+        res['msg'] = u"非进行中项目，不可停止"
+    assert(project.user==request.user)
+    project.state = '20'
+    doc.is_on = False
+    project.save(update_fields=['state'])
+    doc.save(update_fields=['is_on'])
+    res['code'] = 0
+    return JsonResponse(res)
+        
 def merchant_index(request):
     return render(request, 'merchant_index.html')
 def bail_manage(request):
     return render(request, 'bail_manage.html')
 def proj_manage(request):
     return render(request, 'proj_manage.html')    
+def proj_add(request):
+    return render(request, 'proj_add.html')
 def fangdan_audit(request):
     return render(request, 'fangdan_audited.html')
     

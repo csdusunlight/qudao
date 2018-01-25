@@ -9,12 +9,15 @@ from account.models import MyUser
 from merchant.models import Apply_Project, Margin_Translog, Margin_AuditLog
 
 class ApplyProjectFilter(django_filters.rest_framework.FilterSet):
+    qq_number = django_filters.CharFilter('user', lookup_expr='qq_number')
+    qq_name = django_filters.CharFilter('user', lookup_expr='qq_name__contains')
     submittime = django_filters.DateFromToRangeFilter(name="submit_time")
     audittime = django_filters.DateTimeFromToRangeFilter(name="audit_time")
     auditdate = django_filters.DateFromToRangeFilter(name="audit_time")
     project_title_contains = django_filters.CharFilter(name="project", lookup_expr='title__contains')
     user_mobile = django_filters.CharFilter(name="user", lookup_expr='mobile')
     user_level = django_filters.CharFilter(name="user", lookup_expr='level')
+    project_state = django_filters.CharFilter(name="project", lookup_expr='state')
     class Meta:
         model = Apply_Project
         exclude = ['submit_time', 'audit_time']

@@ -208,7 +208,7 @@ class InvestLog(models.Model):
     admin_user = models.ForeignKey(MyUser, related_name="investlog_admin", null=True)
     audit_time = models.DateTimeField(u'审核时间', null=True, blank=True)
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
-    preaudit_state = models.CharField(max_length=10, choices=AUDIT_STATE, default='0', verbose_name=u"审核步骤")
+    preaudit_state = models.CharField(max_length=10, choices=AUDIT_STATE, default='1', verbose_name=u"审核步骤")
     audit_reason = models.CharField(u"审核说明", max_length=30, blank=True)
     settle_amount = models.DecimalField(u'结算金额', max_digits=10, decimal_places=2, default=0)
     return_amount = models.DecimalField(u'返现金额', max_digits=10, decimal_places=2, null=True)

@@ -22,6 +22,7 @@ from merchant.Filters import ApplyProjectFilter, TranslogFilter,\
 from django.views.decorators.csrf import csrf_exempt
 logger = logging.getLogger('wafuli')
 # Create your views here.
+@csrf_exempt
 @transaction.atomic
 def preaudit_investlog(request):
     admin_user = request.user
@@ -71,7 +72,7 @@ def preaudit_investlog(request):
                 res['code'] = -3
                 res['res_msg'] = u'该项目已审核过，不要重复审核！'
                 return JsonResponse(res)
-            if not investlog.audit_step in ['0']:
+            if not investlog.preaudit_state in ['1','3']:
                 res['code'] = -3
                 res['res_msg'] = u'该项目已预审核过，不要重复审核！'
                 return JsonResponse(res)

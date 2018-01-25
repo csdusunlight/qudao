@@ -161,10 +161,11 @@
         </div>
         <div class="handle clearfix">
             <div class="handle__in l">
-                <ul style="width: 320px;" class="state-tabbox-2">
+                <ul style="width: 400px;" class="state-tabbox-2">
                     <li data-state = "" class="state-tab-2 on">全部</li>
                     <li data-state = "1" class="state-tab-2">未审核</li>
                     <li data-state = "0" class="state-tab-2">已通过</li>
+                    <li data-state = "3" class="state-tab-2">复审中</li>
                     <li data-state = "2" class="state-tab-2">已拒绝</li>
                 </ul>
                 
@@ -286,7 +287,7 @@
         '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>返现金额</th><th>审核信息</th><th>投资姓名</th>'+
         '<th class="w-remark">备注及其他</th><th>扣除手续费</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{audit_state}">{audit_state_des}</td>'+
+        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
         '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
         '<td>{broker_amount}</td><td data-state="{audit_state}" class="table-handle"><a onclick="pass_02(this,{id})">审核</a> | <a onclick="again_02(this,{id})">复审</a> | '+
         '<a onclick="refuse_02(this,{id})">拒绝</a></td></tr>[/results]</table>';
@@ -295,7 +296,7 @@
         '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>返现金额</th><th>审核信息</th><th>投资姓名</th>'+
         '<th class="w-remark">备注及其他</th><th>扣除手续费</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{audit_state}">{audit_state_des}</td>'+
+        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
         '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
         '<td>{broker_amount}</td><td data-state="{audit_state}" class="table-handle"><a onclick="pass_02(this,{id})">审核</a> | <a onclick="again_02(this,{id})">复审</a> | '+
         '<a onclick="refuse_02(this,{id})">拒绝</a></td></tr>[/results]</table>';
@@ -304,7 +305,7 @@
         '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>返现金额</th><th>审核信息</th><th>投资姓名</th>'+
         '<th class="w-remark">备注及其他</th><th>扣除手续费</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{audit_state}">{audit_state_des}</td>'+
+        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
         '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
         '<td>{broker_amount}</td></tr>[/results]</table>';
 //  已拒绝
@@ -312,11 +313,20 @@
         '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>返现金额</th><th>审核信息</th><th>投资姓名</th>'+
         '<th class="w-remark">备注及其他</th><th>扣除手续费</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{audit_state}">{audit_state_des}</td>'+
+        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
         '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
         '<td>{broker_amount}</td></tr>[/results]</table>';
+//  复审中
+    var data_user3 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
+        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>返现金额</th><th>审核信息</th><th>投资姓名</th>'+
+        '<th class="w-remark">备注及其他</th><th>扣除手续费</th><th>操作</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
+        '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
+        '<td>{broker_amount}</td><td data-state="{audit_state}" class="table-handle"><a onclick="pass_02(this,{id})">审核</a> | '+
+        '<a onclick="refuse_02(this,{id})">拒绝</a></td></tr>[/results]</table>';
 
-    var url2 = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=false&user={{user.id}}";
+    var url2 = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=true&project_user={{user.id}}";
     
     function pagecallback() {
         $('.table-handle').each(function(){
@@ -396,7 +406,7 @@
             data: {
                 'id': base_id,
                 'cash': return_amount,
-                'type': 0,
+                'type': 1,
             },
             success: function(ret) {
                 if(ret.code == 0) {
@@ -542,7 +552,7 @@
                 newurl += "&project_channel_contains=" + project_channel;
             }
             if(state) {
-                newurl += "&audit_state=" + state;
+                newurl += "&preaudit_state=" + state;
             }
             
             var search_data = data_user;
@@ -602,7 +612,7 @@
                 html += '<input name="project_channel_02" type="hidden" value="' + project_channel + '"/>';
             }
             if(state) {
-                html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
+                html += '<input name="preaudit_state" type="hidden" value="' + state + '"/>';
             }
             
             html += '</form>';

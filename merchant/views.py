@@ -101,6 +101,7 @@ def preaudit_investlog(request):
             res['code'] = 0
         elif type==3:
             investlog.preaudit_state = '3'
+            investlog.audit_state = '3'
             res['code'] = 0
         investlog.audit_reason = reason
         if res['code'] == 0:

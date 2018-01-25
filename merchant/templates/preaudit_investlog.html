@@ -1,0 +1,676 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户中心</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/add-img.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.searchableSelect.css' %}" />
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.searchableSelect.js' %}"></script>
+<style type="text/css">
+    .search {
+        padding-top: 20px;
+        padding-left: 0;
+    }
+    /*.handle {
+        position: relative;
+        text-decoration: underline;
+    }
+    .handle-box {
+        opacity: 1;
+        position: absolute;
+        top: 0;
+        right: -250px;
+        width: 230px;
+        line-height: 50px;
+        color: #fff;
+        background-color: darkseagreen;
+        border-radius: 8px 0 0 8px;
+        transition: all 0.4s ease;
+    }
+    .handle:hover .handle-box {
+        right: 0;
+    }*/
+    .state0 {
+        color: #91c11d;
+    }
+    .state1 {
+        color: #ffbe00;
+    }
+    .state2 {
+        color: red;
+    }
+    .state3 {
+        color: blue;
+    }
+    .state-tabbox,
+    .state-tabbox-2 {
+        font-size: 0;
+    }
+    .state-tab,
+    .state-tab-2 {
+        display: inline-block;
+        width: 80px;
+        line-height: 30px;
+        text-align: center;
+        border: 1px solid #91C11D;
+        border-right: none;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+    .state-tab:last-child,
+    .state-tab-2:last-child {
+        border-right: 1px solid #91C11D;
+    }
+    .state-tab.on,
+    .state-tab-2.on {
+        color: #fff;
+        background-color: #91C11D;
+    }
+    /*.day-search-box {
+        width: 100px;
+        display: inline-block;
+        font-size: 0px;
+    }
+    .search_today,
+    .search_yes {
+        display: inline-block;
+        width: 50%;
+        font-size: 14px;
+        color: #91C11D;
+        text-align: center;;
+        cursor: pointer;
+    }*/
+    /*.today-detail {
+        position: absolute;
+        right: 0;
+        top: 14px;
+        margin-right: 20px;
+        width: 640px;
+        margin-top: -10px;
+        font-size: 0;
+    }
+    .today-detail-item {
+        display: inline-block;
+        width: 25%;
+        font-size: 14px;
+        text-align: right;
+    }
+    .today-num {
+        display: inline-block;
+        margin: 0 4px;
+        font-size: 16px;
+        color: #ffbe00;
+    }*/
+    .return-amount {
+        color: #ffbe00;
+    }
+    .return-amount.m-success {
+        color: #91C11D;
+    }
+    
+    /*.handle-mark {
+        color: #91c11d;
+    }*/
+    .searchable-select {
+        width: 300px;
+    }
+</style>
+
+</head>
+
+<body>
+<!--头部-->
+{% include "merchant_header.html" %}
+<!--内容-->
+<div class="Content">
+    <div class="table">
+        <!--<h2 class="table__title">自建数据</h2>-->
+        <div class="search">
+            <div class="search__item">
+                <span class="search__name">项目名称：</span>
+                <input type="text" id="proj_name_02" />
+            </div>
+            <!--<div class="search__item" style="display: none;">
+                <span class="search__name">投资日期：</span>
+                <div class="time-input-box"><input type="text" class="date_picker time-input" id="invest_date0_02" /></div> ——
+                <div class="time-input-box"><input type="text" class="date_picker time-input" id="invest_date1_02" /></div>
+            </div>-->
+            <div class="search__item">
+                <span class="search__name">提交时间：</span>
+                <div class="time-input-box"><input type="text" class="date_picker time-input" id="submit_date0_02" /></div> ——
+                <div class="time-input-box"><input type="text" class="date_picker time-input" id="submit_date1_02" /></div>
+            </div>
+            <div class="search__item">
+                <span class="search__name">提交手机号：</span>
+                <input type="text" id="telnum_sub_02" />
+            </div>
+            <div class="search__item">
+                <span class="search__name">审核日期：</span>
+                <div class="time-input-box"><input type="text" class="date_picker time-input" id="audit_date0_02" /></div> ——
+                <div class="time-input-box"><input type="text" class="date_picker time-input" id="audit_date1_02" /></div>
+            </div>
+        </div>
+        <div class="handle clearfix">
+            <div class="handle__in l">
+                <ul style="width: 400px;" class="state-tabbox-2">
+                    <li data-state = "" class="state-tab-2 on">全部</li>
+                    <li data-state = "1" class="state-tab-2">未审核</li>
+                    <li data-state = "0" class="state-tab-2">已通过</li>
+                    <li data-state = "3" class="state-tab-2">复审中</li>
+                    <li data-state = "2" class="state-tab-2">已拒绝</li>
+                </ul>
+                
+            </div>
+            <div class="handle__out r">
+                <input style="display: none;" id="fileupload2" name="file" type="file" />
+                <a id="input_clone_02" class="btn m-green m-choose">导入</a>
+                <a id="export_02" class="btn m-green">导出</a>
+                <a id="search_02" class="btn m-green">搜索</a>
+            </div>
+        </div>
+        
+        <div id="pagedata2">
+        </div>
+        <div class="changes-p">
+            <div class="page" id="page2">
+            </div>
+        </div>
+                            
+
+    </div>
+    <!--<div class="popup m-del-proj">
+        <div class="popup__content" style="width: 600px;">
+            <div class="popup__top">
+                <h2 class="popup__title">删除数据</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+            </div>
+            <div class="popup__detail">
+                该操作会彻底在数据库中删除数据，请慎重操作！
+            </div>
+            <div class="popup__btnbox">
+                <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
+                <a id="confirm_delete" class="btn m-green popup__close-btn">确认</a>
+            </div>
+        </div>
+    </div>-->
+   
+    <div class="popup m-pass-proj-02">
+        <div class="popup__content" style="width: 600px;">
+            <div class="popup__top">
+                <h2 class="popup__title">审核通过</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+            </div>
+            <div class="popup__detail">
+                <!--<div class="popup__item">
+                    <span class="popup__itemname">结算金额：</span>
+                    <input type="text" class="settle_amount_02" placeholder="填写投资金额" />
+                </div>-->
+                <div class="popup__item">
+                    <span class="popup__itemname">返现金额：</span>
+                    <input type="text" class="return_amount_02" placeholder="填写投资金额" />
+                    <span style="display: block;text-align:right; margin-right: 32px;">每笔返现扣除2%手续费</span>
+                    <p class="process-money"></p>
+                </div>
+            </div>
+            <div class="popup__btnbox">
+                <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
+                <a id="confirm_pass_02" class="btn m-green popup__close-btn">确认</a>
+            </div>
+        </div>
+    </div>
+    <div class="popup m-refuse-proj-02">
+        <div class="popup__content" style="width: 600px;">
+            <div class="popup__top">
+                <h2 class="popup__title">审核拒绝</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+            </div>
+            <div class="popup__detail">
+                <div class="popup__item">
+                    <span class="popup__itemname">拒绝原因：</span>
+                    <input type="text" class="refuse_reason_02" placeholder="填写拒绝原因" />
+                </div>
+            </div>
+            <div class="popup__btnbox">
+                <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
+                <a id="confirm_refuse_02" class="btn m-green popup__close-btn">确认</a>
+            </div>
+        </div>
+    </div>
+    <div class="popup m-again-proj-02">
+        <div class="popup__content" style="width: 600px;">
+            <div class="popup__top">
+                <h2 class="popup__title">进入复审</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+            </div>
+            <div class="popup__detail">
+                <div class="popup__item">
+                    <span class="popup__itemname">复审原因：</span>
+                    <input type="text" class="again_reason_02" placeholder="填写复审原因" />
+                </div>
+            </div>
+            <div class="popup__btnbox">
+                <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
+                <a id="confirm_again_02" class="btn m-green popup__close-btn">确认</a>
+            </div>
+        </div>
+    </div>
+    <div class="popup m-import">
+        <div class="popup__content" style="width: 600px;">
+            <div class="popup__top">
+                <h2 class="popup__title">导入表格</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+            </div>
+            <div class="popup__detail">
+                <p class="hint-box">已选择表格：<b id="hint_02" class="hint">无</b></p>
+            </div>
+            <div class="popup__btnbox">
+                <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
+                <a id="import_02" class="btn m-green popup__close-btn">确认</a>
+                <!--<a id="import_02" class="btn m-green m-import">审核结果导入</a>-->
+            </div>
+        </div>
+    </div>
+</div>
+<iframe id="myIFrame" scrolling="yes" src="abount:blank" style="display:none" frameborder=1></iframe>
+{% include "footer.html" %}
+
+<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+<script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
+<script type="text/javascript">
+//  全部
+    var data_user = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
+        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>返现金额</th><th>审核信息</th><th>投资姓名</th>'+
+        '<th class="w-remark">备注及其他</th><th>扣除手续费</th><th>操作</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
+        '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
+        '<td>{broker_amount}</td><td data-state="{audit_state}" class="table-handle"><a onclick="pass_02(this,{id})">审核</a> | <a onclick="again_02(this,{id})">复审</a> | '+
+        '<a onclick="refuse_02(this,{id})">拒绝</a></td></tr>[/results]</table>';
+//  未审核
+    var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
+        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>返现金额</th><th>审核信息</th><th>投资姓名</th>'+
+        '<th class="w-remark">备注及其他</th><th>扣除手续费</th><th>操作</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
+        '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
+        '<td>{broker_amount}</td><td data-state="{audit_state}" class="table-handle"><a onclick="pass_02(this,{id})">审核</a> | <a onclick="again_02(this,{id})">复审</a> | '+
+        '<a onclick="refuse_02(this,{id})">拒绝</a></td></tr>[/results]</table>';
+//  已通过
+    var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
+        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>返现金额</th><th>审核信息</th><th>投资姓名</th>'+
+        '<th class="w-remark">备注及其他</th><th>扣除手续费</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
+        '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
+        '<td>{broker_amount}</td></tr>[/results]</table>';
+//  已拒绝
+    var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
+        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>返现金额</th><th>审核信息</th><th>投资姓名</th>'+
+        '<th class="w-remark">备注及其他</th><th>扣除手续费</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
+        '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
+        '<td>{broker_amount}</td></tr>[/results]</table>';
+//  复审中
+    var data_user3 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
+        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>返现金额</th><th>审核信息</th><th>投资姓名</th>'+
+        '<th class="w-remark">备注及其他</th><th>扣除手续费</th><th>操作</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
+        '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
+        '<td>{broker_amount}</td><td data-state="{audit_state}" class="table-handle"><a onclick="pass_02(this,{id})">审核</a> | '+
+        '<a onclick="refuse_02(this,{id})">拒绝</a></td></tr>[/results]</table>';
+
+    var url2 = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=true&project_user={{user.id}}";
+    
+    function pagecallback() {
+        $('.table-handle').each(function(){
+            if($(this).data('state') != 1){
+                $(this).html('————');
+            }
+        })
+        $('.submit-time').each(function(){
+            var submit_time = $(this).text().split('T');
+            $(this).text(submit_time[0]);
+        })
+        $('.return-txt').each(function(){
+            if ($(this).text() == 'null') {
+                $(this).text('');
+            }
+        })
+        $('.return-amount').each(function(){
+            if ($(this).data('return') != null) {
+                $(this).find('.handle').text('已返');
+                $(this).addClass('m-success');
+            }
+        })
+    }
+
+    $("#pagedata2").ajaxPage({
+        url: url2,
+        pageId: $("#page2"),
+        pageSize: 10,
+        run: true,
+        content: data_user,
+        complete:pagecallback,
+    });
+    var parent_del;
+    var base_id;
+    var parent_dom;
+
+    //          编辑/删除数据部分(自建)
+//  function removeData_02 (obj,id) {
+//      base_id = id;
+//      parent_del = $(obj);
+//      $('.popup.m-del-proj').addClass('in');
+//  }
+//  $('#confirm_delete').click(function(){
+//      $.ajax({
+//          url:"/restapi/investlogs/" + base_id + "/",
+//          type:"delete",
+//          dataType: "json",
+//          success: function(ret) {
+//              console.log('删除成功');
+//              parent_del.parent().parent().parent().remove();
+//              $('.popup.m-del-proj').removeClass('in');
+//          },
+//          error: function() {
+//              alert("请检查网络连接");
+//          }
+//      });
+//  })
+    
+    function pass_02 (obj,id) {
+        base_id = id;
+//      $(".settle_amount_02").val('');
+        $(".return_amount_02").val('');
+        $('.popup.m-pass-proj-02').addClass('in');
+    }
+    $('#confirm_pass_02').click(function() {
+//      var settle_amount = $(".settle_amount_02").val();
+        var return_amount = $(".return_amount_02").val();
+        if(!return_amount || !Number(return_amount)) {
+            alert('返现金额不能为空，且必须为数字格式')
+            return;
+        }
+        console.log(return_amount)
+        $.ajax({
+            url: "/merchant/preaudit_investlog/",
+            dataType: "json",
+            type: "post",
+            data: {
+                'id': base_id,
+                'cash': return_amount,
+                'type': 1,
+            },
+            success: function(ret) {
+                if(ret.code == 0) {
+                    alert('操作成功');
+                    $('.popup.m-pass-proj-02').removeClass('in');
+                } else {
+                    console.log(ret.res_msg);
+                }
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+    });
+    $('.return_amount_02').keyup(function(){
+        var value = $(".return_amount_02").val();
+        if(Number(value)) {
+            $('.process-money').text('预计扣除手续费：'+ parseInt(value*0.02) +'元')
+        } else {
+            $('.process-money').text('返现金额请输入纯数字格式');
+        }
+    })
+    
+    function refuse_02 (obj,id) {
+        base_id = id;
+        $(".refuse_reason_02").val('');
+        $('.popup.m-refuse-proj-02').addClass('in');
+    }
+    $('#confirm_refuse_02').click(function() {
+        var refuse_reason = $(".refuse_reason_02").val();
+        if(!refuse_reason) {
+            alert('拒绝原因不能为空')
+            return;
+        }
+        console.log(refuse_reason);
+        $.ajax({
+            url: "/merchant/preaudit_investlog/",
+            dataType: "json",
+            type: "post",
+            data: {
+                'id': base_id,
+                'reason': refuse_reason,
+                'type': 2,
+            },
+            success: function(ret) {
+                if(ret.code == 0) {
+                    alert('操作成功');
+                    $('.popup.m-refuse-proj-02').removeClass('in');
+                } else {
+                    console.log(ret.res_msg);
+                }
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+    });
+    function again_02 (obj,id) {
+        base_id = id;
+        $(".again_reason_02").val('');
+        $('.popup.m-again-proj-02').addClass('in');
+    }
+    $('#confirm_again_02').click(function() {
+        var again_reason = $(".again_reason_02").val();
+        if(!again_reason) {
+            alert('拒绝原因不能为空')
+            return;
+        }
+        console.log(again_reason);
+        $.ajax({
+            url: "/merchant/preaudit_investlog/",
+            dataType: "json",
+            type: "post",
+            data: {
+                'id': base_id,
+                'reason': again_reason,
+                'type': 3,
+            },
+            success: function(ret) {
+                if(ret.code == 0) {
+                    alert('操作成功');
+                    $('.popup.m-again-proj-02').removeClass('in');
+                } else {
+                    console.log(ret.res_msg);
+                }
+            },
+            error: function() {
+                alert("请检查网络连接");
+            }
+        });
+    });
+
+//      编辑/删除部分（自建）---end
+    
+    $(function(){
+        $('.nav__item:eq(3)').addClass('active');
+        
+        $(".table").on("focus", ".date_picker", function() {
+            $('.date_selector').remove();
+            $(this).date_input();
+        })
+
+        var state_2 = '';
+        $('.state-tab-2').click(function(){
+            $(this).addClass('on').siblings().removeClass('on');
+            state_2 = $(this).data('state') + '';
+            console.log(state_2)
+            $('#search_02').click();
+        })
+        $("#search_02").click(function() {
+            var proj_name = $("#proj_name_02").val(),
+                audit_date0 = $("#audit_date0_02").val(),
+                audit_date1 = $("#audit_date1_02").val(),
+                submit_date0 = $("#submit_date0_02").val(), 
+                submit_date1 = $("#submit_date1_02").val(),
+                telnum_sub = $("#telnum_sub_02").val(),
+                zhifubao = $("#zhifubao_02").val(),
+                project_channel = $("#project_channel_02").val(),
+                state = state_2;
+            var newurl = url2;
+            if(proj_name) {
+                newurl += "&project_title_contains=" + proj_name;
+            }
+            if(audit_date0) {
+                newurl += "&auditdate_0=" + audit_date0;
+            }
+            if(audit_date1) {
+                newurl += "&auditdate_1=" + audit_date1;
+            }
+            if(submit_date0) {
+                newurl += "&submittime_0=" + submit_date0;
+            }
+            if(submit_date1) {
+                newurl += "&submittime_1=" + submit_date1;
+            }
+            if(telnum_sub) {
+                newurl += "&invest_mobile=" + telnum_sub;
+            }
+            if(zhifubao) {
+                newurl += "&zhifubao_contains=" + zhifubao;
+            }
+            if(project_channel) {
+                newurl += "&project_channel_contains=" + project_channel;
+            }
+            if(state) {
+                newurl += "&preaudit_state=" + state;
+            }
+            
+            var search_data = data_user;
+            if(state == '0') {
+                search_data = data_user0;
+            } else if(state == '1') {
+                search_data = data_user1;
+            } else if(state == '2') {
+                search_data = data_user2;
+            } else if(state == '3') {
+                search_data = data_user3;
+            }
+            
+            console.log(newurl);
+            $("#page2").empty();
+            $("#pagedata2").ajaxPage({
+                url: newurl,
+                pageId: $("#page2"),
+                pageSize: 10,
+                run: true,
+                content: search_data,
+                complete:pagecallback,
+            });
+        });
+        $("#export_02").click(function() {
+            var html = '<form action="' + "{% url 'export_investlog' %}" + '" method="get" target="_self" id="postData_form">';
+            var proj_name = $("#proj_name_02").val(),
+                audit_date0 = $("#audit_date0_02").val(),
+                audit_date1 = $("#audit_date1_02").val(),
+                submit_date0 = $("#submit_date0_02").val(),
+                submit_date1 = $("#submit_date1_02").val(),
+                telnum_sub = $("#telnum_sub_02").val(),
+                zhifubao = $("#zhifubao_02").val(),
+                project_channel = $("#project_channel_02").val(),
+                state = state_2;
+               
+            
+            html += '<input name="is_official" type="hidden" value="false"/>';
+            if(proj_name) {
+                html += '<input name="project_title_contains" type="hidden" value="' + proj_name + '"/>';
+            }
+            if(audit_date0 && audit_date1) {
+                html += '<input name="auditdate_0" type="hidden" value="' + audit_date0 + '"/>';
+                html += '<input name="auditdate_1" type="hidden" value="' + audit_date1 + '"/>';
+            }
+            if(submit_date0 && submit_date1) {
+                html += '<input name="submittime_0" type="hidden" value="' + submit_date0 + '"/>';
+                html += '<input name="submittime_1" type="hidden" value="' + submit_date1 + '"/>';
+            }
+            if(telnum_sub) {
+                html += '<input name="invest_mobile" type="hidden" value="' + telnum_sub + '"/>';
+            }
+            if(zhifubao) {
+                html += '<input name="zhifubao_contains" type="hidden" value="' + zhifubao + '"/>';
+            }
+            if(project_channel) {
+                html += '<input name="project_channel_02" type="hidden" value="' + project_channel + '"/>';
+            }
+            if(state) {
+                html += '<input name="preaudit_state" type="hidden" value="' + state + '"/>';
+            }
+            
+            html += '</form>';
+            var iframe = document.getElementById('myIFrame');
+            iframe.contentWindow.document.open();
+            iframe.contentWindow.document.write(html);
+            iframe.contentWindow.document.close();
+            document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+        });
+        $('#import_02').click(function() {
+            var fileElementId = 'fileupload2';
+            if(!document.getElementById(fileElementId).value) {
+                alert("请先选择文件");
+                return;
+            }
+            $.ajaxFileUpload({
+                url: "{% url 'import_investlog' %}",
+                secureuri: false,
+                fileElementId: fileElementId, //file标签的id
+                dataType: 'json', //返回数据的类型
+                data: {}, //一同上传的数据
+                success: function(data, status) {
+                    if(data.code == 0) {
+                        alert("导入成功！ 数量：" + data.num);
+                    } else {
+                        alert(data.msg + " 成功数量：" + data.num);
+                    }
+                    $('.popup.m-import').removeClass('in');
+                },
+                error: function(data, status, e) {
+                    alert(e);
+                }
+            });
+            //  hint.innerHTML = '无';
+        });
+        var choose_file_02 = document.getElementById("input_clone_02");
+        var hint_02 = document.getElementById("hint_02");
+        choose_file_02.onclick = function() {
+            console.log(document.getElementById("fileupload2").files);
+            document.getElementById("fileupload2").value = '';
+            document.getElementById("fileupload2").click();
+        }
+        document.getElementById("fileupload2").onchange = function(){
+            hint_02.innerHTML = this.files[0].name;
+            $('.popup.m-import').addClass('in');
+        }
+    })
+    
+    //计算天数差的函数，通用  
+//      function DateDiff(sDate1, sDate2) { //sDate1和sDate2是2002-12-18格式  
+//          var aDate, oDate1, oDate2, iDays
+//          aDate = sDate1.split("-")
+//          oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]) //转换为12-18-2002格式  
+//          aDate = sDate2.split("-")
+//          oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])
+//          iDays = parseInt((oDate1 - oDate2) / 1000 / 60 / 60 / 24) //把相差的毫秒数转换为天数  
+//          return iDays
+//      }
+</script>
+</body>
+</html>

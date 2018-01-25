@@ -22,6 +22,7 @@ from merchant.Filters import ApplyProjectFilter, TranslogFilter,\
 from django.views.decorators.csrf import csrf_exempt
 logger = logging.getLogger('wafuli')
 # Create your views here.
+@csrf_exempt
 @transaction.atomic
 def preaudit_investlog(request):
     admin_user = request.user
@@ -71,7 +72,7 @@ def preaudit_investlog(request):
                 res['code'] = -3
                 res['res_msg'] = u'该项目已审核过，不要重复审核！'
                 return JsonResponse(res)
-            if not investlog.audit_step in ['0']:
+            if not investlog.preaudit_state in ['1','3']:
                 res['code'] = -3
                 res['res_msg'] = u'该项目已预审核过，不要重复审核！'
                 return JsonResponse(res)
@@ -127,22 +128,23 @@ def stop_project(request):
     doc.save(update_fields=['is_on'])
     res['code'] = 0
     return JsonResponse(res)
-        
-def merchant_index(request):
-    return render(request, 'merchant_index.html')
+
 def bail_manage(request):
     return render(request, 'bail_manage.html')
 def proj_manage(request):
     return render(request, 'proj_manage.html')    
+def proj_add(request):
+    return render(request, 'proj_add.html')
 def fangdan_audit(request):
     return render(request, 'fangdan_audited.html')
     
+@csrf_exempt
 @login_required
 def merchant(request):
     user = request.user
     if request.method == 'GET':
         card = user.user_bankcard.first()
-        return render(request,'account/merchant.html',)
+        return render(request,'merchant_index.html',)
     elif request.method == 'POST':
         result = {'code':-1, 'res_msg':''}
         amount = request.POST.get("amount", None)

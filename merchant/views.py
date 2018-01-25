@@ -126,9 +126,7 @@ def stop_project(request):
     doc.save(update_fields=['is_on'])
     res['code'] = 0
     return JsonResponse(res)
-        
-def merchant_index(request):
-    return render(request, 'merchant_index.html')
+
 def bail_manage(request):
     return render(request, 'bail_manage.html')
 def proj_manage(request):
@@ -138,12 +136,13 @@ def proj_add(request):
 def fangdan_audit(request):
     return render(request, 'fangdan_audited.html')
     
+@csrf_exempt
 @login_required
 def merchant(request):
     user = request.user
     if request.method == 'GET':
         card = user.user_bankcard.first()
-        return render(request,'account/merchant.html',)
+        return render(request,'merchant_index.html',)
     elif request.method == 'POST':
         result = {'code':-1, 'res_msg':''}
         amount = request.POST.get("amount", None)

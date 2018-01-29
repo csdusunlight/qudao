@@ -19,10 +19,10 @@ from account.transaction import charge_money
 
 @transaction.atomic
 @has_post_permission('004')
-def admin_merchant(request):
+def admin_margin(request):
     admin_user = request.user
     if request.method == "GET":
-        return render(request,"admin_merchant.html")
+        return render(request,"admin_margin.html")
     if request.method == "POST":
         res = {}
         id = request.POST.get('id', None)
@@ -33,31 +33,43 @@ def admin_merchant(request):
             return JsonResponse(res)
         type = int(type)
         id = int(id)
-        withdrawlog = Margin_AuditLog.objects.get(id=id)
-        if withdrawlog.audit_state != '1':
+        log = Margin_AuditLog.objects.get(id=id)
+        if log.audit_state != '1':
             res['code'] = -3
             res['res_msg'] = u'该项目已审核过，不要重复审核！'
             return JsonResponse(res)
-        if type==1:
-            withdrawlog.audit_state = '0'
-            res['code'] = 0
-            withuser = withdrawlog.user
-            withuser.with_total = F('with_total')+withdrawlog.amount
-            withuser.save(update_fields=['with_total'])
-
-        elif type == 2:
-            reason = request.POST.get('reason', '')
-            if not reason:
-                res['code'] = -2
-                res['res_msg'] = u'传入参数不足，请联系技术人员！'
-                return JsonResponse(res)
-            withdrawlog.audit_state = '2'
-            withdrawlog.audit_reason = reason
-            charge_margin(withdrawlog.user, '0', withdrawlog.amount, u'冲账', True, reason)
-            res['code'] = 0
-        withdrawlog.audit_time = datetime.datetime.now()
-        withdrawlog.admin_user = admin_user
-        withdrawlog.save(update_fields=['audit_state','audit_time','audit_reason'])
+        if log.type == '1':
+            if type==1:
+                log.audit_state = '0'
+                res['code'] = 0
+            elif type == 2:
+                reason = request.POST.get('reason', '')
+                if not reason:
+                    res['code'] = -2
+                    res['res_msg'] = u'传入参数不足，请联系技术人员！'
+                    return JsonResponse(res)
+                log.audit_state = '2'
+                log.audit_reason = reason
+                charge_margin(log.user, '0', log.amount, u'冲账', True, reason)
+                res['code'] = 0
+        if log.type == '0':
+            if type==1:
+                log.audit_state = '0'
+                charge_margin(log.user, '0', log.amount, u'充值', True, reason)
+                res['code'] = 0
+            elif type == 2:
+                reason = request.POST.get('reason', '')
+                if not reason:
+                    res['code'] = -2
+                    res['res_msg'] = u'传入参数不足，请联系技术人员！'
+                    return JsonResponse(res)
+                log.audit_state = '2'
+                log.audit_reason = reason
+                charge_margin(log.user, '0', log.amount, u'冲账', True, reason)
+                res['code'] = 0
+        log.audit_time = datetime.datetime.now()
+        log.admin_user = admin_user
+        log.save(update_fields=['audit_state','audit_time','audit_reason'])
         return JsonResponse(res)
 
 @csrf_exempt
@@ -137,37 +149,47 @@ def admin_investlog(request):
             res['res_msg'] = u'传入参数不足，请联系技术人员！'
             return JsonResponse(res)
         investlog = InvestLog.objects.get(id=id, category='merchant')
-        if not investlog.audit_state in ['1', '3']:
+        if not investlog.audit_state in ['1']:
             res['code'] = 4
-            res['res_msg'] = u'该项目已被审核过'
+            res['res_msg'] = u'该项目非待审核状态'
             return JsonResponse(res)
-        if not investlog.preaudit_state in ['0', '2']:
+        if not investlog.preaudit_state in ['0']:
             res['code'] = 4
-            res['res_msg'] = u'该项目尚未被预审'
+            res['res_msg'] = u'该项目尚未被预审通过'
+            return JsonResponse(res)
+        reason = request.POST.get('reason')
+        if not reason and type != 1:
+            res['code'] = -2
+            res['res_msg'] = u'原因为必填字段'
             return JsonResponse(res)
         type = int(type)
         investlog_user = investlog.user
         cash = investlog.presettle_amount
         project_title = investlog.project.title
-        state = investlog.preaudit_state
         if type==1:
-            investlog.audit_state = state
-            if state == '0':
-                translist = charge_money(investlog_user, '0', cash, project_title)  #jzy
-                investlog.settle_amount += cash
-                translist.auditlog = investlog
-                translist.save()
+            investlog.audit_state = '0'
+            translist = charge_money(investlog_user, '0', cash, project_title)
+            investlog.settle_amount += cash
+            translist.auditlog = investlog
+            translist.save()
         elif type == 2:
-            if state == '0':
-                broker_amount = investlog.broker_amount
-                translist = charge_margin(investlog.project.user, '0', cash, '冲账', True)  #jzy
-                translist.auditlog = investlog
-                translist.save()
+            investlog.audit_state = '1'
+            investlog.reaudit_reason = reason
+            broker_amount = investlog.broker_amount
+            translist = charge_margin(investlog.project.user, '0', cash, '冲账', True, '管理员拒绝')
+            translist.auditlog = investlog
+            translist2 = charge_margin(investlog.project.user, '0', broker_amount, '冲账', True, '管理员拒绝')
+            translist2.auditlog = investlog
+            translist.save(update_fields=['auditlog',])
+            translist2.save(update_fields=['auditlog',])
             res['code'] = 0
+        elif type == 3:
+            investlog.audit_state = '4'
+            investlog.appeal_reason = reason
         else:
             res['code'] = 3
             res['res_msg'] = u'type错误'
-            return JsonResponse(res)    
+            return JsonResponse(res)
         investlog.audit_time = datetime.datetime.now()
         investlog.admin_user = admin_user
         investlog.presettle_amount = 0

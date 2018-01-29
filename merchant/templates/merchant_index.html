@@ -8,7 +8,7 @@
     <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/merchant_index.css' %}" />
+
     <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 
 </head>
@@ -18,131 +18,11 @@
     {% include "merchant_header.html" %}
     <!--内容-->
     <div class="Content">
-        <div class="wrapperBox">
-            <nav>
-                <span class="amount">
-                    <span>账户保证金余额：{{user.margin_account}}元</span>
-                </span>
-                <input type="button" class="btn add" value="充值">
-                <input type="button" class="btn wit" value="提现保证金">
-            </nav>
-            <div class="tabBox">
-                <table width="100%">
-                    <tr>
-                        <th width="30%">变更时间</th>
-                        <th width="30%">变更金额</th>
-                        <th width="30%">变更原因</th>
-                    </tr>
-                    <tr>
-                        <td>1000</td>
-                        <td>1000</td>
-                        <td>1000</td>
-                    </tr>
-                    <tr>
-                        <td>1000</td>
-                        <td>1000</td>
-                        <td>1000</td>
-                    </tr>
-                    <tr>
-                        <td>1000</td>
-                        <td>1000</td>
-                        <td>1000</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <!-- 充值弹窗 -->
-        <div class="addMsk">
-            <div class="dataBox">
-                <span class="card ">充值银行卡</span>
-                <div class="data ">
-                    <table width="100% ">
-                        <tr>
-                            <td width="30% ">开户行</td>
-                            <td width="70% ">46315487824564458</td>
-                        </tr>
-                        <tr>
-                            <td width="30% ">姓名</td>
-                            <td width="70% ">llc</td>
-                        </tr>
-                        <tr>
-                            <td width="30% ">账户</td>
-                            <td width="70% ">12345678977</td>
-                        </tr>
-                    </table>
-                </div>
-                <input type="button " class="submit " value="确定 " />
-            </div>
-        </div>
-
-        <!-- 提现保证金模态框 -->
-        <div class="witMsk ">
-            <div class="witBox ">
-                <span class="tips ">提现保证金</span>
-                <div class="amountBox ">
-                    提现金额(元)
-                    <input type="text " class="witamount ">
-                </div>
-                <div class="amountBox ">
-                    备注
-                    <input type="text " class="remark ">
-                </div>
-                <input type="button " class="send " value="确定 ">
-            </div>
-        </div>
+        <p>这是推客中心</p>
     </div>
-    {% include "footer.html " %}
+    {% include "footer.html" %}
 
-    <script type="text/javascript " src="{% static 'js/wfl-common.js' %} "></script>
-    <script>
-        $(function () {
-
-
-            $(".add ").click(function () {
-                $('.addMsk').show();
-            });
-            $(".submit ").click(function () {
-                $('.addMsk').hide();
-            });
-            //保证金模态框
-            $(".wit ").click(function () {
-                $(".witMsk ").show();
-            });
-            $(".send ").click(function () {
-                const amount = $(".witamount ").val();
-                const remark = $(".remark").val();
-                $(".witMsk ").hide();
-                $.ajax({
-                    url: '/merchant/index/',
-                    type: 'post',
-                    async: false,
-                    timeout: 5000, //超时时间
-                    dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
-                    data: {
-                        'type': 1,
-                        'remark': remark,
-                        "amount": amount
-                    },
-                    success: function (ret) {
-                        if (ret.code == 0) {
-                            alert("提交提现申请，请等待");
-                            $(".witMsk ").hide();
-                        }
-
-                    },
-                    error: function (xhr, textStatus) {
-                        alert(xhr.responseText);
-                    }
-                });
-            });
-
-        });
-    </script>
+    <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
 </body>
-<!-- type:1
-    amount,
-    remark
--->
 
 </html>

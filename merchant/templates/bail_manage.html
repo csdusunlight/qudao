@@ -1,26 +1,180 @@
 {% load staticfiles %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>用户中心</title>
-<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
 
-<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>用户中心</title>
+    <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bail_manage.css' %}" />
+    <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 
 </head>
 
 <body>
-<!--头部-->
-{% include "merchant_header.html" %}
-<!--内容-->
-<div class="Content">
-<p>这是保证金管理</p>
-</div>
-{% include "footer.html" %}
+    <!--头部-->
+    {% include "merchant_header.html" %}
+    <!--内容-->
+    <div class="Content">
+        <div class="wrapperBox">
+            <nav>
+                <span class="amount">
+                    <span>账户保证金余额：{{user.margin_account}}元</span>
+                </span>
+                <input type="button" class="btn add" value="充值">
+                <input type="button" class="btn wit" value="提现保证金">
+            </nav>
+            <div class="tabBox">
+                <!-- <table width="100%">
+                    <tr>
+                        <th width="30%">变更时间</th>
+                        <th width="30%">变更金额</th>
+                        <th width="30%">变更原因</th>
+                    </tr>
+                    <tr>
+                        <td>1000</td>
+                        <td>1000</td>
+                        <td>1000</td>
+                    </tr>
+                    <tr>
+                        <td>1000</td>
+                        <td>1000</td>
+                        <td>1000</td>
+                    </tr>
+                    <tr>
+                        <td>1000</td>
+                        <td>1000</td>
+                        <td>1000</td>
+                    </tr>
+                </table> -->
+            </div>
+        </div>
 
-<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+        <!-- 充值弹窗 -->
+        <div class="addMsk">
+            <div class="dataBox">
+                <span class="card">充值银行卡</span>
+                <div class="data">
+                    <table width="100% ">
+                        <tr>
+                            <td width="30%">开户行</td>
+                            <td width="70%">46315487824564458</td>
+                        </tr>
+                        <tr>
+                            <td width="30%">姓名</td>
+                            <td width="70%">llc</td>
+                        </tr>
+                        <tr>
+                            <td width="30%">账户</td>
+                            <td width="70%">12345678977</td>
+                        </tr>
+                        <tr>
+                            <td width="30%">充值金额</td>
+                            <td width="70%"><input type="text"></td>
+                        </tr>
+                    </table>
+                </div>
+                <input type="button " class="submit " value="确定 " />
+            </div>
+        </div>
+
+        <!-- 提现保证金模态框 -->
+        <div class="witMsk ">
+            <div class="witBox ">
+                <span class="tips ">提现保证金</span>
+                <div class="amountBox ">
+                    提现金额(元)
+                    <input type="text " class="witamount ">
+                </div>
+                <input type="button" class="send" value="确定">
+                <input type="button" class="cancel" value="取消">
+            </div>
+        </div>
+    </div>
+    {% include "footer.html " %}
+
+    <script type="text/javascript " src="{% static 'js/wfl-common.js' %} "></script>
+    <script>
+        $(function () {
+            // $.ajax({
+            //     url:"/sdsa/",
+            //     type:'get',
+            //     async:false,
+            //     timeout:5000,
+            //     dataType:'json',
+            //     success:function(ret){
+
+            //     },
+            //     error:function(xhr,textStatus){
+            //         alert(xhr.responseText);
+            //     }
+            // });
+
+            $(".add ").click(function () {
+                $('.addMsk').show();
+            });
+            $(".submit ").click(function () {
+                $('.addMsk').hide();
+            });
+            //保证金模态框
+            $(".wit ").click(function () {
+                $(".witMsk ").show();
+            });
+            $(".cancel").click(function () {
+                $(".witMsk ").hide();
+                window.location.href = window.location.href;
+            });
+             //获取账户余额：
+            const user_account = {{ user.margin_account }};
+            console.log("--------账户余额：", user_account);
+            //提取保证金
+            $(".send ").click(function () {
+                const amount = $(".witamount ").val();
+                //正则
+                const regx = /^[0-9]*$/;
+                if (!regx.test(amount)) {
+                    alert("提取金额必须为纯数字");
+                    return;
+                }
+                //获取提现金额不能大于保证金
+                if (user_account < amount) {
+                    alert("提取金额不能大于保证金！");
+                    return;
+                }
+
+                //ajax发送提取保证金
+                $.ajax({
+                    url: '/merchant/index/',
+                    type: 'post',
+                    async: false,
+                    timeout: 5000, //超时时间
+                    dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
+                    data: {
+                        'type': 1,
+                        "amount": amount
+                    },
+                    success: function (ret) {
+                        if (ret.code == 0) {
+                            alert("提交提现申请，请等待");
+                            $(".witMsk ").hide();
+                        } else if (ret.code == -2) {
+                            alert("提取失败");
+                        }
+                        //成功后刷新页面
+                        window.location.href = window.location.href;
+                    },
+                    error: function (xhr, textStatus) {
+                        alert(xhr.responseText);
+                    }
+                });
+            });
+
+        });
+    </script>
 </body>
+<!-- 
+    /merchant/margin_translog/
+ -->
 </html>

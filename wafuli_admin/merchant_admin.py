@@ -16,6 +16,8 @@ from django.db.models import F
 from django.views.decorators.csrf import csrf_exempt
 from account.transaction import charge_money
 
+def admin_margin_query(request):
+    return render(request,"admin_margin_query.html",)
 
 @transaction.atomic
 @has_post_permission('004')
@@ -75,10 +77,10 @@ def admin_margin(request):
 @csrf_exempt
 @transaction.atomic
 @has_post_permission('004')
-def admin_project(request):
+def admin_merchant_project(request):
     admin_user = request.user
     if request.method == "GET":
-        return render(request,"admin_project.html")
+        return render(request,"admin_merchant_project.html")
     elif request.method == "POST":
         res = {}
         id = request.POST.get('id', None)
@@ -136,7 +138,7 @@ def admin_project(request):
 @csrf_exempt
 @transaction.atomic
 @has_post_permission('004')
-def admin_investlog(request):
+def admin_merchant_investlog(request):
     admin_user = request.user
     if request.method == "GET":
         return render(request,"admin_project.html")

@@ -50,11 +50,11 @@ nav{
 }
 .dataBox{
     width: 460px;
-    height: 300px;
+    height: 340px;
     background: white;
     box-shadow: 5px 5px 5px 0 gray;
     position: absolute;top: 50%;left: 50%;
-    margin-top: -180px;
+    margin-top: -170px;
     margin-left:-230px;
     border-radius:10px; 
 }
@@ -74,6 +74,18 @@ nav{
     text-align: center;
     font-size: 16px;
 }
+.cha{
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border:1px solid RGB(210,210,210); 
+    text-align: center;
+    line-height: 30px;
+    font-size: 26px;
+    position: absolute;top: 5px;right: 10px;
+    cursor: pointer;
+}
 .submit{
     border: none;
     width: 110px;
@@ -81,7 +93,7 @@ nav{
     text-align: center;
     background: RGB(26,157,214);
     border-radius: 5px;
-    margin: 0 auto;
+    margin: 50px auto;
     display: block;
     cursor: pointer;
     color: white;

@@ -8,7 +8,7 @@
     <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bail_manage.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/margin_manage.css' %}" />
     <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 
 </head>
@@ -55,6 +55,9 @@
         <!-- 充值弹窗 -->
         <div class="addMsk">
             <div class="dataBox">
+                <span class="cha">
+                    ×
+                </span>
                 <span class="card">充值银行卡</span>
                 <div class="data">
                     <table width="100% ">
@@ -72,7 +75,9 @@
                         </tr>
                         <tr>
                             <td width="30%">充值金额</td>
-                            <td width="70%"><input type="text"></td>
+                            <td width="70%">
+                                <input type="text" class="addAmount">
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -112,11 +117,40 @@
             //     }
             // });
 
-            $(".add ").click(function () {
+            $(".add").click(function () {
                 $('.addMsk').show();
             });
-            $(".submit ").click(function () {
+            $(".cha").click(function () {
                 $('.addMsk').hide();
+            });
+            //充值保证金ajax
+            $('.submit').click(function () {
+                const addAmount = $('.addAmount').val();
+                console.log(addAmount);
+                $.ajax({
+                    url: '/merchant/margin_manage/',
+                    type: 'post',
+                    async: false,
+                    timeout: 5000, //超时时间
+                    dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
+                    data: {
+                        'type': 0,
+                        "amount": addAmount
+                    },
+                    success: function (ret) {
+                        if (ret.code == 0) {
+                            alert("提交充值申请，请等待");
+                            $(".addMsk ").hide();
+                        } else if (ret.code == -2) {
+                            alert("提取失败");
+                        }
+                        //成功后刷新页面
+                        // window.location.href = window.location.href;
+                    },
+                    error: function (xhr, textStatus) {
+                        alert(xhr.responseText);
+                    }
+                });
             });
             //保证金模态框
             $(".wit ").click(function () {
@@ -126,50 +160,50 @@
                 $(".witMsk ").hide();
                 window.location.href = window.location.href;
             });
-             //获取账户余额：
+            //获取账户余额：
             const user_account = {{ user.margin_account }};
-            console.log("--------账户余额：", user_account);
-            //提取保证金
-            $(".send ").click(function () {
-                const amount = $(".witamount ").val();
-                //正则
-                const regx = /^[0-9]*$/;
-                if (!regx.test(amount)) {
-                    alert("提取金额必须为纯数字");
-                    return;
-                }
-                //获取提现金额不能大于保证金
-                if (user_account < amount) {
-                    alert("提取金额不能大于保证金！");
-                    return;
-                }
+        console.log("--------账户余额：", user_account);
+        //提取保证金
+        $(".send ").click(function () {
+            const amount = $(".witamount ").val();
+            //正则
+            const regx = /^[0-9]*$/;
+            if (!regx.test(amount)) {
+                alert("提取金额必须为纯数字");
+                return;
+            }
+            //获取提现金额不能大于保证金
+            if (user_account < amount) {
+                alert("提取金额不能大于保证金！");
+                return;
+            }
 
-                //ajax发送提取保证金
-                $.ajax({
-                    url: '/merchant/index/',
-                    type: 'post',
-                    async: false,
-                    timeout: 5000, //超时时间
-                    dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
-                    data: {
-                        'type': 1,
-                        "amount": amount
-                    },
-                    success: function (ret) {
-                        if (ret.code == 0) {
-                            alert("提交提现申请，请等待");
-                            $(".witMsk ").hide();
-                        } else if (ret.code == -2) {
-                            alert("提取失败");
-                        }
-                        //成功后刷新页面
-                        window.location.href = window.location.href;
-                    },
-                    error: function (xhr, textStatus) {
-                        alert(xhr.responseText);
+            //ajax发送提取保证金
+            $.ajax({
+                url: '/merchant/index/',
+                type: 'post',
+                async: false,
+                timeout: 5000, //超时时间
+                dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
+                data: {
+                    'type': 1,
+                    "amount": amount
+                },
+                success: function (ret) {
+                    if (ret.code == 0) {
+                        alert("提交提现申请，请等待");
+                        $(".witMsk ").hide();
+                    } else if (ret.code == -2) {
+                        alert("提取失败");
                     }
-                });
+                    //成功后刷新页面
+                    window.location.href = window.location.href;
+                },
+                error: function (xhr, textStatus) {
+                    alert(xhr.responseText);
+                }
             });
+        });
 
         });
     </script>
@@ -177,4 +211,5 @@
 <!-- 
     /merchant/margin_translog/
  -->
+
 </html>

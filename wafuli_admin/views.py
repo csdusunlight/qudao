@@ -1354,11 +1354,3 @@ def batch_withdraw(request):
             continue
     return JsonResponse({'code':0})
 
-def merchant_proj(request):
-    return render(request,"admin_merchant_proj.html",)
-def merchant_audit(request):
-    return render(request,"admin_merchant_audit.html",)
-def merchant_bail_search(request):
-    return render(request,"merchant_bail_search.html",)
-def merchant_proj_withdraw(request):
-    return render(request,"merchant_proj_withdraw.html",)

@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from django.views.generic.base import TemplateView
+from wafuli_admin import merchant_admin
 
 
 urlpatterns = [
@@ -34,11 +35,10 @@ urlpatterns = [
     
     url(r'^batch_withdraw/$', 'wafuli_admin.views.batch_withdraw', name='batch_withdraw'),
     
-    url(r'^merchant_proj/$', 'wafuli_admin.views.merchant_proj', name='merchant_proj'),
-    url(r'^merchant_audit/$', 'wafuli_admin.views.merchant_audit', name='merchant_audit'),
-    url(r'^admin_margin/$', 'wafuli_admin.views.admin_margin', name='admin_margin'),
-    url(r'^merchant_proj_withdraw/$', 'wafuli_admin.views.merchant_proj_withdraw', name='merchant_proj_withdraw'),
-    url(r'^admin_project/$', 'wafuli_admin.merchant_admin.admin_project', name='admin_project'),
+    url(r'^admin_merchant_project/$', merchant_admin.admin_merchant_project, name='admin_merchant_project'),
+    url(r'^admin_merchant_investlog/$', merchant_admin.admin_merchant_investlog, name='admin_merchant_investlog'),
+    url(r'^admin_margin_query/$', merchant_admin.admin_margin_query, name='admin_margin_query'),
+    url(r'^admin_margin/$', merchant_admin.admin_margin, name='admin_margin'),
 #     url(r'^admin_merchant/$', 'wafuli_admin.views.admin_apply', name='admin_apply'),
 #     url(r'^preaudit/$', 'wafuli_admin.views.admin_invest', name='admin_office'),
 ]

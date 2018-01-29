@@ -191,7 +191,7 @@ def margin_manage(request):
     user = request.user
     if request.method == 'GET':
         card = user.user_bankcard.first()
-        return render(request,'margin_manage.html.html',)
+        return render(request,'margin_manage.html',)
     elif request.method == 'POST':
         result = {'code':-1, 'res_msg':''}
         amount = request.POST.get("amount", None)
@@ -212,20 +212,24 @@ def margin_manage(request):
             result['res_msg'] = u'提现金额错误！'
             return JsonResponse(result)
         card = user.user_bankcard.first()
-        if type==1 and not card:
-            result['code'] = -1
-            result['res_msg'] = u'请先绑定银行卡！'
-            return JsonResponse(result)
-        try:
-            with transaction.atomic():
-                translist = charge_margin(user, '1', amount, u'提现')
-                event = Margin_AuditLog.objects.create(user=user, amount=amount, audit_state='1', type=type)
-                translist.auditlog = event
-                translist.save()
-                result['code'] = 0
-        except:
-            result['code'] = -2
-            result['res_msg'] = u'提现失败！'
+        if type==1:
+            if not card:
+                result['code'] = -1
+                result['res_msg'] = u'请先绑定银行卡！'
+                return JsonResponse(result)
+            try:
+                with transaction.atomic():
+                    translist = charge_margin(user, '1', amount, u'提现')
+                    event = Margin_AuditLog.objects.create(user=user, amount=amount, audit_state='1', type='1')
+                    translist.auditlog = event
+                    translist.save()
+                    result['code'] = 0
+            except:
+                result['code'] = -2
+                result['res_msg'] = u'提现失败！'
+        elif type == 0:
+            Margin_AuditLog.objects.create(user=user, amount=amount, audit_state='1', type='0')
+            result['code'] = 0
         return JsonResponse(result)
     
 class BaseViewMixin(object):

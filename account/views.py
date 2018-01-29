@@ -1159,7 +1159,7 @@ def reaudit(request):
         res['msg'] = u"参数不足"
         return JsonResponse(res)
     log = InvestLog.objects.get(user=request.user, id=id)
-    log.reaudit_reason = reason
+    log.reaudit_reason = u"用户申诉：" + reason
     log.audit_state = '3'
     log.save(update_fields=['audit_state', 'reaudit_reason'])
     res['code'] = 0

@@ -22,6 +22,7 @@ from merchant.Filters import ApplyProjectFilter, TranslogFilter,\
 from django.views.decorators.csrf import csrf_exempt
 logger = logging.getLogger('wafuli')
 # Create your views here.
+@csrf_exempt
 @transaction.atomic
 def preaudit_investlog(request):
     admin_user = request.user
@@ -71,7 +72,7 @@ def preaudit_investlog(request):
                 res['code'] = -3
                 res['res_msg'] = u'该项目已审核过，不要重复审核！'
                 return JsonResponse(res)
-            if not investlog.audit_step in ['0']:
+            if not investlog.preaudit_state in ['1','3']:
                 res['code'] = -3
                 res['res_msg'] = u'该项目已预审核过，不要重复审核！'
                 return JsonResponse(res)
@@ -98,9 +99,16 @@ def preaudit_investlog(request):
                 res['code'] = 0
         elif type==2:
             investlog.preaudit_state = '2'
+            investlog.audit_state = '2'
             res['code'] = 0
         elif type==3:
             investlog.preaudit_state = '3'
+            investlog.audit_state = '3'
+            res['code'] = 0
+        #申诉数据处理，4：接受申诉 5：拒绝申诉
+        elif type==4:
+            investlog.preaudit_state = '3'
+            investlog.audit_state = '3'
             res['code'] = 0
         investlog.audit_reason = reason
         if res['code'] == 0:
@@ -127,8 +135,6 @@ def stop_project(request):
     res['code'] = 0
     return JsonResponse(res)
 
-def bail_manage(request):
-    return render(request, 'bail_manage.html')
 def proj_manage(request):
     return render(request, 'proj_manage.html')    
 def proj_add(request):
@@ -177,6 +183,53 @@ def merchant(request):
         except:
             result['code'] = -2
             result['res_msg'] = u'提现失败！'
+        return JsonResponse(result)
+
+@csrf_exempt
+@login_required
+def margin_manage(request):
+    user = request.user
+    if request.method == 'GET':
+        card = user.user_bankcard.first()
+        return render(request,'margin_manage.html',)
+    elif request.method == 'POST':
+        result = {'code':-1, 'res_msg':''}
+        amount = request.POST.get("amount", None)
+        type = request.POST.get("type", None)
+        if not amount or not type:
+            result['code'] = 3
+            result['res_msg'] = u'传入参数不足！'
+            return JsonResponse(result)
+        try:
+            amount = Decimal(amount)
+            assert(type in ['0', '1'] and amount > 0)
+        except ValueError:
+            result['code'] = -1
+            result['res_msg'] = u'参数不合法！'
+            return JsonResponse(result)
+        if type == 1 and ( amount < 10 or amount > user.margin_account ):
+            result['code'] = -1
+            result['res_msg'] = u'提现金额错误！'
+            return JsonResponse(result)
+        card = user.user_bankcard.first()
+        if type==1:
+            if not card:
+                result['code'] = -1
+                result['res_msg'] = u'请先绑定银行卡！'
+                return JsonResponse(result)
+            try:
+                with transaction.atomic():
+                    translist = charge_margin(user, '1', amount, u'提现')
+                    event = Margin_AuditLog.objects.create(user=user, amount=amount, audit_state='1', type='1')
+                    translist.auditlog = event
+                    translist.save()
+                    result['code'] = 0
+            except:
+                result['code'] = -2
+                result['res_msg'] = u'提现失败！'
+        elif type == 0:
+            Margin_AuditLog.objects.create(user=user, amount=amount, audit_state='1', type='0')
+            result['code'] = 0
         return JsonResponse(result)
     
 class BaseViewMixin(object):

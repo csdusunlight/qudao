@@ -20,16 +20,16 @@ from public.Paginations import MyPageNumberPagination
 from merchant.Filters import ApplyProjectFilter, TranslogFilter,\
     MarginAuditLogFilter
 from django.views.decorators.csrf import csrf_exempt
+from account.transaction import charge_money
 logger = logging.getLogger('wafuli')
 # Create your views here.
 @csrf_exempt
+@login_required
 @transaction.atomic
 def preaudit_investlog(request):
     admin_user = request.user
     if request.method == "GET":
-        if not ( admin_user.is_authenticated() and admin_user.is_staff):
-            return redirect(reverse('admin:login') + "?next=" + reverse('merchant:preaudit_investlog'))
-        item_list = InvestLog.objects.filter(user=admin_user, category='merchant', audit_state__in=['1','3'], submit_time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
+        item_list = InvestLog.objects.filter(project__user=admin_user, category='merchant', audit_state__in=['1','3'], submit_time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
         project_list = ()
         for item in item_list:
             project_list += item
@@ -45,13 +45,12 @@ def preaudit_investlog(request):
         type = request.POST.get('type', None)
         reason = request.POST.get('reason', '')
         type = int(type)
-        if not investlog_id or type==1 and not cash or not type in [1, 2, 3]:
+        if not reason and type in [ 2, 3, 5 ]:
             res['code'] = -2
-            res['res_msg'] = u'传入参数不足，请联系技术人员！'
+            res['res_msg'] = u'传入参数不足！'
             return JsonResponse(res)
         investlog = InvestLog.objects.get(id=investlog_id)
         investlog_user = investlog.user
-        card = investlog_user.user_bankcard.first()
 
         project = investlog.project
         project_title = project.title
@@ -68,11 +67,11 @@ def preaudit_investlog(request):
                 res['code'] = -2
                 res['res_msg'] = u"操作失败，输入不合法！"
                 return JsonResponse(res)
-            if not investlog.audit_state in ['1', '3']:
+            if not investlog.audit_state in ['1', '3', '4']:
                 res['code'] = -3
                 res['res_msg'] = u'该项目已审核过，不要重复审核！'
                 return JsonResponse(res)
-            if not investlog.preaudit_state in ['1','3']:
+            if not investlog.preaudit_state in ['1','3','4']:
                 res['code'] = -3
                 res['res_msg'] = u'该项目已预审核过，不要重复审核！'
                 return JsonResponse(res)
@@ -82,13 +81,13 @@ def preaudit_investlog(request):
                 res['res_msg'] = u"操作失败，返现重复！"
             else:
                 investlog.preaudit_state = '0'
-                translist = charge_margin(investlog_user, '1', cash, project_title)
+                translist = charge_margin(admin_user, '1', cash, project_title)
                 investlog.presettle_amount = cash
                 broker_rate = investlog.project.broker_rate
                 broker_amount = cash * broker_rate/100
                 investlog.broker_amount = broker_amount
                 if broker_amount > 0:
-                    translist2 = charge_margin(investlog_user, '1', broker_amount, "佣金")
+                    translist2 = charge_margin(admin_user, '1', broker_amount, "佣金")
                 translist.auditlog = investlog
                 translist2.auditlog = investlog
                 translist.save()
@@ -107,8 +106,38 @@ def preaudit_investlog(request):
             res['code'] = 0
         #申诉数据处理，4：接受申诉 5：拒绝申诉
         elif type==4:
-            investlog.preaudit_state = '3'
-            investlog.audit_state = '3'
+            investlog.audit_state = '0'
+            try:
+                cash = Decimal(cash)
+            except:
+                res['code'] = -2
+                res['res_msg'] = u"操作失败，输入不合法！"
+                return JsonResponse(res)
+            if cash <= investlog.settle_amount:
+                res['code'] = -3
+                res['res_msg'] = u"申诉数据修正金额必须大于原结算金额！"
+                return JsonResponse(res)
+            delta = cash - investlog.settle_amount
+            translog = charge_margin(admin_user, '1', delta, project_title + u"补差价")
+            broker_rate = investlog.project.broker_rate
+            broker_amount = delta * broker_rate/100
+            investlog.broker_amount = broker_amount
+            if broker_amount > 0:
+                translog2 = charge_margin(admin_user, '1', broker_amount, "佣金")
+            translog.auditlog = investlog
+            translog2.auditlog = investlog
+            translog.save()
+            translog2.save()
+            translist = charge_money(investlog_user, '0', delta, project_title + u"补差价")
+            investlog.settle_amount = cash
+            translist.auditlog = investlog
+            translist.save()
+            res['code'] = 0
+        elif type==5:
+            if investlog.settle_amount > 0:
+                investlog.audit_state = '0'
+            else:
+                investlog.audit_state = '2'
             res['code'] = 0
         investlog.audit_reason = reason
         if res['code'] == 0:

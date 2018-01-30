@@ -1,0 +1,88 @@
+.wrapper{
+    width: 100%;
+}
+.searchTop {
+    padding: 15px 15px;
+    border-bottom: 2px solid RGB(0, 143, 215);
+}
+
+.searchTop>span:before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    margin-right: 20px;
+    position: relative;
+    top: 5px;
+}
+
+.tab{
+    width: 100%;
+}
+.tab>table{
+    width: 100%;
+}
+.tab tr{
+    width: 100%;
+}
+.tab td{
+    width: 50%;
+    height: 40px;
+    text-align: center;
+}
+.tab input[type='datetime-local']{
+    width: 300px;
+    height: 30px;
+    padding: 3px 5px;
+    box-sizing: border-box;
+    width: 60%;
+    margin-left: 1%;
+    border: 1px solid #4daa84;
+    background: url(../images/motime.png) no-repeat 95%;
+    vertical-align: middle;
+    display: inline-block
+}
+.tab input[type='datetime-local']:hover{
+    background: none;
+}
+.tab input[type='text']{
+    width: 300px;
+    height: 30px;
+    padding: 3px 5px;
+    box-sizing: border-box;
+    width: 60%;
+    margin-left: 1%;
+    border: 1px solid #4daa84;
+    vertical-align: middle;
+}
+.operateBox{
+    width: 100%;
+    height: 50px;
+    position: relative;
+}
+.export{
+    width: 150px;
+    height: 30px;
+    background: url(../images/ico2.png) no-repeat 80% #4daa84;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    padding: 0 40px 0 0;
+    box-sizing: border-box;
+    min-width: 80px;
+    margin: 0 7px;
+    position: absolute;right: 300px;top: 10px;
+}
+.search{
+    width: 150px;
+    height: 30px;
+    background: url(../images/ico2.png) no-repeat 80% #4daa84;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    padding: 0 40px 0 0;
+    box-sizing: border-box;
+    min-width: 80px;
+    margin: 0 7px;
+    position: absolute;right: 120px;top: 10px;
+}

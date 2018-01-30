@@ -236,12 +236,12 @@ def margin_manage(request):
             result['code'] = -1
             result['res_msg'] = u'参数不合法！'
             return JsonResponse(result)
-        if type == 1 and ( amount < 10 or amount > user.margin_account ):
+        if type == '1' and ( amount < 10 or amount > user.margin_account ):
             result['code'] = -1
             result['res_msg'] = u'提现金额错误！'
             return JsonResponse(result)
         card = user.user_bankcard.first()
-        if type==1:
+        if type=='1':
             if not card:
                 result['code'] = -1
                 result['res_msg'] = u'请先绑定银行卡！'
@@ -256,7 +256,7 @@ def margin_manage(request):
             except:
                 result['code'] = -2
                 result['res_msg'] = u'提现失败！'
-        elif type == 0:
+        elif type =='0':
             Margin_AuditLog.objects.create(user=user, amount=amount, audit_state='1', type='0')
             result['code'] = 0
         return JsonResponse(result)

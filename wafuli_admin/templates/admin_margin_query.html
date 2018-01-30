@@ -1,1 +1,85 @@
-<p>保证金查询</p>
+{% extends "base.html" %} {% load staticfiles %} {% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/admin_margin_query.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />>{% endblock css %} {% block js %}
+<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
+
+<script type="text/javascript"> 
+    $(function () {
+        $("li.home18").toggleClass("on");
+        //数据
+        const data = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>时间</th><th>初始余额</th><th >变动值</th><th >变动原因</th>' +
+            '<th>备注</th>' +
+            '[results]<tr><td>用户名</td><td>手机号</td><td>时间</td><td>初始余额</td><td>变动值</td>' +
+            '<td>变动原因</td><td>备注</td></tr>[/results]</table>';
+
+        //回调函数
+        function pagecallback() {
+            console.log("回调函数");
+        }
+        $("#pagedata").ajaxPage({
+            url: '/Admin/admin_margin_query/',
+            pageId: $("#page"),
+            pageSize: 6,
+            run: true,
+            content: data,
+            complete: pagecallback,
+        });
+        //搜过功能
+        $('.search').click(function () {
+            let sTime = $('.startTime').val();
+            let eTime = $('.endTime').val();
+            let user = $('.user').val();
+            let phoneNum = $('.phoneNum').val();
+            let reason = $('.reason').val();
+            
+
+        });
+
+
+    });
+</script> {% endblock js %} {% block right %}
+<div class="wrapper">
+    <div class="searchTop">
+        <span>搜索条件</span>
+    </div>
+    <div class="tab">
+        <table>
+            <tr>
+                <td>开始时间：
+                    <input type="datetime-local" class="startTime">
+                </td>
+                <td>结束时间：
+                    <input type="datetime-local" class="endTime">
+                </td>
+            </tr>
+            <tr>
+                <td>用户名：
+                    <input type="text" class="user">
+                </td>
+                <td>手机号：
+                    <input type="text" class="phoneNum">
+                </td>
+            </tr>
+            <tr>
+                <td>变动原因：
+                    <input type="text" class="reason">
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        <div class="operateBox">
+            <input type="button" value="导出" class="export">
+            <input type="button" value="搜索" class="search">
+        </div>
+    </div>
+    <div class="Tin-table">
+        <div id="pagedata">
+        </div>
+        <div class="Page-in-admin">
+            <div class="page" id="page">
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

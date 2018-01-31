@@ -141,7 +141,7 @@ def admin_merchant_project(request):
 def admin_merchant_investlog(request):
     admin_user = request.user
     if request.method == "GET":
-        return render(request,"admin_project.html")
+        return render(request,"admin_merchant_investlog.html")
     elif request.method == "POST":
         res = {}
         id = request.POST.get('id', None)

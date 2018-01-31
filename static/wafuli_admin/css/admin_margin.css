@@ -82,7 +82,7 @@
     float: right;
 }
 
-fileupload1 {
+#fileupload1 {
     display: inline-block;
     width: 150px;
     height: 30px;
@@ -117,5 +117,5 @@ fileupload1 {
     min-width: 80px;
     vertical-align: bottom;
     background: url(../images/ico2.png) no-repeat 80% #4daa84;
-    margin-left: 60px;
+    margin-left: 160px;
 }

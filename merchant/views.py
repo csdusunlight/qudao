@@ -8,7 +8,7 @@ import datetime
 from django.http.response import JsonResponse
 from decimal import Decimal
 import logging
-from merchant.margin_transaction import charge_margin
+from merchant.margin_transaction import charge_margin, ChargeValueError
 from public.permissions import CsrfExemptSessionAuthentication, IsOwnerOrStaff
 from rest_framework import permissions, generics
 from merchant.serializers import ApplyProjectSerializer, TranslogSerializer,\
@@ -81,17 +81,21 @@ def preaudit_investlog(request):
                 res['res_msg'] = u"操作失败，返现重复！"
             else:
                 investlog.preaudit_state = '0'
-                translist = charge_margin(admin_user, '1', cash, project_title)
-                investlog.presettle_amount = cash
                 broker_rate = investlog.project.broker_rate
                 broker_amount = cash * broker_rate/100
+                if cash + broker_amount > admin_user.margin_account:
+                    res['code'] = 1
+                    res['res_msg'] = u"保证金余额不足，请先充值！"
+                    return JsonResponse(res)
+                translist = charge_margin(admin_user, '1', cash, project_title)
+                investlog.presettle_amount = cash
                 investlog.broker_amount = broker_amount
                 if broker_amount > 0:
                     translist2 = charge_margin(admin_user, '1', broker_amount, "佣金")
                 translist.auditlog = investlog
                 translist2.auditlog = investlog
-                translist.save()
-                translist2.save()
+                translist.save(update_fields=['content_type', 'object_id'])
+                translist2.save(update_fields=['content_type', 'object_id'])
 #                 #活动插入
 #                 on_audit_pass(request, investlog)
 #                 #活动插入结束
@@ -118,9 +122,13 @@ def preaudit_investlog(request):
                 res['res_msg'] = u"申诉数据修正金额必须大于原结算金额！"
                 return JsonResponse(res)
             delta = cash - investlog.settle_amount
+            broker_amount = delta * broker_rate/100
+            if delta + broker_amount > admin_user.margin_account:
+                res['code'] = 1
+                res['res_msg'] = u"保证金余额不足，请先充值！"
+                return JsonResponse(res)
             translog = charge_margin(admin_user, '1', delta, project_title + u"补差价")
             broker_rate = investlog.project.broker_rate
-            broker_amount = delta * broker_rate/100
             investlog.broker_amount = broker_amount
             if broker_amount > 0:
                 translog2 = charge_margin(admin_user, '1', broker_amount, "佣金")
@@ -131,7 +139,7 @@ def preaudit_investlog(request):
             translist = charge_money(investlog_user, '0', delta, project_title + u"补差价")
             investlog.settle_amount = cash
             translist.auditlog = investlog
-            translist.save()
+            translist.save(update_fields=['content_type', 'object_id'])
             res['code'] = 0
         elif type==5:
             if investlog.settle_amount > 0:
@@ -139,8 +147,8 @@ def preaudit_investlog(request):
             else:
                 investlog.audit_state = '2'
             res['code'] = 0
-        investlog.audit_reason = reason
         if res['code'] == 0:
+            investlog.audit_reason = reason
             investlog.preaudit_time = datetime.datetime.now()
             investlog.save()
         return JsonResponse(res)

@@ -160,11 +160,11 @@ def admin_merchant_investlog(request):
             res['res_msg'] = u'该项目尚未被预审通过'
             return JsonResponse(res)
         reason = request.POST.get('reason')
+        type = int(type)
         if not reason and type != 1:
             res['code'] = -2
             res['res_msg'] = u'原因为必填字段'
             return JsonResponse(res)
-        type = int(type)
         investlog_user = investlog.user
         cash = investlog.presettle_amount
         project_title = investlog.project.title
@@ -174,6 +174,7 @@ def admin_merchant_investlog(request):
             investlog.settle_amount += cash
             translist.auditlog = investlog
             translist.save()
+            res['code'] = 0
         elif type == 2:
             investlog.audit_state = '1'
             investlog.reaudit_reason = reason
@@ -182,8 +183,8 @@ def admin_merchant_investlog(request):
             translist.auditlog = investlog
             translist2 = charge_margin(investlog.project.user, '0', broker_amount, '冲账', True, '管理员拒绝')
             translist2.auditlog = investlog
-            translist.save(update_fields=['auditlog',])
-            translist2.save(update_fields=['auditlog',])
+            translist.save(update_fields=['content_type', 'object_id'])
+            translist2.save(update_fields=['content_type', 'object_id'])
             res['code'] = 0
         elif type == 3:
             investlog.audit_state = '4'

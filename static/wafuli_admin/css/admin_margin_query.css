@@ -14,6 +14,7 @@
     margin-right: 20px;
     position: relative;
     top: 5px;
+    background: red;
 }
 
 .tab{
@@ -60,19 +61,7 @@
     height: 50px;
     position: relative;
 }
-.export{
-    width: 150px;
-    height: 30px;
-    background: url(../images/ico2.png) no-repeat 80% #4daa84;
-    border: none;
-    color: #fff;
-    font-size: 16px;
-    padding: 0 40px 0 0;
-    box-sizing: border-box;
-    min-width: 80px;
-    margin: 0 7px;
-    position: absolute;right: 300px;top: 10px;
-}
+
 .search{
     width: 150px;
     height: 30px;

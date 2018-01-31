@@ -1,0 +1,125 @@
+{% extends "base.html" %} {% load staticfiles %} {% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/admin_margin.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" /> {% endblock css %} {% block js %}
+<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
+<script type="text/javascript"> 
+    $(function () {
+        $(".home19").toggleClass("on");
+        //未审核数据
+        const aduitData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
+            '<th>申请提现金额</th><th>申请时间</th><th>处理状态</th><th>处理</th><th>备注</th>' +
+            '[results]<tr><td>{username}</td><td>{mobile}</td><td>{余额}</td><td>{开户行}</td><td>{开户行姓名}</td><td>{银行卡号}</td><td>{申请提现金额}</td>' +
+            '<td>申请时间</td><td>处理状态</td><td>处理</td><td>{remark}</td></tr>[/results]</table>';
+        //已通过数据
+        const passData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
+            '<th>申请提现金额</th><th>申请时间</th><th>处理状态</th><th>处理</th><th>备注</th>' +
+            '[results]<tr><td>用户名</td><td>手机号</td><td>庄户余额</td><td>开户行</td><td>开户行姓名</td><td>银行卡号</td><td>申请提现金额</td>' +
+            '<td>申请时间</td><td>处理状态</td><td>处理</td><td>备注</td></tr>[/results]</table>';
+        //已拒绝数据
+        const refuseData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
+            '<th>申请提现金额</th><th>申请时间</th><th>处理状态</th><th>处理</th><th>备注</th>' +
+            '[results]<tr><td>用户名</td><td>手机号</td><td>庄户余额</td><td>开户行</td><td>开户行姓名</td><td>银行卡号</td><td>申请提现金额</td>' +
+            '<td>申请时间</td><td>处理状态</td><td>处理</td><td>备注</td></tr>[/results]</table>';
+            
+        //回调函数
+        function pagecallback() {
+            console.log("回调函数");
+            
+        }
+        $("#pagedata").ajaxPage({
+            url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}',
+            pageId: $("#page"),
+            pageSize: 6,
+            run: true,
+            content: aduitData,
+            complete: pagecallback,
+        });
+    });
+
+
+</script> {% endblock js %} {% block right %}
+<div class="wrapper">
+    <div class="top">
+        <span>搜索条件</span>
+    </div>
+    <table>
+        <tr>
+            <td class="td1">
+                <span>申请开始时间：</span>
+                <input type="datetime-local">
+            </td>
+            <td class="td1">
+                <span>申请结束时间：</span>
+                <input type="datetime-local">
+            </td>
+            <td class="td1">
+                <span>操作开始时间：</span>
+                <input type="datetime-local">
+            </td>
+            <td class="td1">
+                <span>操作开始时间：</span>
+                <input type="datetime-local">
+            </td>
+        </tr>
+        <tr>
+            <td class="td1">
+                <span>用户名：</span>
+                <input type="text">
+            </td>
+            <td class="td1">
+                <span>用户手机号：</span>
+                <input type="text">
+            </td>
+            <td class="td1">
+                <span>用户类型：</span>
+                <input type="text">
+            </td>
+            <td class="td1">
+                <span>开户行姓名：</span>
+                <input type="text">
+            </td>
+        </tr>
+        <tr>
+            <td class="td1">
+                <span>银行卡号：</span>
+                <input type="text">
+            </td>
+            <td class="td1">
+                <span>处理人：</span>
+                <input type="text">
+            </td>
+            <td class="td1">
+                <span>处理状态：</span>
+                <select>
+                    <option value="">未审核</option>
+                    <option value="">已通过</option>
+                    <option value="">已拒绝</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <div class="operateBox">
+        <div class="operateTop">
+            <input type="button" id="search" value="搜索">
+            <input type="button" id="export" value="导出">
+        </div>
+        <div class="operateBtm">
+            <input id="fileupload1" name="file" type="file" onchange="hint.innerHTML = this.files[0].name;">
+            <a id="input_clone" class="input-clone">选择文件</a>
+            <p class="hint-box">已选择表格：
+                <b id="hint" class="hint">无</b>
+            </p>
+            <input id="import" type="button" value="导入">
+        </div>
+    </div>
+    <div class="Tin-table">
+        <div id="pagedata">
+        </div>
+        <div class="Page-in-admin">
+            <div class="page" id="page">
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

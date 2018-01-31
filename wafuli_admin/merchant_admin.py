@@ -76,7 +76,7 @@ def admin_margin(request):
 
 @csrf_exempt
 @transaction.atomic
-@has_post_permission('004')
+@has_post_permission('100')
 def admin_merchant_project(request):
     admin_user = request.user
     if request.method == "GET":

@@ -80,7 +80,6 @@ def preaudit_investlog(request):
                 res['code'] = -5
                 res['res_msg'] = u"操作失败，返现重复！"
             else:
-                investlog.preaudit_state = '0'
                 broker_rate = investlog.project.broker_rate
                 broker_amount = cash * broker_rate/100
                 if cash + broker_amount > admin_user.margin_account:
@@ -92,6 +91,7 @@ def preaudit_investlog(request):
                 investlog.broker_amount = broker_amount
                 if broker_amount > 0:
                     translist2 = charge_margin(admin_user, '1', broker_amount, "佣金")
+                investlog.preaudit_state = '0'
                 translist.auditlog = investlog
                 translist2.auditlog = investlog
                 translist.save(update_fields=['content_type', 'object_id'])

@@ -12,13 +12,16 @@ from django.db.models import F
 from decimal import Decimal
 from merchant.models import Margin_Translog
 logger = logging.getLogger('wafuli')
-
+class ChargeValueError(ValueError):
+    def __init__(self, err):
+        Exception.__init__(self,err)
+        
 def charge_margin(user, type, amount, reason, reverse=False, remark=''):
     if not (isinstance(user, MyUser) and reason) or type !='0' and type != '1':
-        raise Exception('Charge_money Parameters ERROR!!!')
+        raise ChargeValueError('Charge_money Parameters ERROR!!!')
     amount = Decimal(amount)
     if amount <= 0:
-        raise Exception('Charge_money amount can not be less or equal to 0')
+        raise ChargeValueError('Charge_money amount can not be less or equal to 0')
     with transaction.atomic():
         user = MyUser.objects.get(id=user.id)
         trans = Margin_Translog.objects.create(user=user, transType=type, initAmount = user.margin_account, 
@@ -27,7 +30,7 @@ def charge_margin(user, type, amount, reason, reverse=False, remark=''):
             user.margin_account = F('margin_account') + amount
             user.save(update_fields=['margin_account'])
         elif user.margin_account < amount:
-            raise ValueError('The account ' + user.mobile + '\'s margin_account is not enough!')
+            raise ChargeValueError('The account ' + user.mobile + '\'s margin_account is not enough!')
         else:
             user.margin_account = F('margin_account') - amount
             user.save(update_fields=['margin_account'])

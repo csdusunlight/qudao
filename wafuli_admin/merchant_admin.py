@@ -146,21 +146,21 @@ def admin_merchant_investlog(request):
         res = {}
         id = request.POST.get('id', None)
         type = request.POST.get('type', None)
+        type = int(type)
         if not id or not type:
             res['code'] = -2
             res['res_msg'] = u'传入参数不足，请联系技术人员！'
             return JsonResponse(res)
         investlog = InvestLog.objects.get(id=id, category='merchant')
-        if not investlog.audit_state in ['1']:
+        if not investlog.audit_state in ['1'] and type!=3:
             res['code'] = 4
             res['res_msg'] = u'该项目非待审核状态'
             return JsonResponse(res)
-        if not investlog.preaudit_state in ['0']:
+        if not investlog.preaudit_state in ['0'] and type!=3:
             res['code'] = 4
             res['res_msg'] = u'该项目尚未被预审通过'
             return JsonResponse(res)
         reason = request.POST.get('reason')
-        type = int(type)
         if not reason and type != 1:
             res['code'] = -2
             res['res_msg'] = u'原因为必填字段'
@@ -187,6 +187,7 @@ def admin_merchant_investlog(request):
             translist2.save(update_fields=['content_type', 'object_id'])
             res['code'] = 0
         elif type == 3:
+            res['code'] = 0
             investlog.audit_state = '4'
             investlog.appeal_reason = reason
         else:
@@ -195,6 +196,6 @@ def admin_merchant_investlog(request):
             return JsonResponse(res)
         investlog.audit_time = datetime.datetime.now()
         investlog.admin_user = admin_user
-        investlog.presettle_amount = 0
+#         investlog.presettle_amount = 0
         investlog.save()
         return JsonResponse(res)

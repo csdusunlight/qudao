@@ -76,7 +76,7 @@
                         <tr>
                             <td width="30%">充值金额</td>
                             <td width="70%">
-                                <input type="text" class="addAmount">
+                                <input type="text" class="addAmount" style="width: 200px;">
                             </td>
                         </tr>
                     </table>
@@ -162,7 +162,7 @@
             });
             //获取账户余额：
             const user_account = {{ user.margin_account }};
-        console.log("--------账户余额：", user_account);
+            console.log("--------账户余额：", user_account);
         //提取保证金
         $(".send ").click(function () {
             const amount = $(".witamount ").val();

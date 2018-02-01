@@ -69,7 +69,7 @@ class Apply_Project(models.Model):
     admin_user = models.ForeignKey(MyUser, related_name="admin_apply_project", null=True, default=None)
     audit_time = models.DateTimeField(u'审核时间', null=True, default=None)
     is_book = models.BooleanField(u"是否限量/需要预约", default=False)
-    project = models.ForeignKey(Project, on_delete=SET_NULL, null=True)
+    project = models.ForeignKey(Project, on_delete=SET_NULL, null=True, related_name="apply_projects")
     broker_rate = models.SmallIntegerField(u"佣金比例，百分数", default=0)
     class Meta:
         verbose_name = u"放单申请"

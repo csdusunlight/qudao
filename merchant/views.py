@@ -8,19 +8,23 @@ import datetime
 from django.http.response import JsonResponse
 from decimal import Decimal
 import logging
-from merchant.margin_transaction import charge_margin
+from merchant.margin_transaction import charge_margin, ChargeValueError
 from public.permissions import CsrfExemptSessionAuthentication, IsOwnerOrStaff
 from rest_framework import permissions, generics
 from merchant.serializers import ApplyProjectSerializer, TranslogSerializer,\
     MarginAuditLogSerializer
 from merchant.models import Apply_Project, Margin_Translog, Margin_AuditLog
 import django_filters
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from public.Paginations import MyPageNumberPagination
 from merchant.Filters import ApplyProjectFilter, TranslogFilter,\
     MarginAuditLogFilter
 from django.views.decorators.csrf import csrf_exempt
 from account.transaction import charge_money
+from django.db.models.aggregates import Count, Sum
+from dircache import annotate
+from restapi.Filters import InvestLogFilter
+from restapi.serializers import InvestLogSerializer
 logger = logging.getLogger('wafuli')
 # Create your views here.
 @csrf_exempt
@@ -80,18 +84,22 @@ def preaudit_investlog(request):
                 res['code'] = -5
                 res['res_msg'] = u"操作失败，返现重复！"
             else:
-                investlog.preaudit_state = '0'
-                translist = charge_margin(admin_user, '1', cash, project_title)
-                investlog.presettle_amount = cash
                 broker_rate = investlog.project.broker_rate
                 broker_amount = cash * broker_rate/100
+                if cash + broker_amount > admin_user.margin_account:
+                    res['code'] = 1
+                    res['res_msg'] = u"保证金余额不足，请先充值！"
+                    return JsonResponse(res)
+                translist = charge_margin(admin_user, '1', cash, project_title)
+                investlog.presettle_amount = cash
                 investlog.broker_amount = broker_amount
                 if broker_amount > 0:
                     translist2 = charge_margin(admin_user, '1', broker_amount, "佣金")
+                investlog.preaudit_state = '0'
                 translist.auditlog = investlog
                 translist2.auditlog = investlog
-                translist.save()
-                translist2.save()
+                translist.save(update_fields=['content_type', 'object_id'])
+                translist2.save(update_fields=['content_type', 'object_id'])
 #                 #活动插入
 #                 on_audit_pass(request, investlog)
 #                 #活动插入结束
@@ -118,9 +126,13 @@ def preaudit_investlog(request):
                 res['res_msg'] = u"申诉数据修正金额必须大于原结算金额！"
                 return JsonResponse(res)
             delta = cash - investlog.settle_amount
+            broker_amount = delta * broker_rate/100
+            if delta + broker_amount > admin_user.margin_account:
+                res['code'] = 1
+                res['res_msg'] = u"保证金余额不足，请先充值！"
+                return JsonResponse(res)
             translog = charge_margin(admin_user, '1', delta, project_title + u"补差价")
             broker_rate = investlog.project.broker_rate
-            broker_amount = delta * broker_rate/100
             investlog.broker_amount = broker_amount
             if broker_amount > 0:
                 translog2 = charge_margin(admin_user, '1', broker_amount, "佣金")
@@ -131,7 +143,7 @@ def preaudit_investlog(request):
             translist = charge_money(investlog_user, '0', delta, project_title + u"补差价")
             investlog.settle_amount = cash
             translist.auditlog = investlog
-            translist.save()
+            translist.save(update_fields=['content_type', 'object_id'])
             res['code'] = 0
         elif type==5:
             if investlog.settle_amount > 0:
@@ -139,8 +151,8 @@ def preaudit_investlog(request):
             else:
                 investlog.audit_state = '2'
             res['code'] = 0
-        investlog.audit_reason = reason
         if res['code'] == 0:
+            investlog.audit_reason = reason
             investlog.preaudit_time = datetime.datetime.now()
             investlog.save()
         return JsonResponse(res)
@@ -176,7 +188,25 @@ def fangdan_audit(request):
 def merchant(request):
     user = request.user
     if request.method == 'GET':
-        card = user.user_bankcard.first()
+        today = datetime.date.today() 
+        yesterday = today - datetime.timedelta(days=1)
+        ret = Project.objects.filter(user=user, category="merchant", state='10').\
+            aggregate(view_sum=Sum('apply_projects__strategy__view_count'),count=Count('*'),
+                      submit_count=Count('investlogs',audit_state='0'))
+        ret2 = InvestLog.objects.filter(project__user=user, category="merchant", ).values('audit_state').\
+            annotate(count=Count('*'), sumofsettle=Sum('settle_amount')).order_by('audit_state')
+#         print ret, ret2
+        ret3=Project.objects.filter(user=user, category="merchant").\
+            annotate(view_sum=Sum('apply_projects__strategy__view_count'), submit_count=Count('investlogs',))
+#         ret3 = InvestLog.objects.filter(project__user=user, category="merchant").values('project__title').\
+#             annotate(sumofsettle=Sum('settle_amount'),count=Count('*')).order_by('project_id')
+        ret3 = InvestLog.objects.filter(project__user=user, category="merchant", submit_time__gte=today).values('project_id','project__title','audit_state').\
+            annotate(sumofsettle=Sum('settle_amount'),count=Count('*')).order_by('project_id','audit_state')
+        ret3 = InvestLog.objects.filter(project__user=user, category="merchant", submit_time__gte=today).values('project_id','project__title','audit_state').\
+            annotate(sumofsettle=Sum('settle_amount'),count=Count('*')).order_by('project_id','audit_state')
+        print ret3
+#         for i in ret3:
+#             print i.view_sum,i.submit_count
         return render(request,'merchant_index.html',)
     elif request.method == 'POST':
         result = {'code':-1, 'res_msg':''}
@@ -236,12 +266,12 @@ def margin_manage(request):
             result['code'] = -1
             result['res_msg'] = u'参数不合法！'
             return JsonResponse(result)
-        if type == 1 and ( amount < 10 or amount > user.margin_account ):
+        if type == '1' and ( amount < 10 or amount > user.margin_account ):
             result['code'] = -1
             result['res_msg'] = u'提现金额错误！'
             return JsonResponse(result)
         card = user.user_bankcard.first()
-        if type==1:
+        if type=='1':
             if not card:
                 result['code'] = -1
                 result['res_msg'] = u'请先绑定银行卡！'
@@ -256,7 +286,7 @@ def margin_manage(request):
             except:
                 result['code'] = -2
                 result['res_msg'] = u'提现失败！'
-        elif type == 0:
+        elif type =='0':
             Margin_AuditLog.objects.create(user=user, amount=amount, audit_state='1', type='0')
             result['code'] = 0
         return JsonResponse(result)
@@ -314,4 +344,17 @@ class MarginAuditLogList(BaseViewMixin, generics.ListAPIView):
     serializer_class = MarginAuditLogSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, )
     filter_class = MarginAuditLogFilter
+    pagination_class = MyPageNumberPagination
+
+class InvestlogList(BaseViewMixin, generics.ListAPIView):
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return InvestLog.objects.filter(category='merchant')
+        else:
+            return InvestLog.objects.filter(category='merchant',project__user=user)
+    serializer_class = InvestLogSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
+    ordering_fields = ('submit_time',)
+    filter_class = InvestLogFilter
     pagination_class = MyPageNumberPagination

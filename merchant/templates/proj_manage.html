@@ -15,6 +15,7 @@
     <style>
         .page {
             margin-top: 20px;
+            background-color: RGB(245,245,245);
         }
     </style>
 </head>
@@ -67,22 +68,22 @@
             //全部数据：
             let allData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
                 '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">项目状态</th><th width="12.5%">浏览量</th><th width="12.5%">操作</th></tr></thead><tbody>' +
-                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{state_des}</td><td class="td1">325</td><td class="td1 operate" data-id={id} data-state="{audit_state}"></td></tr>[/results]' +
+                '[results]<tr><td class="td1">{title}</td><td class="td1"><a href="{strategy_url}">{strategy_url}</a></td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{state_des}</td><td class="td1">325</td><td class="td1 operate" data-id={id} data-state="{audit_state}"></td></tr>[/results]' +
                 '</tbody></table>';
             //正在进行数据：   
             let passData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
                 '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">项目状态</th><th width="12.5%">浏览量</th></tr></thead><tbody>' +
-                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{project_state_des}</td><td class="td1">325</td></tr>[/results]' +
+                '[results]<tr><td class="td1">{title}</td><td class="td1"><a href="{strategy_url}">{strategy_url}</a></td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{project_state_des}</td><td class="td1">325</td></tr>[/results]' +
                 '</tbody></table>';
             // 申请中数据：    
             let auditData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
                 '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">浏览量</th></tr></thead><tbody>' +
-                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">325</td></tr>[/results]' +
+                '[results]<tr><td class="td1">{title}</td><td class="td1"><a href="{strategy_url}">{strategy_url}</a></td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">325</td></tr>[/results]' +
                 '</tbody></table>';
             //已拒绝
             let refuseData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
                 '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">浏览量</th></tr></thead><tbody>' +
-                '[results]<tr><td class="td1">{title}</td><td class="td1">{strategy_url}</td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">325</td></tr>[/results]' +
+                '[results]<tr><td class="td1">{title}</td><td class="td1"><a href="{strategy_url}">{strategy_url}</a></td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">325</td></tr>[/results]' +
                 '</tbody></table>';
             //回调函数
             function pagecallback() {

@@ -34,6 +34,10 @@ class MarginAuditLogSerializer(serializers.ModelSerializer):
     mobile = serializers.CharField(source='user.mobile', read_only=True)
     admin_mobile = serializers.CharField(source='admin_user.mobile', read_only=True)
     qq_number = serializers.CharField(source='user.qq_number', read_only=True)
+    bank = serializers.CharField(source="user.user_bankcard.first.get_bank_display")
+    card_number = serializers.CharField(source="user.user_bankcard.first.card_number")
+    real_name = serializers.CharField(source="user.user_bankcard.first.real_name")
+    margin_account = serializers.CharField(source='user.margin_account')
     class Meta:
         model = Margin_AuditLog
         fields = '__all__'

@@ -326,7 +326,7 @@
         '<td>{broker_amount}</td><td data-state="{audit_state}" class="table-handle"><a onclick="pass_02(this,{id})">审核</a> | '+
         '<a onclick="refuse_02(this,{id})">拒绝</a></td></tr>[/results]</table>';
 
-    var url2 = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=true&project_user={{user.id}}";
+    var url2 = "/restapi/investlogs/?page={page}&pageSize={pageSize}&category=merchant&project_user={{user.id}}";
     
     function pagecallback() {
         $('.table-handle').each(function(){

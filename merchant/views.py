@@ -15,12 +15,16 @@ from merchant.serializers import ApplyProjectSerializer, TranslogSerializer,\
     MarginAuditLogSerializer
 from merchant.models import Apply_Project, Margin_Translog, Margin_AuditLog
 import django_filters
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from public.Paginations import MyPageNumberPagination
 from merchant.Filters import ApplyProjectFilter, TranslogFilter,\
     MarginAuditLogFilter
 from django.views.decorators.csrf import csrf_exempt
 from account.transaction import charge_money
+from django.db.models.aggregates import Count, Sum
+from dircache import annotate
+from restapi.Filters import InvestLogFilter
+from restapi.serializers import InvestLogSerializer
 logger = logging.getLogger('wafuli')
 # Create your views here.
 @csrf_exempt
@@ -184,7 +188,25 @@ def fangdan_audit(request):
 def merchant(request):
     user = request.user
     if request.method == 'GET':
-        card = user.user_bankcard.first()
+        today = datetime.date.today() 
+        yesterday = today - datetime.timedelta(days=1)
+        ret = Project.objects.filter(user=user, category="merchant", state='10').\
+            aggregate(view_sum=Sum('apply_projects__strategy__view_count'),count=Count('*'),
+                      submit_count=Count('investlogs',audit_state='0'))
+        ret2 = InvestLog.objects.filter(project__user=user, category="merchant", ).values('audit_state').\
+            annotate(count=Count('*'), sumofsettle=Sum('settle_amount')).order_by('audit_state')
+#         print ret, ret2
+        ret3=Project.objects.filter(user=user, category="merchant").\
+            annotate(view_sum=Sum('apply_projects__strategy__view_count'), submit_count=Count('investlogs',))
+#         ret3 = InvestLog.objects.filter(project__user=user, category="merchant").values('project__title').\
+#             annotate(sumofsettle=Sum('settle_amount'),count=Count('*')).order_by('project_id')
+        ret3 = InvestLog.objects.filter(project__user=user, category="merchant", submit_time__gte=today).values('project_id','project__title','audit_state').\
+            annotate(sumofsettle=Sum('settle_amount'),count=Count('*')).order_by('project_id','audit_state')
+        ret3 = InvestLog.objects.filter(project__user=user, category="merchant", submit_time__gte=today).values('project_id','project__title','audit_state').\
+            annotate(sumofsettle=Sum('settle_amount'),count=Count('*')).order_by('project_id','audit_state')
+        print ret3
+#         for i in ret3:
+#             print i.view_sum,i.submit_count
         return render(request,'merchant_index.html',)
     elif request.method == 'POST':
         result = {'code':-1, 'res_msg':''}
@@ -322,4 +344,17 @@ class MarginAuditLogList(BaseViewMixin, generics.ListAPIView):
     serializer_class = MarginAuditLogSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, )
     filter_class = MarginAuditLogFilter
+    pagination_class = MyPageNumberPagination
+
+class InvestlogList(BaseViewMixin, generics.ListAPIView):
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return InvestLog.objects.filter(category='merchant')
+        else:
+            return InvestLog.objects.filter(category='merchant',project__user=user)
+    serializer_class = InvestLogSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
+    ordering_fields = ('submit_time',)
+    filter_class = InvestLogFilter
     pagination_class = MyPageNumberPagination

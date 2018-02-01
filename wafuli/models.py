@@ -296,8 +296,7 @@ class TransList(models.Model):
 #     investlog = models.ForeignKey(InvestLog, related_name="translist", null=True,on_delete=models.SET_NULL)
 #     adminlog = models.ForeignKey(AdminLog, related_name="translist", null=True,on_delete=models.SET_NULL)
     def __unicode__(self):
-        return u"%s:%s了%s现金 提交时间%s" % (self.user, self.get_transType_display(),self.transAmount,
-                                       self.user_event.time if self.user_event else "")
+        return u"%s:%s了%s现金 提交时间%s" % (self.user, self.get_transType_display(),self.transAmount, self.time)
     class Meta:
         ordering = ["-time",]
     

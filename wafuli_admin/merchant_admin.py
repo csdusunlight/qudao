@@ -104,7 +104,7 @@ def admin_merchant_project(request):
             obj.audit_state = '0'
             obj.broker_rate = broker_rate
             res['code'] = 0
-            project = Project.objects.create(title=obj.title, user=obj.user, is_official=True, category='official', is_addedto_repo=True, state='00',
+            project = Project.objects.create(title=obj.title, user=obj.user, is_official=True, category='merchant', is_addedto_repo=True, state='00',
                                    strategy=obj.strategy.fanshu_url(), broker_rate=broker_rate)
             obj.project = project
         elif type == 2:
@@ -137,7 +137,7 @@ def admin_merchant_project(request):
     
 @csrf_exempt
 @transaction.atomic
-@has_post_permission('004')
+@has_post_permission('100')
 def admin_merchant_investlog(request):
     admin_user = request.user
     if request.method == "GET":

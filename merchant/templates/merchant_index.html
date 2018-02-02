@@ -8,9 +8,73 @@
     <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/merchant-base.css' %}" />
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
     <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
-
+    <style type="text/css">
+        .today-data-box {
+            background-color: #fff;
+        }
+        .today-data-title {
+            padding-left: 20px;
+            line-height: 50px;
+            font-size: 16px;
+        }
+    	.today-content {
+    	    padding-bottom: 20px;
+    	    font-size: 0;
+    	}
+    	.today-item {
+    	    display: inline-block;
+    	    width: 20%;
+    	    text-align: center;
+    	}
+    	.today-txt {
+    	    line-height: 40px;
+    	}
+    	.detail-data-box {
+    	    margin-top: 30px;
+    	}
+    	.table-box {
+    	    width: 49%;
+    	    background-color: #fff;
+    	}
+    	.data-head {
+    	    height: 50px;
+    	}
+    	.table-box table {
+    	    width: 100%;
+    	    border: none;
+    	}
+    	.table-box td {
+    	    height: 40px;
+    	    text-align: center;
+    	    border: none;
+    	    border-top: 1px solid #e4e4e4;
+    	}
+    	.table-box th {
+    	    height: 40px;
+    	}
+    	.left-nav-box {
+    	    padding-top: 5px;
+    	    padding-left: 30px;
+    	    font-size: 0;
+    	}
+    	.left-nav-item {
+    	    display: inline-block;
+    	    margin-right: 18px;
+    	    width: 90px;
+    	    height: 40px;
+    	    line-height: 40px;
+    	    border: 1px solid #e4e4e4;
+    	    border-radius: 10px;
+    	    text-align: center;
+    	    cursor: pointer;
+    	}
+    	.left-nav-item.on {
+    	    color: #fff;
+    	    background-color: #efae2c;
+    	}
+    </style>
 </head>
 
 <body>
@@ -18,11 +82,112 @@
     {% include "merchant_header.html" %}
     <!--内容-->
     <div class="Content">
-        <p>这是推客中心</p>
+        <div class="today-data-box">
+        	<h4 class="today-data-title">今日数据</h4>
+        	<ul class="today-content">
+        		<li class="today-item">
+        		    <p class="today-txt">在线项目</p>
+        		    <p class="today-txt">125</p>
+        		</li>
+        		<li class="today-item">
+                    <p class="today-txt">项目浏览量</p>
+                    <p class="today-txt">125</p>
+                </li>
+                <li class="today-item">
+                    <p class="today-txt">交单量</p>
+                    <p class="today-txt">125</p>
+                </li>
+                <li class="today-item">
+                    <p class="today-txt">结算单数</p>
+                    <p class="today-txt">125</p>
+                </li>
+                <li class="today-item">
+                    <p class="today-txt">结算总额</p>
+                    <p class="today-txt">125</p>
+                </li>
+        	</ul>
+        </div>
+        <div class="detail-data-box clearfix">
+            <div class="left-data-box l table-box">
+                <div class="data-head">
+                    <ul class="left-nav-box">
+                    	<li class="left-nav-item on">今天</li>
+                    	<li class="left-nav-item">昨天</li>
+                    	<li class="left-nav-item">最近7天</li>
+                    	<li class="left-nav-item">最近30天</li>
+                    </ul>
+                </div>
+            	<table>
+            		<tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>
+            		<tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+            		<tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+            		<tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+            		<tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+            		<tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+            		<tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+            		<tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+            		<tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+            		<tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+            		<tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+            	</table>
+            </div>
+            <div class="right-data-box">
+                <div class="right-data-box r table-box">
+                    <div class="data-head">
+                        <h4 class="today-data-title">项目数据</h4>
+                    </div>
+                    <table>
+                        <tr><th>日期</th><th>交单量（PV）</th><th>结算单数</th><th>结算总额</th></tr>
+                        <tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+                        <tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+                        <tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+                        <tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+                        <tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+                        <tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+                        <tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+                        <tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+                        <tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+                        <tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+                        <tr><td>43534</td><td>43534</td><td>43534</td><td>43534</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
     {% include "footer.html" %}
 
     <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+    <script type="text/javascript">
+//  	var data_left = '<table width="100%"><tr><th>项目名称</th><th>浏览量（PV）</th>' +
+//      '<th>交单量</th><th>结算单数</th><th>结算总额</th></tr>[results]' +
+//      '<tr><td>{project_title}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+//      '<td>{invest_amount}</td><td>{invest_term}</td></tr>[/results]</table>';
+//      var data_right = '<table width="100%"><tr><th>项目名称</th><th>浏览量（PV）</th>' +
+//      '<th>交单量</th><th>结算单数</th><th>结算总额</th></tr>[results]' +
+//      '<tr><td>{project_title}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+//      '<td>{invest_amount}</td><td>{invest_term}</td></tr>[/results]</table>';
+//      var url = "/merchant/investlogs/?page={page}&pageSize={pageSize}&project_user={{user.id}}";
+//      function pagecallback() {
+//          
+//      }
+//      $("#pagedata").ajaxPage({
+//          url: url,
+//          pageId: $("#page"),
+//          pageSize: 10,
+//          run: true,
+//          content: data_left,
+//          complete:pagecallback,
+//      });
+//      $("#pagedata2").ajaxPage({
+//          url: url,
+//          pageId: $("#page2"),
+//          pageSize: 10,
+//          run: true,
+//          content: data_right,
+//          complete:pagecallback,
+//      });
+    </script>
 </body>
 
 </html>

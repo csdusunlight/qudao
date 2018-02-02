@@ -27,7 +27,7 @@
                 <input type="button" class="btn wit" value="提现保证金">
             </nav>
             <div class="tabBox">
-                <!-- <table width="100%">
+                <!-- <table width="100%" class="tables">
                     <tr>
                         <th width="30%">变更时间</th>
                         <th width="30%">变更金额</th>
@@ -110,7 +110,13 @@
             //     timeout:5000,
             //     dataType:'json',
             //     success:function(ret){
-
+            //    let str_html;
+            //    for (let i in ret.results) {
+            //        str_html = `<tr>
+            //                     <td>${ret.results[i].time}</td><td>${ret.results[i].amount}</td><td>${ret.results[i].reason}</td>
+            //                   </tr>`
+            //    }
+            //    $('.tables').append(str_html);
             //     },
             //     error:function(xhr,textStatus){
             //         alert(xhr.responseText);
@@ -162,7 +168,7 @@
             });
             //获取账户余额：
             const user_account = {{ user.margin_account }};
-            console.log("--------账户余额：", user_account);
+        console.log("--------账户余额：", user_account);
         //提取保证金
         $(".send ").click(function () {
             const amount = $(".witamount ").val();

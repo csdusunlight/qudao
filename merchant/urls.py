@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^apply_projects/(?P<pk>[0-9]+)/$', views.ApplyProjectDetail.as_view(), kwargs={'partial':True}),
     url(r'^margin_translog/$', views.TranslogList.as_view()),
     url(r'^margin_auditlog/$', views.MarginAuditLogList.as_view()),
+    url(r'^investlogs/$', views.InvestlogList.as_view()),
 
 ]
 

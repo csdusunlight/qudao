@@ -171,10 +171,10 @@ a { cursor:pointer;}
 .Finnow-Sub {/* float:left;*/ width:100%; height:auto; margin-top:30px;}
 .Finnow-Sub input[type="submit"]{ width:98px; height:26px; background:url(../images/pic2.png) no-repeat right #008fd7; border:none; border-radius: 13px; color:#fff; padding-right:10px; margin:0 5px;}
 .Finnow-Sub input[type="button"]{ width:98px; height:26px; background:url(../images/pic1.png) no-repeat right #c8c8c8; border:none; border-radius: 13px; color:#fff; padding-right:10px; margin:0 5px;}
-.Audit,.Repeat { position:fixed; width:100%; height:100%; background:url(../images/back-in.png); display:none;}
-.Audit-in,.Repeat-in { float:left; width:100%; height:auto; padding:20px 40px; box-sizing:border-box; text-align:center;}
-.Audit-in span, .Repeat-in span { float:left; width:92px; height:auto;}
-.Audit-in textarea, .Repeat-in textarea { width:394px; height:80px; line-height:20px; resize:none; box-sizing:border-box; float:left; outline:none;}
+.Audit,.Repeat,.Complain { position:fixed; width:100%; height:100%; background:url(../images/back-in.png); display:none;}
+.Audit-in,.Repeat-in,.Complain-in { float:left; width:100%; height:auto; padding:20px 40px; box-sizing:border-box; text-align:center;}
+.Audit-in span, .Repeat-in span, .Complain-in span { float:left; width:92px; height:auto;}
+.Audit-in textarea, .Repeat-in textarea , .Complain-in textarea { width:394px; height:80px; line-height:20px; resize:none; box-sizing:border-box; float:left; outline:none;}
 .jion-s { cursor:pointer;}
 .Deny { position:fixed; width:100%; height:100%; background:url(../images/back-in.png);display:none;}
 .Deny-y { position:fixed; width:100%; height:100%; background:url(../images/back-in.png); display:none;}

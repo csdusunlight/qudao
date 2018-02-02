@@ -161,12 +161,14 @@
         </div>
         <div class="handle clearfix">
             <div class="handle__in l">
-                <ul style="width: 400px;" class="state-tabbox-2">
+                <ul style="width: 560px;" class="state-tabbox-2">
                     <li data-state = "" class="state-tab-2 on">全部</li>
                     <li data-state = "1" class="state-tab-2">未审核</li>
+                    <li data-state = "-1" class="state-tab-2">管理员审核</li>
                     <li data-state = "0" class="state-tab-2">已通过</li>
-                    <li data-state = "3" class="state-tab-2">复审中</li>
                     <li data-state = "2" class="state-tab-2">已拒绝</li>
+                    <li data-state = "3" class="state-tab-2">异常</li>
+                    <li data-state = "4" class="state-tab-2">申诉</li>
                 </ul>
                 
             </div>
@@ -245,11 +247,11 @@
     <div class="popup m-again-proj-02">
         <div class="popup__content" style="width: 600px;">
             <div class="popup__top">
-                <h2 class="popup__title">进入复审</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+                <h2 class="popup__title">进入异常</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
             </div>
             <div class="popup__detail">
                 <div class="popup__item">
-                    <span class="popup__itemname">复审原因：</span>
+                    <span class="popup__itemname">异常原因：</span>
                     <input type="text" class="again_reason_02" placeholder="填写复审原因" />
                 </div>
             </div>
@@ -284,49 +286,66 @@
 <script type="text/javascript">
 //  全部
     var data_user = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>返现金额</th><th>审核信息</th><th>投资姓名</th>'+
+        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>结算金额</th><th>审核信息</th><th>投资姓名</th>'+
         '<th class="w-remark">备注及其他</th><th>扣除手续费</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
-        '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
-        '<td>{broker_amount}</td><td data-state="{audit_state}" class="table-handle"><a onclick="pass_02(this,{id})">审核</a> | <a onclick="again_02(this,{id})">复审</a> | '+
+        '<td class="return-txt">{settle_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
+        '<td>{broker_amount}</td><td data-state="{preaudit_state}" class="table-handle"><a onclick="pass_02(this,{id})">审核</a> | <a onclick="again_02(this,{id})">异常</a> | '+
         '<a onclick="refuse_02(this,{id})">拒绝</a></td></tr>[/results]</table>';
 //  未审核
     var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>返现金额</th><th>审核信息</th><th>投资姓名</th>'+
+        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>预结算金额</th><th>审核信息</th><th>投资姓名</th>'+
         '<th class="w-remark">备注及其他</th><th>扣除手续费</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
-        '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
-        '<td>{broker_amount}</td><td data-state="{audit_state}" class="table-handle"><a onclick="pass_02(this,{id})">审核</a> | <a onclick="again_02(this,{id})">复审</a> | '+
+        '<td class="return-txt">{presettle_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
+        '<td>{broker_amount}</td><td data-state="{preaudit_state}" class="table-handle"><a onclick="pass_02(this,{id})">审核</a> | <a onclick="again_02(this,{id})">异常</a> | '+
         '<a onclick="refuse_02(this,{id})">拒绝</a></td></tr>[/results]</table>';
-//  已通过
-    var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>返现金额</th><th>审核信息</th><th>投资姓名</th>'+
+//  管理员审核
+    var data_user_admin = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
+        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>预结算金额</th><th>审核信息</th><th>投资姓名</th>'+
         '<th class="w-remark">备注及其他</th><th>扣除手续费</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
-        '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
+        '<td class="return-txt">{presettle_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
+        '<td>{broker_amount}</td></tr>[/results]</table>'; 
+//  已通过
+    var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
+        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>结算金额</th><th>审核信息</th><th>投资姓名</th>'+
+        '<th class="w-remark">备注及其他</th><th>扣除手续费</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
+        '<td class="return-txt">{settle_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
         '<td>{broker_amount}</td></tr>[/results]</table>';
 //  已拒绝
     var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>返现金额</th><th>审核信息</th><th>投资姓名</th>'+
+        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>结算金额</th><th>审核信息</th><th>投资姓名</th>'+
         '<th class="w-remark">备注及其他</th><th>扣除手续费</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
-        '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
+        '<td class="return-txt">{settle_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
         '<td>{broker_amount}</td></tr>[/results]</table>';
-//  复审中
+//  异常
     var data_user3 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>返现金额</th><th>审核信息</th><th>投资姓名</th>'+
+        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>结算金额</th><th>审核信息</th><th>投资姓名</th>'+
         '<th class="w-remark">备注及其他</th><th>扣除手续费</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
-        '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
-        '<td>{broker_amount}</td><td data-state="{audit_state}" class="table-handle"><a onclick="pass_02(this,{id})">审核</a> | '+
+        '<td class="return-txt">{settle_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
+        '<td>{broker_amount}</td><td><a onclick="pass_02(this,{id})">审核</a> | '+
         '<a onclick="refuse_02(this,{id})">拒绝</a></td></tr>[/results]</table>';
+//  申诉
+    var data_user4 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
+        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>结算金额</th><th>审核信息</th><th>投资姓名</th>'+
+        '<th class="w-remark">备注及其他</th><th>扣除手续费</th><th>操作</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
+        '<td class="return-txt">{settle_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{other_remark}</td>'+
+        '<td>{broker_amount}</td><td><a onclick="refuse_again(this,{id})">打回</a> | '+
+        '<a onclick="revise(this,{id})">修正</a></td></tr>[/results]</table>';
 
-    var url2 = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=true&project_user={{user.id}}";
+    var url2 = "/merchant/investlogs/?page={page}&pageSize={pageSize}&project_user={{user.id}}";
     
     function pagecallback() {
         $('.table-handle').each(function(){
@@ -362,6 +381,7 @@
     var parent_del;
     var base_id;
     var parent_dom;
+    var base_type;
 
     //          编辑/删除数据部分(自建)
 //  function removeData_02 (obj,id) {
@@ -385,14 +405,21 @@
 //      });
 //  })
     
+    function revise (obj,id) {
+        base_id = id;
+        base_type = 4;
+        parent_dom = $(obj).parent();
+        $(".return_amount_02").val('');
+        $('.popup.m-pass-proj-02').addClass('in');
+    }
     function pass_02 (obj,id) {
         base_id = id;
-//      $(".settle_amount_02").val('');
+        base_type = 1;
+        parent_dom = $(obj).parent();
         $(".return_amount_02").val('');
         $('.popup.m-pass-proj-02').addClass('in');
     }
     $('#confirm_pass_02').click(function() {
-//      var settle_amount = $(".settle_amount_02").val();
         var return_amount = $(".return_amount_02").val();
         if(!return_amount || !Number(return_amount)) {
             alert('返现金额不能为空，且必须为数字格式')
@@ -406,11 +433,12 @@
             data: {
                 'id': base_id,
                 'cash': return_amount,
-                'type': 1,
+                'type': base_type,
             },
             success: function(ret) {
                 if(ret.code == 0) {
                     alert('操作成功');
+                    $(parent_dom).html('操作成功，通过');
                     $('.popup.m-pass-proj-02').removeClass('in');
                 } else {
                     console.log(ret.res_msg);
@@ -430,8 +458,17 @@
         }
     })
     
-    function refuse_02 (obj,id) {
+    function refuse_again (obj,id) {
+        parent_dom = $(obj).parent();
         base_id = id;
+        base_type = 5;
+        $(".refuse_reason_02").val('');
+        $('.popup.m-refuse-proj-02').addClass('in');
+    }
+    function refuse_02 (obj,id) {
+        parent_dom = $(obj).parent();
+        base_id = id;
+        base_type = 2;
         $(".refuse_reason_02").val('');
         $('.popup.m-refuse-proj-02').addClass('in');
     }
@@ -449,11 +486,12 @@
             data: {
                 'id': base_id,
                 'reason': refuse_reason,
-                'type': 2,
+                'type': base_type,
             },
             success: function(ret) {
                 if(ret.code == 0) {
                     alert('操作成功');
+                    $(parent_dom).html('操作成功，拒绝');
                     $('.popup.m-refuse-proj-02').removeClass('in');
                 } else {
                     console.log(ret.res_msg);
@@ -466,13 +504,14 @@
     });
     function again_02 (obj,id) {
         base_id = id;
+        parent_dom = $(obj).parent();
         $(".again_reason_02").val('');
         $('.popup.m-again-proj-02').addClass('in');
     }
     $('#confirm_again_02').click(function() {
         var again_reason = $(".again_reason_02").val();
         if(!again_reason) {
-            alert('拒绝原因不能为空')
+            alert('复审原因不能为空')
             return;
         }
         console.log(again_reason);
@@ -488,6 +527,7 @@
             success: function(ret) {
                 if(ret.code == 0) {
                     alert('操作成功');
+                    $(parent_dom).html('操作成功，复审');
                     $('.popup.m-again-proj-02').removeClass('in');
                 } else {
                     console.log(ret.res_msg);
@@ -551,8 +591,18 @@
             if(project_channel) {
                 newurl += "&project_channel_contains=" + project_channel;
             }
-            if(state) {
+            if(state == '0') {
+                newurl += "&audit_state=" + state;
+            } else if (state == '1') {
                 newurl += "&preaudit_state=" + state;
+            } else if (state == '2') {
+                newurl += "&audit_state=" + state;
+            } else if (state == '3') {
+                newurl += "&audit_state=" + state;
+            } else if (state == '4') {
+                newurl += "&audit_state=" + state;
+            } else if (state == '-1'){
+                newurl += "&preaudit_state=0&audit_state=1";
             }
             
             var search_data = data_user;
@@ -564,6 +614,10 @@
                 search_data = data_user2;
             } else if(state == '3') {
                 search_data = data_user3;
+            } else if(state == '4') {
+                search_data = data_user4;
+            } else if(state == '-1') {
+                search_data = data_user_admin;
             }
             
             console.log(newurl);

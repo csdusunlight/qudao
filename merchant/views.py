@@ -1,6 +1,6 @@
 #coding:utf-8
 from django.shortcuts import render, redirect
-from django.db import transaction
+from django.db import transaction, connection
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from wafuli.models import InvestLog, Project
@@ -25,6 +25,10 @@ from django.db.models.aggregates import Count, Sum
 from dircache import annotate
 from restapi.Filters import InvestLogFilter
 from restapi.serializers import InvestLogSerializer
+from collections import OrderedDict
+from docs.models import DocStatis
+from django.core.cache import cache
+from public.tools import login_required_ajax
 logger = logging.getLogger('wafuli')
 # Create your views here.
 @csrf_exempt
@@ -154,6 +158,7 @@ def preaudit_investlog(request):
         if res['code'] == 0:
             investlog.audit_reason = reason
             investlog.preaudit_time = datetime.datetime.now()
+            investlog.audit_time = datetime.datetime.now()
             investlog.save()
         return JsonResponse(res)
     
@@ -188,26 +193,40 @@ def fangdan_audit(request):
 def merchant(request):
     user = request.user
     if request.method == 'GET':
-        today = datetime.date.today() 
-        yesterday = today - datetime.timedelta(days=1)
-        ret = Project.objects.filter(user=user, category="merchant", state='10').\
-            aggregate(view_sum=Sum('apply_projects__strategy__view_count'),count=Count('*'),
-                      submit_count=Count('investlogs',audit_state='0'))
-        ret2 = InvestLog.objects.filter(project__user=user, category="merchant", ).values('audit_state').\
-            annotate(count=Count('*'), sumofsettle=Sum('settle_amount')).order_by('audit_state')
-#         print ret, ret2
-        ret3=Project.objects.filter(user=user, category="merchant").\
-            annotate(view_sum=Sum('apply_projects__strategy__view_count'), submit_count=Count('investlogs',))
-#         ret3 = InvestLog.objects.filter(project__user=user, category="merchant").values('project__title').\
-#             annotate(sumofsettle=Sum('settle_amount'),count=Count('*')).order_by('project_id')
-        ret3 = InvestLog.objects.filter(project__user=user, category="merchant", submit_time__gte=today).values('project_id','project__title','audit_state').\
-            annotate(sumofsettle=Sum('settle_amount'),count=Count('*')).order_by('project_id','audit_state')
-        ret3 = InvestLog.objects.filter(project__user=user, category="merchant", submit_time__gte=today).values('project_id','project__title','audit_state').\
-            annotate(sumofsettle=Sum('settle_amount'),count=Count('*')).order_by('project_id','audit_state')
-        print ret3
-#         for i in ret3:
-#             print i.view_sum,i.submit_count
-        return render(request,'merchant_index.html',)
+        today = datetime.date.today()
+        online_count = Project.objects.filter(user=user, category="merchant", state__in=['10','20']).count()
+        total_toaudit_count = InvestLog.objects.filter(project__user=user, category="merchant", audit_state='1',
+                                preaudit_state='1').count()
+        total_pv = 0
+        total_settle_amount = 0
+        total_submit_count = 0
+        total_settle_count = 0
+        projects = Project.objects.filter(user=user, category="merchant", state__in=['10','20']).\
+            only('id', 'state', 'apply_project__strategy_id').order_by('state','-pub_date')
+        for project in projects:
+            doc_id = project.apply_project.strategy_id
+            pv = 0
+            try:
+                pv = DocStatis.objects.get(doc_id=doc_id, date=today).count
+            except:
+                pass
+            cache_value = cache.get('doc_%s' % doc_id)
+            if cache_value:
+                pv += cache_value
+            total_pv += pv
+        total_submit_count = InvestLog.objects.filter(project__user=user, category="merchant", submit_time__gte=today).count()
+        settle_data = InvestLog.objects.filter(project__user=user, category="merchant",
+                audit_time__gte=today, audit_state='0').aggregate(sumofsettle=Sum('settle_amount'),count=Count('*'))
+        total_settle_amount = settle_data['sumofsettle']
+        total_settle_count = settle_data['count'] 
+        today_data = {'online_count':online_count, 
+                      'total_pv':total_pv,
+                      'total_toaudit_count':total_toaudit_count,
+                      'total_submit_count':total_submit_count,
+                      'total_settle_count':total_settle_count,
+                      'total_settle_amount':total_settle_amount,
+                      }
+        return render(request,'merchant_index.html',today_data)
     elif request.method == 'POST':
         result = {'code':-1, 'res_msg':''}
         amount = request.POST.get("amount", None)
@@ -243,6 +262,104 @@ def merchant(request):
             result['code'] = -2
             result['res_msg'] = u'提现失败！'
         return JsonResponse(result)
+
+
+
+@login_required_ajax
+def get_project_statis_byday(request):
+    user = request.user
+    _range = request.GET.get('range', 0)
+    _range = int(_range)
+#     if cache.has_key('user_%s_merchant_project_statistic' % user.id):
+#         params = cache.get('user_%s_merchant_project_statistic' % user.id)
+#     else:
+    today = datetime.date.today()
+    yesterday = today - datetime.timedelta(days=1)
+    sevendaysago = today - datetime.timedelta(days=6)
+    thirtydaysago = today - datetime.timedelta(days=29)
+    projects = Project.objects.filter(user=user, category="merchant").\
+        only('id', 'state', 'apply_project__strategy_id').order_by('state','-pub_date')
+    projects_statis_dict = OrderedDict()
+    for project in projects:
+        dic = {'title':project.title, 'submit_count':0, 'settle_amount':0, 'settle_count':0}
+        doc_id = project.apply_project.strategy_id
+        pv = 0
+        if _range == 0:
+            try:
+                pv = DocStatis.objects.get(doc_id=doc_id, date=today).count
+            except:
+                pass
+        elif _range == 1:
+            pv = DocStatis.objects.filter(doc_id=doc_id, date=yesterday).aggregate(count=Sum('count'))['count'] or 0
+        elif _range == 7:
+            pv = DocStatis.objects.filter(doc_id=doc_id, date__gte=sevendaysago).aggregate(count=Sum('count'))['count'] or 0
+        else:
+            pv = DocStatis.objects.filter(doc_id=doc_id, date__gte=thirtydaysago).aggregate(count=Sum('count'))['count'] or 0
+        cache_value = cache.get('doc_%s' % doc_id)
+        if cache_value:
+            pv += cache_value
+        dic.update(pv=pv)
+        projects_statis_dict[project.id] = dic
+    
+    list_submit = InvestLog.objects.filter(project__user=user, category="merchant")
+    list_audite = InvestLog.objects.filter(project__user=user, category="merchant", audit_state='0')
+    if _range == 0:
+        list_submit = list_submit.filter(submit_time__gte=today)
+        list_audite = list_audite.filter(audit_time__gte=today)
+    elif _range == 1:
+        list_submit = list_submit.filter(submit_time__range=[yesterday, today])
+        list_audite = list_audite.filter(audit_time__range=[yesterday, today])
+    elif _range == 7:
+        list_submit = list_submit.filter(submit_time__gte=sevendaysago)
+        list_audite = list_audite.filter(audit_time__gte=sevendaysago)
+    else:
+        list_submit = list_submit.filter(submit_time__gte=thirtydaysago)
+        list_audite = list_audite.filter(audit_time__gte=thirtydaysago)
+    list_submit = list_submit.values('project_id').annotate(count=Count('*')).order_by('project_id')
+    list_audite = list_audite.values('project_id').annotate(sumofsettle=Sum('settle_amount'),
+                count=Count('*')).order_by('project_id')
+    for item in list_submit:
+        id = item['project_id']
+        if projects_statis_dict.has_key(id):
+            projects_statis_dict[id].update(submit_count=item['count'])
+    for item in list_audite:
+        id = item['project_id']
+        if projects_statis_dict.has_key(id):
+            projects_statis_dict[id].update(settle_count=item['count'])
+            projects_statis_dict[id].update(settle_amount=item['sumofsettle'])
+    print projects_statis_dict
+    return JsonResponse(projects_statis_dict)
+
+@login_required_ajax
+def get_days_statis(request):
+    user = request.user
+    _range = request.GET.get('range', 1)
+    _range = int(_range)
+    today = datetime.date.today()
+    ndaysago = today - datetime.timedelta(days=_range-1)
+    user = request.user
+    select1 = {'day': connection.ops.date_trunc_sql('day', 'submit_time')}
+    select2 = {'day': connection.ops.date_trunc_sql('day', 'audit_time')}
+    dict_list = InvestLog.objects.filter(project__user=user, category="merchant", submit_time__gte=ndaysago).\
+            extra(select=select1).values('day').annotate(count=Count('id')).order_by('-day')
+    dict_list2 = InvestLog.objects.filter(project__user=user, category="merchant",
+                audit_time__gte=ndaysago, audit_state='0').extra(select=select2).values('day').\
+                annotate(count=Count('id'),sumofsettle=Sum('settle_amount')).order_by('-day')
+    days_data = OrderedDict()
+    for i in range(_range):
+        day = today - datetime.timedelta(days=i)
+        day = str(day)
+        days_data[day]={
+            'submit_count':0,
+            'settle_count':0,
+            'settle_amount':0,
+        }
+    for item in dict_list:
+        days_data.get(item['day'])['submit_count'] = item['count']
+    for item in dict_list2:
+        days_data.get(item['day'])['settle_count'] = item['count']
+        days_data.get(item['day'])['settle_amount'] = item['sumofsettle']
+    return JsonResponse(days_data)
 
 @csrf_exempt
 @login_required

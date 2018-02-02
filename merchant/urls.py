@@ -16,6 +16,8 @@ urlpatterns = [
     url(r'^margin_translog/$', views.TranslogList.as_view()),
     url(r'^margin_auditlog/$', views.MarginAuditLogList.as_view()),
     url(r'^investlogs/$', views.InvestlogList.as_view()),
+    url(r'^get_days_statis', views.get_days_statis, name='get_days_statis'),
+    url(r'^get_project_statis_byday', views.get_project_statis_byday, name='get_project_statis_byday'),
 
 ]
 

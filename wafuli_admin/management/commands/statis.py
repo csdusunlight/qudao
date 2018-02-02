@@ -8,10 +8,12 @@ Created on 20160417
 import logging
 import time,datetime
 from django.db import connection
-from django.db.models import Sum, Count,Avg
+from django.db.models import Sum, Count,Avg,F
 from wafuli.models import Project, WithdrawLog, InvestLog
 from activity.models import IPAward, IPLog
-from docs.models import Document
+from docs.models import Document, DocStatis
+from django.core.cache import cache
+from public.redis import cache_decr_or_set
 logger = logging.getLogger("wafuli")
 from django.core.management.base import BaseCommand, CommandError
 from account.models import MyUser, Userlogin, ApplyLog
@@ -71,6 +73,24 @@ class Command(BaseCommand):
         
         #文档定时关闭
         Document.objects.filter(close_time__lte=datetime.datetime.now(), is_on=True).update(is_on=False, close_time=None)
+        
+        #文档访问次数持久化
+        keys_list = cache.keys('doc_*')
+        kv_dict = cache.get_many(keys_list)
+        for k,v in kv_dict.items():
+            if v > 0:
+                id = k[4:]
+                doc = Document.objects.filter(id=id).first()
+                if doc:
+                    obj, created = DocStatis.objects.get_or_create(date=today, doc_id=id)
+                    doc.view_count = F('view_count')+v
+                    obj.view_count = F('count')+v
+                    doc.save(update_fields=['view_count',])
+                    obj.save(update_fields=['count',])
+                    cache_decr_or_set(k, v)
+                    cache.expire(k, 24*60*60)
+                else:
+                    cache.delete(k)
         
         end_time = time.time()
         logger.info("******Statistics is finished, time:%s*********",end_time-begin_time)

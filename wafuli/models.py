@@ -207,7 +207,7 @@ class InvestLog(models.Model):
     zhifubao_name = models.CharField(u'支付宝姓名', max_length=30, blank=True)
     expect_amount = models.CharField(u'用户预期返现金额(6)', max_length=20, blank=True)
     admin_user = models.ForeignKey(MyUser, related_name="investlog_admin", null=True)
-    audit_time = models.DateTimeField(u'审核时间', null=True, blank=True)
+    audit_time = models.DateTimeField(u'审核时间', null=True, blank=True, default=None)
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
     preaudit_state = models.CharField(max_length=10, choices=AUDIT_STATE, default='1', verbose_name=u"预审状态")
     audit_reason = models.CharField(u"审核说明", max_length=30, blank=True)
@@ -218,7 +218,7 @@ class InvestLog(models.Model):
     reaudit_reason = models.CharField(u"复审原因", max_length=50, blank=True)
     appeal_reason = models.CharField(u"申诉理由", max_length=50, blank=True)
     presettle_amount = models.DecimalField(u'预结算金额', max_digits=10, decimal_places=2, default=0)
-    preaudit_time = models.DateTimeField(u'审核时间', null=True, blank=True, default=None)
+    preaudit_time = models.DateTimeField(u'预审核时间', null=True, blank=True, default=None)
     translist = GenericRelation('TransList')
     def __unicode__(self):
         return u"来自渠道用户：%s 的投资数据提交：%s" % (self.user, self.invest_amount)

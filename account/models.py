@@ -118,6 +118,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return username
     def has_admin_perms(self, code):
         return self.admin_permissions.filter(code=code).exists()
+    def has_permission100(self):
+        return self.has_admin_perms('100')
     def picture_url(self):
         """
         Returns the URL of the image associated with this Object.

@@ -28,12 +28,13 @@ from restapi.serializers import InvestLogSerializer
 from collections import OrderedDict
 from docs.models import DocStatis
 from django.core.cache import cache
-from public.tools import login_required_ajax
+from public.tools import login_required_ajax, has_permission
 logger = logging.getLogger('wafuli')
 # Create your views here.
 @csrf_exempt
 @login_required
 @transaction.atomic
+@has_permission('100')
 def preaudit_investlog(request):
     admin_user = request.user
     if request.method == "GET":
@@ -163,6 +164,7 @@ def preaudit_investlog(request):
         return JsonResponse(res)
     
 @csrf_exempt
+@has_permission('100')
 def stop_project(request):
     res = {}
     id = request.POST.get('id')
@@ -181,15 +183,22 @@ def stop_project(request):
     res['code'] = 0
     return JsonResponse(res)
 
+@login_required
+@has_permission('100')
 def proj_manage(request):
-    return render(request, 'proj_manage.html')    
+    return render(request, 'proj_manage.html')  
+@login_required
+@has_permission('100')  
 def proj_add(request):
     return render(request, 'proj_add.html')
+@login_required
+@has_permission('100')
 def fangdan_audit(request):
     return render(request, 'fangdan_audited.html')
     
 @csrf_exempt
 @login_required
+@has_permission('100')
 def merchant(request):
     user = request.user
     if request.method == 'GET':
@@ -266,6 +275,7 @@ def merchant(request):
 
 
 @login_required_ajax
+@has_permission('100')
 def get_project_statis_byday(request):
     user = request.user
     _range = request.GET.get('range', 0)
@@ -327,10 +337,10 @@ def get_project_statis_byday(request):
         if projects_statis_dict.has_key(id):
             projects_statis_dict[id].update(settle_count=item['count'])
             projects_statis_dict[id].update(settle_amount=item['sumofsettle'])
-    print projects_statis_dict
     return JsonResponse(projects_statis_dict)
 
 @login_required_ajax
+@has_permission('100')
 def get_days_statis(request):
     user = request.user
     _range = request.GET.get('range', 1)
@@ -363,6 +373,7 @@ def get_days_statis(request):
 
 @csrf_exempt
 @login_required
+@has_permission('100')
 def margin_manage(request):
     user = request.user
     if request.method == 'GET':

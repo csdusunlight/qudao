@@ -12,7 +12,7 @@ var data = '<table width="100%"><tr><th>用户名</th><th>渠道等级</th><th>Q
 	'<td>{balance}</td><td>{accu_income}</td><td>{accu_income}</td><td class="black" id="is_black_{id}">{is_active}</td>'+
 	'<td id="item_{id}"><a class="btn1-x" onclick="addcash({id})">余额</a>│'+
 	'<a class="btn2-x black_btn" data-isblack="{is_active}" id="black_{id}" onclick="addblack({id})">加黑</a>|<a onclick="change_level({id})">级别</a>|'+
-	'<a onclick="change_bail({id})">保证金</a>|<a class="tweeter_btn" id="tweeter_{id} data-istweeter="{false}" onclick="change_tweeter({id})">赋予推客</a>'+
+	'<a onclick="change_bail({id})">保证金</a>|<a class="tweeter_btn" id="tweeter_{id}" data-istweeter="{has_permission100}" onclick="change_tweeter({id})">赋予推客</a>'+
 	'</td></tr>[/results]</table>';
 var url = "/restapi/users/" + "?page={page}&pageSize={pageSize}";
 var selected_id = 0;
@@ -270,7 +270,7 @@ $(document).ready(function(){
                 alert("请检查网络连接");
             }
         });
-        $("a#tweeter"+selected_id).html("取消推客");
+        $("a#tweeter_"+selected_id).html("取消推客");
 //      $("td#is_black_"+selected_id).html("是");
         $(".m-tweeter").css("display","none");
     });
@@ -298,7 +298,7 @@ $(document).ready(function(){
                 alert("请检查网络连接");
             }
         });
-        $("a#tweeter"+selected_id).html("赋予推客");
+        $("a#tweeter_"+selected_id).html("赋予推客");
 //      $("td#is_black_"+selected_id).html("否");
         $(".m-tweeter-none").css("display","none");
     });

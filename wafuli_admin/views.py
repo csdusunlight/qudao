@@ -680,7 +680,10 @@ def admin_user(request):
             translist.save()
             res['code'] = 0
         elif type == 6:
-            perm = AdminPermission.objects.get(code='100')
+            try:
+                perm = AdminPermission.objects.get(code='100')
+            except AdminPermission.DoesNotExist:
+                perm = AdminPermission.objects.create(code='100', name="商家权限")
             obj_user.admin_permissions.add(perm)
             res['code'] = 0
         elif type == 7:

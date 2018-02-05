@@ -27,28 +27,13 @@
                 <input type="button" class="btn wit" value="提现保证金">
             </nav>
             <div class="tabBox">
-                <!-- <table width="100%" class="tables">
+                <table width="100%" class="tables">
                     <tr>
                         <th width="30%">变更时间</th>
                         <th width="30%">变更金额</th>
                         <th width="30%">变更原因</th>
                     </tr>
-                    <tr>
-                        <td>1000</td>
-                        <td>1000</td>
-                        <td>1000</td>
-                    </tr>
-                    <tr>
-                        <td>1000</td>
-                        <td>1000</td>
-                        <td>1000</td>
-                    </tr>
-                    <tr>
-                        <td>1000</td>
-                        <td>1000</td>
-                        <td>1000</td>
-                    </tr>
-                </table> -->
+                </table>
             </div>
         </div>
 
@@ -103,26 +88,32 @@
     <script type="text/javascript " src="{% static 'js/wfl-common.js' %} "></script>
     <script>
         $(function () {
-            // $.ajax({
-            //     url:"/sdsa/",
-            //     type:'get',
-            //     async:false,
-            //     timeout:5000,
-            //     dataType:'json',
-            //     success:function(ret){
-            //    let str_html;
-            //    for (let i in ret.results) {
-            //        str_html = `<tr>
-            //                     <td>${ret.results[i].time}</td><td>${ret.results[i].amount}</td><td>${ret.results[i].reason}</td>
-            //                   </tr>`
-            //    }
-            //    $('.tables').append(str_html);
-            //     },
-            //     error:function(xhr,textStatus){
-            //         alert(xhr.responseText);
-            //     }
-            // });
-
+            $.ajax({
+                url:"/merchant/margin_translog/",
+                type:'get',
+                async:false,
+                timeout:5000,
+                dataType:'json',
+                success:function(ret){
+                    console.log(ret.results);
+               let str_html;
+               for (let i in ret.results) {
+                   str_html = `<tr>
+                                <td class="changeTime">${ret.results[i].time}</td><td>${ret.results[i].initAmount}</td><td>${ret.results[i].reason}</td>
+                              </tr>`
+               }
+               $('.tables').append(str_html);
+                },
+                error:function(xhr,textStatus){
+                    alert(xhr.responseText);
+                }
+            });
+            //变更时间处理
+             let changeTime = $('.changeTime').text().split('T');
+             console.log(changeTime);
+             $('.changeTime').text(changeTime[0]);
+             
+            //添加保证金模态框
             $(".add").click(function () {
                 $('.addMsk').show();
             });

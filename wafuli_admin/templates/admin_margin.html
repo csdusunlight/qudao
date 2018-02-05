@@ -9,7 +9,7 @@
         let aduitData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
             '<th>申请提现金额</th><th>申请时间</th><th>处理状态</th><th>处理</th>' +
             '[results]<tr><td>{username}</td><td>{mobile}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td>{amount}</td>' +
-            '<td class="time">{submit_time}</td><td>{state_des}</td><td data-id={id}><a class="sure">同意</a>|<a class="rSendefuse">拒绝<a></td></tr>[/results]</table>';
+            '<td class="time">{submit_time}</td><td>{state_des}</td><td data-id="{id}"><a class="sure">同意</a>|<a class="rSendefuse">拒绝<a></td></tr>[/results]</table>';
         //已通过数据
         let passData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
             '<th>申请提现金额</th><th>申请时间</th><th>处理状态</th><th>处理人</th>' +
@@ -103,9 +103,13 @@
                 complete: pagecallback,
             });
         });
-        
+        //获取td的data-id值
+        let agreeId;
         //操作 同意模态框
         $('#pagedata').on('click', '.sure', function () {
+            //获取
+            agreeId = $(this).parent().attr('data-id');
+            console.log(agreeId);
             $('.agreeBox').show();
         });
         $('.cancel1').click(function () {
@@ -113,13 +117,14 @@
         });
         //同意ajax
         $('.agree').click(function () {
-            let id = $(this).attr('data-id');
+            console.log(agreeId);
             $.ajax({
-                url: 'Admin/admin_margin' + id,
+                url: '/Admin/admin_margin/',
                 type: 'POST', //GET
                 async: true,    //或false,是否异步
                 data: {
-                    'type': 1
+                    'type': 1,
+                    'id':agreeId
                 },
                 timeout: 5000,    //超时时间
                 dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
@@ -132,26 +137,31 @@
                 error: function (xhr, textStatus) {
                     console.log(xhr.responseText);
                 }
-            })
+            });
         });
         //拒绝模态框
+        let refuseId;//获取父级td的data-id的值
         $('#pagedata').on('click', '.rSendefuse', function () {
+            refuseId = $(this).parent().attr('data-id');
+            console.log('------'+refuseId);
             $('.rSendefuseBox').show();
         });
         $('.cancel2').click(function () {
             $('.rSendefuseBox').hide();
         });
         //拒绝ajax
+
         $('.refuseSend').click(function () {
-            let id = $(this).attr('data-id');
             let reason = $('.reason').val();
+            console.log('----refuse----'+refuseId);
             $.ajax({
-                url: 'Admin/admin_margin' + id,
+                url: '/merchant/margin_auditlog/',
                 type: 'POST',   //GET
                 async: true,    //或false,是否异步
                 data: {
                     'type': 2,
-                    'reason':reason
+                    'reason':reason,
+                    'id':refuseId
                 },
                 timeout: 5000,    //超时时间
                 dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
@@ -164,7 +174,7 @@
                 error: function (xhr, textStatus) {
                     console.log(xhr.responseText);
                 }
-            })
+            });
         });
 
 

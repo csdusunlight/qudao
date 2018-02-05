@@ -368,9 +368,15 @@
     margin-left: 90px;
 }
 /*样式覆盖*/
+html, body, h1, h2, h3, h4, h5, h6, div, dl, dt, dd, ul, ol, li, p, blockquote, pre, hr, figure, table, caption, th, td, form, fieldset, legend, input, button, textarea, menu {
+    box-sizing: border-box;
+}
 .headermain {
     width: 1300px;
 }
 .Content {
+    width: 1300px;
+}
+.wfl-wrap {
     width: 1300px;
 }

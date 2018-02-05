@@ -7,6 +7,7 @@ from django.http.response import Http404
 from django.contrib.auth.decorators import login_required
 from account.models import ApplyLog
 logger = logging.getLogger('wafuli')
+
 def index(request):
     data = {
         'invest_total':0,#引入资金

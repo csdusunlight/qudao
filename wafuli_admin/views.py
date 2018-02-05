@@ -9,7 +9,7 @@ from django.http.response import JsonResponse, Http404, HttpResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from account.transaction import charge_money
 import logging
-from account.models import MyUser, ApplyLog
+from account.models import MyUser, ApplyLog, AdminPermission
 from django.db.models import Q,F
 from wafuli_admin.models import DayStatis, Invest_Record
 from django.conf import settings
@@ -28,6 +28,7 @@ from django.db import transaction
 from public.tools import has_post_permission
 from decimal import Decimal
 from weixin.tasks import sendWeixinNotify
+from merchant.margin_transaction import charge_margin
 # Create your views here.
 logger = logging.getLogger('wafuli')
 def index(request):
@@ -646,6 +647,49 @@ def admin_user(request):
             else:
                 res['code'] = -6
                 res['res_msg'] = u"没有level"
+        elif type == 5:
+            pcash = request.POST.get('pcash', 0)
+            mcash = request.POST.get('mcash', 0)
+            if not pcash:
+                pcash = 0
+            if not mcash:
+                mcash = 0
+            reason = request.POST.get('reason', '')
+            if not pcash and not mcash or pcash and mcash or not reason:
+                res['code'] = -2
+                res['res_msg'] = u'传入参数不足，请联系技术人员！'
+                return JsonResponse(res)
+            try:
+                pcash = Decimal(pcash)
+                mcash = Decimal(mcash)
+            except:
+                res['code'] = -2
+                res['res_msg'] = u"操作失败，输入不合法！"
+                return JsonResponse(res)
+            if pcash < 0 or mcash < 0:
+                res['code'] = -2
+                res['res_msg'] = u"操作失败，输入不合法！"
+                return JsonResponse(res)
+            translist = None
+            if pcash > 0:
+                translist = charge_margin(obj_user, '0', pcash, reason)
+            elif mcash > 0:
+                translist = charge_margin(obj_user, '1', mcash, reason)
+            adminlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=reason, type='4')
+            translist.auditlog = adminlog
+            translist.save()
+            res['code'] = 0
+        elif type == 6:
+            try:
+                perm = AdminPermission.objects.get(code='100')
+            except AdminPermission.DoesNotExist:
+                perm = AdminPermission.objects.create(code='100', name="商家权限")
+            obj_user.admin_permissions.add(perm)
+            res['code'] = 0
+        elif type == 7:
+            perm = AdminPermission.objects.get(code='100')
+            obj_user.admin_permissions.remove(perm)
+            res['code'] = 0
         return JsonResponse(res)
 
 def get_admin_user_page(request):

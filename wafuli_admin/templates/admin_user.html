@@ -9,10 +9,10 @@ var data = '<table width="100%"><tr><th>用户名</th><th>渠道等级</th><th>Q
 	'<th>累计收入</th><th width="5%">是否为黑名单</th><th>账户操作</th>'+
 	'</tr>[results]<tr><td>{username}</td><td>{level}</td><td>{qq_number}</td><td>{qq_name}</td>'+
 	'<td>{mobile}</td><td>{card_number}</td><td>{bank}</td><td>{date_joined}</td>'+
-	'<td>{balance}</td><td>{accu_income}</td><td class="black" id="is_black_{id}">{is_active}</td>'+
+	'<td>{balance}</td><td>{margin_account}</td><td>{accu_income}</td><td class="black" id="is_black_{id}">{is_active}</td>'+
 	'<td id="item_{id}"><a class="btn1-x" onclick="addcash({id})">余额</a>│'+
-	'<a class="btn2-x black_btn" data-isblack="{is_active}" id="black_{id}" onclick="addblack({id})">加黑</a>|'+
-	'<a onclick="change_level({id})">修改级别</a>'+
+	'<a class="btn2-x black_btn" data-isblack="{is_active}" id="black_{id}" onclick="addblack({id})">加黑</a>|<a onclick="change_level({id})">级别</a>|'+
+	'<a onclick="change_bail({id})">保证金</a>|<a class="tweeter_btn" id="tweeter_{id}" data-istweeter="{has_permission100}" onclick="change_tweeter({id})">赋予推客</a>'+
 	'</td></tr>[/results]</table>';
 var url = "/restapi/users/" + "?page={page}&pageSize={pageSize}";
 var selected_id = 0;
@@ -31,11 +31,22 @@ function pagecallback() {
             $(this).text("加黑");
         }
     })
+    $('.tweeter_btn').each(function() {
+        if ($(this).data('istweeter') == false) {
+            $(this).text("赋予推客");
+        } else {
+            $(this).text("取消推客");
+        }
+    })
 }
 
 function addcash(id){
 	$(".Balance").css("display","block");
 	selected_id = id;
+}
+function change_bail(id){
+    $(".popup.m-bail").css("display","block");
+    selected_id = id;
 }
 function change_level(id){
     $(".Change-level").css("display","block");
@@ -50,6 +61,16 @@ function addblack(id){
 	else {
 		$(".Blacklist-none").css("display","block");
 	}
+}
+function change_tweeter(id){
+    selected_id = id;
+    var opertype=$("a#tweeter_"+id).html();
+    if(opertype == "赋予推客"){
+        $(".m-tweeter").css("display","block");
+    }
+    else {
+        $(".m-tweeter-none").css("display","block");
+    }
 }
 
 $(document).ready(function(){
@@ -70,10 +91,10 @@ $(document).ready(function(){
 		$(this).parent().parent().parent().parent().css("display","none");<!--隐藏-->
 	})
 	$('.Balance input[type="submit"]').click(function(){
-		id = selected_id;
-		pcash = $("input#plus_balance").val();
-		mcash = $("input#minus_balance").val();
-		reason = $("#balance_reason").val();
+		var id = selected_id;
+		var pcash = $("input#plus_balance").val();
+		var mcash = $("input#minus_balance").val();
+		var reason = $("#balance_reason").val();
 		if (!id || !pcash && !mcash ||!reason){
 			return;
 		}
@@ -105,6 +126,42 @@ $(document).ready(function(){
 		});
 		$(".Balance").css("display","none");
 	});
+	$('.m-bail input[type="submit"]').click(function(){
+        var id = selected_id;
+        var pcash = $("input#plus_bail").val();
+        var mcash = $("input#minus_bail").val();
+        var reason = $("#bail_reason").val();
+        if (!id || !pcash && !mcash ||!reason){
+            return;
+        }
+        if (pcash && mcash){
+            alert("不能同时添加和扣减保证金");
+            return;
+        }
+        $.ajax({
+            url:"{%url 'admin_user' %}",
+            dataType:"json",
+            type:"POST",
+            data:{
+                'id':id,
+                'pcash':pcash,
+                'mcash':mcash,
+                'reason':reason,
+                'type':5,
+            },
+            success:function(ret){
+                if(ret.code==0){
+                    alert("操作成功！");
+                } else {
+                    alert(ret.res_msg);
+                }
+            },
+            error:function(){
+                alert("请检查网络连接");
+            }
+        });
+        $(".popup.m-bail").css("display","none");
+    });
 	$('.change-level-btn').click(function(){
         id = selected_id;
         level = $("#level_choose").val();
@@ -189,6 +246,62 @@ $(document).ready(function(){
 		$("td#is_black_"+selected_id).html("否");
 		$(".Blacklist-none").css("display","none");
 	});
+	$('.m-tweeter input[type="submit"]').click(function(){
+        var id = selected_id;
+        if (!id){
+            return;
+        }
+        $.ajax({
+            url:"{%url 'admin_user' %}",
+            dataType:"json",
+            type:"POST",
+            data:{
+                'id':id,
+                'type': 6,
+            },
+            success:function(ret){
+                if(ret.code==0){
+                    alert("操作成功！");
+                } else {
+                    alert(ret.res_msg);
+                }
+            },
+            error:function(){
+                alert("请检查网络连接");
+            }
+        });
+        $("a#tweeter_"+selected_id).html("取消推客");
+//      $("td#is_black_"+selected_id).html("是");
+        $(".m-tweeter").css("display","none");
+    });
+    $('.m-tweeter-none input[type="submit"]').click(function(){
+        var id = selected_id;
+        if (!id){
+            return;
+        }
+        $.ajax({
+            url:"{%url 'admin_user' %}",
+            dataType:"json",
+            type:"POST",
+            data:{
+                'id':id,
+                'type':7,
+            },
+            success:function(ret){
+                if(ret.code==0){
+                    alert("操作成功！");
+                } else {
+                    alert(ret.res_msg);
+                }
+            },
+            error:function(){
+                alert("请检查网络连接");
+            }
+        });
+        $("a#tweeter_"+selected_id).html("赋予推客");
+//      $("td#is_black_"+selected_id).html("否");
+        $(".m-tweeter-none").css("display","none");
+    });
 
 	$("#search").click(function(){
 		var startTime = $("#startTime").val();
@@ -366,6 +479,27 @@ $(document).ready(function(){
             </form>
         </div>
     </div>
+    <!--保证金操作-->
+    <div class="m-bail popup">
+        <div class="w570-box">
+            <h3>保证金操作</h3>
+            <button class="none-x"></button>
+            <form class="Finnow">
+                <span>添加保证金：</span>
+                <input id="plus_bail" type="text" />
+                <span>消减保证金：</span>
+                <input id="minus_bail" type="text" />
+                <div class="Balance-in">
+                    <span>原因备注：</span>
+                    <textarea id="bail_reason"></textarea>
+                </div>
+                <div class="Finnow-Sub">
+                <input type="submit" value="确认" onclick="return false;"/>
+                <input type="button" value="取消" class="none-x-s" />
+                </div>
+            </form>
+        </div>
+    </div>
     <!--修改等级-->
     <div class="Change-level">
         <div class="w570-box">
@@ -405,6 +539,34 @@ $(document).ready(function(){
         	<h3>黑名单操作</h3>
             <button class="none-x"></button>
             <h5> 确认取消加黑？</h5>
+            <form class="Audit-in">
+                <div class="Finnow-Sub" style="margin-top:0">
+                <input type="submit" value="确认" onclick="return false;"/>
+                <input type="button" value="取消" class="none-x-s" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--确认赋予推客权限-->
+    <div class="popup m-tweeter">
+        <div class="w570-box">
+            <h3>推客权限操作</h3>
+            <button class="none-x"></button>
+            <h5 style="font-size: 20px"> 确认赋予推客权限？</h5>
+            <form class="Audit-in">
+                <div class="Finnow-Sub" style="margin-top:0">
+                <input type="submit" value="确认" onclick="return false;"/>
+                <input type="button" value="取消" class="none-x-s" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--取消推客权限-->
+    <div class="popup m-tweeter-none">
+        <div class="w570-box">
+            <h3>推客权限操作</h3>
+            <button class="none-x"></button>
+            <h5> 确认撤销推客权限？</h5>
             <form class="Audit-in">
                 <div class="Finnow-Sub" style="margin-top:0">
                 <input type="submit" value="确认" onclick="return false;"/>

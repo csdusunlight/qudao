@@ -22,8 +22,8 @@ class UserSerializer(serializers.ModelSerializer):
         model = MyUser
         fields = ('id', 'mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'with_total','accu_income','is_book_email_notice',
                   'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number', 'is_autowith',
-                  'submit_bg', 'domain_name', 'cs_qq')
-        read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level',)
+                  'submit_bg', 'domain_name', 'cs_qq', 'has_permission100','margin_account')
+        read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level', 'margin_account')
         
 class ProjectSerializer(serializers.ModelSerializer):
 #     subscribers = UserSerializer(many=True)

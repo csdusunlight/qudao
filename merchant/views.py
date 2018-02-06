@@ -227,8 +227,8 @@ def merchant(request):
         total_submit_count = InvestLog.objects.filter(project__user=user, category="merchant", submit_time__gte=today).count()
         settle_data = InvestLog.objects.filter(project__user=user, category="merchant",
                 audit_time__gte=today, audit_state='0').aggregate(sumofsettle=Sum('settle_amount'),count=Count('*'))
-        total_settle_amount = settle_data['sumofsettle']
-        total_settle_count = settle_data['count'] 
+        total_settle_amount = settle_data['sumofsettle'] or 0
+        total_settle_count = settle_data['count'] or 0
         today_data = {'online_count':online_count, 
                       'total_pv':total_pv,
                       'total_toaudit_count':total_toaudit_count,
@@ -366,10 +366,15 @@ def get_days_statis(request):
             'settle_amount':0,
         }
     for item in dict_list:
-        days_data.get(item['day'])['submit_count'] = item['count']
+        key = item['day']
+        if type(key) == datetime.datetime:
+            key = datetime.datetime.strftime(item['day'],'%Y-%m-%d')
+        days_data.get(key)['submit_count'] = item['count']
     for item in dict_list2:
-        days_data.get(item['day'])['settle_count'] = item['count']
-        days_data.get(item['day'])['settle_amount'] = item['sumofsettle']
+        if type(key) == datetime.datetime:
+            key = datetime.datetime.strftime(item['day'],'%Y-%m-%d')
+        days_data.get(key)['settle_count'] = item['count']
+        days_data.get(key)['settle_amount'] = item['sumofsettle']
     return JsonResponse(days_data)
 
 @csrf_exempt
@@ -495,3 +500,4 @@ class MerchantProjectStatisticsList(BaseViewMixin, generics.ListAPIView):
     ordering_fields = ('project__doc__view_count',)
     serializer_class = MerchantProjectStatisticsSerializer
     filter_backends = (OrderingFilter,)
+    pagination_class = MyPageNumberPagination

@@ -45,6 +45,7 @@ class MarginAuditLogSerializer(serializers.ModelSerializer):
 
 class MerchantProjectStatisticsSerializer(serializers.ModelSerializer):
     pv = serializers.CharField(source="view_count", read_only=True)
+    project_title = serializers.CharField(source="project.title", read_only=True)
     class Meta:
         model = MerchantProjectStatistics
         fields = '__all__'

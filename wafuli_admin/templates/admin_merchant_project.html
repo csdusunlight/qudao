@@ -8,7 +8,7 @@
         '<th width="7%">数据结算周期</th><th width="13%">提交时间</th><th width="8%">处理状态</th><th width="10%">备注说明</th><th width="8%">操作</th>' +
         '[results]<tr><td>{qq_number}{qq_name}</td><td>{qq_name}</td><td>{user_mobile}</td><td>{title}</td><td><a href="{strategy_url}">{strategy_url}</a></td>' +
         '<td>{price}</td><td>{settle_period}</td><td class="subtime">{submit_time}</td><td>{state_des}</td><td>{remark}</td>' +
-        '<td data-id="{id}"><a class="pass">同意</a>|<a class="refuse">拒绝</a></td></tr>[/results]</table>';
+        '<td class="opTd" data-id="{id}"><a class="pass">同意</a>|<a class="refuse">拒绝</a></td></tr>[/results]</table>';
     //审核通过数据
     const passData = '<table width="100%"><tr><th width="8%">QQ</th><th width="7%">QQ昵称</th><th width="8%">手机号</th><th width="8%">项目名称</th><th width="15%">攻略链接</th><th width="8%">结算价格</th>' +
         '<th width="7%">数据结算周期</th><th width="13%">提交时间</th><th width="8%">处理状态</th><th>处理时间</th><th width="10%">备注说明</th>' +
@@ -124,12 +124,12 @@
             console.log(id);
             let cash = $(".cash").val();
             //正则
-            const regx = /^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/;
+            const regx = /^[0-9]*$/;
             if (!cash) {
                 alert("佣金不能为空！");
                 return;
             } else if(!regx.test(cash)){
-                alert("佣金只能为百分比");
+                alert("佣金只能为纯数字！");
                 return;
             }
             //同意ajax
@@ -149,6 +149,9 @@
                         alert("已同意");
                         $(".mask").hide();
                     }
+                    $('.opTd').each(function(){
+                        $(this).text('已同意');
+                    });
                 },
                 error: function (xhr, textStatus) {
                     console.log('错误:' + xhr.responseText);
@@ -187,6 +190,9 @@
                         alert("已拒绝");
                         $(".msk").hide();
                     }
+                    $('.opTd').each(function(){
+                        $(this).text('已拒绝');
+                    });
                 },
                 error: function (xhr, textStatus) {
                     console.log('错误:' + xhr.responseText);
@@ -270,6 +276,7 @@
             <div class="cashBox">
                 <span>请输入佣金:</span>
                 <input type="text" class="cash" placeholder="请输入百分比，仅限数字" />
+                <label style="font-size: 24px;position: absolute;top: 135px;right: 130px;">%</label>
             </div>
             <input type="button" value="确定" class="btn sure">
             <input type="button" value="取消" class="btn cancel">

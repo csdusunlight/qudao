@@ -115,20 +115,24 @@
         //取消 模块图消失
         $(".cancel").click(function () {
             $(".mask").hide();
+            $('.cash').val('');
         });
-        //同意ajax
+       
         $(".sure").click(function () {
             //获取当前id
             let id = $('.pass').parent().attr("data-id");
             console.log(id);
             let cash = $(".cash").val();
             //正则
-            // const regx = /^[0-9]*$/;
-            // if (!regx.test(cash)) {
-            //     alert("提取金额必须为纯数字");
-            //     return;
-            // }
-
+            const regx = /^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/;
+            if (!cash) {
+                alert("佣金不能为空！");
+                return;
+            } else if(!regx.test(cash)){
+                alert("佣金只能为百分比");
+                return;
+            }
+            //同意ajax
             $.ajax({
                 url: '/Admin/admin_merchant_project/',
                 type: "post", //提交方式post
@@ -158,6 +162,7 @@
         //拒绝 模态框消失
         $(".cCancel").click(function () {
             $('.msk').hide();
+            $('.reson').val('');
         });
         //拒绝弹窗的确定ajax
         $('.cSure').click(function () {

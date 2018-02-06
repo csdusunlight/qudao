@@ -5,6 +5,10 @@
 	width: 600px;
 	height: 600px;
 	margin: 0 auto;
+	position: relative;
+}
+.link{
+	position: absolute;top:190px;right: -40px;
 }
 .pro{
 	margin-top: 10px;

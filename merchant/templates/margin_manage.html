@@ -12,78 +12,97 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
     <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+    <style>
+        .wrapper{
+            width: 100%;
+            height: 750px;
+            background: url(../../static/images/bg_starSky.jpg) no-repeat;
+            background-position-y: -10px;
+        }
+        .footer{
+            margin: 0 auto;
+        }
+        .Content {
+            margin:0 auto;
+        }
+        #pagedata{
+            background: white;
+        }
+    </style>
 </head>
 
 <body>
     <!--头部-->
     {% include "merchant_header.html" %}
     <!--内容-->
-    <div class="Content">
-        <div class="wrapperBox">
-            <nav>
-                <span class="amount">
-                    <span>账户保证金余额：{{user.margin_account}}元</span>
-                </span>
-                <input type="button" class="btn add" value="充值">
-                <input type="button" class="btn wit" value="提现保证金">
-            </nav>
-            <div class="tabBox">
-                <div id="pagedata">
-                </div>
-                <div class="Page-in-admin">
-                    <div class="page" id="page">
+    <div class="wrapper">
+        <div class="Content">
+            <div class="wrapperBox">
+                <nav>
+                    <span class="amount">
+                        <span class="amount1">账户保证金余额：<label>{{user.margin_account}}元</label></span>
+                    </span>
+                    <input type="button" class="btn add" value="充值">
+                    <input type="button" class="btn wit" value="提现保证金">
+                </nav>
+                <div class="tabBox">
+                    <div id="pagedata">
+                    </div>
+                    <div class="Page-in-admin">
+                        <div class="page" id="page">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 充值弹窗 -->
-        <div class="addMsk">
-            <div class="dataBox">
-                <span class="cha">
-                    ×
-                </span>
-                <span class="card">充值银行卡</span>
-                <div class="data">
-                    <table width="100% ">
-                        <tr>
-                            <td width="30%">开户行</td>
-                            <td width="70%">46315487824564458</td>
-                        </tr>
-                        <tr>
-                            <td width="30%">姓名</td>
-                            <td width="70%">llc</td>
-                        </tr>
-                        <tr>
-                            <td width="30%">账户</td>
-                            <td width="70%">12345678977</td>
-                        </tr>
-                        <tr>
-                            <td width="30%">充值金额</td>
-                            <td width="70%">
-                                <input type="text" class="addAmount" style="width: 200px;">
-                            </td>
-                        </tr>
-                    </table>
+            <!-- 充值弹窗 -->
+            <div class="addMsk">
+                <div class="dataBox">
+                    <span class="cha">
+                        ×
+                    </span>
+                    <span class="card">充值银行卡</span>
+                    <div class="data">
+                        <table width="100% ">
+                            <tr>
+                                <td width="30%">开户行</td>
+                                <td width="70%">46315487824564458</td>
+                            </tr>
+                            <tr>
+                                <td width="30%">姓名</td>
+                                <td width="70%">llc</td>
+                            </tr>
+                            <tr>
+                                <td width="30%">账户</td>
+                                <td width="70%">12345678977</td>
+                            </tr>
+                            <tr>
+                                <td width="30%">充值金额</td>
+                                <td width="70%">
+                                    <input type="text" class="addAmount" style="width: 200px;">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <input type="button " class="submit " value="确定 " />
                 </div>
-                <input type="button " class="submit " value="确定 " />
+            </div>
+
+            <!-- 提现保证金模态框 -->
+            <div class="witMsk ">
+                <div class="witBox ">
+                    <span class="tips ">提现保证金</span>
+                    <div class="amountBox ">
+                        提现金额(元)
+                        <input type="text " class="witamount ">
+                    </div>
+                    <input type="button" class="send" value="确定">
+                    <input type="button" class="cancel" value="取消">
+                </div>
             </div>
         </div>
-
-        <!-- 提现保证金模态框 -->
-        <div class="witMsk ">
-            <div class="witBox ">
-                <span class="tips ">提现保证金</span>
-                <div class="amountBox ">
-                    提现金额(元)
-                    <input type="text " class="witamount ">
-                </div>
-                <input type="button" class="send" value="确定">
-                <input type="button" class="cancel" value="取消">
-            </div>
-        </div>
-    </div>
-    {% include "footer.html " %}
+    </div>    
+    {% include "footer.html" %}
 
     <script type="text/javascript " src="{% static 'js/wfl-common.js' %} "></script>
     <script>

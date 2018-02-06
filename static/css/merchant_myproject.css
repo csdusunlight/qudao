@@ -12,7 +12,7 @@
 .tab {
     width: 398px;
     height: 42px;
-    border: 1px solid gray;
+    border: 1px solid white;
 }
 
 .tab li {
@@ -21,8 +21,10 @@
     line-height: 42px;
     text-align: center;
     float: left;
-    border-right: 1px solid gray;
+    border-right: 1px solid RGB(216,216,216);
     cursor: pointer;
+    /* background: white; */
+    color: white;
 }
 
 .tab li:nth-child(4) {
@@ -30,7 +32,7 @@
 }
 
 .active {
-    background: RGB(145, 193, 29);
+    background: RGB(239,174,44);
     color: white;
 }
 

@@ -132,6 +132,15 @@
 {% include "merchant_header.html" %}
 <!--内容-->
 <div class="Content">
+    <div style="margin-bottom: 20px;" class="table">
+        <h2 class="table__title">项目数据</h2>
+        <div id="pagedata">
+        </div>
+        <div class="changes-p">
+            <div class="page" id="page">
+            </div>
+        </div>
+    </div>
     <div class="table">
         <!--<h2 class="table__title">自建数据</h2>-->
         <div class="search">
@@ -284,6 +293,12 @@
 <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
 <script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
 <script type="text/javascript">
+    //  项目投资数据
+    var data_proj = '<table width="100%"><tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th>' +
+        '<th>结算单数</th><th>申诉数据单数</th><th>异常数据单数</th><th>待处理单数</th><th>结算总额</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>'+
+        '<td>{preaudit_state_des}</td><td class="return-txt">{settle_amount}</td></tr>[/results]</table>';
 //  全部
     var data_user = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
         '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>结算金额</th><th>审核信息</th><th>投资姓名</th>'+
@@ -369,7 +384,15 @@
             }
         })
     }
-
+    
+    $("#pagedata").ajaxPage({
+        url: url2,
+        pageId: $("#page"),
+        pageSize: 10,
+        run: true,
+        content: data_proj,
+        complete:pagecallback,
+    });
     $("#pagedata2").ajaxPage({
         url: url2,
         pageId: $("#page2"),

@@ -138,34 +138,7 @@
     <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
     <script type="text/javascript">
-//  	var data_left = '<table width="100%"><tr><th>项目名称</th><th>浏览量（PV）</th>' +
-//      '<th>交单量</th><th>结算单数</th><th>结算总额</th></tr>[results]' +
-//      '<tr><td>{project_title}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-//      '<td>{invest_amount}</td><td>{invest_term}</td></tr>[/results]</table>';
-//      var data_right = '<table width="100%"><tr><th>项目名称</th><th>浏览量（PV）</th>' +
-//      '<th>交单量</th><th>结算单数</th><th>结算总额</th></tr>[results]' +
-//      '<tr><td>{project_title}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-//      '<td>{invest_amount}</td><td>{invest_term}</td></tr>[/results]</table>';
-//      var url = "/merchant/investlogs/?page={page}&pageSize={pageSize}&project_user={{user.id}}";
-//      function pagecallback() {
-//          
-//      }
-//      $("#pagedata").ajaxPage({
-//          url: url,
-//          pageId: $("#page"),
-//          pageSize: 10,
-//          run: true,
-//          content: data_left,
-//          complete:pagecallback,
-//      });
-//      $("#pagedata2").ajaxPage({
-//          url: url,
-//          pageId: $("#page2"),
-//          pageSize: 10,
-//          run: true,
-//          content: data_right,
-//          complete:pagecallback,
-//      });
+        $('.nav__item:eq(0)').addClass('active');
         var left_data_html;
         var right_data_html;
         $.ajax({

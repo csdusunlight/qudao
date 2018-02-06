@@ -85,6 +85,7 @@
 	<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
 	<script>
 		$(function () {
+			$('.nav__item:eq(2)').addClass('active');
 			//获取文档
 			$.ajax({
 				url: '/restapi/docs/',

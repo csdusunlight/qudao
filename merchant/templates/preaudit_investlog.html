@@ -306,7 +306,7 @@
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
         '<td class="return-txt">{settle_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{remark}</td>'+
-        '<td>{broker_amount}</td><td data-state="{preaudit_state}" class="table-handle"><a onclick="pass_02(this,{id})">审核</a> | <a onclick="again_02(this,{id})">异常</a> | '+
+        '<td>{broker_amount}</td><td data-state="{preaudit_state}" class="table-handle"><a onclick="pass_02(this,{id},{broker_rate})">预审</a> | <a onclick="again_02(this,{id})">异常</a> | '+
         '<a onclick="refuse_02(this,{id})">拒绝</a></td></tr>[/results]</table>';
 //  未审核
     var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
@@ -315,7 +315,7 @@
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
         '<td class="return-txt">{presettle_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{remark}</td>'+
-        '<td>{broker_amount}</td><td data-state="{preaudit_state}" class="table-handle"><a onclick="pass_02(this,{id})">审核</a> | <a onclick="again_02(this,{id})">异常</a> | '+
+        '<td>{broker_amount}</td><td data-state="{preaudit_state}" class="table-handle"><a onclick="pass_02(this,{id},{broker_rate})">预审</a> | <a onclick="again_02(this,{id})">异常</a> | '+
         '<a onclick="refuse_02(this,{id})">拒绝</a></td></tr>[/results]</table>';
 //  管理员审核
     var data_user_admin = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
@@ -348,7 +348,7 @@
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
         '<td>{invest_name}</td><td>{remark}</td><td>{audit_reason}</td>'+
-        '<td><a onclick="pass_02(this,{id})">审核</a> | '+
+        '<td><a onclick="pass_02(this,{id},{broker_rate})">预审</a> | '+
         '<a onclick="refuse_02(this,{id})">拒绝</a></td></tr>[/results]</table>';
 //  申诉
     var data_user4 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
@@ -435,11 +435,15 @@
         $(".return_amount_02").val('');
         $('.popup.m-pass-proj-02').addClass('in');
     }
-    function pass_02 (obj,id) {
+    var rate;
+    function pass_02 (obj,id,broker_rate) {
         base_id = id;
+        rate = broker_rate;
+        console.log(rate);
         base_type = 1;
         parent_dom = $(obj).parent();
         $(".return_amount_02").val('');
+        $('.process-money').text('');
         $('.popup.m-pass-proj-02').addClass('in');
     }
     $('#confirm_pass_02').click(function() {
@@ -475,7 +479,7 @@
     $('.return_amount_02').keyup(function(){
         var value = $(".return_amount_02").val();
         if(Number(value)) {
-            $('.process-money').text('预计扣除手续费：'+ parseInt(value*0.02) +'元')
+            $('.process-money').text('预计扣除手续费：'+ parseInt((value*rate)/10) +'元');
         } else {
             $('.process-money').text('返现金额请输入纯数字格式');
         }

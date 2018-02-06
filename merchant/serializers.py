@@ -5,7 +5,8 @@ Created on 2018年1月16日
 @author: lch
 '''
 from rest_framework import serializers
-from merchant.models import Apply_Project, Margin_Translog, Margin_AuditLog
+from merchant.models import Apply_Project, Margin_Translog, Margin_AuditLog,\
+    MerchantProjectStatistics
 class ApplyProjectSerializer(serializers.ModelSerializer):
     state_des = serializers.CharField(source="get_audit_state_display", read_only=True)
     strategy_url = serializers.CharField(source="strategy.fanshu_url", read_only=True)
@@ -40,4 +41,10 @@ class MarginAuditLogSerializer(serializers.ModelSerializer):
     margin_account = serializers.CharField(source='user.margin_account')
     class Meta:
         model = Margin_AuditLog
+        fields = '__all__'
+
+class MerchantProjectStatisticsSerializer(serializers.ModelSerializer):
+    pv = serializers.CharField(source="view_count", read_only=True)
+    class Meta:
+        model = MerchantProjectStatistics
         fields = '__all__'

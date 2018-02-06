@@ -12,8 +12,9 @@ from merchant.margin_transaction import charge_margin, ChargeValueError
 from public.permissions import CsrfExemptSessionAuthentication, IsOwnerOrStaff
 from rest_framework import permissions, generics
 from merchant.serializers import ApplyProjectSerializer, TranslogSerializer,\
-    MarginAuditLogSerializer
-from merchant.models import Apply_Project, Margin_Translog, Margin_AuditLog
+    MarginAuditLogSerializer, MerchantProjectStatisticsSerializer
+from merchant.models import Apply_Project, Margin_Translog, Margin_AuditLog,\
+    MerchantProjectStatistics
 import django_filters
 from rest_framework.filters import SearchFilter, OrderingFilter
 from public.Paginations import MyPageNumberPagination
@@ -486,3 +487,11 @@ class InvestlogList(BaseViewMixin, generics.ListAPIView):
     ordering_fields = ('submit_time',)
     filter_class = InvestLogFilter
     pagination_class = MyPageNumberPagination
+
+class MerchantProjectStatisticsList(BaseViewMixin, generics.ListAPIView):
+    def get_queryset(self):
+        user = self.request.user
+        return MerchantProjectStatistics.objects.filter(project__user=user, project__state__in=['10','20'])
+    ordering_fields = ('project__doc__view_count',)
+    serializer_class = MerchantProjectStatisticsSerializer
+    filter_backends = (OrderingFilter,)

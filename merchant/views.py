@@ -227,8 +227,8 @@ def merchant(request):
         total_submit_count = InvestLog.objects.filter(project__user=user, category="merchant", submit_time__gte=today).count()
         settle_data = InvestLog.objects.filter(project__user=user, category="merchant",
                 audit_time__gte=today, audit_state='0').aggregate(sumofsettle=Sum('settle_amount'),count=Count('*'))
-        total_settle_amount = settle_data['sumofsettle']
-        total_settle_count = settle_data['count'] 
+        total_settle_amount = settle_data['sumofsettle'] or 0
+        total_settle_count = settle_data['count'] or 0
         today_data = {'online_count':online_count, 
                       'total_pv':total_pv,
                       'total_toaudit_count':total_toaudit_count,

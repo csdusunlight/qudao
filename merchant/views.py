@@ -495,3 +495,4 @@ class MerchantProjectStatisticsList(BaseViewMixin, generics.ListAPIView):
     ordering_fields = ('project__doc__view_count',)
     serializer_class = MerchantProjectStatisticsSerializer
     filter_backends = (OrderingFilter,)
+    pagination_class = MyPageNumberPagination

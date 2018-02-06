@@ -147,7 +147,7 @@
         	dataType: "json",
         	async:true,
         	success: function(ret) {
-        	    right_data_html = '<tr><th>日期</th><th>交单量（PV）</th><th>结算单数</th><th>结算总额</th></tr>';
+        	    right_data_html = '<tr><th>日期</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>';
                 var i;
                 for (i in ret) {
                     right_data_html += '<tr><td>' + i + '</td><td>' + ret[i].submit_count +

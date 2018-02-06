@@ -36,6 +36,7 @@ def admin_margin(request):
         type = int(type)
         id = int(id)
         log = Margin_AuditLog.objects.get(id=id)
+        reason = request.POST.get('reason', '')
         if log.audit_state != '1':
             res['code'] = -3
             res['res_msg'] = u'该项目已审核过，不要重复审核！'
@@ -45,7 +46,6 @@ def admin_margin(request):
                 log.audit_state = '0'
                 res['code'] = 0
             elif type == 2:
-                reason = request.POST.get('reason', '')
                 if not reason:
                     res['code'] = -2
                     res['res_msg'] = u'传入参数不足，请联系技术人员！'
@@ -105,7 +105,7 @@ def admin_merchant_project(request):
             obj.broker_rate = broker_rate
             res['code'] = 0
             project = Project.objects.create(title=obj.title, user=obj.user, is_official=True, category='merchant', is_addedto_repo=True, state='00',
-                                   strategy=obj.strategy.fanshu_url(), broker_rate=broker_rate)
+                                   strategy=obj.strategy.fanshu_url(), broker_rate=broker_rate, doc=obj.strategy)
             obj.project = project
         elif type == 2:
             reason = request.POST.get('reason', '')

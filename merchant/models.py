@@ -77,3 +77,17 @@ class Apply_Project(models.Model):
         ordering = ["-submit_time",]
     def __unicode__(self):
         return self.title
+    
+    
+class MerchantProjectStatistics(models.Model):
+    project = models.OneToOneField(Project)
+    submit_count = models.IntegerField(u"提交单数", default=0)
+    settle_count = models.IntegerField(u"结算单数", default=0)
+    appeal_count = models.IntegerField(u"申诉单数", default=0)
+    abnormal_count = models.IntegerField(u"异常单数", default=0)
+    toaudit_count = models.IntegerField(u"待处理单数", default=0)
+    settle_amount = models.DecimalField(u'结算金额', max_digits=10, decimal_places=2)
+    def view_count(self):
+        return self.project.doc.view_count
+    def __unicode__(self):
+        return self.project.title

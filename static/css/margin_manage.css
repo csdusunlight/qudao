@@ -34,11 +34,16 @@ nav{
 .tabBox th{
     font-size: 16px;
     font-weight: normal;
+    border-bottom: 1px solid RGB(216,216,216);
 }
 .tabBox td{
     height: 40px;
     text-align: center;
     font-size: 16px;
+    border-bottom: 1px solid RGB(216,216,216);
+}
+.page{
+    margin-top: 5px;
 }
 /* 充值模态框 */
 .addMsk{

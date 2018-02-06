@@ -14,6 +14,7 @@ from activity.models import IPAward, IPLog
 from docs.models import Document, DocStatis
 from django.core.cache import cache
 from public.redis import cache_decr_or_set
+from merchant.models import MerchantProjectStatistics
 logger = logging.getLogger("wafuli")
 from django.core.management.base import BaseCommand, CommandError
 from account.models import MyUser, Userlogin, ApplyLog
@@ -93,4 +94,46 @@ class Command(BaseCommand):
                     cache.delete(k)
         
         end_time = time.time()
+        
+        #统计放单项目数据
+        ret = InvestLog.objects.filter(category='merchant', project__state__in=['10', '20']).values('project_id',
+                                'audit_state').annotate(count=Count('*'), sum=Sum('settle_amount')).order_by(
+                                'project_id','audit_state')
+        project_statis = {}
+        view_count = 0
+        settle_count = 0
+        appeal_count = 0
+        abnormal_count = 0
+        toaudit_count = 0
+        settle_amount = 0
+        print ret
+        for item in ret:
+            id = item['project_id'] 
+            if id not in project_statis:
+                project_statis[id]={
+                    'settle_count' : 0,
+                    'settle_amount' :0,
+                    'toaudit_count' :0,
+                    'appeal_count' :0,
+                    'abnormal_count':0,
+                    'submit_count':0,
+                }
+            project_statis[id]['submit_count'] += item['count']
+            if item['audit_state'] == '0':
+                project_statis[id]['settle_count'] = item['count']
+                project_statis[id]['settle_amount'] = item['sum']
+            elif item['audit_state'] == '1':
+                project_statis[id]['toaudit_count'] += item['count']
+            elif item['audit_state'] == '2':
+                project_statis[id]['toaudit_count'] = item['count']
+            elif item['audit_state'] == '3':
+                project_statis[id]['abnormal_count'] = item['count']
+                project_statis[id]['toaudit_count'] += item['count']
+            elif item['audit_state'] == '4':
+                project_statis[id]['appeal_count'] = item['count']
+                project_statis[id]['toaudit_count'] += item['count']
+        for k,v in project_statis.items():
+            MerchantProjectStatistics.objects.update_or_create(project_id=k, defaults=v)
+            
+        
         logger.info("******Statistics is finished, time:%s*********",end_time-begin_time)

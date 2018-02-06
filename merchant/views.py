@@ -366,10 +366,15 @@ def get_days_statis(request):
             'settle_amount':0,
         }
     for item in dict_list:
-        days_data.get(item['day'])['submit_count'] = item['count']
+        key = item['day']
+        if type(key) == datetime.datetime:
+            key = datetime.datetime.strftime(item['day'],'%Y-%m-%d')
+        days_data.get(key)['submit_count'] = item['count']
     for item in dict_list2:
-        days_data.get(item['day'])['settle_count'] = item['count']
-        days_data.get(item['day'])['settle_amount'] = item['sumofsettle']
+        if type(key) == datetime.datetime:
+            key = datetime.datetime.strftime(item['day'],'%Y-%m-%d')
+        days_data.get(key)['settle_count'] = item['count']
+        days_data.get(key)['settle_amount'] = item['sumofsettle']
     return JsonResponse(days_data)
 
 @csrf_exempt

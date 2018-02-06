@@ -9,6 +9,7 @@ from django.utils import timezone
 import datetime
 from django.core.urlresolvers import reverse
 from public.pinyin import PinYin
+from docs.models import Document
 def get_today():
     return datetime.date.today()
 AUDIT_STATE = (
@@ -82,6 +83,7 @@ class Project(models.Model):
     state = models.CharField(u"项目状态", max_length=2, choices=Project_STATE, default='10')
     pic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）", blank=True)
     strategy = models.URLField(u"攻略链接")
+    doc = models.ForeignKey(Document, null=True, on_delete=models.SET_NULL, default=True)
     company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, verbose_name=u"合作平台")
     type = models.CharField(u"项目类别", max_length=1, choices=Project_TYPE, blank=True)
     is_multisub_allowed = models.BooleanField(u"是否允许同一手机号多次提交", default=False)

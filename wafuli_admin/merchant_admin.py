@@ -105,7 +105,7 @@ def admin_merchant_project(request):
             obj.broker_rate = broker_rate
             res['code'] = 0
             project = Project.objects.create(title=obj.title, user=obj.user, is_official=True, category='merchant', is_addedto_repo=True, state='00',
-                                   strategy=obj.strategy.fanshu_url(), broker_rate=broker_rate)
+                                   strategy=obj.strategy.fanshu_url(), broker_rate=broker_rate, doc=obj.strategy)
             obj.project = project
         elif type == 2:
             reason = request.POST.get('reason', '')

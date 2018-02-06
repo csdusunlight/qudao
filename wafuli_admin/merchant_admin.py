@@ -36,6 +36,7 @@ def admin_margin(request):
         type = int(type)
         id = int(id)
         log = Margin_AuditLog.objects.get(id=id)
+        reason = request.POST.get('reason', '')
         if log.audit_state != '1':
             res['code'] = -3
             res['res_msg'] = u'该项目已审核过，不要重复审核！'
@@ -45,7 +46,6 @@ def admin_margin(request):
                 log.audit_state = '0'
                 res['code'] = 0
             elif type == 2:
-                reason = request.POST.get('reason', '')
                 if not reason:
                     res['code'] = -2
                     res['res_msg'] = u'传入参数不足，请联系技术人员！'

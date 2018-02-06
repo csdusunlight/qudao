@@ -3,13 +3,16 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" /> {% endblock css %} {% block js %}
 <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
 <script type="text/javascript"> 
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
     $(function () {
         $(".home19").toggleClass("on");
         //未审核数据
         let aduitData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
             '<th>申请提现金额</th><th>申请时间</th><th>处理状态</th><th>处理</th>' +
             '[results]<tr><td>{username}</td><td>{mobile}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td>{amount}</td>' +
-            '<td class="time">{submit_time}</td><td>{state_des}</td><td data-id="{id}"><a class="sure">同意</a>|<a class="rSendefuse">拒绝<a></td></tr>[/results]</table>';
+            '<td class="time">{submit_time}</td><td>{state_des}</td><td class="opBox" data-id="{id}"><a class="sure">同意</a>|<a class="rSendefuse">拒绝<a></td></tr>[/results]</table>';
         //已通过数据
         let passData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
             '<th>申请提现金额</th><th>申请时间</th><th>处理状态</th><th>处理人</th>' +
@@ -32,11 +35,11 @@
             });
         }
         $("#pagedata").ajaxPage({
-            url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}',
+            url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}&audit_state=1',
             pageId: $("#page"),
             pageSize: 6,
             run: true,
-            content: aduitData,
+            content:aduitData,
             complete: pagecallback,
         });
 
@@ -83,13 +86,13 @@
             }
 
             let pdata;
-            if (audit_state == 0) {          //已通过
+            if(audit_state == 0) {            //已通过
                 pdata = passData;
                 newUrl += '&audit_state=0';
-            } else if (audit_state == 1) {   //待审核
+            } else if (audit_state == 1) {    //待审核
                 pdata = aduitData;
                 newUrl += '&audit_state=1';
-            } else if (audit_state == 2) {   //已拒绝
+            } else if (audit_state == 2) {    //已拒绝
                 pdata = rSendefuseData;
                 newUrl += '&audit_state=2';
             }
@@ -131,6 +134,7 @@
                 success: function (ret) {
                     if (ret.code == 0) {
                         alert("已同意");
+                        $('.opBox').text('已同意');
                         $('.agreeBox').hide();
                     }
                 },
@@ -155,7 +159,7 @@
             let reason = $('.reason').val();
             console.log('----refuse----'+refuseId);
             $.ajax({
-                url: '/merchant/margin_auditlog/',
+                url: '/Admin/admin_margin/',
                 type: 'POST',   //GET
                 async: true,    //或false,是否异步
                 data: {
@@ -168,6 +172,7 @@
                 success: function (ret) {
                     if (ret.code == 0) {
                         alert("已拒绝");
+                        $('.opBox').text('已拒绝');
                         $('.rSendefuseBox').hide();
                     }
                 },

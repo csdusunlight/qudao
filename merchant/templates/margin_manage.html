@@ -9,8 +9,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/margin_manage.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
     <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
-
+    <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
 </head>
 
 <body>
@@ -27,13 +28,12 @@
                 <input type="button" class="btn wit" value="提现保证金">
             </nav>
             <div class="tabBox">
-                <table width="100%" class="tables">
-                    <tr>
-                        <th width="30%">变更时间</th>
-                        <th width="30%">变更金额</th>
-                        <th width="30%">变更原因</th>
-                    </tr>
-                </table>
+                <div id="pagedata">
+                </div>
+                <div class="Page-in-admin">
+                    <div class="page" id="page">
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -88,42 +88,67 @@
     <script type="text/javascript " src="{% static 'js/wfl-common.js' %} "></script>
     <script>
         $(function () {
-            $.ajax({
-                url:"/merchant/margin_translog/",
-                type:'get',
-                async:false,
-                timeout:5000,
-                dataType:'json',
-                success:function(ret){
-                    console.log(ret.results);
-               let str_html;
-               for (let i in ret.results) {
-                   str_html = `<tr>
-                                <td class="changeTime">${ret.results[i].time}</td><td>${ret.results[i].initAmount}</td><td>${ret.results[i].reason}</td>
-                              </tr>`
-               }
-               $('.tables').append(str_html);
-                },
-                error:function(xhr,textStatus){
-                    alert(xhr.responseText);
-                }
-            });
+            let Data = '<table width="100%"><tr><th width="33%">变更时间</th><th width="33%">变更金额</th><th width="33%">变更原因</th></tr>' +
+            '[results]<tr><td class="time">{time}</td><td class="transAmount" data-type="{transType}">{transAmount}</td><td>{reason}</td></tr>[/results]</table>';
+            
+            //回调函数
+            function pagecallback() {
+                console.log("回调函数");
+                $('.time').each(function () {
+                let time = $(this).text().split('T');//分割字符串 获取年月日
+                console.log(time);
+                let time_1 = time[1].split('.');//分割字符串 获取时分秒
+                $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
+                });
+                //根据transType来判断‘+’‘-’号
+                $('.transAmount').each(function(){
+                    let type = $(this).attr('data-type');
+                    let initText = $(this).text();  //获取文本内容 再进行字符串拼接
+                    if (type == 0) {    
+                        $(this).text('+' + initText);
+                    }else{
+                        $(this).text('-' + initText);
+                    }
+                });
+            }
+            //分页
+            $("#pagedata").ajaxPage({
+                url: '/merchant/margin_translog/?page={page}&pageSize={pageSize}',
+                pageId: $("#page"),
+                pageSize: 6,
+                run: true,
+                content:Data,
+                complete: pagecallback,
+            });   
             //变更时间处理
-             let changeTime = $('.changeTime').text().split('T');
-             console.log(changeTime);
-             $('.changeTime').text(changeTime[0]);
-             
+            let changeTime = $('.changeTime').text().split('T');
+            console.log(changeTime);
+            $('.changeTime').text(changeTime[0]);
+
             //添加保证金模态框
             $(".add").click(function () {
                 $('.addMsk').show();
             });
             $(".cha").click(function () {
                 $('.addMsk').hide();
+                $('.addAmount').val('');
             });
             //充值保证金ajax
             $('.submit').click(function () {
                 const addAmount = $('.addAmount').val();
                 console.log(addAmount);
+                //正则验证
+                let regx = /^[0-9]*$/; 
+                if (!regx.test(addAmount)) {
+                    alert('充值金额仅限数字');
+                }
+                if(!addAmount){
+                    alert('充值金额不能为零！');
+                    return;
+                }else if(addAmount <= 0){
+                    alert('输入正确的充值金额！');
+                    return;
+                }
                 $.ajax({
                     url: '/merchant/margin_manage/',
                     type: 'post',
@@ -141,8 +166,7 @@
                         } else if (ret.code == -2) {
                             alert("提取失败");
                         }
-                        //成功后刷新页面
-                        // window.location.href = window.location.href;
+                        $('.addAmount').val('');
                     },
                     error: function (xhr, textStatus) {
                         alert(xhr.responseText);
@@ -155,11 +179,11 @@
             });
             $(".cancel").click(function () {
                 $(".witMsk ").hide();
-                window.location.href = window.location.href;
+                $('.witamount ').val('');
             });
             //获取账户余额：
             const user_account = {{ user.margin_account }};
-        console.log("--------账户余额：", user_account);
+            console.log("--------账户余额：", user_account);
         //提取保证金
         $(".send ").click(function () {
             const amount = $(".witamount ").val();

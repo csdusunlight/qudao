@@ -94,8 +94,8 @@ nav{
     display: none;
 }
 .dataBox{
-    width: 460px;
-    height: 340px;
+    width: 560px;
+    height: 440px;
     background: white;
     box-shadow: 5px 5px 5px 0 gray;
     position: absolute;top: 50%;left: 50%;
@@ -107,17 +107,25 @@ nav{
     display: block;
     font-size: 18px;
     margin-top: 25px;
-    margin-left: 190px;
+    margin-left: 240px;
 }
 .data{
     width: 400px;
     height: 160px;
     margin:20px auto;
 }
-.data td{
+/* .data td{
     height: 50px;
     text-align: left;
     font-size: 16px;
+} */
+.t1{
+    text-align: center;
+    height: 50px;
+}
+.t2{
+    text-align: left;
+    height: 50px;
 }
 .cha{
     display: block;
@@ -138,7 +146,7 @@ nav{
     text-align: center;
     background:RGB(145,193,29);
     border-radius: 5px;
-    margin: 50px auto;
+    margin: 50px auto 20px;
     display: block;
     cursor: pointer;
     color: white;
@@ -147,7 +155,9 @@ nav{
 .submit:hover{
     transform: translateY(-4px);
 }
-
+.moneyTip{
+    padding: 5px 25px;
+}
 /* 保证金提现模态框 */
 .witMsk{
     width: 100%;

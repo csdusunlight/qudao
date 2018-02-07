@@ -99,6 +99,12 @@
     <!-- 项目管理js部分 -->
     <script>
         $(function () {
+            //没有数显显示图片
+            function emptydisplay(obj){
+                pic_url = "{%static 'images/bg-nodata.png' %}";
+                obj.html('<div class="nodata-box"></div>');
+            }
+            //顶部tab效果
             $('.nav__item:eq(2)').addClass('active');
             //全部数据：
             let allData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +

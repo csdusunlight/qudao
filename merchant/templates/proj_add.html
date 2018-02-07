@@ -7,7 +7,7 @@
 	<title>用户中心</title>
 	<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
 	<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
-	<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/merchant-base.css' %}" />
 	<link rel="stylesheet" type="text/css" href="{% static 'css/merchant_new_project.css' %}" />
 	<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 	<style>
@@ -17,7 +17,8 @@
 			margin: 24px auto;
 			overflow: hidden;
 		}
-		.btn{
+
+		.btn {
 			cursor: pointer
 		}
 	</style>
@@ -44,9 +45,9 @@
 						<span>攻略链接</span>
 						<div class="pro_right" style="margin-left: 25px;">
 							<select class="seltBox">
-								<option value="0">----</option>
+								<option value="0">————</option>
 							</select>
-							<a class="link" href="/docs/create" target="view_window">新建攻略</a>
+							<a class="new_link" href="/docs/create" target="view_window">新建攻略</a>
 						</div>
 					</div>
 					<div class="pro pro_price">
@@ -79,7 +80,7 @@
 				</from>
 			</div>
 		</div>
-		
+
 	</div>
 	{% include "footer.html" %}
 
@@ -88,26 +89,32 @@
 		$(function () {
 			$('.nav__item:eq(2)').addClass('active');
 			//获取文档
-			$.ajax({
-				url: '/restapi/docs/',
-				type: 'get',
-				async: false,
-				timeout: 5000, //超时时间
-				dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
-				success: function (ret) {
-					console.log(ret.results);
-					let option = document.createElement("option");
-					let str_html = '';
-					for (const i in ret.results) {
-						str_html += '<option value="'+ret.results[i].id+'">'+ ret.results[i].title +'</option>';
+			function docAjax() {
+				$.ajax({
+					url: '/restapi/docs/',
+					type: 'get',
+					async: false,
+					timeout: 5000, //超时时间
+					dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
+					success: function (ret) {
+						console.log(ret.results);
+						let option = document.createElement("option");
+						let str_html = '';
+						for (const i in ret.results) {
+							str_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
+						}
+						$(".seltBox").append(str_html);
+					},
+					error: function (xhr, textStatus) {
+						alert(xhr.responseText);
 					}
-					$(".seltBox").append(str_html);
-				},
-				error: function (xhr, textStatus) {
-					alert(xhr.responseText);
-				}
+				});
+			}
+			docAjax();
+			//点击Select刷新下拉框内容
+			$('.seltBox').focus(function(){
+				docAjax();
 			});
-
 			//提交申请
 			$(".btn").click(function () {
 				let radio = $("input:radio:checked").val();
@@ -117,8 +124,8 @@
 				let price = $("#price").val();
 				let cycle = $("#cycle").val();
 				let remark = $("#remark").val();
-				
-				if(strategy_url == 0){
+
+				if (strategy_url == 0) {
 					alert("请选择项目攻略链接");
 					return;
 				}

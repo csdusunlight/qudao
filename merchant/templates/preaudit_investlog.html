@@ -488,6 +488,7 @@
                 } else {
                     var fun = "window.location.href='/merchant/margin_manage/'";
                     console.log(ret.res_msg);
+                    $('.popup.m-pass-proj-02').removeClass('in');
                     $.confirm({
                         "Content":ret.res_msg,
                         "Confirm": "马上充值",

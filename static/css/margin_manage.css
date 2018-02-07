@@ -34,11 +34,25 @@ nav{
 }
 
 .tabBox{
-    margin-top: 20px;
     background: white;
     padding: 0 20px;
     position: relative;
 }
+/* .tabul{
+    width: 422px;
+    height: 40px;
+    border: 1px solid #797979;
+}
+.tabul li{
+    width: 140px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    float: left;
+    border-right:1px solid #797979;
+
+} */
+
 .tabBox-left{
     width: 30px;
     height: 40px;
@@ -94,7 +108,7 @@ nav{
 }
 .data td{
     height: 50px;
-    text-align: center;
+    text-align: left;
     font-size: 16px;
 }
 .cha{
@@ -125,10 +139,7 @@ nav{
 .submit:hover{
     transform: translateY(-4px);
 }
-.addTip{
-    padding: 5px 5px;
-    
-}
+
 /* 保证金提现模态框 */
 .witMsk{
     width: 100%;

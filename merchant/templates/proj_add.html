@@ -22,6 +22,24 @@
 		.btn {
 			cursor: pointer
 		}
+		.is_futou {
+			width: 20px;
+			height: 20px;
+			opacity: 0;
+		}
+		.need-icon {
+			display: inline-block;
+			margin: 10px 10px 10px 38px;
+			width: 26px;
+			height: 26px;
+			border-radius: 4px;
+			border: 1px solid #e4e4e4;
+			vertical-align: middle;
+			cursor: pointer;
+		}
+		.is_futou:checked + .need-icon {
+			background: url(../../static/images/bg-checked-choose.png) center center no-repeat;
+		}
 	</style>
 </head>
 
@@ -64,8 +82,10 @@
 					<div class="pro pro_num">
 						<span>是否限量</span>
 						<div class="pro_right">
-							<input type="radio" name="num" style="margin-left: 100px;" value="true" />是
-							<input type="radio" name="num" style="margin-left: 150px;" value="false" checked/>否
+							<!-- <input type="radio" name="num" style="margin-left: 100px;" value="true" />是
+							<input type="radio" name="num" style="margin-left: 150px;" value="false" checked/>否 -->
+							<label style="margin-left: 80px;"><input class="is_futou" type="radio" value="true" name="is_futou"><i class="need-icon m-left"></i>是</label>	
+							<label><input class="is_futou" type="radio" checked="checked" value="false" name="is_futou"><i class="need-icon"></i>否</label>	
 						</div>
 					</div>
 					<div class="pro pro_remark">

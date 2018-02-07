@@ -99,13 +99,13 @@ def preaudit_investlog(request):
                 translist = charge_margin(admin_user, '1', cash, project_title)
                 investlog.presettle_amount = cash
                 investlog.broker_amount = broker_amount
-                if broker_amount > 0:
-                    translist2 = charge_margin(admin_user, '1', broker_amount, "佣金")
                 investlog.preaudit_state = '0'
                 translist.auditlog = investlog
-                translist2.auditlog = investlog
                 translist.save(update_fields=['content_type', 'object_id'])
-                translist2.save(update_fields=['content_type', 'object_id'])
+                if broker_amount > 0:
+                    translist2 = charge_margin(admin_user, '1', broker_amount, "佣金")
+                    translist2.auditlog = investlog
+                    translist2.save(update_fields=['content_type', 'object_id'])
 #                 #活动插入
 #                 on_audit_pass(request, investlog)
 #                 #活动插入结束

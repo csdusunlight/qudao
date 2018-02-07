@@ -45,4 +45,4 @@ class MarginAuditLogFilter(django_filters.rest_framework.FilterSet):
     real_name = django_filters.CharFilter('user', lookup_expr='user_bankcard__real_name')
     class Meta:
         model = Margin_AuditLog
-        fields = ['submit_date', 'audit_date', 'user_mobile', 'qq_number','user_name', 'audit_state', 'card_number', 'real_name']
+        fields = ['submit_date', 'audit_date', 'user_mobile', 'qq_number','user_name', 'audit_state', 'card_number', 'real_name', 'type']

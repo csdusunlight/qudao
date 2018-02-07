@@ -15,6 +15,7 @@
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.searchableSelect.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
 <style type="text/css">
     .search {
         padding-top: 20px;
@@ -183,8 +184,8 @@
             </div>
             <div class="handle__out r">
                 <input style="display: none;" id="fileupload2" name="file" type="file" />
-                <a id="input_clone_02" class="btn m-green m-choose">导入</a>
-                <a id="export_02" class="btn m-green">导出</a>
+                <a style="display: none;" id="input_clone_02" class="btn m-green m-choose">导入</a>
+                <a style="display: none;" id="export_02" class="btn m-green">导出</a>
                 <a id="search_02" class="btn m-green">搜索</a>
             </div>
         </div>
@@ -225,8 +226,8 @@
                 </div>-->
                 <div class="popup__item">
                     <span class="popup__itemname">返现金额：</span>
-                    <input type="text" class="return_amount_02" placeholder="填写投资金额" />
-                    <span style="display: block;text-align:right; margin-right: 32px;">每笔返现扣除2%手续费</span>
+                    <input type="text" class="return_amount_02" placeholder="填写返现金额" />
+                    <span style="display: block;text-align:right; margin-right: 32px;">每笔返现扣除<span class="rate-num">2</span>%手续费</span>
                     <p class="process-money"></p>
                 </div>
             </div>
@@ -444,12 +445,16 @@
         parent_dom = $(obj).parent();
         $(".return_amount_02").val('');
         $('.process-money').text('');
+        $('.rate-num').text(rate);
         $('.popup.m-pass-proj-02').addClass('in');
     }
     $('#confirm_pass_02').click(function() {
         var return_amount = $(".return_amount_02").val();
         if(!return_amount || !Number(return_amount)) {
-            alert('返现金额不能为空，且必须为数字格式')
+//          alert('返现金额不能为空，且必须为数字格式');
+            $.prompt({
+                "Content":"返现金额不能为空，且必须为数字格式"
+            });
             return;
         }
         console.log(return_amount)
@@ -464,15 +469,24 @@
             },
             success: function(ret) {
                 if(ret.code == 0) {
-                    alert('操作成功');
+//                  alert('操作成功');
+                    $.prompt({
+                        "Content":"操作成功"
+                    });
                     $(parent_dom).html('操作成功，通过');
                     $('.popup.m-pass-proj-02').removeClass('in');
                 } else {
                     console.log(ret.res_msg);
+                    $.warning({
+                        "Content":ret.res_msg
+                    });
                 }
             },
             error: function() {
-                alert("请检查网络连接");
+//              alert("请检查网络连接");
+                $.warning({
+                    "Content":"请检查网络连接"
+                });
             }
         });
     });
@@ -502,7 +516,10 @@
     $('#confirm_refuse_02').click(function() {
         var refuse_reason = $(".refuse_reason_02").val();
         if(!refuse_reason) {
-            alert('拒绝原因不能为空')
+//          alert('拒绝原因不能为空');
+            $.warning({
+                "Content":"拒绝原因不能为空"
+            });
             return;
         }
         console.log(refuse_reason);
@@ -517,15 +534,23 @@
             },
             success: function(ret) {
                 if(ret.code == 0) {
-                    alert('操作成功');
+//                  alert('操作成功');
+                    $.prompt({
+                        "Content":"操作成功"
+                    });
                     $(parent_dom).html('操作成功，拒绝');
                     $('.popup.m-refuse-proj-02').removeClass('in');
                 } else {
                     console.log(ret.res_msg);
+                    $.warning({
+                        "Content":ret.res_msg
+                    });
                 }
             },
             error: function() {
-                alert("请检查网络连接");
+                $.warning({
+                    "Content":"请检查网络连接"
+                });
             }
         });
     });
@@ -538,7 +563,10 @@
     $('#confirm_again_02').click(function() {
         var again_reason = $(".again_reason_02").val();
         if(!again_reason) {
-            alert('复审原因不能为空')
+//          alert('复审原因不能为空');
+            $.warning({
+                "Content":"复审原因不能为空"
+            });
             return;
         }
         console.log(again_reason);
@@ -553,15 +581,23 @@
             },
             success: function(ret) {
                 if(ret.code == 0) {
-                    alert('操作成功');
+//                  alert('操作成功');
+                    $.prompt({
+                        "Content":"操作成功"
+                    });
                     $(parent_dom).html('操作成功，复审');
                     $('.popup.m-again-proj-02').removeClass('in');
                 } else {
                     console.log(ret.res_msg);
+                    $.warning({
+                        "Content":ret.res_msg
+                    });
                 }
             },
             error: function() {
-                alert("请检查网络连接");
+                $.warning({
+                    "Content":"请检查网络连接"
+                });
             }
         });
     });

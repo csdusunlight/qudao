@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/merchant-base.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
     <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
     <style type="text/css">
         .today-data-box {
             background-color: #fff;
@@ -35,9 +36,10 @@
     	    margin-top: 30px;
     	}
     	.table-box {
+    	    padding: 10px 0;
     	    width: 49%;
     	    background-color: #fff;
-    	    height: 490px;
+    	    height: 510px;
     	}
     	.data-head {
     	    height: 50px;
@@ -168,6 +170,7 @@
             success: function(ret) {
                 left_data_html = '<tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>';
                 var i;
+                console.log(ret);
                 for (i in ret) {
                     left_data_html += '<tr><td>' + ret[i].title + '</td><td>' + ret[i].pv +
                     '</td><td>' + ret[i].submit_count + '</td><td>' + ret[i].settle_count + '</td><td>' + ret[i].settle_amount + '</td></tr>'

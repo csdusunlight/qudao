@@ -42,7 +42,32 @@
     	    height: 510px;
     	}
     	.data-head {
+    	    position: relative;
     	    height: 50px;
+    	}
+    	.more-link {
+    	    position: absolute;
+    	    top: 10px;
+    	    right: 20px;
+    	    width: 30px;
+    	    height: 30px;
+    	    background-color: #e4e4e4;
+    	    border-radius: 50%;
+    	    cursor: pointer;
+    	}
+    	.more-link:hover {
+            background-color: #ffbe00;
+        }
+    	.more-link:after {
+    	    position: absolute;
+    	    top: 8px;
+    	    left: 6px;
+    	    content: "";
+    	    width: 10px;
+    	    height: 10px;
+    	    border-top: 2px solid #fff;
+    	    border-right: 2px solid #fff;
+    	    transform: rotate(45deg);
     	}
     	.table-box table {
     	    width: 100%;
@@ -58,16 +83,16 @@
     	    height: 40px;
     	}
     	.left-nav-box {
-    	    padding-top: 5px;
+    	    padding-top: 10px;
     	    padding-left: 30px;
     	    font-size: 0;
     	}
     	.left-nav-item {
     	    display: inline-block;
-    	    margin-right: 18px;
-    	    width: 90px;
-    	    height: 40px;
-    	    line-height: 40px;
+    	    margin-right: 14px;
+    	    width: 70px;
+    	    height: 30px;
+    	    line-height: 30px;
     	    border: 1px solid #e4e4e4;
     	    border-radius: 10px;
     	    text-align: center;
@@ -112,13 +137,15 @@
         </div>
         <div class="detail-data-box clearfix">
             <div class="left-data-box l table-box">
-                <div class="data-head">
-                    <ul class="left-nav-box">
+                <div class="data-head clearfix">
+                    <h4 class="today-data-title l">项目数据</h4>
+                    <ul class="left-nav-box l">
                     	<li class="left-nav-item on">今天</li>
                     	<li class="left-nav-item">昨天</li>
                     	<li class="left-nav-item">最近7天</li>
                     	<li class="left-nav-item">最近30天</li>
                     </ul>
+                    <a class="more-link" target="_blank" href="{% url 'merchant:merchant_detail_proj' %}"></a>
                 </div>
             	<table class="left-table-box">
             		<tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>
@@ -127,11 +154,21 @@
             <div class="right-data-box">
                 <div class="right-data-box r table-box">
                     <div class="data-head">
-                        <h4 class="today-data-title">项目数据</h4>
+                        <h4 class="today-data-title">每日统计</h4>
+                        <a class="more-link" target="_blank" href="{% url 'merchant:merchant_detail_day' %}"></a>
                     </div>
                     <table class="right-table-box">
                         <tr><th>日期</th><th>交单量（PV）</th><th>结算单数</th><th>结算总额</th></tr>
                     </table>
+                </div>
+            </div>
+        </div>
+        <div style="margin-bottom: 20px; margin-top: 20px;" class="table">
+            <h2 class="table__title">项目数据</h2>
+            <div id="pagedata">
+            </div>
+            <div class="changes-p">
+                <div class="page" id="page">
                 </div>
             </div>
         </div>
@@ -141,6 +178,19 @@
     <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
     <script type="text/javascript">
+        var data_proj = '<table width="100%"><tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th>' +
+        '<th>结算单数</th><th>申诉数据单数</th><th>异常数据单数</th><th>待处理单数</th><th>结算总额</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td>{pv}</td><td>{submit_count}</td>' +
+        '<td>{settle_count}</td><td>{appeal_count}</td><td>{abnormal_count}</td>'+
+        '<td>{toaudit_count}</td><td>{settle_amount}</td></tr>[/results]</table>';
+        var url = "/merchant/projectstatislist/?page={page}&pageSize={pageSize}&ordering=project__doc__view_count";
+        $("#pagedata").ajaxPage({
+            url: url,
+            pageId: $("#page"),
+            pageSize: 10,
+            run: true,
+            content: data_proj,
+        });
         $('.nav__item:eq(0)').addClass('active');
         var left_data_html;
         var right_data_html;
@@ -168,12 +218,16 @@
             dataType: "json",
             async:true,
             success: function(ret) {
+                var data_num = 0;
                 left_data_html = '<tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>';
                 var i;
                 console.log(ret);
                 for (i in ret) {
-                    left_data_html += '<tr><td>' + ret[i].title + '</td><td>' + ret[i].pv +
-                    '</td><td>' + ret[i].submit_count + '</td><td>' + ret[i].settle_count + '</td><td>' + ret[i].settle_amount + '</td></tr>'
+                    if (data_num<10) {
+                        data_num++;
+                        left_data_html += '<tr><td>' + ret[i].title + '</td><td>' + ret[i].pv +
+                        '</td><td>' + ret[i].submit_count + '</td><td>' + ret[i].settle_count + '</td><td>' + ret[i].settle_amount + '</td></tr>'
+                    }
                 }
                 $('.left-table-box').html(left_data_html);
             },
@@ -205,11 +259,14 @@
                 dataType: "json",
                 async:true,
                 success: function(ret) {
+                    var data_num = 0;
                     left_data_html = '<tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>';
                     var i;
                     for (i in ret) {
-                        left_data_html += '<tr><td>' + ret[i].title + '</td><td>' + ret[i].pv +
-                        '</td><td>' + ret[i].submit_count + '</td><td>' + ret[i].settle_count + '</td><td>' + ret[i].settle_amount + '</td></tr>'
+                        if (data_num<10) {
+                            left_data_html += '<tr><td>' + ret[i].title + '</td><td>' + ret[i].pv +
+                            '</td><td>' + ret[i].submit_count + '</td><td>' + ret[i].settle_count + '</td><td>' + ret[i].settle_amount + '</td></tr>'
+                        }
                     }
                     $('.left-table-box').html(left_data_html);
                 },

@@ -13,23 +13,17 @@
     <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
     <style>
-        /* .wrapper{
-            width: 100%;
-            height: 810px;
-            background: url(../../static/images/bg_starSky.jpg) no-repeat;
-            background-position-y: -10px;
-        } */
-        .page>.href{
-            color: white;
+        .type1{
+            color: RGB(105,105,189);
         }
-        .footer{
-            margin: 0 auto;
+        .type0{
+            color: RGB(145,193,29);
+        }
+        .page>.href{
+            color: black;
         }
         .Content {
             margin:0 auto;
-        }
-        #pagedata{
-            background: white;
         }
         .Page-in-admin{
             padding: 10px 0;
@@ -55,6 +49,8 @@
                     <input type="button" class="btn wit" value="提现保证金">
                 </nav>
                 <div class="tabBox">
+                    <div class="tabBox-left"></div>
+                    <div class="tabBox-right"></div>
                     <div id="pagedata">
                     </div>
                     <div class="Page-in-admin">
@@ -95,6 +91,10 @@
                     </div>
                     <input type="button " class="submit " value="确定 " />
                 </div>
+                <!-- 充值提示窗 -->
+                <div class="addTip">
+                    <span></span>
+                </div>
             </div>
 
             <!-- 提现保证金模态框 -->
@@ -118,7 +118,7 @@
         $(function () {
             $('.nav__item:eq(1)').addClass('active');
             let Data = '<table width="100%"><tr><th width="33%">变更时间</th><th width="33%">变更金额</th><th width="33%">变更原因</th></tr>' +
-            '[results]<tr><td class="time">{time}</td><td class="transAmount" data-type="{transType}">{transAmount}</td><td>{reason}</td></tr>[/results]</table>';
+            '[results]<tr><td class="time">{time}</td><td class="transAmount type{transType}" data-type="{transType}">{transAmount}</td><td>{reason}</td></tr>[/results]</table>';
             
             //回调函数
             function pagecallback() {
@@ -144,7 +144,7 @@
             $("#pagedata").ajaxPage({
                 url: '/merchant/margin_translog/?page={page}&pageSize={pageSize}',
                 pageId: $("#page"),
-                pageSize: 6,
+                pageSize: 15,
                 run: true,
                 content:Data,
                 complete: pagecallback,
@@ -224,35 +224,37 @@
             }
             //获取提现金额不能大于保证金
             if (user_account < amount) {
-                alert("提取金额不能大于保证金！");
+                alert("余额不足！");
+                return;
+            }else if(!amount){
+                alert('提取金额不能为空！');
                 return;
             }
-
             //ajax发送提取保证金
-            $.ajax({
-                url: '/merchant/index/',
-                type: 'post',
-                async: false,
-                timeout: 5000, //超时时间
-                dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
-                data: {
-                    'type': 1,
-                    "amount": amount
-                },
-                success: function (ret) {
-                    if (ret.code == 0) {
-                        alert("提交提现申请，请等待");
-                        $(".witMsk ").hide();
-                    } else if (ret.code == -2) {
-                        alert("提取失败");
-                    }
-                    //成功后刷新页面
-                    window.location.href = window.location.href;
-                },
-                error: function (xhr, textStatus) {
-                    alert(xhr.responseText);
-                }
-            });
+            // $.ajax({
+            //     url: '/merchant/index/',
+            //     type: 'post',
+            //     async: false,
+            //     timeout: 5000, //超时时间
+            //     dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
+            //     data: {
+            //         'type': 1,
+            //         "amount": amount
+            //     },
+            //     success: function (ret) {
+            //         if (ret.code == 0) {
+            //             alert("提交提现申请，请等待");
+            //             $(".witMsk ").hide();
+            //         } else if (ret.code == -2) {
+            //             alert("提取失败");
+            //         }
+            //         //成功后刷新页面
+            //         window.location.href = window.location.href;
+            //     },
+            //     error: function (xhr, textStatus) {
+            //         alert(xhr.responseText);
+            //     }
+            // });
         });
 
         });

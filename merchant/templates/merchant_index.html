@@ -184,6 +184,10 @@
         '<td>{settle_count}</td><td>{appeal_count}</td><td>{abnormal_count}</td>'+
         '<td>{toaudit_count}</td><td>{settle_amount}</td></tr>[/results]</table>';
         var url = "/merchant/projectstatislist/?page={page}&pageSize={pageSize}&ordering=project__doc__view_count";
+        function emptydisplay(obj){
+            pic_url = "{%static 'images/bg-nodata.png' %}";
+            obj.html('<div class="nodata-box"></div>');
+        }
         $("#pagedata").ajaxPage({
             url: url,
             pageId: $("#page"),

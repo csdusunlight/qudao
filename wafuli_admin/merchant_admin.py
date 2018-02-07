@@ -67,7 +67,6 @@ def admin_margin(request):
                     return JsonResponse(res)
                 log.audit_state = '2'
                 log.audit_reason = reason
-                charge_margin(log.user, '0', log.amount, u'冲账', True, reason)
                 res['code'] = 0
         log.audit_time = datetime.datetime.now()
         log.admin_user = admin_user

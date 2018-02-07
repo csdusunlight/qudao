@@ -226,14 +226,18 @@
                 left_data_html = '<tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>';
                 var i;
                 console.log(ret);
-                for (i in ret) {
-                    if (data_num<10) {
-                        data_num++;
-                        left_data_html += '<tr><td>' + ret[i].title + '</td><td>' + ret[i].pv +
-                        '</td><td>' + ret[i].submit_count + '</td><td>' + ret[i].settle_count + '</td><td>' + ret[i].settle_amount + '</td></tr>'
+                if (!ret) {
+                	$('.left-data-box').addClass('nodata-box');
+                } else{
+                    for (i in ret) {
+                        if (data_num<10) {
+                            data_num++;
+                            left_data_html += '<tr><td>' + ret[i].title + '</td><td>' + ret[i].pv +
+                            '</td><td>' + ret[i].submit_count + '</td><td>' + ret[i].settle_count + '</td><td>' + ret[i].settle_amount + '</td></tr>'
+                        }
                     }
+                    $('.left-table-box').html(left_data_html);
                 }
-                $('.left-table-box').html(left_data_html);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR.responseText);
@@ -266,13 +270,17 @@
                     var data_num = 0;
                     left_data_html = '<tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>';
                     var i;
-                    for (i in ret) {
-                        if (data_num<10) {
-                            left_data_html += '<tr><td>' + ret[i].title + '</td><td>' + ret[i].pv +
-                            '</td><td>' + ret[i].submit_count + '</td><td>' + ret[i].settle_count + '</td><td>' + ret[i].settle_amount + '</td></tr>'
+                    if (!ret) {
+                        $('.left-data-box').addClass('nodata-box');
+                    } else{
+                        for (i in ret) {
+                            if (data_num<10) {
+                                left_data_html += '<tr><td>' + ret[i].title + '</td><td>' + ret[i].pv +
+                                '</td><td>' + ret[i].submit_count + '</td><td>' + ret[i].settle_count + '</td><td>' + ret[i].settle_amount + '</td></tr>'
+                            }
                         }
+                        $('.left-table-box').html(left_data_html);
                     }
-                    $('.left-table-box').html(left_data_html);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR.responseText);

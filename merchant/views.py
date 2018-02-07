@@ -273,7 +273,17 @@ def merchant(request):
             result['res_msg'] = u'提现失败！'
         return JsonResponse(result)
 
+@csrf_exempt
+@login_required
+@has_permission('100')
+def merchant_detail_proj(request):
+    return render(request,'merchant_detail_proj.html',{})
 
+@csrf_exempt
+@login_required
+@has_permission('100')
+def merchant_detail_day(request):
+    return render(request,'merchant_detail_day.html',{})
 
 @login_required_ajax
 @has_permission('100')

@@ -25,13 +25,12 @@
 				</li>
 				{% else %}
 				<li class="d-ib">
-					<font>您好，
-						<a class="headertop__navitem link" href="{% url 'account_index' %}">{{user.mobile}}</a>
+					<font>您好,<a class="headertop__navitem link" href="{% url 'account_index' %}">{{user.mobile}}</a></font>
 				</li>
 				<!--{%if user.level > 0 %}
                      （VIP{{user.level}}）
                     {%endif%}-->
-				</font>
+				
 				<li class="d-ib">
 					<a class="headertop__navitem link" href="{%url 'logout' %}">退出</a>
 				</li>

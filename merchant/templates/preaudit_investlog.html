@@ -21,6 +21,12 @@
         padding-top: 20px;
         padding-left: 0;
     }
+    .popup__detail {
+        text-align: center;
+    }
+    .process-money {
+        text-align: left;
+    }
     /*.handle {
         position: relative;
         text-decoration: underline;
@@ -480,9 +486,12 @@
                     $(parent_dom).html('操作成功，通过');
                     $('.popup.m-pass-proj-02').removeClass('in');
                 } else {
+                    var fun = "window.location.href='/merchant/margin_manage/'";
                     console.log(ret.res_msg);
-                    $.warning({
-                        "Content":ret.res_msg
+                    $.confirm({
+                        "Content":ret.res_msg,
+                        "Confirm": "马上充值",
+                        "ConfirmFunc":fun
                     });
                 }
             },
@@ -496,8 +505,10 @@
     });
     $('.return_amount_02').keyup(function(){
         var value = $(".return_amount_02").val();
+        console.log(value);
+        console.log(rate);
         if(Number(value)) {
-            $('.process-money').text('预计扣除手续费：'+ parseInt((value*rate)/10) +'元');
+            $('.process-money').text('预计扣除手续费：'+ parseInt((value*rate)/100) +'元');
         } else {
             $('.process-money').text('返现金额请输入纯数字格式');
         }

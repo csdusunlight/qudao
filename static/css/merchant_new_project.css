@@ -1,10 +1,18 @@
 .wrapperBox{
 	width: 100%;
 }
+.myFrom span{
+	color: white;
+}
 .wrapper{
 	width: 600px;
 	height: 600px;
 	margin: 0 auto;
+	position: relative;
+}
+.new_link{
+	position: absolute;top:190px;right: -40px;
+	text-decoration: underline;
 }
 .pro{
 	margin-top: 10px;
@@ -12,6 +20,7 @@
 }
 .pro_title span{
 	font-size: 18px;
+	color: white;
 }
 .pro_left{
 	width: 30%;
@@ -21,6 +30,7 @@
 .pro_right{
 	width: 70%;
 	display: inline-block;
+	color: white;
 }
 .pro_right input[type=text]{
 	width: 100%;
@@ -34,7 +44,7 @@
 	display: block;
 	margin: 30px auto;
 	border: none;
-	color: black;
+	color: RGB(102,102,102);
 	border-radius: 10px;
 	background: white;
 }

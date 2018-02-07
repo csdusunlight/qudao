@@ -306,7 +306,7 @@ def get_admin_project_page(request):
 def export_investlog(request):
     user = request.user
     item_list = []
-    item_list = InvestLog.objects
+    item_list = InvestLog.objects.filter(category='official')
     if not user.is_staff:
         raise Http404
     investtime_0 = request.GET.get("investtime_0", None)

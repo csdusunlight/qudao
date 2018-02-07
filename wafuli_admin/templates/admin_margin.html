@@ -33,6 +33,7 @@
                 let time_1 = time[1].split('.');//分割字符串 获取时分秒
                 $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
             });
+            
             //变动类型根据type的值来渲染
             $('.change').each(function(){
                 let type = $(this).attr('data-cType');

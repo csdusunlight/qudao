@@ -36,7 +36,7 @@
     color: white;
 }
 .contentBox{
-    padding: 0 20px;
+    padding:20px;
     background-color: #fff;
     position: relative;
 }
@@ -72,7 +72,7 @@
 }
 .tab-right span{
     font-size: 17px;
-    position: absolute;top: 3px;right: 10px;
+    position: absolute;top: 2px;right: 10px;
 }
 .td1 {
     height: 40px;

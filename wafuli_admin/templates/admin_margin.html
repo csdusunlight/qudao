@@ -10,18 +10,18 @@
         $(".home19").toggleClass("on");
         //未审核数据
         let aduitData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
-            '<th>申请提现金额</th><th>申请时间</th><th>处理状态</th><th>处理</th>' +
-            '[results]<tr><td>{username}</td><td>{mobile}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td>{amount}</td>' +
+            '<th>变动类型</th><th>变动金额</th><th>申请时间</th><th>处理状态</th><th>处理</th>' +
+            '[results]<tr><td>{username}</td><td>{mobile}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td class="change" data-cType="{type}"></td><td class="amount" data-type="{type}">{amount}</td>' +
             '<td class="time">{submit_time}</td><td>{state_des}</td><td class="opBox{id}" data-id="{id}"><a class="sure">同意</a>|<a class="rSendefuse">拒绝<a></td></tr>[/results]</table>';
         //已通过数据
         let passData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
-            '<th>申请提现金额</th><th>申请时间</th><th>处理状态</th><th>处理人</th>' +
-            '[results]<tr><td>{username}</td><td>{mobile}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td>{amount}</td>' +
+            '<th>变动类型</th><th>变动金额</th><th>申请时间</th><th>处理状态</th><th>处理人</th>' +
+            '[results]<tr><td>{username}</td><td>{mobile}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td class="change" data-cType="{type}"></td><td class="amount" data-type="{type}">{amount}</td></td>' +
             '<td class="time">{submit_time}</td><td>{state_des}</td><td>{admin_user}</td></tr>[/results]</table>';
         //已拒绝数据
         let rSendefuseData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
-            '<th>申请提现金额</th><th>申请时间</th><th>处理状态</th>' +
-            '[results]<tr><td>{username}</td><td>{mobile}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td>{amount}</td>' +
+            '<th>变动类型</th><th>变动金额</th><th>申请时间</th><th>处理状态</th>' +
+            '[results]<tr><td>{username}</td><td>{mobile}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td class="change" data-cType="{type}"></td><td class="amount" data-type="{type}">{amount}</td></td>' +
             '<td class="time">{submit_time}</td><td>{state_des}</td></tr>[/results]</table>';
 
         //回调函数
@@ -33,6 +33,26 @@
                 let time_1 = time[1].split('.');//分割字符串 获取时分秒
                 $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
             });
+            //变动类型根据type的值来渲染
+            $('.change').each(function(){
+                let type = $(this).attr('data-cType');
+               if (type == 0) {
+                    $(this).text('充值');
+               } else {
+                   $(this).text('提现');
+               }
+            })
+            //根据type值来渲染‘+’‘-’
+            $('.amount').each(function(){
+                let type = $(this).attr('data-type');
+                let amountText = $(this).text();
+                if (type == 0) {
+                    $(this).text(`+ ${amountText}`);
+                } else {
+                    $(this).text(`- ${amountText}`);
+                }
+            });
+            
         }
         $("#pagedata").ajaxPage({
             url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}&audit_state=1',

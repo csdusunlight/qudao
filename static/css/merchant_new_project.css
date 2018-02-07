@@ -11,8 +11,13 @@
 	position: relative;
 }
 .new_link{
-	position: absolute;top:190px;right: -40px;
+	font-size:18px;
+	color: white;
+	float: right; 
 	text-decoration: underline;
+}
+.new_link:hover{
+	color: RGB(145,193,29);
 }
 .pro{
 	margin-top: 10px;

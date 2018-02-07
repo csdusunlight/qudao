@@ -34,6 +34,7 @@
 				<from class="myFrom">
 					<div class="pro pro_title">
 						<span>新建项目</span>
+						<a class="new_link" href="/docs/create" target="view_window">新建攻略</a>
 					</div>
 					<div class="pro pro_name">
 						<span>项目名称</span>
@@ -44,16 +45,13 @@
 					<div class="pro pro_link">
 						<span>攻略链接</span>
 						<div class="pro_right" style="margin-left: 25px;">
-							<select class="seltBox">
-								<option value="0">————</option>
-							</select>
-							<a class="new_link" href="/docs/create" target="view_window">新建攻略</a>
+							<select class="seltBox"></select>
 						</div>
 					</div>
 					<div class="pro pro_price">
 						<span>结算价格</span>
 						<div class="pro_right" style="margin-left: 26px;">
-							<input type="text" name="price" id="price" placeholder="请输入结算价格" />
+							<input type="text" name="price" id="price" placeholder="该价格为公返给渠道的价格，请谨慎确定" />
 						</div>
 					</div>
 					<div class="pro pro_cycle">
@@ -99,11 +97,11 @@
 					success: function (ret) {
 						console.log(ret.results);
 						let option = document.createElement("option");
-						let str_html = '';
+						let str_html = '<option value="0">————</option>';
 						for (const i in ret.results) {
 							str_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
 						}
-						$(".seltBox").append(str_html);
+						$(".seltBox").html(str_html);
 					},
 					error: function (xhr, textStatus) {
 						alert(xhr.responseText);

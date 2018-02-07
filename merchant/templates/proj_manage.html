@@ -23,7 +23,8 @@
             margin:0 auto;
         }
         #pagedata{
-            color: white;
+            min-height: 200px;
+            color: black;
         }
         #pagedata > table{
             background: white;
@@ -41,12 +42,8 @@
             border-bottom: 2px solid #f5f5f5;
         }
         .page>.href{
-            color: white;
+            color: black;
         }
-        .footer{
-            margin: 0 auto;
-        }
-        
     </style>
 </head>
 
@@ -67,12 +64,15 @@
                     </ul>
                     <a href="/merchant/proj_add/">
                         <div class="tab-right">
-                            <label>+</label> 新建项目申请
+                            <label>+</label> 
+                            <span>新建项目申请</span>
                         </div>
                     </a>
                 </div>
 
                 <div class="contentBox">
+                    <div class="c-left"></div>
+                    <div class="c-right"></div>
                     <div id="pagedata"></div>
                     <div class="Page-in1">
                         <div class="page" id="page"></div>
@@ -138,7 +138,7 @@
             $("#pagedata").ajaxPage({
                 url: url,
                 pageId: $("#page"),
-                pageSize: 6,
+                pageSize: 15,
                 run: true,
                 content: allData,
                 complete: pagecallback,

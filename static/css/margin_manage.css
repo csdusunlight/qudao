@@ -1,6 +1,5 @@
 .wrapperBox{
     width: 946px;
-    height: 600px;
     margin: 0 auto;
 }
 nav{
@@ -38,6 +37,19 @@ nav{
     margin-top: 20px;
     background: white;
     padding: 0 20px;
+    position: relative;
+}
+.tabBox-left{
+    width: 30px;
+    height: 40px;
+    position: absolute;top: 0;left: 0;
+    background-color: #f5f5f5;
+}
+.tabBox-right{
+    width: 30px;
+    height: 40px;
+    position: absolute;top: 0;right: 0;
+    background-color: #f5f5f5;
 }
 .tabBox th{
     background-color: #f5f5f5;
@@ -113,6 +125,10 @@ nav{
 .submit:hover{
     transform: translateY(-4px);
 }
+.addTip{
+    padding: 5px 5px;
+    
+}
 /* 保证金提现模态框 */
 .witMsk{
     width: 100%;
@@ -147,6 +163,7 @@ nav{
     margin-left: 30px;
     height: 30px;
     width: 200px;
+    padding: 5px 5px;
 }
 
 .send{

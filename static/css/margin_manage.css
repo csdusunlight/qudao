@@ -35,13 +35,14 @@ nav{
 
 .tabBox{
     background: white;
-    padding: 0 20px;
+    padding: 10px 20px;
     position: relative;
 }
-/* .tabul{
+.tabul{
     width: 422px;
-    height: 40px;
+    height: 42px;
     border: 1px solid #797979;
+    margin-top: 10px;
 }
 .tabul li{
     width: 140px;
@@ -50,8 +51,15 @@ nav{
     line-height: 40px;
     float: left;
     border-right:1px solid #797979;
-
-} */
+    cursor: pointer;
+}
+.tabul li:nth-child(3){
+    border-right: none;
+}
+.act{
+    background: #91c11d;
+    color:#fff;
+}
 
 .tabBox-left{
     width: 30px;

@@ -56,45 +56,43 @@
     <!--头部-->
     {% include "merchant_header.html" %}
     <!--内容-->
-    <div class="wrapContent">
-        <div class="Content">
-            <!-- {% include "merchant_left.html" %}-->
-            <div class="wrapperBox">
-                <div class="wrapper">
-                    <ul class="tab">
-                        <li class="active">全部</li>
-                        <li>已通过</li>
-                        <li>申请中</li>
-                        <li>已拒绝</li>
-                    </ul>
-                    <a href="/merchant/proj_add/">
-                        <div class="tab-right">
-                            <label>+</label> 
-                            <span>我要放单</span>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="contentBox">
-                    <div id="pagedata"></div>
-                    <div class="Page-in1">
-                        <div class="page" id="page"></div>
+    <div class="Content">
+        <!-- {% include "merchant_left.html" %}-->
+        <div class="wrapperBox">
+            <div class="wrapper">
+                <ul class="tab">
+                    <li class="active">全部</li>
+                    <li>已通过</li>
+                    <li>申请中</li>
+                    <li>已拒绝</li>
+                </ul>
+                <a href="/merchant/proj_add/">
+                    <div class="tab-right">
+                        <label>+</label> 
+                        <span>我要放单</span>
                     </div>
-                </div>
+                </a>
             </div>
-            <!-- 点击 操作模态框 -->
-            <div class="opMsk">
-                <div class="dataBox">
-                    <p>提示</p>
-                    <span class="tips"></span>
-                    <div class="btnBox">
-                        <input type="button" class="btn send" value="确定">
-                        <input type="button" class="btn cancel" value="取消">
-                    </div>
+
+            <div class="contentBox">
+                <div id="pagedata"></div>
+                <div class="Page-in1">
+                    <div class="page" id="page"></div>
                 </div>
             </div>
         </div>
-    </div>    
+        <!-- 点击 操作模态框 -->
+        <div class="opMsk">
+            <div class="dataBox">
+                <p>提示</p>
+                <span class="tips"></span>
+                <div class="btnBox">
+                    <input type="button" class="btn send" value="确定">
+                    <input type="button" class="btn cancel" value="取消">
+                </div>
+            </div>
+        </div>
+    </div>
     {% include "footer.html" %}
 
     <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>

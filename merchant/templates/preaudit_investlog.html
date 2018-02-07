@@ -175,6 +175,7 @@
                 <div class="time-input-box"><input type="text" class="date_picker time-input" id="audit_date1_02" /></div>
             </div>
         </div>
+        <p style="margin-bottom: 10px;" class="clearfix">未审核数据通过后立即扣除保证金，进入预审核通过，再经过管理员审核确认后正式通过。</p>
         <div class="handle clearfix">
             <div class="handle__in l">
                 <ul style="width: 560px;" class="state-tabbox-2">
@@ -196,7 +197,7 @@
             </div>
         </div>
         
-        <div style="height: 561px;" id="pagedata2">
+        <div class="page-data" style="height: 561px;" id="pagedata2">
         </div>
         <div class="changes-p">
             <div class="page" id="page2">
@@ -395,6 +396,10 @@
 //              $(this).text('无');
 //          }
 //      })
+    }
+    function emptydisplay(obj){
+        pic_url = "{%static 'images/bg-nodata.png' %}";
+        obj.html('<div class="nodata-box"></div>');
     }
     
 //  $("#pagedata").ajaxPage({

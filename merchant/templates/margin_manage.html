@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
     <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
     <style>
         .type1{
             color: RGB(105,105,189);
@@ -31,6 +32,10 @@
             width: 100%;
             background: white;
         }
+        .page > .on{
+            width: 26px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -49,8 +54,11 @@
                     <input type="button" class="btn wit" value="提现保证金">
                 </nav>
                 <div class="tabBox">
-                    <div class="tabBox-left"></div>
-                    <div class="tabBox-right"></div>
+                    <!-- <ul class="tabul">
+                        <li>全部</li>
+                        <li>充值</li>
+                        <li>提现</li>
+                    </ul> -->
                     <div id="pagedata">
                     </div>
                     <div class="Page-in-admin">
@@ -90,10 +98,6 @@
                         </table>
                     </div>
                     <input type="button " class="submit " value="确定 " />
-                </div>
-                <!-- 充值提示窗 -->
-                <div class="addTip">
-                    <span></span>
                 </div>
             </div>
 
@@ -142,9 +146,9 @@
             }
             //分页
             $("#pagedata").ajaxPage({
-                url: '/merchant/margin_translog/?page={page}&pageSize={pageSize}',
+                url: '/merchant/margin_translog/?page={page}&pageSize={pageSize}&user=',
                 pageId: $("#page"),
-                pageSize: 15,
+                pageSize: 20,
                 run: true,
                 content:Data,
                 complete: pagecallback,
@@ -169,15 +173,22 @@
                 //正则验证
                 let regx = /^[0-9]*$/; 
                 if (!regx.test(addAmount)) {
-                    alert('充值金额仅限数字');
+                    $.prompt({
+                        "Content":"充值金额仅限数字!"
+                    });
                 }
                 if(!addAmount){
-                    alert('充值金额不能为零！');
+                    $.prompt({
+                        "Content":"充值金额不能为零！"
+                    });
                     return;
                 }else if(addAmount <= 0){
-                    alert('输入正确的充值金额！');
+                    $.prompt({
+                        "Content":"输入正确的充值金额！"
+                    });
                     return;
                 }
+               
                 $.ajax({
                     url: '/merchant/margin_manage/',
                     type: 'post',
@@ -190,10 +201,14 @@
                     },
                     success: function (ret) {
                         if (ret.code == 0) {
-                            alert("提交充值申请，请等待");
+                            $.prompt({
+                                "Content":"提交充值申请，请等待!"
+                            });
                             $(".addMsk ").hide();
                         } else if (ret.code == -2) {
-                            alert("提取失败");
+                            $.prompt({
+                                "Content":"提取失败!"
+                            });
                         }
                         $('.addAmount').val('');
                     },
@@ -219,42 +234,57 @@
             //正则
             const regx = /^[0-9]*$/;
             if (!regx.test(amount)) {
-                alert("提取金额必须为纯数字");
+                $.prompt({
+                    "Content":"提取金额必须为纯数字!"
+                });
                 return;
             }
             //获取提现金额不能大于保证金
             if (user_account < amount) {
-                alert("余额不足！");
+                $.prompt({
+                    "Content":"余额不足！"
+                });
                 return;
             }else if(!amount){
-                alert('提取金额不能为空！');
+                $.prompt({
+                    "Content":"提取金额不能为空！"
+                });
                 return;
             }
             //ajax发送提取保证金
-            // $.ajax({
-            //     url: '/merchant/index/',
-            //     type: 'post',
-            //     async: false,
-            //     timeout: 5000, //超时时间
-            //     dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
-            //     data: {
-            //         'type': 1,
-            //         "amount": amount
-            //     },
-            //     success: function (ret) {
-            //         if (ret.code == 0) {
-            //             alert("提交提现申请，请等待");
-            //             $(".witMsk ").hide();
-            //         } else if (ret.code == -2) {
-            //             alert("提取失败");
-            //         }
-            //         //成功后刷新页面
-            //         window.location.href = window.location.href;
-            //     },
-            //     error: function (xhr, textStatus) {
-            //         alert(xhr.responseText);
-            //     }
-            // });
+            $.ajax({
+                url: '/merchant/index/',
+                type: 'post',
+                async: false,
+                timeout: 5000, //超时时间
+                dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
+                data: {
+                    'type': 1,
+                    "amount": amount
+                },
+                success: function (ret) {
+                    if (ret.code == 0) {
+                        // alert('提交提现申请，请等待');
+                        $.prompt({
+                            "Content":"提交提现申请，请等待!"
+                        });
+                        $(".witMsk ").hide();
+                    } else if (ret.code == -2) {
+                        $.prompt({
+                            "Content":"提取失败！"
+                        });
+                    }
+                    //成功后2s刷新页面
+                    setTimeout(function(){
+                        window.location.href = window.location.href;
+                    },1000);
+                },
+                error: function (xhr, textStatus) {
+                    $.prompt({
+                        "Content":"请检查网络设置！"
+                    });
+                }
+            });
         });
 
         });

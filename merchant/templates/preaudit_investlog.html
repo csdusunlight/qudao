@@ -133,7 +133,7 @@
 {% include "merchant_header.html" %}
 <!--内容-->
 <div class="Content">
-    <div style="margin-bottom: 20px;" class="table">
+    <!--<div style="margin-bottom: 20px;" class="table">
         <h2 class="table__title">项目数据</h2>
         <div id="pagedata">
         </div>
@@ -141,7 +141,7 @@
             <div class="page" id="page">
             </div>
         </div>
-    </div>
+    </div>-->
     <div class="table">
         <!--<h2 class="table__title">自建数据</h2>-->
         <div class="search">
@@ -174,7 +174,7 @@
                 <ul style="width: 560px;" class="state-tabbox-2">
                     <li data-state = "" class="state-tab-2 on">全部</li>
                     <li data-state = "1" class="state-tab-2">未审核</li>
-                    <li data-state = "-1" class="state-tab-2">管理员审核</li>
+                    <li data-state = "-1" class="state-tab-2">预审核通过</li>
                     <li data-state = "0" class="state-tab-2">已通过</li>
                     <li data-state = "2" class="state-tab-2">已拒绝</li>
                     <li data-state = "3" class="state-tab-2">异常</li>
@@ -190,7 +190,7 @@
             </div>
         </div>
         
-        <div id="pagedata2">
+        <div style="height: 561px;" id="pagedata2">
         </div>
         <div class="changes-p">
             <div class="page" id="page2">
@@ -295,11 +295,11 @@
 <script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
 <script type="text/javascript">
     //  项目投资数据
-    var data_proj = '<table width="100%"><tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th>' +
-        '<th>结算单数</th><th>申诉数据单数</th><th>异常数据单数</th><th>待处理单数</th><th>结算总额</th></tr>[results]' +
-        '<tr><td>{project_title}</td><td>{pv}</td><td>{submit_count}</td>' +
-        '<td>{settle_count}</td><td>{appeal_count}</td><td>{abnormal_count}</td>'+
-        '<td>{toaudit_count}</td><td>{settle_amount}</td></tr>[/results]</table>';
+//  var data_proj = '<table width="100%"><tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th>' +
+//      '<th>结算单数</th><th>申诉数据单数</th><th>异常数据单数</th><th>待处理单数</th><th>结算总额</th></tr>[results]' +
+//      '<tr><td>{project_title}</td><td>{pv}</td><td>{submit_count}</td>' +
+//      '<td>{settle_count}</td><td>{appeal_count}</td><td>{abnormal_count}</td>'+
+//      '<td>{toaudit_count}</td><td>{settle_amount}</td></tr>[/results]</table>';
 //  全部
     var data_user = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
         '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>结算金额</th><th>审核信息</th><th>投资姓名</th>'+
@@ -307,7 +307,7 @@
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
         '<td class="return-txt">{settle_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{remark}</td>'+
-        '<td>{broker_amount}</td><td data-state="{preaudit_state}" class="table-handle"><a onclick="pass_02(this,{id},{broker_rate})">预审</a> | <a onclick="again_02(this,{id})">异常</a> | '+
+        '<td class="broker-amount">{broker_amount}</td><td data-state="{preaudit_state}" class="table-handle"><a onclick="pass_02(this,{id},{broker_rate})">预审</a> | <a onclick="again_02(this,{id})">异常</a> | '+
         '<a onclick="refuse_02(this,{id})">拒绝</a></td></tr>[/results]</table>';
 //  未审核
     var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
@@ -316,7 +316,7 @@
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
         '<td class="return-txt">{presettle_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{remark}</td>'+
-        '<td>{broker_amount}</td><td data-state="{preaudit_state}" class="table-handle"><a onclick="pass_02(this,{id},{broker_rate})">预审</a> | <a onclick="again_02(this,{id})">异常</a> | '+
+        '<td class="broker-amount">{broker_amount}</td><td data-state="{preaudit_state}" class="table-handle"><a onclick="pass_02(this,{id},{broker_rate})">预审</a> | <a onclick="again_02(this,{id})">异常</a> | '+
         '<a onclick="refuse_02(this,{id})">拒绝</a></td></tr>[/results]</table>';
 //  管理员审核
     var data_user_admin = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
@@ -325,7 +325,7 @@
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
         '<td class="return-txt">{presettle_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{remark}</td>'+
-        '<td>{broker_amount}</td></tr>[/results]</table>'; 
+        '<td class="broker-amount">{broker_amount}</td></tr>[/results]</table>'; 
 //  已通过
     var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
         '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>结算金额</th><th>审核信息</th><th>投资姓名</th>'+
@@ -333,7 +333,7 @@
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
         '<td class="return-txt">{settle_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{remark}</td>'+
-        '<td>{broker_amount}</td></tr>[/results]</table>';
+        '<td class="broker-amount">{broker_amount}</td></tr>[/results]</table>';
 //  已拒绝
     var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
         '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>结算金额</th><th>审核信息</th><th>投资姓名</th>'+
@@ -341,7 +341,7 @@
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
         '<td class="return-txt">{settle_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{remark}</td>'+
-        '<td>{broker_amount}</td></tr>[/results]</table>';
+        '<td class="broker-amount">{broker_amount}</td></tr>[/results]</table>';
 //  异常
     var data_user3 = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
         '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th>审核状态</th><th>投资姓名</th>'+
@@ -358,7 +358,7 @@
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="submit-time state{preaudit_state}">{preaudit_state_des}</td>'+
         '<td class="return-txt">{settle_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{remark}</td>'+
-        '<td>{broker_amount}</td><td>{appeal_reason}</td><td><a onclick="refuse_again(this,{id})">打回</a> | '+
+        '<td class="broker-amount">{broker_amount}</td><td>{appeal_reason}</td><td><a onclick="refuse_again(this,{id})">打回</a> | '+
         '<a onclick="revise(this,{id})">修正</a></td></tr>[/results]</table>';
     var url = "/merchant/projectstatislist/?page={page}&pageSize={pageSize}&ordering=project__doc__view_count";
     var url2 = "/merchant/investlogs/?page={page}&pageSize={pageSize}&project_user={{user.id}}";
@@ -384,16 +384,20 @@
                 $(this).addClass('m-success');
             }
         })
+//      $('.broker-amount').each(function(){
+//          if ($(this).text() == 'null') {
+//              $(this).text('无');
+//          }
+//      })
     }
     
-    $("#pagedata").ajaxPage({
-        url: url,
-        pageId: $("#page"),
-        pageSize: 10,
-        run: true,
-        content: data_proj,
-//      complete:pagecallback,
-    });
+//  $("#pagedata").ajaxPage({
+//      url: url,
+//      pageId: $("#page"),
+//      pageSize: 10,
+//      run: true,
+//      content: data_proj,
+//  });
     $("#pagedata2").ajaxPage({
         url: url2,
         pageId: $("#page2"),

@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
     <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
     <style>
         .Page-in1{
             padding: 10px 0;
@@ -44,6 +45,10 @@
         .page>.href{
             color: black;
         }
+        .page > .on{
+            width: 26px;
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -65,14 +70,12 @@
                     <a href="/merchant/proj_add/">
                         <div class="tab-right">
                             <label>+</label> 
-                            <span>新建项目申请</span>
+                            <span>我要放单</span>
                         </div>
                     </a>
                 </div>
 
                 <div class="contentBox">
-                    <div class="c-left"></div>
-                    <div class="c-right"></div>
                     <div id="pagedata"></div>
                     <div class="Page-in1">
                         <div class="page" id="page"></div>
@@ -216,10 +219,15 @@
                     },
                     success: function (ret) {
                         if (ret.code == 0) {
-                            alert("已结束");
+                            $.prompt({
+                                "Content":"已结束！"
+                            });
                             $(".opMsk").hide();
                         }
-
+                        //1s后刷新页面
+                        setTimeout(function(){
+                            window.location.href = window.location.href;
+                        },1000);
                     },
                     error: function (xhr, textStatus) {
                         console.log('错误:' + xhr.responseText);

@@ -66,16 +66,22 @@
             <div class="wrapperBox">
                 <nav>
                     <span class="amount">
-                        <span class="amount1">账户保证金余额：<label>{{user.margin_account}}元</label></span>
+                        <span class="amount1">资金账户余额：<label>{{user.margin_account}}元</label></span>
                     </span>
-                    <input type="button" class="btn add" value="充值">
-                    <input type="button" class="btn wit" value="提现保证金">
+                    <input type="button" class="btn add" value="存入">
+                    <input type="button" class="btn wit" value="提取">
                 </nav>
                 <div class="tabBox">
                     <ul class="tabul">
+<<<<<<< HEAD
                         <li class="act">资金明细</li>
                         <li>充值</li>
                         <li>提现</li>
+=======
+                        <li class="act">全部</li>
+                        <li>存入</li>
+                        <li>提取</li>
+>>>>>>> 5ea7643b8f2f628cac6d750e7dad397c06bb6f56
                     </ul>
                     <div id="pagedata" class="page-data">
                     </div>
@@ -92,23 +98,23 @@
                     <span class="cha">
                         ×
                     </span>
-                    <span class="card">充值银行卡</span>
+                    <span class="card">存入银行卡</span>
                     <div class="data">
                         <table width="100% ">
                             <tr>
-                                <td class="t1" width="40%">开户行</td>
-                                <td class="t2" width="60%">46315487824564458</td>
+                                <td class="t1" width="40%">账户</td>
+                                <td class="t2" width="60%">6217932602650574</td>
                             </tr>
                             <tr>
                                 <td class="t1" width="40%">姓名</td>
-                                <td class="t2" width="60%">llc</td>
+                                <td class="t2" width="60%">龙旺</td>
                             </tr>
                             <tr>
-                                <td class="t1" width="40%">账户</td>
-                                <td class="t2" width="60%">12345678977</td>
+                                <td class="t1" width="40%">开户行</td>
+                                <td class="t2" width="60%">浦发银行长沙分行麓谷科技支行</td>
                             </tr>
                             <tr>
-                                <td class="t1" width="40%">充值金额</td>
+                                <td class="t1" width="40%">存入金额</td>
                                 <td class="t2" width="60%">
                                     <input type="text" class="addAmount" style="width: 200px;">
                                 </td>
@@ -128,9 +134,9 @@
             <!-- 提现保证金模态框 -->
             <div class="witMsk ">
                 <div class="witBox ">
-                    <span class="tips ">提现保证金</span>
+                    <span class="tips ">提取资金</span>
                     <div class="amountBox ">
-                        提现金额(元)
+                        提取金额(元)
                         <input type="text " class="witamount ">
                     </div>
                     <input type="button" class="send" value="确定">

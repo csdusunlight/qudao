@@ -178,8 +178,8 @@
                 <div class="time-input-box"><input type="text" class="date_picker time-input" id="audit_date1_02" /></div>
             </div>
         </div>
-        <p style="color: blue" class="clearfix">*商家（您）需要对用户的交单数据进行预审（预结算并扣除保证金），等待管理员确认后，结算金额进入用户的联盟账号。</p>
-        <p style="margin-bottom: 10px; color: blue" class="clearfix">*若数据有争议或需要延后审核，可做异常处理；若无法查到该投资记录，可做拒绝处理。</p>
+        <p style="color: blue; font-size: 12px;" class="clearfix">*商家（您）需要对用户的交单数据进行预审（预结算并冻结相应资金），等待管理员确认后，结算金额进入用户的联盟账号。</p>
+        <p style="margin-bottom: 10px; color: blue; font-size: 12px;" class="clearfix">*若数据有争议或需要延后审核，可做异常处理；若无法查到该投资记录，可做拒绝处理。</p>
         <div class="handle clearfix">
             <div class="handle__in l">
                 <ul style="width: 560px;" class="state-tabbox-2">
@@ -501,7 +501,7 @@
                     $('.popup.m-pass-proj-02').removeClass('in');
                     $.confirm({
                         "Content":ret.res_msg,
-                        "Confirm": "马上充值",
+                        "Confirm": "立即存入",
                         "ConfirmFunc":fun
                     });
                 }

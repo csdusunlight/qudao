@@ -9,7 +9,7 @@ nav{
 
 .amount{
     display: inline-block;
-    margin-left: 30px;
+    margin-left: 15px;
     color: white;
 }
 .amount1 > label{
@@ -230,4 +230,18 @@ nav{
 }
 .cancel:hover{
     transform: translateY(-4px);
+}
+
+.tips__icon {
+    position: absolute !important;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    border-radius: 50%;
+    border: 1px solid RGB(170,222,36);
+    cursor: pointer;
+    color: RGB(170,222,36);
 }

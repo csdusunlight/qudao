@@ -49,7 +49,10 @@
             width: 26px;
             text-align: center;
         }
-        .pagedata{
+        /* .pagedata{
+            min-height: 800px;
+        } */
+        .nodata-box {
             min-height: 800px;
         }
     </style>
@@ -147,7 +150,7 @@
             }
 
 
-            const url = '/merchant/apply_projects/' + '?page={page}&pageSize={pageSize}';
+            const url = '/merchant/apply_projects/' + '?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}';
             //获取全部数据：
             $("#pagedata").ajaxPage({
                 url: url,

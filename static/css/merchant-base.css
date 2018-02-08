@@ -394,9 +394,9 @@ body {
     position: absolute !important;
     box-sizing: border-box;
     display: inline-block;
-    width: 26px;
-    height: 26px;
-    line-height: 26px;
+    width: 22px;
+    height: 22px;
+    line-height: 22px;
     text-align: center;
     border-radius: 50%;
     border: 1px solid #666;

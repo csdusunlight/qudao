@@ -3,23 +3,24 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" /> {% endblock css %} {% block js %}
 <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
 <script type="text/javascript"> 
+    
     $.ajaxSetup({
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
     });
     $(function () {
         $(".home19").toggleClass("on");
         //未审核数据
-        let aduitData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
+        var aduitData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
             '<th>变动类型</th><th>变动金额</th><th>申请时间</th><th>处理状态</th><th>处理</th>' +
             '[results]<tr><td>{username}</td><td>{mobile}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td class="change" data-cType="{type}"></td><td class="amount" data-type="{type}">{amount}</td>' +
             '<td class="time">{submit_time}</td><td>{state_des}</td><td class="opBox{id}" data-id="{id}"><a class="sure">同意</a>|<a class="rSendefuse">拒绝<a></td></tr>[/results]</table>';
         //已通过数据
-        let passData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
+        var passData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
             '<th>变动类型</th><th>变动金额</th><th>申请时间</th><th>处理状态</th><th>处理人</th>' +
             '[results]<tr><td>{username}</td><td>{mobile}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td class="change" data-cType="{type}"></td><td class="amount" data-type="{type}">{amount}</td></td>' +
             '<td class="time">{submit_time}</td><td>{state_des}</td><td>{admin_user}</td></tr>[/results]</table>';
         //已拒绝数据
-        let rSendefuseData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
+        var rSendefuseData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
             '<th>变动类型</th><th>变动金额</th><th>申请时间</th><th>处理状态</th>' +
             '[results]<tr><td>{username}</td><td>{mobile}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td class="change" data-cType="{type}"></td><td class="amount" data-type="{type}">{amount}</td></td>' +
             '<td class="time">{submit_time}</td><td>{state_des}</td></tr>[/results]</table>';
@@ -28,15 +29,15 @@
         function pagecallback() {
             console.log("回调函数");
             $('.time').each(function () {
-                let time = $(this).text().split('T');//分割字符串 获取年月日
+                var time = $(this).text().split('T');//分割字符串 获取年月日
                 console.log(time);
-                let time_1 = time[1].split('.');//分割字符串 获取时分秒
+                var time_1 = time[1].split('.');//分割字符串 获取时分秒
                 $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
             });
             
             //变动类型根据type的值来渲染
             $('.change').each(function(){
-                let type = $(this).attr('data-cType');
+                var type = $(this).attr('data-cType');
                if (type == 0) {
                     $(this).text('充值');
                } else {
@@ -45,8 +46,8 @@
             })
             //根据type值来渲染‘+’‘-’
             $('.amount').each(function(){
-                let type = $(this).attr('data-type');
-                let amountText = $(this).text();
+                var type = $(this).attr('data-type');
+                var amountText = $(this).text();
                 if (type == 0) {
                     $(this).text(`+ ${amountText}`);
                 } else {
@@ -66,8 +67,8 @@
 
         //搜索功能
         $('#search').click(function () {
-            let newUrl = '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}';
-            let submit_date_0 = $('.submit_date_0').val(),
+            var newUrl = '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}';
+            var submit_date_0 = $('.submit_date_0').val(),
                 submit_date_1 = $('.submit_date_1').val(),
                 audit_date_0 = $('.audit_date_0').val(),
                 audit_date_1 = $('.audit_date_1').val(),
@@ -106,7 +107,7 @@
                 newUrl += '&admin_user=' + admin_user;
             }
 
-            let pdata;
+            var pdata;
             if(audit_state == 0) {            //已通过
                 pdata = passData;
                 newUrl += '&audit_state=0';
@@ -128,7 +129,7 @@
             });
         });
         //获取td的data-id值
-        let agreeId;
+        var agreeId;
         //操作 同意模态框
         $('#pagedata').on('click', '.sure', function () {
             //获取
@@ -170,7 +171,7 @@
             });
         });
         //拒绝模态框
-        let refuseId;//获取父级td的data-id的值
+        var refuseId;//获取父级td的data-id的值
         $('#pagedata').on('click', '.rSendefuse', function () {
             refuseId = $(this).parent().attr('data-id');
             console.log('------'+refuseId);
@@ -181,7 +182,7 @@
         });
         //拒绝ajax
         $('.refuseSend').click(function () {
-            let reason = $('.reason').val();
+            var reason = $('.reason').val();
             console.log('----refuse----'+refuseId);
             $('.opBox' + refuseId).text('已拒绝');
             $.ajax({
@@ -217,7 +218,7 @@
         //     if (!$('#fileupload1').val()) {
         //         alert("请选择要导入的文件");
         //     }
-        //     let upFile = "fileupload1";
+        //     var upFile = "fileupload1";
         //     $.ajaxFileUpload({
 		// 		url: '/Admin/import_investlog_settle/',
 		// 		secureuri: false,
@@ -239,8 +240,8 @@
         
         //导出
         $('#export').click(function(){
-            let html = '<form action="' + "" + '" method="get" target="_self" id="postData_form">';
-            let submit_date_0 = $('.submit_date_0').val(),
+            var html = '<form action="' + "" + '" method="get" target="_self" id="postData_form">';
+            var submit_date_0 = $('.submit_date_0').val(),
                 submit_date_1 = $('.submit_date_1').val(),
                 audit_date_0 = $('.audit_date_0').val(),
                 audit_date_1 = $('.audit_date_1').val(),
@@ -278,7 +279,7 @@
                 html += '<input name="audit_state" type="hidden" value="'+ audit_state +'">';
             }
             html +='</html>';
-            let iframe = document.getElementById('myIFrame');
+            var iframe = document.getElementById('myIFrame');
             iframe.contentWindow.document.open();
             iframe.contentWindow.document.write(html);
             iframe.contentWindow.document.close();

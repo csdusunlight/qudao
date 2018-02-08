@@ -225,10 +225,12 @@
                 var data_num = 0;
                 left_data_html = '<tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>';
                 var i;
-                console.log(ret);
-                if (!ret) {
+                console.log(jQuery.isEmptyObject(ret));
+                if (jQuery.isEmptyObject(ret)) {
+                    console.log('jj');
                 	$('.left-data-box').addClass('nodata-box');
                 } else{
+                    console.log('yy');
                     for (i in ret) {
                         if (data_num<10) {
                             data_num++;
@@ -270,9 +272,10 @@
                     var data_num = 0;
                     left_data_html = '<tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>';
                     var i;
-                    if (!ret) {
+                    if (jQuery.isEmptyObject(ret)) {
                         $('.left-data-box').addClass('nodata-box');
                     } else{
+                        $('.left-data-box').removeClass('nodata-box');
                         for (i in ret) {
                             if (data_num<10) {
                                 left_data_html += '<tr><td>' + ret[i].title + '</td><td>' + ret[i].pv +

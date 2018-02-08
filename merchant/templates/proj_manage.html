@@ -49,6 +49,12 @@
             width: 26px;
             text-align: center;
         }
+        /* .pagedata{
+            min-height: 800px;
+        } */
+        .nodata-box {
+            min-height: 800px;
+        }
     </style>
 </head>
 
@@ -75,7 +81,7 @@
             </div>
 
             <div class="contentBox">
-                <div id="pagedata"></div>
+                <div id="pagedata" class="pagedata"></div>
                 <div class="Page-in1">
                     <div class="page" id="page"></div>
                 </div>
@@ -90,6 +96,9 @@
                     <input type="button" class="btn send" value="确定">
                     <input type="button" class="btn cancel" value="取消">
                 </div>
+                <div class="opTip">
+                    <span>项目关闭后会同步关闭该项目的番薯文档</span>
+                </div>
             </div>
         </div>
     </div>
@@ -98,31 +107,32 @@
     <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
     <!-- 项目管理js部分 -->
     <script>
-        $(function () {
-            //没有数显显示图片
-            function emptydisplay(obj){
+        //没有数显显示图片
+        function emptydisplay(obj){
                 pic_url = "{%static 'images/bg-nodata.png' %}";
                 obj.html('<div class="nodata-box"></div>');
             }
+        $(function () {
+            
             //顶部tab效果
             $('.nav__item:eq(2)').addClass('active');
             //全部数据：
-            let allData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
+            var allData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
                 '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">项目状态</th><th width="12.5%">浏览量</th><th width="12.5%">操作</th></tr></thead><tbody>' +
                 '[results]<tr><td class="td1">{title}</td><td class="td1"><a href="{strategy_url}">{strategy_url}</a></td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{state_des}</td><td class="td1">325</td><td class="td1 operate" data-id={id} data-state="{audit_state}"></td></tr>[/results]' +
                 '</tbody></table>';
             //正在进行数据：   
-            let passData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
+            var passData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
                 '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">项目状态</th><th width="12.5%">浏览量</th></tr></thead><tbody>' +
                 '[results]<tr><td class="td1">{title}</td><td class="td1"><a href="{strategy_url}">{strategy_url}</a></td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">{project_state_des}</td><td class="td1">325</td></tr>[/results]' +
                 '</tbody></table>';
             // 申请中数据：    
-            let auditData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
+            var auditData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
                 '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">浏览量</th></tr></thead><tbody>' +
                 '[results]<tr><td class="td1">{title}</td><td class="td1"><a href="{strategy_url}">{strategy_url}</a></td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">325</td></tr>[/results]' +
                 '</tbody></table>';
             //已拒绝
-            let refuseData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
+            var refuseData = '<table width="100%"><thead><tr><th width="12.5%">项目名称</th><th width="12.5%">攻略投资</th>' +
                 '<th width="12.5%">结算价格</th><th width="12.5%">数据结算周期</th><th width="12.5%">浏览量</th></tr></thead><tbody>' +
                 '[results]<tr><td class="td1">{title}</td><td class="td1"><a href="{strategy_url}">{strategy_url}</a></td><td class="td1">{price}</td><td class="td1">{settle_period}</td><td class="td1">325</td></tr>[/results]' +
                 '</tbody></table>';
@@ -130,7 +140,7 @@
             function pagecallback() {
                 console.log("这是一个回调函数");
                 $(".operate").each(function () {
-                    let state = $(this).attr("data-state");
+                    var state = $(this).attr("data-state");
                     if (state == "0") {
                         $(this).html("<a class='clickEnd'>点击结束</a>")
                     } else {
@@ -140,7 +150,7 @@
             }
 
 
-            const url = '/merchant/apply_projects/' + '?page={page}&pageSize={pageSize}';
+            const url = '/merchant/apply_projects/' + '?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}';
             //获取全部数据：
             $("#pagedata").ajaxPage({
                 url: url,
@@ -151,7 +161,7 @@
                 complete: pagecallback,
             });
             $(".tab>li").click(function () {
-                let index = $(this).index();
+                var index = $(this).index();
                 console.log("当前的index:", index);
                 $(this).addClass("active").siblings().removeClass("active");
                 //根据li的index判断加载模块

@@ -202,12 +202,12 @@
             <div style="position: relative;" class="handle__in l">
                 <ul style="width: 560px;" class="state-tabbox-2">
                     <li data-state = "" class="state-tab-2 on">全部</li>
-                    <li data-state = "1" class="state-tab-2">未预审</li>
+                    <li data-state = "1" class="state-tab-2">未预审<span class="tab-num">{{unaudited_num}}</span></li>
                     <li data-state = "-1" class="state-tab-2">预审核通过</li>
                     <li data-state = "0" class="state-tab-2">已通过</li>
                     <li data-state = "2" class="state-tab-2">已拒绝</li>
-                    <li data-state = "3" class="state-tab-2">异常</li>
-                    <li data-state = "4" class="state-tab-2">用户申诉<span class="tab-num">23</span></li>
+                    <li data-state = "3" class="state-tab-2">异常<span class="tab-num">{{except_num}}</span></li>
+                    <li data-state = "4" class="state-tab-2">用户申诉<span class="tab-num">{{appeal_num}}</span></li>
                 </ul>
                 <span style="top: 4px; right: -30px;" class="tips__icon" data-microtip-size="large" data-microtip="此处未预审以及预审核通过对应表格中的状态为未审核" data-microtip-position="top-right">？</span>
                 

@@ -52,7 +52,7 @@
             color: red;
         }
         .page-data{
-            height: 562px;;
+            min-height: 560px;;
         }
     </style>
 </head>
@@ -198,7 +198,7 @@
             $("#pagedata").ajaxPage({
                 url: '/merchant/margin_translog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}',
                 pageId: $("#page"),
-                pageSize: 20,
+                pageSize: 10,
                 run: true,
                 content:Data,
                 complete: pagecallback,
@@ -213,7 +213,7 @@
                     $("#pagedata").ajaxPage({
                         url: '/merchant/margin_translog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}',
                         pageId: $("#page"),
-                        pageSize: 20,
+                        pageSize: 10,
                         run: true,
                         content:Data,
                         complete: pagecallback,
@@ -222,7 +222,7 @@
                     $("#pagedata").ajaxPage({
                         url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}&type=0',
                         pageId: $("#page"),
-                        pageSize: 20,
+                        pageSize: 10,
                         run: true,
                         content:addData,
                         complete: pagecallback,
@@ -231,7 +231,7 @@
                     $("#pagedata").ajaxPage({
                         url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}&type=1',
                         pageId: $("#page"),
-                        pageSize: 20,
+                        pageSize: 10,
                         run: true,
                         content:reduceData,
                         complete: pagecallback,

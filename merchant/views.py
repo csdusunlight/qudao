@@ -47,7 +47,12 @@ def preaudit_investlog(request):
         unaudited_pronames = []
         for project in projects:
             unaudited_pronames.append(project.title)
-        return render(request,"preaudit_investlog.html", {'unaudited_pronames':unaudited_pronames})
+        unaudited_num = InvestLog.objects.filter(project__user=admin_user, category='merchant', 
+                                                 preaudit_state='1', audit_state='1').count()
+        except_num = InvestLog.objects.filter(project__user=admin_user, category='merchant', audit_state='3').count()
+        appeal_num = InvestLog.objects.filter(project__user=admin_user, category='merchant', audit_state='4').count()
+        return render(request,"preaudit_investlog.html", {'unaudited_pronames':unaudited_pronames,
+                    'except_num':except_num, 'appeal_num':appeal_num, 'unaudited_num':unaudited_num})
     if request.method == "POST":
         res = {}
         investlog_id = request.POST.get('id', None)

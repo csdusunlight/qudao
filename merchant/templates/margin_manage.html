@@ -138,10 +138,10 @@
             let Data = '<table width="100%"><tr><th width="33%">提交时间</th><th width="33%">变更金额</th><th width="33%">变更原因</th></tr>' +
             '[results]<tr><td class="time">{time}</td><td class="transAmount type{transType}" data-type="{transType}">{transAmount}</td><td>{reason}</td></tr>[/results]</table>';
            //充值数据
-            let addData = '<table width="100%"><tr><th width="25%">提交时间</th><th width="25%">变更金额</th><th width="25%">处理状态</th><th width="25%">变更原因</th></tr>' +
+            let addData = '<table width="100%"><tr><th width="25%">提交时间</th><th width="25%">充值金额</th><th width="25%">处理状态</th><th width="25%">变更原因</th></tr>' +
             '[results]<tr><td class="c-time">{submit_time}</td><td class="transAmount type{type}" data-type="{type}">{amount}</td><td>{state_des}</td><td>{audit_reason}</td></tr>[/results]</table>';
             //体现数据
-            let reduceData = '<table width="100%"><tr><th width="25%">提交时间</th><th width="25%">变更金额</th><th width="25%">处理状态</th><th width="25%">变更原因</th></tr>' +
+            let reduceData = '<table width="100%"><tr><th width="25%">提交时间</th><th width="25%">提现金额</th><th width="25%">处理状态</th><th width="25%">变更原因</th></tr>' +
             '[results]<tr><td class="c-time1">{submit_time}</td><td class="transAmount type{type}" data-type="{type}">{amount}</td><td>{state_des}</td><td>{audit_reason}</td></tr>[/results]</table>';
             //回调函数
             function pagecallback() {
@@ -180,7 +180,7 @@
             //分页
             console.log('llc'+'{{user.id}}');
             $("#pagedata").ajaxPage({
-                url: '/merchant/margin_translog/?page={page}&pageSize={pageSize}&user_moblie={{user.id}}',
+                url: '/merchant/margin_translog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}',
                 pageId: $("#page"),
                 pageSize: 20,
                 run: true,
@@ -195,7 +195,7 @@
                 $(this).addClass('act').siblings().removeClass('act');
                 if (index == 0) {
                     $("#pagedata").ajaxPage({
-                        url: '/merchant/margin_translog/?page={page}&pageSize={pageSize}&user_moblie={{user.id}}',
+                        url: '/merchant/margin_translog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}',
                         pageId: $("#page"),
                         pageSize: 20,
                         run: true,
@@ -204,7 +204,7 @@
                     }); 
                 }else if (index == 1) {
                     $("#pagedata").ajaxPage({
-                        url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}&user_moblie={{user.id}}&type=0',
+                        url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}&type=0',
                         pageId: $("#page"),
                         pageSize: 20,
                         run: true,
@@ -213,7 +213,7 @@
                     });
                 }else if(index == 2){
                     $("#pagedata").ajaxPage({
-                        url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}&user_moblie={{user.id}}&type=1',
+                        url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}&user={{user.mobile}}&type=1',
                         pageId: $("#page"),
                         pageSize: 20,
                         run: true,

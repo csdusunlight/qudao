@@ -182,10 +182,10 @@
 					dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
 					success: function (data) {
 						$.prompt({
-							"Content":"提交成功"
+							"Content":"提交成功,即将跳转到项目管理页面"
 						});
 						setTimeout(function(){
-							window.location.href = window.location.href;
+							window.location.href = '/merchant/proj_manage/';
 						},1000);
 					},
 					error: function (xhr, textStatus) {

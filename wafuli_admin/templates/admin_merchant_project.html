@@ -160,7 +160,9 @@
             });
         });
         //拒绝 模态框出现
+        var refuseId;
         $("#pagedata").on('click', '.refuse', function () {
+            refuseId = $(this).parent().attr("data-id");
             $(".msk").show();
         });
         //拒绝 模态框消失
@@ -181,7 +183,7 @@
                 async: true, //是否同步
                 data: {
                     "type": 2,
-                    "id": id,
+                    "id": refuseId,
                     "reason": reason
                 },
                 timeout: 5000, //超出时间
@@ -191,7 +193,7 @@
                         alert("已拒绝");
                         $(".msk").hide();
                     }
-                    $('.opTd' + id).text('已拒绝');
+                    $('.opTd' + refuseId).text('已拒绝');
                     $('.reson').val('');
                 },
                 error: function (xhr, textStatus) {

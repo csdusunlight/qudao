@@ -109,7 +109,7 @@
 .tips{
     display: block;
     font-size: 18px;
-    position: absolute;top: 80px;left: 180px;
+    position: absolute;top: 80px;left: 160px;
 }
 .btnBox{
     width: 100%;
@@ -131,4 +131,9 @@
 }
 .cancel{
     margin-left: 90px;
+}
+.opTip{
+    padding: 15px 15px;
+    color: #b48ade;
+    position: absolute;bottom: 5px;left: 100px;
 }

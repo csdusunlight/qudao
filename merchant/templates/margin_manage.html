@@ -39,6 +39,9 @@
         #pagedata{
             margin-top: 10px;
         }
+        .page-data{
+            min-height: 800px;
+        }
     </style>
 </head>
 
@@ -62,7 +65,7 @@
                         <li>充值</li>
                         <li>提现</li>
                     </ul>
-                    <div id="pagedata">
+                    <div id="pagedata" class="page-data">
                     </div>
                     <div class="Page-in-admin">
                         <div class="page" id="page">
@@ -128,48 +131,49 @@
 
     <script type="text/javascript " src="{% static 'js/wfl-common.js' %} "></script>
     <script>
+        //没有数显显示图片
+        function emptydisplay(obj){
+            pic_url = "{%static 'images/bg-nodata.png' %}";
+            obj.html('<div class="nodata-box"></div>');
+        }
         $(function () {
-            function emptydisplay(obj){
-                pic_url = "{%static 'images/bg-nodata.png' %}";
-                obj.html('<div class="nodata-box"></div>');
-            }
             $('.nav__item:eq(1)').addClass('active');
             //所有数据
-            let Data = '<table width="100%"><tr><th width="33%">提交时间</th><th width="33%">变更金额</th><th width="33%">变更原因</th></tr>' +
+            var Data = '<table width="100%"><tr><th width="33%">提交时间</th><th width="33%">变更金额</th><th width="33%">变更原因</th></tr>' +
             '[results]<tr><td class="time">{time}</td><td class="transAmount type{transType}" data-type="{transType}">{transAmount}</td><td>{reason}</td></tr>[/results]</table>';
            //充值数据
-            let addData = '<table width="100%"><tr><th width="25%">提交时间</th><th width="25%">充值金额</th><th width="25%">处理状态</th><th width="25%">变更原因</th></tr>' +
+           var addData = '<table width="100%"><tr><th width="25%">提交时间</th><th width="25%">充值金额</th><th width="25%">处理状态</th><th width="25%">变更原因</th></tr>' +
             '[results]<tr><td class="c-time">{submit_time}</td><td class="transAmount type{type}" data-type="{type}">{amount}</td><td>{state_des}</td><td>{audit_reason}</td></tr>[/results]</table>';
             //体现数据
-            let reduceData = '<table width="100%"><tr><th width="25%">提交时间</th><th width="25%">提现金额</th><th width="25%">处理状态</th><th width="25%">变更原因</th></tr>' +
+            var reduceData = '<table width="100%"><tr><th width="25%">提交时间</th><th width="25%">提现金额</th><th width="25%">处理状态</th><th width="25%">变更原因</th></tr>' +
             '[results]<tr><td class="c-time1">{submit_time}</td><td class="transAmount type{type}" data-type="{type}">{amount}</td><td>{state_des}</td><td>{audit_reason}</td></tr>[/results]</table>';
             //回调函数
             function pagecallback() {
                 console.log("回调函数");
                 $('.time').each(function () {
-                    let time = $(this).text().split('T');//分割字符串 获取年月日
+                    var time = $(this).text().split('T');//分割字符串 获取年月日
                     console.log(time);
-                    let time_1 = time[1].split('.');//分割字符串 获取时分秒
+                    var time_1 = time[1].split('.');//分割字符串 获取时分秒
                     $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
                 });
 
                 $('.c-time').each(function(){
-                    let time = $(this).text().split('T');
+                    var time = $(this).text().split('T');
                         console.log('llc'+time);
-                        let time_1 = time[1].split('.');//分割字符串 获取时分秒
+                        var time_1 = time[1].split('.');//分割字符串 获取时分秒
                         $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
                 });
 
                 $('.c-time1').each(function(){
-                    let time = $(this).text().split('T');//分割字符串 获取年月日
+                    var time = $(this).text().split('T');//分割字符串 获取年月日
                     console.log(time);
-                    let time_1 = time[1].split('.');//分割字符串 获取时分秒
+                    var time_1 = time[1].split('.');//分割字符串 获取时分秒
                     $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
                 });
                 //根据transType来判断‘+’‘-’号
                 $('.transAmount').each(function(){
-                    let type = $(this).attr('data-type');
-                    let initText = $(this).text();  //获取文本内容 再进行字符串拼接
+                    var type = $(this).attr('data-type');
+                    var initText = $(this).text();  //获取文本内容 再进行字符串拼接
                     if (type == 0) {    
                         $(this).text('+' + initText);
                     }else{
@@ -190,7 +194,7 @@
             //分页过滤
             $('.tabul > li').click(function(){
                 $('#pagedata').empty();
-                let index = $(this).index();
+                var index = $(this).index();
                 console.log(index);
                 $(this).addClass('act').siblings().removeClass('act');
                 if (index == 0) {
@@ -238,7 +242,7 @@
             });
             //充值保证金ajax
             $('.submit').click(function () {
-                const addAmount = $('.addAmount').val();
+                var addAmount = $('.addAmount').val();
                 console.log(addAmount);
                 //正则验证
                 let regx = /^[0-9]*$/; 
@@ -297,13 +301,13 @@
                 $('.witamount ').val('');
             });
             //获取账户余额：
-            const user_account = {{ user.margin_account }};
+            var user_account = {{ user.margin_account }};
             console.log("--------账户余额：", user_account);
         //提取保证金
         $(".send ").click(function () {
-            const amount = $(".witamount ").val();
+            var amount = $(".witamount ").val();
             //正则
-            const regx = /^[0-9]*$/;
+            var regx = /^[0-9]*$/;
             if (!regx.test(amount)) {
                 $.prompt({
                     "Content":"提取金额必须为纯数字!"

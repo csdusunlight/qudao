@@ -7,7 +7,7 @@
     $(function () {
         $("li.home18").toggleClass("on");
         //数据
-        const data = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>时间</th><th>初始余额</th><th >变动值</th><th >变动原因</th>' +
+        var data = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>时间</th><th>初始余额</th><th >变动值</th><th >变动原因</th>' +
             '<th>备注</th>' +
             '[results]<tr><td>{username}</td><td>{mobile}</td><td class="time">{time}</td><td>{initAmount}</td><td>{transAmount}</td>' +
             '<td>{reason}</td><td>{remark}</td></tr>[/results]</table>';
@@ -17,9 +17,9 @@
             console.log("回调函数");
             //时间分割展示
             $('.time').each(function () {
-                let time = $(this).text().split('T');//分割字符串 获取年月日
+                var time = $(this).text().split('T');//分割字符串 获取年月日
                 console.log(time);
-                let time_1 = time[1].split('.');//分割字符串 获取时分秒
+                var time_1 = time[1].split('.');//分割字符串 获取时分秒
                 $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
             });
         }
@@ -33,11 +33,11 @@
         });
         //搜过功能
         $('.search').click(function () {
-            let sTime = $('.startTime').val();
-            let eTime = $('.endTime').val();
-            let user = $('.user').val();
-            let phoneNum = $('.phoneNum').val();
-            let reason = $('.reason').val();
+            var sTime = $('.startTime').val();
+            var eTime = $('.endTime').val();
+            var user = $('.user').val();
+            var phoneNum = $('.phoneNum').val();
+            var reason = $('.reason').val();
             var newUrl = '/merchant/margin_translog/?page={page}&pageSize={pageSize}';
             if (sTime) {
                 newUrl += '&trans_date_0=' + sTime;

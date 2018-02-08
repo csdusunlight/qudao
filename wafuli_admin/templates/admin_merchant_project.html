@@ -4,19 +4,19 @@
 <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
 <script type="text/javascript"> 
     //待审核数据
-    const auditData = '<table width="100%"><tr><th width="8%">QQ</th><th width="7%">QQ昵称</th><th width="8%">手机号</th><th width="8%">项目名称</th><th width="15%">攻略链接</th><th width="8%">结算价格</th>' +
+    var auditData = '<table width="100%"><tr><th width="8%">QQ</th><th width="7%">QQ昵称</th><th width="8%">手机号</th><th width="8%">项目名称</th><th width="15%">攻略链接</th><th width="8%">结算价格</th>' +
         '<th width="7%">数据结算周期</th><th width="13%">提交时间</th><th width="8%">处理状态</th><th width="10%">备注说明</th><th width="8%">操作</th>' +
         '[results]<tr><td>{qq_number}{qq_name}</td><td>{qq_name}</td><td>{user_mobile}</td><td>{title}</td><td><a href="{strategy_url}">{strategy_url}</a></td>' +
         '<td>{price}</td><td>{settle_period}</td><td class="subtime">{submit_time}</td><td>{state_des}</td><td>{remark}</td>' +
         '<td class="opTd{id}" data-id="{id}"><a class="pass">同意</a>|<a class="refuse">拒绝</a></td></tr>[/results]</table>';
     //审核通过数据
-    const passData = '<table width="100%"><tr><th width="8%">QQ</th><th width="7%">QQ昵称</th><th width="8%">手机号</th><th width="8%">项目名称</th><th width="15%">攻略链接</th><th width="8%">结算价格</th>' +
+    var passData = '<table width="100%"><tr><th width="8%">QQ</th><th width="7%">QQ昵称</th><th width="8%">手机号</th><th width="8%">项目名称</th><th width="15%">攻略链接</th><th width="8%">结算价格</th>' +
         '<th width="7%">数据结算周期</th><th width="13%">提交时间</th><th width="8%">处理状态</th><th>处理时间</th><th width="10%">备注说明</th>' +
         '[results]<tr><td>{qq_number}</td><td>{qq_name}</td><td>{user_mobile}</td><td>{title}</td><td><a href="{strategy_url}">{strategy_url}</a></td><td>{price}</td>' +
         '<td>{settle_period}</td><td class="subtime">{submit_time}</td><td>{project_state_des}</td><td class="adt_time">{audit_time}</td><td>{remark}</td>' +
         '</tr>[/results]</table>';
     //审核未通过数据
-    const refuseData = '<table width="100%"><tr><th>QQ</th><th>QQ昵称</th><th>手机号</th><th>项目名称</th><th>攻略链接</th><th>结算价格</th>' +
+    var refuseData = '<table width="100%"><tr><th>QQ</th><th>QQ昵称</th><th>手机号</th><th>项目名称</th><th>攻略链接</th><th>结算价格</th>' +
         '<th>数据结算周期</th><th>提交时间</th><th>处理状态</th><th>处理时间</th><th>拒绝原因</th><th>备注说明</th>' +
         '[results]<tr><td>{qq_number}</td><td>{qq_name}</td><td>{user_mobile}</td><td>{title}</td><td><a href="{strategy_url}">{strategy_url}</a></td><td>{price}</td><td>{settle_period}</td>' +
         '<td class="subtime">{submit_time}</td><td>{state_des}</td><td class="adt_time">{audit_time}</td><td>{audit_reason}</td><td>{remark}</td>' +
@@ -29,14 +29,14 @@
             console.log("回调函数");
             //获取提交时间
             $(".subtime").each(function () {
-                let sub_time = $(this).text().split("T");//分割字符串获取年月日
-                let time_1 = sub_time[1].split('.');//分割字符串获取时分秒
+                var sub_time = $(this).text().split("T");//分割字符串获取年月日
+                var time_1 = sub_time[1].split('.');//分割字符串获取时分秒
                 $(this).text(sub_time[0] + " " + time_1[0]);
             });
             //获取操作时间
             $(".adt_time").each(function () {
-                let adt_time = $(this).text().split("T");//分割字符串获取年月日
-                let adt_time_1 = adt_time[1].split('.');//分割字符串获取时分秒
+                var adt_time = $(this).text().split("T");//分割字符串获取年月日
+                var adt_time_1 = adt_time[1].split('.');//分割字符串获取时分秒
                 $(this).text(adt_time[0] + " " + adt_time_1[0]);
             });
         }
@@ -51,16 +51,16 @@
         //点击搜索功能
         $(".search").click(function () {
             //获取申请开始与申请结束时间
-            let apply_0 = $(".apply_time0").val();
-            let apply_1 = $(".apply_time1").val();
+            var apply_0 = $(".apply_time0").val();
+            var apply_1 = $(".apply_time1").val();
             //获取操作开始与操作结束时间
-            let operate_0 = $(".operate_date0").val();
-            let operate_1 = $(".operate_date1").val();
+            var operate_0 = $(".operate_date0").val();
+            var operate_1 = $(".operate_date1").val();
             //获取手机号、QQ号、QQ昵称、处理状态
-            let phone = $(".phoneNum").val();
-            let qq_number = $(".qqNum").val();
-            let qq_name = $(".qqName").val();
-            let state = $(".seltBox option:selected").val();
+            var phone = $(".phoneNum").val();
+            var qq_number = $(".qqNum").val();
+            var qq_name = $(".qqName").val();
+            var state = $(".seltBox option:selected").val();
 
             var newUrl = url;
             if (apply_0) {
@@ -123,9 +123,9 @@
        
         $(".sure").click(function () {
             console.log(passId);
-            let cash = $(".cash").val();
+            var cash = $(".cash").val();
             //正则
-            const regx = /^[0-9]*$/;
+            var regx = /^[0-9]*$/;
             if (!cash) {
                 alert("佣金不能为空！");
                 return;
@@ -170,9 +170,9 @@
         //拒绝弹窗的确定ajax
         $('.cSure').click(function () {
             //获取当前id
-            let id = $('.pass').parent().attr("data-id");
+            var id = $('.pass').parent().attr("data-id");
             console.log(id);
-            let reason = $(".reson").val();
+            var reason = $(".reson").val();
 
             $.ajax({
                 url: '/Admin/admin_merchant_project/',

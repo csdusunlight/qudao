@@ -56,6 +56,7 @@
     }
     .state-tab,
     .state-tab-2 {
+        position: relative;
         display: inline-block;
         width: 80px;
         line-height: 30px;
@@ -123,6 +124,16 @@
     .searchable-select {
         width: 300px;
     }
+    .tab-num {
+        position: absolute;
+        right: -6px;
+        top: -12px;
+        color: red;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        font-weight: bold;
+    }
 </style>
 
 </head>
@@ -184,7 +195,7 @@
                     <li data-state = "0" class="state-tab">已通过</li>
                     <li data-state = "2" class="state-tab">已拒绝</li>
                     <li data-state = "3" class="state-tab">异常</li>
-                    <li data-state = "4" class="state-tab">申诉</li>
+                    <li data-state = "4" class="state-tab">申诉<span class="tab-num">56</span></li>
                 </ul>
             </div>
             <div style="display: none;" class="search__item">

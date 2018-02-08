@@ -101,7 +101,7 @@ def preaudit_investlog(request):
                 investlog.broker_amount = broker_amount
                 investlog.preaudit_state = '0'
                 #对于异常数据，要改成未处理
-                investlog.preaudit_state = '1'
+                investlog.audit_state = '1'
                 translist.auditlog = investlog
                 translist.save(update_fields=['content_type', 'object_id'])
                 if broker_amount > 0:

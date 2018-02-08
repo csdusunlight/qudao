@@ -59,7 +59,8 @@
         position: relative;
         display: inline-block;
         width: 80px;
-        line-height: 30px;
+        height: 38px;
+        line-height: 38px;
         text-align: center;
         border: 1px solid #91C11D;
         border-right: none;
@@ -126,13 +127,16 @@
     }
     .tab-num {
         position: absolute;
-        right: -6px;
-        top: -12px;
-        color: red;
-        width: 30px;
-        height: 30px;
+        right: 4px;
+        top: 1px;
+        color: #fff;
+        font-size: 12px;
+        width: 18px;
+        height: 18px;
+        line-height: 20px;
         border-radius: 50%;
-        font-weight: bold;
+        background-color: #ff5a00;
+        /*font-weight: bold;*/
     }
 </style>
 
@@ -194,7 +198,7 @@
                     <li data-state = "1" class="state-tab">未审核</li>
                     <li data-state = "0" class="state-tab">已通过</li>
                     <li data-state = "2" class="state-tab">已拒绝</li>
-                    <li data-state = "3" class="state-tab">异常</li>
+                    <li data-state = "3" class="state-tab">异常<span class="tab-num">{{except_num}}</span></li>
                     <li data-state = "4" class="state-tab">申诉<span class="tab-num">{{appeal_num}}</span></li>
                 </ul>
             </div>
@@ -1002,7 +1006,16 @@
                 $('.date_selector').remove();
                 $(this).date_input();
             })
-            
+            $('.tab-num').each(function () {
+                if ($(this).text() == '') {
+                	$(this).hide();
+                }
+            })
+            if ($('.tab-num').text() == '') {
+                
+            } else {
+            	
+            }
 //          $.ajax({
 //              url:"/restapi/projects/?is_official=true&pageSize=999",
 //              type:"get",

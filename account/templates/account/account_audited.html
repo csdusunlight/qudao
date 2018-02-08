@@ -194,7 +194,7 @@
                     <li data-state = "1" class="state-tab">未审核</li>
                     <li data-state = "0" class="state-tab">已通过</li>
                     <li data-state = "2" class="state-tab">已拒绝</li>
-                    <li data-state = "3" class="state-tab">异常</li>
+                    <li data-state = "3" class="state-tab">异常<span class="tab-num">{{except_num}}</span></li>
                     <li data-state = "4" class="state-tab">申诉<span class="tab-num">{{appeal_num}}</span></li>
                 </ul>
             </div>
@@ -1002,7 +1002,18 @@
                 $('.date_selector').remove();
                 $(this).date_input();
             })
-            
+            $('.tab-num').each(function () {
+                if ($(this).text() == '') {
+                	$(this).parent().css('background-color','red');
+                } else{
+                	$(this).parent().css('background-color','green');
+                }
+            })
+            if ($('.tab-num').text() == '') {
+                
+            } else {
+            	
+            }
 //          $.ajax({
 //              url:"/restapi/projects/?is_official=true&pageSize=999",
 //              type:"get",

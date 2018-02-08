@@ -24,7 +24,7 @@
             margin:0 auto;
         }
         #pagedata{
-            min-height: 562px;
+            min-height: 560px;
             color: black;
         }
         #pagedata > table{
@@ -155,7 +155,7 @@
             $("#pagedata").ajaxPage({
                 url: url,
                 pageId: $("#page"),
-                pageSize: 15,
+                pageSize: 10,
                 run: true,
                 content: allData,
                 complete: pagecallback,
@@ -183,7 +183,7 @@
                 $("#pagedata").ajaxPage({
                     url: dataUrl,
                     pageId: $("#page"),
-                    pageSize: 15,
+                    pageSize: 10,
                     run: true,
                     content: pdata,
                     complete: pagecallback,

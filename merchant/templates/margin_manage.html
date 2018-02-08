@@ -52,7 +52,7 @@
             color: red;
         }
         .page-data{
-            height: 562px;;
+            min-height: 560px;;
         }
     </style>
 </head>
@@ -73,15 +73,9 @@
                 </nav>
                 <div class="tabBox">
                     <ul class="tabul">
-<<<<<<< HEAD
                         <li class="act">资金明细</li>
                         <li>充值</li>
-                        <li>提现</li>
-=======
-                        <li class="act">全部</li>
-                        <li>存入</li>
                         <li>提取</li>
->>>>>>> 5ea7643b8f2f628cac6d750e7dad397c06bb6f56
                     </ul>
                     <div id="pagedata" class="page-data">
                     </div>
@@ -131,7 +125,7 @@
                 </div>
             </div>
 
-            <!-- 提现保证金模态框 -->
+            <!-- 提取保证金模态框 -->
             <div class="witMsk ">
                 <div class="witBox ">
                     <span class="tips ">提取资金</span>
@@ -163,7 +157,7 @@
            var addData = '<table width="100%"><tr><th width="25%">充值时间</th><th width="25%">充值金额</th><th width="25%">审核状态</th><th width="25%">审核说明</th></tr>' +
             '[results]<tr><td class="c-time">{submit_time}</td><td class="transAmount type{type}" data-type="{type}">{amount}</td><td class="state{audit_state}">{state_des}</td><td>{audit_reason}</td></tr>[/results]</table>';
             //体现数据
-            var reduceData = '<table width="100%"><tr><th width="25%">提现时间</th><th width="25%">提现金额</th><th width="25%">审核状态</th><th width="25%">审核原因</th></tr>' +
+            var reduceData = '<table width="100%"><tr><th width="25%">提取时间</th><th width="25%">提取金额</th><th width="25%">审核状态</th><th width="25%">审核原因</th></tr>' +
             '[results]<tr><td class="c-time1">{submit_time}</td><td class="transAmount type{type}" data-type="{type}">{amount}</td><td class="state{audit_state}">{state_des}</td><td>{audit_reason}</td></tr>[/results]</table>';
             //回调函数
             function pagecallback() {
@@ -204,7 +198,7 @@
             $("#pagedata").ajaxPage({
                 url: '/merchant/margin_translog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}',
                 pageId: $("#page"),
-                pageSize: 20,
+                pageSize: 10,
                 run: true,
                 content:Data,
                 complete: pagecallback,
@@ -219,7 +213,7 @@
                     $("#pagedata").ajaxPage({
                         url: '/merchant/margin_translog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}',
                         pageId: $("#page"),
-                        pageSize: 20,
+                        pageSize: 10,
                         run: true,
                         content:Data,
                         complete: pagecallback,
@@ -228,7 +222,7 @@
                     $("#pagedata").ajaxPage({
                         url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}&type=0',
                         pageId: $("#page"),
-                        pageSize: 20,
+                        pageSize: 10,
                         run: true,
                         content:addData,
                         complete: pagecallback,
@@ -237,7 +231,7 @@
                     $("#pagedata").ajaxPage({
                         url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}&type=1',
                         pageId: $("#page"),
-                        pageSize: 20,
+                        pageSize: 10,
                         run: true,
                         content:reduceData,
                         complete: pagecallback,
@@ -332,7 +326,7 @@
                 });
                 return;
             }
-            //获取提现金额不能大于保证金
+            //获取提取金额不能大于保证金
             if (user_account < amount) {
                 $.prompt({
                     "Content":"余额不足！"
@@ -357,9 +351,9 @@
                 },
                 success: function (ret) {
                     if (ret.code == 0) {
-                        // alert('提交提现申请，请等待');
+                        // alert('提交提取申请，请等待');
                         $.prompt({
-                            "Content":"提交提现申请，请等待!"
+                            "Content":"申请成功，请等待!"
                         });
                         $(".witMsk ").hide();
                     } else if (ret.code == -2) {

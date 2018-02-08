@@ -381,6 +381,7 @@ def get_days_statis(request):
             key = datetime.datetime.strftime(item['day'],'%Y-%m-%d')
         days_data.get(key)['submit_count'] = item['count']
     for item in dict_list2:
+        key = item['day']
         if type(key) == datetime.datetime:
             key = datetime.datetime.strftime(item['day'],'%Y-%m-%d')
         days_data.get(key)['settle_count'] = item['count']

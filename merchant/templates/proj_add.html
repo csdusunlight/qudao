@@ -119,7 +119,7 @@
 						console.log(ret.results);
 						var option = document.createElement("option");
 						var str_html = '<option value="0">————</option>';
-						for (const i in ret.results) {
+						for (var i in ret.results) {
 							str_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
 						}
 						$(".seltBox").html(str_html);

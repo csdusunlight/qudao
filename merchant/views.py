@@ -94,7 +94,7 @@ def preaudit_investlog(request):
                 broker_amount = cash * broker_rate/100
                 if cash + broker_amount > admin_user.margin_account:
                     res['code'] = 1
-                    res['res_msg'] = u"保证金余额不足，请先充值！"
+                    res['res_msg'] = u"资金账户余额不足，请先存入足够金额！"
                     return JsonResponse(res)
                 translist = charge_margin(admin_user, '1', cash, project_title)
                 investlog.presettle_amount = cash
@@ -135,7 +135,7 @@ def preaudit_investlog(request):
             broker_amount = delta * broker_rate/100
             if delta + broker_amount > admin_user.margin_account:
                 res['code'] = 1
-                res['res_msg'] = u"保证金余额不足，请先充值！"
+                res['res_msg'] = u"资金账户余额不足，请先存入足够金额！"
                 return JsonResponse(res)
             translog = charge_margin(admin_user, '1', delta, project_title + u"补差价")
             broker_rate = investlog.project.broker_rate

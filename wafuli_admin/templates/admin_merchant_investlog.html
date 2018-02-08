@@ -66,7 +66,8 @@
         '<td>{settle_amount}</td><td>{invest_name}</td><td>{audit_state_des}</td>'+
         '<td>{broker_amount}</td>'+
         '<td>{remark}</td></tr>[/results]</table>';
-    var url = "/merchant/investlogs/" + "?page={page}&pageSize={pageSize}&project_user={{user.id}}";
+//  var url = "/merchant/investlogs/" + "?page={page}&pageSize={pageSize}&project_user={{user.id}}";
+    var url = "/restapi/investlogs/" + "?page={page}&pageSize={pageSize}&is_official=true&category=merchant";
     
     function pagecallback() {
 //      $('.is-img').each(function() {

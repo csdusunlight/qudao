@@ -22,7 +22,7 @@
         '[results]<tr><td>{qq_number}</td><td>{qq_name}</td><td>{user_mobile}</td><td>{title}</td><td><a href="{strategy_url}">{strategy_url}</a></td><td>{price}</td><td>{settle_period}</td>' +
         '<td class="subtime">{submit_time}</td><td>{state_des}</td><td class="adt_time">{audit_time}</td><td>{audit_reason}</td><td>{remark}</td>' +
         '</tr>[/results]</table>';
-    var url = "/restapi/investlogs/" + "?page={page}&pageSize={pageSize}&category=merchant";
+    var url = "/merchant/apply_projects/?page={page}&pageSize={pageSize}";
     $(document).ready(function () {
         $("li.home16").toggleClass("on");
         //回调函数
@@ -42,7 +42,7 @@
             });
         }
         $("#pagedata").ajaxPage({
-            url: url + '&audit_state=1',
+            url: '/merchant/apply_projects/?page={page}&pageSize={pageSize}&audit_state=1',
             pageId: $("#page"),
             pageSize: 6,
             run: true,

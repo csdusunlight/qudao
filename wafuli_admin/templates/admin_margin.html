@@ -3,7 +3,9 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" /> {% endblock css %} {% block js %}
 <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
 <script type="text/javascript"> 
-    
+    //声明严格模式
+    "use strict";
+    //添加token
     $.ajaxSetup({
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
     });

@@ -131,6 +131,8 @@
 
     <script type="text/javascript " src="{% static 'js/wfl-common.js' %} "></script>
     <script>
+        //声明严格模式
+        "use strict";
         //没有数显显示图片
         function emptydisplay(obj){
             pic_url = "{%static 'images/bg-nodata.png' %}";
@@ -228,7 +230,7 @@
                 
             });
             //变更时间处理
-            let changeTime = $('.changeTime').text().split('T');
+            var changeTime = $('.changeTime').text().split('T');
             console.log(changeTime);
             $('.changeTime').text(changeTime[0]);
 
@@ -245,7 +247,7 @@
                 var addAmount = $('.addAmount').val();
                 console.log(addAmount);
                 //正则验证
-                let regx = /^[0-9]*$/; 
+                var regx = /^[0-9]*$/; 
                 if (!regx.test(addAmount)) {
                     $.prompt({
                         "Content":"充值金额仅限数字!"

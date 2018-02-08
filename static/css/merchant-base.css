@@ -387,3 +387,28 @@ body {
     height: 100%;
     background: url(../images/bg-nodata.png) center center no-repeat;
 }
+.tips__box {
+    position: absolute;
+}
+.tips__icon {
+    position: absolute !important;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    text-align: center;
+    border-radius: 50%;
+    border: 1px solid #666;
+    cursor: pointer;
+}
+/*.tips__icon:hover + .tips__txt {
+    display: block;
+}
+.tips__txt {
+    padding: 10px;
+    width: 400px;
+    border-radius: 8px;
+    background-color: rgba(0,0,0,0.7);
+    color: #fff;
+}*/

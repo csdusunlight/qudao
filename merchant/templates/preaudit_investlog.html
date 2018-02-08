@@ -9,6 +9,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/merchant-base.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/add-img.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.searchableSelect.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/microtip.css' %}" />
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
@@ -63,7 +64,13 @@
     }
     .state-tabbox,
     .state-tabbox-2 {
+        position: relative;
         font-size: 0;
+    }
+    .tips-box {
+        position: absolute;
+        right: -20px;
+        top: 0;
     }
     .state-tab,
     .state-tab-2 {
@@ -181,16 +188,17 @@
         <p style="color: blue; font-size: 12px;" class="clearfix">*商家（您）需要对用户的交单数据进行预审（预结算并冻结相应资金），等待管理员确认后，结算金额进入用户的联盟账号。</p>
         <p style="margin-bottom: 10px; color: blue; font-size: 12px;" class="clearfix">*若数据有争议或需要延后审核，可做异常处理；若无法查到该投资记录，可做拒绝处理。</p>
         <div class="handle clearfix">
-            <div class="handle__in l">
+            <div style="position: relative;" class="handle__in l">
                 <ul style="width: 560px;" class="state-tabbox-2">
                     <li data-state = "" class="state-tab-2 on">全部</li>
-                    <li data-state = "1" class="state-tab-2">未审核</li>
+                    <li data-state = "1" class="state-tab-2">未预审</li>
                     <li data-state = "-1" class="state-tab-2">预审核通过</li>
                     <li data-state = "0" class="state-tab-2">已通过</li>
                     <li data-state = "2" class="state-tab-2">已拒绝</li>
                     <li data-state = "3" class="state-tab-2">异常</li>
                     <li data-state = "4" class="state-tab-2">用户申诉</li>
                 </ul>
+                <span style="top: 4px; right: -30px;" class="tips__icon" data-microtip-size="large" data-microtip="此处未预审以及预审核通过对应表格中的状态为未审核" data-microtip-position="top-right">?</span>
                 
             </div>
             <div class="handle__out r">
@@ -273,7 +281,7 @@
             <div class="popup__detail">
                 <div class="popup__item">
                     <span class="popup__itemname">异常原因：</span>
-                    <input type="text" class="again_reason_02" placeholder="填写复审原因" />
+                    <input type="text" class="again_reason_02" placeholder="填写异常原因" />
                 </div>
             </div>
             <div class="popup__btnbox">
@@ -495,7 +503,7 @@
                     });
                     $(parent_dom).html('操作成功，通过');
                     $('.popup.m-pass-proj-02').removeClass('in');
-                } else {
+                } else if (ret.code == 1) {
                     var fun = "window.location.href='/merchant/margin_manage/'";
                     console.log(ret.res_msg);
                     $('.popup.m-pass-proj-02').removeClass('in');
@@ -503,6 +511,10 @@
                         "Content":ret.res_msg,
                         "Confirm": "立即存入",
                         "ConfirmFunc":fun
+                    });
+                } else {
+                    $.warning({
+                        "Content":ret.res_msg
                     });
                 }
             },
@@ -589,9 +601,9 @@
     $('#confirm_again_02').click(function() {
         var again_reason = $(".again_reason_02").val();
         if(!again_reason) {
-//          alert('复审原因不能为空');
+//          alert('异常原因不能为空');
             $.prompt({
-                "Content":"复审原因不能为空"
+                "Content":"异常原因不能为空"
             });
             return;
         }
@@ -611,7 +623,7 @@
                     $.prompt({
                         "Content":"操作成功"
                     });
-                    $(parent_dom).html('操作成功，复审');
+                    $(parent_dom).html('操作成功，异常');
                     $('.popup.m-again-proj-02').removeClass('in');
                 } else {
                     console.log(ret.res_msg);

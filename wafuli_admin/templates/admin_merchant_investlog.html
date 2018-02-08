@@ -164,7 +164,7 @@
 //              },
 //              success: function(ret) {
 //                  if(ret.code == 0) {
-//                      $("#item_" + id).html("审核完成，复审");
+//                      $("#item_" + id).html("审核完成，异常");
 //                  } else if(ret.code == -1) {
 //                      alert("该页面已过期，请重新登录！");
 //                      window.location.href = ret.url;
@@ -538,13 +538,13 @@
         </form>
     </div>
 </div>
-<!--审核复审-->
+<!--审核异常-->
 <!--<div class="Repeat">
     <div class="w570-box">
-        <h3>进入复审</h3>
+        <h3>进入异常</h3>
         <button class="none-x"></button>
         <form class="Repeat-in">
-            <span>填写复审原因：</span>
+            <span>填写异常原因：</span>
             <input id="repeat_event_id" type="hidden" />
             <textarea id="repeat_reason"></textarea>
             <div class="Finnow-Sub">

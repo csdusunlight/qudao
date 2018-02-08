@@ -255,12 +255,12 @@
     <div class="popup m-again-proj-02">
         <div class="popup__content" style="width: 600px;">
             <div class="popup__top">
-                <h2 class="popup__title">进入复审</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+                <h2 class="popup__title">进入异常</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
             </div>
             <div class="popup__detail">
                 <div class="popup__item">
-                    <span class="popup__itemname">复审原因：</span>
-                    <input type="text" class="again_reason_02" placeholder="填写复审原因" />
+                    <span class="popup__itemname">异常原因：</span>
+                    <input type="text" class="again_reason_02" placeholder="填写异常原因" />
                 </div>
             </div>
             <div class="popup__btnbox">
@@ -288,7 +288,7 @@
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{project_channel}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td data-remark="{remark}">{other_remark}</td>' +
-        '<td><a onclick="pass_02(this,{id})">审核</a> | <a onclick="again_02(this,{id})">复审</a> | '+
+        '<td><a onclick="pass_02(this,{id})">审核</a> | <a onclick="again_02(this,{id})">异常</a> | '+
         '<a onclick="refuse_02(this,{id})">拒绝</a></td>'+
         '</tr>[/results]</table>';
 //  已通过

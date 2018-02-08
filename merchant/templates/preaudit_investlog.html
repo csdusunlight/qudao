@@ -74,6 +74,7 @@
     }
     .state-tab,
     .state-tab-2 {
+        position: relative;
         display: inline-block;
         width: 80px;
         line-height: 30px;
@@ -82,6 +83,16 @@
         border-right: none;
         cursor: pointer;
         box-sizing: border-box;
+    }
+    .tab-num {
+        position: absolute;
+        right: -6px;
+        top: -12px;
+        color: red;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        font-weight: bold;
     }
     .state-tab:last-child,
     .state-tab-2:last-child {
@@ -191,14 +202,14 @@
             <div style="position: relative;" class="handle__in l">
                 <ul style="width: 560px;" class="state-tabbox-2">
                     <li data-state = "" class="state-tab-2 on">全部</li>
-                    <li data-state = "1" class="state-tab-2">未预审</li>
+                    <li data-state = "1" class="state-tab-2">未预审<span class="tab-num">{{unaudited_num}}</span></li>
                     <li data-state = "-1" class="state-tab-2">预审核通过</li>
                     <li data-state = "0" class="state-tab-2">已通过</li>
                     <li data-state = "2" class="state-tab-2">已拒绝</li>
-                    <li data-state = "3" class="state-tab-2">异常</li>
-                    <li data-state = "4" class="state-tab-2">用户申诉</li>
+                    <li data-state = "3" class="state-tab-2">异常<span class="tab-num">{{except_num}}</span></li>
+                    <li data-state = "4" class="state-tab-2">用户申诉<span class="tab-num">{{appeal_num}}</span></li>
                 </ul>
-                <span style="top: 4px; right: -30px;" class="tips__icon" data-microtip-size="large" data-microtip="此处未预审以及预审核通过对应表格中的状态为未审核" data-microtip-position="top-right">?</span>
+                <span style="top: 4px; right: -30px;" class="tips__icon" data-microtip-size="large" data-microtip="此处未预审以及预审核通过对应表格中的状态为未审核" data-microtip-position="top-right">？</span>
                 
             </div>
             <div class="handle__out r">
@@ -321,7 +332,7 @@
 //      '<td>{toaudit_count}</td><td>{settle_amount}</td></tr>[/results]</table>';
 //  全部
     var data_user = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th style="position:absolute;line-height:40px;">审核状态<span style="top: 6px; right: -30px;" class="tips__icon" data-microtip-size="large" data-microtip="此处未预审以及预审核通过对应表格中的状态为未审核" data-microtip-position="top-right">?</span></th><th>结算金额</th><th>审核信息</th><th>投资姓名</th>'+
+        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th style="position:relative;line-height:40px;"><span>审核状态</span><span style="top: 8px; right: -4px;" class="tips__icon" data-microtip-size="large" data-microtip="此处未预审以及预审核通过对应表格中的状态为未审核" data-microtip-position="top-right">？</span></th><th>结算金额</th><th>审核信息</th><th>投资姓名</th>'+
         '<th class="w-remark">备注</th><th>扣除手续费</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="state{audit_state} prestate{preaudit_state}">{audit_state_des}</td>'+

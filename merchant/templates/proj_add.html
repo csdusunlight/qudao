@@ -117,8 +117,8 @@
 					dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
 					success: function (ret) {
 						console.log(ret.results);
-						let option = document.createElement("option");
-						let str_html = '<option value="0">————</option>';
+						var option = document.createElement("option");
+						var str_html = '<option value="0">————</option>';
 						for (const i in ret.results) {
 							str_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
 						}
@@ -136,13 +136,13 @@
 			});
 			//提交申请
 			$(".btn").click(function () {
-				let radio = $("input:radio:checked").val();
+				var radio = $("input:radio:checked").val();
 				console.log(radio);
-				let project = $("#project").val();
-				let strategy_url = $(".seltBox option:selected").val();
-				let price = $("#price").val();
-				let cycle = $("#cycle").val();
-				let remark = $("#remark").val();
+				var project = $("#project").val();
+				var strategy_url = $(".seltBox option:selected").val();
+				var price = $("#price").val();
+				var cycle = $("#cycle").val();
+				var remark = $("#remark").val();
 
 				if (strategy_url == 0) {
 					$.prompt({
@@ -165,7 +165,7 @@
 				}
 
 				//获取url
-				let url = "/merchant/apply_projects/";
+				var url = "/merchant/apply_projects/";
 				$.ajax({
 					url: url,
 					type: 'post',

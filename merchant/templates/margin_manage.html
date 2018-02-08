@@ -145,7 +145,7 @@
            var addData = '<table width="100%"><tr><th width="25%">提交时间</th><th width="25%">充值金额</th><th width="25%">处理状态</th><th width="25%">变更原因</th></tr>' +
             '[results]<tr><td class="c-time">{submit_time}</td><td class="transAmount type{type}" data-type="{type}">{amount}</td><td>{state_des}</td><td>{audit_reason}</td></tr>[/results]</table>';
             //体现数据
-            var reduceData = '<table width="100%"><tr><th width="25%">提交时间</th><th width="25%">提现金额</th><th width="25%">处理状态</th><th width="25%">变更原因</th></tr>' +
+            var reduceData = '<table width="100%"><tr><th width="25%">提交时间</th><th width="25%">提取金额</th><th width="25%">处理状态</th><th width="25%">变更原因</th></tr>' +
             '[results]<tr><td class="c-time1">{submit_time}</td><td class="transAmount type{type}" data-type="{type}">{amount}</td><td>{state_des}</td><td>{audit_reason}</td></tr>[/results]</table>';
             //回调函数
             function pagecallback() {
@@ -341,7 +341,7 @@
                     if (ret.code == 0) {
                         // alert('提交提现申请，请等待');
                         $.prompt({
-                            "Content":"提交提现申请，请等待!"
+                            "Content":"申请成功，请等待!"
                         });
                         $(".witMsk ").hide();
                     } else if (ret.code == -2) {

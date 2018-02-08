@@ -143,7 +143,7 @@
         <h2 class="table__title">官方数据</h2>
         <ul class="today-detail">
             <li class="today-detail-item">今日提交<span class="today-num">{{submit_num}}</span>项</li><li class="today-detail-item">通过<span class="today-num">{{pass_num}}</span>项</li>
-            <li class="today-detail-item">复审<span class="today-num">{{check_num}}</span>项</li><li class="today-detail-item">拒绝<span class="today-num">{{refuse_num}}</span>项</li>
+            <li class="today-detail-item">异常<span class="today-num">{{check_num}}</span>项</li><li class="today-detail-item">拒绝<span class="today-num">{{refuse_num}}</span>项</li>
         </ul>
         <div class="search">
             <div class="search__item">
@@ -519,9 +519,9 @@
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>审核时间</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td class="submit-time">{audit_time}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
-//  复审
+//  异常
     var data3 = '<table width="100%"><tr><th>项目名称3</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">复审原因</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">异常原因</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{audit_reason}</td><td data-remark="{remark}">{other_remark}</td>' +
         '<td class="handle">详情<div class="handle-box"><a onclick="removeData(this,{id})">删除</a> | '+

@@ -176,7 +176,8 @@ def admin_merchant_investlog(request):
             res['code'] = 0
         elif type == 2:
             investlog.audit_state = '1'
-            investlog.reaudit_reason = reason
+            investlog.preaudit_state = '1'
+            investlog.audit_reason = reason
             broker_amount = investlog.broker_amount
             translist = charge_margin(investlog.project.user, '0', cash, '冲账', True, '管理员拒绝')
             translist.auditlog = investlog

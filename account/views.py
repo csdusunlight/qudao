@@ -439,8 +439,8 @@ def account_audited(request):
             kwarg.update(refuse_num=num.get('count') or 0)
         elif state=='3':
             kwarg.update(check_num=num.get('count') or 0)
-    appeal_num = InvestLog.objects.filter(user=user, audit_state='4').count()
-    except_num = InvestLog.objects.filter(user=user, audit_state='3').count()
+    appeal_num = InvestLog.objects.filter(user=user, audit_state='4').count() or ''
+    except_num = InvestLog.objects.filter(user=user, audit_state='3').count() or ''
     kwarg.update(appeal_num=appeal_num, except_num=except_num)
     template = 'account/m_account_audited.html' if request.mobile else 'account/account_audited.html' 
     return render(request, template, kwarg)

@@ -154,6 +154,10 @@
     .searchable-select {
         width: 300px;
     }
+    [data-microtip]:hover:after {
+        text-align: left;
+        line-height: 24px;
+    }
 </style>
 
 </head>
@@ -205,22 +209,24 @@
             <div style="position: relative;" class="handle__in l">
                 <ul style="width: 560px;" class="state-tabbox-2">
                     <li data-state = "" class="state-tab-2 on">全部</li>
-                    <li data-state = "1" class="state-tab-2">未预审<span class="tab-num">{{unaudited_num}}</span></li>
-                    <li data-state = "-1" class="state-tab-2">预审核通过</li>
-                    <li data-state = "0" class="state-tab-2">已通过</li>
-                    <li data-state = "2" class="state-tab-2">已拒绝</li>
-                    <li data-state = "3" class="state-tab-2">异常<span class="tab-num">{{except_num}}</span></li>
-                    <li data-state = "4" class="state-tab-2">申诉<span class="tab-num">{{appeal_num}}</span></li>
+                    <li data-state = "1" class="state-tab-2"><span data-microtip-position="top-right" data-microtip-size="large" data-microtip="未预审：用户提交，商家（您）还未进行审核操作的数据">未预审</span><span class="tab-num">{{unaudited_num}}</span></li>
+                    <li data-state = "-1" class="state-tab-2"><span data-microtip-position="top-right" data-microtip-size="large" data-microtip="预审核通过：用户提交，商家（您）审核通过的数据">预审核通过</span></li>
+                    <li data-state = "0" class="state-tab-2"><span data-microtip-position="top-right" data-microtip-size="large" data-microtip="已通过：商家（您）预审核通过后，福联最终确认通过的数据">已通过</span></li>
+                    <li data-state = "2" class="state-tab-2"><span data-microtip-position="top-right" data-microtip-size="large" data-microtip="已拒绝：商家（您）审核拒绝的数据">已拒绝</span></li>
+                    <li data-state = "3" class="state-tab-2"><span data-microtip-position="top-right" data-microtip-size="large" data-microtip="异常：需要用户修改数据或延后处理的数据">异常</span><span class="tab-num">{{except_num}}</span></li>
+                    <li data-state = "4" class="state-tab-2"><span data-microtip-position="top-right" data-microtip-size="large" data-microtip="用户申诉：已经审核完成，用户认为结算金额不正确提出申诉的数据">申诉</span><span class="tab-num">{{appeal_num}}</span></li>
                 </ul>
-                <span style="top: 8px; right: -30px;" class="tips__icon" data-microtip-size="large" data-microtip="未审核：用户提交，商家（您）还未进行审核操作的数据预审核通过：用户提交，商家（您）审核通过的数据；
-								
-								已通过：商家（您）预审核通过后，福联最终确认通过的数据
-								
-								已拒绝：商家（您）审核拒绝的数据
-								
-								异常：需要用户修改数据或延后处理的数据
-								
-								用户申诉：已经审核完成，用户认为结算金额不正确提出申诉的数据" data-microtip-position="top-right">？</span>
+                <span style="top: 8px; right: -30px;" class="tips__icon" data-microtip-size="large" data-microtip="未预审：用户提交，商家（您）还未进行审核操作的数据；
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                预审核通过：用户提交，商家（您）审核通过的数据；
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					已通过：商家（您）预审核通过后，福联最终确认通过的数据；
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					已拒绝：商家（您）审核拒绝的数据；
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					异常：需要用户修改数据或延后处理的数据；
+					
+					用户申诉：已经审核完成，用户认为结算金额不正确提出申诉的数据；" data-microtip-position="bottom-right">？</span>
                 
             </div>
             <div class="handle__out r">

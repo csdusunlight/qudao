@@ -19,6 +19,9 @@ class ProjectAdmin(admin.ModelAdmin):
                 batch_subscribe(request.user, True, obj)
         if obj.state=='30' or not obj.is_addedto_repo:
             batch_deletesub(obj)
+        if obj.state != '10' and obj.doc and obj.doc.is_on:
+            obj.doc.is_on = False
+            obj.doc.save(update_fields=['is_on',])
 class CompanyAdmin(admin.ModelAdmin):
     search_fields = ['name',]            
 admin.site.register(Project, ProjectAdmin)

@@ -232,8 +232,8 @@
             </div>
             <div class="handle__out r">
                 <input style="display: none;" id="fileupload2" name="file" type="file" />
-                <a style="display: none;" id="input_clone_02" class="btn m-green m-choose">导入</a>
-                <a style="display: none;" id="export_02" class="btn m-green">导出</a>
+                <a id="input_clone_02" class="btn m-green m-choose">导入</a>
+                <a id="export_02" class="btn m-green">导出</a>
                 <a id="search_02" class="btn m-green">搜索</a>
             </div>
         </div>
@@ -701,8 +701,8 @@
                 submit_date0 = $("#submit_date0_02").val(), 
                 submit_date1 = $("#submit_date1_02").val(),
                 telnum_sub = $("#telnum_sub_02").val(),
-                zhifubao = $("#zhifubao_02").val(),
-                project_channel = $("#project_channel_02").val(),
+//              zhifubao = $("#zhifubao_02").val(),
+//              project_channel = $("#project_channel_02").val(),
                 state = state_2;
             var newurl = url2;
             if(proj_name) {
@@ -723,12 +723,12 @@
             if(telnum_sub) {
                 newurl += "&invest_mobile=" + telnum_sub;
             }
-            if(zhifubao) {
-                newurl += "&zhifubao_contains=" + zhifubao;
-            }
-            if(project_channel) {
-                newurl += "&project_channel_contains=" + project_channel;
-            }
+//          if(zhifubao) {
+//              newurl += "&zhifubao_contains=" + zhifubao;
+//          }
+//          if(project_channel) {
+//              newurl += "&project_channel_contains=" + project_channel;
+//          }
             if(state == '0') {
                 newurl += "&audit_state=" + state;
             } else if (state == '1') {
@@ -777,8 +777,8 @@
                 submit_date0 = $("#submit_date0_02").val(),
                 submit_date1 = $("#submit_date1_02").val(),
                 telnum_sub = $("#telnum_sub_02").val(),
-                zhifubao = $("#zhifubao_02").val(),
-                project_channel = $("#project_channel_02").val(),
+//              zhifubao = $("#zhifubao_02").val(),
+//              project_channel = $("#project_channel_02").val(),
                 state = state_2;
                
             
@@ -797,15 +797,29 @@
             if(telnum_sub) {
                 html += '<input name="invest_mobile" type="hidden" value="' + telnum_sub + '"/>';
             }
-            if(zhifubao) {
-                html += '<input name="zhifubao_contains" type="hidden" value="' + zhifubao + '"/>';
-            }
-            if(project_channel) {
-                html += '<input name="project_channel_02" type="hidden" value="' + project_channel + '"/>';
-            }
-            if(state) {
+//          if(zhifubao) {
+//              html += '<input name="zhifubao_contains" type="hidden" value="' + zhifubao + '"/>';
+//          }
+//          if(project_channel) {
+//              html += '<input name="project_channel_contains" type="hidden" value="' + project_channel + '"/>';
+//          }
+            
+            if(state == '0') {
+                html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
+            } else if (state == '1') {
                 html += '<input name="preaudit_state" type="hidden" value="' + state + '"/>';
+            } else if (state == '2') {
+                html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
+            } else if (state == '3') {
+                html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
+            } else if (state == '4') {
+                html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
+            } else if (state == '-1'){
+                newurl += "&preaudit_state=0&audit_state=1";
+                html += '<input name="preaudit_state" type="hidden" value="0"/>';
+                html += '<input name="audit_state" type="hidden" value="1"/>';
             }
+            
             
             html += '</form>';
             var iframe = document.getElementById('myIFrame');

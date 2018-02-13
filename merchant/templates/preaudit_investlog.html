@@ -532,6 +532,7 @@
                     });
                     $(parent_dom).html('操作成功，通过');
                     $('.popup.m-pass-proj-02').removeClass('in');
+                    $('#search_02').click();
                 } else if (ret.code == 1) {
                     var fun = "window.location.href='/merchant/margin_manage/'";
                     console.log(ret.res_msg);
@@ -607,6 +608,7 @@
                     });
                     $(parent_dom).html('操作成功，拒绝');
                     $('.popup.m-refuse-proj-02').removeClass('in');
+                    $('#search_02').click();
                 } else {
                     console.log(ret.res_msg);
                     $.warning({
@@ -654,6 +656,7 @@
                     });
                     $(parent_dom).html('操作成功，异常');
                     $('.popup.m-again-proj-02').removeClass('in');
+                    $('#search_02').click();
                 } else {
                     console.log(ret.res_msg);
                     $.warning({

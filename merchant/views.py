@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from wafuli.models import InvestLog, Project
 import datetime
-from django.http.response import JsonResponse
+from django.http.response import JsonResponse, HttpResponse
 from decimal import Decimal
 import logging
 from merchant.margin_transaction import charge_margin, ChargeValueError
@@ -29,7 +29,13 @@ from restapi.serializers import InvestLogSerializer
 from collections import OrderedDict
 from docs.models import DocStatis
 from django.core.cache import cache
-from public.tools import login_required_ajax, has_permission
+from public.tools import login_required_ajax, has_permission,\
+    has_post_permission
+from xlwt.Workbook import Workbook
+from xlwt.Style import easyxf
+import StringIO
+import xlrd
+import traceback
 logger = logging.getLogger('wafuli')
 # Create your views here.
 @csrf_exempt
@@ -525,13 +531,14 @@ def export_merchant_investlog(request):
     user = request.user
     item_list = []
     item_list = InvestLog.objects.filter(category='merchant', project__user=user)
+    print len(item_list)
     investtime_0 = request.GET.get("investtime_0", None)
     investtime_1 = request.GET.get("investtime_1", None)
     submittime_0 = request.GET.get("submittime_0", None)
     submittime_1 = request.GET.get("submittime_1", None)
     audittime_0 = request.GET.get("audittime_0", None)
     audittime_1 = request.GET.get("audittime_1", None)
-    state = request.GET.get("audit_state",'1')
+    state = request.GET.get("audit_state", None)
     submit_type = request.GET.get('submit_type', '0')
     if investtime_0 and investtime_1:
         s = datetime.datetime.strptime(investtime_0,'%Y-%m-%d')
@@ -545,18 +552,15 @@ def export_merchant_investlog(request):
         s = datetime.datetime.strptime(audittime_0,'%Y-%m-%d %H:%M')
         e = datetime.datetime.strptime(audittime_1,'%Y-%m-%d %H:%M')
         item_list = item_list.filter(audit_time__range=(s,e))
-    qq_number = request.GET.get("qq_number", None)
-    if qq_number:
-        item_list = item_list.filter(user__qq_number=qq_number)
+#     qq_number = request.GET.get("qq_number", None)
+#     if qq_number:
+#         item_list = item_list.filter(user__qq_number=qq_number)
     mobile = request.GET.get("user_mobile", None)
     if mobile:
         item_list = item_list.filter(user__mobile=mobile)
     userlevel = request.GET.get("level",None)
     if userlevel:
         item_list = item_list.filter(user__level=userlevel)
-    is_official = request.GET.get("is_official",None)
-    if is_official:
-        item_list = item_list.filter(is_official=is_official)
     companyname = request.GET.get("companyname", None)
     if companyname:
         item_list = item_list.filter(project__company__name__contains=companyname)
@@ -566,12 +570,8 @@ def export_merchant_investlog(request):
     projectname = request.GET.get("project_title_contains", None)
     if projectname:
         item_list = item_list.filter(project__title__contains=projectname)
-    adminname = request.GET.get("admin_user", None)
-    if adminname:
-        item_list = item_list.filter(admin_user__username=adminname)
-    if submit_type=='1' or submit_type=='2':
-        item_list = item_list.filter(submit_type=submit_type)
-    item_list = item_list.filter(audit_state=state).select_related('user', 'project').order_by('submit_time')
+    if state:
+        item_list = item_list.filter(audit_state=state).select_related('user', 'project').order_by('submit_time')
     data = []
     for con in item_list:
         project = con.project
@@ -592,7 +592,7 @@ def export_merchant_investlog(request):
         submit_type = con.get_submit_type_display()
         if con.preaudit_state=='0':
             result = u'通过'
-            settle_amount = str(con.settle_amount)
+            settle_amount = str(con.presettle_amount)
         elif con.preaudit_state=='2':
             result = u'拒绝'
         data.append([id, project_name, invest_date, invest_mobile, invest_name, term,
@@ -603,6 +603,7 @@ def export_merchant_investlog(request):
                  u'审核结果',u'结算金额',u'审核说明']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
+    print len(data)
     row = len(data)
     style1 = easyxf(num_format_str='YY/MM/DD')
     for i in range(row):
@@ -620,3 +621,118 @@ def export_merchant_investlog(request):
     response['Content-Disposition'] = 'attachment; filename=投资数据表.xls'
     response.write(sio.getvalue())
     return response
+
+@csrf_exempt
+@has_post_permission('100')
+def import_investlog(request):
+    admin_user = request.user
+    ret = {'code':-1}
+    file = request.FILES.get('file')
+#     print file.name
+    with open('./out.xls', 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+    data = xlrd.open_workbook('out.xls')
+    table = data.sheets()[0]
+    nrows = table.nrows
+    ncols = table.ncols
+    if ncols!=15:
+        ret['msg'] = u"文件格式与模板不符，请在导出的待审核记录表中更新后将文件导入！"
+        return JsonResponse(ret)
+    rtable = []
+    mobile_list = []
+    try:
+        for i in range(1,nrows):
+            temp = []
+            duplic = False
+            for j in range(ncols):
+                cell = table.cell(i,j)
+                if j==0:
+                    id = int(cell.value)
+                    temp.append(id)
+                elif j==1:
+                    project = cell.value
+                    temp.append(project)
+                elif j==8:
+                    result = cell.value.strip()
+                    if result == u"通过":
+                        result = 1
+                    elif result == u"拒绝":
+                        result = 2
+                    elif result == u"异常":
+                        result = 3
+                    else:
+                        raise Exception(u"审核结果必须为是,否或复审。")
+                    temp.append(result)
+                elif j==9:
+                    return_amount = 0
+                    if cell.value:
+                        return_amount = Decimal(cell.value)
+                    elif result==1:
+                        raise Exception(u"审核结果为是时，返现金额不能为空或零。")
+                    temp.append(return_amount)
+                elif j==10:
+                    reason = cell.value
+                    temp.append(reason)
+                else:
+                    continue;
+            rtable.append(temp)
+    except Exception, e:
+        traceback.print_exc()
+        ret['msg'] = unicode(e)
+        ret['num'] = 0
+        return JsonResponse(ret)
+    admin_user = request.user
+    suc_num = 0
+    try:
+        for row in rtable:
+            with transaction.atomic():
+                id = row[0]
+                project_title=row[1]
+                result = row[2]
+                cash = row[3]
+                reason = row[4]
+                investlog = InvestLog.objects.get(id=id)
+                if not investlog.audit_state in ['1','3'] or investlog.translist.exists():
+                    continue
+                investlog_user = investlog.user
+                translist = None
+                if result==1:
+                    broker_rate = investlog.project.broker_rate
+                    broker_amount = cash * broker_rate/100
+                    if cash + broker_amount > admin_user.margin_account:
+                        raise Exception(u"资金余额不足，请先存入。") 
+                    translist = charge_margin(admin_user, '1', cash, project_title)
+                    investlog.presettle_amount = cash
+                    investlog.broker_amount = broker_amount
+                    investlog.preaudit_state = '0'
+                    #对于异常数据，要改成未处理
+                    investlog.audit_state = '1'
+                    translist.auditlog = investlog
+                    translist.save(update_fields=['content_type', 'object_id'])
+                    if broker_amount > 0:
+                        translist2 = charge_margin(admin_user, '1', broker_amount, "佣金")
+                        translist2.auditlog = investlog
+                        translist2.save(update_fields=['content_type', 'object_id'])
+#                     #活动插入
+#                     on_audit_pass(request, investlog)
+#                     #活动插入结束
+                elif result==2:
+                    investlog.preaudit_state = '2'
+                    investlog.audit_state = '2'
+                elif result==3:
+                    investlog.preaudit_state = '3'
+                    investlog.audit_state = '3'
+                investlog.audit_reason = reason    
+                investlog.audit_time = datetime.datetime.now()
+                investlog.admin_user = admin_user
+                investlog.save(update_fields=['audit_state','audit_time','settle_amount','preaudit_state'
+                                              'presettle_amount','audit_reason','admin_user'])
+                suc_num += 1
+        ret['code'] = 0
+    except Exception as e:
+        traceback.print_exc()
+        ret['code'] = 1
+        ret['msg'] = unicode(e)
+    ret['num'] = suc_num
+    return JsonResponse(ret)

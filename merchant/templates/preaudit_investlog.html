@@ -770,7 +770,7 @@
             });
         });
         $("#export_02").click(function() {
-            var html = '<form action="' + "{% url 'export_investlog' %}" + '" method="get" target="_self" id="postData_form">';
+            var html = '<form action="' + "{% url 'merchant:export_merchant_investlog' %}" + '" method="get" target="_self" id="postData_form">';
             var proj_name = $("#proj_name_02").val(),
                 audit_date0 = $("#audit_date0_02").val(),
                 audit_date1 = $("#audit_date1_02").val(),
@@ -782,7 +782,7 @@
                 state = state_2;
                
             
-            html += '<input name="is_official" type="hidden" value="false"/>';
+
             if(proj_name) {
                 html += '<input name="project_title_contains" type="hidden" value="' + proj_name + '"/>';
             }

@@ -334,6 +334,21 @@
             </div>
         </div>
     </div>
+    <div class="popup m-import-msg">
+        <div class="popup__content" style="width: 600px;">
+            <div class="popup__top">
+                <h2 class="popup__title">审核结果导入</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+            </div>
+            <div style="text-align: left;" class="popup__detail">
+                <p style="font-size: 16px;">导入成功数量 <span id="import_pass"></span> 条</p>
+                <p style="display:none; word-break: break-all;" id="import_none_line">不存在数据ID： <span id="import_none"></span></p>
+                <p style="display:none; word-break: break-all;" id="import_audited_line">已审核数据ID： <span id="import_audited"></span></p>
+            </div>
+            <div class="popup__btnbox">
+                <a class="cancel btn m-green" onclick="canclePopup(this)">确定</a>
+            </div>
+        </div>
+    </div>
 </div>
 <iframe id="myIFrame" scrolling="yes" src="abount:blank" style="display:none" frameborder=1></iframe>
 {% include "footer.html" %}
@@ -560,7 +575,7 @@
         console.log(value);
         console.log(rate);
         if(Number(value)) {
-            $('.process-money').text('预计扣除手续费：'+ parseInt((value*rate)/100) +'元');
+            $('.process-money').text('预计扣除手续费：'+ parseFloat((value*rate)/100) +'元');
         } else {
             $('.process-money').text('结算金额请输入纯数字格式');
         }
@@ -845,7 +860,18 @@
                 data: {}, //一同上传的数据
                 success: function(data, status) {
                     if(data.code == 0) {
-                        alert("导入成功！ 数量：" + data.num);
+//                      alert("导入成功！ 数量：" + data.num);
+                        console.log(data);
+                        $('#import_pass').text(data.num);
+                        if(data.not_exist_list.length != 0) {
+                            $('#import_none').text(data.not_exist_list);
+                            $('#import_none_line').show()
+                        }
+                        if (data.had_audited_list.length != 0) {
+                            $('#import_audited').text(data.had_audited_list);
+                            $('#import_audited_line').show()
+                        }
+                        $('.popup.m-import-msg').addClass('in');
                     } else {
                         alert(data.msg + " 成功数量：" + data.num);
                     }

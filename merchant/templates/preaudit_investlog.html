@@ -231,7 +231,7 @@
                 
             </div>
             <div class="handle__out r">
-                <input style="display: none;" id="fileupload2" name="file" type="file" />
+                <input style="display: none;" id="fileupload2" name="file" type="file" onchange="import_onchange(this)" />
                 <a id="input_clone_02" class="btn m-green m-choose">导入</a>
                 <a id="export_02" class="btn m-green">导出</a>
                 <a id="search_02" class="btn m-green">搜索</a>
@@ -497,7 +497,6 @@
     function pass_02 (obj,id,broker_rate) {
         base_id = id;
         rate = broker_rate;
-        console.log(rate);
         base_type = 1;
         parent_dom = $(obj).parent();
         $(".return_amount_02").val('');
@@ -673,7 +672,12 @@
     });
 
 //      编辑/删除部分（自建）---end
-    
+    function import_onchange(that){
+    	var choose_file_02 = document.getElementById("input_clone_02");
+        var hint_02 = document.getElementById("hint_02");
+        hint_02.innerHTML = that.files[0].name;
+        $('.popup.m-import').addClass('in');
+    }
     $(function(){
         $('.nav__item:eq(3)').addClass('active');
         
@@ -758,7 +762,6 @@
                 search_data = data_user_admin;
             }
             
-            console.log(newurl);
             $("#page2").empty();
             $("#pagedata2").ajaxPage({
                 url: newurl,
@@ -835,7 +838,7 @@
                 return;
             }
             $.ajaxFileUpload({
-                url: "{% url 'import_investlog' %}",
+                url: "{% url 'merchant:import_merchant_investlog' %}",
                 secureuri: false,
                 fileElementId: fileElementId, //file标签的id
                 dataType: 'json', //返回数据的类型
@@ -857,14 +860,13 @@
         var choose_file_02 = document.getElementById("input_clone_02");
         var hint_02 = document.getElementById("hint_02");
         choose_file_02.onclick = function() {
-            console.log(document.getElementById("fileupload2").files);
             document.getElementById("fileupload2").value = '';
+            console.log(document.getElementById("fileupload2").files);
             document.getElementById("fileupload2").click();
+            var a = document.getElementById("fileupload2");
         }
-        document.getElementById("fileupload2").onchange = function(){
-            hint_02.innerHTML = this.files[0].name;
-            $('.popup.m-import').addClass('in');
-        }
+        
+        
     })
     
     //计算天数差的函数，通用  

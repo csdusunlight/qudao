@@ -531,14 +531,14 @@ def export_merchant_investlog(request):
     user = request.user
     item_list = []
     item_list = InvestLog.objects.filter(category='merchant', project__user=user)
-    print len(item_list)
     investtime_0 = request.GET.get("investtime_0", None)
     investtime_1 = request.GET.get("investtime_1", None)
     submittime_0 = request.GET.get("submittime_0", None)
     submittime_1 = request.GET.get("submittime_1", None)
-    audittime_0 = request.GET.get("audittime_0", None)
-    audittime_1 = request.GET.get("audittime_1", None)
+    auditdate_0 = request.GET.get("auditdate_0", None)
+    auditdate_1 = request.GET.get("auditdate_1", None)
     state = request.GET.get("audit_state", None)
+    preaudit_state = request.GET.get("preaudit_state", None)
     submit_type = request.GET.get('submit_type', '0')
     if investtime_0 and investtime_1:
         s = datetime.datetime.strptime(investtime_0,'%Y-%m-%d')
@@ -548,9 +548,10 @@ def export_merchant_investlog(request):
         s = datetime.datetime.strptime(submittime_0,'%Y-%m-%d')
         e = datetime.datetime.strptime(submittime_1,'%Y-%m-%d')
         item_list = item_list.filter(submit_time__range=(s,e))
-    if audittime_0 and audittime_1:
-        s = datetime.datetime.strptime(audittime_0,'%Y-%m-%d %H:%M')
-        e = datetime.datetime.strptime(audittime_1,'%Y-%m-%d %H:%M')
+    if auditdate_0 and auditdate_1:
+        s = datetime.datetime.strptime(auditdate_0,'%Y-%m-%d')
+        e = datetime.datetime.strptime(auditdate_1,'%Y-%m-%d')
+        e += datetime.timedelta(days=1)
         item_list = item_list.filter(audit_time__range=(s,e))
 #     qq_number = request.GET.get("qq_number", None)
 #     if qq_number:
@@ -572,6 +573,8 @@ def export_merchant_investlog(request):
         item_list = item_list.filter(project__title__contains=projectname)
     if state:
         item_list = item_list.filter(audit_state=state).select_related('user', 'project').order_by('submit_time')
+    if preaudit_state:
+        item_list = item_list.filter(preaudit_state=preaudit_state).select_related('user', 'project').order_by('submit_time')
     data = []
     for con in item_list:
         project = con.project
@@ -595,6 +598,8 @@ def export_merchant_investlog(request):
             settle_amount = str(con.presettle_amount)
         elif con.preaudit_state=='2':
             result = u'拒绝'
+        elif con.preaudit_state=='3':
+            result = u'异常'
         data.append([id, project_name, invest_date, invest_mobile, invest_name, term,
                      invest_amount, remark, result, settle_amount, reason])
     w = Workbook()     #创建一个工作簿
@@ -603,7 +608,6 @@ def export_merchant_investlog(request):
                  u'审核结果',u'结算金额',u'审核说明']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
-    print len(data)
     row = len(data)
     style1 = easyxf(num_format_str='YY/MM/DD')
     for i in range(row):
@@ -624,7 +628,7 @@ def export_merchant_investlog(request):
 
 @csrf_exempt
 @has_post_permission('100')
-def import_investlog(request):
+def import_merchant_investlog(request):
     admin_user = request.user
     ret = {'code':-1}
     file = request.FILES.get('file')
@@ -636,7 +640,7 @@ def import_investlog(request):
     table = data.sheets()[0]
     nrows = table.nrows
     ncols = table.ncols
-    if ncols!=15:
+    if ncols!=11:
         ret['msg'] = u"文件格式与模板不符，请在导出的待审核记录表中更新后将文件导入！"
         return JsonResponse(ret)
     rtable = []
@@ -662,18 +666,20 @@ def import_investlog(request):
                     elif result == u"异常":
                         result = 3
                     else:
-                        raise Exception(u"审核结果必须为是,否或复审。")
+                        raise Exception(u"审核结果必须为通过,拒绝或异常。")
                     temp.append(result)
                 elif j==9:
                     return_amount = 0
                     if cell.value:
                         return_amount = Decimal(cell.value)
                     elif result==1:
-                        raise Exception(u"审核结果为是时，返现金额不能为空或零。")
+                        raise Exception(u"审核结果为通过时，返现金额不能为空或零。")
                     temp.append(return_amount)
                 elif j==10:
                     reason = cell.value
                     temp.append(reason)
+                    if result!=1 and not reason:
+                        raise Exception(u"拒绝或异常数据要注明原因。")
                 else:
                     continue;
             rtable.append(temp)
@@ -684,6 +690,8 @@ def import_investlog(request):
         return JsonResponse(ret)
     admin_user = request.user
     suc_num = 0
+    not_exist_list = []
+    had_audited_list = []
     try:
         for row in rtable:
             with transaction.atomic():
@@ -692,8 +700,14 @@ def import_investlog(request):
                 result = row[2]
                 cash = row[3]
                 reason = row[4]
-                investlog = InvestLog.objects.get(id=id)
-                if not investlog.audit_state in ['1','3'] or investlog.translist.exists():
+                try:
+                    investlog = InvestLog.objects.get(id=id)
+                except InvestLog.DoesNotExist:
+                    not_exist_list.append(id)
+                    continue
+                if not investlog.preaudit_state in ['1','3'] or not \
+                    investlog.audit_state in ['1','3'] or investlog.translist.exists():
+                    had_audited_list.append(id)
                     continue
                 investlog_user = investlog.user
                 translist = None
@@ -726,7 +740,7 @@ def import_investlog(request):
                 investlog.audit_reason = reason    
                 investlog.audit_time = datetime.datetime.now()
                 investlog.admin_user = admin_user
-                investlog.save(update_fields=['audit_state','audit_time','settle_amount','preaudit_state'
+                investlog.save(update_fields=['audit_state','audit_time','settle_amount','preaudit_state',
                                               'presettle_amount','audit_reason','admin_user'])
                 suc_num += 1
         ret['code'] = 0
@@ -735,4 +749,6 @@ def import_investlog(request):
         ret['code'] = 1
         ret['msg'] = unicode(e)
     ret['num'] = suc_num
+    ret['not_exist_list'] = not_exist_list
+    ret['had_audited_list'] = had_audited_list
     return JsonResponse(ret)

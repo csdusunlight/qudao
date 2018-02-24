@@ -260,7 +260,7 @@
                 var addAmount = $('.addAmount').val();
                 console.log(addAmount);
                 //正则验证
-                var regx = /^[0-9]*$/; 
+                var regx = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/; 
                 if (!regx.test(addAmount)) {
                     $.prompt({
                         "Content":"充值金额仅限数字!"

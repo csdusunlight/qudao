@@ -159,6 +159,9 @@
         text-align: left;
         line-height: 24px;
     }
+    [data-microtip]:after {
+        text-align: left;
+    }
 </style>
 
 </head>
@@ -232,9 +235,9 @@
             </div>
             <div class="handle__out r">
                 <input style="display: none;" id="fileupload2" name="file" type="file" onchange="import_onchange(this)" />
-                <a id="input_clone_02" class="btn m-green m-choose">导入</a>
-                <a id="export_02" class="btn m-green">导出</a>
                 <a id="search_02" class="btn m-green">搜索</a>
+                <a id="export_02" class="btn m-green">导出</a>
+                <a id="input_clone_02" class="btn m-green" data-microtip-position="top-left" data-microtip-size="large" data-microtip="导入未审核数据前请填写审核状态，结算金额，审核说明等信息。">导入</a>
             </div>
         </div>
         

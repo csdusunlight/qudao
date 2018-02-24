@@ -39,8 +39,8 @@
         '<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
         '<td>{presettle_amount}</td><td>{invest_name}</td><td>{audit_state_des}</td>'+
         '<td>{broker_amount}</td>'+
-        '<td>{remark}</td><td id="item_{id}"><a class="fyin" onclick="pass({id})">通过' +
-        '</a>│<a class="jion-s" onclick="refuse({id})">拒绝</a></td></tr>[/results]</table>';
+        '<td>{remark}</td><td id="item_{id}"><a class="fyin" onclick="pass({id})">同意' +
+        '</a>│<a class="jion-s" onclick="refuse({id})">驳回</a></td></tr>[/results]</table>';
     //全部  未审核
     var data0 = '<table width="100%"><tr><th>QQ/QQ昵称</th><th>项目名称</th><th>手机号</th>' +
         '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>结算金额</th><th>投资姓名</th><th>处理状态</th><th>扣除手续费</th>' +
@@ -67,7 +67,7 @@
         '<td>{broker_amount}</td>'+
         '<td>{remark}</td></tr>[/results]</table>';
 //  var url = "/merchant/investlogs/" + "?page={page}&pageSize={pageSize}&project_user={{user.id}}";
-    var url = "/restapi/investlogs/" + "?page={page}&pageSize={pageSize}&is_official=true&category=merchant";
+    var url = "/restapi/investlogs/" + "?page={page}&pageSize={pageSize}&category=merchant";
     
     function pagecallback() {
 //      $('.is-img').each(function() {
@@ -318,7 +318,6 @@
         $("#export").click(function() {
             var html = '<form action="' + "{% url 'admin_export_merchant_investlog' %}" + '" method="get" target="_self" id="postData_form">';
             
-            html += '<input name="is_official" type="hidden" value="true"/>';
             var startTime = $("#startTime").val();
             var endTime = $("#endTime").val();
             if(startTime && endTime) {
@@ -354,7 +353,13 @@
                 html += '<input name="admin_user" type="hidden" value="' + adminname + '"/>';
             }
             if(state) {
-                html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
+            	if(state=='-1'){
+            		html += '<input name="preaudit_state" type="hidden" value="0"/>';
+            		html += '<input name="audit_state" type="hidden" value="1"/>';
+            	}
+            	else{
+	                html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
+            	}
             }
             if(invest_type) {
                 html += '<input name="submit_type" type="hidden" value="' + invest_type + '"/>';
@@ -557,10 +562,10 @@
 <!--审核拒绝-->
 <div class="Audit">
     <div class="w570-box">
-        <h3>拒绝预审核？</h3>
+        <h3>驳回预审核？</h3>
         <button class="none-x"></button>
         <form class="Audit-in">
-            <span>拒绝原因：</span>
+            <span>驳回原因：</span>
             <input id="refuse_event_id" type="hidden" />
             <textarea id="refuse_reason"></textarea>
             <div class="Finnow-Sub">

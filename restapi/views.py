@@ -118,6 +118,10 @@ class InvestlogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
                 if queryset.exclude(id=id).exclude(audit_state='2').exists():
                     raise ValidationError({'detail':u"投资手机号重复"})
         serializer.save()
+    def perform_destroy(self, instance):
+        if instance.preaudit_state == '0' or instance.audit_state == '0':
+            raise ValidationError({'detail':u"该数据正在审核中，无法删除"})
+        generics.RetrieveUpdateDestroyAPIView.perform_destroy(self, instance)
     
 class TranslistList(BaseViewMixin, generics.ListAPIView):
     def get_queryset(self):

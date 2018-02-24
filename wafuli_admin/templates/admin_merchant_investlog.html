@@ -316,7 +316,7 @@
             });
         });
         $("#export").click(function() {
-            var html = '<form action="' + "{% url 'admin_export_investlog' %}" + '" method="get" target="_self" id="postData_form">';
+            var html = '<form action="' + "{% url 'admin_export_merchant_investlog' %}" + '" method="get" target="_self" id="postData_form">';
             
             html += '<input name="is_official" type="hidden" value="true"/>';
             var startTime = $("#startTime").val();
@@ -377,7 +377,7 @@
                 return;
             }
             $.ajaxFileUpload({
-                url: "{% url 'admin_import_investlog' %}",
+                url: "{% url 'admin_import_merchant_investlog' %}",
                 secureuri: false,
                 fileElementId: fileElementId, //file标签的id
                 dataType: 'json', //返回数据的类型

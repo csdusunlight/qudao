@@ -21,6 +21,8 @@ urlpatterns = [
     url(r'^get_days_statis', views.get_days_statis, name='get_days_statis'),
     url(r'^get_project_statis_byday', views.get_project_statis_byday, name='get_project_statis_byday'),
     url(r'^projectstatislist/$', views.MerchantProjectStatisticsList.as_view()),
+    url(r'^export_merchant_investlog/$', views.export_merchant_investlog, name='export_merchant_investlog'),
+    url(r'^import_merchant_investlog/$', views.import_merchant_investlog, name='import_merchant_investlog'),
 ]
 
 

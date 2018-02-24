@@ -830,6 +830,7 @@
             $('.popup.m-del-proj').addClass('in');
         }
         $('#confirm_delete').click(function(){
+        	$('.popup.m-del-proj').removeClass('in');
             $.ajax({
                 url:"/restapi/investlogs/" + delete_id + "/",
                 type:"delete",
@@ -837,10 +838,9 @@
                 success: function(ret) {
                     console.log('删除成功');
                     parent_del.parent().parent().parent().remove();
-                    $('.popup.m-del-proj').removeClass('in');
                 },
-                error: function() {
-                    alert("请检查网络连接");
+                error: function(x,t,e) {
+                    alert(x.responseJSON.detail);
                 }
             });
         })

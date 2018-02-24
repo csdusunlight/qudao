@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from wafuli.models import InvestLog, Project
 import datetime
-from django.http.response import JsonResponse
+from django.http.response import JsonResponse, HttpResponse
 from decimal import Decimal
 import logging
 from merchant.margin_transaction import charge_margin, ChargeValueError
@@ -29,7 +29,13 @@ from restapi.serializers import InvestLogSerializer
 from collections import OrderedDict
 from docs.models import DocStatis
 from django.core.cache import cache
-from public.tools import login_required_ajax, has_permission
+from public.tools import login_required_ajax, has_permission,\
+    has_post_permission
+from xlwt.Workbook import Workbook
+from xlwt.Style import easyxf
+import StringIO
+import xlrd
+import traceback
 logger = logging.getLogger('wafuli')
 # Create your views here.
 @csrf_exempt
@@ -519,3 +525,230 @@ class MerchantProjectStatisticsList(BaseViewMixin, generics.ListAPIView):
     serializer_class = MerchantProjectStatisticsSerializer
     filter_backends = (OrderingFilter,)
     pagination_class = MyPageNumberPagination
+    
+@login_required
+def export_merchant_investlog(request):
+    user = request.user
+    item_list = []
+    item_list = InvestLog.objects.filter(category='merchant', project__user=user)
+    investtime_0 = request.GET.get("investtime_0", None)
+    investtime_1 = request.GET.get("investtime_1", None)
+    submittime_0 = request.GET.get("submittime_0", None)
+    submittime_1 = request.GET.get("submittime_1", None)
+    auditdate_0 = request.GET.get("auditdate_0", None)
+    auditdate_1 = request.GET.get("auditdate_1", None)
+    state = request.GET.get("audit_state", None)
+    preaudit_state = request.GET.get("preaudit_state", None)
+    submit_type = request.GET.get('submit_type', '0')
+    if investtime_0 and investtime_1:
+        s = datetime.datetime.strptime(investtime_0,'%Y-%m-%d')
+        e = datetime.datetime.strptime(investtime_1,'%Y-%m-%d')
+        item_list = item_list.filter(invest_date__range=(s,e))
+    if submittime_0 and submittime_1:
+        s = datetime.datetime.strptime(submittime_0,'%Y-%m-%d')
+        e = datetime.datetime.strptime(submittime_1,'%Y-%m-%d')
+        item_list = item_list.filter(submit_time__range=(s,e))
+    if auditdate_0 and auditdate_1:
+        s = datetime.datetime.strptime(auditdate_0,'%Y-%m-%d')
+        e = datetime.datetime.strptime(auditdate_1,'%Y-%m-%d')
+        e += datetime.timedelta(days=1)
+        item_list = item_list.filter(audit_time__range=(s,e))
+#     qq_number = request.GET.get("qq_number", None)
+#     if qq_number:
+#         item_list = item_list.filter(user__qq_number=qq_number)
+    mobile = request.GET.get("user_mobile", None)
+    if mobile:
+        item_list = item_list.filter(user__mobile=mobile)
+    userlevel = request.GET.get("level",None)
+    if userlevel:
+        item_list = item_list.filter(user__level=userlevel)
+    companyname = request.GET.get("companyname", None)
+    if companyname:
+        item_list = item_list.filter(project__company__name__contains=companyname)
+    invest_mobile = request.GET.get("invest_mobile", None)
+    if invest_mobile:
+        item_list = item_list.filter(invest_mobile=invest_mobile)
+    projectname = request.GET.get("project_title_contains", None)
+    if projectname:
+        item_list = item_list.filter(project__title__contains=projectname)
+    if state:
+        item_list = item_list.filter(audit_state=state).select_related('user', 'project').order_by('submit_time')
+    if preaudit_state:
+        item_list = item_list.filter(preaudit_state=preaudit_state).select_related('user', 'project').order_by('submit_time')
+    data = []
+    for con in item_list:
+        project = con.project
+        project_name=project.title
+        invest_mobile=con.invest_mobile
+        invest_name=con.invest_name
+        invest_date=con.invest_date
+        id=con.id
+        remark= con.remark
+        invest_amount= con.invest_amount
+        term=con.invest_term
+        qq_number = con.user.qq_number + '/' +  con.user.qq_name
+        user_level = con.user.level
+        result = ''
+        settle_amount = ''
+        settle_price = con.get_project_price()
+        reason = con.audit_reason
+        submit_type = con.get_submit_type_display()
+        if con.preaudit_state=='0':
+            result = u'通过'
+            settle_amount = str(con.presettle_amount)
+        elif con.preaudit_state=='2':
+            result = u'拒绝'
+        elif con.preaudit_state=='3':
+            result = u'异常'
+        data.append([id, project_name, invest_date, invest_mobile, invest_name, term,
+                     invest_amount, remark, result, settle_amount, reason])
+    w = Workbook()     #创建一个工作簿
+    ws = w.add_sheet(u'待审核记录')     #创建一个工作表
+    title_row = [u'记录ID',u'项目名称',u'投资日期', u'投资手机号', u'投资姓名' ,u'投资期限' ,u'投资金额', u'备注',
+                 u'审核结果',u'结算金额',u'审核说明']
+    for i in range(len(title_row)):
+        ws.write(0,i,title_row[i])
+    row = len(data)
+    style1 = easyxf(num_format_str='YY/MM/DD')
+    for i in range(row):
+        lis = data[i]
+        col = len(lis)
+        for j in range(col):
+            if j==2:
+                ws.write(i+1,j,lis[j],style1)
+            else:
+                ws.write(i+1,j,lis[j])
+    sio = StringIO.StringIO()
+    w.save(sio)
+    sio.seek(0)
+    response = HttpResponse(sio.getvalue(), content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=投资数据表.xls'
+    response.write(sio.getvalue())
+    return response
+
+@csrf_exempt
+@has_post_permission('100')
+def import_merchant_investlog(request):
+    admin_user = request.user
+    ret = {'code':-1}
+    file = request.FILES.get('file')
+#     print file.name
+    with open('./out.xls', 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+    data = xlrd.open_workbook('out.xls')
+    table = data.sheets()[0]
+    nrows = table.nrows
+    ncols = table.ncols
+    if ncols!=11:
+        ret['msg'] = u"文件格式与模板不符，请在导出的待审核记录表中更新后将文件导入！"
+        return JsonResponse(ret)
+    rtable = []
+    mobile_list = []
+    try:
+        for i in range(1,nrows):
+            temp = []
+            duplic = False
+            for j in range(ncols):
+                cell = table.cell(i,j)
+                if j==0:
+                    id = int(cell.value)
+                    temp.append(id)
+                elif j==1:
+                    project = cell.value
+                    temp.append(project)
+                elif j==8:
+                    result = cell.value.strip()
+                    if result == u"通过":
+                        result = 1
+                    elif result == u"拒绝":
+                        result = 2
+                    elif result == u"异常":
+                        result = 3
+                    else:
+                        raise Exception(u"审核结果必须为通过,拒绝或异常。")
+                    temp.append(result)
+                elif j==9:
+                    return_amount = 0
+                    if cell.value:
+                        return_amount = Decimal(cell.value)
+                    elif result==1:
+                        raise Exception(u"审核结果为通过时，返现金额不能为空或零。")
+                    temp.append(return_amount)
+                elif j==10:
+                    reason = cell.value
+                    temp.append(reason)
+                    if result!=1 and not reason:
+                        raise Exception(u"拒绝或异常数据要注明原因。")
+                else:
+                    continue;
+            rtable.append(temp)
+    except Exception, e:
+        traceback.print_exc()
+        ret['msg'] = unicode(e)
+        ret['num'] = 0
+        return JsonResponse(ret)
+    admin_user = request.user
+    suc_num = 0
+    not_exist_list = []
+    had_audited_list = []
+    try:
+        for row in rtable:
+            with transaction.atomic():
+                id = row[0]
+                project_title=row[1]
+                result = row[2]
+                cash = row[3]
+                reason = row[4]
+                try:
+                    investlog = InvestLog.objects.get(id=id)
+                except InvestLog.DoesNotExist:
+                    not_exist_list.append(id)
+                    continue
+                if not investlog.preaudit_state in ['1','3'] or not \
+                    investlog.audit_state in ['1','3'] or investlog.translist.exists():
+                    had_audited_list.append(id)
+                    continue
+                investlog_user = investlog.user
+                translist = None
+                if result==1:
+                    broker_rate = investlog.project.broker_rate
+                    broker_amount = cash * broker_rate/100
+                    if cash + broker_amount > admin_user.margin_account:
+                        raise Exception(u"资金余额不足，请先存入。") 
+                    translist = charge_margin(admin_user, '1', cash, project_title)
+                    investlog.presettle_amount = cash
+                    investlog.broker_amount = broker_amount
+                    investlog.preaudit_state = '0'
+                    #对于异常数据，要改成未处理
+                    investlog.audit_state = '1'
+                    translist.auditlog = investlog
+                    translist.save(update_fields=['content_type', 'object_id'])
+                    if broker_amount > 0:
+                        translist2 = charge_margin(admin_user, '1', broker_amount, "佣金")
+                        translist2.auditlog = investlog
+                        translist2.save(update_fields=['content_type', 'object_id'])
+#                     #活动插入
+#                     on_audit_pass(request, investlog)
+#                     #活动插入结束
+                elif result==2:
+                    investlog.preaudit_state = '2'
+                    investlog.audit_state = '2'
+                elif result==3:
+                    investlog.preaudit_state = '3'
+                    investlog.audit_state = '3'
+                investlog.audit_reason = reason    
+                investlog.audit_time = datetime.datetime.now()
+                investlog.admin_user = admin_user
+                investlog.save(update_fields=['audit_state','audit_time','settle_amount','preaudit_state',
+                                              'presettle_amount','audit_reason','admin_user'])
+                suc_num += 1
+        ret['code'] = 0
+    except Exception as e:
+        traceback.print_exc()
+        ret['code'] = 1
+        ret['msg'] = unicode(e)
+    ret['num'] = suc_num
+    ret['not_exist_list'] = not_exist_list
+    ret['had_audited_list'] = had_audited_list
+    return JsonResponse(ret)

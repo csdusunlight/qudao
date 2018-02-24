@@ -85,6 +85,7 @@
         box-sizing: border-box;
     }
     .tab-num {
+        display: none;
         position: absolute;
         right: 1px;
         top: 1px;
@@ -216,7 +217,7 @@
                     <li data-state = "3" class="state-tab-2"><span data-microtip-position="top-right" data-microtip-size="large" data-microtip="异常：需要用户修改数据或延后处理的数据">异常</span><span class="tab-num">{{except_num}}</span></li>
                     <li data-state = "4" class="state-tab-2"><span data-microtip-position="top-right" data-microtip-size="large" data-microtip="用户申诉：已经审核完成，用户认为结算金额不正确提出申诉的数据">申诉</span><span class="tab-num">{{appeal_num}}</span></li>
                 </ul>
-                <span style="top: 8px; right: -30px;" class="tips__icon" data-microtip-size="large" data-microtip="未预审：用户提交，商家（您）还未进行审核操作的数据；
+                <span style="display:none; top: 8px; right: -30px;" class="tips__icon" data-microtip-size="large" data-microtip="未预审：用户提交，商家（您）还未进行审核操作的数据；
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 预审核通过：用户提交，商家（您）审核通过的数据；
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -230,9 +231,9 @@
                 
             </div>
             <div class="handle__out r">
-                <input style="display: none;" id="fileupload2" name="file" type="file" />
-                <a style="display: none;" id="input_clone_02" class="btn m-green m-choose">导入</a>
-                <a style="display: none;" id="export_02" class="btn m-green">导出</a>
+                <input style="display: none;" id="fileupload2" name="file" type="file" onchange="import_onchange(this)" />
+                <a id="input_clone_02" class="btn m-green m-choose">导入</a>
+                <a id="export_02" class="btn m-green">导出</a>
                 <a id="search_02" class="btn m-green">搜索</a>
             </div>
         </div>
@@ -349,7 +350,7 @@
 //      '<td>{toaudit_count}</td><td>{settle_amount}</td></tr>[/results]</table>';
 //  全部
     var data_user = '<table width="100%"><tr><th>项目名称</th><th>投资日期</th><th>提交手机号</th>' +
-        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th width="110px" style="position:relative;line-height:40px;"><span>审核状态</span><span style="top: 8px; left: 84px;" class="tips__icon" data-microtip-size="large" data-microtip="此处未预审以及预审核通过对应表格中的状态为未审核" data-microtip-position="top-right">？</span></th><th>结算金额</th><th>审核信息</th><th>投资姓名</th>'+
+        '<th>投资金额</th><th>投资标期</th><th>提交时间</th><th width="110px" style="position:relative;line-height:40px;"><span>审核状态</span><span style="top: 8px; left: 84px;" class="tips__icon" data-microtip-size="large" data-microtip="用户提交的数据初始状态为待审核，商家预审通过后状态变为预审核通过，然后等待管理员确认，确认后状态变为审核通过" data-microtip-position="top-right">？</span></th><th>结算金额</th><th>审核信息</th><th>投资姓名</th>'+
         '<th class="w-remark">备注</th><th>扣除手续费</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td><td class="state{audit_state} prestate{preaudit_state}">{audit_state_des}</td>'+
@@ -496,7 +497,6 @@
     function pass_02 (obj,id,broker_rate) {
         base_id = id;
         rate = broker_rate;
-        console.log(rate);
         base_type = 1;
         parent_dom = $(obj).parent();
         $(".return_amount_02").val('');
@@ -531,6 +531,7 @@
                     });
                     $(parent_dom).html('操作成功，通过');
                     $('.popup.m-pass-proj-02').removeClass('in');
+                    $('#search_02').click();
                 } else if (ret.code == 1) {
                     var fun = "window.location.href='/merchant/margin_manage/'";
                     console.log(ret.res_msg);
@@ -606,6 +607,7 @@
                     });
                     $(parent_dom).html('操作成功，拒绝');
                     $('.popup.m-refuse-proj-02').removeClass('in');
+                    $('#search_02').click();
                 } else {
                     console.log(ret.res_msg);
                     $.warning({
@@ -653,6 +655,7 @@
                     });
                     $(parent_dom).html('操作成功，异常');
                     $('.popup.m-again-proj-02').removeClass('in');
+                    $('#search_02').click();
                 } else {
                     console.log(ret.res_msg);
                     $.warning({
@@ -669,7 +672,12 @@
     });
 
 //      编辑/删除部分（自建）---end
-    
+    function import_onchange(that){
+    	var choose_file_02 = document.getElementById("input_clone_02");
+        var hint_02 = document.getElementById("hint_02");
+        hint_02.innerHTML = that.files[0].name;
+        $('.popup.m-import').addClass('in');
+    }
     $(function(){
         $('.nav__item:eq(3)').addClass('active');
         
@@ -678,8 +686,8 @@
             $(this).date_input();
         })
         $('.tab-num').each(function () {
-            if ($(this).text() == '') {
-                $(this).hide();
+            if ($(this).text() != '') {
+                $(this).show();
             }
         })
 
@@ -697,8 +705,8 @@
                 submit_date0 = $("#submit_date0_02").val(), 
                 submit_date1 = $("#submit_date1_02").val(),
                 telnum_sub = $("#telnum_sub_02").val(),
-                zhifubao = $("#zhifubao_02").val(),
-                project_channel = $("#project_channel_02").val(),
+//              zhifubao = $("#zhifubao_02").val(),
+//              project_channel = $("#project_channel_02").val(),
                 state = state_2;
             var newurl = url2;
             if(proj_name) {
@@ -719,12 +727,12 @@
             if(telnum_sub) {
                 newurl += "&invest_mobile=" + telnum_sub;
             }
-            if(zhifubao) {
-                newurl += "&zhifubao_contains=" + zhifubao;
-            }
-            if(project_channel) {
-                newurl += "&project_channel_contains=" + project_channel;
-            }
+//          if(zhifubao) {
+//              newurl += "&zhifubao_contains=" + zhifubao;
+//          }
+//          if(project_channel) {
+//              newurl += "&project_channel_contains=" + project_channel;
+//          }
             if(state == '0') {
                 newurl += "&audit_state=" + state;
             } else if (state == '1') {
@@ -754,7 +762,6 @@
                 search_data = data_user_admin;
             }
             
-            console.log(newurl);
             $("#page2").empty();
             $("#pagedata2").ajaxPage({
                 url: newurl,
@@ -766,19 +773,19 @@
             });
         });
         $("#export_02").click(function() {
-            var html = '<form action="' + "{% url 'export_investlog' %}" + '" method="get" target="_self" id="postData_form">';
+            var html = '<form action="' + "{% url 'merchant:export_merchant_investlog' %}" + '" method="get" target="_self" id="postData_form">';
             var proj_name = $("#proj_name_02").val(),
                 audit_date0 = $("#audit_date0_02").val(),
                 audit_date1 = $("#audit_date1_02").val(),
                 submit_date0 = $("#submit_date0_02").val(),
                 submit_date1 = $("#submit_date1_02").val(),
                 telnum_sub = $("#telnum_sub_02").val(),
-                zhifubao = $("#zhifubao_02").val(),
-                project_channel = $("#project_channel_02").val(),
+//              zhifubao = $("#zhifubao_02").val(),
+//              project_channel = $("#project_channel_02").val(),
                 state = state_2;
                
             
-            html += '<input name="is_official" type="hidden" value="false"/>';
+
             if(proj_name) {
                 html += '<input name="project_title_contains" type="hidden" value="' + proj_name + '"/>';
             }
@@ -793,15 +800,29 @@
             if(telnum_sub) {
                 html += '<input name="invest_mobile" type="hidden" value="' + telnum_sub + '"/>';
             }
-            if(zhifubao) {
-                html += '<input name="zhifubao_contains" type="hidden" value="' + zhifubao + '"/>';
-            }
-            if(project_channel) {
-                html += '<input name="project_channel_02" type="hidden" value="' + project_channel + '"/>';
-            }
-            if(state) {
+//          if(zhifubao) {
+//              html += '<input name="zhifubao_contains" type="hidden" value="' + zhifubao + '"/>';
+//          }
+//          if(project_channel) {
+//              html += '<input name="project_channel_contains" type="hidden" value="' + project_channel + '"/>';
+//          }
+            
+            if(state == '0') {
+                html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
+            } else if (state == '1') {
                 html += '<input name="preaudit_state" type="hidden" value="' + state + '"/>';
+            } else if (state == '2') {
+                html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
+            } else if (state == '3') {
+                html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
+            } else if (state == '4') {
+                html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
+            } else if (state == '-1'){
+                newurl += "&preaudit_state=0&audit_state=1";
+                html += '<input name="preaudit_state" type="hidden" value="0"/>';
+                html += '<input name="audit_state" type="hidden" value="1"/>';
             }
+            
             
             html += '</form>';
             var iframe = document.getElementById('myIFrame');
@@ -817,7 +838,7 @@
                 return;
             }
             $.ajaxFileUpload({
-                url: "{% url 'import_investlog' %}",
+                url: "{% url 'merchant:import_merchant_investlog' %}",
                 secureuri: false,
                 fileElementId: fileElementId, //file标签的id
                 dataType: 'json', //返回数据的类型
@@ -839,14 +860,13 @@
         var choose_file_02 = document.getElementById("input_clone_02");
         var hint_02 = document.getElementById("hint_02");
         choose_file_02.onclick = function() {
-            console.log(document.getElementById("fileupload2").files);
             document.getElementById("fileupload2").value = '';
+            console.log(document.getElementById("fileupload2").files);
             document.getElementById("fileupload2").click();
+            var a = document.getElementById("fileupload2");
         }
-        document.getElementById("fileupload2").onchange = function(){
-            hint_02.innerHTML = this.files[0].name;
-            $('.popup.m-import').addClass('in');
-        }
+        
+        
     })
     
     //计算天数差的函数，通用  

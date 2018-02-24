@@ -277,35 +277,34 @@
                         "Content":"输入正确的充值金额！"
                     });
                     return;
-                }
-               
-                // $.ajax({
-                //     url: '/merchant/margin_manage/',
-                //     type: 'post',
-                //     async: false,
-                //     timeout: 5000, //超时时间
-                //     dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
-                //     data: {
-                //         'type': 0,
-                //         "amount": addAmount
-                //     },
-                //     success: function (ret) {
-                //         if (ret.code == 0) {
-                //             $.prompt({
-                //                 "Content":"提交充值申请，请等待!"
-                //             });
-                //             $(".addMsk ").hide();
-                //         } else if (ret.code == -2) {
-                //             $.prompt({
-                //                 "Content":"提取失败!"
-                //             });
-                //         }
-                //         $('.addAmount').val('');
-                //     },
-                //     error: function (xhr, textStatus) {
-                //         alert(xhr.responseText);
-                //     }
-                // });
+                } 
+                $.ajax({
+                    url: '/merchant/margin_manage/',
+                    type: 'post',
+                    async: false,
+                    timeout: 5000, //超时时间
+                    dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
+                    data: {
+                        'type': 0,
+                        "amount": addAmount
+                    },
+                    success: function (ret) {
+                        if (ret.code == 0) {
+                            $.prompt({
+                                "Content":"提交充值申请，请等待!"
+                            });
+                            $(".addMsk ").hide();
+                        } else if (ret.code == -2) {
+                            $.prompt({
+                                "Content":"提取失败!"
+                            });
+                        }
+                        $('.addAmount').val('');
+                    },
+                    error: function (xhr, textStatus) {
+                        alert(xhr.responseText);
+                    }
+                });
             });
             //保证金模态框
             $(".wit ").click(function () {

@@ -400,7 +400,7 @@ input[type="text"],select {
 }
 .QrBox{
 	position: absolute;right: 0;top: -5px;
-	width: 116px;
+	width: 100px;
 	height: 116px;
 	/*background: lavender;*/
 }

@@ -41,8 +41,8 @@ urlpatterns = [
     url(r'^admin_margin/$', merchant_admin.admin_margin, name='admin_margin'),
 #     url(r'^admin_merchant/$', 'wafuli_admin.views.admin_apply', name='admin_apply'),
 #     url(r'^preaudit/$', 'wafuli_admin.views.admin_invest', name='admin_office'),
-    url(r'^admin_merchant_project/$', merchant_admin.admin_export_merchant_investlog, name='admin_export_merchant_investlog'),
-    url(r'^admin_merchant_investlog/$', merchant_admin.admin_import_merchant_investlog, name='admin_import_merchant_investlog'),
+    url(r'^admin_export_merchant_investlog/$', merchant_admin.admin_export_merchant_investlog, name='admin_export_merchant_investlog'),
+    url(r'^admin_import_merchant_investlog/$', merchant_admin.admin_import_merchant_investlog, name='admin_import_merchant_investlog'),
 ]
 
 

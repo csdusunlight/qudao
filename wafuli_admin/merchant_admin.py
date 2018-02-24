@@ -187,11 +187,11 @@ def admin_merchant_investlog(request):
             investlog.audit_reason = reason
             broker_amount = investlog.broker_amount
             if cash>0:
-                translist = charge_margin(investlog.project.user, '0', cash, '冲账', True, '管理员拒绝')
+                translist = charge_margin(investlog.project.user, '0', cash, '冲账（结算额）', True, '管理员驳回：'+project_title)
                 translist.auditlog = investlog
                 translist.save(update_fields=['content_type', 'object_id'])
             if broker_amount>0:    
-                translist2 = charge_margin(investlog.project.user, '0', broker_amount, '冲账', True, '管理员拒绝')
+                translist2 = charge_margin(investlog.project.user, '0', broker_amount, '冲账（佣金）', True, '管理员驳回：'+project_title)
                 translist2.auditlog = investlog
                 translist2.save(update_fields=['content_type', 'object_id'])
             res['code'] = 0
@@ -222,7 +222,7 @@ def admin_export_merchant_investlog(request):
     submittime_1 = request.GET.get("submittime_1", None)
     audittime_0 = request.GET.get("audittime_0", None)
     audittime_1 = request.GET.get("audittime_1", None)
-    state = request.GET.get("audit_state",'1')
+    state = request.GET.get("audit_state",None)
     submit_type = request.GET.get('submit_type', '0')
     if investtime_0 and investtime_1:
         s = datetime.datetime.strptime(investtime_0,'%Y-%m-%d')
@@ -245,9 +245,6 @@ def admin_export_merchant_investlog(request):
     userlevel = request.GET.get("level",None)
     if userlevel:
         item_list = item_list.filter(user__level=userlevel)
-    is_official = request.GET.get("is_official",None)
-    if is_official:
-        item_list = item_list.filter(is_official=is_official)
     companyname = request.GET.get("companyname", None)
     if companyname:
         item_list = item_list.filter(project__company__name__contains=companyname)
@@ -262,7 +259,9 @@ def admin_export_merchant_investlog(request):
         item_list = item_list.filter(admin_user__username=adminname)
     if submit_type=='1' or submit_type=='2':
         item_list = item_list.filter(submit_type=submit_type)
-    item_list = item_list.filter(audit_state=state).select_related('user', 'project').order_by('submit_time')
+    if state:
+        item_list = item_list.filter(audit_state=state)
+    item_list=item_list.select_related('user', 'project').order_by('submit_time')
     data = []
     for con in item_list:
         project = con.project
@@ -278,20 +277,37 @@ def admin_export_merchant_investlog(request):
         user_level = con.user.level
         result = ''
         settle_amount = ''
+        presettle_amount = ''
+        broker_amount = con.broker_amount
         settle_price = con.get_project_price()
         reason = con.audit_reason
+        opinion = ''
         submit_type = con.get_submit_type_display()
+        if con.audit_state == '0' or con.audit_state == '2'  or con.audit_state == '4':
+            opinion = u"已完成"
+        elif con.preaudit_state == '1' or con.preaudit_state == '3':
+            opinion = u"待预审"
+        if con.preaudit_state=='0':
+            preresult = u'通过'
+            presettle_amount = str(con.presettle_amount)
+        elif con.preaudit_state=='2':
+            preresult = u'拒绝'
+        elif con.preaudit_state=='3':
+            preresult = u'异常'
         if con.audit_state=='0':
-            result = u'是'
-            settle_amount = str(con.settle_amount)
+            result = u'通过'
         elif con.audit_state=='2':
-            result = u'否'
+            result = u'拒绝'
+        elif con.audit_state=='3':
+            result = u'异常'
+        elif con.audit_state=='4':
+            result = u'申诉'
         data.append([id, project_name, invest_date, qq_number,user_level, settle_price, invest_mobile, invest_name, term,
-                     invest_amount, submit_type, remark, result, settle_amount, reason])
+                     invest_amount, submit_type, remark, preresult, presettle_amount,broker_amount, result, settle_amount, opinion, reason])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
     title_row = [u'记录ID',u'项目名称',u'投资日期', u'QQ', u'用户类型', u'结算价格', u'投资手机号', u'投资姓名' ,u'投资期限' ,u'投资金额',u'投资类型', u'备注',
-                 u'审核通过',u'结算金额',u'拒绝原因']
+                 u'预审核结果',u'预结算金额',u'佣金',u'审核结果',u'结算金额',u'复审意见（同意/驳回）',u'审核说明']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
     row = len(data)
@@ -326,7 +342,7 @@ def admin_import_merchant_investlog(request):
     table = data.sheets()[0]
     nrows = table.nrows
     ncols = table.ncols
-    if ncols!=15:
+    if ncols!=19:
         ret['msg'] = u"文件格式与模板不符，请在导出的待审核记录表中更新后将文件导入！"
         return JsonResponse(ret)
     rtable = []
@@ -335,6 +351,7 @@ def admin_import_merchant_investlog(request):
         for i in range(1,nrows):
             temp = []
             duplic = False
+            result = None
             for j in range(ncols):
                 cell = table.cell(i,j)
                 if j==0:
@@ -343,27 +360,22 @@ def admin_import_merchant_investlog(request):
                 elif j==1:
                     project = cell.value
                     temp.append(project)
-                elif j==12:
+                elif j==17:
                     result = cell.value.strip()
-                    if result == u"是":
+                    if result == u"同意":
                         result = 1
-                    elif result == u"否":
+                    elif result == u"驳回":
                         result = 2
-                    elif result == u"复审":
+                    elif result == u"已完成":
                         result = 3
                     else:
-                        raise Exception(u"审核结果必须为是,否或复审。")
+                        raise Exception(u"复审意见必须为同意,驳回或已完成。")
                     temp.append(result)
-                elif j==13:
-                    return_amount = 0
-                    if cell.value:
-                        return_amount = Decimal(cell.value)
-                    elif result==1:
-                        raise Exception(u"审核结果为是时，返现金额不能为空或零。")
-                    temp.append(return_amount)
-                elif j==14:
+                elif j==18:
                     reason = cell.value
                     temp.append(reason)
+                    if result == 2 and not reason:
+                        raise Exception(u"复审意见为驳回时,审核说明不能为空")
                 else:
                     continue;
             rtable.append(temp)
@@ -378,31 +390,43 @@ def admin_import_merchant_investlog(request):
         for row in rtable:
             with transaction.atomic():
                 id = row[0]
+                project_title = row[1]
                 result = row[2]
-                reason = row[4]
+                reason = row[3]
                 investlog = InvestLog.objects.get(id=id)
-                if not investlog.audit_state in ['1','3'] or investlog.translist.exists():
+                if not investlog.audit_state in ['1','3'] or investlog.translist.exists() or investlog.preaudit_state!='0':
                     continue
                 investlog_user = investlog.user
                 translist = None
+                cash = investlog.presettle_amount
                 if result==1:
-                    amount = row[3]
-                    translist = charge_money(investlog_user, '0', amount, row[1])
                     investlog.audit_state = '0'
-                    investlog.settle_amount = amount
+                    translist = charge_money(investlog_user, '0', cash, project_title)
+                    investlog.settle_amount += cash
                     translist.auditlog = investlog
                     translist.save()
 #                     #活动插入
 #                     on_audit_pass(request, investlog)
 #                     #活动插入结束
                 elif result==2:
-                    investlog.audit_state = '2'
-                elif result==3:
-                    investlog.audit_state = '3'
+                    investlog.audit_state = '1'
+                    investlog.preaudit_state = '1'
+                    investlog.audit_reason = reason
+                    broker_amount = investlog.broker_amount
+                    if cash>0:
+                        translist = charge_margin(investlog.project.user, '0', cash, '冲账（结算额）', True, u'管理员驳回：'+project_title)
+                        translist.auditlog = investlog
+                        translist.save(update_fields=['content_type', 'object_id'])
+                    if broker_amount>0:    
+                        translist2 = charge_margin(investlog.project.user, '0', broker_amount, '冲账（佣金）', True, u'管理员驳回：'+project_title)
+                        translist2.auditlog = investlog
+                        translist2.save(update_fields=['content_type', 'object_id'])
+                else:
+                    continue
                 investlog.audit_reason = reason    
                 investlog.audit_time = datetime.datetime.now()
                 investlog.admin_user = admin_user
-                investlog.save(update_fields=['audit_state','audit_time','settle_amount','audit_reason','admin_user'])
+                investlog.save()
                 suc_num += 1
         ret['code'] = 0
     except Exception as e:

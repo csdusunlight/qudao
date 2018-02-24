@@ -99,7 +99,7 @@ def preaudit_investlog(request):
             if investlog.audit_state == '1' and investlog.translist.exists():
                 logger.critical("Returning cash is repetitive!!!")
                 res['code'] = -5
-                res['res_msg'] = u"操作失败，返现重复！"
+                res['res_msg'] = u"操作失败，结算重复！"
             else:
                 broker_rate = investlog.project.broker_rate
                 broker_amount = cash * broker_rate/100
@@ -673,7 +673,7 @@ def import_merchant_investlog(request):
                     if cell.value:
                         return_amount = Decimal(cell.value)
                     elif result==1:
-                        raise Exception(u"审核结果为通过时，返现金额不能为空或零。")
+                        raise Exception(u"审核结果为通过时，结算金额不能为空或零。")
                     temp.append(return_amount)
                 elif j==10:
                     reason = cell.value

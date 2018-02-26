@@ -605,7 +605,7 @@ def export_merchant_investlog(request):
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
     title_row = [u'记录ID',u'项目名称',u'投资日期', u'投资手机号', u'投资姓名' ,u'投资期限' ,u'投资金额', u'备注',
-                 u'审核结果',u'结算金额',u'审核说明']
+                 u'审核结果(通过/拒绝/异常)',u'结算金额',u'审核说明']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
     row = len(data)

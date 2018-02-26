@@ -633,19 +633,19 @@ def import_merchant_investlog(request):
     ret = {'code':-1}
     file = request.FILES.get('file')
 #     print file.name
-    with open('./out.xls', 'wb+') as destination:
-        for chunk in file.chunks():
-            destination.write(chunk)
-    data = xlrd.open_workbook('out.xls')
-    table = data.sheets()[0]
-    nrows = table.nrows
-    ncols = table.ncols
-    if ncols!=11:
-        ret['msg'] = u"文件格式与模板不符，请在导出的待审核记录表中更新后将文件导入！"
-        return JsonResponse(ret)
-    rtable = []
-    mobile_list = []
     try:
+        with open('./out.xls', 'wb+') as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
+        data = xlrd.open_workbook('out.xls')
+        table = data.sheets()[0]
+        nrows = table.nrows
+        ncols = table.ncols
+        if ncols!=11:
+            ret['msg'] = u"文件格式与模板不符，请在导出的待审核记录表中更新后将文件导入！"
+            return JsonResponse(ret)
+        rtable = []
+        mobile_list = []
         for i in range(1,nrows):
             temp = []
             duplic = False

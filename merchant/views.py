@@ -605,7 +605,7 @@ def export_merchant_investlog(request):
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
     title_row = [u'记录ID',u'项目名称',u'投资日期', u'投资手机号', u'投资姓名' ,u'投资期限' ,u'投资金额', u'备注',
-                 u'审核结果',u'结算金额',u'审核说明']
+                 u'审核结果(通过/拒绝/异常)',u'结算金额',u'审核说明']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
     row = len(data)
@@ -633,19 +633,19 @@ def import_merchant_investlog(request):
     ret = {'code':-1}
     file = request.FILES.get('file')
 #     print file.name
-    with open('./out.xls', 'wb+') as destination:
-        for chunk in file.chunks():
-            destination.write(chunk)
-    data = xlrd.open_workbook('out.xls')
-    table = data.sheets()[0]
-    nrows = table.nrows
-    ncols = table.ncols
-    if ncols!=11:
-        ret['msg'] = u"文件格式与模板不符，请在导出的待审核记录表中更新后将文件导入！"
-        return JsonResponse(ret)
-    rtable = []
-    mobile_list = []
     try:
+        with open('./out.xls', 'wb+') as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
+        data = xlrd.open_workbook('out.xls')
+        table = data.sheets()[0]
+        nrows = table.nrows
+        ncols = table.ncols
+        if ncols!=11:
+            ret['msg'] = u"文件格式与模板不符，请在导出的待审核记录表中更新后将文件导入！"
+            return JsonResponse(ret)
+        rtable = []
+        mobile_list = []
         for i in range(1,nrows):
             temp = []
             duplic = False

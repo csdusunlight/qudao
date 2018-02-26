@@ -56,7 +56,8 @@
     width: 120px;
     height: 42px;
     line-height: 42px;
-    background: white;
+    background: #91c11d;
+    color: white;
     padding-left: 50px;
     position: absolute;
     right: 0;

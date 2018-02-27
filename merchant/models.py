@@ -27,7 +27,7 @@ class Margin_Translog(models.Model):
     def __unicode__(self):
         return u"%s:%s了%s现金 时间%s" % (self.user, self.get_transType_display(),self.transAmount, self.time)
     class Meta:
-        ordering = ["-time",]
+        ordering = ["-time", -'initAmount']
     
     def balance(self):
         if self.transType == '0':

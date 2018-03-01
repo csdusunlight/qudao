@@ -91,7 +91,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'mobile'
     REQUIRED_FIELDS = ['username','qq_number']
-
+    def get_fanshu_domain(self):
+        return 'http://%s.51fanshu.com' % self.domain_name
     def set_pay_password(self, raw_password):
         self.pay_password = make_password(raw_password)
     def check_pay_password(self, raw_password):

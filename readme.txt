@@ -10,5 +10,5 @@ rabbitmq-server
 redis-server
 django-redis
 
-python-weixin
-jwt
+python-weixin(rename weixin_python)
+pyjwt

@@ -740,8 +740,7 @@ def import_merchant_investlog(request):
                 investlog.audit_reason = reason    
                 investlog.audit_time = datetime.datetime.now()
                 investlog.admin_user = admin_user
-                investlog.save(update_fields=['audit_state','audit_time','settle_amount','preaudit_state',
-                                              'presettle_amount','audit_reason','admin_user'])
+                investlog.save()
                 suc_num += 1
         ret['code'] = 0
     except Exception as e:

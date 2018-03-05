@@ -84,7 +84,7 @@ class Command(BaseCommand):
                 doc = Document.objects.filter(id=id).first()
                 if doc:
                     obj, created = DocStatis.objects.get_or_create(date=today, doc_id=id)
-                    doc.count = F('view_count')+v
+                    doc.view_count = F('view_count')+v
                     obj.count = F('count')+v
                     obj.save(update_fields=['count',])
                     doc.save(update_fields=['view_count'])

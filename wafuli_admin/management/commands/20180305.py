@@ -20,7 +20,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         ts = Margin_Translog.objects.filter(reason=u"佣金")
         for t in ts:
-            print
             if t.auditlog and t.auditlog.broker_amount==0 and t.transAmount!=0:
                 print t.transAmount,t.auditlog.broker_amount
                 t.auditlog.broker_amount = t.transAmount

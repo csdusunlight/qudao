@@ -87,6 +87,7 @@ class Command(BaseCommand):
                     doc.count = F('view_count')+v
                     obj.count = F('count')+v
                     obj.save(update_fields=['count',])
+                    doc.save(update_fields=['view_count'])
                     cache_decr_or_set(k, v)
                     cache.expire(k, 24*60*60)
                 else:

@@ -13,12 +13,14 @@ import datetime
 from django.core.management.base import BaseCommand
 from public.pinyin import PinYin
 from docs.models import Document
+from merchant.models import Margin_Translog
 logger = logging.getLogger("wafuli")
 from wafuli.models import InvestLog, TransList
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        ts = TransList.objects.filter(reason=u"佣金")
+        ts = Margin_Translog.objects.filter(reason=u"佣金")
         for t in ts:
+            print
             if t.auditlog and t.auditlog.broker_amount==0 and t.transAmount!=0:
                 print t.transAmount,t.auditlog.broker_amount
                 t.auditlog.broker_amount = t.transAmount

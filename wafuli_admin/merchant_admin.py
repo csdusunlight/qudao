@@ -22,6 +22,8 @@ import StringIO
 import xlrd
 from decimal import Decimal
 import traceback
+import logging
+logger=logging.getLogger('wafuli')
 
 def admin_margin_query(request):
     return render(request,"admin_margin_query.html",)
@@ -223,6 +225,7 @@ def admin_export_merchant_investlog(request):
     audittime_0 = request.GET.get("audittime_0", None)
     audittime_1 = request.GET.get("audittime_1", None)
     state = request.GET.get("audit_state",None)
+    preaudit_state = request.GET.get("preaudit_state",None)
     submit_type = request.GET.get('submit_type', '0')
     if investtime_0 and investtime_1:
         s = datetime.datetime.strptime(investtime_0,'%Y-%m-%d')
@@ -261,6 +264,8 @@ def admin_export_merchant_investlog(request):
         item_list = item_list.filter(submit_type=submit_type)
     if state:
         item_list = item_list.filter(audit_state=state)
+    if preaudit_state:
+        item_list = item_list.filter(preaudit_state=preaudit_state)
     item_list=item_list.select_related('user', 'project').order_by('submit_time')
     data = []
     for con in item_list:
@@ -287,6 +292,7 @@ def admin_export_merchant_investlog(request):
             opinion = u"已完成"
         elif con.preaudit_state == '1' or con.preaudit_state == '3':
             opinion = u"待预审"
+        preresult = ''
         if con.preaudit_state=='0':
             preresult = u'通过'
             presettle_amount = str(con.presettle_amount)

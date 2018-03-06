@@ -236,8 +236,8 @@
             <div class="handle__out r">
                 <input style="display: none;" id="fileupload2" name="file" type="file" onchange="import_onchange(this)" />
                 <a id="search_02" class="btn m-green">搜索</a>
-                <a id="export_02" class="btn m-green">导出</a>
-                <a id="input_clone_02" class="btn m-green" data-microtip-position="top-left" data-microtip-size="large" data-microtip="导入未审核数据前请填写审核状态，结算金额，审核说明等信息。">导入</a>
+                <a id="export_02" class="btn m-green">导出投资数据</a>
+                <a id="input_clone_02" class="btn m-green" data-microtip-position="top-left" data-microtip-size="large" data-microtip="请先将未审核数据导出，在导出表格中填写审核结果、结算金额和审核说明，再将表格导入即可。">导入预审结果</a>
             </div>
         </div>
         
@@ -858,6 +858,7 @@
             $.ajaxFileUpload({
                 url: "{% url 'merchant:import_merchant_investlog' %}",
                 secureuri: false,
+                async: false,
                 fileElementId: fileElementId, //file标签的id
                 dataType: 'json', //返回数据的类型
                 data: {}, //一同上传的数据

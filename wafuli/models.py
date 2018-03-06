@@ -105,7 +105,7 @@ class Project(models.Model):
     pinyin = models.CharField(u"拼音全拼", max_length=100)
     szm = models.CharField(u"首字母", max_length=20)
     remark = models.CharField(u"项目备注", max_length=50, blank=True)
-    broker_rate = models.SmallIntegerField(u"佣金比例，百分数", default=0)
+    broker_rate = models.DecimalField(u"佣金比例，百分数", max_digits=10, decimal_places=2, default=0)
     def save(self, force_insert=False, force_update=False, using=None, 
              update_fields=None):
         pyin = PinYin()

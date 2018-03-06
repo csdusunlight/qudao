@@ -13,6 +13,55 @@
     {% endblock css %}
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+<script type="text/javascript">
+	$(function(){
+	    $.ajax({
+	    	type:"get",
+	    	url:"/Admin/check_new/",
+	    	async:true,
+	    	success: function (ret) {
+	    	    console.log(ret);
+	    	    if (ret.admin_apply == 0) {
+	    	        $('.admin_apply_num').hide();
+	    	    } else {
+	    	        $('.admin_apply_num').show().text(ret.admin_apply);
+	    	    }
+	    	    
+	    	    if (ret.admin_margin == 0) {
+                    $('.admin_margin_num').hide();
+                } else {
+                    $('.admin_margin_num').show().text(ret.admin_margin);
+                }
+                
+                if (ret.admin_merchant_investlog == 0) {
+                    $('.admin_merchant_investlog_num').hide();
+                } else {
+                    $('.admin_merchant_investlog_num').show().text(ret.admin_merchant_investlog);
+                }
+                
+                if (ret.admin_merchant_project == 0) {
+                    $('.admin_merchant_project_num').hide();
+                } else {
+                    $('.admin_merchant_project_num').show().text(ret.admin_merchant_project);
+                }
+                
+                if (ret.admin_office == 0) {
+                    $('.admin_office_num').hide();
+                } else {
+                    $('.admin_office_num').show().text(ret.admin_office);
+                }
+                if (ret.admin_withdraw == 0) {
+                    $('.admin_withdraw_num').hide();
+                } else {
+                    $('.admin_withdraw_num').show().text(ret.admin_withdraw);
+                }
+	    	},
+	    	error: function (ret){
+	    	    console.log(ret.msg);
+	    	}
+	    });
+	})
+</script>
     {% block js %}
 
     {% endblock js %}
@@ -40,9 +89,9 @@
                     	<ul>
                         	<li class="home1"><a href="{%url 'admin_index'%}">首页</a></li>
                         	<li class="home2"><a href="{%url 'admin_user'%}">用户管理</a></li>
-                        	<li class="home15"><a href="{%url 'admin_apply'%}">申请名单</a></li>
-                        	<li class="home3"><a href="{%url 'admin_withdraw'%}">提现管理</a></li>
-                        	<li class="home4"><a href="{%url 'admin_office'%}">官方数据</a></li>
+                        	<li class="home15"><a href="{%url 'admin_apply'%}">申请名单<span class="new-data admin_apply_num"></span></a></li>
+                        	<li class="home3"><a href="{%url 'admin_withdraw'%}">提现管理<span class="new-data admin_withdraw_num"></span></a></li>
+                        	<li class="home4"><a href="{%url 'admin_office'%}">官方数据<span class="new-data admin_office_num"></span></a></li>
                         	<li class="home5"><a href="{%url 'admin_private'%}">自建数据</a></li>
                             <!--<li class="home12"><a href="">体验管理</a></li>-->
                             <!--<li class="home6"><a href="">推荐管理</a></li>-->
@@ -51,9 +100,9 @@
                             <!--<li class="home10"><a href="">优惠券审核</a></li>-->
                             <li class="home11"><a href="{%url 'admin_charge'%}">记账查询</a></li>
                             <li class="home12"><a href="{%url 'award_logs'%}">奖励记录</a></li>
-                            <li class="home16"><a href="{%url 'admin_merchant_project'%}">放单项目</a></li>
-                            <li class="home17"><a href="{%url 'admin_merchant_investlog'%}">放单数据</a></li>
-                            <li class="home18"><a href="{%url 'admin_margin_query'%}">保证金查询</a></li>
+                            <li class="home16"><a href="{%url 'admin_merchant_project'%}">放单项目 <span class="new-data admin_merchant_project_num"></span></a></li>
+                            <li class="home17"><a href="{%url 'admin_merchant_investlog'%}">放单数据 <span class="new-data admin_merchant_investlog_num"></span></a></li>
+                            <li class="home18"><a href="{%url 'admin_margin_query'%}">保证金查询 <span class="new-data admin_margin_num"></span></a></li>
                             <li class="home19"><a href="{%url 'admin_margin'%}">保证金</a></li>
                         </ul>
                     </div>

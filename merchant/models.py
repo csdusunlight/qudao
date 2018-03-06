@@ -70,7 +70,7 @@ class Apply_Project(models.Model):
     audit_time = models.DateTimeField(u'审核时间', null=True, default=None)
     is_book = models.BooleanField(u"是否限量/需要预约", default=False)
     project = models.OneToOneField(Project, on_delete=SET_NULL, null=True)
-    broker_rate = models.SmallIntegerField(u"佣金比例，百分数", default=0)
+    broker_rate = models.DecimalField(u"佣金比例，百分数", max_digits=10, decimal_places=2, default=0)
     class Meta:
         verbose_name = u"放单申请"
         verbose_name_plural = u"放单申请"

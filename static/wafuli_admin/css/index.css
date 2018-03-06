@@ -329,3 +329,9 @@ a { cursor:pointer;}
 	margin-top: 20px;
 }
 /*立项部分---end*/
+.new-data {
+    position: absolute;
+    margin-left: 6px;
+    font-size: 14px;
+    color: red;
+}

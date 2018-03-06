@@ -126,15 +126,16 @@
             console.log(passId);
             var cash = $(".cash").val();
             //正则
-            var regx = /^[0-9]*$/;
+            var regx =/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
             if (!cash) {
                 alert("佣金不能为空！");
                 return;
             } else if(!regx.test(cash)){
-                alert("佣金只能为纯数字！");
+                alert("请输入正确的金额");
                 return;
             }
-            //同意ajax
+            // alert(123);
+            // 同意ajax
             $.ajax({
                 url: '/Admin/admin_merchant_project/',
                 type: "post", //提交方式post

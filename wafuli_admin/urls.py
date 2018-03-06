@@ -43,6 +43,8 @@ urlpatterns = [
 #     url(r'^preaudit/$', 'wafuli_admin.views.admin_invest', name='admin_office'),
     url(r'^admin_export_merchant_investlog/$', merchant_admin.admin_export_merchant_investlog, name='admin_export_merchant_investlog'),
     url(r'^admin_import_merchant_investlog/$', merchant_admin.admin_import_merchant_investlog, name='admin_import_merchant_investlog'),
+
+    url(r'^check_new/$', merchant_admin.check_new, name='check_new'),
 ]
 
 

@@ -18,11 +18,12 @@ class UserSerializer(serializers.ModelSerializer):
     real_name = serializers.CharField(source="user_bankcard.first.real_name")
     bank = serializers.CharField(source="user_bankcard.first.get_bank_display")
     card_number = serializers.CharField(source="user_bankcard.first.card_number")
+    fanshu_domain = serializers.CharField(source="get_fanshu_domain")
     class Meta:
         model = MyUser
         fields = ('id', 'mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'with_total','accu_income','is_book_email_notice',
                   'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number', 'is_autowith',
-                  'submit_bg', 'domain_name', 'cs_qq', 'has_permission100','margin_account')
+                  'submit_bg', 'domain_name', 'cs_qq', 'has_permission100','margin_account', 'fanshu_domain')
         read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level', 'margin_account')
         
 class ProjectSerializer(serializers.ModelSerializer):

@@ -352,6 +352,7 @@
             if(adminname) {
                 html += '<input name="admin_user" type="hidden" value="' + adminname + '"/>';
             }
+            state = $('#state').val();
             if(state) {
             	if(state=='-1'){
             		html += '<input name="preaudit_state" type="hidden" value="0"/>';

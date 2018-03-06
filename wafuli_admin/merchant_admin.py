@@ -5,13 +5,13 @@ Created on 2018年1月17日
 @author: lch
 '''
 from django.db import transaction
-from public.tools import has_post_permission
+from public.tools import has_post_permission, login_required_ajax
 from django.shortcuts import render
 from django.http.response import JsonResponse, Http404, HttpResponse
 from merchant.models import Margin_AuditLog, Apply_Project
 from merchant.margin_transaction import charge_margin
 import datetime
-from wafuli.models import Project, InvestLog
+from wafuli.models import Project, InvestLog, WithdrawLog
 from django.db.models import F
 from django.views.decorators.csrf import csrf_exempt
 from account.transaction import charge_money
@@ -22,6 +22,9 @@ import StringIO
 import xlrd
 from decimal import Decimal
 import traceback
+import logging
+from account.models import ApplyLog
+logger=logging.getLogger('wafuli')
 
 def admin_margin_query(request):
     return render(request,"admin_margin_query.html",)
@@ -223,6 +226,7 @@ def admin_export_merchant_investlog(request):
     audittime_0 = request.GET.get("audittime_0", None)
     audittime_1 = request.GET.get("audittime_1", None)
     state = request.GET.get("audit_state",None)
+    preaudit_state = request.GET.get("preaudit_state",None)
     submit_type = request.GET.get('submit_type', '0')
     if investtime_0 and investtime_1:
         s = datetime.datetime.strptime(investtime_0,'%Y-%m-%d')
@@ -261,6 +265,8 @@ def admin_export_merchant_investlog(request):
         item_list = item_list.filter(submit_type=submit_type)
     if state:
         item_list = item_list.filter(audit_state=state)
+    if preaudit_state:
+        item_list = item_list.filter(preaudit_state=preaudit_state)
     item_list=item_list.select_related('user', 'project').order_by('submit_time')
     data = []
     for con in item_list:
@@ -287,6 +293,7 @@ def admin_export_merchant_investlog(request):
             opinion = u"已完成"
         elif con.preaudit_state == '1' or con.preaudit_state == '3':
             opinion = u"待预审"
+        preresult = ''
         if con.preaudit_state=='0':
             preresult = u'通过'
             presettle_amount = str(con.presettle_amount)
@@ -423,7 +430,7 @@ def admin_import_merchant_investlog(request):
                         translist2.save(update_fields=['content_type', 'object_id'])
                 else:
                     continue
-                investlog.audit_reason = reason    
+                investlog.audit_reason = reason
                 investlog.audit_time = datetime.datetime.now()
                 investlog.admin_user = admin_user
                 investlog.save()
@@ -435,3 +442,21 @@ def admin_import_merchant_investlog(request):
         ret['msg'] = unicode(e)
     ret['num'] = suc_num
     return JsonResponse(ret)
+
+@login_required_ajax
+def check_new(request):
+    admin_margin = Margin_AuditLog.objects.filter(audit_state='1').count()
+    admin_merchant_investlog = InvestLog.objects.filter(category='merchant', audit_state='1', preaudit_state='0').count()
+    admin_merchant_project = Apply_Project.objects.filter(audit_state='1').count()
+    admin_apply = ApplyLog.objects.filter(audit_state='1').count()
+    admin_withdraw = WithdrawLog.objects.filter(audit_state='1').count()
+    admin_office = InvestLog.objects.filter(category='official', audit_state='1').count()
+    kw = {
+        'admin_margin':admin_margin,
+        'admin_merchant_investlog':admin_merchant_investlog,
+        'admin_merchant_project':admin_merchant_project,
+        'admin_apply':admin_apply,
+        'admin_withdraw':admin_withdraw,
+        'admin_office':admin_office
+    }
+    return JsonResponse(kw)

@@ -13,6 +13,10 @@
     {% endblock css %}
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+<script type="text/javascript">
+	$(function(){
+	})
+</script>
     {% block js %}
 
     {% endblock js %}
@@ -51,9 +55,9 @@
                             <!--<li class="home10"><a href="">优惠券审核</a></li>-->
                             <li class="home11"><a href="{%url 'admin_charge'%}">记账查询</a></li>
                             <li class="home12"><a href="{%url 'award_logs'%}">奖励记录</a></li>
-                            <li class="home16"><a href="{%url 'admin_merchant_project'%}">放单项目</a></li>
-                            <li class="home17"><a href="{%url 'admin_merchant_investlog'%}">放单数据</a></li>
-                            <li class="home18"><a href="{%url 'admin_margin_query'%}">保证金查询</a></li>
+                            <li class="home16"><a href="{%url 'admin_merchant_project'%}">放单项目 <span class="new-data">12</span></a></li>
+                            <li class="home17"><a href="{%url 'admin_merchant_investlog'%}">放单数据 <span class="new-data">2</span></a></li>
+                            <li class="home18"><a href="{%url 'admin_margin_query'%}">保证金查询 <span class="new-data">6</span></a></li>
                             <li class="home19"><a href="{%url 'admin_margin'%}">保证金</a></li>
                         </ul>
                     </div>

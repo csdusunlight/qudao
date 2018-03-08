@@ -39,6 +39,8 @@ class WXUser(models.Model):
         verbose_name = 'wxuser'
         verbose_name_plural = 'wxusers'
         ordering = ['-date_joined']
+    def __unicode__(self):
+        return self.nickName
 class WXUserlogin(models.Model):
     wxuser = models.ForeignKey(WXUser, related_name="user_login_history")
     time = models.DateTimeField(u'登录时间', default = timezone.now)

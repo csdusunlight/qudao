@@ -192,6 +192,7 @@ SUB_WAY = (
 )
 class InvestLog(models.Model):
     user = models.ForeignKey(MyUser, related_name="investlog_submit")
+    wxuser = models.ForeignKey(WXUser, related_name="investlog_of", blank=True, null=True, on_delete=models.SET_NULL)
     project = models.ForeignKey(Project, related_name="investlogs")
     submit_type = models.CharField(max_length=10, choices=SUB_TYPE, verbose_name=u"首投/复投")
     submit_way = models.CharField(max_length=10, choices=SUB_WAY, verbose_name=u"提交入口")

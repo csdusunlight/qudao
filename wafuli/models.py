@@ -10,6 +10,7 @@ import datetime
 from django.core.urlresolvers import reverse
 from public.pinyin import PinYin
 from docs.models import Document
+from xiaochengxu.models import WXUser
 def get_today():
     return datetime.date.today()
 AUDIT_STATE = (

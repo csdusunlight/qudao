@@ -14,6 +14,7 @@ class App(models.Model):
     app_id = models.CharField(max_length=18, primary_key=True)
     app_secret = models.CharField(max_length=32)
     app_name = models.CharField(max_length=32)
+    cs_weixin = models.CharField(u"客服微信号", max_length=32)
     def __unicode__(self):
         return '%s:%s' % (self.app_name, self.app_id)
 class WXUser(models.Model):

@@ -59,7 +59,7 @@ class Command(BaseCommand):
         
         first_day = datetime.datetime(today.year, today.month, 1)
         
-        with_total = MyUser.objects.aggregate(sum=Sum('with_total'))
+        with_total = MyUser.objects.aggregate(sum=Sum('accu_income'))
         invest_total = InvestLog.objects.filter(audit_state='0').aggregate(sum=Sum('invest_amount'),
                             count=Count('*'))
         global_statis = GlobalStatis.objects.first()

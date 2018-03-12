@@ -153,13 +153,13 @@
         }
         $(function () {
             $('.nav__item:eq(1)').addClass('active');
-            //所有数据
+            //资金明细
             var Data = '<table width="100%"><tr><th width="25%">变更时间</th><th width="25%">变更金额</th><th width="25%">剩余额度</th><th width="25%">变更原因</th></tr>' +
-            '[results]<tr><td class="time">{time}</td><td class="transAmount type{transType}" data-type="{transType}">{transAmount}</td><td>{initAmount}</td><td>{reason}</td></tr>[/results]</table>';
+            '[results]<tr><td class="time">{time}</td><td class="transAmount type{transType}" data-type="{transType}">{transAmount}</td><td class="initAmount" data-init="{{transType}}">{initAmount}</td><td>{reason}</td></tr>[/results]</table>';
            //充值数据
            var addData = '<table width="100%"><tr><th width="25%">充值时间</th><th width="25%">充值金额</th><th width="25%">审核状态</th><th width="25%">审核说明</th></tr>' +
             '[results]<tr><td class="c-time">{submit_time}</td><td class="transAmount type{type}" data-type="{type}">{amount}</td><td class="state{audit_state}">{state_des}</td><td>{audit_reason}</td></tr>[/results]</table>';
-            //体现数据
+            //提现数据
             var reduceData = '<table width="100%"><tr><th width="25%">提取时间</th><th width="25%">提取金额</th><th width="25%">审核状态</th><th width="25%">审核原因</th></tr>' +
             '[results]<tr><td class="c-time1">{submit_time}</td><td class="transAmount type{type}" data-type="{type}">{amount}</td><td class="state{audit_state}">{state_des}</td><td>{audit_reason}</td></tr>[/results]</table>';
             //回调函数
@@ -194,6 +194,18 @@
                     }else{
                         $(this).text('-' + initText);
                     }
+                });
+                var initAmount;
+                $(".initAmount").each(function(){
+                    var amount = $(this).text(); 
+                    // console.log("------剩余额度-----",amount);
+                    var initType = $(this).attr("data-type");
+                    var transAmount = $(this).prev().text();//根据当前节点的上一个兄弟节点获取transAmount
+                    console.log("transAmount",transAmount);
+                    console.log("---initsmunt---",amount);
+                    initAmount = (parseFloat(amount) + parseFloat(transAmount)).toFixed(2);
+                   $(this).text(initAmount);
+                   console.log("Amount:",initAmount);
                 });
             }
             //分页
@@ -363,10 +375,10 @@
                             "Content":"提取失败！"
                         });
                     }
-                    //成功后2s刷新页面
-                    setTimeout(function(){
-                        window.location.href = window.location.href;
-                    },1000);
+                     //成功后2s刷新页面
+                    // setTimeout(function(){
+                    //     window.location.href = window.location.href;
+                    // },1000);
                 },
                 error: function (xhr, textStatus) {
                     $.prompt({

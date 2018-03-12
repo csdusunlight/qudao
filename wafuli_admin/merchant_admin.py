@@ -190,11 +190,11 @@ def admin_merchant_investlog(request):
             investlog.audit_reason = reason
             broker_amount = investlog.broker_amount
             if cash>0:
-                translist = charge_margin(investlog.project.user, '0', cash, '冲账（结算额）', True, '管理员驳回：'+project_title)
+                translist = charge_margin(investlog.project.user, '0', cash, u'冲账（结算额）', True, u'管理员驳回：'+project_title)
                 translist.auditlog = investlog
                 translist.save(update_fields=['content_type', 'object_id'])
             if broker_amount>0:    
-                translist2 = charge_margin(investlog.project.user, '0', broker_amount, '冲账（佣金）', True, '管理员驳回：'+project_title)
+                translist2 = charge_margin(investlog.project.user, '0', broker_amount, u'冲账（佣金）', True, u'管理员驳回：'+project_title)
                 translist2.auditlog = investlog
                 translist2.save(update_fields=['content_type', 'object_id'])
             res['code'] = 0

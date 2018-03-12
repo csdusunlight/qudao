@@ -88,7 +88,7 @@
 			$('.search_doc').click(function(){
                 var search_key = $('.search_doc_txt').val();
                 $.ajax({ 
-                    url: '/restapi/docs/' + '?search=' + search_key,
+                    url: '/restapi/docs/' + '?search=' + encodeURI(search_key),
                     dataType: "json",
                     type: 'get',
                     success: function(ret) {
@@ -141,7 +141,7 @@
                 if(e.keyCode == 13) {
                     var search_key = $('.search_doc_txt').val();
                     $.ajax({ 
-                        url: '/restapi/docs/' + '?search=' + search_key,
+                        url: '/restapi/docs/' + '?search=' + encodeURI(search_key),
                         dataType: "json",
                         type: 'get',
                         success: function(ret) {

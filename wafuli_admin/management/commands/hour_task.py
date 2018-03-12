@@ -26,6 +26,7 @@ class Command(BaseCommand):
         to = start + datetime.timedelta(hours=1)
         access_token = update_accesstoken()
         update_jsapi_ticket(access_token)
+        update_xcxaccesstoken()
 #         sendTemplate(access_token)
         end_time = time.time()
         logger.info("******Hour-task is finished, time:%s*********",end_time-begin_time)
@@ -81,4 +82,22 @@ def sendTemplate(access_token):
         kwarg.update(data=data, touser=openid)
         ret = httpconn(url, kwarg, 1)
         logger.info(ret)
-    
+        
+def update_xcxaccesstoken():
+    url = 'https://api.weixin.qq.com/cgi-bin/token'
+    params = {
+        'grant_type':'client_credential',
+        'appid':settings.APPID_XCX,
+        'secret':settings.SECRET_XCX,
+    }
+    json_ret = httpconn(url, params, 0)
+    if 'access_token' in json_ret and 'expires_in' in json_ret:
+        access_token = json_ret['access_token']
+        now = int(time.time())
+        expire_stamp = now + json_ret['expires_in']
+        defaults={'value':access_token, 'expire_stamp':expire_stamp}
+        Dict.objects.update_or_create(key='access_token_xcx', defaults=defaults)
+        return access_token
+    else:
+        logger.error('Getting access_token error:' + str(json_ret) )
+        return ''   

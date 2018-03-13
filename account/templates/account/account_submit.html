@@ -538,7 +538,7 @@
 							data_list = [project_select, time, telnum, amount, term, zhifubao, invest_name, remark, is_futou];
 							console.log(project_name);
 							console.log(remark);
-							if (((project_name.search("补差") == -1) || (project_name.search("补价") == -1)) &&
+							if (((project_name.search("补差") == -1) && (project_name.search("补价") == -1)) &&
 							((remark.search("补差") != -1) || (remark.search("补价") != -1) || (remark.search("补反") != -1) || (remark.search("补返") != -1))) {
 							    is_bucha = false;
 							}

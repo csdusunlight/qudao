@@ -1,0 +1,296 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>用户中心</title>
+    <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/merchant-base.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
+    <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
+    <style type="text/css">
+        .today-data-box {
+            background-color: #fff;
+        }
+        .today-data-title {
+            padding-left: 20px;
+            line-height: 50px;
+            font-size: 16px;
+        }
+    	.today-content {
+    	    padding-bottom: 20px;
+    	    font-size: 0;
+    	}
+    	.today-item {
+    	    display: inline-block;
+    	    width: 20%;
+    	    text-align: center;
+    	}
+    	.today-txt {
+    	    line-height: 40px;
+    	}
+    	.detail-data-box {
+    	    margin-top: 30px;
+    	}
+    	.table-box {
+    	    padding: 10px 0;
+    	    width: 49%;
+    	    background-color: #fff;
+    	    height: 510px;
+    	}
+    	.data-head {
+    	    position: relative;
+    	    height: 50px;
+    	}
+    	.more-link {
+    	    position: absolute;
+    	    top: 10px;
+    	    right: 20px;
+    	    width: 30px;
+    	    height: 30px;
+    	    background-color: #e4e4e4;
+    	    border-radius: 50%;
+    	    cursor: pointer;
+    	}
+    	.more-link:hover {
+            background-color: #ffbe00;
+        }
+    	.more-link:after {
+    	    position: absolute;
+    	    top: 9px;
+    	    left: 6px;
+    	    content: "";
+    	    width: 10px;
+    	    height: 10px;
+    	    border-top: 2px solid #fff;
+    	    border-right: 2px solid #fff;
+    	    transform: rotate(45deg);
+    	}
+    	.table-box table {
+    	    width: 100%;
+    	    border: none;
+    	}
+    	.table-box td {
+    	    height: 40px;
+    	    text-align: center;
+    	    border: none;
+    	    border-top: 1px solid #e4e4e4;
+    	}
+    	.table-box th {
+    	    height: 40px;
+    	}
+    	.left-nav-box {
+    	    padding-top: 10px;
+    	    padding-left: 30px;
+    	    font-size: 0;
+    	}
+    	.left-nav-item {
+    	    display: inline-block;
+    	    margin-right: 14px;
+    	    width: 70px;
+    	    height: 30px;
+    	    line-height: 30px;
+    	    border: 1px solid #e4e4e4;
+    	    border-radius: 10px;
+    	    text-align: center;
+    	    cursor: pointer;
+    	}
+    	.left-nav-item.on {
+    	    color: #fff;
+    	    background-color: #efae2c;
+    	}
+    </style>
+</head>
+
+<body>
+    <!--头部-->
+    {% include "merchant_header.html" %}
+    <!--内容-->
+    <div class="Content">
+        <div class="today-data-box">
+        	<h4 class="today-data-title">今日数据</h4>
+        	<ul class="today-content">
+        		<li class="today-item">
+        		    <p class="today-txt">在线项目</p>
+        		    <p class="today-txt">{{online_count}}</p>
+        		</li>
+        		<li class="today-item">
+                    <p class="today-txt">项目浏览量</p>
+                    <p class="today-txt">{{total_pv}}</p>
+                </li>
+                <li class="today-item">
+                    <p class="today-txt">交单量</p>
+                    <p class="today-txt">{{total_submit_count}}</p>
+                </li>
+                <li class="today-item">
+                    <p class="today-txt">结算单数</p>
+                    <p class="today-txt">{{total_settle_count}}</p>
+                </li>
+                <li class="today-item">
+                    <p class="today-txt">结算总额</p>
+                    <p class="today-txt">{{total_settle_amount}}</p>
+                </li>
+        	</ul>
+        </div>
+        <div class="detail-data-box clearfix">
+            <div class="left-data-box l table-box">
+                <div class="data-head clearfix">
+                    <h4 class="today-data-title l">项目动态</h4>
+                    <ul class="left-nav-box l">
+                    	<li class="left-nav-item on">今天</li>
+                    	<li class="left-nav-item">昨天</li>
+                    	<li class="left-nav-item">最近7天</li>
+                    	<li class="left-nav-item">最近30天</li>
+                    </ul>
+                    <a class="more-link" target="_blank" href="{% url 'merchant:merchant_detail_proj' %}"></a>
+                </div>
+            	<table class="left-table-box">
+            		<tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>
+            	</table>
+            </div>
+            <div class="right-data-box">
+                <div class="right-data-box r table-box">
+                    <div class="data-head">
+                        <h4 class="today-data-title">每日统计</h4>
+                        <a class="more-link" target="_blank" href="{% url 'merchant:merchant_detail_day' %}"></a>
+                    </div>
+                    <table class="right-table-box">
+                        <tr><th>日期</th><th>交单量（PV）</th><th>结算单数</th><th>结算总额</th></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div style="margin-bottom: 20px; margin-top: 20px;" class="table">
+            <h2 class="table__title">项目数据统计</h2>
+            <div style="height: 561px;" id="pagedata">
+            </div>
+            <div class="changes-p">
+                <div class="page" id="page">
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "footer.html" %}
+
+    <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+    <script type="text/javascript">
+        var data_proj = '<table width="100%"><tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th>' +
+        '<th>结算单数</th><th>申诉数据单数</th><th>异常数据单数</th><th>待处理单数</th><th>结算总额</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td>{pv}</td><td>{submit_count}</td>' +
+        '<td>{settle_count}</td><td>{appeal_count}</td><td>{abnormal_count}</td>'+
+        '<td>{toaudit_count}</td><td>{settle_amount}</td></tr>[/results]</table>';
+        var url = "/merchant/projectstatislist/?page={page}&pageSize={pageSize}&ordering=project__doc__view_count";
+        function emptydisplay(obj){
+            pic_url = "{%static 'images/bg-nodata.png' %}";
+            obj.html('<div class="nodata-box"></div>');
+        }
+        $("#pagedata").ajaxPage({
+            url: url,
+            pageId: $("#page"),
+            pageSize: 10,
+            run: true,
+            content: data_proj,
+        });
+        $('.nav__item:eq(0)').addClass('active');
+        var left_data_html;
+        var right_data_html;
+        $.ajax({
+            url:"/merchant/get_days_statis?range=10",
+        	type:"get",
+        	dataType: "json",
+        	async:true,
+        	success: function(ret) {
+        	    right_data_html = '<tr><th>日期</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>';
+                var i;
+                for (i in ret) {
+                    right_data_html += '<tr><td>' + i + '</td><td>' + ret[i].submit_count +
+                    '</td><td>' + ret[i].settle_count + '</td><td>' + ret[i].settle_amount + '</td></tr>'
+                }
+                $('.right-table-box').html(right_data_html);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+            }
+        });
+        $.ajax({
+            url:"/merchant/get_project_statis_byday/",
+            type:"get",
+            dataType: "json",
+            async:true,
+            success: function(ret) {
+                var data_num = 0;
+                left_data_html = '<tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>';
+                var i;
+                console.log(jQuery.isEmptyObject(ret));
+                if (jQuery.isEmptyObject(ret)) {
+                    console.log('jj');
+                	$('.left-data-box').addClass('nodata-box');
+                } else{
+                    console.log('yy');
+                    for (i in ret) {
+                        if (data_num<10) {
+                            data_num++;
+                            left_data_html += '<tr><td>' + ret[i].title + '</td><td>' + ret[i].pv +
+                            '</td><td>' + ret[i].submit_count + '</td><td>' + ret[i].settle_count + '</td><td>' + ret[i].settle_amount + '</td></tr>'
+                        }
+                    }
+                    $('.left-table-box').html(left_data_html);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+            }
+        });
+        $('.left-nav-item').click(function(){
+            var base_url = '/merchant/get_project_statis_byday/';
+            $(this).addClass('on').siblings().removeClass('on');
+            console.log($(this).index());
+            switch ($(this).index()){
+            	case 0:
+            	    base_url += '?range=0';
+            		break;
+        		case 1:
+        		    base_url += '?range=1';  
+                    break;
+                case 2:
+                    base_url += '?range=7';
+                    break;
+                case 3:
+                    base_url += '?range=30';
+                    break;
+            }
+            $.ajax({
+                url:base_url,
+                type:"get",
+                dataType: "json",
+                async:true,
+                success: function(ret) {
+                    var data_num = 0;
+                    left_data_html = '<tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>';
+                    var i;
+                    if (jQuery.isEmptyObject(ret)) {
+                        $('.left-data-box').addClass('nodata-box');
+                    } else{
+                        $('.left-data-box').removeClass('nodata-box');
+                        for (i in ret) {
+                            if (data_num<10) {
+                                left_data_html += '<tr><td>' + ret[i].title + '</td><td>' + ret[i].pv +
+                                '</td><td>' + ret[i].submit_count + '</td><td>' + ret[i].settle_count + '</td><td>' + ret[i].settle_amount + '</td></tr>'
+                            }
+                        }
+                        $('.left-table-box').html(left_data_html);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
+                }
+            });
+        })
+    </script>
+</body>
+
+</html>

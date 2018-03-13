@@ -1,0 +1,159 @@
+.searchTop {
+    padding: 15px 15px;
+    border-bottom: 2px solid RGB(0, 143, 215);
+}
+
+.searchTop>span:before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    background-color: #fe1e1b;
+    margin-right: 20px;
+    position: relative;
+    top: 5px;
+}
+
+.tabBox {
+    width: 100%;
+    margin: 30px auto;
+}
+
+.tabBox input[type="text"],
+.tabBox input[type="date"],
+.tabBox input[type="datetime-local"],
+.tabBox select {
+    width: 60%;
+    margin-left: 1%;
+    height: 28px;
+    border: 1px solid #4daa84;
+    outline: none;
+    padding: 0 5px;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+.tabBox input[type="datetime-local"]{
+    background:url(../images/motime.png) no-repeat 95%; 
+    vertical-align:middle;
+}
+.tabBox input[type="datetime-local"]:hover{
+    background: none;
+}
+.searchBtn {
+    width: 240px;
+    padding: 0;
+    float: right;
+}
+
+.search {
+    background:url(../images/ico2.png) no-repeat 80% #4daa84;
+    border: none;
+    width: 150px;
+    height: 30px;
+    font-size: 16px;
+    color: #fff;
+    padding: 0 40px 0 0;
+    box-sizing: border-box;
+    min-width: 80px;
+    margin: 0 7px;
+    cursor: pointer;
+}
+
+.Tin-table {
+    float: left;
+    width: 100%;
+    height: auto;
+    margin-top: 18px;
+    border: 1px solid #fafafa;
+}
+
+.page {
+    background-color: #fff;
+    text-align: right;
+    line-height: 25px;
+    font-size: 0;
+}
+.mask{
+    width: 100%;
+    height: 100%;
+    position: fixed;top: 0;left: 0;
+    background:RGBa(128,128,128,.3);
+    display: none;
+}
+.passBox{
+    width: 600px;
+    height: 300px;
+    position: absolute;top: 50%;left: 50%;
+    margin-top: -150px;
+    margin-left: -300px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px 0 gray;
+}
+.tips{
+    font-size: 20px;
+    display: block;
+    margin-left: 280px;
+    margin-top: 30px;
+}
+.passBox p{
+    font-size: 18px;
+    margin-left: 220px;
+    margin-top: 20px;
+}
+.cashBox{
+    margin-top: 20px;
+    padding: 15px 15px;
+    padding-left: 160px;
+}
+.cashBox span{
+    font-size: 16px;
+}
+.cash{
+    width: 180px;
+    height: 30px;
+    margin-left: 10px;
+}
+.btn{
+    width: 130px;
+    height: 40px;
+    display: inline-block;
+    margin-top: 40px;
+    margin-left: 110px;
+    background: RGB(22,155,212);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    transition: all 0.4s ease;
+}
+.msk{
+    width: 100%;
+    height: 100%;
+    position: fixed;top: 0;left: 0;
+    background:RGBa(128,128,128,.3);
+    display: none;
+}
+.reson{
+    width: 300px;
+    height: 30px;
+    margin-left: 150px;
+    margin-top: 30px;
+}
+.refuseBox{
+    width: 600px;
+    height: 300px;
+    position: absolute;top: 50%;left: 50%;
+    margin-top: -150px;
+    margin-left: -300px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px 0 gray;
+}
+.refuseBox p{
+    font-size: 18px;
+    margin-left: 220px;
+    margin-top: 30px;
+}
+.btn:hover {
+    transform: translateY(-4px);
+}

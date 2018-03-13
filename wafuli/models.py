@@ -8,14 +8,17 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 import datetime
 from django.core.urlresolvers import reverse
+from public.pinyin import PinYin
+from docs.models import Document
 def get_today():
     return datetime.date.today()
 AUDIT_STATE = (
     ('0', u'审核通过'),
     ('1', u'待审核'),
     ('2', u'审核未通过'),
-    ('3', u'复审'),
-)    
+    ('3', u'异常'),
+    ('4', u'申诉'),
+)
 class Company(models.Model):
     name = models.CharField(u"平台名称(必填)",max_length=100,unique=True)
     pinyin = models.CharField(u"平台名称拼音（排序用）",max_length=100,default='')
@@ -63,17 +66,24 @@ Project_TYPE = (
     ('2', u'稳健投资'),
     ('3', u'高收益区'),
 )
+Project_CATE = (
+    ('official', u'官方项目'),
+    ('self', u'自建项目'),
+    ('merchant', u'商家项目'),
+)
 class Project(models.Model):
     title = models.CharField(max_length=20, verbose_name=u"标题")
     priority = models.IntegerField(u"优先级",default=3)
     pub_date = models.DateTimeField(u"创建时间", default=timezone.now)
     user = models.ForeignKey(MyUser, null=True, related_name="created_projects")
     is_official = models.BooleanField(u"是否官方项目", default=False)
+    category = models.CharField(u"项目属性", max_length=20, choices=Project_CATE)
     is_addedto_repo = models.BooleanField(u"是否加入项目库", default=True)
     is_book = models.BooleanField(u"是否需要预约", default=False)
     state = models.CharField(u"项目状态", max_length=2, choices=Project_STATE, default='10')
     pic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）", blank=True)
     strategy = models.URLField(u"攻略链接")
+    doc = models.ForeignKey(Document, null=True, on_delete=models.SET_NULL, default=None, blank=True)
     company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, verbose_name=u"合作平台")
     type = models.CharField(u"项目类别", max_length=1, choices=Project_TYPE, blank=True)
     is_multisub_allowed = models.BooleanField(u"是否允许同一手机号多次提交", default=False)
@@ -87,7 +97,7 @@ class Project(models.Model):
     investrange = models.CharField(u"投资额度区间", max_length=20)
     intrest = models.CharField(u"预期年化", max_length=20)
     necessary_fields = models.CharField(u"必填字段", max_length=50,help_text=u"投资用户名(0)，投资金额(1)，投资标期(2)，投资日期(3)，\
-                支付宝信息(4)，投资手机号(5)，预期返现金额(6)，QQ号(7)，投资截图(8)，字段以英文逗号隔开，如0,1,2,3,4,5", default = '0,1,2,3,4,5')
+                支付宝信息(4)，投资手机号(5)，预期返现金额(6)，QQ号(7)，投资截图(8)，字段以英文逗号隔开，如0,1,2,3,4,5", default = '1,2,3,4,5,6')
     subscribers = models.ManyToManyField(MyUser, through='SubscribeShip')
     points = models.IntegerField(u"参与人数", default=0)
     channel = models.CharField(u"项目来源（上游渠道）", max_length=20, blank=True)
@@ -95,11 +105,19 @@ class Project(models.Model):
     pinyin = models.CharField(u"拼音全拼", max_length=100)
     szm = models.CharField(u"首字母", max_length=20)
     remark = models.CharField(u"项目备注", max_length=50, blank=True)
+    broker_rate = models.SmallIntegerField(u"佣金比例，百分数", default=0)
+    def save(self, force_insert=False, force_update=False, using=None, 
+             update_fields=None):
+        pyin = PinYin()
+        pyin.load_word()
+        self.szm, self.pinyin = pyin.hanzi2pinyin_split(self.title)
+        return models.Model.save(self, force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
     def clean(self):
-        if not self.pic:
-            raise ValidationError({'pic': u'图片不能为空'})
-        elif self.pic.size > 30000:
-            raise ValidationError({'pic': u'图片大小不能超过30k'})
+        if not self.company:
+            if not self.pic:
+                raise ValidationError({'pic': u'图片不能为空'})
+            elif self.pic.size > 30000:
+                raise ValidationError({'pic': u'图片大小不能超过30k'})
     class Meta:
         verbose_name = u"理财项目"
         verbose_name_plural = u"理财项目"
@@ -139,8 +157,8 @@ class SubscribeShip(models.Model):
     project = models.ForeignKey(Project)
     introduction = models.CharField(u"项目简介",max_length=100)
     myprice = models.CharField(u"保留字段",max_length=40)
-    price = models.CharField(u"客户价",max_length=40)
-    shortprice = models.CharField(u"客户价简洁展示",max_length=20,)
+    price = models.CharField(u"客户价",max_length=40,default=u"私聊")
+    shortprice = models.CharField(u"客户价简洁展示",max_length=20,default=u"私聊")
     is_on = models.BooleanField(u"是否在主页显示",default=True)
     is_recommend = models.BooleanField(u"是否放到推荐位置",default=False)
     intrest = models.CharField(u"预期年化", max_length=20)
@@ -178,7 +196,7 @@ class InvestLog(models.Model):
     submit_type = models.CharField(max_length=10, choices=SUB_TYPE, verbose_name=u"首投/复投")
     submit_way = models.CharField(max_length=10, choices=SUB_WAY, verbose_name=u"提交入口")
     is_official = models.BooleanField(u'是否官方项目',)
-    is_selfsub = models.BooleanField(u'是否渠道用户自己提交的',default=False)
+    category = models.CharField(u"项目属性", max_length=20, choices=Project_CATE)
     submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
     invest_mobile = models.CharField(u"投资手机号", max_length=11)
     invest_name = models.CharField(u"投资用户名/姓名0", max_length=11, blank=True)
@@ -191,12 +209,19 @@ class InvestLog(models.Model):
     zhifubao_name = models.CharField(u'支付宝姓名', max_length=30, blank=True)
     expect_amount = models.CharField(u'用户预期返现金额(6)', max_length=20, blank=True)
     admin_user = models.ForeignKey(MyUser, related_name="investlog_admin", null=True)
-    audit_time = models.DateTimeField(u'审核时间', null=True, blank=True)
+    audit_time = models.DateTimeField(u'审核时间', null=True, blank=True, default=None)
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
-    audit_reason = models.CharField(u"审核原因", max_length=30, blank=True)
+    preaudit_state = models.CharField(max_length=10, choices=AUDIT_STATE, default='1', verbose_name=u"预审状态")
+    audit_reason = models.CharField(u"审核说明", max_length=30, blank=True)
     settle_amount = models.DecimalField(u'结算金额', max_digits=10, decimal_places=2, default=0)
     return_amount = models.DecimalField(u'返现金额', max_digits=10, decimal_places=2, null=True)
+    broker_amount = models.DecimalField(u'佣金', max_digits=10, decimal_places=2, default=0)
     remark = models.CharField(u"备注", max_length=100, blank=True)
+    reaudit_reason = models.CharField(u"复审原因", max_length=50, blank=True)
+    appeal_reason = models.CharField(u"申诉理由", max_length=50, blank=True)
+    presettle_amount = models.DecimalField(u'预结算金额', max_digits=10, decimal_places=2, default=0)
+    preaudit_time = models.DateTimeField(u'预审核时间', null=True, blank=True, default=None)
+    translist = GenericRelation('TransList')
     def __unicode__(self):
         return u"来自渠道用户：%s 的投资数据提交：%s" % (self.user, self.invest_amount)
     class Meta:
@@ -241,6 +266,7 @@ ADMIN_TYPE = (
     ('1', u'更改现金余额'),
     ('2', u'更改用户状态'),
     ('3', u'更改用户等级'),
+    ('4', u'更改保证金余额'),
 )   
 class AdminLog(models.Model):
     admin_user = models.ForeignKey(MyUser, related_name="user_admin_history")
@@ -267,11 +293,13 @@ class TransList(models.Model):
     reason = models.CharField(max_length=20, verbose_name=u"变动原因")
     remark = models.CharField(u"备注", max_length=100, blank=True)
     transType = models.CharField(max_length=2, choices=TRANS_TYPE, verbose_name=u"变动类型")
-    investlog = models.ForeignKey(InvestLog, related_name="translist", null=True,on_delete=models.SET_NULL)
-    adminlog = models.ForeignKey(AdminLog, related_name="translist", null=True,on_delete=models.SET_NULL)
+    content_type = models.ForeignKey(ContentType,null=True,blank=True)
+    object_id = models.PositiveIntegerField(null=True,blank=True)
+    auditlog = GenericForeignKey('content_type', 'object_id')
+#     investlog = models.ForeignKey(InvestLog, related_name="translist", null=True,on_delete=models.SET_NULL)
+#     adminlog = models.ForeignKey(AdminLog, related_name="translist", null=True,on_delete=models.SET_NULL)
     def __unicode__(self):
-        return u"%s:%s了%s现金 提交时间%s" % (self.user, self.get_transType_display(),self.transAmount,
-                                       self.user_event.time if self.user_event else "")
+        return u"%s:%s了%s现金 提交时间%s" % (self.user, self.get_transType_display(),self.transAmount, self.time)
     class Meta:
         ordering = ["-time",]
     

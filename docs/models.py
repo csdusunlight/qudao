@@ -3,6 +3,7 @@ from django.db import models
 from account.models import MyUser
 from dragon.settings import FANSHU_DOMAIN
 from public.models import RandomPrimaryIdModel
+import datetime
 
 # Create your models here.
 class Document(RandomPrimaryIdModel):
@@ -19,3 +20,10 @@ class Document(RandomPrimaryIdModel):
         return self.user.username + self.title
     def fanshu_url(self):
         return 'http://' + FANSHU_DOMAIN + '/docs/' + str(self.id)
+    
+class DocStatis(models.Model):
+    date = models.DateField(default=datetime.date.today)
+    doc = models.ForeignKey(Document, related_query_name = "docstatis")
+    count = models.IntegerField(default=0)
+    def __unicode__(self):
+        return str(self.doc) + str(self.date)

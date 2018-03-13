@@ -4,10 +4,10 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework import generics, permissions
 import django_filters
-from Paginations import MyPageNumberPagination
+from public.Paginations import MyPageNumberPagination
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
     Announcement, WithdrawLog, Mark, Company, BookLog
-from permissions import CsrfExemptSessionAuthentication, IsAdmin
+from public.permissions import CsrfExemptSessionAuthentication, IsAdmin
 from restapi.serializers import UserSerializer, InvestLogSerializer,\
     TransListSerializer, NoticeSerializer, ProjectSerializer,\
     SubscribeShipSerializer, AnnouncementSerializer, DayStatisSerializer,\
@@ -16,7 +16,7 @@ from restapi.serializers import UserSerializer, InvestLogSerializer,\
     RankSerializer, IPLogSerializer, BookLogSerializer, DocumentSerializer
 from account.models import MyUser, ApplyLog
 from rest_framework.filters import SearchFilter,OrderingFilter
-from restapi.permissions import IsOwnerOrStaff, IsSelfOrStaff
+from public.permissions import IsOwnerOrStaff, IsSelfOrStaff
 from restapi.Filters import InvestLogFilter, SubscribeShipFilter, UserFilter,\
     ApplyLogFilter, TranslistFilter, WithdrawLogFilter
 from django.db.models import Q
@@ -41,12 +41,12 @@ class ProjectList(BaseViewMixin, generics.ListCreateAPIView):
         
     serializer_class = ProjectSerializer
     filter_backends = (SearchFilter, django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
-    filter_fields = ['state','type','is_multisub_allowed','is_official']
+    filter_fields = ['state','type','is_multisub_allowed','is_official','category']
     ordering_fields = ('state','pub_date','pinyin')
     search_fields = ('title', 'introduction')
     pagination_class = MyPageNumberPagination
     def perform_create(self, serializer):
-        obj = serializer.save(is_official=False, user=self.request.user, state='10')
+        obj = serializer.save(is_official=False, category='self', is_addedto_repo=False, user=self.request.user, state='10')
         SubscribeShip.objects.create(project=obj, user=self.request.user)
 
 class ProjectDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
@@ -90,6 +90,7 @@ class InvestlogList(BaseViewMixin, generics.ListCreateAPIView):
     def perform_create(self, serializer):
         project = serializer.validated_data['project']
         is_official = project.is_official
+        category = project.category
         invest_mobile = serializer.validated_data['invest_mobile']
         if not project.is_multisub_allowed:
             if project.company is None:
@@ -98,7 +99,7 @@ class InvestlogList(BaseViewMixin, generics.ListCreateAPIView):
                 queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id)
             if queryset.exclude(audit_state='2').exists():    
                 raise ValidationError({'detail':u"投资手机号重复"})
-        serializer.save(is_official=is_official, audit_state='1', user=self.request.user)
+        serializer.save(is_official=is_official, category=category, audit_state='1', user=self.request.user)
 
 class InvestlogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = InvestLog.objects.all()
@@ -117,6 +118,10 @@ class InvestlogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
                 if queryset.exclude(id=id).exclude(audit_state='2').exists():
                     raise ValidationError({'detail':u"投资手机号重复"})
         serializer.save()
+    def perform_destroy(self, instance):
+        if instance.preaudit_state == '0' or instance.audit_state == '0':
+            raise ValidationError({'detail':u"该数据正在审核中，无法删除"})
+        generics.RetrieveUpdateDestroyAPIView.perform_destroy(self, instance)
     
 class TranslistList(BaseViewMixin, generics.ListAPIView):
     def get_queryset(self):

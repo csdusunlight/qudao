@@ -1,0 +1,111 @@
+.wrapper{
+    width: 100%;  
+}
+.topBox{
+    width: 100%;
+    height: 50px;
+}
+.searchTop{
+    padding: 15px 15px;
+    border-bottom: 2px solid RGB(0, 143, 215);
+}
+.searchTop>span:before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    background-color: #fe1e1b;
+    margin-right: 20px;
+    position: relative;
+    top: 5px;
+}
+.tabBox{
+    width: 100%;
+    margin-top: 30px;
+}
+.tabBox input[type="text"], 
+.tabBox input[type="date"], 
+.tabBox input[type="datetime-local"], 
+.tabBox select {
+    width: 60%;
+    margin-left: 1%;
+    height: 28px;
+    border: 1px solid #4daa84;
+    outline: none;
+    padding: 0 5px;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+.tabBox input[type="datetime-local"] {
+    background: url(../images/motime.png) no-repeat 95%;
+    vertical-align: middle;
+}
+.tabBox input[type="datetime-local"]:hover{
+    background:none; 
+}
+
+.tabBox td{
+    height: 50px;
+}
+.btnBox{
+    width: 100%;
+    height: 40px;
+    position: relative
+}
+.btnBox > input[type='button']{
+    background: url(../images/ico2.png) no-repeat 80% #4daa84;
+}
+#fileupload1{
+   margin-top: 10px;
+}
+.input-clone {
+    display: inline-block;
+    width: 152px;
+    height: 30px;
+    background-color: #4daa84;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+    min-width: 80px;
+    vertical-align: bottom;
+}
+.hint-box{
+    position: absolute;bottom: 2px;left: 160px;
+}
+.import{
+    display: inline-block;
+    width: 150px;
+    height: 30px;
+    background-color: #4daa84;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+    min-width: 80px;
+    vertical-align: bottom;
+    margin-left: 60px;
+    margin-top: 10px;
+}
+.search{
+    width: 150px;
+    height: 30px;
+    color: #fff;
+    font-size: 16px;
+    padding: 0 40px 0 0;
+    box-sizing: border-box;
+    min-width: 80px;
+    border: none;
+    margin-left: 60px;
+}
+.export{
+    width: 150px;
+    height: 30px;
+    color: #fff;
+    font-size: 16px;
+    padding: 0 40px 0 0;
+    box-sizing: border-box;
+    min-width: 80px;
+    border: none;
+    margin-left: 30px;
+}

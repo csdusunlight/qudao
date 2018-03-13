@@ -547,7 +547,7 @@
 							re_amount = /^\d+(\.\d+)?$/, //验证数字格式
 							re_date = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;  //验证日期
 
-						var is_repeat = 0; //是否重复参数
+						var is_repeat = false; //是否重复参数
 
 						if(project_select == "0") {
 							promptNumber++;
@@ -590,10 +590,10 @@
 							term01.css("border", "1px solid #c1c1c1");
 						}
 						//    数据去重
-						if(Data.length > 0) {
+						if(Data.length > 0 && data_list[8]==1) {
 							for(var i = 0; i < Data.length; i++) {
 								if((Data[i][0] == data_list[0]) && (Data[i][2] == data_list[2])) {
-									is_repeat = 1;
+									is_repeat = true;
 								}
 							}
 						}

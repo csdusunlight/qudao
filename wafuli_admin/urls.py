@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from django.views.generic.base import TemplateView
+from wafuli_admin import merchant_admin
 
 
 urlpatterns = [
@@ -33,6 +34,15 @@ urlpatterns = [
     url(r'^award_logs/$', 'wafuli_admin.views.award_logs', name='award_logs'),
     
     url(r'^batch_withdraw/$', 'wafuli_admin.views.batch_withdraw', name='batch_withdraw'),
+    
+    url(r'^admin_merchant_project/$', merchant_admin.admin_merchant_project, name='admin_merchant_project'),
+    url(r'^admin_merchant_investlog/$', merchant_admin.admin_merchant_investlog, name='admin_merchant_investlog'),
+    url(r'^admin_margin_query/$', merchant_admin.admin_margin_query, name='admin_margin_query'),
+    url(r'^admin_margin/$', merchant_admin.admin_margin, name='admin_margin'),
+#     url(r'^admin_merchant/$', 'wafuli_admin.views.admin_apply', name='admin_apply'),
+#     url(r'^preaudit/$', 'wafuli_admin.views.admin_invest', name='admin_office'),
+    url(r'^admin_export_merchant_investlog/$', merchant_admin.admin_export_merchant_investlog, name='admin_export_merchant_investlog'),
+    url(r'^admin_import_merchant_investlog/$', merchant_admin.admin_import_merchant_investlog, name='admin_import_merchant_investlog'),
 ]
 
 

@@ -1,0 +1,386 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>用户中心</title>
+    <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/merchant-base.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/margin_manage.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/microtip.css' %}" />
+    <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
+    <style>
+        .type1{
+            color: RGB(105,105,189);
+        }
+        .type0{
+            color: RGB(145,193,29);
+        }
+        .page>.href{
+            color: black;
+        }
+        .Content {
+            margin:0 auto;
+        }
+        .Page-in-admin{
+            padding: 10px 0;
+            padding-right: 20px;
+            width: 100%;
+            background: white;
+        }
+        .page > .on{
+            width: 26px;
+            text-align: center;
+        }
+        #pagedata{
+            margin-top: 10px;
+        }
+        .nodata-box {
+            min-height: 800px;
+        }
+        .state0{
+            color: #91c11d;
+        }
+        .state1{
+            color: #ffbe00;
+        }
+        .state2{
+            color: red;
+        }
+        .page-data{
+            min-height: 560px;;
+        }
+    </style>
+</head>
+
+<body>
+    <!--头部-->
+    {% include "merchant_header.html" %}
+    <!--内容-->
+    
+    <div class="wrapper">
+        <div class="Content">
+            <div class="wrapperBox">
+                <nav>
+                <span style="position: absolute;top: 21px;left: 0;"  class="tips__icon" data-microtip-size="large" data-microtip="资金账号：商家（您）在审核交单数据时结算使用，可以随时充值和提现，区别于福利联盟个人中心的账户余额" data-microtip-position="bottom">?</span>          
+                    <span class="amount">
+                        <span class="amount1">资金账户余额：<label>{{user.margin_account}}元</label></span>
+                    </span>
+                    <input type="button" class="btn add" value="存入">
+                    <input type="button" class="btn wit" value="提取">
+                </nav>
+                <div class="tabBox">
+                    <ul class="tabul">
+                        <li class="act">资金明细</li>
+                        <li>充值</li>
+                        <li>提取</li>
+                    </ul>
+                    <div id="pagedata" class="page-data">
+                    </div>
+                    <div class="Page-in-admin">
+                        <div class="page" id="page">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 充值弹窗 -->
+            <div class="addMsk">
+                <div class="dataBox">
+                    <span class="cha">
+                        ×
+                    </span>
+                    <span class="card">存入银行卡</span>
+                    <div class="data">
+                        <table width="100% ">
+                            <tr>
+                                <td class="t1" width="40%">账户</td>
+                                <td class="t2" width="60%">6217932602650574</td>
+                            </tr>
+                            <tr>
+                                <td class="t1" width="40%">姓名</td>
+                                <td class="t2" width="60%">龙旺</td>
+                            </tr>
+                            <tr>
+                                <td class="t1" width="40%">开户行</td>
+                                <td class="t2" width="60%">浦发银行长沙分行麓谷科技支行</td>
+                            </tr>
+                            <tr>
+                                <td class="t1" width="40%">存入金额</td>
+                                <td class="t2" width="60%">
+                                    <input type="text" class="addAmount" style="width: 200px;">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="moneyTip">
+                        <span>
+                            *请您将资金汇入如上银行卡账户，汇款备注请填写福利联盟注册手机号，汇款完成后将实际金额填入再点击确认。
+                            工作日9点-18点汇款后10分钟内会审核入账，其他时间会不定时审核，如有紧急情况，请联系TEL：18702888275.
+                        </span>
+                    </div>
+                    <input type="button " class="submit " value="确定 " />
+                </div>
+            </div>
+
+            <!-- 提取保证金模态框 -->
+            <div class="witMsk ">
+                <div class="witBox ">
+                    <span class="tips ">提取资金</span>
+                    <div class="amountBox ">
+                        提取金额(元)
+                        <input type="text " class="witamount ">
+                    </div>
+                    <input type="button" class="send" value="确定">
+                    <input type="button" class="cancel" value="取消">
+                </div>
+            </div>
+        </div>
+    </div>    
+    {% include "footer.html" %}
+
+    <script type="text/javascript " src="{% static 'js/wfl-common.js' %} "></script>
+    <script>
+        //没有数显显示图片
+        function emptydisplay(obj){
+            pic_url = "{%static 'images/bg-nodata.png' %}";
+            obj.html('<div class="nodata-box"></div>');
+        }
+        $(function () {
+            $('.nav__item:eq(1)').addClass('active');
+            //所有数据
+            var Data = '<table width="100%"><tr><th width="25%">变更时间</th><th width="25%">变更金额</th><th width="25%">剩余额度</th><th width="25%">变更原因</th></tr>' +
+            '[results]<tr><td class="time">{time}</td><td class="transAmount type{transType}" data-type="{transType}">{transAmount}</td><td>{initAmount}</td><td>{reason}</td></tr>[/results]</table>';
+           //充值数据
+           var addData = '<table width="100%"><tr><th width="25%">充值时间</th><th width="25%">充值金额</th><th width="25%">审核状态</th><th width="25%">审核说明</th></tr>' +
+            '[results]<tr><td class="c-time">{submit_time}</td><td class="transAmount type{type}" data-type="{type}">{amount}</td><td class="state{audit_state}">{state_des}</td><td>{audit_reason}</td></tr>[/results]</table>';
+            //体现数据
+            var reduceData = '<table width="100%"><tr><th width="25%">提取时间</th><th width="25%">提取金额</th><th width="25%">审核状态</th><th width="25%">审核原因</th></tr>' +
+            '[results]<tr><td class="c-time1">{submit_time}</td><td class="transAmount type{type}" data-type="{type}">{amount}</td><td class="state{audit_state}">{state_des}</td><td>{audit_reason}</td></tr>[/results]</table>';
+            //回调函数
+            function pagecallback() {
+                console.log("回调函数");
+                $('.time').each(function () {
+                    var time = $(this).text().split('T');//分割字符串 获取年月日
+                    console.log(time);
+                    var time_1 = time[1].split('.');//分割字符串 获取时分秒
+                    $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
+                });
+
+                $('.c-time').each(function(){
+                    var time = $(this).text().split('T');
+                        console.log('llc'+time);
+                        var time_1 = time[1].split('.');//分割字符串 获取时分秒
+                        $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
+                });
+
+                $('.c-time1').each(function(){
+                    var time = $(this).text().split('T');//分割字符串 获取年月日
+                    console.log(time);
+                    var time_1 = time[1].split('.');//分割字符串 获取时分秒
+                    $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
+                });
+                //根据transType来判断‘+’‘-’号
+                $('.transAmount').each(function(){
+                    var type = $(this).attr('data-type');
+                    var initText = $(this).text();  //获取文本内容 再进行字符串拼接
+                    if (type == 0) {    
+                        $(this).text('+' + initText);
+                    }else{
+                        $(this).text('-' + initText);
+                    }
+                });
+            }
+            //分页
+            console.log('llc'+'{{user.id}}');
+            $("#pagedata").ajaxPage({
+                url: '/merchant/margin_translog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}',
+                pageId: $("#page"),
+                pageSize: 10,
+                run: true,
+                content:Data,
+                complete: pagecallback,
+            });   
+            //分页过滤
+            $('.tabul > li').click(function(){
+                $('#pagedata').empty();
+                var index = $(this).index();
+                console.log(index);
+                $(this).addClass('act').siblings().removeClass('act');
+                if (index == 0) {
+                    $("#pagedata").ajaxPage({
+                        url: '/merchant/margin_translog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}',
+                        pageId: $("#page"),
+                        pageSize: 10,
+                        run: true,
+                        content:Data,
+                        complete: pagecallback,
+                    }); 
+                }else if (index == 1) {
+                    $("#pagedata").ajaxPage({
+                        url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}&type=0',
+                        pageId: $("#page"),
+                        pageSize: 10,
+                        run: true,
+                        content:addData,
+                        complete: pagecallback,
+                    });
+                }else if(index == 2){
+                    $("#pagedata").ajaxPage({
+                        url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}&type=1',
+                        pageId: $("#page"),
+                        pageSize: 10,
+                        run: true,
+                        content:reduceData,
+                        complete: pagecallback,
+                    });
+                }
+                
+            });
+            //变更时间处理
+            var changeTime = $('.changeTime').text().split('T');
+            console.log(changeTime);
+            $('.changeTime').text(changeTime[0]);
+
+            //添加保证金模态框
+            $(".add").click(function () {
+                $('.addMsk').show();
+            });
+            $(".cha").click(function () {
+                $('.addMsk').hide();
+                $('.addAmount').val('');
+            });
+            //充值保证金ajax
+            $('.submit').click(function () {
+                var addAmount = $('.addAmount').val();
+                console.log(addAmount);
+                //正则验证
+                var regx = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/; 
+                if (!regx.test(addAmount)) {
+                    $.prompt({
+                        "Content":"充值金额仅限数字且只能带两位小数!"
+                    });
+                    return;
+                }
+                if(!addAmount){
+                    $.prompt({
+                        "Content":"充值金额不能为零！"
+                    });
+                    return;
+                }else if(addAmount <= 0){
+                    $.prompt({
+                        "Content":"输入正确的充值金额！"
+                    });
+                    return;
+                } 
+                $.ajax({
+                    url: '/merchant/margin_manage/',
+                    type: 'post',
+                    async: false,
+                    timeout: 5000, //超时时间
+                    dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
+                    data: {
+                        'type': 0,
+                        "amount": addAmount
+                    },
+                    success: function (ret) {
+                        if (ret.code == 0) {
+                            $.prompt({
+                                "Content":"提交充值申请，请等待!"
+                            });
+                            $(".addMsk ").hide();
+                        } else if (ret.code == -2) {
+                            $.prompt({
+                                "Content":"提取失败!"
+                            });
+                        }
+                        $('.addAmount').val('');
+                    },
+                    error: function (xhr, textStatus) {
+                        alert(xhr.responseText);
+                    }
+                });
+            });
+            //保证金模态框
+            $(".wit ").click(function () {
+                $(".witMsk ").show();
+            });
+            $(".cancel").click(function () {
+                $(".witMsk ").hide();
+                $('.witamount ').val('');
+            });
+            //获取账户余额：
+            var user_account = {{ user.margin_account }};
+            console.log("--------账户余额：", user_account);
+        //提取保证金
+        $(".send ").click(function () {
+            var amount = $(".witamount ").val();
+            //正则
+            var regx = /^[0-9]*$/;
+            if (!regx.test(amount)) {
+                $.prompt({
+                    "Content":"提取金额必须为纯数字!"
+                });
+                return;
+            }
+            //获取提取金额不能大于保证金
+            if (user_account < amount) {
+                $.prompt({
+                    "Content":"余额不足！"
+                });
+                return;
+            }else if(!amount){
+                $.prompt({
+                    "Content":"提取金额不能为空！"
+                });
+                return;
+            }
+            //ajax发送提取保证金
+            $.ajax({
+                url: '/merchant/index/',
+                type: 'post',
+                async: false,
+                timeout: 5000, //超时时间
+                dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
+                data: {
+                    'type': 1,
+                    "amount": amount
+                },
+                success: function (ret) {
+                    if (ret.code == 0) {
+                        // alert('提交提取申请，请等待');
+                        $.prompt({
+                            "Content":"申请成功，请等待!"
+                        });
+                        $(".witMsk ").hide();
+                    } else if (ret.code == -2) {
+                        $.prompt({
+                            "Content":"提取失败！"
+                        });
+                    }
+                    //成功后2s刷新页面
+                    setTimeout(function(){
+                        window.location.href = window.location.href;
+                    },1000);
+                },
+                error: function (xhr, textStatus) {
+                    $.prompt({
+                        "Content":"请检查网络设置！"
+                    });
+                }
+            });
+        });
+
+        });
+    </script>
+</body>
+<!-- 
+    /merchant/margin_translog/
+ -->
+
+</html>

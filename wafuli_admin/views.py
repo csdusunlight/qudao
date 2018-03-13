@@ -9,7 +9,7 @@ from django.http.response import JsonResponse, Http404, HttpResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from account.transaction import charge_money
 import logging
-from account.models import MyUser, ApplyLog
+from account.models import MyUser, ApplyLog, AdminPermission
 from django.db.models import Q,F
 from wafuli_admin.models import DayStatis, Invest_Record
 from django.conf import settings
@@ -25,9 +25,10 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.db import transaction
-from public.tools import has_permission
+from public.tools import has_post_permission
 from decimal import Decimal
 from weixin.tasks import sendWeixinNotify
+from merchant.margin_transaction import charge_margin
 # Create your views here.
 logger = logging.getLogger('wafuli')
 def index(request):
@@ -46,7 +47,7 @@ def index(request):
     total['with_count'] = dict_with.get('cou')
     total['with_total'] = dict_with.get('sum') or 0
 
-    dict_ret = InvestLog.objects.filter(is_official=True,audit_state='0').\
+    dict_ret = InvestLog.objects.filter(category='official',audit_state='0').\
             aggregate(cou=Count('user',distinct=True),sum=Sum('settle_amount'))
     total['ret_count'] = dict_ret.get('cou')
     total['ret_total'] = dict_ret.get('sum') or 0
@@ -106,13 +107,13 @@ def admin_private(request):
     return render(request,"admin_private.html",)
 
 @transaction.atomic
-@has_permission('002')
+@has_post_permission('002')
 def admin_invest(request):
     admin_user = request.user
     if request.method == "GET":
         if not ( admin_user.is_authenticated() and admin_user.is_staff):
             return redirect(reverse('admin:login') + "?next=" + reverse('admin_project'))
-        item_list = InvestLog.objects.filter(is_official=True, audit_state__in=['1','3'], submit_time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
+        item_list = InvestLog.objects.filter(category='official', audit_state__in=['1','3'], submit_time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
         print item_list
         project_list = ()
         for item in item_list:
@@ -137,7 +138,6 @@ def admin_invest(request):
             return JsonResponse(res)
         investlog = InvestLog.objects.get(id=investlog_id)
         investlog_user = investlog.user
-        card = investlog_user.user_bankcard.first()
 
         project = investlog.project
         project_title = project.title
@@ -158,22 +158,23 @@ def admin_invest(request):
                 res['code'] = -3
                 res['res_msg'] = u'该项目已审核过，不要重复审核！'
                 return JsonResponse(res)
-            if investlog.translist.exists():
+            if investlog.audit_state == '1' and investlog.translist.exists():
                 logger.critical("Returning cash is repetitive!!!")
                 res['code'] = -3
                 res['res_msg'] = u"操作失败，返现重复！"
             else:
                 translist = charge_money(investlog_user, '0', cash, project_title)  #jzy
                 investlog.audit_state = '0'
-                investlog.settle_amount = cash
-                translist.investlog = investlog
-                translist.save(update_fields=['investlog'])
+                investlog.settle_amount += cash
+                translist.auditlog = investlog
+                translist.save()
 #                 #活动插入
 #                 on_audit_pass(request, investlog)
 #                 #活动插入结束
                 res['code'] = 0
         elif type==2:
-            investlog.audit_state = '2'
+            if investlog.settle_amount == 0:
+                investlog.audit_state = '2'
             res['code'] = 0
         elif type==3:
             investlog.audit_state = '3'
@@ -305,7 +306,7 @@ def get_admin_project_page(request):
 def export_investlog(request):
     user = request.user
     item_list = []
-    item_list = InvestLog.objects
+    item_list = InvestLog.objects.filter(category='official')
     if not user.is_staff:
         raise Http404
     investtime_0 = request.GET.get("investtime_0", None)
@@ -465,7 +466,7 @@ def export_charge_excel(request):
     return response
 
 @csrf_exempt
-@has_permission('002')
+@has_post_permission('002')
 def import_investlog(request):
     admin_user = request.user
     ret = {'code':-1}
@@ -542,8 +543,8 @@ def import_investlog(request):
                     translist = charge_money(investlog_user, '0', amount, row[1])
                     investlog.audit_state = '0'
                     investlog.settle_amount = amount
-                    translist.investlog = investlog
-                    translist.save(update_fields=['investlog'])
+                    translist.auditlog = investlog
+                    translist.save()
 #                     #活动插入
 #                     on_audit_pass(request, investlog)
 #                     #活动插入结束
@@ -565,7 +566,7 @@ def import_investlog(request):
     return JsonResponse(ret)
 
 @transaction.atomic
-@has_permission("005")
+@has_post_permission("005")
 def admin_user(request):
     admin_user = request.user
     if request.method == "GET":
@@ -621,8 +622,8 @@ def admin_user(request):
             elif mcash > 0:
                 translist = charge_money(obj_user, '1', mcash, reason)
             adminlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=reason, type='1')
-            translist.adminlog = adminlog
-            translist.save(update_fields=['adminlog'])
+            translist.auditlog = adminlog
+            translist.save()
             res['code'] = 0
 
 
@@ -646,6 +647,49 @@ def admin_user(request):
             else:
                 res['code'] = -6
                 res['res_msg'] = u"没有level"
+        elif type == 5:
+            pcash = request.POST.get('pcash', 0)
+            mcash = request.POST.get('mcash', 0)
+            if not pcash:
+                pcash = 0
+            if not mcash:
+                mcash = 0
+            reason = request.POST.get('reason', '')
+            if not pcash and not mcash or pcash and mcash or not reason:
+                res['code'] = -2
+                res['res_msg'] = u'传入参数不足，请联系技术人员！'
+                return JsonResponse(res)
+            try:
+                pcash = Decimal(pcash)
+                mcash = Decimal(mcash)
+            except:
+                res['code'] = -2
+                res['res_msg'] = u"操作失败，输入不合法！"
+                return JsonResponse(res)
+            if pcash < 0 or mcash < 0:
+                res['code'] = -2
+                res['res_msg'] = u"操作失败，输入不合法！"
+                return JsonResponse(res)
+            translist = None
+            if pcash > 0:
+                translist = charge_margin(obj_user, '0', pcash, reason)
+            elif mcash > 0:
+                translist = charge_margin(obj_user, '1', mcash, reason)
+            adminlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=reason, type='4')
+            translist.auditlog = adminlog
+            translist.save()
+            res['code'] = 0
+        elif type == 6:
+            try:
+                perm = AdminPermission.objects.get(code='100')
+            except AdminPermission.DoesNotExist:
+                perm = AdminPermission.objects.create(code='100', name="商家权限")
+            obj_user.admin_permissions.add(perm)
+            res['code'] = 0
+        elif type == 7:
+            perm = AdminPermission.objects.get(code='100')
+            obj_user.admin_permissions.remove(perm)
+            res['code'] = 0
         return JsonResponse(res)
 
 def get_admin_user_page(request):
@@ -756,7 +800,7 @@ def get_admin_user_page(request):
     return JsonResponse(res)
 
 @transaction.atomic
-@has_permission('004')
+@has_post_permission('004')
 def admin_withdraw(request):
     admin_user = request.user
     if request.method == "GET":
@@ -1010,7 +1054,7 @@ def export_withdrawlog(request):
     return response
 
 @csrf_exempt
-@has_permission('004')
+@has_post_permission('004')
 def import_withdrawlog(request):
     admin_user = request.user
 
@@ -1353,3 +1397,4 @@ def batch_withdraw(request):
         except:
             continue
     return JsonResponse({'code':0})
+

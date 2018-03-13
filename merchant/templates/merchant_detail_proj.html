@@ -1,0 +1,161 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>用户中心</title>
+    <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/merchant-base.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
+    <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
+    <style type="text/css">
+        .table-box {
+            padding: 20px;
+            width: 100%;
+            background-color: #fff;
+            min-height: 700px;
+        }
+        .data-head {
+            position: relative;
+            height: 50px;
+        }
+        .today-data-title {
+            padding-left: 20px;
+            line-height: 50px;
+            font-size: 16px;
+        }
+        .table-box table {
+            width: 100%;
+            border: none;
+        }
+        .table-box td {
+            height: 40px;
+            text-align: center;
+            border: none;
+            border-top: 1px solid #e4e4e4;
+        }
+        .table-box th {
+            height: 40px;
+        }
+        .left-nav-box {
+            padding-top: 10px;
+            padding-left: 30px;
+            font-size: 0;
+        }
+        .left-nav-item {
+            display: inline-block;
+            margin-right: 14px;
+            width: 70px;
+            height: 30px;
+            line-height: 30px;
+            border: 1px solid #e4e4e4;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .left-nav-item.on {
+            color: #fff;
+            background-color: #efae2c;
+        }
+    </style>
+</head>
+
+<body>
+    <!--头部-->
+    {% include "merchant_header.html" %}
+    <!--内容-->
+    <div class="Content">
+        <div class="table-box">
+            <div class="data-head">
+                <h4 class="today-data-title">项目动态</h4>
+                <ul class="left-nav-box l">
+                    <li class="left-nav-item on">今天</li>
+                    <li class="left-nav-item">昨天</li>
+                    <li class="left-nav-item">最近7天</li>
+                    <li class="left-nav-item">最近30天</li>
+                </ul>
+            </div>
+        	<table class="left-table-box">
+        		<tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>
+        	</table>
+        </div>
+    </div>
+    {% include "footer.html" %}
+
+    <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+    <script type="text/javascript">
+        $('.nav__item:eq(0)').addClass('active');
+        var left_data_html;
+        $.ajax({
+            url:"/merchant/get_project_statis_byday/",
+            type:"get",
+            dataType: "json",
+            async:true,
+            success: function(ret) {
+                left_data_html = '<tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>';
+                var i;
+                console.log(ret);
+                if (jQuery.isEmptyObject(ret)) {
+                    $('.table-box').addClass('nodata-box');
+                } else{
+                    for (i in ret) {
+                        left_data_html += '<tr><td>' + ret[i].title + '</td><td>' + ret[i].pv +
+                        '</td><td>' + ret[i].submit_count + '</td><td>' + ret[i].settle_count + '</td><td>' + ret[i].settle_amount + '</td></tr>'
+                    }
+                    $('.left-table-box').html(left_data_html);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.responseText);
+            }
+        });
+        $('.left-nav-item').click(function(){
+            var base_url = '/merchant/get_project_statis_byday/';
+            $(this).addClass('on').siblings().removeClass('on');
+            console.log($(this).index());
+            switch ($(this).index()){
+                case 0:
+                    base_url += '?range=0';
+                    break;
+                case 1:
+                    base_url += '?range=1';  
+                    break;
+                case 2:
+                    base_url += '?range=7';
+                    break;
+                case 3:
+                    base_url += '?range=30';
+                    break;
+            }
+            $.ajax({
+                url:base_url,
+                type:"get",
+                dataType: "json",
+                async:true,
+                success: function(ret) {
+                    left_data_html = '<tr><th>项目名称</th><th>浏览量（PV）</th><th>交单量</th><th>结算单数</th><th>结算总额</th></tr>';
+                    var i;
+                    if (jQuery.isEmptyObject(ret)) {
+                        $('.table-box').addClass('nodata-box');
+                    } else{
+                        $('.table-box').removeClass('nodata-box');
+                        for (i in ret) {
+                            left_data_html += '<tr><td>' + ret[i].title + '</td><td>' + ret[i].pv +
+                            '</td><td>' + ret[i].submit_count + '</td><td>' + ret[i].settle_count + '</td><td>' + ret[i].settle_amount + '</td></tr>'
+                        }
+                        $('.left-table-box').html(left_data_html);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
+                }
+            });
+        })
+    </script>
+</body>
+
+</html>

@@ -24,7 +24,7 @@
         var Data       = arguments[0]    ? arguments[0]    : '{}';
         var Id         = Data.Id         ? Data.Id         : 'popup_confirm';   //唯一ID值
         var Width      = Data.Width      ? Data.Width      : '600';     //弹窗宽度
-        var Title      = Data.Title      ? Data.Title      : '标题';      //弹窗标题
+        var Title      = Data.Title      ? Data.Title      : '提示';      //弹窗标题
         var Content    = Data.Content    ? Data.Content    : '内容文字';        //弹窗内容
         var NeedCancle   = Data.NeedCancle   ? Data.NeedCancle   : false;        //是否需要取消按钮
         var Cancle     = Data.Cancle     ? Data.Cancle     : '取消';      //取消按钮名称

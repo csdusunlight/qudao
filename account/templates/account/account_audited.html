@@ -56,9 +56,11 @@
     }
     .state-tab,
     .state-tab-2 {
+        position: relative;
         display: inline-block;
         width: 80px;
-        line-height: 30px;
+        height: 38px;
+        line-height: 38px;
         text-align: center;
         border: 1px solid #91C11D;
         border-right: none;
@@ -123,6 +125,19 @@
     .searchable-select {
         width: 300px;
     }
+    .tab-num {
+        position: absolute;
+        right: 4px;
+        top: 1px;
+        color: #fff;
+        font-size: 12px;
+        width: 18px;
+        height: 18px;
+        line-height: 20px;
+        border-radius: 50%;
+        background-color: #ff5a00;
+        /*font-weight: bold;*/
+    }
 </style>
 
 </head>
@@ -143,7 +158,7 @@
         <h2 class="table__title">官方数据</h2>
         <ul class="today-detail">
             <li class="today-detail-item">今日提交<span class="today-num">{{submit_num}}</span>项</li><li class="today-detail-item">通过<span class="today-num">{{pass_num}}</span>项</li>
-            <li class="today-detail-item">复审<span class="today-num">{{check_num}}</span>项</li><li class="today-detail-item">拒绝<span class="today-num">{{refuse_num}}</span>项</li>
+            <li class="today-detail-item">异常<span class="today-num">{{check_num}}</span>项</li><li class="today-detail-item">拒绝<span class="today-num">{{refuse_num}}</span>项</li>
         </ul>
         <div class="search">
             <div class="search__item">
@@ -177,13 +192,14 @@
                 <span class="search_today">今日</span>
                 <span class="search_yes">昨日</span>
             </div>
-            <div style="width: 400px;margin-left: 110px;" class="search__item">
+            <div style="width: 480px;margin-left: 30px;" class="search__item">
                 <ul class="state-tabbox">
                     <li data-state = "" class="state-tab on">全部</li>
                     <li data-state = "1" class="state-tab">未审核</li>
-                    <li data-state = "3" class="state-tab">复审中</li>
                     <li data-state = "0" class="state-tab">已通过</li>
                     <li data-state = "2" class="state-tab">已拒绝</li>
+                    <li data-state = "3" class="state-tab">异常<span class="tab-num">{{except_num}}</span></li>
+                    <li data-state = "4" class="state-tab">申诉<span class="tab-num">{{appeal_num}}</span></li>
                 </ul>
             </div>
             <div style="display: none;" class="search__item">
@@ -299,8 +315,9 @@
             <div class="popup__detail">
                 <div class="popup__item">
                     <span class="popup__itemname">项目名称</span>
-                    <select disabled="disabled" class="project" placeholder="选择项目">
-                    </select>
+                    <!--<select disabled="disabled" class="project" placeholder="选择项目">
+                    </select>-->
+                    <input disabled="disabled" type="text" class="project" />
                 </div>
                 <div class="popup__item">
                     <span class="popup__itemname">投资日期：</span>
@@ -362,8 +379,9 @@
             <div class="popup__detail">
                 <div class="popup__item">
                     <span class="popup__itemname">项目名称</span>
-                    <select disabled="disabled" class="project_02" placeholder="选择项目">
-                    </select>
+                    <!--<select disabled="disabled" class="project_02" placeholder="选择项目">
+                    </select>-->
+                    <input disabled="disabled" type="text" class="project_02" />
                 </div>
                 <div class="popup__item">
                     <span class="popup__itemname">投资日期：</span>
@@ -476,7 +494,7 @@
     </div>
 </div>
 </div>
-<iframe id="myIFrame" scrolling="yes" src="abount:blank" style="display:none" frameborder=1></iframe>
+<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
 {% include "footer.html" %}
 
 <script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
@@ -516,9 +534,9 @@
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>审核时间</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td class="submit-time">{audit_time}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
-//  复审
+//  异常
     var data3 = '<table width="100%"><tr><th>项目名称3</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">复审原因</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">异常原因</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
         '<td>{invest_amount}</td><td>{invest_term}</td><td>{audit_reason}</td><td data-remark="{remark}">{other_remark}</td>' +
         '<td class="handle">详情<div class="handle-box"><a onclick="removeData(this,{id})">删除</a> | '+
@@ -526,7 +544,11 @@
         '<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
         '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span></div></td>'+
         '</tr>[/results]</table>';
-    
+    //  申诉
+    var data4 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
+        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>审核时间</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td class="submit-time">{audit_time}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
 //  全部
     var data_user = '<table width="100%"><tr><th>项目名称</th><th>项目来源</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
         '<th>投资金额</th><th>投资标期</th><th>审核状态</th><th>结算金额</th><th>返现金额</th><th class="w-remark">备注及其他</th></tr>[results]' +
@@ -645,7 +667,7 @@
                 dataType: "json",
                 type: 'get',
                 success: function(ret) {
-                    $(".project").val(ret.project);
+                    $(".project").val(ret.project_title);
                     $(".date").val(ret.invest_date);
                     $(".telnum").val(ret.invest_mobile);
                     $(".zfbname").val(ret.invest_name);
@@ -808,6 +830,7 @@
             $('.popup.m-del-proj').addClass('in');
         }
         $('#confirm_delete').click(function(){
+        	$('.popup.m-del-proj').removeClass('in');
             $.ajax({
                 url:"/restapi/investlogs/" + delete_id + "/",
                 type:"delete",
@@ -815,10 +838,9 @@
                 success: function(ret) {
                     console.log('删除成功');
                     parent_del.parent().parent().parent().remove();
-                    $('.popup.m-del-proj').removeClass('in');
                 },
-                error: function() {
-                    alert("请检查网络连接");
+                error: function(x,t,e) {
+                    alert(x.responseJSON.detail);
                 }
             });
         })
@@ -906,7 +928,7 @@
                 dataType: "json",
                 type: 'get',
                 success: function(ret) {
-                    $(".project_02").val(ret.project);
+                    $(".project_02").val(ret.project_title);
                     $(".date_02").val(ret.invest_date);
                     $(".telnum_02").val(ret.invest_mobile);
                     $(".zfbname_02").val(ret.invest_name);
@@ -984,41 +1006,50 @@
                 $('.date_selector').remove();
                 $(this).date_input();
             })
-            
-            $.ajax({
-                url:"/restapi/projects/?is_official=true&pageSize=999",
-                type:"get",
-                dataType: "json",
-                success: function(ret) {
-                    console.log(ret.results);
-                    var option_html = '';
-                    for (var i = 0; i < ret.results.length; i++) {
-                        option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
-                    }
-                    $('.project').html(option_html);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR.responseText);
-                    console.log("数据错误is_official=true");
+            $('.tab-num').each(function () {
+                if ($(this).text() == '') {
+                	$(this).hide();
                 }
-            });
-            $.ajax({
-                url:"/restapi/projects/?is_official=false&pageSize=999",
-                type:"get",
-                dataType: "json",
-                success: function(ret) {
-                    console.log(ret.results);
-                    var option_html = '';
-                    for (var i = 0; i < ret.results.length; i++) {
-                        option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
-                    }
-                    $('.project_02').html(option_html);
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR.responseText);
-                    console.log("数据错误is_official=false");
-                }
-            });
+            })
+            if ($('.tab-num').text() == '') {
+                
+            } else {
+            	
+            }
+//          $.ajax({
+//              url:"/restapi/projects/?is_official=true&pageSize=999",
+//              type:"get",
+//              dataType: "json",
+//              success: function(ret) {
+//                  console.log(ret.results);
+//                  var option_html = '';
+//                  for (var i = 0; i < ret.results.length; i++) {
+//                      option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
+//                  }
+//                  $('.project').html(option_html);
+//              },
+//              error: function(jqXHR, textStatus, errorThrown) {
+//                  console.log(jqXHR.responseText);
+//                  console.log("数据错误is_official=true");
+//              }
+//          });
+//          $.ajax({
+//              url:"/restapi/projects/?is_official=false&pageSize=999",
+//              type:"get",
+//              dataType: "json",
+//              success: function(ret) {
+//                  console.log(ret.results);
+//                  var option_html = '';
+//                  for (var i = 0; i < ret.results.length; i++) {
+//                      option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
+//                  }
+//                  $('.project_02').html(option_html);
+//              },
+//              error: function(jqXHR, textStatus, errorThrown) {
+//                  console.log(jqXHR.responseText);
+//                  console.log("数据错误is_official=false");
+//              }
+//          });
             
 //          官方数据
             var state_1 = '';
@@ -1027,27 +1058,6 @@
                 state_1 = $(this).data('state') + '';
                 console.log(state_1)
                 $('#search').click();
-//              var search_data = data;
-//              switch (state_1){
-//              	case 0:
-//              	    search_data = data0;
-//              		break;
-//                  case 1:
-//                      search_data = data1;
-//                      break;
-//                  case 2:
-//                      search_data = data2;
-//                      break;
-//              }
-//              $("#page").empty();
-//              $("#pagedata").ajaxPage({
-//                  url: url + '&audit_state=' + state_1,
-//                  pageId: $("#page"),
-//                  pageSize: 10,
-//                  run: true,
-//                  content: search_data,
-//                  complete:pagecallback,
-//              });
             })
             $('.search_today').click(function(){
                 var date = new Date();
@@ -1117,6 +1127,8 @@
                     search_data = data2;
                 } else if(state == '3') {
                     search_data = data3;
+                } else if(state == '4') {
+                    search_data = data4;
                 }
                 
                 console.log(newurl);

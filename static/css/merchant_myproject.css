@@ -1,0 +1,140 @@
+.wrapperBox {
+    width: 100%;
+}
+
+.wrapper {
+    width: 1300px;
+    margin: 50px auto;
+    /*background: lightblue;*/
+    position: relative;
+}
+
+.tab {
+    width: 398px;
+    height: 42px;
+    border: 1px solid RGB(145,193,29);
+}
+
+.tab li {
+    width: 99px;
+    height: 100%;
+    line-height: 42px;
+    text-align: center;
+    float: left;
+    border-right: 1px solid RGB(145,193,29);
+    cursor: pointer;
+    /* background: white; */
+    color: white;
+}
+
+.tab li:nth-child(4) {
+    border: none;
+}
+
+.active {
+    background: RGB(239,174,44);
+    color: white;
+}
+.contentBox{
+    padding:20px;
+    background-color: #fff;
+    position: relative;
+}
+.c-left{
+    width: 30px;
+    height: 40px;
+    background-color: #f5f5f5;
+    position: absolute;top: 0;left: 0;
+}
+.c-right{
+    width: 30px;
+    height: 40px;
+    background-color: #f5f5f5;
+    position: absolute;top: 0;right: 0;
+}
+.tab-right {
+    width: 120px;
+    height: 42px;
+    line-height: 42px;
+    background: #91c11d;
+    color: white;
+    padding-left: 50px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+}
+
+.tab-right label {
+    font-size: 40px;
+    position: absolute;
+    top: 1px;
+    left: 12px;
+}
+.tab-right span{
+    font-size: 17px;
+    position: absolute;top: 2px;right: 10px;
+}
+.td1 {
+    height: 40px;
+    text-align: center;
+}
+
+.opMsk {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(30,30,30,.3);
+    display: none;
+}
+
+.dataBox {
+    width: 500px;
+    height: 240px;
+    background: white;
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -120px;
+    margin-left: -250px;
+    box-shadow: 5px 5px 5px 0 gray;
+    position: relative;
+}
+.dataBox p{
+    font-size: 20px;
+    position: absolute;top: 30px;left: 220px;
+}
+.tips{
+    display: block;
+    font-size: 18px;
+    position: absolute;top: 80px;left: 160px;
+}
+.btnBox{
+    width: 100%;
+    position: absolute;top: 145px;left: 90px;
+}
+.btn{
+    /* margin-top: 45px;
+    margin-left: 90px; */
+    background: RGB(239,174,44);
+    display: inline-block;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.5s ease;
+    position: relative;
+}
+.btn:hover{
+    transform: translateY(-4);
+}
+.cancel{
+    margin-left: 90px;
+}
+.opTip{
+    padding: 15px 15px;
+    color: #b48ade;
+    position: absolute;bottom: 5px;left: 100px;
+}

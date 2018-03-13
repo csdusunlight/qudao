@@ -65,7 +65,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(u'注册时间', default=timezone.now)
     type = models.CharField(u'用户类型', default='agent',max_length=10)
     level = models.CharField(u"用户等级", choices=USER_LEVEL, default='03', max_length=2)
-    domain_name = models.CharField(u"个人主页域名", max_length=20, unique=True)
+    domain_name = models.CharField(u"个人主页域名", max_length=20)
     cs_qq = models.CharField(u"客服QQ号", max_length=20,)
     color = models.CharField(u'个人主页色调', choices=COLORS, default='0', max_length=2)
     submit_bg = models.CharField(u'交单页面背景', default='0', max_length=2)
@@ -85,6 +85,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         related_name="user_set", related_query_name="user")
     is_autowith = models.BooleanField(u'是否自动提现', default=True)
     is_book_email_notice = models.BooleanField(u'是否预约单邮件通知', default=True)
+    margin_account = models.DecimalField(u'保证金账户余额', default = Decimal(0), max_digits=10, decimal_places=2)
+    
     objects = MyUserManager()
 
     USERNAME_FIELD = 'mobile'
@@ -116,6 +118,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return username
     def has_admin_perms(self, code):
         return self.admin_permissions.filter(code=code).exists()
+    def has_permission100(self):
+        return self.has_admin_perms('100')
     def picture_url(self):
         """
         Returns the URL of the image associated with this Object.
@@ -174,7 +178,7 @@ class MobileCode(models.Model):
 
 
 class AdminPermission(models.Model):
-    code = models.CharField(unique=True, max_length=3)
+    code = models.CharField(unique=True, max_length=20)
     name = models.CharField('name', max_length=255)
     def __unicode__(self):
         return self.code + ',' + self.name

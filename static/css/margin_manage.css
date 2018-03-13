@@ -1,0 +1,247 @@
+.wrapperBox{
+    width: 946px;
+    margin: 0 auto;
+}
+nav{
+    padding: 15px 15px;
+    position: relative;
+}
+
+.amount{
+    display: inline-block;
+    margin-left: 15px;
+    color: white;
+}
+.amount1 > label{
+    color: RGB(217,164,61);
+    font-size: 18px;
+}
+
+.btn{
+    display: inline-block;
+    border: none;
+    margin-left: 10px;
+    cursor: pointer;
+    color: white;
+    border: 1px solid RGB(239,174,44);
+    background: transparent;
+}
+.add:hover{
+    background: RGB(239,174,44);
+    color: white;
+}
+.wit:hover{
+    background: RGB(239,174,44);
+    color: white;
+}
+
+.tabBox{
+    background: white;
+    padding: 10px 20px;
+    position: relative;
+}
+.tabul{
+    width: 422px;
+    height: 42px;
+    border: 1px solid RGB(145,193,29);
+    margin-top: 10px;
+}
+.tabul li{
+    width: 140px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    float: left;
+    border-right:1px solid #91c11d;
+    cursor: pointer;
+}
+.tabul li:nth-child(3){
+    border-right: none;
+}
+.act{
+    background: #91c11d;
+    color:#fff;
+}
+
+.tabBox-left{
+    width: 30px;
+    height: 40px;
+    position: absolute;top: 0;left: 0;
+    background-color: #f5f5f5;
+}
+.tabBox-right{
+    width: 30px;
+    height: 40px;
+    position: absolute;top: 0;right: 0;
+    background-color: #f5f5f5;
+}
+.tabBox th{
+    background-color: #f5f5f5;
+    height: 40px;
+    font-weight: normal;
+}
+.tabBox td{
+    height: 50px;
+    text-align: center;
+}
+.tabBox tr{
+    border-bottom: 2px solid #f5f5f5;
+}
+/* 充值模态框 */
+.addMsk{
+    width: 100%;
+    height: 100%;
+    position: fixed;top: 0;left: 0;
+    background: rgba(30,30,30,.3);
+    display: none;
+}
+.dataBox{
+    width: 560px;
+    height: 440px;
+    background: white;
+    box-shadow: 3px 3px 1px 0 rgba(30,30,30,.3);
+    position: absolute;top: 50%;left: 50%;
+    margin-top: -170px;
+    margin-left:-230px;
+    border-radius:10px; 
+}
+.card{
+    display: block;
+    font-size: 18px;
+    margin-top: 25px;
+    margin-left: 240px;
+}
+.data{
+    width: 400px;
+    height: 160px;
+    margin:20px auto;
+}
+/* .data td{
+    height: 50px;
+    text-align: left;
+    font-size: 16px;
+} */
+.t1{
+    text-align: center;
+    height: 50px;
+}
+.t2{
+    text-align: left;
+    height: 50px;
+}
+.cha{
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border:1px solid RGB(210,210,210); 
+    text-align: center;
+    line-height: 30px;
+    font-size: 26px;
+    position: absolute;top: 5px;right: 10px;
+    cursor: pointer;
+}
+.submit{
+    border: none;
+    width: 110px;
+    height: 36px;
+    text-align: center;
+    background:RGB(145,193,29);
+    border-radius: 5px;
+    margin: 20px auto 20px;
+    display: block;
+    cursor: pointer;
+    color: white;
+    transition: 0.5s ease;
+}
+.submit:hover{
+    transform: translateY(-4px);
+}
+.moneyTip{
+    padding: 5px 25px;
+    color: blue;
+    padding-top:30px; 
+}
+/* 保证金提现模态框 */
+.witMsk{
+    width: 100%;
+    height: 100%;
+    position: fixed;top: 0;left: 0;
+    background: rgba(30,30,30,.3);
+    display: none;
+}
+.witBox{
+    width: 460px;
+    height: 235px;
+    background: white;
+    box-shadow: 3px 3px 1px 0 rgba(30,30,30,.3);
+    position: absolute;top: 50%;left: 50%;
+    margin-top: -130px;
+    margin-left:-230px;
+    border-radius:10px; 
+}
+.tips{
+    display: block;
+    font-size: 18px;
+    margin-top: 25px;
+    margin-left: 190px;
+}
+.amountBox{
+    padding: 15px 15px;
+    margin-left: 60px;
+    margin-top: 30px;
+    color:RGB(102,102,102);
+}
+.witamount{
+    margin-left: 30px;
+    height: 30px;
+    width: 200px;
+    padding: 5px 5px;
+}
+
+.send{
+    display: inline-block;
+    border: none;
+    width: 110px;
+    height: 36px;
+    border-radius: 5px;
+    text-align: center;
+    background: RGB(145,193,29);
+    cursor: pointer;
+    transition: 0.5s ease;
+    margin:30px 80px;
+    color: white;
+
+}
+.send:hover{
+    transform: translateY(-4px);
+}
+.cancel{
+    display: inline-block;
+    border: none;
+    width: 110px;
+    height: 36px;
+    border-radius: 5px;
+    text-align: center;
+    background: RGB(145,193,29);
+    cursor: pointer;
+    transition: 0.5s ease;
+    color: white;
+}
+.cancel:hover{
+    transform: translateY(-4px);
+}
+
+.tips__icon {
+    position: absolute !important;
+    box-sizing: border-box;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    line-height: 22px;
+    text-align: center;
+    border-radius: 50%;
+    border: 1px solid RGB(170,222,36);
+    cursor: pointer;
+    color: RGB(170,222,36);
+}

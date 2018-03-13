@@ -117,7 +117,7 @@ def channel(request):
                     duplicate_mobile_list.append(mob)
                 else:
                     item = rtable[i]
-                    obj = InvestLog(user=request.user, invest_mobile=mob, project=project, is_official=project.is_official,is_selfsub=True,
+                    obj = InvestLog(user=request.user, invest_mobile=mob, project=project, is_official=project.is_official, category=project.category,
                                     invest_amount=item[3],invest_term=item[4],invest_date=item[0],invest_name=item[2],submit_way='3',
                                     audit_state='1',zhifubao=item[5],remark=item[6],submit_type='1')
                     log_list.append(obj)
@@ -164,21 +164,22 @@ def submit_itembyitem(request):
         remark = temp[7]
         submit_type = temp[8] or '1'
         try:
-            if not project.is_multisub_allowed or submit_type=='1':
-                if project.company is None:
-                    queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project=project)
-                else:
-                    queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id)
-                if queryset.exclude(audit_state='2').exists():
-                    exist_num += 1   #jzy
-                    exist_phone = exist_phone + project.title + invest_mobile + ";"   #jzy
-                    continue
-            InvestLog.objects.create(user=request.user, project=project, invest_date=time, invest_mobile=invest_mobile, invest_term=term,
-                             invest_amount=Decimal(amount), audit_state='1', is_official=project.is_official, is_selfsub=True,
-                             zhifubao=zhifubao, invest_name=invest_name, remark=remark, submit_type=submit_type,submit_way='2',)
-            suc_num += 1
-            project.points = F('points') + 1
-            project.save(update_fields=['points',])
+            with transaction.atomic():
+                if not project.is_multisub_allowed or submit_type=='1':
+                    if project.company is None:
+                        queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project=project)
+                    else:
+                        queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id)
+                    if queryset.exclude(audit_state='2').exists():
+                        exist_num += 1   #jzy
+                        exist_phone = exist_phone + project.title + invest_mobile + ";"   #jzy
+                        continue
+                InvestLog.objects.create(user=request.user, project=project, invest_date=time, invest_mobile=invest_mobile, invest_term=term,
+                                 invest_amount=Decimal(amount), audit_state='1', is_official=project.is_official,category=project.category,
+                                 zhifubao=zhifubao, invest_name=invest_name, remark=remark, submit_type=submit_type,submit_way='2',)
+                suc_num += 1
+                project.points = F('points') + 1
+                project.save(update_fields=['points',])
         except Exception, e:
             logger.info(e)
     result = {'code':0, 'suc_num':suc_num, 'exist_num':exist_num, 'exist_phone':exist_phone}   #jzy

@@ -41,9 +41,9 @@
 		'<td data-isimg="{invest_image}" class="is-img"><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
         '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
 		'<td>{remark}</td><td id="item_{id}"><a class="fyin" onclick="pass({id})">返现' +
-		'</a>│<a class="jion-s" onclick="refuse({id})">拒绝</a>│<a class="repeat" onclick="repeat({id})">复审</a></td></tr>[/results]</table>';
+		'</a>│<a class="jion-s" onclick="refuse({id})">拒绝</a>│<a class="repeat" onclick="repeat({id})">异常</a></td></tr>[/results]</table>';
     var data3 = '<table width="100%"><tr><th>QQ/QQ昵称</th><th>用户级别</th><th>结算价格</th><th>手机号</th><th>项目名称</th>' +
-        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>投资类型</th><th>提交方式</th><th>复审原因</th><th>上传截图</th>' +
+        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>投资类型</th><th>提交方式</th><th>异常原因</th><th>上传截图</th>' +
         '<th>备注</th><th>操作</th></tr>[results]<tr><td>{qq_number}/{qq_name}</td><td>{user_level}</td>'+
         '<td>{project_price}</td><td>{user_mobile}</td><td>{project_title}</td>' +
         '<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
@@ -69,7 +69,7 @@
         '<td data-isimg="{invest_image}" class="is-img"><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
         '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
         '<td>{remark}</td></tr>[/results]</table>';
-	var url = "/restapi/investlogs/" + "?page={page}&pageSize={pageSize}&is_official=true";
+	var url = "/restapi/investlogs/" + "?page={page}&pageSize={pageSize}&is_official=true&category=official";
     
     function pagecallback() {
         $('.is-img').each(function() {
@@ -162,7 +162,7 @@
                 },
                 success: function(ret) {
                     if(ret.code == 0) {
-                        $("#item_" + id).html("审核完成，复审");
+                        $("#item_" + id).html("审核完成，异常");
                     } else if(ret.code == -1) {
                         alert("该页面已过期，请重新登录！");
                         window.location.href = ret.url;
@@ -429,7 +429,7 @@
 						<i style="letter-spacing:4.8px;">处理状态：</i>
 						<select name="selectAge" id="state">
 							<option value="1">未审核</option>
-							<option value="3">复审中</option>
+							<option value="3">异常中</option>
 							<option value="0">审核通过</option>
 							<option value="2">审核拒绝</option>
 						</select>
@@ -496,13 +496,13 @@
 		</form>
 	</div>
 </div>
-<!--审核复审-->
+<!--审核异常-->
 <div class="Repeat">
     <div class="w570-box">
-        <h3>进入复审</h3>
+        <h3>进入异常</h3>
         <button class="none-x"></button>
         <form class="Repeat-in">
-            <span>填写复审原因：</span>
+            <span>填写异常原因：</span>
             <input id="repeat_event_id" type="hidden" />
             <textarea id="repeat_reason"></textarea>
             <div class="Finnow-Sub">
@@ -528,6 +528,6 @@
 		</form>
 	</div>
 </div>
-<iframe id="myIFrame" scrolling="yes" src="abount:blank" style="display:none" frameborder=1></iframe>
+<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
 <!--end-->
 {% endblock modal %}

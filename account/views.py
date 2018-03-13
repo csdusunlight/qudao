@@ -406,6 +406,7 @@ def phoneImageV(request):
 def account(request):
     announce_list = Announcement.objects.all()
     recom_projects = Project.objects.filter(state='10', is_official=True, is_addedto_repo=True)[0:4]
+    print 'haha'
     template = 'account/m_account_index.html' if request.mobile else 'account/account_index.html'
     return render(request, template,{'announce_list':announce_list, 'recom_projects':recom_projects})
 
@@ -438,6 +439,9 @@ def account_audited(request):
             kwarg.update(refuse_num=num.get('count') or 0)
         elif state=='3':
             kwarg.update(check_num=num.get('count') or 0)
+    appeal_num = InvestLog.objects.filter(user=user, audit_state='4').count() or ''
+    except_num = InvestLog.objects.filter(user=user, audit_state='3').count() or ''
+    kwarg.update(appeal_num=appeal_num, except_num=except_num)
     template = 'account/m_account_audited.html' if request.mobile else 'account/account_audited.html' 
     return render(request, template, kwarg)
 
@@ -707,14 +711,10 @@ def get_user_money_page(request):
 @login_required
 def withdraw(request):
     if request.method == 'GET':
-        hashkey = CaptchaStore.generate_key()
-        codimg_url = captcha_image_url(hashkey)
-
         user = request.user
         card = user.user_bankcard.first()
         template = 'account/m_withdraw.html' if request.mobile else 'account/withdraw.html'
-        return render(request, template,
-                  {'hashkey':hashkey, 'codimg_url':codimg_url, "card":card})
+        return render(request, template,{"card":card})
     elif request.method == 'POST':
         user = request.user
         result = {'code':-1, 'res_msg':''}
@@ -747,6 +747,8 @@ def withdraw(request):
             with transaction.atomic():
                 translist = charge_money(user, '1', withdraw_amount, u'提现')
                 event = WithdrawLog.objects.create(user=user, amount=withdraw_amount, audit_state='1')
+                translist.auditlog = event
+                translist.save()
                 result['code'] = 0
             try:
                 sendWeixinNotify.delay([(request.user, event),], 'withdraw_apply')
@@ -1141,28 +1143,29 @@ def submitOrder(request):
     investlog=InvestLog.objects.create(user=request.user,project_id=project_id, invest_mobile=invest_mobile, invest_date=invest_date,
                              invest_name=invest_name, remark=remark, qq_number=qq_number, expect_amount=expect_amount,
                              zhifubao=zhifubao, invest_amount=invest_amount, submit_type=submit_type,
-                              invest_term=invest_term, is_official=project.is_official,
-                              submit_way='4', is_selfsub=True, audit_state='1')
+                              invest_term=invest_term, is_official=project.is_official, category=project.category,
+                              submit_way='4', audit_state='1')
     #活动插入
 #     on_submit(request, request.user, investlog)
     #活动插入结束
-    
-#     imgurl_list = []
-#     if len(request.FILES)>6:
-#         result = {'code':-2, 'msg':u"上传图片数量不能超过6张"}
-#         return JsonResponse(result)
-#     for key in request.FILES:
-#         block = request.FILES[key]
-#         if block.size > 100*1024:
-#             result = {'code':-1, 'msg':u"每张图片大小不能超过100k，请重新上传"}
-#             return JsonResponse(result)
-#     for key in request.FILES:
-#         block = request.FILES[key]
-#         imgurl = saveImgAndGenerateUrl(key, block, 'screenshot')
-#         imgurl_list.append(imgurl)
-#     if imgurl_list:
-#         invest_image = ';'.join(imgurl_list)
-#         investlog.invest_image = invest_image
-#         investlog.save(update_fields=['invest_image',])
+
     result['code'] = 0
     return JsonResponse(result)
+
+@csrf_exempt
+@login_required_ajax
+def reaudit(request):
+    res = {}
+    id = request.POST.get('id')
+    reason = request.POST.get('reason')
+    if not id or not reason:
+        res['code'] = 1
+        res['msg'] = u"参数不足"
+        return JsonResponse(res)
+    log = InvestLog.objects.get(user=request.user, id=id)
+    log.reaudit_reason = u"用户申诉：" + reason
+    log.audit_state = '3'
+    log.save(update_fields=['audit_state', 'reaudit_reason'])
+    res['code'] = 0
+    return JsonResponse(res)
+    

@@ -7,6 +7,7 @@ from django.http.response import Http404
 from django.contrib.auth.decorators import login_required
 from account.models import ApplyLog
 logger = logging.getLogger('wafuli')
+
 def index(request):
     data = {
         'invest_total':0,#引入资金
@@ -43,7 +44,6 @@ def project_all(request):
         projects = Project.objects.filter(is_official=True,is_addedto_repo=True, state__in=['10', '20'])
         template = 'm_project_repo_nologin.html' if request.mobile else 'project_repo_nologin.html'
         return render(request, template, {'projects':projects})
-    
     
 def user_guide(request):
     return render(request, 'user_guide.html',  )

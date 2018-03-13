@@ -1,0 +1,202 @@
+.wrapper{
+    width: 100%;
+}
+.top{
+    padding: 15px 15px;
+    border-bottom: 2px solid RGB(0, 143, 215);
+}
+.top>span:before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    margin-right: 20px;
+    position: relative;
+    top: 5px;
+    background: red;
+}
+.wrapper > table{
+    width: 100%;
+}
+.wrapper > tr{
+    height: 100%;
+}
+.td1{
+    text-align: center;
+    height: 50px;
+}
+.td1 > input{
+    width: 58%;
+    margin-left: 1%;
+    height: 28px;
+    border: 1px solid #4daa84;
+    outline: none;
+    padding: 0 5px;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+.td1 input[type='datetime-local']{
+    background: url(../images/motime.png) no-repeat 95%;
+    vertical-align: middle;
+}
+.td1 input[type='datetime-local']:hover{
+    background: none;
+}
+.td1 select{
+    width: 58%;
+    margin-left: 1%;
+    height: 28px;
+    border: 1px solid #4daa84;
+    outline: none;
+    padding: 0 5px;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+.operateBox{
+    width: 100%;
+    height: 100px;
+    position: relative;
+}
+.operateTop{
+    width: 100%;
+    height: 50px;
+    background: white;
+}
+.operateTop > input{
+    width: 150px;
+    height: 30px;
+    border: none;
+    font-size: 16px;
+    color: #fff;
+    padding: 0 40px 0 0;
+    box-sizing: border-box;
+    min-width: 80px;
+    margin: 0 7px;
+    background: url(../images/ico2.png) no-repeat 80% #4daa84;
+    border: none;
+}
+#export{
+    float: right;
+}
+#search{
+    float: right;
+}
+
+#fileupload1 {
+    display: inline-block;
+    width: 150px;
+    height: 30px;
+    background-color: #4daa84;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+    min-width: 80px;
+    vertical-align: bottom;
+}
+.hint-box {
+    position: absolute;top: 60px;left: 160px;
+}
+.input-clone {
+    width: 152px;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    text-align: center;
+    line-height: 30px;
+}
+#import{
+    display: inline-block;
+    width: 150px;
+    height: 30px;
+    background-color: #4daa84;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+    min-width: 80px;
+    vertical-align: bottom;
+    background: url(../images/ico2.png) no-repeat 80% #4daa84;
+    margin-left: 200px;
+}
+/* ********同意模态框****** */
+.agreeBox{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background:rgba(128,128,128,.4);
+    display: none;
+}
+.operate1{
+    width: 500px;
+    height: 220px;
+    background: white;
+    position: absolute;top: 50%;left: 50%;
+    margin-left: -250px;
+    margin-top: -110px;
+    box-shadow: 5px 5px 5px 0 gray;
+    border-radius: 10px;
+}
+.tip1{
+    display: block;
+    margin-top: 30px;
+    margin-left: 220px;
+    font-size: 22px;
+}
+.msg1{
+    font-size: 20px;
+    margin-left: 160px;
+    margin-top:20px; 
+}
+.btn{
+    width: 150px;
+    height: 40px;
+    border:none;
+    margin-top: 30px;
+    margin-left: 70px;
+    transition: 0.5s ease;
+    border-radius: 5px;
+    color: white;
+    background: RGB(22,155,212);
+}
+.btn:hover{
+    transform: translateY(-4px);
+}
+/* *********拒绝模态框******** */
+.rSendefuseBox{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background:rgba(128,128,128,.4);
+    display: none;
+}
+.operate2{
+    width: 500px;
+    height: 270px;
+    background: white;
+    position: absolute;top: 50%;left: 50%;
+    margin-left: -250px;
+    margin-top: -135px;
+    box-shadow: 5px 5px 5px 0 gray;
+    border-radius: 10px;
+}
+.tip2{
+    display: block;
+    margin-top: 30px;
+    margin-left: 220px;
+    font-size: 22px;
+}
+.msg2{
+    font-size: 20px;
+    margin-left: 160px;
+    margin-top:20px; 
+}
+.reason{
+    display: inline-block;
+    width: 300px;
+    height: 30px;
+}

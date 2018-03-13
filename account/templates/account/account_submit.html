@@ -511,8 +511,8 @@
 				var repeat_num = 0; //存储重复提交条数
 				var re_phone = ""; //重复手机号
 				var repeat_phone = ""; //存储重复手机号
-				var is_bucha = true; //判断补差价项目
 				$("#upload_byitem").on("click", function() {
+				    var is_bucha = true; //判断补差价项目
 					$(".submit-item-box").each(function(index, domEle) {
 						var project_select01 = $(this).find(".project_select"),
 						    project_select_box = $(this).find(".searchable-select-holder"),
@@ -537,9 +537,9 @@
 							is_futou = $(this).find(".is_futou option:selected").val(),
 							data_list = [project_select, time, telnum, amount, term, zhifubao, invest_name, remark, is_futou];
 							console.log(project_name);
+							console.log(remark);
 							if (((project_name.search("补差") == -1) || (project_name.search("补价") == -1)) &&
 							((remark.search("补差") != -1) || (remark.search("补价") != -1) || (remark.search("补反") != -1) || (remark.search("补返") != -1))) {
-							    
 							    is_bucha = false;
 							}
 
@@ -606,7 +606,11 @@
 						//    数据去重-----------end
 						// Data.push(data_list.join('|'));
 					})
-					if(promptNumber == 0 || !is_bucha) {
+					if (!is_bucha) {
+						alert('补差价请选择补差价项目！')
+						return;
+					}
+					if(promptNumber == 0 && is_bucha) {
 						//   console.log(Data);
 						// var data = Data.join('$');
 						console.log(re_num);

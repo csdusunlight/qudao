@@ -601,10 +601,10 @@ def export_merchant_investlog(request):
         elif con.preaudit_state=='3':
             result = u'异常'
         data.append([id, project_name, invest_date, invest_mobile, invest_name, term,
-                     invest_amount, remark, result, settle_amount, reason])
+                     invest_amount, settle_price,remark, result, settle_amount, reason])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
-    title_row = [u'记录ID',u'项目名称',u'投资日期', u'投资手机号', u'投资姓名' ,u'投资期限' ,u'投资金额', u'备注',
+    title_row = [u'记录ID',u'项目名称',u'投资日期', u'投资手机号', u'投资姓名' ,u'投资期限' ,u'投资金额', u'结算价格', u'备注',
                  u'审核结果(通过/拒绝/异常)',u'结算金额',u'审核说明']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
@@ -641,7 +641,7 @@ def import_merchant_investlog(request):
         table = data.sheets()[0]
         nrows = table.nrows
         ncols = table.ncols
-        if ncols!=11:
+        if ncols!=12:
             ret['msg'] = u"文件格式与模板不符，请在导出的待审核记录表中更新后将文件导入！"
             return JsonResponse(ret)
         rtable = []
@@ -657,7 +657,7 @@ def import_merchant_investlog(request):
                 elif j==1:
                     project = cell.value
                     temp.append(project)
-                elif j==8:
+                elif j==9:
                     result = cell.value.strip()
                     if result == u"通过":
                         result = 1
@@ -668,14 +668,14 @@ def import_merchant_investlog(request):
                     else:
                         raise Exception(u"审核结果必须为通过,拒绝或异常。")
                     temp.append(result)
-                elif j==9:
+                elif j==10:
                     return_amount = 0
                     if cell.value:
                         return_amount = Decimal(cell.value)
                     elif result==1:
                         raise Exception(u"审核结果为通过时，结算金额不能为空或零。")
                     temp.append(return_amount)
-                elif j==10:
+                elif j==11:
                     reason = cell.value
                     temp.append(reason)
                     if result!=1 and not reason:

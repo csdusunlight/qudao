@@ -55,6 +55,8 @@ USER_LEVEL = (
     ('01', u'一级代理'),
     ('02', u'二级代理'),
     ('03', u'三级代理'),
+    ('04', u'四级代理'),
+    ('05', u'五级代理'),
 )
 class MyUser(AbstractBaseUser, PermissionsMixin):
 #     email = models.EmailField('email address', max_length=255)

@@ -110,11 +110,11 @@ class Project(models.Model):
     szm = models.CharField(u"首字母", max_length=20)
     remark = models.CharField(u"项目备注", max_length=50, blank=True)
     broker_rate = models.DecimalField(u"默认佣金比例，百分数", max_digits=10, decimal_places=2, default=5)
-    broker_rate01 = models.DecimalField(u"1级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True)
-    broker_rate02 = models.DecimalField(u"2级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True)
-    broker_rate03 = models.DecimalField(u"3级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True)
-    broker_rate04 = models.DecimalField(u"4级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True)
-    broker_rate05 = models.DecimalField(u"5级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True)
+    broker_rate01 = models.DecimalField(u"1级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True, blank=True)
+    broker_rate02 = models.DecimalField(u"2级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True, blank=True)
+    broker_rate03 = models.DecimalField(u"3级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True, blank=True)
+    broker_rate04 = models.DecimalField(u"4级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True, blank=True)
+    broker_rate05 = models.DecimalField(u"5级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True, blank=True)
     def save(self, force_insert=False, force_update=False, using=None, 
              update_fields=None):
         pyin = PinYin()
@@ -253,7 +253,7 @@ class InvestLog(models.Model):
             return mobile
     def get_project_price(self):
         level = self.user.level
-        return getattr(self.project, 'price'+str(level)) or self.default_price
+        return getattr(self.project, 'price'+str(level)) or self.project.default_price
     def get_project_broker(self):
         level = self.user.level
         return getattr(self.project, 'broker_rate'+str(level)) or self.project.broker_rate

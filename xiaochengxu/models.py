@@ -19,7 +19,7 @@ class App(models.Model):
     app_name = models.CharField(max_length=32)
     access_token = models.CharField(max_length=512, blank=True)
     cs_weixin = models.CharField(u"客服微信号", max_length=32)
-    state = models.CharField(u"小程序状态", choices=APPSTATE, default='0')
+    state = models.CharField(u"小程序状态", choices=APPSTATE, default='0', max_length=2)
     expire_stamp = models.IntegerField(blank=True)
     def __unicode__(self):
         return '%s:%s' % (self.app_name, self.app_id)

@@ -89,11 +89,12 @@ class Project(models.Model):
     type = models.CharField(u"项目类别", max_length=1, choices=Project_TYPE, blank=True)
     is_multisub_allowed = models.BooleanField(u"是否允许同一手机号多次提交", default=False)
     introduction = models.TextField(u"项目简介",max_length=100,blank=True)
-    price01 = models.CharField(u"一级代理价格",max_length=25)
-    price02 = models.CharField(u"二级代理价格",max_length=25)
-    price03 = models.CharField(u"三级代理价格",max_length=25)
-    price04 = models.CharField(u"四级代理价格",max_length=25)
-    price05 = models.CharField(u"五级代理价格",max_length=25)
+    default_price = models.CharField(u"默认价格",max_length=25, default='私聊') 
+    price01 = models.CharField(u"一级代理价格",max_length=25,blank=True)
+    price02 = models.CharField(u"二级代理价格",max_length=25,blank=True)
+    price03 = models.CharField(u"三级代理价格",max_length=25,blank=True)
+    price04 = models.CharField(u"四级代理价格",max_length=25,blank=True)
+    price05 = models.CharField(u"五级代理价格",max_length=25,blank=True)
     cprice = models.CharField(u"客户指导价",max_length=40)
     shortprice = models.CharField(u"客户指导价简洁展示",max_length=20, help_text=u"格式必须为投资xxxx返xx，如投资1000返10")
     term = models.CharField(u"标期长度", max_length=20)
@@ -108,7 +109,12 @@ class Project(models.Model):
     pinyin = models.CharField(u"拼音全拼", max_length=100)
     szm = models.CharField(u"首字母", max_length=20)
     remark = models.CharField(u"项目备注", max_length=50, blank=True)
-    broker_rate = models.DecimalField(u"佣金比例，百分数", max_digits=10, decimal_places=2, default=0)
+    broker_rate = models.DecimalField(u"默认佣金比例，百分数", max_digits=10, decimal_places=2, default=5)
+    broker_rate01 = models.DecimalField(u"1级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True)
+    broker_rate02 = models.DecimalField(u"2级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True)
+    broker_rate03 = models.DecimalField(u"3级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True)
+    broker_rate04 = models.DecimalField(u"4级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True)
+    broker_rate05 = models.DecimalField(u"5级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True)
     def save(self, force_insert=False, force_update=False, using=None, 
              update_fields=None):
         pyin = PinYin()
@@ -167,7 +173,7 @@ class SubscribeShip(models.Model):
     intrest = models.CharField(u"预期年化", max_length=20)
     def get_project_price(self):
         level = self.user.level
-        return getattr(self.project, 'price'+str(level))
+        return getattr(self.project, 'price'+str(level)) or self.project.default_price
     def __unicode__(self):
         return self.user.mobile + self.project.title
     class Meta:
@@ -247,7 +253,10 @@ class InvestLog(models.Model):
             return mobile
     def get_project_price(self):
         level = self.user.level
-        return getattr(self.project, 'price'+str(level))
+        return getattr(self.project, 'price'+str(level)) or self.default_price
+    def get_project_broker(self):
+        level = self.user.level
+        return getattr(self.project, 'broker_rate'+str(level)) or self.project.broker_rate
 
 STATE = (
     ('0', u'置顶'),

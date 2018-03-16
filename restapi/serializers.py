@@ -48,7 +48,7 @@ class InvestLogSerializer(serializers.ModelSerializer):
     submit_type_des = serializers.CharField(source='get_submit_type_display', read_only=True)
     submit_way_des = serializers.CharField(source='get_submit_way_display', read_only=True)
     project_price = serializers.CharField(source='get_project_price', read_only=True)
-    broker_rate = serializers.CharField(source='project.broker_rate', read_only=True)
+    broker_rate = serializers.CharField(source='get_project_broker', read_only=True)
     class Meta:
         model = InvestLog
         fields = '__all__'

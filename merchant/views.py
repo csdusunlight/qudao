@@ -101,7 +101,7 @@ def preaudit_investlog(request):
                 res['code'] = -5
                 res['res_msg'] = u"操作失败，结算重复！"
             else:
-                broker_rate = investlog.project.broker_rate
+                broker_rate = investlog.get_project_broker()
                 broker_amount = cash * broker_rate/100
                 if cash + broker_amount > admin_user.margin_account:
                     res['code'] = 1
@@ -712,7 +712,7 @@ def import_merchant_investlog(request):
                 investlog_user = investlog.user
                 translist = None
                 if result==1:
-                    broker_rate = investlog.project.broker_rate
+                    broker_rate = investlog.get_project_broker()
                     broker_amount = cash * broker_rate/100
                     if cash + broker_amount > admin_user.margin_account:
                         raise Exception(u"资金余额不足，请先存入。") 

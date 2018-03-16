@@ -16,6 +16,7 @@ from django.conf import settings
 from weixin.models import WeiXinUser
 from weixin.settings import submit_investlog_notify_templateid
 from dragon.settings import APPID
+from xiaochengxu.models import App
 logger = logging.getLogger("wafuli")
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -84,20 +85,23 @@ def sendTemplate(access_token):
         logger.info(ret)
         
 def update_xcxaccesstoken():
+    apps = App.objects.filter(state='0')
     url = 'https://api.weixin.qq.com/cgi-bin/token'
-    params = {
-        'grant_type':'client_credential',
-        'appid':settings.APPID_XCX,
-        'secret':settings.SECRET_XCX,
-    }
-    json_ret = httpconn(url, params, 0)
-    if 'access_token' in json_ret and 'expires_in' in json_ret:
-        access_token = json_ret['access_token']
-        now = int(time.time())
-        expire_stamp = now + json_ret['expires_in']
-        defaults={'value':access_token, 'expire_stamp':expire_stamp}
-        Dict.objects.update_or_create(key='access_token_xcx', defaults=defaults)
-        return access_token
-    else:
-        logger.error('Getting access_token error:' + str(json_ret) )
-        return ''   
+    for app in apps:
+        app_id = app.app_id
+        app_secret = app.app_secret
+        params = {
+            'grant_type':'client_credential',
+            'appid':app_id,
+            'secret':app_secret,
+        }
+        json_ret = httpconn(url, params, 0)
+        if 'access_token' in json_ret and 'expires_in' in json_ret:
+            access_token = json_ret['access_token']
+            now = int(time.time())
+            expire_stamp = now + json_ret['expires_in']
+            app.access_token = access_token
+            app.expire_stamp = expire_stamp
+            app.save(update_fields=['access_token', 'expire_stamp'])
+        else:
+            logger.error('Getting access_token for %s error: %s' % (app_id, str(json_ret)) )

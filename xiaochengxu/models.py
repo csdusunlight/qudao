@@ -8,13 +8,19 @@ import datetime
 from django.utils import timezone
 from decimal import Decimal
 from account.models import MyUser
-
+APPSTATE = (
+    ('0', u"正常"),
+    ('1', u"欠费")
+)
 class App(models.Model):
     user = models.ForeignKey(MyUser, related_name="apps")
     app_id = models.CharField(max_length=18, primary_key=True)
     app_secret = models.CharField(max_length=32)
     app_name = models.CharField(max_length=32)
+    access_token = models.CharField(max_length=512, blank=True)
     cs_weixin = models.CharField(u"客服微信号", max_length=32)
+    state = models.CharField(u"小程序状态", choices=APPSTATE, default='0')
+    expire_stamp = models.IntegerField(blank=True)
     def __unicode__(self):
         return '%s:%s' % (self.app_name, self.app_id)
 class WXUser(models.Model):

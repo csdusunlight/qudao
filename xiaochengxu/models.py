@@ -20,7 +20,8 @@ class App(models.Model):
     access_token = models.CharField(max_length=512, blank=True)
     cs_weixin = models.CharField(u"客服微信号", max_length=32)
     state = models.CharField(u"小程序状态", choices=APPSTATE, default='0', max_length=2)
-    expire_stamp = models.IntegerField(blank=True)
+    expire_stamp = models.IntegerField(default=0)
+    contact_brcode = models.ImageField(u"微信客服名片二维码（390*390）", blank=True)
     def __unicode__(self):
         return '%s:%s' % (self.app_name, self.app_id)
 class WXUser(models.Model):

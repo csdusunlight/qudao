@@ -1,0 +1,145 @@
+{% load staticfiles %}
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>收支详情</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="{% static 'css/mui.min.css' %}" rel="stylesheet" />
+		<link rel="stylesheet" href="{% static 'css/PaymentDetails.css' %}" />
+		<script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
+		<style>
+			.pro_reduice {
+				position: absolute;
+				left: 5px;
+			}
+			
+			.add {
+				color: RGB(248, 90, 89);
+			}
+			
+			.reduce {
+				color: RGB(234, 240, 254)
+			}
+			
+			.mui-pull-bottom-wrapper {
+				padding-top: 0.5rem;
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="position: relative;background: white;">
+			<a href="{% url 'account_index' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
+			<h1 class="mui-title" style="style=" color: RGB(102,102,102); "">收支详情</h1>
+			<!--<img src="{% static 'images/icon_03.jpg' %}" class="header_icon" />
+			<span class="header_audit">全部</span>-->
+		</header>
+		<div id="pullrefresh" class="mui-scroll-wrapper" style="top:32px;">
+			<div class="mui-content">
+				<ul class="mui-table-view">
+					
+				</ul>
+			</div>
+		</div>
+        {% include "m_footer.html" %}
+		<script src="{% static 'js/mui.min.js' %}"></script>
+		<!--<script src="{%static 'js/mui.pullToRefresh.js'%}"></script>
+		<script src="{%static 'js/mui.pullToRefresh.material.js'%}"></script>-->
+		<script type="text/javascript">
+			var url = '/restapi/translist/?user_mobile={{user.mobile}}';
+			mui.init({
+				pullRefresh: {
+					container: '#pullrefresh',
+					up: {
+						auto: true,
+						contentrefresh: '正在加载...',
+						contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
+						callback: pullupRefresh
+					}
+				},
+				swipeBack: true //启用右滑关闭功能
+			});
+
+			//上拉加载
+			var count = 0;
+
+			function getList(n) {
+				mui.ajax(url, {
+					data: {
+						count: n,
+						type: 3,
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'get', //HTTP请求类型
+					timeout: 10000, //超时时间设置为10秒；
+					// 				    headers:{'Content-Type':'application/json'},
+					success: function(data) {
+						console.log("data数据：", data.results);
+						if(!data.results.length) {
+							mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+						} else {
+							mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
+							var table = document.querySelector(".mui-table-view");
+							for(var i in data.results) {
+								console.log("------------时间：",data.results[i].time)
+								var Time = data.results[i].time.split("T");//截取到年月日
+								console.log(Time);
+								console.log(Time[1]);
+								var T2 = Time[1].substring(0,5);//截取分钟
+								console.log(T2);
+								console.log('transType值:', data.results[i].transType);
+								var transType = data.results[i].transType;
+								var li = document.createElement("li");
+								li.className = "mui-table-view-cell";
+								str_html = '<span class=" pro_name">' + data.results[i].reason + '</span>' +
+									'<span data-isAdd="+ data.results[i].transType +" class="pro_add">' + (transType == 0 ? '+' + data.results[i].transAmount : '-' + data.results[i].transAmount) + '</span>' +
+									'<p class="pro_time">' + Time[0]+'&nbsp;'+ T2 +'</p>' +
+									'<span  class="pro_num">' + data.results[i].user_balance + '</span>';
+									
+									if(mui(".pro_add").transType == 0) {
+										mui(".pro_add").classList.add("add");
+									} else if(mui(".pro_add").transType == 1) {
+										mui(".pro_add").classList.add("reduce");
+									}
+									li.innerHTML = str_html;
+									table.appendChild(li);
+							}
+ 
+						}
+					},
+					error: function(xhr, type, errorThrown) {
+						console.log(xhr.responseText);
+					}
+				});
+			}
+
+			function pullupRefresh() {
+				if(count == 0) {
+					mui('#pullrefresh').pullRefresh().scrollTo(0, 0);
+				}
+				getList(count++);
+			}
+            mui('.mui-bar').on('tap', '.mui-action-back', function() {
+                var href = this.getAttribute("href");
+                mui.openWindow({
+                    url: href,
+                    styles: {
+                        top: 0,
+                        bottom: 0
+                    },
+                    show: {
+                        aniShow: 'slide-in-right',
+                    },
+                    waiting: {
+                        autoShow: false, //自动显示等待框
+                        title: '正在加载...', //等待对话框上显示的提示内容
+                    }
+                });
+            });
+		</script>
+	</body>
+
+</html>

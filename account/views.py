@@ -409,6 +409,10 @@ def account(request):
     print 'haha'
     template = 'account/m_account_index.html' if request.mobile else 'account/account_index.html'
     return render(request, template,{'announce_list':announce_list, 'recom_projects':recom_projects})
+@login_required
+def hongbao(request):   #jzy
+    template = 'account/m_account_hongbao.html' if request.mobile else 'account/account_hongbao.html'
+    return render(request, template,{})
 
 @login_required
 def account_setting(request):

@@ -3,6 +3,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r'^$', 'account.views.account', name='account_index'),
+    url(r'^hongbao/$', 'account.views.hongbao', name='account_hongbao'),    #jzy
     url(r'^money/$', 'account.views.money', name='account_money'),
     url(r'^yuyue/$', 'account.views.yuyue', name='account_yuyue'),
 #     url(r'^moneypage/$', 'account.views.get_user_money_page', name='get_user_money_page'),

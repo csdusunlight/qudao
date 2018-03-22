@@ -173,7 +173,6 @@ def preaudit_investlog(request):
         if res['code'] == 0:
             investlog.audit_reason = reason
             investlog.preaudit_time = datetime.datetime.now()
-            investlog.audit_time = datetime.datetime.now()
             investlog.save()
         return JsonResponse(res)
     
@@ -738,7 +737,7 @@ def import_merchant_investlog(request):
                     investlog.preaudit_state = '3'
                     investlog.audit_state = '3'
                 investlog.audit_reason = reason    
-                investlog.audit_time = datetime.datetime.now()
+                investlog.preaudit_time = datetime.datetime.now()
                 investlog.admin_user = admin_user
                 investlog.save()
                 suc_num += 1

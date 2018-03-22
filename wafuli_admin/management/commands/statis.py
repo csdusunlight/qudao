@@ -14,7 +14,7 @@ from activity.models import IPAward, IPLog
 from docs.models import Document, DocStatis
 from django.core.cache import cache
 from public.redis import cache_decr_or_set
-from merchant.models import MerchantProjectStatistics
+from merchant.models import MerchantProjectStatistics, Margin_AuditLog
 logger = logging.getLogger("wafuli")
 from django.core.management.base import BaseCommand, CommandError
 from account.models import MyUser, Userlogin, ApplyLog
@@ -92,9 +92,8 @@ class Command(BaseCommand):
                     cache.expire(k, 24*60*60)
                 else:
                     cache.delete(k)
-        
-        end_time = time.time()
-        
+         
+         
         #统计放单项目数据
         ret = InvestLog.objects.filter(category='merchant', project__state__in=['10', '20']).values('project_id',
                                 'audit_state').annotate(count=Count('*'), sum=Sum('settle_amount')).order_by(
@@ -134,6 +133,35 @@ class Command(BaseCommand):
                 project_statis[id]['toaudit_count'] += item['count']
         for k,v in project_statis.items():
             MerchantProjectStatistics.objects.update_or_create(project_id=k, defaults=v)
-            
         
+        #放单数据每日统计For Admin
+        merchant_people = MyUser.objects.filter(admin_permissions__code='100', is_staff=False).count()
+        dic = Project.objects.filter(category='merchant', state='10').aggregate(user_count=Count('user_id', distinct=True),
+                count = Count('*'))
+        merchant_people_active = dic.get('user_count') or 0
+        merchant_projects = dic.get('count') or 0
+        
+        merchant_investlogs_submit = InvestLog.objects.filter(category='merchant', submit_time__gte=today).count()
+        dic = InvestLog.objects.filter(category='merchant', audit_state='0', audit_time__gte=today).aggregate(
+                broker_amount=Sum('broker_amount'), settle_amount=Sum('settle_amount'), count = Count('*'))
+        merchant_broker = dic.get('broker_amount') or 0
+        merchant_settle = dic.get('settle_amount') or 0
+        merchant_investlogs_audit = dic.get('amount') or 0
+        merchant_consume = merchant_settle + merchant_broker
+        dic = Margin_AuditLog.objects.filter(audit_time__gte=today, audit_state='0').aggregate(merchant_charge=Sum('amount'))
+        merchant_charge = dic.get('merchant_charge') or 0
+        update_fields = {
+            'merchant_people': merchant_people,
+            'merchant_people_active': merchant_people_active,
+            'merchant_projects': merchant_projects,
+            'merchant_investlogs_submit':merchant_investlogs_submit,
+            'merchant_investlogs_audit':merchant_investlogs_audit,
+            'merchant_charge': merchant_charge,
+            'merchant_consume': merchant_consume,
+            'merchant_broker': merchant_broker,
+            'merchant_settle': merchant_settle
+        }
+        DayStatis.objects.filter(date=today).update(**update_fields)
+        
+        end_time = time.time()
         logger.info("******Statistics is finished, time:%s*********",end_time-begin_time)

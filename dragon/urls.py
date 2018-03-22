@@ -32,6 +32,7 @@ urlpatterns = [
 # #     url(r'^test/$', 'wafuli.views.index', name='captcha-refresh'),
     url('^homepage/', include('homepage.urls')),
     url('^merchant/', include('merchant.urls', namespace='merchant')),
+    url('^coupon/', include('coupon.urls', namespace='coupon')),
 ]
 
 from django.conf.urls.static import static

@@ -72,6 +72,23 @@
 				border: none !important;
 				margin: 1.5rem 5rem;
 			}
+			/*样式覆盖*/
+			.mui-table-view-cell.mui-active {
+			    background-color: transparent;
+			}
+			.mui-table-view:before,.mui-table-view:after {
+			    display: none;
+			}
+			.mui-table-view-cell {
+			    padding: 0;
+			}
+			.mui-table-view-cell>a:not(.mui-btn) {
+			    margin: 0;
+			}
+			.mui-table-view-cell.mui-collapse .mui-collapse-content {
+			    margin: 0;
+			    padding: 0;
+			}
 		</style>
 	</head>
 
@@ -134,6 +151,18 @@
 						<td>
 							<input type="password" id="pwd" name="password" class="mui-input-password ipt">
 						</td>
+					</tr>
+					<tr>
+					    <td>
+					         <ul class="mui-table-view"> 
+                                <li class="mui-table-view-cell mui-collapse">
+                                    <a style="display: block;margin: 6px 0 14px;" class="mui-navigate-right" href="#">邀请人ID（选填）</a>
+                                    <div class="mui-collapse-content">
+                                        <input type="text" id="inviter_code" name="inviter_code" class="mui-input-password ipt">
+                                    </div>
+                                </li>
+                            </ul>
+					    </td>
 					</tr>
 					<tr>
 						<td>

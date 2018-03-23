@@ -100,7 +100,11 @@ body {
 .re-d{
 	position: relative;
 	margin-bottom:1.5rem;}
-.recommend-id {position:relative; cursor: pointer;}
+.recommend-id {
+    position:relative; 
+    cursor: pointer;
+    line-height: 30px !important;
+    }
 .recommend-id:after {
 	content:"";
 	position:absolute;
@@ -110,15 +114,16 @@ body {
 	border-top: 2px solid #008fd7;
 	border-right: 2px solid #008fd7;
 	transform:rotate(135deg);
-	top:-2px;
-	left:200px;
+	top:6px;
+	left:130px;
 }
 .recommend-container .recommend-id:after {
 	transform:rotate(-45deg);
-	top:4px;
+	top:12px;
 }
 .recommend-box {
 	display: none;
+	margin-top: 20px;
 }
 .recommend-container .recommend-box {
 	display: block;
@@ -127,7 +132,7 @@ body {
 	position: absolute;
 	width: 24px;
 	height: 24px;
-	left: 448px;
+	left: 428px;
 	top: 10px;
 	background: url("../images/password-eye.png") center center/100% auto no-repeat;
 }

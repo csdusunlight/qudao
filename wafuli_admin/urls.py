@@ -5,6 +5,7 @@ from wafuli_admin import merchant_admin
 
 urlpatterns = [
     url(r'^$', 'wafuli_admin.views.index', name='admin_index'),
+    url(r'^admin_merchant_look/$', 'wafuli_admin.views.admin_merchant_look', name='admin_merchant_look'),
     url(r'^admin_apply/$', 'wafuli_admin.views.admin_apply', name='admin_apply'),
     url(r'^admin_office/$', 'wafuli_admin.views.admin_invest', name='admin_office'),
     url(r'^admin_private/$', 'wafuli_admin.views.admin_private', name='admin_private'),

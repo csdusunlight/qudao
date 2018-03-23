@@ -54,6 +54,9 @@ def index(request):
 
     return render(request,"admin_index.html", {'total':total})
 
+def admin_merchant_look(request):
+    return render(request,"admin_merchant_look.html", {})
+
 def admin_apply(request):
     if request.method == "POST":
         admin_user = request.user

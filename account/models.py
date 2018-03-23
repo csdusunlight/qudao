@@ -88,6 +88,9 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     is_autowith = models.BooleanField(u'是否自动提现', default=True)
     is_book_email_notice = models.BooleanField(u'是否预约单邮件通知', default=True)
     margin_account = models.DecimalField(u'保证金账户余额', default = Decimal(0), max_digits=10, decimal_places=2)
+    inviter = models.ForeignKey('self', related_name = 'invitees',
+                                blank=True, null=True, on_delete=models.SET_NULL, default=None)
+    invite_code = models.CharField(u"邀请码", blank=True, max_length=10)
     
     objects = MyUserManager()
 
@@ -215,6 +218,8 @@ class ApplyLog(models.Model):
     audit_reason = models.CharField(u"审核原因", max_length=30)
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
     level = models.SmallIntegerField(u"用户等级", choices=USER_LEVEL, default=2)
+    inviter = models.ForeignKey('self', related_name = 'invitees',
+                                blank=True, null=True, on_delete=models.SET_NULL, default=None)
     class Meta:
         ordering = ["submit_time",]
     def __unicode__(self):

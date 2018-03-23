@@ -113,6 +113,7 @@ def register(request):
         qq_number = request.POST.get('qq_number', None)
         qq_name = request.POST.get('qq_name', '')
         profile = request.POST.get('profile', '')
+        invite_code = request.POST.get('invite_code', '')
         if not (telcode and mobile and password and qq_number):
             result['code'] = '3'
             result['msg'] = u'传入参数不足！'
@@ -131,11 +132,20 @@ def register(request):
             elif ret == 2:
                 result['msg'] = u'手机验证码已过期，请重新获取'
             return JsonResponse(result)
-
+        
+        inviter = None
+        if invite_code:
+            try:
+                inviter = MyUser.objects.get(invite_code=invite_code, is_staff=True)
+            except MyUser.DoesNotExist:
+                result['code'] = '2'
+                result['msg'] = u'该邀请码不存在，请与工作人员联系'
+                return JsonResponse(result)
+            
         try:
             username = 'v' + str(mobile)
             apply = ApplyLog(mobile=mobile, username=username, password=password,
-                            qq_name=qq_name, qq_number=qq_number, profile=profile, audit_state='1')
+                            qq_name=qq_name, qq_number=qq_number, profile=profile, audit_state='1', inviter=inviter)
             apply.save()
             logger.info('Creating ApplyLog:' + mobile + ' succeed!')
         except Exception,e:

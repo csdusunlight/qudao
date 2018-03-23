@@ -120,7 +120,7 @@ def register(request):
             return JsonResponse(result)
         if ApplyLog.objects.filter(mobile=mobile).exists():
             result['code'] = '1'
-            result['msg'] = u'该手机号码已被注册，请直接登录！'
+            result['msg'] = u'该手机号码已经提交过申请，请等待短信通知或联系管理员'
             return JsonResponse(result)
         ret = verifymobilecode(mobile,telcode)
         if ret != 0:

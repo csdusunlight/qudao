@@ -7,10 +7,10 @@ Created on 20160417
 
 import logging
 import time,datetime
-from django.db import connection
+# from django.db import connection
 from django.db.models import Sum, Count,Avg,F
 from wafuli.models import Project, WithdrawLog, InvestLog
-from activity.models import IPAward, IPLog
+# from activity.models import IPAward, IPLog
 from docs.models import Document, DocStatis
 from django.core.cache import cache
 from public.redis import cache_decr_or_set

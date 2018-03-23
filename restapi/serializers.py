@@ -11,7 +11,7 @@ from account.models import MyUser, ApplyLog
 from wafuli_admin.models import DayStatis
 from wafuli.models import Company
 from statistic.models import UserDetailStatis, UserAverageStatis
-from activity.models import SubmitRank, IPLog
+# from activity.models import SubmitRank, IPLog
 from docs.models import Document
 
 class UserSerializer(serializers.ModelSerializer):
@@ -150,19 +150,19 @@ class CompanySerializer(serializers.ModelSerializer):
         model = Company
         fields = '__all__'
         
-class RankSerializer(serializers.ModelSerializer):
-    user_pic = serializers.CharField(source='user.picture_url', read_only=True)
-    mobile = serializers.CharField(source='user.get_encrypt_mobile', read_only=True)
-    class Meta:
-        model = SubmitRank
-        fields = '__all__'
-        
-class IPLogSerializer(serializers.ModelSerializer):
-    mobile = serializers.CharField(source='user.mobile', read_only=True)
-    username = serializers.CharField(source='user.username', read_only=True)
-    class Meta:
-        model = IPLog
-        fields = '__all__'
+# class RankSerializer(serializers.ModelSerializer):
+#     user_pic = serializers.CharField(source='user.picture_url', read_only=True)
+#     mobile = serializers.CharField(source='user.get_encrypt_mobile', read_only=True)
+#     class Meta:
+#         model = SubmitRank
+#         fields = '__all__'
+#         
+# class IPLogSerializer(serializers.ModelSerializer):
+#     mobile = serializers.CharField(source='user.mobile', read_only=True)
+#     username = serializers.CharField(source='user.username', read_only=True)
+#     class Meta:
+#         model = IPLog
+#         fields = '__all__'
         
 class BookLogSerializer(serializers.ModelSerializer):
     state_des = serializers.CharField(source='get_state_display', read_only=True)

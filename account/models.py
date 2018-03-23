@@ -102,11 +102,11 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         self.pay_password = make_password(raw_password)
     def check_pay_password(self, raw_password):
         return check_password(raw_password, self.pay_password)
-    def save(self, force_insert=False, force_update=False, using=None,
-        update_fields=None):
-        if not self.pk:
-            self.invite_code = random_str(5) + str(MyUser.objects.count())
-        return AbstractBaseUser.save(self, force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+#     def save(self, force_insert=False, force_update=False, using=None,
+#         update_fields=None):
+#         if not self.pk:
+#             self.invite_code = random_str(5) + str(MyUser.objects.count())
+#         return AbstractBaseUser.save(self, force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
     class Meta:
         verbose_name = 'user'
         verbose_name_plural = 'users'
@@ -218,7 +218,7 @@ class ApplyLog(models.Model):
     audit_reason = models.CharField(u"审核原因", max_length=30)
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
     level = models.SmallIntegerField(u"用户等级", choices=USER_LEVEL, default=2)
-    inviter = models.ForeignKey('self', related_name = 'invitees',
+    inviter = models.ForeignKey(MyUser, related_name = 'invitees_applogs',
                                 blank=True, null=True, on_delete=models.SET_NULL, default=None)
     class Meta:
         ordering = ["submit_time",]

@@ -158,7 +158,7 @@
                                 <li class="mui-table-view-cell mui-collapse">
                                     <a style="display: block;margin: 6px 0 14px;" class="mui-navigate-right" href="#">邀请人ID（选填）</a>
                                     <div class="mui-collapse-content">
-                                        <input type="text" id="inviter_code" name="inviter_code" class="mui-input-password ipt">
+                                        <input type="text" id="invite_code" name="inviter_code" class="mui-input-password ipt">
                                     </div>
                                 </li>
                             </ul>
@@ -237,6 +237,7 @@
 				var phone = document.getElementById("phone").value;
 				var pwd = document.getElementById("pwd").value;
 				var checkBox = document.getElementById("checkBox");
+				var invite_code = document.getElementById("invite_code").value;
 				
 				if(!qq || !qqName || !introduce || !phone || !checkNum || !pwd) {
 					mui.alert("填写不能为空");
@@ -265,6 +266,7 @@
 						"code": checkNum,
 						"password": pwd,
 						"mobile": phone,
+						"invite_code": invite_code
 					},
 					dataType: 'json', //服务器返回json格式数据
 					type: 'post', //HTTP请求类型

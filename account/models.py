@@ -67,7 +67,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(u'注册时间', default=timezone.now)
     type = models.CharField(u'用户类型', default='agent',max_length=10)
     level = models.CharField(u"用户等级", choices=USER_LEVEL, default='03', max_length=2)
-    domain_name = models.CharField(u"个人主页域名", max_length=20)
+    domain_name = models.CharField(u"个人主页域名", max_length=20, unique=True)
     cs_qq = models.CharField(u"客服QQ号", max_length=20,)
     color = models.CharField(u'个人主页色调', choices=COLORS, default='0', max_length=2)
     submit_bg = models.CharField(u'交单页面背景', default='0', max_length=2)
@@ -102,11 +102,11 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         self.pay_password = make_password(raw_password)
     def check_pay_password(self, raw_password):
         return check_password(raw_password, self.pay_password)
-    def save(self, force_insert=False, force_update=False, using=None,
-        update_fields=None):
-        if not self.pk:
-            self.invite_code = random_str(5) + str(MyUser.objects.count())
-        return AbstractBaseUser.save(self, force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+#     def save(self, force_insert=False, force_update=False, using=None,
+#         update_fields=None):
+#         if not self.pk:
+#             self.invite_code = random_str(5) + str(MyUser.objects.count())
+#         return AbstractBaseUser.save(self, force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
     class Meta:
         verbose_name = 'user'
         verbose_name_plural = 'users'
@@ -147,7 +147,9 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         else:
             return mobile
     def clean(self):
-        print 'dsfsdfsdsd'
+        mat = re.match(r'[0-9a-zA-A\-_]+$', self.domain_name)
+        if not mat:
+            raise ValidationError({'pub_date': u'域名只能包含数字、字母、-和_字符'})
 class BankCard(models.Model):
     user = models.ForeignKey(MyUser, related_name="user_bankcard")
     card_number = models.CharField(u"银行卡号",max_length=23)
@@ -218,7 +220,7 @@ class ApplyLog(models.Model):
     audit_reason = models.CharField(u"审核原因", max_length=30)
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
     level = models.SmallIntegerField(u"用户等级", choices=USER_LEVEL, default=2)
-    inviter = models.ForeignKey('self', related_name = 'invitees',
+    inviter = models.ForeignKey(MyUser, related_name = 'invitees_applogs',
                                 blank=True, null=True, on_delete=models.SET_NULL, default=None)
     class Meta:
         ordering = ["submit_time",]

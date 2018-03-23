@@ -73,7 +73,7 @@ def admin_apply(request):
             level = request.POST.get('level', '03')
             with transaction.atomic():
                 user = MyUser(mobile=apply.mobile, username=apply.username, level=level, profile=apply.profile,
-                              qq_name=apply.qq_name, qq_number=apply.qq_number,
+                              qq_name=apply.qq_name, qq_number=apply.qq_number, inviter=apply.inviter,
                               cs_qq=apply.qq_number, domain_name=apply.qq_number, qualification=apply.qualification)
                 user.set_password(apply.password)
                 user.save()

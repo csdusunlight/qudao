@@ -136,6 +136,14 @@
 						</td>
 					</tr>
 					<tr>
+                        <td>邀请人（选填）</td>
+                    </tr>
+					<tr>
+					    <td>
+                            <input id='invite_code' name="invite_code" type="text" class="ipt" placeholder="邀请人ID（选填）">
+					    </td>
+					</tr>
+					<tr>
 						<td>
 							<input type="checkbox" id="checkBox" class="checkbox" />
 							<a style="font-size: 13px;color: RGB(102,102,102);">我接受《注册协议》、《免责声明》</a>
@@ -214,6 +222,7 @@
 //				var checkNum = document.getElementById("checkNum").value;
 //				var phone = document.getElementById("phone").value;
 				var pwd = document.getElementById("pwd").value;
+				var invite_code = document.getElementById("invite_code").value;
 				
 				var checkBox = document.getElementById("checkBox");
 				console.log(qq + "," + qqName + "," + introduce + "," + pwd);
@@ -233,6 +242,7 @@
 						"profile": introduce,
 //						"checkNum": checkNum,
 						"password": pwd,
+						"invite_code": invite_code
 //						"phone": phone,
 					},
 					dataType: 'json', //服务器返回json格式数据

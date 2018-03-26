@@ -80,7 +80,7 @@ def admin_margin(request):
                 res['code'] = 0
         log.audit_time = datetime.datetime.now()
         log.admin_user = admin_user
-        log.save(update_fields=['audit_state','audit_time','audit_reason'])
+        log.save()
         return JsonResponse(res)
 
 @csrf_exempt

@@ -91,6 +91,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     inviter = models.ForeignKey('self', related_name = 'invitees',
                                 blank=True, null=True, on_delete=models.SET_NULL, default=None)
     invite_code = models.CharField(u"邀请码", blank=True, max_length=10)
+    invite_settle = models.DecimalField(u'上月员工推广结算金额', default = Decimal(0), max_digits=10, decimal_places=2)
     
     objects = MyUserManager()
 

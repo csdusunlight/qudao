@@ -46,6 +46,11 @@ urlpatterns = [
     url(r'^admin_import_merchant_investlog/$', merchant_admin.admin_import_merchant_investlog, name='admin_import_merchant_investlog'),
 
     url(r'^check_new/$', merchant_admin.check_new, name='check_new'),
+    
+    url(r'^coupon_send/$', 'wafuli_admin.views.coupon_send', name='coupon_send'),  #jzy
+    url(r'^coupon_manage/$', 'wafuli_admin.views.coupon_manage', name='coupon_manage'),   #jzy
+    url(r'^coupon_count/$', 'wafuli_admin.views.coupon_count', name='coupon_count'),  #jzy
+    url(r'^parse_file/$', 'wafuli_admin.views.parse_file', name='parse_file'), #jzy
 ]
 
 

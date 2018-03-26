@@ -29,6 +29,7 @@ from public.tools import has_post_permission
 from decimal import Decimal
 from weixin.tasks import sendWeixinNotify
 from merchant.margin_transaction import charge_margin
+from coupon.views import on_register
 # Create your views here.
 logger = logging.getLogger('wafuli')
 def index(request):
@@ -93,6 +94,8 @@ def admin_apply(request):
                 apply.save()
                 sendmsg_bydhst(apply.mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + user.domain_name + '.51fanshu.com' +
                                      u"，快去分享给小伙伴们吧~")
+                on_register(user)
+                sendmsg_bydhst(apply.mobile, u"88元新手红包已发放到您的账户，请到福利联盟个人中心查看。有效期一个月，快来领取哦~")
         elif type==2:
             reason = request.POST.get('reason', '')
             apply.admin_user = admin_user

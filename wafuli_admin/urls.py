@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.views.generic.base import TemplateView
-from wafuli_admin import merchant_admin, coupon
+from wafuli_admin import merchant_admin, coupon_admin
 
 
 urlpatterns = [
@@ -47,8 +47,8 @@ urlpatterns = [
 
     url(r'^check_new/$', merchant_admin.check_new, name='check_new'),
     
-    url(r'^deliver_coupon/$', coupon.deliver_coupon, name='deliver_coupon'),
-    url(r'^parse_file/$', coupon.parse_file, name='parse_file'),
+    url(r'^deliver_coupon/$', coupon_admin.deliver_coupon, name='deliver_coupon'),
+    url(r'^parse_file/$', coupon_admin.parse_file, name='parse_file'),
 ]
 
 

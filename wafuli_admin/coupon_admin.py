@@ -1,4 +1,4 @@
-#coding:uft-8
+#coding:utf-8
 '''
 Created on 2018年3月26日
 

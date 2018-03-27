@@ -48,7 +48,7 @@ class userCouponList(BaseViewMixin, ListCreateAPIView):
 #     ordering_fields = ('state','pub_date','pinyin')
     search_fields = ('name', )
     pagination_class = MyPageNumberPagination
-    
+
 def on_register(user):
     contracts = Contract.objects.filter(name__startswith=u"新手红包")
     bulks = []

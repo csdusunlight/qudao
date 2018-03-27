@@ -95,6 +95,13 @@
     background: url(../../../static/images/hongbao_2.png) no-repeat;
     position: relative;
 }
+.fbtm_desc{
+    width: 120px;
+    height: 40px;
+    line-height: 15px;
+    color: white;
+    position: absolute;bottom: 0;left: 38px;
+}
 .fbtn{
     background: #c7c7c7;
 }

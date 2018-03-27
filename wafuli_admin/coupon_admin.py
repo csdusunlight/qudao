@@ -34,13 +34,12 @@ def deliver_coupon(request):
         success_count = 0
         fail_list = []
         select_user = request.POST.get('selectuser')
-        award = request.POST.get('award')
         bulk = []
         users = []
         if select_user == '1':
             users = MyUser.objects.all()
             for user in users:
-                coupon = UserCoupon(user=user, contract=contract, award=award, type='heyue', award=contract.award)
+                coupon = UserCoupon(user=user, contract=contract, type='heyue', award=contract.award)
                 bulk.append(coupon)
                 success_count += 1
         elif select_user == '2':
@@ -58,7 +57,7 @@ def deliver_coupon(request):
                 except:
                     fail_list.append(mobile)
                 else:
-                    coupon = UserCoupon(user=user, contract=contract, award=award, type='heyue', award=contract.award)
+                    coupon = UserCoupon(user=user, contract=contract, type='heyue', award=contract.award)
                     bulk.append(coupon)
                     success_count += 1
         if bulk:

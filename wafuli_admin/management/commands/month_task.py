@@ -4,7 +4,7 @@ Created on 20160608
 @author: lch
 '''
 import logging
-from wafuli.models import UserEvent
+from wafuli.models import InvestLog
 import time as ttime
 from django.core.management.base import BaseCommand
 from django.db.models import Sum
@@ -12,24 +12,34 @@ from account.models import MyUser
 from django.conf import settings
 from decimal import Decimal
 from wafuli_admin.models import RecommendRank, UserStatis
+import datetime
 logger = logging.getLogger("wafuli")
 class Command(BaseCommand):
     def handle(self, *args, **options):
         logger.info("******MonthTask  is beginning*********")
-        month = ttime.localtime()[1]-1 or 12
-        year = ttime.localtime()[0]
-        year = year-1 if month == 12 else year
-        inviters = MyUser.objects.all()
-        for inviter in inviters:
-            invite_lastmonth = UserEvent.objects.filter(user__inviter=inviter, event_type='2',
-                        audit_state='0',audit_time__year=year,audit_time__month=month).\
-                        aggregate(sumofwith=Sum('invest_amount'))
-            award_lastmonth = float(invite_lastmonth.get('sumofwith') or 0)*settings.AWARD_RATE
-            award_lastmonth = int(award_lastmonth)
-            inviter.invite_account += award_lastmonth
-            inviter.invite_income += award_lastmonth
-            inviter.save(update_fields=['invite_account','invite_income'])
-
+        last_month = ttime.localtime()[1]-1 or 12
+        last_year = ttime.localtime()[0]
+        last_year = last_year-1 if last_month == 12 else last_year
+        last2_month = last_month-1 or 12
+        last2_year = last_year-1 if last2_month == 12 else last_year
+        last3_month = last2_month-1 or 12 
+        last3_year = last2_year-1 if last3_month == 12 else last2_year
+        print last_year, last_month, last2_year, last2_month, last3_year, last3_month
+        firstday_lastmonth = datetime.date(last_year, last_month, 1)
+        firstday_last2month = datetime.date(last2_year, last2_month, 1)
+        firstday_last3month = datetime.date(last3_year, last3_month, 1)
+        invitees = MyUser.objects.filter(inviter__isnull=False, date_joined__gt=firstday_last3month)
+        inviters = {}
+        for invitee in invitees:
+            inviter = invitee.inviter
+            sum = InvestLog.objects.filter(user=invitee, is_official=True, audit_state='0', audit_time__range=(firstday_lastmonth,
+                    invitee.date_joined + datetime.timedelta(days=60))).aggregate(sum=Sum('settle_amount'))
+            settle_amount = sum.get('sum') or 0
+            if inviter.id in inviters:
+                inviters[inviter.id] += settle_amount
+            else:
+                inviters[inviter.id] = settle_amount
+        print inviters
         # trunscate table RecommendRank
         RecommendRank.objects.all().delete()
         

@@ -72,11 +72,29 @@
 				border: none !important;
 				margin: 1.5rem 5rem;
 			}
+			/*样式覆盖*/
+			.mui-table-view-cell.mui-active {
+			    background-color: transparent;
+			}
+			.mui-table-view:before,.mui-table-view:after {
+			    display: none;
+			}
+			.mui-table-view-cell {
+			    padding: 0;
+			}
+			.mui-table-view-cell>a:not(.mui-btn) {
+			    margin: 0;
+			}
+			.mui-table-view-cell.mui-collapse .mui-collapse-content {
+			    margin: 0;
+			    padding: 0;
+			}
 		</style>
 	</head>
 
 	<body>
 		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
 			<h1 class="mui-title">申请成为渠道</h1>
 		</header>
 		<div class="mui-content" style="background: white;">
@@ -134,6 +152,18 @@
 						<td>
 							<input type="password" id="pwd" name="password" class="mui-input-password ipt">
 						</td>
+					</tr>
+					<tr>
+					    <td>
+					         <ul class="mui-table-view"> 
+                                <li class="mui-table-view-cell mui-collapse">
+                                    <a style="display: block;margin: 6px 0 14px;" class="mui-navigate-right" href="#">邀请人ID（选填）</a>
+                                    <div class="mui-collapse-content">
+                                        <input type="text" id="invite_code" name="inviter_code" class="mui-input-password ipt">
+                                    </div>
+                                </li>
+                            </ul>
+					    </td>
 					</tr>
 					<tr>
 						<td>
@@ -208,6 +238,7 @@
 				var phone = document.getElementById("phone").value;
 				var pwd = document.getElementById("pwd").value;
 				var checkBox = document.getElementById("checkBox");
+				var invite_code = document.getElementById("invite_code").value;
 				
 				if(!qq || !qqName || !introduce || !phone || !checkNum || !pwd) {
 					mui.alert("填写不能为空");
@@ -236,6 +267,7 @@
 						"code": checkNum,
 						"password": pwd,
 						"mobile": phone,
+						"invite_code": invite_code
 					},
 					dataType: 'json', //服务器返回json格式数据
 					type: 'post', //HTTP请求类型

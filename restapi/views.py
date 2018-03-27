@@ -13,7 +13,7 @@ from restapi.serializers import UserSerializer, InvestLogSerializer,\
     SubscribeShipSerializer, AnnouncementSerializer, DayStatisSerializer,\
     ApplyLogSerializer, WithdrawLogSerializer, UserDetailStatisSerializer,\
     UserAverageStatisSerializer, MarkSerializer, CompanySerializer,\
-    RankSerializer, IPLogSerializer, BookLogSerializer, DocumentSerializer
+    BookLogSerializer, DocumentSerializer
 from account.models import MyUser, ApplyLog
 from rest_framework.filters import SearchFilter,OrderingFilter
 from public.permissions import IsOwnerOrStaff, IsSelfOrStaff
@@ -23,7 +23,7 @@ from django.db.models import Q
 from wafuli_admin.models import DayStatis
 from statistic.models import UserDetailStatis, UserAverageStatis
 from rest_framework.exceptions import ValidationError
-from activity.models import SubmitRank, IPLog
+# from activity.models import SubmitRank, IPLog
 from docs.models import Document
 import re
 # from wafuli.Filters import UserEventFilter
@@ -251,16 +251,16 @@ class CompanyList(BaseViewMixin, generics.ListAPIView):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
     pagination_class = MyPageNumberPagination
-class RankList(BaseViewMixin, generics.ListAPIView):
-    permission_classes = ()
-    queryset = SubmitRank.objects.all()
-    serializer_class = RankSerializer
-    pagination_class = MyPageNumberPagination
-class IPLogList(BaseViewMixin, generics.ListAPIView):
-    permission_classes = (IsAdmin,)
-    queryset = IPLog.objects.all()
-    serializer_class = IPLogSerializer
-    pagination_class = MyPageNumberPagination
+# class RankList(BaseViewMixin, generics.ListAPIView):
+#     permission_classes = ()
+#     queryset = SubmitRank.objects.all()
+#     serializer_class = RankSerializer
+#     pagination_class = MyPageNumberPagination
+# class IPLogList(BaseViewMixin, generics.ListAPIView):
+#     permission_classes = (IsAdmin,)
+#     queryset = IPLog.objects.all()
+#     serializer_class = IPLogSerializer
+#     pagination_class = MyPageNumberPagination
 class BookLogList(BaseViewMixin, generics.ListCreateAPIView):
     def get_queryset(self):
         return BookLog.objects.filter(user=self.request.user)

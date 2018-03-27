@@ -16,6 +16,15 @@ class DayStatis(models.Model):
     ret_num = models.PositiveIntegerField(u"返现人数", default=0)
     new_project_num = models.PositiveIntegerField(u"今日上线项目数", default=0)
     activity_consume = models.DecimalField(u'账户余额', default = Decimal(0), max_digits=10, decimal_places=2)
+    merchant_people = models.IntegerField(u'商家人数', default=0)
+    merchant_people_active = models.IntegerField(u'放单商家人数', default=0)
+    merchant_projects = models.IntegerField(u'在线项目数量', default=0)
+    merchant_investlogs_submit = models.IntegerField(u'商家项目交单数量', default=0)
+    merchant_investlogs_audit = models.IntegerField(u'交单审核通过数量', default=0)
+    merchant_charge = models.DecimalField(u'保证金充值', default = Decimal(0), max_digits=10, decimal_places=2)
+    merchant_consume = models.DecimalField(u'保证金消耗', default = Decimal(0), max_digits=10, decimal_places=2)
+    merchant_broker = models.DecimalField(u'佣金', default = Decimal(0), max_digits=10, decimal_places=2)
+    merchant_settle = models.DecimalField(u'结算金额', default = Decimal(0), max_digits=10, decimal_places=2)
     def __unicode__(self):
         return self.date.strftime("%Y-%m-%d")
     class Meta:

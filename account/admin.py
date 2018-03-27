@@ -13,7 +13,7 @@ class MyUserAdmin(UserAdmin):
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser',
                                        'groups', 'user_permissions', 'admin_permissions')}),
         ('Important dates', {'fields': ('qq_name', 'type', 'level', 'profile', 'with_total','accu_income', 'date_joined', )}),
-        ('others', {'fields': ('balance', 'margin_account','domain_name', 'cs_qq')}),
+        ('others', {'fields': ('balance', 'margin_account','domain_name', 'cs_qq', 'invite_code', 'inviter')}),
     )
     add_fieldsets = (
     (None, {

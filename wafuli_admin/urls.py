@@ -1,10 +1,11 @@
 from django.conf.urls import url
 from django.views.generic.base import TemplateView
-from wafuli_admin import merchant_admin
+from wafuli_admin import merchant_admin, coupon_admin
 
 
 urlpatterns = [
     url(r'^$', 'wafuli_admin.views.index', name='admin_index'),
+    url(r'^admin_merchant_look/$', 'wafuli_admin.views.admin_merchant_look', name='admin_merchant_look'),
     url(r'^admin_apply/$', 'wafuli_admin.views.admin_apply', name='admin_apply'),
     url(r'^admin_office/$', 'wafuli_admin.views.admin_invest', name='admin_office'),
     url(r'^admin_private/$', 'wafuli_admin.views.admin_private', name='admin_private'),
@@ -45,6 +46,9 @@ urlpatterns = [
     url(r'^admin_import_merchant_investlog/$', merchant_admin.admin_import_merchant_investlog, name='admin_import_merchant_investlog'),
 
     url(r'^check_new/$', merchant_admin.check_new, name='check_new'),
+    
+    url(r'^deliver_coupon/$', coupon_admin.deliver_coupon, name='deliver_coupon'),
+    url(r'^parse_file/$', coupon_admin.parse_file, name='parse_file'),
 ]
 
 

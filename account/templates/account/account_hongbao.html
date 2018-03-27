@@ -1,173 +1,234 @@
 {% load staticfiles %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>用户中心</title>
-<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
-<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/page.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
-<style type="text/css">
-	.fubi-box {
-	    margin-bottom: 20px;
-	    height: 80px;
-	    background-color: #fff;
-	}
-	.fubi-item {
-	    display: inline-block;
-	    margin-left: 20px;
-	    min-width: 200px;
-	    height: 80px;
-	    line-height: 80px;
-	    font-size: 18px;
-	}
-	.fubi-num {
-	    display: inline-block;
-	    padding: 0 10px;
-	    color: #FFBE00;
-	    font-size: 24px;
-	}
-	.tixian {
-	    margin-top: 22px;
-	    margin-right: 20px;
-	}
-</style>
-<script type="text/javascript">
-var data = '<table width="100%"><thead><tr><th height="44">项目</th>' +
-'<th>金额</th><th>余额</th><th>获取时间</th><th>备注</th></tr></thead><tbody>'+
-'[results]<tr><td>{reason}</td><td class="shouzhi" data-shouzhi="{transType}">{transAmount}</td>'+
-'<td>{user_balance}</td><td class="submit-time">{time}</td><td>{remark}</td></tr>[/results]'+
-'</tbody></table>';
-var url = "/restapi/translist/" + "?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}";
-//function emptydisplay(obj){
-//	pic_url = "/restapi/projects/";
-//	obj.html('<div class="Defa-in"><img src="' + pic_url + '">'+
-//			'<h2>咦~~ 您还没有相关记录~~</h2></div>');
-//}
-function pagecallback(){
-    $('.shouzhi').each(function(){
-        console.log($(this).data('shouzhi'))
-        if($(this).data('shouzhi') == '0') {
-            $(this).text('+' + $(this).text());
-        } else if($(this).data('shouzhi') == '1') {
-            $(this).text('-' + $(this).text());
-        }
-    })
-    $('.submit-time').each(function(){
-        var submit_time = $(this).text().replace('T',' ');
-        $(this).text(submit_time);
-    })
-}
-
-$(function(){
-	$('.back-a14').toggleClass("on");
-    $(".Close").click(function(){
-    	$(".Listpop").css("display","none")<!--隐藏-->
-    });
-	$("#pagedata").ajaxPage({
-	    url:url,
-	    pageId:$("#page"),
-	    run:true,
-	    content:data,
-	    complete:pagecallback,
-	});
-	
-	$(".RightCont").on("focus", ".date_picker", function() {
-        $(this).date_input();
-    })
-	
-	$("#search").click(function() {
-        var trans_date_0 = $("#trans_date_0").val(),
-            trans_date_1 = $("#trans_date_1").val(),
-            transType = $("#transType").val();
-        var newurl = url;
-        if(trans_date_0) {
-            newurl += "&trans_date_0=" + trans_date_0;
-        }
-        if(trans_date_1) {
-            newurl += "&trans_date_1=" + trans_date_1;
-        }
-        if(transType) {
-            newurl += "&transType=" + transType;
-        }
-    
-        console.log(newurl);
-        $("#page").empty();
-        $("#pagedata").ajaxPage({
-            url: newurl,
-            pageId: $("#page"),
-            run: true,
-            content: data,
-            complete:pagecallback,
-        });
-    });
-
-    // 审核拒绝原因弹窗
-//	$('.Content').on('click','.state_2',function(){
-//		  var reason = $(this).attr('reason');
-//	      alert(reason);
-//	  });
-});
-</script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>用户中心</title>
+    <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/hongbao.css' %}">
+    <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
 </head>
 
 <body>
     {% include "header.html" %}
-	<div class="Content">
-    	<!--头部-->
-    	<!--内容-->
-    	{% include "account/left.html" %}
-    	<div class="RightCont">
-        	<div class="fubi-box">
-            	<span class="fubi-item">您的累积收益<strong class="fubi-num">{{user.accu_income}}</strong></span>
-            	<span class="fubi-item">账户余额<strong class="fubi-num">{{user.balance}}</strong></span>
-                <a href="{%url 'account_withdraw'%}" class="tixian btn m-yellow r">提  现</a>
-            </div>
-            <div class="table">
-                <h2 class="table__title">收支详情</h2>
-                <div class="search">
-                    <div class="search__item">
-                        <span class="search__name">获取时间：</span>
-                        <div class="time-input-box"><input type="text" class="date_picker time-input" id="trans_date_0" onchange="$('#search').click()" /></div> ——
-                        <div class="time-input-box"><input type="text" class="date_picker time-input" id="trans_date_1" onchange="$('#search').click()" /></div>
+    <div class="Content">
+        <!--头部-->
+        <!--内容-->
+        {% include "account/left.html" %}
+        <!-- 右边内容部分 -->
+        <ul class="RightCont">
+            <!-- tab部分 -->
+            <ul class="tab">
+                <li class="active">可用红包</li>
+                <li>失效红包</li>
+            </ul>
+            <ol class="contBox">
+                <li class="effective">
+                    <div class="hongbao_box">
+                        <div class="hongbao">
+                            <span style="color: white;">￥
+                                <span class="amount">5</span>
+                            </span>
+                            <span class="desc">新用户专享</span>
+                            <p class="time">有效期至：2018-12-21</p>
+                            <div class="btm_desc">累计提交15单并且通过审核</div>
+                        </div>
+                        <input class="btn" type="button" value="领取">
                     </div>
-                    <div class="search__item">
-                        <span class="search__name">收支类型：</span>
-                        <select name="select_status" id="transType" onchange="$('#search').click()">
-                            <option value="">全部</option>
-                            <option value="0">收入</option>
-                            <option value="1">支出</option>
-                            <!--<option value="3">已删除</option>-->
-                        </select>
+                    <div class="hongbao_box">
+                        <div class="hongbao">
+                            <span style="color: white;">￥
+                                <span class="amount">5</span>
+                            </span>
+                            <span class="desc">新用户专享</span>
+                            <p class="time">有效期至：2018-12-21</p>
+                            <div class="btm_desc">累计提交15单并且通过审核</div>
+                        </div>
+                        <input class="btn" type="button" value="领取">
                     </div>
-                </div>
-                <div style="display: none;" class="handle clearfix">
-                    <div class="handle__out r">
-                        <a id="search" class="btn m-green m-search">搜索</a>
+                    <div class="hongbao_box">
+                        <div class="hongbao">
+                            <span style="color: white;">￥
+                                <span class="amount">5</span>
+                            </span>
+                            <span class="desc">新用户专享</span>
+                            <p class="time">有效期至：2018-12-21</p>
+                            <div class="btm_desc">累计提交15单并且通过审核</div>
+                        </div>
+                        <input class="btn" type="button" value="领取">
                     </div>
-                </div>
-                <div id="pagedata">
-
-                </div>
-
-                <div class="changes-p">
-                    <div class="page" id="page">
+                    <div class="hongbao_box">
+                        <div class="hongbao">
+                            <span style="color: white;">￥
+                                <span class="amount">5</span>
+                            </span>
+                            <span class="desc">新用户专享</span>
+                            <p class="time">有效期至：2018-12-21</p>
+                            <div class="btm_desc">累计提交15单并且通过审核</div>
+                        </div>
+                        <input class="btn" type="button" value="领取">
                     </div>
-                </div>
-
-            </div>
-
-        </div>
-    	<!--底部-->
-  <div style="clear: both;"></div>
-  </div>
-  {% include "footer.html" %}
-  <!--浮动窗口-->
+                    <div class="hongbao_box">
+                        <div class="hongbao">
+                            <span style="color: white;">￥
+                                <span class="amount">5</span>
+                            </span>
+                            <span class="desc">新用户专享</span>
+                            <p class="time">有效期至：2018-12-21</p>
+                            <div class="btm_desc">累计提交15单并且通过审核</div>
+                        </div>
+                        <input class="btn" type="button" value="领取">
+                    </div>
+                    <div class="hongbao_box">
+                        <div class="hongbao">
+                            <span style="color: white;">
+                                ￥<span class="amount">5</span>
+                            </span>
+                            <span class="desc">新用户专享</span>
+                            <p class="time">有效期至：2018-12-21</p>
+                            <div class="btm_desc">累计提交15单并且通过审核</div>
+                        </div>
+                        <input class="btn" type="button" value="领取">
+                    </div>
+                    <div class="hongbao_box">
+                        <div class="hongbao">
+                            <span style="color: white;">￥
+                                <span class="amount">5</span>
+                            </span>
+                            <span class="desc">新用户专享</span>
+                            <p class="time">有效期至：2018-12-21</p>
+                            <div class="btm_desc">累计提交15单并且通过审核</div>
+                        </div>
+                        <input class="btn" type="button" value="领取">
+                    </div>
+                    <div class="hongbao_box">
+                        <div class="hongbao">
+                            <span style="color: white;">￥
+                                <span class="amount">5</span>
+                            </span>
+                            <span class="desc">新用户专享</span>
+                            <p class="time">有效期至：2018-12-21</p>
+                            <div class="btm_desc">累计提交15单并且通过审核</div>
+                        </div>
+                        <input class="btn" type="button" value="领取">
+                    </div>
+                    <!-- <div class="contentBox">
+                        <div id="pagedata" class="pagedata"></div>
+                        <div class="Page-in1">
+                            <div class="page" id="page"></div>
+                        </div>
+                    </div> -->
+                </li>
+                <li class="failure">
+                    <div class="fail_hongbao_box">
+                        <div class="fail_hongbao">
+                            <span class="amount">￥5</span>
+                            <span class="desc">新用户专享</span>
+                            <p class="time">有效期至：2018-12-21</p>
+                            <div class="btm_desc">累计提交15单并且通过审核</div>
+                        </div>
+                        <input class="btn fbtn" type="button" value="已失效">
+                    </div>
+                    
+                    <!-- <div class="contentBox">
+                        <div id="pagedata" class="pagedata"></div>
+                        <div class="Page-in1">
+                            <div class="page" id="page"></div>
+                        </div>
+                    </div> -->
+                </li>
+            </ol>
+    </div>
+    <!--底部-->
+    <div style="clear: both;"></div>
+    </div>
+    {% include "footer.html" %}
+    <!--浮动窗口-->
     </div>
 </body>
+<script type="text/javascript">
+    "use strict";//声明严格模式
+    // var data = `<div class="hongbao_box">
+
+    //             <div>`
+
+
+    // var data = '<table width="100%"><thead><tr><th height="44">项目</th>' +
+    //     '<th>金额</th><th>余额</th><th>获取时间</th><th>备注</th></tr></thead><tbody>' +
+    //     '[results]<tr><td>{reason}</td><td class="shouzhi" data-shouzhi="{transType}">{transAmount}</td>' +
+    //     '<td>{user_balance}</td><td class="submit-time">{time}</td><td>{remark}</td></tr>[/results]' +
+    //     '</tbody></table>';
+    // var url = "/restapi/translist/" + "?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}";
+    function pagecallback() {
+        console.log('回调函数');
+    }
+
+    $(function () {
+        /**
+         tab效果
+        **/
+        $(".tab>li").click(function () {
+            console.log("当前下标序号：", $(this).index());
+            let index = $(this).index()
+            $(this).addClass("active").siblings().removeClass("active");
+            $(".contBox > li").eq(index).show().siblings().hide();
+        });
+        $('.back-a14').toggleClass("on");
+        // ajax交互数据
+        // $("#pagedata").ajaxPage({
+        //     url: url,
+        //     pageId: $("#page"),
+        //     run: true,
+        //     content: data,
+        //     complete: pagecallback,
+        // });
+        //     $(".Close").click(function () {
+        //         $(".Listpop").css("display", "none") < !--隐藏-->
+        //     });
+        //     $("#pagedata").ajaxPage({
+        //         url: url,
+        //         pageId: $("#page"),
+        //         run: true,
+        //         content: data,
+        //         complete: pagecallback,
+        //     });
+
+        //     $(".RightCont").on("focus", ".date_picker", function () {
+        //         $(this).date_input();
+        //     })
+
+        //     $("#search").click(function () {
+        //         var trans_date_0 = $("#trans_date_0").val(),
+        //             trans_date_1 = $("#trans_date_1").val(),
+        //             transType = $("#transType").val();
+        //         var newurl = url;
+        //         if (trans_date_0) {
+        //             newurl += "&trans_date_0=" + trans_date_0;
+        //         }
+        //         if (trans_date_1) {
+        //             newurl += "&trans_date_1=" + trans_date_1;
+        //         }
+        //         if (transType) {
+        //             newurl += "&transType=" + transType;
+        //         }
+
+        //         console.log(newurl);
+        //         $("#page").empty();
+        //         $("#pagedata").ajaxPage({
+        //             url: newurl,
+        //             pageId: $("#page"),
+        //             run: true,
+        //             content: data,
+        //             complete: pagecallback,
+        //         });
+    });
+</script>
+
 </html>

@@ -2,144 +2,372 @@
 <!doctype html>
 <html>
 
-	<head>
-		<meta charset="UTF-8">
-		<title>收支详情</title>
-		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link href="{% static 'css/mui.min.css' %}" rel="stylesheet" />
-		<link rel="stylesheet" href="{% static 'css/PaymentDetails.css' %}" />
-		<script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
-		<style>
-			.pro_reduice {
-				position: absolute;
-				left: 5px;
-			}
-			
-			.add {
-				color: RGB(248, 90, 89);
-			}
-			
-			.reduce {
-				color: RGB(234, 240, 254)
-			}
-			
-			.mui-pull-bottom-wrapper {
-				padding-top: 0.5rem;
-				text-align: center;
-			}
-		</style>
-	</head>
+<head>
+	<meta charset="UTF-8">
+	<title>收支详情</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<link href="{% static 'css/mui.min.css' %}" rel="stylesheet" />
+	<link rel="stylesheet" href="{% static 'css/m_hongbao.css' %}" />
+	<script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
+	<style>
+		.mui-bar-nav~.mui-content {
+			padding-top: 0;
+		}
 
-	<body>
-		<header class="mui-bar mui-bar-nav" style="position: relative;background: white;">
-			<a href="{% url 'account_index' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
-			<h1 class="mui-title" style="style=" color: RGB(102,102,102); "">收支详情</h1>
-			<!--<img src="{% static 'images/icon_03.jpg' %}" class="header_icon" />
-			<span class="header_audit">全部</span>-->
-		</header>
-		<div id="pullrefresh" class="mui-scroll-wrapper" style="top:32px;">
+		.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
+			color: #90c01e;
+			border-bottom: 2px solid #90c01e;
+			background: 0 0;
+		}
+
+		.mui-active {
+			background: white !important;
+		}
+	</style>
+</head>
+
+<body>
+	<header class="mui-bar mui-bar-nav" style="position: relative;background: white;">
+		<a href="{% url 'account_index' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
+		<h1 class="mui-title" style=" color: RGB(102,102,102);">我的红包</h1>
+	</header>
+	<div class="mui-content">
+		<!--选项卡部分-->
+		<div id="finance_slider" class="mui-slider mui-fullscreen">
+			<div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+				<a class="mui-control-item" href="#item1">可用红包（10）</a>
+				<a class="mui-control-item" href="#item2">失效红包（10）</a>
+			</div>
+			<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6" style="background: #90c01e;"></div>
+			<div class="mui-slider-group">
+				<div id="item1" class="mui-slider-item mui-control-content mui-active" value="1">
+					<div id="scroll1" class="mui-scroll-wrapper">
+						<div class="mui-scroll">
+							<ul class="mui-table-view tab1">
+								<!-- <li class="mui-table-view-cell">
+									<div class="hongbao_box">
+										<div class="hongbao_top">
+											<div class="amount">
+												<span>￥</span>
+												<span class="amount1">5.00</span>
+											</div>
+											<div class="time">
+												<span>有效期至：</span>
+												<span>2018-03-22</span>
+											</div>
+											<button type="button" class="mui-btn take mui-btn-outlined">领取</button>
+										</div>
+										<div class="hongbao_bottom">
+											<span class="btm_text">首次交单并审核通过</span>
+										</div>
+									</div>
+								</li> -->
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- 失效红包 -->
+				<div id="item2" class="mui-slider-item mui-control-content" value="2">
+					<div id="scroll1" class="mui-scroll-wrapper">
+						<div class="mui-scroll">
+							<ul class="mui-table-view tab2">
+								<!-- <li class="mui-table-view-cell">
+									<div class="hongbao_box">
+										<div class="fhongbao_top">
+											<div class="amount fail">
+												<span>￥</span>
+												<span class="amount1">5.00</span>
+											</div>
+											<div class="time fail">
+												<span>有效期至：</span>
+												<span>2018-03-22</span>
+											</div>
+											<div class="failBox"></div>
+										</div>
+										<div class="hongbao_bottom">
+											<span class="btm_text">首次交单并审核通过</span>
+										</div>
+									</div>
+								</li> -->
+							</ul>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+	<!-- <div id="pullrefresh" class="mui-scroll-wrapper" style="top:32px;">
 			<div class="mui-content">
 				<ul class="mui-table-view">
 					
 				</ul>
 			</div>
-		</div>
-        {% include "m_footer.html" %}
-		<script src="{% static 'js/mui.min.js' %}"></script>
-		<!--<script src="{%static 'js/mui.pullToRefresh.js'%}"></script>
-		<script src="{%static 'js/mui.pullToRefresh.material.js'%}"></script>-->
-		<script type="text/javascript">
-			var url = '/restapi/translist/?user_mobile={{user.mobile}}';
-			mui.init({
-				pullRefresh: {
-					container: '#pullrefresh',
-					up: {
-						auto: true,
-						contentrefresh: '正在加载...',
-						contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
-						callback: pullupRefresh
-					}
+		</div> -->
+	{% include "m_footer.html" %}
+	<script src="{% static 'js/mui.min.js' %}"></script>
+	<script src="{%static 'js/mui.pullToRefresh.js'%}"></script>
+	<script src="{%static 'js/mui.pullToRefresh.material.js'%}"></script>
+	<script type="text/javascript">
+		mui.init();
+		//初始化滚动条
+		mui('.mui-scroll-wrapper').scroll({
+			deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+		});
+		var data = {
+			"results": [
+				{
+					"id": "59",
+					"state": "0",
+					"type": "1",
+					"amount": "5.00",
+					"date": "2018-3-26",
+					"desc": "首次交单并审核通过"
 				},
-				swipeBack: true //启用右滑关闭功能
-			});
-
-			//上拉加载
-			var count = 0;
-
-			function getList(n) {
-				mui.ajax(url, {
-					data: {
-						count: n,
-						type: 3,
-					},
-					dataType: 'json', //服务器返回json格式数据
-					type: 'get', //HTTP请求类型
-					timeout: 10000, //超时时间设置为10秒；
-					// 				    headers:{'Content-Type':'application/json'},
-					success: function(data) {
-						console.log("data数据：", data.results);
-						if(!data.results.length) {
-							mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
-						} else {
-							mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
-							var table = document.querySelector(".mui-table-view");
-							for(var i in data.results) {
-								console.log("------------时间：",data.results[i].time)
-								var Time = data.results[i].time.split("T");//截取到年月日
-								console.log(Time);
-								console.log(Time[1]);
-								var T2 = Time[1].substring(0,5);//截取分钟
-								console.log(T2);
-								console.log('transType值:', data.results[i].transType);
-								var transType = data.results[i].transType;
-								var li = document.createElement("li");
-								li.className = "mui-table-view-cell";
-								str_html = '<span class=" pro_name">' + data.results[i].reason + '</span>' +
-									'<span data-isAdd="+ data.results[i].transType +" class="pro_add">' + (transType == 0 ? '+' + data.results[i].transAmount : '-' + data.results[i].transAmount) + '</span>' +
-									'<p class="pro_time">' + Time[0]+'&nbsp;'+ T2 +'</p>' +
-									'<span  class="pro_num">' + data.results[i].user_balance + '</span>';
-									
-									if(mui(".pro_add").transType == 0) {
-										mui(".pro_add").classList.add("add");
-									} else if(mui(".pro_add").transType == 1) {
-										mui(".pro_add").classList.add("reduce");
-									}
-									li.innerHTML = str_html;
-									table.appendChild(li);
-							}
- 
-						}
-					},
-					error: function(xhr, type, errorThrown) {
-						console.log(xhr.responseText);
-					}
-				});
-			}
-
-			function pullupRefresh() {
-				if(count == 0) {
-					mui('#pullrefresh').pullRefresh().scrollTo(0, 0);
+				{
+					"id": 56,
+					"state": "1",
+					"type": "0",
+					"amount": "5.00",
+					"date": "2018-3-26",
+					"desc": "首次交单并审核通过"
+				},
+				{
+					"id": 52,
+					"state": "0",
+					"type": "1",
+					"amount": "5.00",
+					"date": "2018-3-26",
+					"desc": "首次交单并审核通过"
+				},
+				{
+					"id": 51,
+					"state": "1",
+					"type": "0",
+					"amount": "5.00",
+					"date": "2018-3-26",
+					"desc": "首次交单并审核通过"
+				},
+				{
+					"id": 50,
+					"state": "1",
+					"type": "0",
+					"amount": "5.00",
+					"date": "2018-3-26",
+					"desc": "首次交单并审核通过"
+				},
+				{
+					"id": 49,
+					"state": "1",
+					"type": "0",
+					"amount": "5.00",
+					"date": "2018-3-26",
+					"desc": "首次交单并审核通过"
+				},
+				{
+					"id": 48,
+					"state": "1",
+					"type": "0",
+					"amount": "5.00",
+					"date": "2018-3-26",
+					"desc": "首次交单并审核通过"
 				}
-				getList(count++);
+			]
+		}
+		var html1 = document.querySelector(".tab1");
+		var html2 = document.querySelector(".tab2");
+		var str_html;
+		for(var i in data.results){
+			var li = document.createElement("li");
+			li.className = "mui-table-view-cell";
+			str_html = '<div class="hongbao_box">' +
+								'<div class="hongbao_top">' +
+									'<div class="amount">' +
+										'<span>￥</span>' +
+										'<span class="amount1">'+ data.results[i].amount +'</span>' +
+									'</div>' +
+									'<div class="time">' +
+										'<span>有效期至：</span>' +
+										'<span>'+ data.results[i].date +'</span>' +
+									'</div>' +
+									'<button type="button" class="mui-btn take mui-btn-outlined">领取</button>' +
+								'</div>' +
+								'<div class="hongbao_bottom">' +
+									'<span class="btm_text">'+ data.results[i].desc +'</span>' +
+								'</div>' +
+							'</div>'
+				li.innerHTML = str_html;
+				html1.appendChild(li);				
+		}
+		document.getElementById('finance_slider').addEventListener('slide', function(e) {
+			// console.log("当前下标：",e.detail.slideNumber);
+			html2.innerHTML = "";//清空上一次追加进来的内容
+			if (e.detail.slideNumber == 1) {
+				for (var i in data.results) {	
+					var li = document.createElement("li");
+					li.className = "mui-table-view-cell";
+					str_html = '<div class="hongbao_box">' +
+									'<div class="fhongbao_top">' +
+											'<div class="amount fail">' +
+											'<span>￥</span>' +
+											'<span class="amount1">'+ data.results[i].amount +'</span>' +
+										'</div>' +
+										'<div class="time fail">' +
+											'<span>有效期至：</span>' +
+											'<span>'+ data.results[i].date +'</span>' +
+										'</div>' +
+										'<div class="failBox"></div>' +
+									'</div>' +
+									'<div class="hongbao_bottom">' +
+										'<span class="btm_text">'+ data.results[i].desc +'</span>' +
+									'</div>' +
+								'</div>'
+				li.innerHTML = str_html;
+				html2.appendChild(li);
+				}
 			}
-            mui('.mui-bar').on('tap', '.mui-action-back', function() {
-                var href = this.getAttribute("href");
-                mui.openWindow({
-                    url: href,
-                    styles: {
-                        top: 0,
-                        bottom: 0
-                    },
-                    show: {
-                        aniShow: 'slide-in-right',
-                    },
-                    waiting: {
-                        autoShow: false, //自动显示等待框
-                        title: '正在加载...', //等待对话框上显示的提示内容
-                    }
-                });
-            });
-		</script>
-	</body>
+		});
+		//领取点击事件：
+		mui(".mui-table-view-cell").on("tap",".take",function () { 
+			console.log("click");
+		 });
+
+
+		// for (var i in data.results) {
+		// 	console.log(data.results[i].id);
+		// 	var li = document.createElement("li");
+		// 	li.className = "mui-table-view-cell";
+		// 	if (data.results[i].type == 1) {
+		// 		str_html = '<div class="hongbao_box">' +
+		// 						'<div class="hongbao_top">' +
+		// 							'<div class="amount">' +
+		// 							'<span>￥</span>' +
+		// 							'<span class="amount1">'+ data.results[i].amount +'</span>' +
+		// 							'</div>' +
+		// 							'<div class="time">' +
+		// 							'<span>有效期至：</span>' +
+		// 							'<span>'+ data.results[i].date +'</span>' +
+		// 							'</div>' +
+		// 							'<button type="button" class="mui-btn take mui-btn-outlined">领取</button>' +
+		// 						'</div>' +
+		// 						'<div class="hongbao_bottom">' +
+		// 							'<span class="btm_text">'+ data.results[i].desc +'</span>' +
+		// 						'</div>' +
+		// 					'</div>'
+		// 	} else {
+		// 		str_html = '<div class="hongbao_box">' +
+		// 						'<div class="fhongbao_top">' +
+		// 								'<div class="amount fail">' +
+		// 								'<span>￥</span>' +
+		// 								'<span class="amount1">'+ data.results[i].amount +'</span>' +
+		// 							'</div>' +
+		// 							'<div class="time fail">' +
+		// 								'<span>有效期至：</span>' +
+		// 								'<span>'+ data.results[i].date +'</span>' +
+		// 							'</div>' +
+		// 							'<div class="failBox"></div>' +
+		// 						'</div>' +
+		// 						'<div class="hongbao_bottom">' +
+		// 							'<span class="btm_text">'+ data.results[i].desc +'</span>' +
+		// 						'</div>' +
+		// 					'</div>'
+		// 	}
+		// 	li.innerHTML = str_html;
+		// 	table.appendChild(li);
+		// }
+		// mui.ajax(url, {
+		// 		dataType: 'json', //服务器返回json格式数据 
+		// 		type: 'get', //HTTP请求类型
+		// 		timeout: 10000, //超时时间设置为10秒；
+		// 		//headers:{'Content-Type':'application/json'},
+		// 		success: function (res) {
+
+		// 		},
+		// 		error: function (xhr, type, errorThrown) {
+		// 			console.log(xhr.responseText);
+		// 		}
+		// 	});
+
+
+
+
+
+		// var url = '/restapi/translist/?user_mobile={{user.mobile}}';
+		// mui.init({
+		// 	pullRefresh: {
+		// 		container: '#pullrefresh',
+		// 		up: {
+		// 			auto: true,
+		// 			contentrefresh: '正在加载...',
+		// 			contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
+		// 			callback: pullupRefresh
+		// 		}
+		// 	},
+		// 	swipeBack: true //启用右滑关闭功能
+		// });
+
+		// //上拉加载
+		// var count = 0;
+
+		// function getList(n) {
+		// 	mui.ajax(url, {
+		// 		data: {
+		// 			count: n,
+		// 			type: 3,
+		// 		},
+		// 		dataType: 'json', //服务器返回json格式数据
+		// 		type: 'get', //HTTP请求类型
+		// 		timeout: 10000, //超时时间设置为10秒；
+		// 		// 				    headers:{'Content-Type':'application/json'},
+		// 		success: function (data) {
+		// 			console.log("data数据：", data.results);
+		// 			if (!data.results.length) {
+		// 				mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+		// 			} else {
+		// 				mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
+		// 				var table = document.querySelector(".mui-table-view");
+		// 				for (var i in data.results) {
+		// 					console.log("------------时间：", data.results[i].time)
+		// 					var Time = data.results[i].time.split("T");//截取到年月日
+		// 					console.log(Time);
+		// 					console.log(Time[1]);
+		// 					var T2 = Time[1].substring(0, 5);//截取分钟
+		// 					console.log(T2);
+		// 					console.log('transType值:', data.results[i].transType);
+		// 					var transType = data.results[i].transType;
+		// 					var li = document.createElement("li");
+		// 					li.className = "mui-table-view-cell";
+		// 					str_html = '<span class=" pro_name">' + data.results[i].reason + '</span>' +
+		// 						'<span data-isAdd="+ data.results[i].transType +" class="pro_add">' + (transType == 0 ? '+' + data.results[i].transAmount : '-' + data.results[i].transAmount) + '</span>' +
+		// 						'<p class="pro_time">' + Time[0] + '&nbsp;' + T2 + '</p>' +
+		// 						'<span  class="pro_num">' + data.results[i].user_balance + '</span>';
+
+		// 					if (mui(".pro_add").transType == 0) {
+		// 						mui(".pro_add").classList.add("add");
+		// 					} else if (mui(".pro_add").transType == 1) {
+		// 						mui(".pro_add").classList.add("reduce");
+		// 					}
+		// 					li.innerHTML = str_html;
+		// 					table.appendChild(li);
+		// 				}
+
+		// 			}
+		// 		},
+		// 		error: function (xhr, type, errorThrown) {
+		// 			console.log(xhr.responseText);
+		// 		}
+		// 	});
+		// }
+
+		// function pullupRefresh() {
+		// 	if (count == 0) {
+		// 		mui('#pullrefresh').pullRefresh().scrollTo(0, 0);
+		// 	}
+		// 	getList(count++);
+		// }
+	</script>
+</body>
 
 </html>

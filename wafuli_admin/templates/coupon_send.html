@@ -66,8 +66,8 @@
                             data: data,
                             success:function(ret){
                                 if(ret.code=='0'){
-                                    console.log('success');
                                     console.log(ret);
+                                   alert('成功人数：' + ret.succ_num);
                                 }
                                 else {
                                     alert(ret.res_msg);
@@ -111,14 +111,20 @@
             var coupon_amount = $('#coupon_amount').val();
             
             $.ajax({
-                url: "/coupon/coupons/",
+                url: "/coupon/contracts/",
                 dataType:"json",
                 type:"POST",
                 data: {
-                    
+                    'name': coupon_name,
+                    'settle_amount': settle_amount,
+                    'settle_count': submit_num,
+                    'start_date': date_start,
+                    'end_date': date_end,
+                    'award': coupon_amount,
                 },
                 success:function(ret){
-                    console.log(ret);
+                    alert('新建方案成功');
+                    location.reload();
                 },
                 error:function(){
                     alert("请检查网络连接");

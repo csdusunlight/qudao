@@ -115,7 +115,7 @@ $(function(){
                     <p style="margin-left: 206px;">如填写abc，则主页域名为abc.51fanshu.com</p>
                 </div>
                 <div class="item">
-                    <span class="item__name m-need">主页客服QQ</span>
+                    <span class="item__name">主页客服QQ</span>
                     <input class="qq-link item__txt" type="text" value="{{user.cs_qq}}" onkeyup="this.value=this.value.replace(/\D/g,'')" />
                     <!--<span>显示在个人主页，用于交单用户联系您</span>-->
                     <p style="margin-left: 206px;">显示在个人主页，用于交单用户联系您</p>
@@ -389,7 +389,7 @@ $(function(){
                 var tosign = $('.tosign').val().replace(/[\r\n]/g,'');
                 tosign = tosign ? tosign : "这个人无话可说~~";
                 $('.tosign').val(tosign);
-                if (!username|| !url_name || !qq_link) {
+                if (!username|| !url_name) {
                     alert('必填项不能为空');
                     return;
                 }

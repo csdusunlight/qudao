@@ -2,7 +2,7 @@
 <script type="text/javascript" src="{%static 'js/jquery-1.11.2.min.js'%}"></script>
 <script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
 <script>
-    var deliver_coupon_url = ""
+    var deliver_coupon_url = "{%url 'deliver_coupon' %}";
     var parse_file_url = "{%url 'parse_file'%}"
     $.ajaxSetup({
         data: {
@@ -11,9 +11,27 @@
     });
     $(function() {
         $("li.home9").toggleClass("on");
+        
+            $.ajax({
+                url: '/coupon/contracts/',
+                dataType:"json",
+                type:"get",
+                success:function(ret){
+                    var option_html = '<option value="0">--</option>';
+                    console.log(ret.results);
+                    for ( var i in ret.results) {
+                        option_html += '<option value="'+ ret.results[i].id +'">'+ ret.results[i].name +'</option>'
+                    }
+                    $('#contract').html(option_html);
+                },
+                error:function(){
+                    alert("请检查网络连接");
+                }
+            });
+        
         $('#selectuser').change(function() {
             var select_val = $(this).children('option:selected').val();
-            if(select_val === '0') {
+            if(select_val === '1') {
                 $("div.part_user").hide();
             } else {
                 $("div.part_user").css("display", 'block');
@@ -32,41 +50,33 @@
             var select_user_id = $("select#selectuser").children('option:selected').val();
             var contract_id = $("select#contract").children('option:selected').val();
             var data = {
-                contract_id: contract_id,
-                select_user: select_user_id,
+                'contract': contract_id,
+                'selectuser': select_user_id,
             };
-            if(id === '0') {
+            if(select_user_id === '1') {
                 data.user = 'all';
-            } else if(id === '1') {
+            } else if(select_user_id === '2') {
                 data.users = $("textarea#users").val();
             }
             console.log(data);
-            //          $.ajax({
-            //              url: deliver_coupon_url,
-            //              dataType:"json",
-            //              type:"POST",
-            //              data: data,
-            //              success:function(ret){
-            //                  if(ret.code=='0'){
-            //                      var succ_num = ret.succ_num;
-            //                      var fail_list = ret.fail_list;
-            //                      var fail_str = '';
-            //                      for (x in fail_list){
-            //                          fail_str += fail_list[x] + '；';
-            //                      }
-            //                      if (fail_str){
-            //                          fail_str = "；导入失败：" + fail_str;
-            //                      }
-            //                      alert("成功新建优惠券"+succ_num+"张" + fail_str);
-            //                  }
-            //                  else {
-            //                      alert(ret.res_msg);
-            //                  }
-            //              },
-            //              error:function(){
-            //                  alert("请检查网络连接");
-            //              }
-            //          });
+                        $.ajax({
+                            url: deliver_coupon_url,
+                            dataType:"json",
+                            type:"POST",
+                            data: data,
+                            success:function(ret){
+                                if(ret.code=='0'){
+                                    console.log('success');
+                                    console.log(ret);
+                                }
+                                else {
+                                    alert(ret.res_msg);
+                                }
+                            },
+                            error:function(){
+                                alert("请检查网络连接");
+                            }
+                        });
         });
         $('button.uploadbtn').click(function() {
             $.ajaxFileUpload({
@@ -92,16 +102,35 @@
                 }
             });
         });
+        $("#add_coupon_btn").click(function() {
+            var coupon_name = $('#coupon_name').val();
+            var settle_amount = $('#settle_amount').val();
+            var submit_num = $('#submit_num').val();
+            var date_start = $('#date_start').val();
+            var date_end = $('#date_end').val();
+            var coupon_amount = $('#coupon_amount').val();
+            
+            $.ajax({
+                url: "/coupon/coupons/",
+                dataType:"json",
+                type:"POST",
+                data: {
+                    
+                },
+                success:function(ret){
+                    console.log(ret);
+                },
+                error:function(){
+                    alert("请检查网络连接");
+                }
+            });
+        });
     });
 </script>
 {% endblock js%} {% block right %}
 <div>
     <i style="letter-spacing:4.8px;">红包方案：</i>
-    <select name="selecttype" id="contract">
-        <option value="-1">--</option>
-        {% for x in type_list %}
-        <option value="{{x.0}}">{{x.1}}</option>
-        {%endfor%}
+    <select class="select" name="selecttype" id="contract">
     </select>
     <span id="add_plan">增加方案</span>
 </div>
@@ -125,9 +154,10 @@
 {% block modal %}
 <div class="BackNow">
     <div class="w570-box">
-        <h3>返现操作</h3>
+        <h3>增加红包方案</h3>
         <button class="none-x"></button>
         <form class="Finnow">
+            <div style="margin-bottom: 20px;"><span>红包名称： </span><input style="width: 200px; height: 30px;" id="coupon_name" type="text" /></div>
             <div style="margin-bottom: 20px;"><span>结算金额： </span><input style="width: 200px; height: 30px;" id="settle_amount" type="number" /></div>
             <div style="margin-bottom: 20px;"><span>交单数量： </span><input style="width: 200px; height: 30px;" id="submit_num" type="number" /></div>
             <div style="margin-bottom: 20px;"><span>起止日期： </span><input style="width: 140px; height: 30px;" id="date_start" type="date" />——<input style="width: 140px; height: 30px;" id="date_end" type="date" /></div>
@@ -138,7 +168,7 @@
             <span>审核说明：</span>
             <input id="audit_reason" type="text" placeholder="选填" />-->
             <div class="Finnow-Sub">
-                <input type="submit" value="确认" onclick="return false;" />
+                <input id="add_coupon_btn" type="submit" value="确认" onclick="return false;" />
                 <input type="button" value="取消" class="none-x-s" />
             </div>
         </form>

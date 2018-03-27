@@ -335,3 +335,10 @@ a { cursor:pointer;}
     font-size: 14px;
     color: red;
 }
+/*公共样式*/
+.select {
+    width: 125px;
+    height: 28px;
+    border: 1px solid #4daa84;
+    border-radius: 4px;
+}

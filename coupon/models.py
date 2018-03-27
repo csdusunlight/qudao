@@ -10,11 +10,12 @@ from account.transaction import charge_money
 # Create your models here.
 
 class Contract(models.Model):
-    name = models.CharField(u"合约名称", max_length=20)
+    name = models.CharField(u"合约名称", max_length=20, unique=True)
     start_date = models.DateField(u"开始时间")
     end_date = models.DateField(u"结束时间")
     settle_count = models.IntegerField(u"结算单数")
     settle_amount = models.DecimalField(u"结算金额", decimal_places=2, max_digits=6)
+    award = models.DecimalField(u"奖励金额", default=0, decimal_places=2, max_digits=6)
     def __unicode__(self):
         return self.name
     class Meta:
@@ -22,7 +23,7 @@ class Contract(models.Model):
         verbose_name_plural = u"合约"
 
 COUPONTYPE = (
-    ('zhuce', u'注册红包'),
+    ('guanzhu', u'关注公众号红包'),
     ('bangka', u'绑卡红包'),
     ('heyue', u'合约红包'),
     ('shoudan', u'首次交单'),

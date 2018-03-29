@@ -68,9 +68,9 @@
 		<ul id="pagedata1" class="item-container clearfix">
 			{% for item in projects %}
 			<li class="finance">
-				<a class="link_left" href="http://51fanshu.com/docs/HLUlS" target="_blank">
+				<a class="link_left" href="{{item.strategy}}" target="_blank">
 					<div class="wrapperBox">
-						<div class="over" data-state={{project_state}}><span>已结束</span></div>
+						<div class="over" data-state={{item.state}}><span>已结束</span></div>
 						<img class="finance__img finance__item" src="{{item.picture_url}}" alt="商家logo">
 					</div>
 					<div class="item1"><span class="finance__term finance__item">{{item.term}}</span></div>

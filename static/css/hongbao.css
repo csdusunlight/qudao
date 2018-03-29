@@ -43,11 +43,17 @@
     margin-left: 50px;
 }
 .hongbao{
-    padding:10px 30px;
+    padding:12px 20px;
     width: 198px;
     height: 140px;
     background: url(../../../static/images/hongbao_1.png) no-repeat;
     position: relative;
+}
+.top_box{
+    width: 100%;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
 }
 .amount{
     font-size: 20px;
@@ -56,16 +62,17 @@
 .desc{
     font-size: 14px;
     color: white;
-    margin-left: 25px;
+    margin-left: 10px;
 }
 .time{
     font-size: 12px;
     color: white;
-    margin: 5px 2px;
+    margin: 0 18px;
 }
 .btm_desc{
     width: 120px;
     height: 40px;
+    padding-left: 5px;
     line-height: 15px;
     color: white;
     position: absolute;bottom: 0;left: 38px;
@@ -80,6 +87,10 @@
     margin: 20px 15px;
     cursor: pointer;
 }
+.btntrue{
+    background: RGB(199,199,199);
+    cursor: not-allowed;
+}
 .fail_hongbao_box{
     margin: 20px 0;
     width: 198px;
@@ -89,7 +100,7 @@
     margin-left: 50px;
 }
 .fail_hongbao{
-    padding:10px 30px;
+    padding:10px 20px;
     width: 198px;
     height: 140px;
     background: url(../../../static/images/hongbao_2.png) no-repeat;
@@ -104,4 +115,57 @@
 }
 .fbtn{
     background: #c7c7c7;
+    cursor: not-allowed;
+}
+/* 红包模态框 */
+.modal_box{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: rgba(68, 68, 68, 0.4);
+    z-index: 9;
+    display: none;
+}
+.modal_img_box{
+    width: 260px;
+    height: 370px;
+    background: yellow;
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    background: url(../../../static/images/hongbao_btn.png) no-repeat center center;
+    background-size: 100% auto;
+}
+.modal_amount_box{
+    width: 100%;
+    height: 150px;
+    position: absolute;bottom: 80px;
+}
+.modal_amount{
+    width: 100%;
+    height: 60%;
+    text-align: center;
+    color: RGB(255,247,92);
+    line-height: 90px;
+    font-size: 40px;
+    padding-top: 20px;
+}
+.modal_desc{
+    width: 100%;
+    height: 40%;
+    text-align: center;
+    color: RGB(248,215,81);
+    line-height: 60px;
+}
+.modal_btn{
+    width: 180px;
+    height: 45px;
+    background: rgba(white, white, white, 0);
+    position: absolute;bottom: 32px;left: 40px;
+    text-align: center;
+    line-height: 45px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
 }

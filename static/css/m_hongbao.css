@@ -22,14 +22,15 @@
     color: #656565;
 }
 .take{
-    /* width: 6rem; */
-    /* height: 3rem; */
     background: #ffbe00;
     border-radius: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
+}
+.taketrue {
+    background: RGB(199,199,199);
 }
 .hongbao_bottom{
     width: 100%;
@@ -60,4 +61,58 @@
     position: absolute;right: 0.5rem;top: 0;z-index: 9;
     background: url(../../../static/images/expired.png) no-repeat center center;
     background-size: 100% auto;
+}
+/* 红包模态框 */
+.modal_box{
+    width: 100%;
+    height: 100%;
+    background: rgba(68, 68, 68, 0.4);
+    position: fixed;
+    z-index: 9;
+    display: none;
+}
+.modal_img_box{
+    width: 20rem;
+    height: 29rem;
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    background: url(../../../static/images/hongbao_btn.png) no-repeat center center;
+    background-size: 100% auto;
+}
+.modal_amount_box{
+    width: 100%;
+    height: 11rem;
+    position: absolute;top: 11.5rem;
+    display: flex;
+    flex-direction: column;
+}
+.modal_amount{
+    width: 100%;
+    height: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    color: RGB(255,247,92);
+    padding-top: 2rem;
+}
+.modal_desc{
+    width: 100%;
+    height: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: RGB(248,215,81);
+    font-size: 14px;
+}
+.modal_btn{
+    width: 13.4rem;
+    height: 3.6rem;
+    background: rgba(255, 255, 255, 0);
+    position: absolute;bottom: 2.6rem;left: 3.2rem;
+    color:white;
+    text-align: center;
+    line-height: 3.6rem;
 }

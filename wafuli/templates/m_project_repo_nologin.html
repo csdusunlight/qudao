@@ -45,19 +45,19 @@
                     </ul>
                 </ul>
                 <ul id="mui-table-view-right" class="mui-table-view-right">
-                    <li class="item_line m-head m-right">
+                    <li class="item_line m-head m-right" style="width: 44rem;">
                         <div class="column_2 column m-head">推广标期</div>
-                        <div class="column_3 column m-head">投资档位</div>
-                        <div class="column_4 column m-head">结算价格</div>
+                        <div class="column_3 column m-head">结算价格</div>
+                        <div class="column_4 column m-head">投资档位</div>
                         <!--<div class="column_5 column m-head">客户指导价</div>-->
                         <div class="column_6 column m-head">备注说明</div>
                     </li>
                     <ul id="right_box" class="right_ul">
                         {% for item in projects %}
-                        <li class="item_line m-right">
+                        <li class="item_line m-right" style="width: 44rem;">
                             <div class="column_2 column"><span class="item">{{item.term}}</span></div>
-                            <div class="column_3 column"><span class="item">{{item.investrange}}</span></div>
-                            <div class="column_4 column"><a href="/account/login/?next=/project_all" class="item">登陆后查看</a></div>
+                            <div class="column_3 column"><a href="/account/login/?next=/project_all" class="item">登陆后查看</a></div>
+                            <div class="column_4 column"><span class="item">{{item.investrange}}</span></div>
                             <!--<div class="column_5 column"><a href="/account/login/?next=/project_all" class="item">登陆后查看</a></div>-->
                             <div class="column_6 column"><span class="item">{{item.remark}}</span></div>
                         </li>

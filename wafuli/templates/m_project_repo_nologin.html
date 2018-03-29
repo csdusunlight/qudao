@@ -39,7 +39,7 @@
                     <ul id="left_box" class="left_ul">
                         {% for item in projects %}
                         <li class="item_line state{{item.state}}">
-                            <div class="column_1 column"><span class="item opa{{item.state}}">{{item.title}}</span></div>
+                            <div class="column_1 column"><span class="item opa{{item.state}}"><a href="{{item.strategy}}">{{item.title}}</a></span></div>
                         </li>
                         {%endfor%}
                     </ul>

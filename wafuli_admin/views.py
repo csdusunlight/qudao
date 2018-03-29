@@ -1404,3 +1404,9 @@ def batch_withdraw(request):
             continue
     return JsonResponse({'code':0})
 
+def coupon_send(request):    #jzy
+    return render(request,"coupon_send.html",{})
+def coupon_manage(request):    #jzy
+    return render(request,"coupon_manage.html",{})
+def coupon_count(request):    #jzy
+    return render(request,"coupon_count.html",{})

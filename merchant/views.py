@@ -226,7 +226,9 @@ def merchant(request):
         projects = Project.objects.filter(user=user, category="merchant", state__in=['10','20']).\
             only('id', 'state', 'apply_project__strategy_id').order_by('state','-pub_date')
         for project in projects:
-            doc_id = project.apply_project.strategy_id
+            doc_id = project.apply_project.strategy_id if hasattr(project, 'apply_project') else None
+            if not doc_id:
+                continue
             pv = 0
             try:
                 pv = DocStatis.objects.get(doc_id=doc_id, date=today).count
@@ -315,7 +317,7 @@ def get_project_statis_byday(request):
     projects_statis_dict = OrderedDict()
     for project in projects:
         dic = {'title':project.title, 'submit_count':0, 'settle_amount':0, 'settle_count':0}
-        doc_id = project.apply_project.strategy_id
+        doc_id = project.apply_project.strategy_id if hasattr(project, 'apply_project') else None
         pv = 0
         if _range == 0:
             try:

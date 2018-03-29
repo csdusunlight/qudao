@@ -59,3 +59,8 @@ def on_register(user):
     bulks.append(UserCoupon(type='bangka', user=user, award=2))
     bulks.append(UserCoupon(type='shoudan', user=user, award=5))
     UserCoupon.objects.bulk_create(bulks)
+    
+def open_coupon(request):
+    id = request.POST.get('id')
+    UserCoupon.objects.get(id=id).open()
+    return JsonResponse({'code':0})

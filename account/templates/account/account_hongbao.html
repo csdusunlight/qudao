@@ -147,7 +147,7 @@
             let hongbaoId = $(this).attr("data-id");//获取data-id的值
             $(".modal_amount").text(award); //将获取的data-award放入modal_amount盒子里
             $.ajax({
-                url: '/coupon/contracts/',
+                url: '/coupon/open_coupon/',
                 data:{
                     id:hongbaoId
                 },

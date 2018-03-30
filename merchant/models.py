@@ -60,7 +60,7 @@ class Apply_Project(models.Model):
     title = models.CharField(max_length=20, verbose_name=u"标题")
     submit_time = models.DateTimeField(u"申请时间", default=timezone.now)
     user = models.ForeignKey(MyUser, null=True, related_name="apply_projects")
-    strategy = models.ForeignKey(Document)
+    strategy = models.ForeignKey(Document, on_delete=SET_NULL, null=True)
     price = models.CharField(u"结算价格",max_length=25, blank=True)
     settle_period = models.CharField(u"结算周期", max_length=20)
     remark = models.CharField(u"备注", max_length=100, blank=True)

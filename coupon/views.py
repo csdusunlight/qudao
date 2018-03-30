@@ -8,7 +8,7 @@ from public.permissions import CsrfExemptSessionAuthentication
 from rest_framework import permissions
 from rest_framework.filters import SearchFilter
 import django_filters
-from public.tools import has_permission
+from public.tools import has_permission, login_required_ajax
 from django.http.response import JsonResponse
 from django.contrib.auth.decorators import login_required
 from account.models import MyUser
@@ -59,3 +59,10 @@ def on_register(user):
     bulks.append(UserCoupon(type='bangka', user=user, award=2))
     bulks.append(UserCoupon(type='shoudan', user=user, award=5))
     UserCoupon.objects.bulk_create(bulks)
+    
+@csrf_exempt
+@login_required_ajax
+def open_coupon(request):
+    id = request.POST.get('id')
+    UserCoupon.objects.get(user=request.user, id=id).open()
+    return JsonResponse({'code':0})

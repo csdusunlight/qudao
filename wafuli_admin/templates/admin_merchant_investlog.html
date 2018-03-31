@@ -123,7 +123,8 @@
             $.ajax({
                 url: "{%url 'admin_merchant_investlog' %}",
                 dataType: "json",
-                type: "POST",
+                type: "POST", 
+                async: false,
                 data: {
                     'id': id,
 //                  'cash': cash,
@@ -188,7 +189,8 @@
             $.ajax({
                 url: "{%url 'admin_merchant_investlog' %}",
                 dataType: "json",
-                type: "POST",
+                type: "POST", 
+                async: false,
                 data: {
                     'id': id,
                     'reason': reason,
@@ -220,7 +222,8 @@
             $.ajax({
                 url: "{%url 'admin_merchant_investlog' %}",
                 dataType: "json",
-                type: "POST",
+                type: "POST", 
+                async: false,
                 data: {
                     'id': id,
                     'reason': reason,

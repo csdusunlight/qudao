@@ -170,7 +170,7 @@ def admin_merchant_investlog(request):
             res['res_msg'] = u'该项目尚未被预审通过'
             return JsonResponse(res)
         reason = request.POST.get('reason')
-        if not reason and type != 1:
+        if not reason and type == 3:
             res['code'] = -2
             res['res_msg'] = u'原因为必填字段'
             return JsonResponse(res)
@@ -187,7 +187,7 @@ def admin_merchant_investlog(request):
         elif type == 2:
             investlog.audit_state = '1'
             investlog.preaudit_state = '1'
-            investlog.audit_reason = reason
+#             investlog.audit_reason = reason
             broker_amount = investlog.broker_amount
             if cash>0:
                 translist = charge_margin(investlog.project.user, '0', cash, u'冲账（结算额）', True, u'管理员驳回：'+project_title)
@@ -418,7 +418,7 @@ def admin_import_merchant_investlog(request):
                 elif result==2:
                     investlog.audit_state = '1'
                     investlog.preaudit_state = '1'
-                    investlog.audit_reason = reason
+#                     investlog.audit_reason = reason
                     broker_amount = investlog.broker_amount
                     if cash>0:
                         translist = charge_margin(investlog.project.user, '0', cash, '冲账（结算额）', True, u'管理员驳回：'+project_title)

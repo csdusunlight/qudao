@@ -1410,3 +1410,5 @@ def coupon_manage(request):    #jzy
     return render(request,"coupon_manage.html",{})
 def coupon_count(request):    #jzy
     return render(request,"coupon_count.html",{})
+def coupon_plan(request):    #jzy
+    return render(request,"coupon_plan.html",{})

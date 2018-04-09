@@ -1,0 +1,69 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{% block title %}挖福利{% endblock title %}</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/index.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/style-i.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/page.js' %}?v-1"></script>
+<script type="text/javascript">
+    var data = '<table width="100%"><tr><th>红包名称</th><th>开始时间</th><th>结束时间</th><th>结算单数</th>' +
+        '<th>结算金额</th><th>奖励金额</th><th>操作</th>' +
+        '[results]<tr><td>{name}</td><td>{start_date}</td><td>{end_date}</td>' +
+        '<td>{settle_count}</td><td>{settle_amount}</td><td>{award}</td><td><a onclick="del({id},this)">删除</a></td>' +
+        '</tr>[/results]</table>';
+    var url = "/coupon/contracts/" + "?page={page}&pageSize={pageSize}";
+    
+    function del (id,obj) {
+        console.log(id);
+        console.log(obj);
+        var r=confirm("确定删除该条红包方案？")
+        if (r==true){
+            console.log('del');
+            $.ajax({
+                url: "{%url 'admin_invest' %}",
+                dataType: "json",
+                type: "delete", 
+                async: false,
+                success: function(ret) {
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
+        }
+    }
+    $(document).ready(function() {
+        $(".ListTable tr:even").css("background-color", "#fcfcfc");
+        $("li.home21").toggleClass("on");
+        $("#pagedata").ajaxPage({
+            url: url,
+            pageId: $("#page"),
+            pageSize: 10,
+            run: true,
+            content: data,
+        });
+    });
+</script>
+
+<div class="Dateover">
+    <span>红包方案</span>
+    <div class="Date-box">
+        <div class="Date-Form">
+        </div>
+        <div class="ListTable">
+            <div id="pagedata">
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="Page-in-admin">
+    <div class="page" id="page">
+    </div>
+</div>

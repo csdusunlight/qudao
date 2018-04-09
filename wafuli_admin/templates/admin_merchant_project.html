@@ -137,8 +137,8 @@
             // 同意ajax
             $.ajax({
                 url: '/Admin/admin_merchant_project/',
-                type: "post", //提交方式post
-                async: true, //是否同步
+                type: "POST", 
+                async: false,
                 data: {
                     "type": 1,
                     "id":passId,
@@ -180,7 +180,7 @@
             $.ajax({
                 url: '/Admin/admin_merchant_project/',
                 type: "post", //提交方式post
-                async: true, //是否同步
+                async: false, //是否同步
                 data: {
                     "type": 2,
                     "id": refuseId,

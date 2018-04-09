@@ -25,11 +25,13 @@
         if (r==true){
             console.log('del');
             $.ajax({
-                url: "{%url 'admin_invest' %}",
+                url: "/coupon/contracts/" + id + '/',
                 dataType: "json",
                 type: "delete", 
                 async: false,
                 success: function(ret) {
+                    alert('删除成功');
+                    $(obj).parent().parent().remove();
                 },
                 error: function() {
                     alert("请检查网络连接");

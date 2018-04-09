@@ -7,10 +7,9 @@
     $(function () {
         $("li.home22").toggleClass("on");
         //数据
-        var data = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>时间</th><th>初始余额</th><th >变动值</th><th >变动原因</th>' +
-            '<th>备注</th>' +
+        var data = '<table width="100%"><tr><th>发放日期</th><th>红包方案</th><th>QQ昵称</th><th>手机号</th><th >红包金额</th><th >有效期</th>' +
             '[results]<tr><td>{username}</td><td>{mobile}</td><td class="time">{time}</td><td>{initAmount}</td><td>{transAmount}</td>' +
-            '<td>{reason}</td><td>{remark}</td></tr>[/results]</table>';
+            '<td>{reason}</td></tr>[/results]</table>';
 
         //回调函数
         function pagecallback() {
@@ -35,9 +34,8 @@
         $('.search').click(function () {
             var sTime = $('.startTime').val();
             var eTime = $('.endTime').val();
-            var user = $('.user').val();
-            var phoneNum = $('.phoneNum').val();
-            var reason = $('.reason').val();
+            var phone = $('.phone').val();
+            var coupon_plan = $('.coupon_plan').val();
             var newUrl = '/merchant/margin_translog/?page={page}&pageSize={pageSize}';
             if (sTime) {
                 newUrl += '&trans_date_0=' + sTime;
@@ -45,14 +43,11 @@
             if (eTime) {
                 newUrl += '&trans_date_1=' + eTime;
             }
-            if (user) {
-                newUrl += '&user_name=' + user;
+            if (phone) {
+                newUrl += '&phone=' + phone;
             }
-            if (phoneNum) {
-                newUrl += '&user_mobile=' + phoneNum;
-            }
-            if (reason) {
-                newUrl += '&reason_contains=' + reason;
+            if (coupon_plan) {
+                newUrl += '&coupon_plan=' + coupon_plan;
             }
             console.log(newUrl);
 
@@ -83,18 +78,12 @@
                 </td>
             </tr>
             <tr>
-                <td>用户名：
-                    <input type="text" class="user">
+                <td>用户手机号：
+                    <input type="text" class="phone">
                 </td>
-                <td>手机号：
-                    <input type="text" class="phoneNum">
+                <td>红包方案：
+                    <input type="text" class="coupon_plan">
                 </td>
-            </tr>
-            <tr>
-                <td>变动原因：
-                    <input type="text" class="reason">
-                </td>
-                <td></td>
             </tr>
         </table>
         <div class="operateBox">

@@ -14,6 +14,8 @@
     <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/page.js' %}?v-1"></script>
     <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
+    
 </head>
 
 <body>
@@ -45,29 +47,10 @@
             </ul>
             <ol class="contBox">
                 <li class="effective">
-                    <!-- <div class="hongbao_box">
-                        <div class="hongbao">
-                            <span style="color: white;">
-                                ￥<span class="amount">5</span>
-                            </span>
-                            <span class="desc">新用户专享</span>
-                            <p class="time">有效期至：2018-12-21</p>
-                            <div class="btm_desc">累计提交15单并且通过审核</div>
-                        </div>
-                        <input class="btn" type="button" value="领取">
-                    </div> -->
+                    
                 </li>
                 <li class="failure">
-                    <!-- <div class="fail_hongbao_box">
-                        <div class="fail_hongbao">
-                            <span class="amount">￥5</span>
-                            <span class="desc">新用户专享</span>
-                            <p class="time">有效期至：2018-12-21</p>
-                            <div class="fbtm_desc">累计提交15单并且通过审核</div>
-                        </div>
-                        <input class="btn fbtn" type="button" value="已失效">
-                    </div> -->
-
+                    
                 </li>
             </ol>
     </div>
@@ -95,7 +78,7 @@
           ajax获取红包列表  
         **/
         $.ajax({
-            url: '/coupon/coupons/?' + "user={{user.id}}",
+            url: '/coupon/coupons/?' + "user={{user.id}}&pageSize=9999",
             type: "get", //提交方式post
             async: true, //是否同步
             timeout: 5000, //超出时间
@@ -115,9 +98,9 @@
                                                 '</span>'+
                                             '</div>'+
                                             '<p class="time">有效期至：'+data.results[i].expire+'</p>'+
-                                            '<div class="btm_desc">累计提交15单并且通过审核</div>'+
+                                            '<div class="btm_desc" data-type="'+ data.results[i].type +'"></div>'+
                                         '</div>'+
-                                        '<input class="btn btn'+ data.results[i].is_to_expired +' get" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'"  type="button" value="'+ data.results[i].state_des+'">'+
+                                        '<input class="btn btn'+ data.results[i].is_to_expired +' get state'+ data.results[i].state +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ data.results[i].state +'" type="button" value="'+ data.results[i].state_des+'">'+
                                     '</div>' 
                         $(".effective").append(str_html);       
                     }else{
@@ -129,48 +112,73 @@
                                                 '</span>'+
                                             '</div>'+
                                             '<p class="time">有效期至：'+data.results[i].expire+'</p>'+
-                                            '<div class="fbtm_desc" data-type="'+ data.results[i].type +'">累计提交15单并且通过审核</div>'+
+                                            '<div class="fbtm_desc btm_desc" data-type="'+ data.results[i].type +'"></div>'+
                                         '</div>'+
                                         '<input class="btn fbtn" type="button" value="'+ data.results[i].state_des+'">'+
                                     '</div>'
                     }
                     $(".failure").append(str_html1);
                 }
+                //根据type来渲染
+                $(".btm_desc").each(function () { 
+                    let type = $(this).attr("data-type");
+                    if(type == ""){
+                        $(this).text("暂未达成解锁条件");
+                    }else if(type == "heyue"){
+                        $(this).text("累计提交5单并且审核通过");
+                    }else if(type == "guanzhu"){
+                        $(this).text("关注官微并且绑定账号");
+                    }else if(type == "shoudan"){
+                        $(this).text("首次交单挺且审核通过");
+                    }else{
+                        $(this).text("绑定银行卡");
+                    }
+                })
             },
             error: function (xhr, textStatus) {
                 console.log('错误:' + xhr.responseText);
             }
         });
+        
         //点击领取功能 
         $(document).on("click",".get",function () { //给动态添加出来的按钮添加监听事件
+            let that = $(this);
             let award = $(this).attr("data-award"); //获取data-award的值
             let hongbaoId = $(this).attr("data-id");//获取data-id的值
             $(".modal_amount").text(award); //将获取的data-award放入modal_amount盒子里
-            $.ajax({
-                url: '/coupon/open_coupon/',
-                data:{
-                    id:hongbaoId
-                },
-                type: "post", //提交方式post
-                async: true, //是否同步
-                timeout: 5000, //超出时间
-                dataType: 'json', //返回数据格式Json
-                success: function (res) {
-                    if(res.code == 0){
-                        //模态框的出现
-                        $(".modal_box").show();
-                        $(this).css("background","#c7c7c7");
-                        $(this).val("已领取");
+            let state = $(this).attr("data-state");//获取当前data-state的值
+            if(state == 0){
+                $.prompt({
+                    "Content":"您未达到解锁条件，请完成任务后再来领取红包"
+                });
+            }else if(state == 2){
+                $.prompt({
+                    "Content":"您已领取过该红包"
+                });
+            }else{
+                $.ajax({
+                    url: '/coupon/open_coupon/',
+                    data:{
+                        id:hongbaoId
+                    },
+                    type: "post", //提交方式post
+                    async: true, //是否同步
+                    timeout: 5000, //超出时间
+                    dataType: 'json', //返回数据格式Json
+                    success: function (res) {
+                        console.log("success this",that);
+                        if(res.code == 0){
+                            that.css("background","#c7c7c7");
+                            that.val("已领取");
+                            //模态框的出现
+                            $(".modal_box").show();
+                        }
+                    },
+                    error: function (xhr, textStatus) {
+                        console.log('错误:' + xhr.responseText);
                     }
-                },
-                error: function (xhr, textStatus) {
-                    console.log('错误:' + xhr.responseText);
-                }
-            });
-            // $(this).prev().css("background","url(../../../static/images/hongbao_2.png) no-repeat");
-            // $(this).css({"background":"#c7c7c7","cursor":" not-allowed"});
-            // $(this).attr("disabled","disabled");
-            // $(this).val("已领取");
+                });
+            }
          })
          
         //模态框消失

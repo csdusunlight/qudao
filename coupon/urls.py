@@ -3,8 +3,9 @@ from django.views.generic.base import TemplateView
 from . import views
 
 urlpatterns = [
-    url(r'^coupons/$', views.userCouponList.as_view()),
-    url(r'^contracts/$', views.contractList.as_view()),
+    url(r'^coupons/$', views.UserCouponList.as_view()),
+    url(r'^contracts/$', views.ContractList.as_view()),
+    url(r'^contracts/(?P<pk>[0-9]+)/$', views.ContractDetail.as_view(), kwargs={'partial':True}),
     url(r'^open_coupon/$', views.open_coupon),
 ]
 

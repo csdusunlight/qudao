@@ -10,10 +10,61 @@
         <link rel="stylesheet" type="text/css" href="/static/css/wfl-common.css"/>
         <link rel="stylesheet" type="text/css" href="/static/css/wfl-flesslider.css"/>
         <link rel="stylesheet" type="text/css" href="/static/css/wfl-index.css"/>
+        <style>
+            .modal_hangbao_box{
+                width: 100%;
+                height: 300px;
+                position: fixed;bottom: 0;z-index: 8;
+                /* background: rgba(68, 68, 68, 0.4); */
+            }
+            .modal_btm{
+                width: 100%;
+                height: 113px;
+                position: absolute;bottom: 0;
+                background: url(../../../static/images/hongbao_index1.png) no-repeat center center;
+                background-size: 100% auto;
+                background-position-y: 0;
+            }
+            .modal_top{
+                width: 300px;
+                height: 300px;
+                background: url(../../../static/images/hongbao_index2.png) no-repeat center center;
+                background-size: 100% auto;
+                position:absolute;z-index: 9;
+                left:50%;
+                top:50%;
+                transform:translate(-50%,-50%);
+            }
+            .close{
+                width: 20px;
+                height: 20px;
+                background: rgba(171,171,171,.4);
+                text-align: center;
+                line-height: 22px;
+                font-size: 24px;
+                border-radius: 50%;
+                cursor: pointer;
+                position: absolute;right: 0;top: 20px;
+                color: white;
+            }
+            .register_box{
+                width: 120px;
+                height: 28px;
+                margin: 52px 35px;
+                cursor: pointer;
+            }
+        </style>
     </head>
     <body>
+        <div class="modal_hangbao_box">
+            <div class="modal_top">
+                <div class="close">×</div>
+                <div class="register_box"></div>
+            </div>
+            <div class="modal_btm"></div>
+        </div>
+        <!-- 头部 -->
         {% include "header.html" %}
-
         <!--banner-container-->
         <div class="banner-container wfl-wrap clearfix">
             <div class="banner l">
@@ -106,11 +157,18 @@
         <script type="text/javascript">
             $(document).ready(function(){
                 $('.nav__item:eq(0)').addClass('active');
-
+                //点击模态框消失
+                $(".close").click(function(){
+                    $(".modal_hangbao_box").hide();
+                });
+                //跳转到注册页面
+                $(".register_box").click(function(){
+                    window.location.href="{% url 'register' %}";
+                });
 //              轮播部分
                 $('.flexslider').flexslider({
                     directionNav: true,
-                    pauseOnAction: false
+                    pauseOnAction: false 
                 });
 //              轮播部分---end
             });

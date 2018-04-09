@@ -17,6 +17,20 @@
 </head>
 
 <body>
+    <!-- 红包模态框 -->
+    <div class="modal_box">
+        <div class="modal_img_box">
+            <div class="modal_amount_box">
+                <div class="modal_amount">
+                    
+                </div>
+                <div class="modal_desc">
+                    已存放至账户余额
+                </div>
+            </div>
+            <div class="modal_btn">确定</div>
+        </div>        
+    </div>
     {% include "header.html" %}
     <div class="Content">
         <!--头部-->
@@ -31,7 +45,7 @@
             </ul>
             <ol class="contBox">
                 <li class="effective">
-                    <div class="hongbao_box">
+                    <!-- <div class="hongbao_box">
                         <div class="hongbao">
                             <span style="color: white;">
                                 ￥<span class="amount">5</span>
@@ -41,27 +55,10 @@
                             <div class="btm_desc">累计提交15单并且通过审核</div>
                         </div>
                         <input class="btn" type="button" value="领取">
-                    </div>
-                    <div class="hongbao_box">
-                        <div class="hongbao">
-                            <span style="color: white;">
-                                ￥<span class="amount">5</span>
-                            </span>
-                            <span class="desc">新用户专享</span>
-                            <p class="time">有效期至：2018-12-21</p>
-                            <div class="btm_desc">累计提交15单并且通过审核</div>
-                        </div>
-                        <input class="btn" type="button" value="领取">
-                    </div>
-                    <!-- <div class="contentBox">
-                        <div id="pagedata" class="pagedata"></div>
-                        <div class="Page-in1">
-                            <div class="page" id="page"></div>
-                        </div>
                     </div> -->
                 </li>
                 <li class="failure">
-                    <div class="fail_hongbao_box">
+                    <!-- <div class="fail_hongbao_box">
                         <div class="fail_hongbao">
                             <span class="amount">￥5</span>
                             <span class="desc">新用户专享</span>
@@ -69,14 +66,8 @@
                             <div class="fbtm_desc">累计提交15单并且通过审核</div>
                         </div>
                         <input class="btn fbtn" type="button" value="已失效">
-                    </div>
-                    
-                    <!-- <div class="contentBox">
-                        <div id="pagedata" class="pagedata"></div>
-                        <div class="Page-in1">
-                            <div class="page" id="page"></div>
-                        </div>
                     </div> -->
+
                 </li>
             </ol>
     </div>
@@ -89,79 +80,105 @@
 </body>
 <script type="text/javascript">
     "use strict";//声明严格模式
-    // var data = `<div class="hongbao_box">
-
-    //             <div>`
-
-
-    // var data = '<table width="100%"><thead><tr><th height="44">项目</th>' +
-    //     '<th>金额</th><th>余额</th><th>获取时间</th><th>备注</th></tr></thead><tbody>' +
-    //     '[results]<tr><td>{reason}</td><td class="shouzhi" data-shouzhi="{transType}">{transAmount}</td>' +
-    //     '<td>{user_balance}</td><td class="submit-time">{time}</td><td>{remark}</td></tr>[/results]' +
-    //     '</tbody></table>';
-    // var url = "/restapi/translist/" + "?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}";
-    function pagecallback() {
-        console.log('回调函数');
-    }
-
     $(function () {
+        $('.back-a14').toggleClass("on");
         /**
          tab效果
         **/
         $(".tab>li").click(function () {
-            console.log("当前下标序号：", $(this).index());
+            // console.log("当前下标序号：", $(this).index());
             let index = $(this).index()
             $(this).addClass("active").siblings().removeClass("active");
             $(".contBox > li").eq(index).show().siblings().hide();
         });
-        $('.back-a14').toggleClass("on");
-        // ajax交互数据
-        // $("#pagedata").ajaxPage({
-        //     url: url,
-        //     pageId: $("#page"),
-        //     run: true,
-        //     content: data,
-        //     complete: pagecallback,
-        // });
-        //     $(".Close").click(function () {
-        //         $(".Listpop").css("display", "none") < !--隐藏-->
-        //     });
-        //     $("#pagedata").ajaxPage({
-        //         url: url,
-        //         pageId: $("#page"),
-        //         run: true,
-        //         content: data,
-        //         complete: pagecallback,
-        //     });
+        /**
+          ajax获取红包列表  
+        **/
+        $.ajax({
+            url: '/coupon/coupons/?' + "user={{user.id}}",
+            type: "get", //提交方式post
+            async: true, //是否同步
+            timeout: 5000, //超出时间
+            dataType: 'json', //返回数据格式Json
+            success: function (data) {
+                console.log(data.results);
+                let str_html;
+                let str_html1;
+                for (let i in data.results) {
+                    // console.log("-- is_expired --",data.results[i].is_expired)
+                    if (data.results[i].is_expired === false) {
+                        str_html = '<div class="hongbao_box">'+
+                                        '<div class="hongbao">'+
+                                            '<div class="top_box">'+
+                                                '<span style="color: white;">'+
+                                                    '￥<span class="amount">'+ data.results[i].award +'</span>'+
+                                                '</span>'+
+                                            '</div>'+
+                                            '<p class="time">有效期至：'+data.results[i].expire+'</p>'+
+                                            '<div class="btm_desc">累计提交15单并且通过审核</div>'+
+                                        '</div>'+
+                                        '<input class="btn btn'+ data.results[i].is_to_expired +' get" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'"  type="button" value="'+ data.results[i].state_des+'">'+
+                                    '</div>' 
+                        $(".effective").append(str_html);       
+                    }else{
+                        str_html1 = '<div class="fail_hongbao_box">'+
+                                        '<div class="fail_hongbao">'+
+                                            '<div class="top_box">'+
+                                                '<span style="color: white;">'+
+                                                    '￥<span class="amount">'+ data.results[i].award +'</span>'+
+                                                '</span>'+
+                                            '</div>'+
+                                            '<p class="time">有效期至：'+data.results[i].expire+'</p>'+
+                                            '<div class="fbtm_desc" data-type="'+ data.results[i].type +'">累计提交15单并且通过审核</div>'+
+                                        '</div>'+
+                                        '<input class="btn fbtn" type="button" value="'+ data.results[i].state_des+'">'+
+                                    '</div>'
+                    }
+                    $(".failure").append(str_html1);
+                }
+            },
+            error: function (xhr, textStatus) {
+                console.log('错误:' + xhr.responseText);
+            }
+        });
+        //点击领取功能 
+        $(document).on("click",".get",function () { //给动态添加出来的按钮添加监听事件
+            let award = $(this).attr("data-award"); //获取data-award的值
+            let hongbaoId = $(this).attr("data-id");//获取data-id的值
+            $(".modal_amount").text(award); //将获取的data-award放入modal_amount盒子里
+            $.ajax({
+                url: '/coupon/open_coupon/',
+                data:{
+                    id:hongbaoId
+                },
+                type: "post", //提交方式post
+                async: true, //是否同步
+                timeout: 5000, //超出时间
+                dataType: 'json', //返回数据格式Json
+                success: function (res) {
+                    if(res.code == 0){
+                        //模态框的出现
+                        $(".modal_box").show();
+                        $(this).css("background","#c7c7c7");
+                        $(this).val("已领取");
+                    }
+                },
+                error: function (xhr, textStatus) {
+                    console.log('错误:' + xhr.responseText);
+                }
+            });
+            // $(this).prev().css("background","url(../../../static/images/hongbao_2.png) no-repeat");
+            // $(this).css({"background":"#c7c7c7","cursor":" not-allowed"});
+            // $(this).attr("disabled","disabled");
+            // $(this).val("已领取");
+         })
+         
+        //模态框消失
+        $(".modal_btn").click(function () { 
+            $(".modal_box").hide();
+         })
+        
 
-        //     $(".RightCont").on("focus", ".date_picker", function () {
-        //         $(this).date_input();
-        //     })
-
-        //     $("#search").click(function () {
-        //         var trans_date_0 = $("#trans_date_0").val(),
-        //             trans_date_1 = $("#trans_date_1").val(),
-        //             transType = $("#transType").val();
-        //         var newurl = url;
-        //         if (trans_date_0) {
-        //             newurl += "&trans_date_0=" + trans_date_0;
-        //         }
-        //         if (trans_date_1) {
-        //             newurl += "&trans_date_1=" + trans_date_1;
-        //         }
-        //         if (transType) {
-        //             newurl += "&transType=" + transType;
-        //         }
-
-        //         console.log(newurl);
-        //         $("#page").empty();
-        //         $("#pagedata").ajaxPage({
-        //             url: newurl,
-        //             pageId: $("#page"),
-        //             run: true,
-        //             content: data,
-        //             complete: pagecallback,
-        //         });
     });
 </script>
 

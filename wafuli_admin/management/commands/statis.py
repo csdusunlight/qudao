@@ -15,6 +15,7 @@ from docs.models import Document, DocStatis
 from django.core.cache import cache
 from public.redis import cache_decr_or_set
 from merchant.models import MerchantProjectStatistics, Margin_AuditLog
+from coupon.models import UserCoupon
 logger = logging.getLogger("wafuli")
 from django.core.management.base import BaseCommand, CommandError
 from account.models import MyUser, Userlogin, ApplyLog
@@ -105,7 +106,6 @@ class Command(BaseCommand):
         abnormal_count = 0
         toaudit_count = 0
         settle_amount = 0
-        print ret
         for item in ret:
             id = item['project_id'] 
             if id not in project_statis:
@@ -160,6 +160,26 @@ class Command(BaseCommand):
             'merchant_consume': merchant_consume,
             'merchant_broker': merchant_broker,
             'merchant_settle': merchant_settle
+        }
+        DayStatis.objects.filter(date=today).update(**update_fields)
+        
+        dic = UserCoupon.objects.filter(create_date=today).aggregate(count_user=Count('user', distinct=True),
+                    count_coupon=Count('*'), sum=Sum('award'))
+        coupon_user_total = dic.get('count_user') or 0
+        coupon_total = dic.get('count_coupon') or 0
+        coupon_award = dic.get('sum') or 0
+        dic = UserCoupon.objects.filter(unlock_date=today).aggregate(count_user=Count('user', distinct=True),
+                    count_coupon=Count('*'), sum=Sum('award'))
+        coupon_user_total_unlock = dic.get('count_user') or 0
+        coupon_total_unlock = dic.get('count_coupon') or 0
+        coupon_award_unlock = dic.get('sum') or 0
+        update_fields = {
+            'coupon_user_total': coupon_user_total,
+            'coupon_total': coupon_total,
+            'coupon_award': coupon_award,
+            'coupon_user_total_unlock':coupon_user_total_unlock,
+            'coupon_total_unlock':coupon_total_unlock,
+            'coupon_award_unlock': coupon_award_unlock,
         }
         DayStatis.objects.filter(date=today).update(**update_fields)
         

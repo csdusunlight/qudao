@@ -17,6 +17,8 @@ from weixin.models import WeiXinUser
 from weixin.settings import submit_investlog_notify_templateid
 from dragon.settings import APPID
 from xiaochengxu.models import App
+from django.core.cache import cache
+from coupon.models import UserCoupon
 logger = logging.getLogger("wafuli")
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -29,6 +31,7 @@ class Command(BaseCommand):
         update_jsapi_ticket(access_token)
         update_xcxaccesstoken()
 #         sendTemplate(access_token)
+        check_coupon()
         end_time = time.time()
         logger.info("******Hour-task is finished, time:%s*********",end_time-begin_time)
         
@@ -105,3 +108,18 @@ def update_xcxaccesstoken():
             app.save(update_fields=['access_token', 'expire_stamp'])
         else:
             logger.error('Getting access_token for %s error: %s' % (app_id, str(json_ret)) )
+
+def check_coupon():
+    users = ''
+    with cache.lock("admin_invest"):
+        users = cache.get('invest_user_set')
+#         cache.set('invest_user_set', '')
+    if users:
+        users = users.split(',')
+        users = [ int(x) for x in users ]
+        user_set = set(users)
+        print user_set
+        coupons = UserCoupon.objects.filter(user_id__in=user_set, state='0',
+                                   expire__gt=datetime.date.today())
+        for coupon in coupons:
+            coupon.checklock()

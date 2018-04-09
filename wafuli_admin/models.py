@@ -25,6 +25,13 @@ class DayStatis(models.Model):
     merchant_consume = models.DecimalField(u'保证金消耗', default = Decimal(0), max_digits=10, decimal_places=2)
     merchant_broker = models.DecimalField(u'佣金', default = Decimal(0), max_digits=10, decimal_places=2)
     merchant_settle = models.DecimalField(u'结算金额', default = Decimal(0), max_digits=10, decimal_places=2)
+    coupon_total = models.IntegerField(u'发放红包数量', default=0)
+    coupon_user_total = models.IntegerField(u"发放红包用户数", default=0)
+    coupon_award = models.DecimalField(u'红包奖励金额', default = Decimal(0), max_digits=10, decimal_places=2)
+    coupon_total_unlock = models.IntegerField(u'激活红包数量', default=0)
+    coupon_user_total_unlock = models.IntegerField(u"激活红包用户数", default=0)
+    coupon_award_unlock = models.DecimalField(u'激活红包奖励金额', default = Decimal(0), max_digits=10, decimal_places=2)
+    
     def __unicode__(self):
         return self.date.strftime("%Y-%m-%d")
     class Meta:

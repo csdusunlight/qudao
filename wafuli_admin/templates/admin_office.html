@@ -121,7 +121,8 @@
 			$.ajax({
 				url: "{%url 'admin_invest' %}",
 				dataType: "json",
-				type: "POST",
+				type: "POST", 
+				async: false,
 				data: {
 					'id': id,
 					'cash': cash,
@@ -154,7 +155,8 @@
             $.ajax({
                 url: "{%url 'admin_invest' %}",
                 dataType: "json",
-                type: "POST",
+                type: "POST", 
+                async: false,
                 data: {
                     'id': id,
                     'reason': reason,
@@ -187,6 +189,7 @@
 				url: "{%url 'admin_invest' %}",
 				dataType: "json",
 				type: "POST",
+				async: false,
 				data: {
 					'id': id,
 					'reason': reason,

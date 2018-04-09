@@ -616,6 +616,11 @@ def bind_bankcard(request):
         if card_number and real_name and bank:
             user.user_bankcard.create(user=user, card_number=card_number, real_name=real_name,
                                        bank=bank, subbranch=subbranch)
+        #红包活动插入++++++++++
+        coupons = user.usercoupons.filter(type='bangka')
+        for coupon in coupons:
+            coupon.checklock()
+        #红包活动插入++++++++++
         result['code'] = 0
     return JsonResponse(result)
 @login_required

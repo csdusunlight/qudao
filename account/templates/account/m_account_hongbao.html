@@ -159,130 +159,38 @@
 			//领取点击事件ajax:
 			var modal_box = document.querySelector(".modal_box");
 			var modal_amount = document.querySelector(".modal_amount");
-			mui(document).on("tap",".take",function () { 
+			mui(document).on("tap",".take",function () { //加载出来的button DOM节点 用on监听
 				console.log(mui(this));
-				var award = mui(this)[0].getAttribute("data-award"); //获取数组的第一个 
+				var award = mui(this)[0].getAttribute("data-award"); //获取button的data-award属性
 				modal_amount.innerHTML = award;
-				modal_box.style.display = "block";
+				var hongbaoId = mui(this)[0].getAttribute("data-id");
+				//领取红包ajax
+				mui.ajax('/coupon/open_coupon/', {
+					dataType: 'json', //服务器返回json格式数据 
+					type: 'post', //HTTP请求类型
+					data:{
+						id:hongbaoId
+					},
+					timeout: 10000, //超时时间设置为10秒；
+					//headers:{'Content-Type':'application/json'},
+					success: function (data) {
+						if(data.code == 0){
+							modal_box.style.display = "block";
+							mui(this).innerHTML = "已领取";
+							// mui(this).style.backgroundColor = "#c7c7c7";
+						}
+					},
+					error: function (xhr, type, errorThrown) {
+						console.log(xhr.responseText);
+					}
+			});
+				
 			});
 			//隐藏模态框：
 			var modal_btn = document.querySelector(".modal_btn");
 			modal_btn.onclick = function () { 
 				modal_box.style.display = "none";
-			 }
-		// var data = {
-		// 	"results": [
-		// 		{
-		// 			"id": "59",
-		// 			"state": "0",
-		// 			"type": "1",
-		// 			"amount": "5.00",
-		// 			"date": "2018-3-26",
-		// 			"desc": "首次交单并审核通过"
-		// 		},
-		// 		{
-		// 			"id": 56,
-		// 			"state": "1",
-		// 			"type": "0",
-		// 			"amount": "5.00",
-		// 			"date": "2018-3-26",
-		// 			"desc": "首次交单并审核通过"
-		// 		},
-		// 		{
-		// 			"id": 52,
-		// 			"state": "0",
-		// 			"type": "1",
-		// 			"amount": "5.00",
-		// 			"date": "2018-3-26",
-		// 			"desc": "首次交单并审核通过"
-		// 		},
-		// 		{
-		// 			"id": 51,
-		// 			"state": "1",
-		// 			"type": "0",
-		// 			"amount": "5.00",
-		// 			"date": "2018-3-26",
-		// 			"desc": "首次交单并审核通过"
-		// 		},
-		// 		{
-		// 			"id": 50,
-		// 			"state": "1",
-		// 			"type": "0",
-		// 			"amount": "5.00",
-		// 			"date": "2018-3-26",
-		// 			"desc": "首次交单并审核通过"
-		// 		},
-		// 		{
-		// 			"id": 49,
-		// 			"state": "1",
-		// 			"type": "0",
-		// 			"amount": "5.00",
-		// 			"date": "2018-3-26",
-		// 			"desc": "首次交单并审核通过"
-		// 		},
-		// 		{
-		// 			"id": 48,
-		// 			"state": "1",
-		// 			"type": "0",
-		// 			"amount": "5.00",
-		// 			"date": "2018-3-26",
-		// 			"desc": "首次交单并审核通过"
-		// 		}
-		// 	]
-		// }
-		// var html1 = document.querySelector(".tab1");
-		// var html2 = document.querySelector(".tab2");
-		// var str_html;
-		// for(var i in data.results){
-		// 	var li = document.createElement("li");
-		// 	li.className = "mui-table-view-cell";
-		// 	str_html = '<div class="hongbao_box">' +
-		// 						'<div class="hongbao_top">' +
-		// 							'<div class="amount">' +
-		// 								'<span>￥</span>' +
-		// 								'<span class="amount1">'+ data.results[i].amount +'</span>' +
-		// 							'</div>' +
-		// 							'<div class="time">' +
-		// 								'<span>有效期至：</span>' +
-		// 								'<span>'+ data.results[i].date +'</span>' +
-		// 							'</div>' +
-		// 							'<button type="button" class="mui-btn take mui-btn-outlined">领取</button>' +
-		// 						'</div>' +
-		// 						'<div class="hongbao_bottom">' +
-		// 							'<span class="btm_text">'+ data.results[i].desc +'</span>' +
-		// 						'</div>' +
-		// 					'</div>'
-		// 		li.innerHTML = str_html;
-		// 		html1.appendChild(li);				
-		// }
-		// document.getElementById('finance_slider').addEventListener('slide', function(e) {
-		// 	// console.log("当前下标：",e.detail.slideNumber);
-		// 	html2.innerHTML = "";//清空上一次追加进来的内容
-		// 	if (e.detail.slideNumber == 1) {
-		// 		for (var i in data.results) {	
-		// 			var li = document.createElement("li");
-		// 			li.className = "mui-table-view-cell";
-		// 			str_html = '<div class="hongbao_box">' +
-		// 							'<div class="fhongbao_top">' +
-		// 									'<div class="amount fail">' +
-		// 									'<span>￥</span>' +
-		// 									'<span class="amount1">'+ data.results[i].amount +'</span>' +
-		// 								'</div>' +
-		// 								'<div class="time fail">' +
-		// 									'<span>有效期至：</span>' +
-		// 									'<span>'+ data.results[i].date +'</span>' +
-		// 								'</div>' +
-		// 								'<div class="failBox"></div>' +
-		// 							'</div>' +
-		// 							'<div class="hongbao_bottom">' +
-		// 								'<span class="btm_text">'+ data.results[i].desc +'</span>' +
-		// 							'</div>' +
-		// 						'</div>'
-		// 		li.innerHTML = str_html;
-		// 		html2.appendChild(li);
-		// 		}
-		// 	}
-		// });
+			}
 		
 	</script>
 </body>

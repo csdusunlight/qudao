@@ -155,10 +155,13 @@
                 async: true, //是否同步
                 timeout: 5000, //超出时间
                 dataType: 'json', //返回数据格式Json
-                success: function (data) {
-                //模态框的出现
-                    $(".modal_box").show();
-                    $(this).css({"background":"#c7c7c7","cursor":" not-allowed"});
+                success: function (res) {
+                    if(res.code == 0){
+                        //模态框的出现
+                        $(".modal_box").show();
+                        $(this).css("background","#c7c7c7");
+                        $(this).val("已领取");
+                    }
                 },
                 error: function (xhr, textStatus) {
                     console.log('错误:' + xhr.responseText);

@@ -99,7 +99,7 @@
 		//ajax获取红包列表数据：
 		var html1 = document.querySelector(".tab1");
 		var html2 = document.querySelector(".tab2");
-		mui.ajax('/coupon/coupons/?' + "user={{user.id}}", {
+		mui.ajax('/coupon/coupons/?' + "user={{user.id}}&pageSize=999", {
 				dataType: 'json', //服务器返回json格式数据 
 				type: 'get', //HTTP请求类型
 				timeout: 10000, //超时时间设置为10秒；
@@ -121,7 +121,7 @@
 													'<span>有效期至：</span>' +
 													'<span>'+ data.results[i].expire +'</span>' +
 												'</div>' +
-												'<button type="button" data-award="'+ data.results[i].award +'" data-id="'+ data.results[i].id +'" class="mui-btn take take'+ data.results[i].is_to_expired +' mui-btn-outlined">'+ data.results[i].state_des +'</button>' +
+												'<button type="button" data-state="'+ data.results[i].state +'"  data-award="'+ data.results[i].award +'" data-id="'+ data.results[i].id +'" class="mui-btn take take'+ data.results[i].is_to_expired +' state'+ data.results[i].state +' mui-btn-outlined">'+ data.results[i].state_des +'</button>' +
 											'</div>' +
 											'<div class="hongbao_bottom">' +
 												'<span class="btm_text">'+ data.results[i].type_des +'</span>' +
@@ -161,29 +161,40 @@
 			var modal_amount = document.querySelector(".modal_amount");
 			mui(document).on("tap",".take",function () { //加载出来的button DOM节点 用on监听
 				console.log(mui(this));
+				var that = mui(this)[0];
 				var award = mui(this)[0].getAttribute("data-award"); //获取button的data-award属性
 				modal_amount.innerHTML = award;
 				var hongbaoId = mui(this)[0].getAttribute("data-id");
-				//领取红包ajax
-				mui.ajax('/coupon/open_coupon/', {
-					dataType: 'json', //服务器返回json格式数据 
-					type: 'post', //HTTP请求类型
-					data:{
-						id:hongbaoId
-					},
-					timeout: 10000, //超时时间设置为10秒；
-					//headers:{'Content-Type':'application/json'},
-					success: function (data) {
-						if(data.code == 0){
-							modal_box.style.display = "block";
-							mui(this).innerHTML = "已领取";
-							// mui(this).style.backgroundColor = "#c7c7c7";
+				var state = mui(this)[0].getAttribute("data-state");
+				if(state == 0){
+					mui.toast('您未达到解锁条件，请完成任务后再来领取红包');  
+					return;
+				}else if(state == 2){
+					mui.toast('您已领取过该红包');  
+					return;
+				}else {
+					//领取红包ajax
+					mui.ajax('/coupon/open_coupon/', {
+						dataType: 'json', //服务器返回json格式数据 
+						type: 'post', //HTTP请求类型
+						data:{
+							id:hongbaoId
+						},
+						timeout: 10000, //超时时间设置为10秒；
+						//headers:{'Content-Type':'application/json'},
+						success: function (data) {
+							if(data.code == 0){
+								modal_box.style.display = "block";
+								that.innerHTML = "已领取";
+								that.style.backgroundColor = "#c7c7c7";
+							}
+						},
+						error: function (xhr, type, errorThrown) {
+							console.log(xhr.responseText);
 						}
-					},
-					error: function (xhr, type, errorThrown) {
-						console.log(xhr.responseText);
-					}
-			});
+					});
+				}
+				
 				
 			});
 			//隐藏模态框：

@@ -14,6 +14,7 @@ from django.contrib.auth.decorators import login_required
 from account.models import MyUser
 from django.views.decorators.csrf import csrf_exempt
 import logging
+from coupon.Filters import UserCouponFilter
 logger = logging.getLogger('wafuli')
 # Create your views here.
 class BaseViewMixin(object):
@@ -42,11 +43,11 @@ class userCouponList(BaseViewMixin, ListCreateAPIView):
             return UserCoupon.objects.filter(user=user)
         
     serializer_class = UserCouponSerializer
-    filter_backends = (SearchFilter, django_filters.rest_framework.DjangoFilterBackend,)
-    filter_fields = ['user']
-#     filter_class = ApplyProjectFilter
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+#     filter_fields = ['user']
+    filter_class = UserCouponFilter
 #     ordering_fields = ('state','pub_date','pinyin')
-    search_fields = ('name', )
+#     search_fields = ('name', )
     pagination_class = MyPageNumberPagination
 
 def on_register(user):

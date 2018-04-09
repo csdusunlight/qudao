@@ -40,6 +40,7 @@ class UserCoupon(models.Model):
     user = models.ForeignKey(MyUser, null=True, related_name="usercoupons")
     contract = models.ForeignKey(Contract, null=True)
     state = models.CharField(u"红包状态", choices=COUPONSTATE, default='0', max_length=2)
+    create_date = models.DateField(u"发放日期", default=datetime.date.today)
     expire = models.DateField(u"过期时间", default=thirty_day_later)
     award = models.DecimalField(u"奖励金额", default=0, decimal_places=2, max_digits=6)
     def checklock(self):

@@ -32,6 +32,9 @@
 .taketrue {
     background: RGB(199,199,199);
 }
+.state2{
+    background: RGB(199,199,199) !important;
+}
 .hongbao_bottom{
     width: 100%;
     height: 35%;

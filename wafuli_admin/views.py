@@ -558,7 +558,7 @@ def import_investlog(request):
                     investlog.audit_state = '2'
                 elif result==3:
                     investlog.audit_state = '3'
-                investlog.audit_reason = reason    
+                investlog.audit_reason = reason
                 investlog.audit_time = datetime.datetime.now()
                 investlog.admin_user = admin_user
                 investlog.save(update_fields=['audit_state','audit_time','settle_amount','audit_reason','admin_user'])

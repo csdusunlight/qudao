@@ -12,6 +12,8 @@ from django.http.response import JsonResponse
 from coupon.models import Contract, UserCoupon
 from account.models import MyUser
 import logging
+from account.varify import send_multimsg_bydhst
+from public.tools import send_mobilemsg_multi
 logger = logging.getLogger('wafuli')
 @csrf_exempt
 @login_required
@@ -64,7 +66,8 @@ def deliver_coupon(request):
                     success_count += 1
         if bulk:
             UserCoupon.objects.bulk_create(bulk)
-            
+        send_mobilemsg_multi(user_set, u"送您一张%s元的推单红包，快去个人中心领取吧。联盟地址：%s" % (contract.award, 'http://fuliunion.com/account/hongbao/'))
+
         result.update({'succ_num':success_count, 'fail_list':fail_list})
         return JsonResponse(result)
 

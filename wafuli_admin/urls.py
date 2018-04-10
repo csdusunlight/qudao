@@ -51,6 +51,7 @@ urlpatterns = [
     url(r'^coupon_send/$', 'wafuli_admin.views.coupon_send', name='coupon_send'),  #jzy
     url(r'^coupon_manage/$', 'wafuli_admin.views.coupon_manage', name='coupon_manage'),   #jzy
     url(r'^coupon_count/$', 'wafuli_admin.views.coupon_count', name='coupon_count'),  #jzy
+    url(r'^coupon_plan/$', 'wafuli_admin.views.coupon_plan', name='coupon_plan'),  #jzy
 #     url(r'^parse_file/$', 'wafuli_admin.views.parse_file', name='parse_file'), #jzy
     url(r'^deliver_coupon/$', coupon_admin.deliver_coupon, name='deliver_coupon'),
     url(r'^parse_file/$', coupon_admin.parse_file, name='parse_file'),

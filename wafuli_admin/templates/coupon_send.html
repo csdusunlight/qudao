@@ -10,7 +10,7 @@
         },
     });
     $(function() {
-        $("li.home9").toggleClass("on");
+        $("li.home23").toggleClass("on");
         
             $.ajax({
                 url: '/coupon/contracts/',
@@ -109,6 +109,10 @@
             var date_start = $('#date_start').val();
             var date_end = $('#date_end').val();
             var coupon_amount = $('#coupon_amount').val();
+            if (coupon_amount <= 0 ) {
+                alert('红包金额必须大于零')
+                return;
+            }
             
             $.ajax({
                 url: "/coupon/contracts/",
@@ -138,7 +142,7 @@
     <i style="letter-spacing:4.8px;">红包方案：</i>
     <select class="select" name="selecttype" id="contract">
     </select>
-    <span id="add_plan">增加方案</span>
+    <a id="add_plan">&nbsp;&nbsp;增加方案</a>&nbsp;&nbsp;<a target="_blank" href="{% url 'coupon_plan' %}">查看方案</a>
 </div>
 
 <div id="cash_coupon">

@@ -61,6 +61,8 @@
         </style>
     </head>
     <body>
+        <!-- 底部红包模态框 -->
+        {% if not user.is_authenticated %}
         <div class="modal_hangbao_box">
             <div class="modal_top">
                 <div class="close">×</div>
@@ -69,6 +71,7 @@
             </div>
             <div class="modal_btm"></div>
         </div>
+        {% endif %}
         <!-- 头部 -->
         {% include "header.html" %}
         <!--banner-container-->
@@ -163,16 +166,16 @@
         <script type="text/javascript">
             $(document).ready(function(){
                 //跳转到红包页面
-                $(".hongbao_box").click(function(){
-                    window.location.href="{% url 'account_hongbao' %}";
-                });
+    //            $(".hongbao_box").click(function(){
+    //                window.location.href="{% url 'account_hongbao' %}";
+    //            });
                 $('.nav__item:eq(0)').addClass('active');
                 //点击模态框消失
                 $(".close").click(function(){
                     $(".modal_hangbao_box").hide();
                 });
                 //跳转到注册页面
-                $(".register_box").click(function(){
+                $(".hongbao_box").click(function(){
                     window.location.href="{% url 'register' %}";
                 });
 //              轮播部分

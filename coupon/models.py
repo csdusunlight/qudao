@@ -14,8 +14,8 @@ class Contract(models.Model):
     start_date = models.DateField(u"开始时间")
     end_date = models.DateField(u"结束时间")
     settle_count = models.IntegerField(u"结算单数")
-    settle_amount = models.DecimalField(u"结算金额", decimal_places=2, max_digits=6)
-    award = models.DecimalField(u"奖励金额", default=0, decimal_places=2, max_digits=10)
+    settle_amount = models.DecimalField(u"结算金额", decimal_places=2, max_digits=10)
+    award = models.DecimalField(u"奖励金额", default=0, decimal_places=2, max_digits=6)
     def __unicode__(self):
         return self.name
     class Meta:
@@ -42,7 +42,7 @@ class UserCoupon(models.Model):
     state = models.CharField(u"红包状态", choices=COUPONSTATE, default='0', max_length=2)
     create_date = models.DateField(u"发放日期", default=datetime.date.today)
     expire = models.DateField(u"过期时间", default=thirty_day_later)
-    award = models.DecimalField(u"奖励金额", default=0, decimal_places=2, max_digits=10)
+    award = models.DecimalField(u"奖励金额", default=0, decimal_places=2, max_digits=6)
     unlock_date = models.DateField(u"解锁日期", default=None, null=True, blank=True)
     def checklock(self):
         if self.state != '0':

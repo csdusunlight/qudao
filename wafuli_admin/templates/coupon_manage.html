@@ -8,19 +8,19 @@
         $("li.home22").toggleClass("on");
         //数据
         var data = '<table width="100%"><tr><th>发放日期</th><th>红包方案</th><th>QQ昵称</th><th>手机号</th><th >红包金额</th><th >有效期</th>' +
-            '[results]<tr><td>{create_date}</td><td>{type}</td><td class="time">{time}</td><td>{initAmount}</td><td>{award}</td>' +
+            '[results]<tr><td>{create_date}</td><td>{contract_name}</td><td>{qq_name}</td><td>{mobile}</td><td>{award}</td>' +
             '<td>{expire}</td></tr>[/results]</table>';
 
         //回调函数
         function pagecallback() {
             console.log("回调函数");
             //时间分割展示
-            $('.time').each(function () {
-                var time = $(this).text().split('T');//分割字符串 获取年月日
-                console.log(time);
-                var time_1 = time[1].split('.');//分割字符串 获取时分秒
-                $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
-            });
+//          $('.time').each(function () {
+//              var time = $(this).text().split('T');//分割字符串 获取年月日
+//              console.log(time);
+//              var time_1 = time[1].split('.');//分割字符串 获取时分秒
+//              $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
+//          });
         }
         $("#pagedata").ajaxPage({
             url: '/coupon/coupons/?page={page}&pageSize={pageSize}',
@@ -36,18 +36,18 @@
             var eTime = $('.endTime').val();
             var phone = $('.phone').val();
             var coupon_plan = $('.coupon_plan').val();
-            var newUrl = '/merchant/margin_translog/?page={page}&pageSize={pageSize}';
+            var newUrl = '/coupon/coupons/?page={page}&pageSize={pageSize}';
             if (sTime) {
-                newUrl += '&trans_date_0=' + sTime;
+                newUrl += '&create_0=' + sTime;
             }
             if (eTime) {
-                newUrl += '&trans_date_1=' + eTime;
+                newUrl += '&create_1=' + eTime;
             }
             if (phone) {
-                newUrl += '&phone=' + phone;
+                newUrl += '&user_mobile=' + phone;
             }
             if (coupon_plan) {
-                newUrl += '&coupon_plan=' + coupon_plan;
+                newUrl += '&contract_contains=' + coupon_plan;
             }
             console.log(newUrl);
 

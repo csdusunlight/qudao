@@ -109,6 +109,10 @@
             var date_start = $('#date_start').val();
             var date_end = $('#date_end').val();
             var coupon_amount = $('#coupon_amount').val();
+            if (coupon_amount <= 0 ) {
+                alert('红包金额必须大于零')
+                return;
+            }
             
             $.ajax({
                 url: "/coupon/contracts/",

@@ -19,6 +19,8 @@ class UserCouponSerializer(serializers.ModelSerializer):
     mobile = serializers.CharField(source='user.mobile', read_only=True)
     qq_name = serializers.CharField(source='user.qq_name', read_only=True)
     contract_name = serializers.CharField(source='contract.name', read_only=True)
+    settle_count = serializers.CharField(source='contract.settle_count', read_only=True)
+    settle_amount = serializers.CharField(source='contract.settle_count', read_only=True)
     class Meta:
         model = UserCoupon
         fields = '__all__'

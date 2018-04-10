@@ -43,29 +43,27 @@ class UserCoupon(models.Model):
     create_date = models.DateField(u"发放日期", default=datetime.date.today)
     expire = models.DateField(u"过期时间", default=thirty_day_later)
     award = models.DecimalField(u"奖励金额", default=0, decimal_places=2, max_digits=6)
+    unlock_date = models.DateField(u"解锁日期", default=None, null=True, blank=True)
     def checklock(self):
         if self.state != '0':
             return
         if self.type == 'heyue':
-            dic = self.user.investlog_submit.filter(submit_time__get=(self.contract.start_date,
+            dic = self.user.investlog_submit.filter(submit_time__range=(self.contract.start_date,
                  self.contract.end_date + datetime.timedelta(days=1)), audit_state='0').\
                  aggregate(cou=Count('*'),sum=Sum('settle_amount'))
             count = dic.get('cou') or 0
             amount = dic.get('sum') or 0
             if count >= self.contract.settle_count and amount >= self.contract.settle_amount:
                 self.state = '1'
-                self.save(update_fields = ['state'])
-        elif self.type == 'zhuce':
-            self.state = '1'
-            self.save(update_fields = ['state'])
         elif self.type == 'bangka':
             if self.user.user_bankcard.exists():
                 self.state = '1'
-                self.save(update_fields = ['state'])
         elif self.type == 'shoudan':
             if self.user.investlog_submit.filter(audit_state='0').exists():
                 self.state = '1'
-                self.save(update_fields = ['state'])
+        if self.state == '1':
+            self.create_date = datetime.date.today()
+            self.save(update_fields = ['create_date', 'state'])
     def is_expired(self):
         return datetime.date.today() > self.expire
     def is_to_expired(self):

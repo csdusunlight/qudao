@@ -30,6 +30,9 @@ from decimal import Decimal
 from weixin.tasks import sendWeixinNotify
 from merchant.margin_transaction import charge_margin
 from coupon.views import on_register
+from django_redis import get_redis_connection
+from django.core.cache import cache
+from coupon.models import UserCoupon
 # Create your views here.
 logger = logging.getLogger('wafuli')
 def index(request):
@@ -174,6 +177,13 @@ def admin_invest(request):
                 investlog.settle_amount += cash
                 translist.auditlog = investlog
                 translist.save()
+                #红包插入+++++++++++++++++++
+                with cache.lock("admin_invest"):
+                    users = cache.get('invest_user_set') or ''
+                    user_set = set(users.split(','))  if users else set()
+                    user_set.add(str(investlog_user.id))
+                    cache.set('invest_user_set', ','.join(user_set))
+                #红包插入+++++++++++++++++++
 #                 #活动插入
 #                 on_audit_pass(request, investlog)
 #                 #活动插入结束
@@ -533,6 +543,7 @@ def import_investlog(request):
         return JsonResponse(ret)
     admin_user = request.user
     suc_num = 0
+    user_set_temp = set()
     try:
         for row in rtable:
             with transaction.atomic():
@@ -551,6 +562,9 @@ def import_investlog(request):
                     investlog.settle_amount = amount
                     translist.auditlog = investlog
                     translist.save()
+                    #红包插入+++++++++++++++++++
+                    user_set_temp.add(str(investlog_user.id))
+                    #红包插入+++++++++++++++++++
 #                     #活动插入
 #                     on_audit_pass(request, investlog)
 #                     #活动插入结束
@@ -563,6 +577,13 @@ def import_investlog(request):
                 investlog.admin_user = admin_user
                 investlog.save(update_fields=['audit_state','audit_time','settle_amount','audit_reason','admin_user'])
                 suc_num += 1
+        #红包插入+++++++++++++++++++
+        with cache.lock("admin_invest"):
+            users = cache.get('invest_user_set') or ''
+            user_set = set(users.split(',')) if users else set()
+            user_set.update(user_set_temp)
+            cache.set('invest_user_set', ','.join(user_set))
+        #红包插入+++++++++++++++++++
         ret['code'] = 0
     except Exception as e:
         traceback.print_exc()
@@ -1409,4 +1430,22 @@ def coupon_send(request):    #jzy
 def coupon_manage(request):    #jzy
     return render(request,"coupon_manage.html",{})
 def coupon_count(request):    #jzy
-    return render(request,"coupon_count.html",{})
+    total = {}
+    dic = UserCoupon.objects.filter(type='heyue').aggregate(count_user=Count('user', distinct=True),
+                    count_coupon=Count('*'), sum=Sum('award'))
+    coupon_user_total = dic.get('count_user') or 0
+    coupon_total = dic.get('count_coupon') or 0
+    coupon_award = dic.get('sum') or 0
+    dic = UserCoupon.objects.filter(type='heyue', state='1').aggregate(count_user=Count('user', distinct=True),
+                count_coupon=Count('*'), sum=Sum('award'))
+    coupon_user_total_unlock = dic.get('count_user') or 0
+    coupon_total_unlock = dic.get('count_coupon') or 0
+    coupon_award_unlock = dic.get('sum') or 0
+    total['coupon_user_total'] = coupon_user_total
+    total['coupon_total'] = coupon_total
+    total['coupon_award'] = coupon_award
+    total['coupon_user_total_unlock'] = coupon_user_total_unlock
+    total['coupon_total_unlock'] = coupon_total_unlock
+    total['coupon_award_unlock'] = coupon_award_unlock
+    print total
+    return render(request,"coupon_count.html",{'total':total})

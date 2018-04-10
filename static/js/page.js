@@ -37,6 +37,7 @@
 		b.r = function (obj,opt) {
 			var str;
 			function fun(str) {
+				
 				for(var name in opt) {
 					if(opt[name] && typeof opt[name]=="object") {
 						// 字符串截取出新字符串
@@ -46,7 +47,11 @@
 						for(var i=0;i<opt[name].length;i++) {
 							var newStrP=getStr;
 							for(var s in opt[name][i]) {
-								newStrP=newStrP.replace(eval("/{"+s+"}/ig"),opt[name][i][s]);
+								var objstr = '' + opt[name][i][s];
+								console.log('++++++++++++++++++++++++'+objstr);
+								objstr = ToHtmlString(objstr);
+								console.log(objstr);
+								newStrP=newStrP.replace(eval("/{"+s+"}/ig"),objstr);
 							}
 							newStr+=newStrP;
 						}
@@ -283,3 +288,25 @@
 	}
 	a.fn.extend({ajaxPage:ajaxPage});
 })(jQuery);
+
+function ToHtmlString(htmlStr) {
+    return toTXT(htmlStr);
+}
+//Html结构转字符串形式显示
+function toTXT(str) {
+    var RexStr = /\<|\>/g
+    str = str.replace(RexStr,
+    function (MatchStr) {
+        switch (MatchStr) {
+            case "<":
+                return "&lt;";
+                break;
+            case ">":
+                return "&gt;";
+                break;
+            default:
+                break;
+        }
+    })
+    return str;
+}

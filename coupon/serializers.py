@@ -16,6 +16,9 @@ class UserCouponSerializer(serializers.ModelSerializer):
     type_des = serializers.CharField(source='get_type_display', read_only=True)
     is_expired = serializers.BooleanField(read_only=True)
     is_to_expired = serializers.BooleanField(read_only=True)
+    mobile = serializers.CharField(source='user.mobile', read_only=True)
+    qq_name = serializers.CharField(source='user.qq_name', read_only=True)
+    contract_name = serializers.CharField(source='contract.name', read_only=True)
     class Meta:
         model = UserCoupon
         fields = '__all__'

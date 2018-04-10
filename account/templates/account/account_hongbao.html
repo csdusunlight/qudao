@@ -85,21 +85,30 @@
             dataType: 'json', //返回数据格式Json
             success: function (data) {
                 console.log(data.results);
-                let str_html;
-                let str_html1;
+                let str_html = '';
+                let str_html1 = '';
                 for (let i in data.results) {
                     // console.log("-- is_expired --",data.results[i].is_expired)
                     if (data.results[i].is_expired === false) {
-                        str_html = '<div class="hongbao_box">'+
+                        str_html += '<div class="hongbao_box">'+
                                         '<div class="hongbao">'+
                                             '<div class="top_box">'+
                                                 '<span style="color: white;">'+
                                                     '￥<span class="amount">'+ data.results[i].award +'</span>'+
                                                 '</span>'+
                                             '</div>'+
-                                            '<p class="time">有效期至：'+data.results[i].expire+'</p>'+
-                                            '<div class="btm_desc" data-type="'+ data.results[i].type +'"></div>'+
-                                        '</div>'+
+                                            '<p class="time">有效期至：'+data.results[i].expire+'</p>';
+                                            // '<div class="btm_desc" data-type="'+ data.results[i].type +'"></div>'+
+                                            if (data.results[i].type === "heyue") {
+                                                str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
+                                            } else if(data.results[i].type === "guanzhu"){
+                                                str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
+                                            } else if(data.results[i].type === "shoudan"){
+                                                str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
+                                            } else{
+                                                str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
+                                            }
+                            str_html += '</div>'+
                                         '<input class="btn btn'+ data.results[i].is_to_expired +' get state'+ data.results[i].state +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ data.results[i].state +'" type="button" value="'+ data.results[i].state_des+'">'+
                                     '</div>' 
                         $(".effective").append(str_html);       
@@ -116,22 +125,10 @@
                                         '</div>'+
                                         '<input class="btn fbtn" type="button" value="'+ data.results[i].state_des+'">'+
                                     '</div>'
+                        $(".failure").append(str_html1);            
                     }
-                    $(".failure").append(str_html1);
+                    
                 }
-                //根据type来渲染
-                $(".btm_desc").each(function () { 
-                    let type = $(this).attr("data-type");
-                    if(type == "heyue"){
-                        $(this).text("累计提交5单并且审核通过");
-                    }else if(type == "guanzhu"){
-                        $(this).text("关注官微并且绑定账号");
-                    }else if(type == "shoudan"){
-                        $(this).text("首次交单挺且审核通过");
-                    }else{
-                        $(this).text("绑定银行卡");
-                    }
-                })
             },
             error: function (xhr, textStatus) {
                 console.log('错误:' + xhr.responseText);

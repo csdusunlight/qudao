@@ -36,7 +36,7 @@ COUPONSTATE = (
 def thirty_day_later():
     return datetime.date.today() + datetime.timedelta(days=30)
 class UserCoupon(models.Model):
-    type = models.CharField(u"红包类型", choices=COUPONTYPE, max_length=2)
+    type = models.CharField(u"红包类型", choices=COUPONTYPE, max_length=10)
     user = models.ForeignKey(MyUser, null=True, related_name="usercoupons")
     contract = models.ForeignKey(Contract, null=True)
     state = models.CharField(u"红包状态", choices=COUPONSTATE, default='0', max_length=2)

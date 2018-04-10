@@ -160,8 +160,8 @@
 						}
 					}
 					//将统计好的红包个数放入顶部tab切换栏
-					top_left.innerHTML = "<span>("+ effective_hongbao +")</span>"		
-					top_right.innerHTML = "<span>(" + failure_hongbao + ")</span>";
+					top_left.innerHTML = "("+ effective_hongbao +")"		
+					top_right.innerHTML = "(" + failure_hongbao + ")";
 					
 				},
 				error: function (xhr, type, errorThrown) {
@@ -198,7 +198,7 @@
 						success: function (data) {
 							if(data.code == 0){
 								modal_box.style.display = "block";
-								that.innerHTML = "已领取";
+								that.innerText = "已领取";
 								that.style.backgroundColor = "#c7c7c7";
 							}
 						},

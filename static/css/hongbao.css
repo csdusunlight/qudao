@@ -4,6 +4,7 @@
 .tab{
     width: 200px;
     height: 40px;
+    margin: 20px;
     border:1px solid #91c11d;
     background: white;
     color: #91c11d;
@@ -40,7 +41,7 @@
     /* background: yellow; */
     padding-top: 12px;
     float: left;
-    margin-left: 50px;
+    margin-left: 40px;
 }
 .hongbao{
     padding:12px 20px;

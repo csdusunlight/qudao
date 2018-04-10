@@ -49,8 +49,8 @@
 		<!--选项卡部分-->
 		<div id="finance_slider" class="mui-slider mui-fullscreen">
 			<div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-				<a class="mui-control-item" href="#item1">可用红包（10）</a>
-				<a class="mui-control-item" href="#item2">失效红包（10）</a>
+				<a class="mui-control-item" href="#item1">可用红包<span class="top_left"></span></a>
+				<a class="mui-control-item" href="#item2">失效红包<span class="top_right"></span></a>
 			</div>
 			<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6" style="background: #90c01e;"></div>
 			<div class="mui-slider-group">
@@ -99,6 +99,8 @@
 		//ajax获取红包列表数据：
 		var html1 = document.querySelector(".tab1");
 		var html2 = document.querySelector(".tab2");
+		var top_left = document.querySelector(".top_left");
+		var top_right = document.querySelector(".top_right");
 		mui.ajax('/coupon/coupons/?' + "user={{user.id}}&pageSize=999", {
 				dataType: 'json', //服务器返回json格式数据 
 				type: 'get', //HTTP请求类型
@@ -106,11 +108,16 @@
 				//headers:{'Content-Type':'application/json'},
 				success: function (data) {
 					console.log("data:",data);
+					//定义有效红包个数和失效红包个数
+					var effective_hongbao = 0; 
+					var failure_hongbao = 0; 
 					for(var i in data.results){
-						var span = document.createElement("span");
 						var li = document.createElement("li");
 						li.className = "mui-table-view-cell";
-						if(data.results[i].is_expired === false){
+						var span = document.createElement("span");
+						//判断当前红包是否有效
+						if(data.results[i].is_expired === false){ 
+							effective_hongbao ++;
 							str_html = '<div class="hongbao_box" data-id="'+ data.results[i].id +'">' +
 											'<div class="hongbao_top">' +
 												'<div class="amount">' +
@@ -130,6 +137,7 @@
 								li.innerHTML = str_html;
 								html1.appendChild(li);
 						}else{
+							failure_hongbao ++;
 							str_html = '<div class="hongbao_box">' +
 											'<div class="fhongbao_top">' +
 													'<div class="amount fail">' +
@@ -148,23 +156,13 @@
 										'</div>'
 							li.innerHTML = str_html;
 							html2.appendChild(li);
+							
 						}
 					}
-					// mui(".btm_text").each(function(){
-					// 	var type = mui(this)[0].getAttribute("data-type");
-					// 	if(type == "heyue"){
-                    //     	mui(this).innerText="累计提交5单并且审核通过";
-					// 	}else if(type == "guanzhu"){
-					// 		// mui(this).text("关注官微并且绑定账号");
-					// 		mui(this).innerText="关注官微并且绑定账号";
-					// 	}else if(type == "shoudan"){
-					// 		// mui(this).text("首次交单挺且审核通过");
-					// 		mui(this).innerText="首次交单挺且审核通过";
-					// 	}else{
-					// 		// mui(this).text("绑定银行卡");
-					// 		mui(this).innerText="绑定银行卡";
-					// 	}
-					// })
+					//将统计好的红包个数放入顶部tab切换栏
+					top_left.innerHTML = "("+ effective_hongbao +")"		
+					top_right.innerHTML = "(" + failure_hongbao + ")";
+					
 				},
 				error: function (xhr, type, errorThrown) {
 					console.log(xhr.responseText);
@@ -200,7 +198,7 @@
 						success: function (data) {
 							if(data.code == 0){
 								modal_box.style.display = "block";
-								that.innerHTML = "已领取";
+								that.innerText = "已领取";
 								that.style.backgroundColor = "#c7c7c7";
 							}
 						},

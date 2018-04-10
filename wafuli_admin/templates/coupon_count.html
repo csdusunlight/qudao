@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 {% block js %}
 <script type="text/javascript"> 
-var data = '<table width="100%"><tr><th>日期</th><th>新申请用户数</th><th>审核拒绝人数</th><th>审核通过人数</th>'+
-	'<th>成功提现金额</th><th>成功提现用户数</th><th>返现金额</th><th>返现用户数</th><th>活动奖励</th>'+
-	'[results]<tr><td>{date}</td><td>{apply_num}</td><td>{refuse_num}</td>'+
-	'<td>{new_reg_num}</td><td>{with_amount}</td><td>{with_num}</td><td>{ret_amount}</td>'+
-	'<td>{ret_num}</td><td>{activity_consume}</td>'+
+var data = '<table width="100%"><tr><th>日期</th><th>红包发放个数</th><th>红包发放用户数</th><th>红包发放总额</th>'+
+	'<th>激活红包人数</th><th>激活红包数量</th><th>激活红包总额</th>'+
+	'[results]<tr><td>{date}</td><td>{coupon_total}</td><td>{coupon_user_total}</td>'+
+	'<td>{coupon_award}</td><td>{coupon_user_total_unlock}</td><td>{coupon_total_unlock}</td><td>{coupon_award_unlock}</td>'+
 	'</tr>[/results]</table>';
 var url = "/restapi/daystatis/" + "?page={page}&pageSize={pageSize}";
 $(document).ready(function(){
@@ -28,22 +27,20 @@ $(document).ready(function(){
                         <div class="Table-in">
                         	<table width="100%">
                             	<tr>
-                                	<th>总申请人数</th>
-                                	<th>申请同意人数</th>
-                                	<th>现金余额</th>
-                                	<th>总提现金额</th>
-                                	<th>提现成功人数</th>
-                                	<th>总返现金额</th>
-                                	<th>返现处理人数</th>
+                                	<th>总发放红包个数</th>
+                                	<th>总发放红包用户数</th>
+                                	<th>总发放红包金额</th>
+                                	<th>总激活红包人数</th>
+                                	<th>总激活红包数量</th>
+                                	<th>总激活红包金额</th>
                                 </tr>
                                 <tr>
-                                	<td>{{total.apply_num}}</td>
-                                	<td>{{total.user_num}}</td>
-                                	<td>{{total.balance}}</td>
-                                	<td>{{total.with_total}}</td>
-                                	<td>{{total.with_count}}</td>
-                                	<td>{{total.ret_total}}</td>
-                                	<td>{{total.ret_count}}</td>
+                                	<td>{{total.coupon_total}}</td>
+                                	<td>{{total.coupon_user_total}}</td>
+                                	<td>{{total.coupon_award}}</td>
+                                	<td>{{total.coupon_user_total_unlock}}</td>
+                                	<td>{{total.coupon_total_unlock}}</td>
+                                	<td>{{total.coupon_award_unlock}}</td>
                                 </tr>
                             </table>
                         </div>
@@ -52,6 +49,7 @@ $(document).ready(function(){
                             <div class="Date-box">
                             	<div class="Date-Form">
                                 </div>
+                                <p>此表格包括新注册用户红包及老用户红包</p>
                                 <div class="ListTable">
 									<div id="pagedata">
 									</div>

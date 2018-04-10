@@ -124,7 +124,7 @@
 												'<button type="button" data-state="'+ data.results[i].state +'"  data-award="'+ data.results[i].award +'" data-id="'+ data.results[i].id +'" class="mui-btn take take'+ data.results[i].is_to_expired +' state'+ data.results[i].state +' mui-btn-outlined">'+ data.results[i].state_des +'</button>' +
 											'</div>' +
 											'<div class="hongbao_bottom">' +
-												'<span class="btm_text">'+ data.results[i].type_des +'</span>' +
+												'<span class="btm_text" data-type="'+ data.results[i].type +'">'+ data.results[i].type_des +'</span>' +
 											'</div>' +
 										'</div>'
 								li.innerHTML = str_html;
@@ -143,13 +143,28 @@
 												'<div class="failBox"></div>' +
 											'</div>' +
 											'<div class="hongbao_bottom">' +
-												'<span class="btm_text">'+ data.results[i].type_des +'</span>' +
+												'<span class="btm_text" data-type="'+ data.results[i].type +'">'+ data.results[i].type_des +'</span>' +
 											'</div>' +
 										'</div>'
 							li.innerHTML = str_html;
 							html2.appendChild(li);
 						}
 					}
+					// mui(".btm_text").each(function(){
+					// 	var type = mui(this)[0].getAttribute("data-type");
+					// 	if(type == "heyue"){
+                    //     	mui(this).innerText="累计提交5单并且审核通过";
+					// 	}else if(type == "guanzhu"){
+					// 		// mui(this).text("关注官微并且绑定账号");
+					// 		mui(this).innerText="关注官微并且绑定账号";
+					// 	}else if(type == "shoudan"){
+					// 		// mui(this).text("首次交单挺且审核通过");
+					// 		mui(this).innerText="首次交单挺且审核通过";
+					// 	}else{
+					// 		// mui(this).text("绑定银行卡");
+					// 		mui(this).innerText="绑定银行卡";
+					// 	}
+					// })
 				},
 				error: function (xhr, type, errorThrown) {
 					console.log(xhr.responseText);
@@ -160,7 +175,7 @@
 			var modal_box = document.querySelector(".modal_box");
 			var modal_amount = document.querySelector(".modal_amount");
 			mui(document).on("tap",".take",function () { //加载出来的button DOM节点 用on监听
-				console.log(mui(this));
+				// console.log(mui(this));
 				var that = mui(this)[0];
 				var award = mui(this)[0].getAttribute("data-award"); //获取button的data-award属性
 				modal_amount.innerHTML = award;

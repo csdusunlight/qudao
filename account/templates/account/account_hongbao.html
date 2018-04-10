@@ -122,9 +122,7 @@
                 //根据type来渲染
                 $(".btm_desc").each(function () { 
                     let type = $(this).attr("data-type");
-                    if(type == ""){
-                        $(this).text("暂未达成解锁条件");
-                    }else if(type == "heyue"){
+                    if(type == "heyue"){
                         $(this).text("累计提交5单并且审核通过");
                     }else if(type == "guanzhu"){
                         $(this).text("关注官微并且绑定账号");

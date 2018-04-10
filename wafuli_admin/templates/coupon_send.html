@@ -109,8 +109,12 @@
             var date_start = $('#date_start').val();
             var date_end = $('#date_end').val();
             var coupon_amount = $('#coupon_amount').val();
+            if (!coupon_name || !settle_amount || !submit_num || !date_start || !date_end || !coupon_amount) {
+                alert('填写项不能为空');
+                return;
+            }
             if (coupon_amount <= 0 ) {
-                alert('红包金额必须大于零')
+                alert('红包金额必须大于零');
                 return;
             }
             

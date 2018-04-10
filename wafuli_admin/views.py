@@ -1429,9 +1429,9 @@ def coupon_send(request):    #jzy
     return render(request,"coupon_send.html",{})
 def coupon_manage(request):    #jzy
     return render(request,"coupon_manage.html",{})
-def coupon_count(request):    #jzy
-    return render(request,"coupon_count.html",{})
 def coupon_plan(request):    #jzy
+    return render(request,"coupon_plan.html",{})
+def coupon_count(request):
     total = {}
     dic = UserCoupon.objects.filter(type='heyue').aggregate(count_user=Count('user', distinct=True),
                     count_coupon=Count('*'), sum=Sum('award'))
@@ -1449,5 +1449,4 @@ def coupon_plan(request):    #jzy
     total['coupon_user_total_unlock'] = coupon_user_total_unlock
     total['coupon_total_unlock'] = coupon_total_unlock
     total['coupon_award_unlock'] = coupon_award_unlock
-    print total
     return render(request,"coupon_count.html",{'total':total})

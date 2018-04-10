@@ -3,8 +3,8 @@
 <script type="text/javascript"> 
 var data = '<table width="100%"><tr><th>日期</th><th>红包发放个数</th><th>红包发放用户数</th><th>红包发放总额</th>'+
 	'<th>激活红包人数</th><th>激活红包数量</th><th>激活红包总额</th>'+
-	'[results]<tr><td>{date}</td><td>{apply_num}</td><td>{refuse_num}</td>'+
-	'<td>{new_reg_num}</td><td>{with_amount}</td><td>{with_num}</td><td>{ret_amount}</td>'+
+	'[results]<tr><td>{date}</td><td>{coupon_total}</td><td>{coupon_user_total}</td>'+
+	'<td>{coupon_award}</td><td>{coupon_user_total_unlock}</td><td>{coupon_total_unlock}</td><td>{coupon_award_unlock}</td>'+
 	'</tr>[/results]</table>';
 var url = "/restapi/daystatis/" + "?page={page}&pageSize={pageSize}";
 $(document).ready(function(){
@@ -35,12 +35,12 @@ $(document).ready(function(){
                                 	<th>总激活红包金额</th>
                                 </tr>
                                 <tr>
-                                	<td>{{total.apply_num}}</td>
-                                	<td>{{total.user_num}}</td>
-                                	<td>{{total.balance}}</td>
-                                	<td>{{total.with_total}}</td>
-                                	<td>{{total.with_count}}</td>
-                                	<td>{{total.ret_total}}</td>
+                                	<td>{{total.coupon_total}}</td>
+                                	<td>{{total.coupon_user_total}}</td>
+                                	<td>{{total.coupon_award}}</td>
+                                	<td>{{total.coupon_user_total_unlock}}</td>
+                                	<td>{{total.coupon_total_unlock}}</td>
+                                	<td>{{total.coupon_award_unlock}}</td>
                                 </tr>
                             </table>
                         </div>

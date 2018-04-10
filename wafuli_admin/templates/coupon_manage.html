@@ -8,8 +8,8 @@
         $("li.home22").toggleClass("on");
         //数据
         var data = '<table width="100%"><tr><th>发放日期</th><th>红包方案</th><th>QQ昵称</th><th>手机号</th><th >红包金额</th><th >有效期</th>' +
-            '[results]<tr><td>{username}</td><td>{mobile}</td><td class="time">{time}</td><td>{initAmount}</td><td>{transAmount}</td>' +
-            '<td>{reason}</td></tr>[/results]</table>';
+            '[results]<tr><td>{create_date}</td><td>{type}</td><td class="time">{time}</td><td>{initAmount}</td><td>{award}</td>' +
+            '<td>{expire}</td></tr>[/results]</table>';
 
         //回调函数
         function pagecallback() {
@@ -23,7 +23,7 @@
             });
         }
         $("#pagedata").ajaxPage({
-            url: '/merchant/margin_translog/?page={page}&pageSize={pageSize}',
+            url: '/coupon/coupons/?page={page}&pageSize={pageSize}',
             pageId: $("#page"),
             pageSize: 6,
             run: true,

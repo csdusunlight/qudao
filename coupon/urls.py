@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^contracts/(?P<pk>[0-9]+)/$', views.ContractDetail.as_view(), kwargs={'partial':True}),
     url(r'^open_coupon/$', views.open_coupon),
     url(r'^get_coupon_schedule/$', views.get_coupon_schedule),
+    url(r'^get_coupon_num/$', views.get_coupon_num),
 ]
 
 

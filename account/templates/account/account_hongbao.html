@@ -223,10 +223,10 @@
                                     "Content":`已经结算了${data.count}单，结算了${data.amount}元` //ES6字符串模板
                                 });
                            }else if(data.code == 1){
-                               $(this).removeClass("state0").addClass("state1");
-                               $(this).attr("disabled","disabled")
-                               $(this).text("已领取");
-                               $(this).attr("data-state","1")
+                               that.removeClass("state0").addClass("state1");
+                               that.attr("disabled","disabled")
+                               that.text("已领取");
+                               that.attr("data-state","1")
                            }
                         },
                         error: function (xhr, textStatus) {

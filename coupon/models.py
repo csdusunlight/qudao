@@ -46,7 +46,7 @@ class UserCoupon(models.Model):
     unlock_date = models.DateField(u"解锁日期", default=None, null=True, blank=True)
     def checklock(self):
         if self.state != '0':
-            return
+            return True
         if self.type == 'heyue':
             count, amount = self.check_schedule()
             if count >= self.contract.settle_count and amount >= self.contract.settle_amount:
@@ -60,6 +60,9 @@ class UserCoupon(models.Model):
         if self.state == '1':
             self.create_date = datetime.date.today()
             self.save(update_fields = ['create_date', 'state'])
+            return True
+        else:
+            return False
     def check_schedule(self):
         if self.type != 'heyue':
             return None, None

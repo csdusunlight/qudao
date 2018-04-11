@@ -10,19 +10,19 @@
     $(function () {
         $(".home19").toggleClass("on");
         //未审核数据
-        var aduitData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
+        var aduitData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>QQ号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
             '<th>变动类型</th><th>变动金额</th><th>申请时间</th><th>处理状态</th><th>处理</th>' +
-            '[results]<tr><td>{username}</td><td>{mobile}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td class="change" data-cType="{type}"></td><td class="amount" data-type="{type}">{amount}</td>' +
+            '[results]<tr><td>{username}</td><td>{mobile}</td><td>{qq_number}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td class="change" data-cType="{type}"></td><td class="amount" data-type="{type}">{amount}</td>' +
             '<td class="time">{submit_time}</td><td>{state_des}</td><td class="opBox{id}" data-id="{id}"><a class="sure">同意</a>|<a class="rSendefuse">拒绝<a></td></tr>[/results]</table>';
         //已通过数据
-        var passData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
+        var passData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>QQ号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
             '<th>变动类型</th><th>变动金额</th><th>申请时间</th><th>处理状态</th><th>处理人</th>' +
-            '[results]<tr><td>{username}</td><td>{mobile}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td class="change" data-cType="{type}"></td><td class="amount" data-type="{type}">{amount}</td></td>' +
+            '[results]<tr><td>{username}</td><td>{mobile}</td><td>{qq_number}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td class="change" data-cType="{type}"></td><td class="amount" data-type="{type}">{amount}</td></td>' +
             '<td class="time">{submit_time}</td><td>{state_des}</td><td>{admin_user}</td></tr>[/results]</table>';
         //已拒绝数据
-        var rSendefuseData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
+        var rSendefuseData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>QQ号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
             '<th>变动类型</th><th>变动金额</th><th>申请时间</th><th>处理状态</th>' +
-            '[results]<tr><td>{username}</td><td>{mobile}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td class="change" data-cType="{type}"></td><td class="amount" data-type="{type}">{amount}</td></td>' +
+            '[results]<tr><td>{username}</td><td>{mobile}</td><td>{qq_number}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td class="change" data-cType="{type}"></td><td class="amount" data-type="{type}">{amount}</td></td>' +
             '<td class="time">{submit_time}</td><td>{state_des}</td></tr>[/results]</table>';
 
         //回调函数

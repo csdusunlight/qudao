@@ -127,3 +127,24 @@
     background:rgba(147,147,147,.4);
     display: none;
 }
+.qrBox{
+    width: 18rem;
+    height: 18rem;
+    background: url(../../../static/images/m_hongbao_qrCode.png) no-repeat center center;
+    background-size: 100% auto;
+    position: absolute;
+    left: 50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+}
+.qr_close{
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid white;
+    font-size: 30px;
+    color: white;
+    text-align: center;
+    line-height: 2rem;
+    border-radius: 50%;
+    position: absolute;right: -1.2rem;top: -1.2rem;
+}

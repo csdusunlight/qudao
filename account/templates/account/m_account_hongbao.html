@@ -60,7 +60,9 @@
 		</div>
 		<!-- 官微模态框 -->
 		<div class="modal_wechant">
-
+			<div class="qrBox">
+				<div class="qr_close">×</div>
+			</div>
 		</div>
 		<!--选项卡部分-->
 		<div id="finance_slider" class="mui-slider mui-fullscreen">
@@ -211,30 +213,42 @@
 		//领取点击事件ajax:
 		var modal_box = document.querySelector(".modal_box");
 		var modal_amount = document.querySelector(".modal_amount");
+		var modal_wechant = document.querySelector(".modal_wechant");
 		mui(document).on("tap", ".take", function () { //加载出来的button DOM节点 用on监听
-			var btnArray = ['否', '是'];
+			// var btnArray = ['否', '是'];
 			var that = mui(this)[0];
 			var award = mui(this)[0].getAttribute("data-award"); //获取button的data-award属性
 			modal_amount.innerHTML = award;
 			var hongbaoId = mui(this)[0].getAttribute("data-id");
 			var state = mui(this)[0].getAttribute("data-state");
 			var type = mui(this)[0].getAttribute("data-type");
+			var hongbao_id = mui(this)[0].getAttribute("data-id");
 			if (state == 0) {
 				if (type == "guanzhu") {
 					console.log("guanzhu");
-					// mui.confirm('MUI是个好框架，确认？', 'Hello MUI', btnArray, function(e) {
-					// 	if (e.index == 1) {
-					// 		console.log(123)
-					// 	} else {
-					// 		console.log(5456)
-					// 	}
-					// })
+					modal_wechant.style.display = "block";
 					return;
 				} else if (type == "bangka") {
-					console.log("bangka")
+					
 					// window.open("{% url 'account_bankcard' %}");
 					return;
 				} else if (type == "heyue") {
+					mui.ajax('/coupon/get_coupon_schedule/', {
+						dataType: 'json', //服务器返回json格式数据 
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						data:{
+							id:hongbao_id
+						},
+						success: function (data) {
+							console.log(data);
+							mui.toast(`已经结算了${data.count}单，结算了${data.amount}元`); //es6 字符串模板
+						},
+						error: function (xhr, type, errorThrown) {
+							console.log(xhr.responseText);
+						}
+					});
+					// mui.toast('欢迎体验Hello MUI');
 					console.log("heyue")
 					// window.open("{% url 'account_submit' %}");
 					return;
@@ -278,9 +292,12 @@
 		modal_btn.onclick = function () {
 			modal_box.style.display = "none";
 		}
-
+		//隐藏二维码模态框
+		var qr_close = document.querySelector(".qr_close");
+		qr_close.onclick = function () { 
+			modal_wechant.style.display = "none";
+		 }
 	</script>
 </body>
 
 </html>
-<!-- 354X351 -->

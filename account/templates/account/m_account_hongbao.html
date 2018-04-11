@@ -20,10 +20,6 @@
 			background: 0 0;
 		}
 
-		.mui-active {
-			background: white !important;
-		}
-
 		.state0 {
 			background: #91c11d;
 		}
@@ -61,6 +57,7 @@
 		<!-- 官微模态框 -->
 		<div class="modal_wechant">
 			<div class="qrBox">
+			    <img src="{% static 'images/m_hongbao_qrCode.png' %}">
 				<div class="qr_close">×</div>
 			</div>
 		</div>
@@ -215,7 +212,7 @@
 		var modal_amount = document.querySelector(".modal_amount");
 		var modal_wechant = document.querySelector(".modal_wechant");
 		mui(document).on("tap", ".take", function () { //加载出来的button DOM节点 用on监听
-			// var btnArray = ['否', '是'];
+			var btnArray = ['取消', '确定'];
 			var that = mui(this)[0];
 			var award = mui(this)[0].getAttribute("data-award"); //获取button的data-award属性
 			modal_amount.innerHTML = award;
@@ -229,7 +226,29 @@
 					modal_wechant.style.display = "block";
 					return;
 				} else if (type == "bangka") {
-					
+					mui.confirm('是否要跳转到绑定银行卡卡页面','提示',btnArray,function (e) { 
+						if (e.index == 1) {
+							mui.openWindow({
+								url: "/account/bankcard/",
+								styles: {
+									top: 0,
+									bottom: 0
+								},
+								show: {
+									aniShow: 'slide-in-right',
+								},
+								waiting: {
+									autoShow: false, //自动显示等待框
+									title: '正在加载...', //等待对话框上显示的提示内容
+								}
+							});
+						} else {
+							console.log("取消")
+						}
+					 })
+
+
+
 					// window.open("{% url 'account_bankcard' %}");
 					return;
 				} else if (type == "heyue") {
@@ -248,8 +267,6 @@
 							console.log(xhr.responseText);
 						}
 					});
-					// mui.toast('欢迎体验Hello MUI');
-					console.log("heyue")
 					// window.open("{% url 'account_submit' %}");
 					return;
 				} else {

@@ -15,6 +15,7 @@ from account.models import MyUser
 from django.views.decorators.csrf import csrf_exempt
 import logging
 from coupon.Filters import UserCouponFilter
+import datetime
 logger = logging.getLogger('wafuli')
 # Create your views here.
 class BaseViewMixin(object):
@@ -66,3 +67,16 @@ def open_coupon(request):
     id = request.POST.get('id')
     UserCoupon.objects.get(user=request.user, id=id).open()
     return JsonResponse({'code':0})
+
+@csrf_exempt
+@login_required_ajax
+def get_coupon_schedule(request):
+    id = request.POST.get('id')
+    count, amount = UserCoupon.objects.get(user=request.user, id=id).check_schedule()
+    return JsonResponse({'count':count, 'amount':amount})
+
+@login_required_ajax
+def get_coupon_num(request):
+    user = request.user
+    count = user.usercoupons.filter(expire__gte=datetime.date.today()).exclude(state='2').count()
+    return JsonResponse({'count':count})

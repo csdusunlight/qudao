@@ -14,7 +14,7 @@ class Contract(models.Model):
     start_date = models.DateField(u"开始时间")
     end_date = models.DateField(u"结束时间")
     settle_count = models.IntegerField(u"结算单数")
-    settle_amount = models.DecimalField(u"结算金额", decimal_places=2, max_digits=6)
+    settle_amount = models.DecimalField(u"结算金额", decimal_places=2, max_digits=10)
     award = models.DecimalField(u"奖励金额", default=0, decimal_places=2, max_digits=6)
     def __unicode__(self):
         return self.name
@@ -48,11 +48,7 @@ class UserCoupon(models.Model):
         if self.state != '0':
             return
         if self.type == 'heyue':
-            dic = self.user.investlog_submit.filter(submit_time__range=(self.contract.start_date,
-                 self.contract.end_date + datetime.timedelta(days=1)), audit_state='0').\
-                 aggregate(cou=Count('*'),sum=Sum('settle_amount'))
-            count = dic.get('cou') or 0
-            amount = dic.get('sum') or 0
+            count, amount = self.check_schedule()
             if count >= self.contract.settle_count and amount >= self.contract.settle_amount:
                 self.state = '1'
         elif self.type == 'bangka':
@@ -64,6 +60,15 @@ class UserCoupon(models.Model):
         if self.state == '1':
             self.create_date = datetime.date.today()
             self.save(update_fields = ['create_date', 'state'])
+    def check_schedule(self):
+        if self.type != 'heyue':
+            return None, None
+        dic = self.user.investlog_submit.filter(submit_time__range=(self.contract.start_date,
+                 self.contract.end_date + datetime.timedelta(days=1)), audit_state='0').\
+                 aggregate(cou=Count('*'),sum=Sum('settle_amount'))
+        count = dic.get('cou') or 0
+        amount = dic.get('sum') or 0
+        return count, amount
     def is_expired(self):
         return datetime.date.today() > self.expire
     def is_to_expired(self):
@@ -77,5 +82,6 @@ class UserCoupon(models.Model):
     def __unicode__(self):
         return self.get_type_display() + ' ' + self.user.mobile
     class Meta:
+        ordering = ['-create_date']
         verbose_name = u"用户红包"
         verbose_name_plural = u"用户红包"

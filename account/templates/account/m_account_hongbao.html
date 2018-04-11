@@ -289,8 +289,14 @@
 							id: hongbao_id
 						},
 						success: function (data) {
-							console.log(data);
-							mui.toast(`已经结算了${data.count}单，结算了${data.amount}元`); //es6 字符串模板
+							if (data.code == 0) {
+								mui.toast(`已经结算了${data.count}单，结算了${data.amount}元`);
+							} else if(data.code == 1){
+								// mui(this).style.background = "RGB(249,86,60)";
+								mui(this).className = "mui-btn take takefalse state1 mui-btn-outlined";
+								mui(this).setAttribute("data-state","1");
+								mui(this).innerText = "立即领取";
+							}
 						},
 						error: function (xhr, type, errorThrown) {
 							console.log(xhr.responseText);
@@ -315,8 +321,8 @@
 								// that.style.backgroundColor = "#c7c7c7";
 							} else if(data.code == 1){
 								modal_box.style.display = "block";
-								that.innerText = "已领取";
-								that.style.backgroundColor = "#c7c7c7";
+								// that.innerText = "已领取";
+								// that.style.backgroundColor = "#c7c7c7";
 							}
 						},
 						error: function (xhr, type, errorThrown) {
@@ -342,12 +348,9 @@
 					//headers:{'Content-Type':'application/json'},
 					success: function (data) {
 						if (data.code == 0) {
-							mui.toast(`已经结算了${data.count}单，结算了${data.amount}元`);
-						} else if(data.code == 1){
-							// mui(this).style.background = "RGB(249,86,60)";
-							mui(this).className = "mui-btn take takefalse state1 mui-btn-outlined";
-							mui(this).setAttribute("data-state","1");
-							mui(this).innerText = "立即领取";
+							modal_box.style.display = "block";
+							that.innerText = "已领取";
+							that.style.backgroundColor = "#c7c7c7";
 						}
 					},
 					error: function (xhr, type, errorThrown) {

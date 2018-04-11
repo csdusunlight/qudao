@@ -227,7 +227,10 @@
 				//将统计好的红包个数放入顶部tab切换栏
 				top_left.innerHTML = "(" + effective_hongbao + ")"
 				top_right.innerHTML = "(" + failure_hongbao + ")";
-
+				if(failure_hongbao == 0){
+					li.innerHTML = "<span>您还没有失效的红包</span>"
+					html2.appendChild(li);
+				}
 			},
 			error: function (xhr, type, errorThrown) {
 				console.log(xhr.responseText);

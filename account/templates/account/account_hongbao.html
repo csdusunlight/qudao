@@ -97,6 +97,7 @@
             timeout: 5000, //超出时间
             dataType: 'json', //返回数据格式Json
             success: function (data) {
+                var failure_hongbao = 0;
                 console.log(data.results);
                 let str_html;
                 let str_html1;
@@ -114,10 +115,10 @@
                                             '<p class="time">有效期至：'+data.results[i].expire+'</p>';
                                             if (data.results[i].type === "heyue") {
                                                 if(data.results[i].settle_amount > 0){
-                                                    str_html +='<span class="btm_desc" data-type="'+ data.results[i].type +'">结算单数'+ data.results[i].settle_amount +'</span>'
+                                                    str_html +='<p class="p_tips"><span data-type="'+ data.results[i].type +'">结算单数'+ data.results[i].settle_amount +'单</span></p>'
                                                 }
                                                 if(data.results[i].settle_count > 0){
-                                                    str_html +='<span class="btm_desc" data-type="'+ data.results[i].type +'">结算金额'+ data.results[i].settle_amount +'</span>'
+                                                    str_html +='<p class="p_tip"><span data-type="'+ data.results[i].type +'">结算金额'+ data.results[i].settle_amount +'元</span></p>'
                                                 }
                                                 // str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
                                             } else if(data.results[i].type === "guanzhu"){
@@ -140,6 +141,7 @@
                             str_html += '</div>'; 
                         $(".effective").append(str_html);       
                     }else{
+                        failure_hongbao++;
                         str_html1 = '';
                         str_html1 += '<div class="fail_hongbao_box">'+
                                         '<div class="fail_hongbao">'+
@@ -171,7 +173,9 @@
                             str_html1 += '</div>'
                         $(".failure").append(str_html1);            
                     }
-                    
+                    if(failure_hongbao == 0){
+                        $(".failure").html("<span class='f_tips'>您还没有失效的红包</span>");
+                    }
                 }
             },
             error: function (xhr, textStatus) {
@@ -218,8 +222,10 @@
                     });    
                    
                 } else{
-                    window.open("{% url 'account_bankcard' %}");
-                    // $(".modal_submit").show();
+                    $.prompt({
+                        "Content":"提交首单并且通过才能领取"
+                    });
+                    // window.open("{% url 'account_bankcard' %}");
                     return;
                 }
                 // $.prompt({

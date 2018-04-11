@@ -57,7 +57,8 @@
 		<!-- 官微模态框 -->
 		<div class="modal_wechant">
 			<div class="qrBox">
-			    <img src="{% static 'images/m_hongbao_qrCode.png' %}">
+				<img src="{% static 'images/m_hongbao_qrCode.png' %}">
+				<span class="tips">请关注<label style="color:white">福利联盟官微</label></span>
 				<div class="qr_close">×</div>
 			</div>
 		</div>
@@ -111,6 +112,23 @@
 	<script src="{%static 'js/mui.pullToRefresh.material.js'%}"></script>
 	<script type="text/javascript">
 		mui.init();
+		//判断是否是微信浏览器来显示
+		var tips = document.querySelector(".tips");
+		function isWeiXin() {
+			//window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
+			var ua = window.navigator.userAgent.toLowerCase();
+			//通过正则表达式匹配ua中是否含有MicroMessenger字符串
+			if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+				console.log("微信浏览器")
+				tips.style.display = "none";
+				return true;
+			} else {
+				tips.style.display = "block"
+				console.log("其他浏览器")
+				return false;
+			}
+		}
+		isWeiXin();//调用一遍
 		//初始化滚动条
 		mui('.mui-scroll-wrapper').scroll({
 			deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
@@ -151,11 +169,11 @@
 							'</div>';
 						// '<button type="button" data-state="'+ data.results[i].state +'"  data-award="'+ data.results[i].award +'" data-id="'+ data.results[i].id +'" class="mui-btn take take'+ data.results[i].is_to_expired +' state'+ data.results[i].state +' mui-btn-outlined">'+ data.results[i].state_des +'</button>' +
 						if (data.results[i].state == 1) {
-							str_html += '<button type="button" data-type="'+ data.results[i].type +'" data-state="' + data.results[i].state + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + data.results[i].state + ' mui-btn-outlined">立即领取</button>'
+							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + data.results[i].state + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + data.results[i].state + ' mui-btn-outlined">立即领取</button>'
 						} else if (data.results[i].state == 2) {
-							str_html += '<button type="button" data-type="'+ data.results[i].type +'" data-state="' + data.results[i].state + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + data.results[i].state + ' mui-btn-outlined">已领取</button>'
+							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + data.results[i].state + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + data.results[i].state + ' mui-btn-outlined">已领取</button>'
 						} else {
-							str_html += '<button type="button" data-type="'+ data.results[i].type +'" data-state="' + data.results[i].state + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + data.results[i].state + ' mui-btn-outlined">立即激活</button>'
+							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + data.results[i].state + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + data.results[i].state + ' mui-btn-outlined">立即激活</button>'
 						}
 						str_html += '</div>' +
 							'<div class="hongbao_bottom">';
@@ -176,7 +194,7 @@
 					} else {
 						str_html = '';
 						failure_hongbao++;
-						str_html = '<div class="hongbao_box">' +
+						str_html += '<div class="hongbao_box">' +
 							'<div class="fhongbao_top">' +
 							'<div class="amount fail">' +
 							'<span>￥</span>' +
@@ -188,10 +206,19 @@
 							'</div>' +
 							'<div class="failBox"></div>' +
 							'</div>' +
-							'<div class="hongbao_bottom">'
-						'<span class="btm_text" data-type="' + data.results[i].type + '">' + data.results[i].type_des + '</span>' +
-							'</div>' +
-							'</div>'
+							'<div class="hongbao_bottom">';
+						// str_html +='<span class="btm_text" data-type="' + data.results[i].type + '">' + data.results[i].type_des + '</span>' +
+						if (data.results[i].type === "heyue") {
+							str_html += '<span class="btm_text" data-type="' + data.results[i].type + '">累计提交' + data.results[i].settle_amount + '单并且审核通过</span>'
+						} else if (data.results[i].type === "guanzhu") {
+							str_html += '<span class="btm_text" data-type="' + data.results[i].type + '">关注官微并且绑定账户</span>'
+						} else if (data.results[i].type === "shoudan") {
+							str_html += '<span class="btm_text" data-type="' + data.results[i].type + '">首次交单并且审核通过</span>'
+						} else {
+							str_html += '<span class="btm_text" data-type="' + data.results[i].type + '">绑定银行卡</span>'
+						}
+						str_html += '</div>' +
+							'</div>';
 						li.innerHTML = str_html;
 						html2.appendChild(li);
 
@@ -226,7 +253,7 @@
 					modal_wechant.style.display = "block";
 					return;
 				} else if (type == "bangka") {
-					mui.confirm('是否要跳转到绑定银行卡卡页面','提示',btnArray,function (e) { 
+					mui.confirm('是否要跳转到绑定银行卡页面', '提示', btnArray, function (e) {
 						if (e.index == 1) {
 							mui.openWindow({
 								url: "/account/bankcard/",
@@ -245,10 +272,7 @@
 						} else {
 							console.log("取消")
 						}
-					 })
-
-
-
+					})
 					// window.open("{% url 'account_bankcard' %}");
 					return;
 				} else if (type == "heyue") {
@@ -256,8 +280,8 @@
 						dataType: 'json', //服务器返回json格式数据 
 						type: 'post', //HTTP请求类型
 						timeout: 10000, //超时时间设置为10秒；
-						data:{
-							id:hongbao_id
+						data: {
+							id: hongbao_id
 						},
 						success: function (data) {
 							console.log(data);
@@ -311,9 +335,9 @@
 		}
 		//隐藏二维码模态框
 		var qr_close = document.querySelector(".qr_close");
-		qr_close.onclick = function () { 
+		qr_close.onclick = function () {
 			modal_wechant.style.display = "none";
-		 }
+		}
 	</script>
 </body>
 

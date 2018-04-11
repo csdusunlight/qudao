@@ -125,7 +125,7 @@
     height: 100%;
     position: fixed;z-index: 999;
     background:rgba(147,147,147,.4);
-    display: none;
+    /* display: none; */
 }
 .qrBox{
     width: 18rem;
@@ -150,4 +150,7 @@
     line-height: 2rem;
     border-radius: 50%;
     position: absolute;right: -1.2rem;top: -1.2rem;
+}
+.tips{
+    margin: 0 2.5rem;
 }

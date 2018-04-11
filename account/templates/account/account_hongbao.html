@@ -114,10 +114,10 @@
                                             '<p class="time">有效期至：'+data.results[i].expire+'</p>';
                                             if (data.results[i].type === "heyue") {
                                                 if(data.results[i].settle_amount > 0){
-                                                    str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">结算单数'+ data.results[i].settle_amount +'</div>'
+                                                    str_html +='<span class="btm_desc" data-type="'+ data.results[i].type +'">结算单数'+ data.results[i].settle_amount +'</span>'
                                                 }
                                                 if(data.results[i].settle_count > 0){
-                                                    str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">结算金额'+ data.results[i].settle_amount +'</div>'
+                                                    str_html +='<span class="btm_desc" data-type="'+ data.results[i].type +'">结算金额'+ data.results[i].settle_amount +'</span>'
                                                 }
                                                 // str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
                                             } else if(data.results[i].type === "guanzhu"){
@@ -218,7 +218,8 @@
                     });    
                    
                 } else{
-                    $(".modal_submit").show();
+                    window.open("{% url 'account_bankcard' %}");
+                    // $(".modal_submit").show();
                     return;
                 }
                 // $.prompt({
@@ -262,10 +263,10 @@
          });
         
         //跳转到交单页面 
-        $(".sure").click(function () {
-            window.open("{% url 'account_submit' %}");
-            $(".modal_submit").hide();//跳转成功后模态框消失
-        })
+        // $(".sure").click(function () {
+        //     window.open("{% url 'account_submit' %}");
+        //     $(".modal_submit").hide();//跳转成功后模态框消失
+        // })
         // 绑卡模态框消失
         $(".bind_cancel").click(function () { 
             $(".modal_card").hide();

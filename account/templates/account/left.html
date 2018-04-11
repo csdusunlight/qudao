@@ -6,7 +6,7 @@
 	   	<li class="back-a2 account-navbox"><a href="{% url 'account_setting' %}" class="account-nav">主页设置</a></li>
 	   	<li class="back-a10 account-navbox"><a href="{% url 'account_notice' %}" class="account-nav">编辑公告</a></li>
 	   	<li class="back-a3 account-navbox"><a href="{% url 'project_manage' %}" class="account-nav">我的项目</a></li>
-	   	<li class="back-a14 account-navbox"><a href="{% url 'account_hongbao' %}" class="account-nav">我的红包</a></li>
+	   	<li class="back-a14 account-navbox"><a href="{% url 'account_hongbao' %}" class="account-nav">我的红包<span class="coupon_num left_tip_num"></span></a></li>
 	   	<li class="account-nav-head m-num">数据管理</li>
 	   	<li class="back-a4 account-navbox"><a href="{% url 'account_submit' %}" class="account-nav">自助交单</a></li>
 	   	<li class="back-a5 account-navbox"><a href="{% url 'account_audited' %}" class="account-nav">数据审核</a></li>
@@ -23,6 +23,24 @@
 </div>
 <script>
 $(function(){
-	$('.nav__item:eq(5)').addClass('active');
+//	$('.nav__item:eq(5)').addClass('active');
+	$(function(){
+        $.ajax({
+            type:"get",
+            url:"/coupon/get_coupon_num/",
+            async:true,
+            success: function (ret) {
+                console.log(ret.count);
+                if (ret.count > 0) {
+                    $('.coupon_num').text(ret.count);
+                } else {
+                    $('.coupon_num').hide();
+                }
+            },
+            error: function (ret){
+                console.log(ret.msg);
+            }
+        });
+    })
 });
 </script>

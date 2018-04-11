@@ -13,7 +13,7 @@
         $("li.home23").toggleClass("on");
         
             $.ajax({
-                url: '/coupon/contracts/',
+                url: '/coupon/contracts/?pageSize=999',
                 dataType:"json",
                 type:"get",
                 success:function(ret){
@@ -111,6 +111,10 @@
             var coupon_amount = $('#coupon_amount').val();
             if (!coupon_name || !settle_amount || !submit_num || !date_start || !date_end || !coupon_amount) {
                 alert('填写项不能为空');
+                return;
+            }
+            if (submit_num <= 0 && settle_amount <= 0 ) {
+                alert('结算金额和交单数量必须有一个大于零');
                 return;
             }
             if (coupon_amount <= 0 ) {

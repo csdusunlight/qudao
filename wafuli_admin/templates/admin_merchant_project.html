@@ -5,21 +5,21 @@
 <script type="text/javascript"> 
     
     //待审核数据
-    var auditData = '<table width="100%"><tr><th width="8%">QQ</th><th width="7%">QQ昵称</th><th width="8%">手机号</th><th width="8%">项目名称</th><th width="6%">佣金</th><th width="12%">攻略链接</th><th width="8%">结算价格</th>' +
+    var auditData = '<table width="100%"><tr><th width="8%">QQ</th><th width="7%">项目状态</th><th width="8%">手机号</th><th width="8%">项目名称</th><th width="6%">佣金</th><th width="12%">攻略链接</th><th width="8%">结算价格</th>' +
         '<th width="7%">数据结算周期</th><th width="10%">提交时间</th><th width="8%">处理状态</th><th width="10%">备注说明</th><th width="8%">操作</th>' +
-        '[results]<tr><td>{qq_number}{qq_name}</td><td>{qq_name}</td><td>{user_mobile}</td><td>{title}</td><td>{broker_rate}</td><td><a href="{strategy_url}">{strategy_url}</a></td>' +
+        '[results]<tr><td>{qq_number}</td><td>{project_state_des}</td><td>{user_mobile}</td><td>{title}</td><td>{broker_rate}</td><td><a href="{strategy_url}">{strategy_url}</a></td>' +
         '<td>{price}</td><td>{settle_period}</td><td class="subtime">{submit_time}</td><td>{state_des}</td><td>{remark}</td>' +
         '<td class="opTd{id}" data-id="{id}"><a class="pass">同意</a>|<a class="refuse">拒绝</a></td></tr>[/results]</table>';
     //审核通过数据
-    var passData = '<table width="100%"><tr><th width="8%">QQ</th><th width="7%">QQ昵称</th><th width="8%">手机号</th><th width="8%">项目名称</th><th width="6%">佣金</th><th width="12%">攻略链接</th><th width="8%">结算价格</th>' +
+    var passData = '<table width="100%"><tr><th width="8%">QQ</th><th width="7%">项目状态</th><th width="8%">手机号</th><th width="8%">项目名称</th><th width="6%">佣金</th><th width="12%">攻略链接</th><th width="8%">结算价格</th>' +
         '<th width="7%">数据结算周期</th><th width="10%">提交时间</th><th width="8%">处理状态</th><th>处理时间</th><th width="10%">备注说明</th>' +
-        '[results]<tr><td>{qq_number}</td><td>{qq_name}</td><td>{user_mobile}</td><td>{title}</td><td>{broker_rate}</td><td><a href="{strategy_url}">{strategy_url}</a></td><td>{price}</td>' +
+        '[results]<tr><td>{qq_number}</td><td>{project_state_des}</td><td>{user_mobile}</td><td>{title}</td><td>{broker_rate}</td><td><a href="{strategy_url}">{strategy_url}</a></td><td>{price}</td>' +
         '<td>{settle_period}</td><td class="subtime">{submit_time}</td><td>{project_state_des}</td><td class="adt_time">{audit_time}</td><td>{remark}</td>' +
         '</tr>[/results]</table>';
     //审核未通过数据
-    var refuseData = '<table width="100%"><tr><th>QQ</th><th>QQ昵称</th><th>手机号</th><th>项目名称</th><th width="">佣金</th><th>攻略链接</th><th>结算价格</th>' +
+    var refuseData = '<table width="100%"><tr><th>QQ</th><th>项目状态</th><th>手机号</th><th>项目名称</th><th width="">佣金</th><th>攻略链接</th><th>结算价格</th>' +
         '<th>数据结算周期</th><th>提交时间</th><th>处理状态</th><th>处理时间</th><th>拒绝原因</th><th>备注说明</th>' +
-        '[results]<tr><td>{qq_number}</td><td>{qq_name}</td><td>{user_mobile}</td><td>{title}</td><td>{broker_rate}</td><td><a href="{strategy_url}">{strategy_url}</a></td><td>{price}</td><td>{settle_period}</td>' +
+        '[results]<tr><td>{qq_number}</td><td>{project_state_des}</td><td>{user_mobile}</td><td>{title}</td><td>{broker_rate}</td><td><a href="{strategy_url}">{strategy_url}</a></td><td>{price}</td><td>{settle_period}</td>' +
         '<td class="subtime">{submit_time}</td><td>{state_des}</td><td class="adt_time">{audit_time}</td><td>{audit_reason}</td><td>{remark}</td>' +
         '</tr>[/results]</table>';
     var url = "/merchant/apply_projects/?page={page}&pageSize={pageSize}";
@@ -60,7 +60,7 @@
             //获取手机号、QQ号、QQ昵称、处理状态
             var phone = $(".phoneNum").val();
             var qq_number = $(".qqNum").val();
-            var qq_name = $(".qqName").val();
+            var project_title = $(".project_title").val();
             var state = $(".seltBox option:selected").val();
 
             var newUrl = url;
@@ -79,8 +79,8 @@
             if (phone) {
                 newUrl += '&user_mobile=' + phone;
             }
-            if (qq_name) {
-                newUrl += '&qq_name=' + qq_name;
+            if (project_title) {
+                newUrl += '&project_title_contains=' + project_title;
             }
             if (qq_number) {
                 newUrl += '&qq_number=' + qq_number;
@@ -240,8 +240,8 @@
                         <input type="text" class="qqNum" />
                     </td>
                     <td style="text-align: center;height: 50px;">
-                        <label>QQ昵称：</label>
-                        <input type="text" class="qqName" />
+                        <label>项目名称：</label>
+                        <input type="text" class="project_title" />
                     </td>
                     <td style="text-align: center;height: 50px;">
                         <label>处理状态：</label>

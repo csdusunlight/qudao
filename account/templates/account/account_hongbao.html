@@ -23,15 +23,28 @@
     <div class="modal_box">
         <div class="modal_img_box">
             <div class="modal_amount_box">
-                <div class="modal_amount">
-                    
-                </div>
+                <div class="modal_amount"></div>
                 <div class="modal_desc">
                     已存放至账户余额
                 </div>
             </div>
             <div class="modal_btn">确定</div>
         </div>        
+    </div>
+    <!-- 微信公众号模态框 -->
+    <div class="modal_qrBox">
+        <div class="qr_code">
+            <div class="qr_close"><span>×</span></div>
+            <img src="{% static 'images/hongbao_qrCode.png' %}">
+        </div>
+    </div>
+    <!-- 绑定银行卡模态框 -->
+    <div class="modal_card">
+        <div class="tipBox">
+            <p class="tip">是否跳转到绑卡页面？</p>
+            <a class="tipBtn bind_cancel">取消</a>
+            <a class="tipBtn bind_sure">确定</a>
+        </div>
     </div>
     {% include "header.html" %}
     <div class="Content">
@@ -78,16 +91,18 @@
           ajax获取红包列表  
         **/
         $.ajax({
-            url: '/coupon/coupons/?' + "user={{user.id}}&pageSize=9999",
+            url: '/coupon/coupons/?' + "user_mobile={{user.mobile}}&pageSize=9999",
             type: "get", //提交方式post
             async: true, //是否同步
             timeout: 5000, //超出时间
             dataType: 'json', //返回数据格式Json
             success: function (data) {
+                var failure_hongbao = 0;
                 console.log(data.results);
-                let str_html = '';
-                let str_html1 = '';
+                let str_html;
+                let str_html1;
                 for (let i in data.results) {
+                    str_html = '';
                     // console.log("-- is_expired --",data.results[i].is_expired)
                     if (data.results[i].is_expired === false) {
                         str_html += '<div class="hongbao_box">'+
@@ -98,36 +113,69 @@
                                                 '</span>'+
                                             '</div>'+
                                             '<p class="time">有效期至：'+data.results[i].expire+'</p>';
-                                            // '<div class="btm_desc" data-type="'+ data.results[i].type +'"></div>'+
                                             if (data.results[i].type === "heyue") {
-                                                str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
+                                                if(data.results[i].settle_amount > 0){
+                                                    str_html +='<p class="p_tips"><span data-type="'+ data.results[i].type +'">结算单数'+ data.results[i].settle_amount +'单</span></p>'
+                                                }
+                                                if(data.results[i].settle_count > 0){
+                                                    str_html +='<p class="p_tip"><span data-type="'+ data.results[i].type +'">结算金额'+ data.results[i].settle_amount +'元</span></p>'
+                                                }
+                                                // str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
                                             } else if(data.results[i].type === "guanzhu"){
-                                                str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
+                                                str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">关注官微并且绑定账户</div>'
                                             } else if(data.results[i].type === "shoudan"){
-                                                str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
+                                                str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">首次交单并且审核通过</div>'
                                             } else{
-                                                str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
+                                                str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">绑定银行卡</div>'
                                             }
-                            str_html += '</div>'+
-                                        '<input class="btn btn'+ data.results[i].is_to_expired +' get state'+ data.results[i].state +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ data.results[i].state +'" type="button" value="'+ data.results[i].state_des+'">'+
-                                    '</div>' 
+                            str_html += '</div>';
+                                        // '<input class="btn btn'+ data.results[i].is_to_expired +' get state'+ data.results[i].state +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ data.results[i].state +'" type="button" value="'+ data.results[i].state_des+'">'+
+                                            if (data.results[i].state == 1) {
+                                                str_html += '<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ data.results[i].state +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ data.results[i].state +'" data-type="'+ data.results[i].type +'">立即领取</a>'
+                                                // str_html += '<input class="btn btn'+ data.results[i].is_to_expired +' get state'+ data.results[i].state +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ data.results[i].state +'" data-type="'+ data.results[i].type +'" type="button" value="立即领取">'
+                                            } else if(data.results[i].state == 2){
+                                                str_html +='<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ data.results[i].state +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ data.results[i].state +'" data-type="'+ data.results[i].type +'">已领取</a>'
+                                            } else{
+                                                str_html +='<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ data.results[i].state +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ data.results[i].state +'" data-type="'+ data.results[i].type +'">立即激活</a>'
+                                            }
+                            str_html += '</div>'; 
                         $(".effective").append(str_html);       
                     }else{
-                        str_html1 = '<div class="fail_hongbao_box">'+
+                        failure_hongbao++;
+                        str_html1 = '';
+                        str_html1 += '<div class="fail_hongbao_box">'+
                                         '<div class="fail_hongbao">'+
                                             '<div class="top_box">'+
                                                 '<span style="color: white;">'+
                                                     '￥<span class="amount">'+ data.results[i].award +'</span>'+
                                                 '</span>'+
                                             '</div>'+
-                                            '<p class="time">有效期至：'+data.results[i].expire+'</p>'+
-                                            '<div class="fbtm_desc btm_desc" data-type="'+ data.results[i].type +'"></div>'+
-                                        '</div>'+
-                                        '<input class="btn fbtn" type="button" value="'+ data.results[i].state_des+'">'+
-                                    '</div>'
+                                             '<p class="time">有效期至：'+data.results[i].expire+'</p>';
+                                            // '<div class="fbtm_desc btm_desc" data-type="'+ data.results[i].type +'">累计提交5单并且审核通过</div>'+
+                                            if (data.results[i].type === "heyue") {
+                                                str_html1 +='<div class="fbtm_desc btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
+                                            } else if(data.results[i].type === "guanzhu"){
+                                                str_html1 +='<div class="fbtm_desc btm_desc" data-type="'+ data.results[i].type +'">关注官微并且绑定账户</div>'
+                                            } else if(data.results[i].type === "shoudan"){
+                                                str_html1 +='<div class="fbtm_desc btm_desc" data-type="'+ data.results[i].type +'">首次交单并且审核通过</div>'
+                                            } else{
+                                                str_html1 +='<div class="fbtm_desc btm_desc" data-type="'+ data.results[i].type +'">绑定银行卡</div>'
+                                            }
+                                str_html1 +='</div>';
+                                        // '<input class="btn fbtn" type="button" value="'+ data.results[i].state_des+'">'+
+                                        if (data.results[i].state == 1) {
+                                            str_html1 += '<a class="btn fbtn">立即领取</a>'
+                                        } else if(data.results[i].state == 2){
+                                            str_html1 += '<a class="btn fbtn">已领取</a>'
+                                        } else{
+                                            str_html1 += '<a class="btn fbtn">立即激活</a>'
+                                        }
+                            str_html1 += '</div>'
                         $(".failure").append(str_html1);            
                     }
-                    
+                    if(failure_hongbao == 0){
+                        $(".failure").html("<span class='f_tips'>您还没有失效的红包</span>");
+                    }
                 }
             },
             error: function (xhr, textStatus) {
@@ -142,14 +190,49 @@
             let hongbaoId = $(this).attr("data-id");//获取data-id的值
             $(".modal_amount").text(award); //将获取的data-award放入modal_amount盒子里
             let state = $(this).attr("data-state");//获取当前data-state的值
+            let type = $(this).attr("data-type");//获取当前data-type的值
+            let hongbao_id = $(this).attr("data-id");
             if(state == 0){
-                $.prompt({
-                    "Content":"您未达到解锁条件，请完成任务后再来领取红包"
-                });
+                if(type === "guanzhu"){
+                    $(".modal_qrBox").show();
+                    return;
+                } else if(type === "bangka"){
+                    $(".modal_card").show();
+                    // window.open("{% url 'account_bankcard' %}");
+                    return;
+                } else if(type === "heyue"){
+                    $.ajax({
+                        url: '/coupon/get_coupon_schedule/',
+                        type: "post", //提交方式post
+                        data:{
+                            id:hongbao_id
+                        },
+                        async: true, //是否同步
+                        timeout: 5000, //超出时间
+                        dataType: 'json', //返回数据格式Json
+                        success: function (data) {
+                            console.log(data)
+                            $.prompt({
+                                "Content":`已经结算了${data.count}单，结算了${data.amount}元` //ES6字符串模板
+                            });
+                        },
+                        error: function (xhr, textStatus) {
+                            console.log('错误:' + xhr.responseText);
+                        }
+                    });    
+                   
+                } else{
+                    $.prompt({
+                        "Content":"提交首单并且通过才能领取"
+                    });
+                    // window.open("{% url 'account_bankcard' %}");
+                    return;
+                }
+                // $.prompt({
+                //     "Content":"您未达到解锁条件，请完成任务后再来领取红包"
+                // });
             }else if(state == 2){
-                $.prompt({
-                    "Content":"您已领取过该红包"
-                });
+                $(this).attr("disabled","disabled");
             }else{
                 $.ajax({
                     url: '/coupon/open_coupon/',
@@ -180,8 +263,25 @@
         $(".modal_btn").click(function () { 
             $(".modal_box").hide();
          })
+        //二维码模态框消失
+        $(".qr_close").click(function () { 
+            $(".modal_qrBox").hide();
+         });
         
-
+        //跳转到交单页面 
+        // $(".sure").click(function () {
+        //     window.open("{% url 'account_submit' %}");
+        //     $(".modal_submit").hide();//跳转成功后模态框消失
+        // })
+        // 绑卡模态框消失
+        $(".bind_cancel").click(function () { 
+            $(".modal_card").hide();
+         })
+        //跳转到绑卡页面
+        $(".bind_sure").click(function () {
+            window.open("{% url 'account_bankcard' %}");
+            $(".modal_card").hide();//跳转成功后模态框消失
+        })
     });
 </script>
 

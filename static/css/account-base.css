@@ -367,3 +367,16 @@
 .popup .date_selector {
     margin-left: 90px;
 }
+.left_tip_num {
+    position: absolute;
+    left: 150px;
+    top: 6px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    background-color: red;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 12px;
+}

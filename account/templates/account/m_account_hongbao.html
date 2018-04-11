@@ -144,7 +144,7 @@
 			timeout: 10000, //超时时间设置为10秒；
 			//headers:{'Content-Type':'application/json'},
 			success: function (data) {
-				console.log("data:", data);
+				console.log("data:", data.results);
 				//定义有效红包个数和失效红包个数
 				var effective_hongbao = 0;
 				var failure_hongbao = 0;
@@ -156,6 +156,7 @@
 					var span = document.createElement("span");
 					//判断当前红包是否有效
 					if (data.results[i].is_expired === false) {
+						console.log("~~~~~");
 						effective_hongbao++;
 						str_html += '<div class="hongbao_box" data-id="' + data.results[i].id + '">' +
 							'<div class="hongbao_top">' +
@@ -191,6 +192,7 @@
 							'</div>';
 						li.innerHTML = str_html;
 						html1.appendChild(li);
+							console.log("~~~",li);
 					} else {
 						str_html = '';
 						failure_hongbao++;
@@ -228,8 +230,8 @@
 				top_left.innerHTML = "(" + effective_hongbao + ")"
 				top_right.innerHTML = "(" + failure_hongbao + ")";
 				if(failure_hongbao == 0){
-					li.innerHTML = "<span>您还没有失效的红包</span>"
-					html2.appendChild(li);
+					// li.innerHTML = "<span>您还没有失效的红包</span>"
+					html2.innerHTML=("<span>您还没有失效的红包</span>");
 				}
 			},
 			error: function (xhr, type, errorThrown) {

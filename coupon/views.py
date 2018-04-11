@@ -72,8 +72,12 @@ def open_coupon(request):
 @login_required_ajax
 def get_coupon_schedule(request):
     id = request.POST.get('id')
-    count, amount = UserCoupon.objects.get(user=request.user, id=id).check_schedule()
-    return JsonResponse({'count':count, 'amount':amount})
+    coupon = UserCoupon.objects.get(user=request.user, id=id)
+    if coupon.checklock():
+        return JsonResponse({'code':1})
+    else:
+        count, amount = coupon.check_schedule()
+        return JsonResponse({'code':0, 'count':count, 'amount':amount})
 
 @login_required_ajax
 def get_coupon_num(request):

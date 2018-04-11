@@ -113,7 +113,7 @@ def check_coupon():
     users = ''
     with cache.lock("admin_invest"):
         users = cache.get('invest_user_set')
-#         cache.set('invest_user_set', '')
+        cache.set('invest_user_set', '')
     if users:
         users = users.split(',')
         users = [ int(x) for x in users ]

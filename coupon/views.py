@@ -66,3 +66,10 @@ def open_coupon(request):
     id = request.POST.get('id')
     UserCoupon.objects.get(user=request.user, id=id).open()
     return JsonResponse({'code':0})
+
+@csrf_exempt
+@login_required_ajax
+def get_coupon_schedule(request):
+    id = request.POST.get('id')
+    count, amount = UserCoupon.objects.get(user=request.user, id=id).check_schedule()
+    return JsonResponse({'count':count, 'amount':amount})

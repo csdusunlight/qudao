@@ -156,7 +156,6 @@
 					var span = document.createElement("span");
 					//判断当前红包是否有效
 					if (data.results[i].is_expired === false) {
-						console.log("~~~~~");
 						effective_hongbao++;
 						str_html += '<div class="hongbao_box" data-id="' + data.results[i].id + '">' +
 							'<div class="hongbao_top">' +
@@ -180,7 +179,7 @@
 							'<div class="hongbao_bottom">';
 						// '<span class="btm_text" data-type="'+ data.results[i].type +'">'+ data.results[i].type_des +'</span>' +
 						if (data.results[i].type === "heyue") {
-							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">累计提交' + data.results[i].settle_amount + '单并且审核通过</div>'
+							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">累计提交' + data.results[i].settle_count + '单并且审核通过</div>'
 						} else if (data.results[i].type === "guanzhu") {
 							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">关注官微并且绑定账户</div>'
 						} else if (data.results[i].type === "shoudan") {
@@ -192,7 +191,6 @@
 							'</div>';
 						li.innerHTML = str_html;
 						html1.appendChild(li);
-							console.log("~~~",li);
 					} else {
 						str_html = '';
 						failure_hongbao++;
@@ -254,7 +252,6 @@
 			var hongbao_id = mui(this)[0].getAttribute("data-id");
 			if (state == 0) {
 				if (type == "guanzhu") {
-					console.log("guanzhu");
 					modal_wechant.style.display = "block";
 					return;
 				} else if (type == "bangka") {

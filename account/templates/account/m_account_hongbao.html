@@ -299,8 +299,30 @@
 					// window.open("{% url 'account_submit' %}");
 					return;
 				} else {
-					console.log("shoudan")
-					// window.open("{% url 'account_submit' %}");
+					mui.ajax('/coupon/open_coupon/', {
+						dataType: 'json', //服务器返回json格式数据 
+						type: 'post', //HTTP请求类型
+						data: {
+							id: hongbaoId
+						},
+						timeout: 10000, //超时时间设置为10秒；
+						//headers:{'Content-Type':'application/json'},
+						success: function (data) {
+							if (data.code == 0) {
+								mui.toast("请首次交单并且通过")
+								// modal_box.style.display = "block";
+								// that.innerText = "已领取";
+								// that.style.backgroundColor = "#c7c7c7";
+							} else if(data.code == 1){
+								modal_box.style.display = "block";
+								that.innerText = "已领取";
+								that.style.backgroundColor = "#c7c7c7";
+							}
+						},
+						error: function (xhr, type, errorThrown) {
+							console.log(xhr.responseText);
+						}
+					});
 					return;
 				}
 				// mui.toast('您未达到解锁条件，请完成任务后再来领取红包');  
@@ -320,9 +342,12 @@
 					//headers:{'Content-Type':'application/json'},
 					success: function (data) {
 						if (data.code == 0) {
-							modal_box.style.display = "block";
-							that.innerText = "已领取";
-							that.style.backgroundColor = "#c7c7c7";
+							mui.toast(`已经结算了${data.count}单，结算了${data.amount}元`);
+						} else if(data.code == 1){
+							// mui(this).style.background = "RGB(249,86,60)";
+							mui(this).className = "mui-btn take takefalse state1 mui-btn-outlined";
+							mui(this).setAttribute("data-state","1");
+							mui(this).innerText = "立即领取";
 						}
 					},
 					error: function (xhr, type, errorThrown) {

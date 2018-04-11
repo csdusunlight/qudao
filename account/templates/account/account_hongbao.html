@@ -115,10 +115,10 @@
                                             '<p class="time">有效期至：'+data.results[i].expire+'</p>';
                                             if (data.results[i].type === "heyue") {
                                                 if(data.results[i].settle_amount > 0){
-                                                    str_html +='<p class="p_tips"><span data-type="'+ data.results[i].type +'">结算单数'+ data.results[i].settle_count +'单</span></p>'
+                                                    str_html +='<p class="p_tips"><span data-type="'+ data.results[i].type +'">结算金额'+ data.results[i].settle_amount +'元</span></p>'
                                                 }
                                                 if(data.results[i].settle_count > 0){
-                                                    str_html +='<p class="p_tip"><span data-type="'+ data.results[i].type +'">结算金额'+ data.results[i].settle_amount +'元</span></p>'
+                                                    str_html +='<p class="p_tip"><span data-type="'+ data.results[i].type +'">结算单数'+ data.results[i].settle_count +'单</span></p>'
                                                 }
                                                 // if(data.results[i].settle_amount != 0){
                                                 //     str_html +='<p class="p_tips"><span data-type="'+ data.results[i].type +'">结算单数'+ data.results[i].settle_count +'单</span></p>'
@@ -218,9 +218,16 @@
                         dataType: 'json', //返回数据格式Json
                         success: function (data) {
                             console.log(data)
-                            $.prompt({
-                                "Content":`已经结算了${data.count}单，结算了${data.amount}元` //ES6字符串模板
-                            });
+                           if(data.code == 0){
+                                $.prompt({
+                                    "Content":`已经结算了${data.count}单，结算了${data.amount}元` //ES6字符串模板
+                                });
+                           }else if(data.code == 1){
+                               $(this).removeClass("state0").addClass("state1");
+                               $(this).attr("disabled","disabled")
+                               $(this).text("已领取");
+                               $(this).attr("data-state","1")
+                           }
                         },
                         error: function (xhr, textStatus) {
                             console.log('错误:' + xhr.responseText);
@@ -273,12 +280,6 @@
         $(".qr_close").click(function () { 
             $(".modal_qrBox").hide();
          });
-        
-        //跳转到交单页面 
-        // $(".sure").click(function () {
-        //     window.open("{% url 'account_submit' %}");
-        //     $(".modal_submit").hide();//跳转成功后模态框消失
-        // })
         // 绑卡模态框消失
         $(".bind_cancel").click(function () { 
             $(".modal_card").hide();

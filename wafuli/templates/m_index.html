@@ -57,6 +57,7 @@
 	</head>
 
 	<body>
+		{% if not user.is_authenticated %}
 		<!-- 红包模态框 -->
 		<div class="modal_box">
 			<div class="modal_img_box">
@@ -64,6 +65,7 @@
 				<a class="modal_btn" href="{% url 'account_hongbao' %}">立即领取</a>
 			</div>
 		</div>
+		{% endif %}
 		<!-- 红包模态框完毕 -->
 		<div class="mui-content">
 			<div class="top">

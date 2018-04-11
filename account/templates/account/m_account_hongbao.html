@@ -23,6 +23,18 @@
 		.mui-active {
 			background: white !important;
 		}
+
+		.state0 {
+			background: #91c11d;
+		}
+
+		.state1 {
+			background: #f8513b;
+		}
+
+		.state2 {
+			background: RGB(199, 199, 199);
+		}
 	</style>
 </head>
 
@@ -37,7 +49,7 @@
 			<div class="modal_img_box">
 				<div class="modal_amount_box">
 					<div class="modal_amount">
-						
+
 					</div>
 					<div class="modal_desc">
 						以存放至账户余额
@@ -46,11 +58,19 @@
 				<div class="modal_btn">确定</div>
 			</div>
 		</div>
+		<!-- 官微模态框 -->
+		<div class="modal_wechant">
+
+		</div>
 		<!--选项卡部分-->
 		<div id="finance_slider" class="mui-slider mui-fullscreen">
 			<div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-				<a class="mui-control-item" href="#item1">可用红包<span class="top_left"></span></a>
-				<a class="mui-control-item" href="#item2">失效红包<span class="top_right"></span></a>
+				<a class="mui-control-item" href="#item1">可用红包
+					<span class="top_left"></span>
+				</a>
+				<a class="mui-control-item" href="#item2">失效红包
+					<span class="top_right"></span>
+				</a>
 			</div>
 			<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6" style="background: #90c01e;"></div>
 			<div class="mui-slider-group">
@@ -58,7 +78,7 @@
 					<div id="scroll1" class="mui-scroll-wrapper">
 						<div class="mui-scroll">
 							<ul class="mui-table-view tab1">
-								
+
 							</ul>
 						</div>
 					</div>
@@ -68,7 +88,7 @@
 					<div id="scroll1" class="mui-scroll-wrapper">
 						<div class="mui-scroll">
 							<ul class="mui-table-view tab2">
-								
+
 							</ul>
 						</div>
 					</div>
@@ -101,122 +121,166 @@
 		var html2 = document.querySelector(".tab2");
 		var top_left = document.querySelector(".top_left");
 		var top_right = document.querySelector(".top_right");
-		mui.ajax('/coupon/coupons/?' + "user={{user.id}}&pageSize=999", {
-				dataType: 'json', //服务器返回json格式数据 
-				type: 'get', //HTTP请求类型
-				timeout: 10000, //超时时间设置为10秒；
-				//headers:{'Content-Type':'application/json'},
-				success: function (data) {
-					console.log("data:",data);
-					//定义有效红包个数和失效红包个数
-					var effective_hongbao = 0; 
-					var failure_hongbao = 0; 
-					for(var i in data.results){
-						var li = document.createElement("li");
-						li.className = "mui-table-view-cell";
-						var span = document.createElement("span");
-						//判断当前红包是否有效
-						if(data.results[i].is_expired === false){ 
-							effective_hongbao ++;
-							str_html = '<div class="hongbao_box" data-id="'+ data.results[i].id +'">' +
-											'<div class="hongbao_top">' +
-												'<div class="amount">' +
-													'<span>￥</span>' +
-													'<span class="amount1 useable">'+ data.results[i].award +'</span>' +
-												'</div>' +
-												'<div class="time">' +
-													'<span>有效期至：</span>' +
-													'<span>'+ data.results[i].expire +'</span>' +
-												'</div>' +
-												'<button type="button" data-state="'+ data.results[i].state +'"  data-award="'+ data.results[i].award +'" data-id="'+ data.results[i].id +'" class="mui-btn take take'+ data.results[i].is_to_expired +' state'+ data.results[i].state +' mui-btn-outlined">'+ data.results[i].state_des +'</button>' +
-											'</div>' +
-											'<div class="hongbao_bottom">' +
-												'<span class="btm_text" data-type="'+ data.results[i].type +'">'+ data.results[i].type_des +'</span>' +
-											'</div>' +
-										'</div>'
-								li.innerHTML = str_html;
-								html1.appendChild(li);
-						}else{
-							failure_hongbao ++;
-							str_html = '<div class="hongbao_box">' +
-											'<div class="fhongbao_top">' +
-													'<div class="amount fail">' +
-													'<span>￥</span>' +
-													'<span class="amount1">'+ data.results[i].award +'</span>' +
-												'</div>' +
-												'<div class="time fail">' +
-													'<span>有效期至：</span>' +
-													'<span>'+ data.results[i].expire +'</span>' +
-												'</div>' +
-												'<div class="failBox"></div>' +
-											'</div>' +
-											'<div class="hongbao_bottom">' +
-												'<span class="btm_text" data-type="'+ data.results[i].type +'">'+ data.results[i].type_des +'</span>' +
-											'</div>' +
-										'</div>'
-							li.innerHTML = str_html;
-							html2.appendChild(li);
-							
+		mui.ajax('/coupon/coupons/?' + "user_mobile={{user.mobile}}&pageSize=999", {
+			dataType: 'json', //服务器返回json格式数据 
+			type: 'get', //HTTP请求类型
+			timeout: 10000, //超时时间设置为10秒；
+			//headers:{'Content-Type':'application/json'},
+			success: function (data) {
+				console.log("data:", data);
+				//定义有效红包个数和失效红包个数
+				var effective_hongbao = 0;
+				var failure_hongbao = 0;
+				var str_html;
+				for (var i in data.results) {
+					str_html = '';
+					var li = document.createElement("li");
+					li.className = "mui-table-view-cell";
+					var span = document.createElement("span");
+					//判断当前红包是否有效
+					if (data.results[i].is_expired === false) {
+						effective_hongbao++;
+						str_html += '<div class="hongbao_box" data-id="' + data.results[i].id + '">' +
+							'<div class="hongbao_top">' +
+							'<div class="amount">' +
+							'<span>￥</span>' +
+							'<span class="amount1 useable">' + data.results[i].award + '</span>' +
+							'</div>' +
+							'<div class="time">' +
+							'<span>有效期至：</span>' +
+							'<span>' + data.results[i].expire + '</span>' +
+							'</div>';
+						// '<button type="button" data-state="'+ data.results[i].state +'"  data-award="'+ data.results[i].award +'" data-id="'+ data.results[i].id +'" class="mui-btn take take'+ data.results[i].is_to_expired +' state'+ data.results[i].state +' mui-btn-outlined">'+ data.results[i].state_des +'</button>' +
+						if (data.results[i].state == 1) {
+							str_html += '<button type="button" data-type="'+ data.results[i].type +'" data-state="' + data.results[i].state + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + data.results[i].state + ' mui-btn-outlined">立即领取</button>'
+						} else if (data.results[i].state == 2) {
+							str_html += '<button type="button" data-type="'+ data.results[i].type +'" data-state="' + data.results[i].state + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + data.results[i].state + ' mui-btn-outlined">已领取</button>'
+						} else {
+							str_html += '<button type="button" data-type="'+ data.results[i].type +'" data-state="' + data.results[i].state + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + data.results[i].state + ' mui-btn-outlined">立即激活</button>'
 						}
+						str_html += '</div>' +
+							'<div class="hongbao_bottom">';
+						// '<span class="btm_text" data-type="'+ data.results[i].type +'">'+ data.results[i].type_des +'</span>' +
+						if (data.results[i].type === "heyue") {
+							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">累计提交' + data.results[i].settle_amount + '单并且审核通过</div>'
+						} else if (data.results[i].type === "guanzhu") {
+							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">关注官微并且绑定账户</div>'
+						} else if (data.results[i].type === "shoudan") {
+							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">首次交单并且审核通过</div>'
+						} else {
+							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">绑定银行卡</div>'
+						}
+						str_html += '</div>' +
+							'</div>';
+						li.innerHTML = str_html;
+						html1.appendChild(li);
+					} else {
+						str_html = '';
+						failure_hongbao++;
+						str_html = '<div class="hongbao_box">' +
+							'<div class="fhongbao_top">' +
+							'<div class="amount fail">' +
+							'<span>￥</span>' +
+							'<span class="amount1">' + data.results[i].award + '</span>' +
+							'</div>' +
+							'<div class="time fail">' +
+							'<span>有效期至：</span>' +
+							'<span>' + data.results[i].expire + '</span>' +
+							'</div>' +
+							'<div class="failBox"></div>' +
+							'</div>' +
+							'<div class="hongbao_bottom">'
+						'<span class="btm_text" data-type="' + data.results[i].type + '">' + data.results[i].type_des + '</span>' +
+							'</div>' +
+							'</div>'
+						li.innerHTML = str_html;
+						html2.appendChild(li);
+
 					}
-					//将统计好的红包个数放入顶部tab切换栏
-					top_left.innerHTML = "("+ effective_hongbao +")"		
-					top_right.innerHTML = "(" + failure_hongbao + ")";
-					
-				},
-				error: function (xhr, type, errorThrown) {
-					console.log(xhr.responseText);
 				}
-			});
-			
-			//领取点击事件ajax:
-			var modal_box = document.querySelector(".modal_box");
-			var modal_amount = document.querySelector(".modal_amount");
-			mui(document).on("tap",".take",function () { //加载出来的button DOM节点 用on监听
-				// console.log(mui(this));
-				var that = mui(this)[0];
-				var award = mui(this)[0].getAttribute("data-award"); //获取button的data-award属性
-				modal_amount.innerHTML = award;
-				var hongbaoId = mui(this)[0].getAttribute("data-id");
-				var state = mui(this)[0].getAttribute("data-state");
-				if(state == 0){
-					mui.toast('您未达到解锁条件，请完成任务后再来领取红包');  
-					return;
-				}else if(state == 2){
-					mui.toast('您已领取过该红包');  
-					return;
-				}else {
-					//领取红包ajax
-					mui.ajax('/coupon/open_coupon/', {
-						dataType: 'json', //服务器返回json格式数据 
-						type: 'post', //HTTP请求类型
-						data:{
-							id:hongbaoId
-						},
-						timeout: 10000, //超时时间设置为10秒；
-						//headers:{'Content-Type':'application/json'},
-						success: function (data) {
-							if(data.code == 0){
-								modal_box.style.display = "block";
-								that.innerText = "已领取";
-								that.style.backgroundColor = "#c7c7c7";
-							}
-						},
-						error: function (xhr, type, errorThrown) {
-							console.log(xhr.responseText);
-						}
-					});
-				}
-				
-				
-			});
-			//隐藏模态框：
-			var modal_btn = document.querySelector(".modal_btn");
-			modal_btn.onclick = function () { 
-				modal_box.style.display = "none";
+				//将统计好的红包个数放入顶部tab切换栏
+				top_left.innerHTML = "(" + effective_hongbao + ")"
+				top_right.innerHTML = "(" + failure_hongbao + ")";
+
+			},
+			error: function (xhr, type, errorThrown) {
+				console.log(xhr.responseText);
 			}
-		
+		});
+
+		//领取点击事件ajax:
+		var modal_box = document.querySelector(".modal_box");
+		var modal_amount = document.querySelector(".modal_amount");
+		mui(document).on("tap", ".take", function () { //加载出来的button DOM节点 用on监听
+			var btnArray = ['否', '是'];
+			var that = mui(this)[0];
+			var award = mui(this)[0].getAttribute("data-award"); //获取button的data-award属性
+			modal_amount.innerHTML = award;
+			var hongbaoId = mui(this)[0].getAttribute("data-id");
+			var state = mui(this)[0].getAttribute("data-state");
+			var type = mui(this)[0].getAttribute("data-type");
+			if (state == 0) {
+				if (type == "guanzhu") {
+					console.log("guanzhu");
+					// mui.confirm('MUI是个好框架，确认？', 'Hello MUI', btnArray, function(e) {
+					// 	if (e.index == 1) {
+					// 		console.log(123)
+					// 	} else {
+					// 		console.log(5456)
+					// 	}
+					// })
+					return;
+				} else if (type == "bangka") {
+					console.log("bangka")
+					// window.open("{% url 'account_bankcard' %}");
+					return;
+				} else if (type == "heyue") {
+					console.log("heyue")
+					// window.open("{% url 'account_submit' %}");
+					return;
+				} else {
+					console.log("shoudan")
+					// window.open("{% url 'account_submit' %}");
+					return;
+				}
+				// mui.toast('您未达到解锁条件，请完成任务后再来领取红包');  
+				return;
+			} else if (state == 2) {
+				// mui.toast('您已领取过该红包');  
+				return;
+			} else {
+				//领取红包ajax
+				mui.ajax('/coupon/open_coupon/', {
+					dataType: 'json', //服务器返回json格式数据 
+					type: 'post', //HTTP请求类型
+					data: {
+						id: hongbaoId
+					},
+					timeout: 10000, //超时时间设置为10秒；
+					//headers:{'Content-Type':'application/json'},
+					success: function (data) {
+						if (data.code == 0) {
+							modal_box.style.display = "block";
+							that.innerText = "已领取";
+							that.style.backgroundColor = "#c7c7c7";
+						}
+					},
+					error: function (xhr, type, errorThrown) {
+						console.log(xhr.responseText);
+					}
+				});
+			}
+
+
+		});
+		//隐藏模态框：
+		var modal_btn = document.querySelector(".modal_btn");
+		modal_btn.onclick = function () {
+			modal_box.style.display = "none";
+		}
+
 	</script>
 </body>
 
 </html>
+<!-- 354X351 -->

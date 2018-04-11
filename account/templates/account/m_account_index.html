@@ -133,6 +133,19 @@
 			.mui-popup-text {
 			    text-align: left;
 			}
+			.left_tip_num {
+                position: absolute;
+                right: 30px;
+                top: 14px;
+                width: 16px;
+                height: 16px;
+                line-height: 16px;
+                text-align: center;
+                background-color: red;
+                color: #fff;
+                border-radius: 50%;
+                font-size: 12px;
+            }
 		</style>
 	</head>
 
@@ -183,6 +196,7 @@
                 </li>
                 <li class="mui-table-view-cell">
                     <a href="{% url 'account_hongbao' %}" class="mui-navigate-right" style="color: RGB(102,102,102);">我的红包</a>
+                    <span class="left_tip_num" id="coupon_num"></span>
                 </li>
 			</ul>
 			<div id="out" class="outbtn">
@@ -305,6 +319,25 @@
             });
             
 //          置顶消息----------end
+            mui.ajax('/coupon/get_coupon_num/', {
+                dataType: 'json', //服务器返回json格式数据
+                type: 'get', //HTTP请求类型
+                timeout: 3000, //超时时间设置为10秒；
+                success: function(ret) {
+                    console.log(ret.count);
+                    if (ret.count > 0) {
+                    	document.getElementById('coupon_num').innerText = ret.count;
+                    } else{
+                    	document.getElementById('coupon_num').style.display = 'none';
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.responseText);
+                    mui.alert("数据错误");
+                }
+
+            });
+
 			var hUrl = document.getElementById("Alink").getAttribute("href");
 			console.log(hUrl);
 			mui('.mui-table-view-cell').on('tap', '.Alink', function() {

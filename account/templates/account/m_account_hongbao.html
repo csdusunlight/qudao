@@ -19,6 +19,9 @@
 			left: 50%;
 			transform: translate(-50%,-50%)
 		}
+		.mui-table-view-cell {
+			background: RGB(247,247,247);
+		}
 		.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
 			color: #90c01e;
 			border-bottom: 2px solid #90c01e;
@@ -76,8 +79,11 @@
 				<a class="mui-control-item" href="#item2">失效红包
 					<span class="top_right"></span>
 				</a>
+				<a class="mui-control-item" href="#item3">失效红包
+						<!-- <span class="top_right"></span> -->
+				</a>
 			</div>
-			<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-6" style="background: #90c01e;"></div>
+			<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4" style="background: #90c01e;"></div>
 			<div class="mui-slider-group">
 				<div id="item1" class="mui-slider-item mui-control-content mui-active" value="1">
 					<div id="scroll1" class="mui-scroll-wrapper">
@@ -98,7 +104,16 @@
 						</div>
 					</div>
 				</div>
+				<!-- 失效红包 -->
+				<div id="item3" class="mui-slider-item mui-control-content" value="3">
+					<div id="scroll1" class="mui-scroll-wrapper">
+						<div class="mui-scroll">
+							<ul class="mui-table-view tab2">
 
+							</ul>
+						</div>
+					</div>
+				</div>
 			</div>
 
 		</div>

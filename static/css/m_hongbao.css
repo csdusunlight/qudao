@@ -11,6 +11,9 @@
     justify-content: space-around;
     align-items: center;
 }
+.top_tab{
+    background: white;
+}
 .amount{
     margin-left: 0.8rem;
     color: #91c11d;

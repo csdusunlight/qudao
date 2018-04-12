@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/hongbao.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/microtip.css' %}" />
     <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/page.js' %}?v-1"></script>
     <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
@@ -55,16 +56,21 @@
         <ul class="RightCont">
             <!-- tab部分 -->
             <ul class="tab">
-                <li class="active">可用红包</li>
+                <li style="border-right: 1px solid RGB(145,193,29)" class="active">可用红包</li>
+                <li style="border-right: 1px solid RGB(145,193,29)">已领取红包</li>
                 <li>失效红包</li>
             </ul>
             <ol class="contBox">
                 <li class="effective">
                     
                 </li>
+                <li class="received">
+                 
+                </li>   
                 <li class="failure">
                     
                 </li>
+                
             </ol>
     </div>
     <!--底部-->
@@ -101,10 +107,12 @@
                 console.log(data.results);
                 let str_html;
                 let str_html1;
+                let str_html2;
                 for (let i in data.results) {
+                    var dataNum = parseInt(data.results[i].state)
                     str_html = '';
                     // console.log("-- is_expired --",data.results[i].is_expired)
-                    if (data.results[i].is_expired === false) {
+                    if (data.results[i].is_expired === false && dataNum != 2) {
                         str_html += '<div class="hongbao_box">'+
                                         '<div class="hongbao">'+
                                             '<div class="top_box">'+
@@ -115,7 +123,8 @@
                                             '<p class="time">有效期至：'+data.results[i].expire+'</p>';
                                             if (data.results[i].type === "heyue") {
                                                 if(data.results[i].settle_amount > 0||data.results[i].settle_count > 0){
-                                                    str_html +='<span class="all">结算金额'+ data.results[i].settle_amount +'元,结算单数'+ data.results[i].settle_count +'单</span>'
+                                                    // str_html +='<span class="all ">结算金额'+ data.results[i].settle_amount +'元,结算单数'+ data.results[i].settle_count +'单</span>'
+                                                    str_html +='<span class="all ">激活条件：至'+ data.results[i].settle_amount +'元,结算单数'+ data.results[i].settle_count +'单</span>'
                                                 }
                                                 if(data.results[i].settle_amount > 0){
                                                     str_html +='<p class="p_tips"><span data-type="'+ data.results[i].type +'">结算金额'+ data.results[i].settle_amount +'元</span></p>'
@@ -132,18 +141,48 @@
                                                 str_html +='<div class="btm_desc card" data-type="'+ data.results[i].type +'">绑定银行卡</div>'
                                             }
                             str_html += '</div>';
-                                        // '<input class="btn btn'+ data.results[i].is_to_expired +' get state'+ data.results[i].state +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ data.results[i].state +'" type="button" value="'+ data.results[i].state_des+'">'+
-                                            if (data.results[i].state == 1) {
-                                                str_html += '<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ data.results[i].state +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ data.results[i].state +'" data-type="'+ data.results[i].type +'">立即领取</a>'
-                                                // str_html += '<input class="btn btn'+ data.results[i].is_to_expired +' get state'+ data.results[i].state +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ data.results[i].state +'" data-type="'+ data.results[i].type +'" type="button" value="立即领取">'
-                                            } else if(data.results[i].state == 2){
-                                                str_html +='<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ data.results[i].state +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ data.results[i].state +'" data-type="'+ data.results[i].type +'">已领取</a>'
+                                            if (dataNum == 1) {
+                                                str_html += '<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ dataNum +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ dataNum +'" data-type="'+ data.results[i].type +'">立即领取</a>'
+                                            } else if(dataNum == 2){
+                                                str_html +='<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ dataNum +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ dataNum +'" data-type="'+ data.results[i].type +'">已领取</a>'
                                             } else{
-                                                str_html +='<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ data.results[i].state +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ data.results[i].state +'" data-type="'+ data.results[i].type +'">立即激活</a>'
+                                                str_html +='<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ dataNum +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ dataNum +'" data-type="'+ data.results[i].type +'">立即激活</a>'
                                             }
                             str_html += '</div>'; 
                         $(".effective").append(str_html);       
+                    }else if(dataNum === 2){
+                            str_html2 = '';
+                            str_html2 += '<div class="hongbao_box">'+
+                                        '<div class="hongbao">'+
+                                            '<div class="top_box">'+
+                                                '<span style="color: white;">'+
+                                                    '￥<span class="amount">'+ data.results[i].award +'</span>'+
+                                                '</span>'+
+                                            '</div>'+
+                                            '<p class="time">有效期至：'+data.results[i].expire+'</p>';
+                                            if (data.results[i].type === "heyue") {
+                                                if(data.results[i].settle_amount > 0||data.results[i].settle_count > 0){
+                                                    str_html2 +='<span class="all">结算金额'+ data.results[i].settle_amount +'元,结算单数'+ data.results[i].settle_count +'单</span>'
+                                                }
+                                                if(data.results[i].settle_amount > 0){
+                                                    str_html2 +='<p class="p_tips"><span data-type="'+ data.results[i].type +'">结算金额'+ data.results[i].settle_amount +'元</span></p>'
+                                                }
+                                                if(data.results[i].settle_count > 0){
+                                                    str_html2 +='<p class="p_tip"><span data-type="'+ data.results[i].type +'">结算单数'+ data.results[i].settle_count +'单</span></p>'
+                                                }
+                                            } else if(data.results[i].type === "guanzhu"){
+                                                str_html2 +='<div class="btm_desc" data-type="'+ data.results[i].type +'">关注官微并且绑定账户</div>'
+                                            } else if(data.results[i].type === "shoudan"){
+                                                str_html2 +='<div class="btm_desc" data-type="'+ data.results[i].type +'">首次交单并且审核通过</div>'
+                                            } else{
+                                                str_html2 +='<div class="btm_desc card" data-type="'+ data.results[i].type +'">绑定银行卡</div>'
+                                            }
+                        str_html2 += '</div>'+
+                                        '<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ dataNum +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ dataNum +'" data-type="'+ data.results[i].type +'">已领取</a>'+
+                                 '</div>'; 
+                            $(".received").append(str_html2);  
                     }else{
+                        console.log("失效红包")
                         failure_hongbao++;
                         str_html1 = '';
                         str_html1 += '<div class="fail_hongbao_box">'+
@@ -154,7 +193,6 @@
                                                 '</span>'+
                                             '</div>'+
                                              '<p class="time">有效期至：'+data.results[i].expire+'</p>';
-                                            // '<div class="fbtm_desc btm_desc" data-type="'+ data.results[i].type +'">累计提交5单并且审核通过</div>'+
                                             if (data.results[i].type === "heyue") {
                                                 str_html1 +='<div class="fbtm_desc btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
                                             } else if(data.results[i].type === "guanzhu"){
@@ -166,9 +204,9 @@
                                             }
                                 str_html1 +='</div>';
                                         // '<input class="btn fbtn" type="button" value="'+ data.results[i].state_des+'">'+
-                                        if (data.results[i].state == 1) {
+                                        if (dataNum == 1) {
                                             str_html1 += '<a class="btn fbtn">已过期</a>'
-                                        } else if(data.results[i].state == 2){
+                                        } else if(dataNum == 2){
                                             str_html1 += '<a class="btn fbtn">已过期</a>'
                                         } else{
                                             str_html1 += '<a class="btn fbtn">已过期</a>'

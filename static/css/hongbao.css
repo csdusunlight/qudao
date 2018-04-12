@@ -2,7 +2,7 @@
     background: white;
 }
 .tab{
-    width: 200px;
+    width: 299px;
     height: 40px;
     margin: 20px;
     border:1px solid #91c11d;
@@ -29,6 +29,10 @@
 .effective{
     width: 100%;
     overflow: hidden;
+}
+.received{
+    width: 100%;
+    display: none;
 }
 .all{
     color: white;

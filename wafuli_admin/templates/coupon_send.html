@@ -138,8 +138,8 @@
                     alert('新建方案成功');
                     location.reload();
                 },
-                error:function(){
-                    alert("请检查网络连接");
+                error:function(ret){
+                    alert(ret.responseText);
                 }
             });
         });

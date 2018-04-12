@@ -60,10 +60,16 @@
 }
 .f_tips{
     width: 100%;
-    height: 4rem;
-    display: block;
-    line-height: 4rem;
-    margin-left: 1.5rem;
+    height: 48.5rem;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    vertical-align: middle;
+}
+.f_img{
+    width: 16rem !important;
+    height: 16rem;
+    margin-top: 13rem;
 }
 .failBox{
     width: 5rem;

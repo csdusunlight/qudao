@@ -4,7 +4,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>收支详情</title>
+	<title>红包详情</title>
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 	<link href="{% static 'css/mui.min.css' %}" rel="stylesheet" />
 	<link rel="stylesheet" href="{% static 'css/m_hongbao.css' %}" />
@@ -13,7 +13,12 @@
 		.mui-bar-nav~.mui-content {
 			padding-top: 0;
 		}
-
+		.mui-toast-container{
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%,-50%)
+		}
 		.mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active {
 			color: #90c01e;
 			border-bottom: 2px solid #90c01e;
@@ -48,7 +53,7 @@
 
 					</div>
 					<div class="modal_desc">
-						以存放至账户余额
+						已存放至账户余额
 					</div>
 				</div>
 				<div class="modal_btn">确定</div>
@@ -233,7 +238,7 @@
 				top_left.innerHTML = "(" + effective_hongbao + ")"
 				top_right.innerHTML = "(" + failure_hongbao + ")";
 				if(failure_hongbao == 0){
-					html2.innerHTML=("<span class='f_tips'>您还没有失效的红包</span>");
+					html2.innerHTML=("<div class='f_tips'><img class='f_img' src='{% static 'images/hongbao_nodata.png' %}'></div>");
 				}
 			},
 			error: function (xhr, type, errorThrown) {
@@ -305,7 +310,7 @@
 					});
 					// window.open("{% url 'account_submit' %}");
 					return;
-				} else {
+				} else { //首单红包
 					mui.ajax('/coupon/open_coupon/', {
 						dataType: 'json', //服务器返回json格式数据 
 						type: 'post', //HTTP请求类型
@@ -321,7 +326,10 @@
 								// that.innerText = "已领取";
 								// that.style.backgroundColor = "#c7c7c7";
 							} else if(data.code == 1){
-								modal_box.style.display = "block";
+								that.className = "mui-btn take takefalse state1 mui-btn-outlined";
+								that.setAttribute("data-state","1");
+								that.innerText = "立即领取";
+								// modal_box.style.display = "block";
 								// that.innerText = "已领取";
 								// that.style.backgroundColor = "#c7c7c7";
 							}

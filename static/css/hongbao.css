@@ -30,12 +30,21 @@
     width: 100%;
     overflow: hidden;
 }
+.all{
+    color: white;
+    display: block;
+    margin-top: 40px;
+    line-height: 15px;
+}
 .failure{
     width: 100%;
     display: none;
 }
 .f_tips{
-    margin-left: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
 }
 .hongbao_box{
     margin: 20px 0;
@@ -76,11 +85,15 @@
 .btm_desc{
     width: 120px;
     height: 40px;
-    text-align: center;
+    /* text-align: center; */
     padding-left: 5px;
     line-height: 15px;
     color: white;
     margin: 35px 20px;
+}
+.card{
+    text-align: center;
+    line-height: 35px;
 }
 .p_tips{
     margin-left: 20px;

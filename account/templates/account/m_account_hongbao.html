@@ -179,7 +179,12 @@
 							'<div class="hongbao_bottom">';
 						// '<span class="btm_text" data-type="'+ data.results[i].type +'">'+ data.results[i].type_des +'</span>' +
 						if (data.results[i].type === "heyue") {
-							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">累计提交' + data.results[i].settle_count + '单并且审核通过</div>'
+							if(data.results[i].settle_amount > 0){
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">结算金额' + data.results[i].settle_amount + '元</div>'
+							}
+							if(data.results[i].settle_count > 0){
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">结算单数' + data.results[i].settle_count + '单</div>'
+							}
 						} else if (data.results[i].type === "guanzhu") {
 							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">关注官微并且绑定账户</div>'
 						} else if (data.results[i].type === "shoudan") {
@@ -228,8 +233,7 @@
 				top_left.innerHTML = "(" + effective_hongbao + ")"
 				top_right.innerHTML = "(" + failure_hongbao + ")";
 				if(failure_hongbao == 0){
-					// li.innerHTML = "<span>您还没有失效的红包</span>"
-					html2.innerHTML=("<span>您还没有失效的红包</span>");
+					html2.innerHTML=("<span class='f_tips'>您还没有失效的红包</span>");
 				}
 			},
 			error: function (xhr, type, errorThrown) {

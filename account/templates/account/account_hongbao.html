@@ -120,12 +120,6 @@
                                                 if(data.results[i].settle_count > 0){
                                                     str_html +='<p class="p_tip"><span data-type="'+ data.results[i].type +'">结算单数'+ data.results[i].settle_count +'单</span></p>'
                                                 }
-                                                // if(data.results[i].settle_amount != 0){
-                                                //     str_html +='<p class="p_tips"><span data-type="'+ data.results[i].type +'">结算单数'+ data.results[i].settle_count +'单</span></p>'
-                                                // }
-                                                // if(data.results[i].settle_count != 0){
-                                                //     str_html +='<p class="p_tips"><span data-type="'+ data.results[i].type +'">结算单数'+ data.results[i].settle_count +'单</span></p>'
-                                                // }
                                                 // str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
                                             } else if(data.results[i].type === "guanzhu"){
                                                 str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">关注官微并且绑定账户</div>'

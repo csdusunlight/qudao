@@ -58,6 +58,13 @@
     color: #888888;
     margin-left: 1.6rem;
 }
+.f_tips{
+    width: 100%;
+    height: 4rem;
+    display: block;
+    line-height: 4rem;
+    margin-left: 1.5rem;
+}
 .failBox{
     width: 5rem;
     height: 5rem;

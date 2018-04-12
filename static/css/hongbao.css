@@ -83,11 +83,13 @@
     margin: 35px 20px;
 }
 .p_tips{
-    margin: 30px 0 0 40px;
+    margin-left: 20px;
+    margin-top: 40px;
     color: white;
 }
 .p_tip{
-    margin: 0 0 0 40px;
+    margin-left: 35px;
+    margin-top: 40px;
     color: white;
 }
 .btn{
@@ -123,7 +125,7 @@
     height: 40px;
     line-height: 15px;
     color: white;
-    position: absolute;bottom: 0;left: 38px;
+    /* position: absolute;bottom: 0;left: 38px; */
 }
 .fbtn{
     background: #c7c7c7;

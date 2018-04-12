@@ -115,10 +115,10 @@
                                             '<p class="time">有效期至：'+data.results[i].expire+'</p>';
                                             if (data.results[i].type === "heyue") {
                                                 if(data.results[i].settle_amount > 0){
-                                                    str_html +='<p class="p_tips"><span data-type="'+ data.results[i].type +'">结算单数'+ data.results[i].settle_amount +'单</span></p>'
+                                                    str_html +='<p class="p_tips"><span data-type="'+ data.results[i].type +'">结算金额'+ data.results[i].settle_amount +'元</span></p>'
                                                 }
                                                 if(data.results[i].settle_count > 0){
-                                                    str_html +='<p class="p_tip"><span data-type="'+ data.results[i].type +'">结算金额'+ data.results[i].settle_amount +'元</span></p>'
+                                                    str_html +='<p class="p_tip"><span data-type="'+ data.results[i].type +'">结算单数'+ data.results[i].settle_count +'单</span></p>'
                                                 }
                                                 // str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
                                             } else if(data.results[i].type === "guanzhu"){
@@ -171,11 +171,12 @@
                                             str_html1 += '<a class="btn fbtn">立即激活</a>'
                                         }
                             str_html1 += '</div>'
-                        $(".failure").append(str_html1);            
+                        $(".failure").append(str_html1);  
+                        if(failure_hongbao == 0){ //当failure_hongbao的等于0的时候 将span标签渲染出来
+                            $(".failure").html("<span class='f_tips'>您还没有失效的红包</span>");
+                        }          
                     }
-                    if(failure_hongbao == 0){
-                        $(".failure").html("<span class='f_tips'>您还没有失效的红包</span>");
-                    }
+                    
                 }
             },
             error: function (xhr, textStatus) {
@@ -212,9 +213,16 @@
                         dataType: 'json', //返回数据格式Json
                         success: function (data) {
                             console.log(data)
-                            $.prompt({
-                                "Content":`已经结算了${data.count}单，结算了${data.amount}元` //ES6字符串模板
-                            });
+                           if(data.code == 0){
+                                $.prompt({
+                                    "Content":`已经结算了${data.count}单，结算了${data.amount}元` //ES6字符串模板
+                                });
+                           }else if(data.code == 1){
+                               that.removeClass("state0").addClass("state1");
+                               that.attr("disabled","disabled")
+                               that.text("立即领取");
+                               that.attr("data-state","1")
+                           }
                         },
                         error: function (xhr, textStatus) {
                             console.log('错误:' + xhr.responseText);
@@ -267,12 +275,6 @@
         $(".qr_close").click(function () { 
             $(".modal_qrBox").hide();
          });
-        
-        //跳转到交单页面 
-        // $(".sure").click(function () {
-        //     window.open("{% url 'account_submit' %}");
-        //     $(".modal_submit").hide();//跳转成功后模态框消失
-        // })
         // 绑卡模态框消失
         $(".bind_cancel").click(function () { 
             $(".modal_card").hide();

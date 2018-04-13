@@ -122,7 +122,8 @@
 			success:function(ret){
 			    if (ret.code == 0) {
 			        mui.alert('绑定成功',callback=function(){
-			        	window.history.back();
+			        	// window.history.back();
+                window.history.go(-1);
 			        	return;
 			        });
 			    } else{

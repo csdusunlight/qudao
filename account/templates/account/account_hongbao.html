@@ -118,12 +118,15 @@
                     if (data.results[i].is_expired === false && dataNum != 2) {
                         effective_hongbao ++;
                         str_html += '<div class="hongbao_box">';
+                                            //根据交单数和结算金额来渲染提示框
                                             if(data.results[i].settle_amount > 0 && data.results[i].settle_count > 0 ){
                                                 str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，结算单数达到'+ data.results[i].settle_count +'单，结算金额达到'+ data.results[i].settle_amount +'元" data-microtip-position="top">';
                                             } else if(data.results[i].settle_amount > 0){
                                                 str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，结算金额达到'+ data.results[i].settle_amount +'元" data-microtip-position="top">';
                                             } else if(data.results[i].settle_count > 0){
                                                 str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，结算单数达到'+ data.results[i].settle_count +'单" data-microtip-position="top">';
+                                            }else {
+                                                str_html += '<div class="hongbao">';
                                             }
                                     str_html+='<div class="top_box">'+
                                                 '<span style="color: white;">'+
@@ -225,13 +228,11 @@
                 $(".btm_box").each(function () { 
                     let pHeight = $(this).height();
                     let chlidHeight = $(this).find(".all").height();
-                    console.log("---相差的值:",pHeight - chlidHeight);
                     if (pHeight - chlidHeight <= 0) {
                         $(this).addClass("after")
-                       console.log("---1")
                     }else{
                         $(this).parent().removeAttr("data-microtip");
-                        console.log("---2")
+                      
                     }
                  })
                 //当failure_hongbao的等于0的时候 将span标签渲染出来

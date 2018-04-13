@@ -395,16 +395,10 @@
 						success: function (data) {
 							if (data.code == 0) {
 								mui.toast("请首次交单并且通过")
-								// modal_box.style.display = "block";
-								// that.innerText = "已领取";
-								// that.style.backgroundColor = "#c7c7c7";
 							} else if(data.code == 1){
 								that.className = "mui-btn take takefalse state1 mui-btn-outlined";
 								that.setAttribute("data-state","1");
 								that.innerText = "立即领取";
-								// modal_box.style.display = "block";
-								// that.innerText = "已领取";
-								// that.style.backgroundColor = "#c7c7c7";
 							}
 						},
 						error: function (xhr, type, errorThrown) {
@@ -418,8 +412,7 @@
 			} else if (state == 2) {
 				// mui.toast('您已领取过该红包');  
 				return;
-			} else {
-				//领取红包ajax
+			} else {//领取红包ajax
 				mui.ajax('/coupon/open_coupon/', {
 					dataType: 'json', //服务器返回json格式数据 
 					type: 'post', //HTTP请求类型

@@ -80,3 +80,10 @@ class WithdrawLogFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = WithdrawLog
         fields = ['submit_date', 'audit_date', 'user_mobile', 'qq_number','user_name', 'audit_state', 'card_number', 'real_name']
+        
+class ProjectFilter(django_filters.rest_framework.FilterSet):
+    user_mobile = django_filters.CharFilter('user', lookup_expr='mobile__contains')
+    qq_name = django_filters.CharFilter('user', lookup_expr='qq_name__contains')
+    class Meta:
+        model = Project
+        fields = ['state','type','is_multisub_allowed','is_official','category', 'user_mobile', 'qq_name']

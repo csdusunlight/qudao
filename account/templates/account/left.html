@@ -32,7 +32,7 @@ $(function(){
             success: function (ret) {
                 console.log(ret.count);
                 if (ret.count > 0) {
-                    $('.coupon_num').text(ret.count);
+                    $('.coupon_num').show().text(ret.count);
                 } else {
                     $('.coupon_num').hide();
                 }

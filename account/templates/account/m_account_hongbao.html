@@ -13,6 +13,17 @@
 		.mui-bar-nav~.mui-content {
 			padding-top: 0;
 		}
+		.mui-table-view-cell:after {
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			left: 15px;
+			height: 0;
+			content: '';
+			-webkit-transform: scaleY(.5);
+			transform: scaleY(.5);
+			background-color: #c8c7cc;
+		}
 		.mui-toast-container{
 			position: absolute;
 			top: 50%;
@@ -73,14 +84,14 @@
 		<!--选项卡部分-->
 		<div id="finance_slider" class="mui-slider mui-fullscreen">
 			<div class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-				<a class="mui-control-item" href="#item1">可用红包
+				<a class="mui-control-item" style="background: white" href="#item1">可用红包
 					<span class="top_left"></span>
 				</a>
-				<a class="mui-control-item" href="#item2">失效红包
+				<a class="mui-control-item" style="background: white" href="#item2">失效红包
 					<span class="top_right"></span>
 				</a>
-				<a class="mui-control-item" href="#item3">失效红包
-						<!-- <span class="top_right"></span> -->
+				<a class="mui-control-item" style="background: white" href="#item3">已领取红包
+						<span class="top_3"></span>
 				</a>
 			</div>
 			<div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4" style="background: #90c01e;"></div>
@@ -104,11 +115,11 @@
 						</div>
 					</div>
 				</div>
-				<!-- 失效红包 -->
+				<!-- 已领取红包 -->
 				<div id="item3" class="mui-slider-item mui-control-content" value="3">
 					<div id="scroll1" class="mui-scroll-wrapper">
 						<div class="mui-scroll">
-							<ul class="mui-table-view tab2">
+							<ul class="mui-table-view tab3">
 
 							</ul>
 						</div>
@@ -156,8 +167,10 @@
 		//ajax获取红包列表数据：
 		var html1 = document.querySelector(".tab1");
 		var html2 = document.querySelector(".tab2");
+		var html3 = document.querySelector(".tab3");
 		var top_left = document.querySelector(".top_left");
 		var top_right = document.querySelector(".top_right");
+		var top_3 = document.querySelector(".top_3");
 		mui.ajax('/coupon/coupons/?' + "user_mobile={{user.mobile}}&pageSize=999", {
 			dataType: 'json', //服务器返回json格式数据 
 			type: 'get', //HTTP请求类型
@@ -165,17 +178,19 @@
 			//headers:{'Content-Type':'application/json'},
 			success: function (data) {
 				console.log("data:", data.results);
-				//定义有效红包个数和失效红包个数
+				//定义有效红包个数、失效红包个数、已领取红包个数
 				var effective_hongbao = 0;
 				var failure_hongbao = 0;
+				var received = 0;
 				var str_html;
 				for (var i in data.results) {
 					str_html = '';
 					var li = document.createElement("li");
 					li.className = "mui-table-view-cell";
 					var span = document.createElement("span");
+					var dataNum = parseInt(data.results[i].state);
 					//判断当前红包是否有效
-					if (data.results[i].is_expired === false) {
+					if (data.results[i].is_expired === false && dataNum != 2) {
 						effective_hongbao++;
 						str_html += '<div class="hongbao_box" data-id="' + data.results[i].id + '">' +
 							'<div class="hongbao_top">' +
@@ -187,13 +202,12 @@
 							'<span>有效期至：</span>' +
 							'<span>' + data.results[i].expire + '</span>' +
 							'</div>';
-						// '<button type="button" data-state="'+ data.results[i].state +'"  data-award="'+ data.results[i].award +'" data-id="'+ data.results[i].id +'" class="mui-btn take take'+ data.results[i].is_to_expired +' state'+ data.results[i].state +' mui-btn-outlined">'+ data.results[i].state_des +'</button>' +
-						if (data.results[i].state == 1) {
-							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + data.results[i].state + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + data.results[i].state + ' mui-btn-outlined">立即领取</button>'
-						} else if (data.results[i].state == 2) {
-							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + data.results[i].state + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + data.results[i].state + ' mui-btn-outlined">已领取</button>'
+						if (dataNum == 1) {
+							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + dataNum + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + dataNum + ' mui-btn-outlined">立即领取</button>'
+						} else if (dataNum == 2) {
+							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + dataNum + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + dataNum + ' mui-btn-outlined">已领取</button>'
 						} else {
-							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + data.results[i].state + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + data.results[i].state + ' mui-btn-outlined">立即激活</button>'
+							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + dataNum + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + dataNum + ' mui-btn-outlined">立即激活</button>'
 						}
 						str_html += '</div>' +
 							'<div class="hongbao_bottom">';
@@ -216,6 +230,42 @@
 							'</div>';
 						li.innerHTML = str_html;
 						html1.appendChild(li);
+					} else if(dataNum === 2){
+						str_html = '';
+						received ++;
+						str_html += '<div class="hongbao_box" data-id="' + data.results[i].id + '">' +
+							'<div class="hongbao_top">' +
+							'<div class="amount">' +
+							'<span>￥</span>' +
+							'<span class="amount1 useable">' + data.results[i].award + '</span>' +
+							'</div>' +
+							'<div class="time">' +
+							'<span>有效期至：</span>' +
+							'<span>' + data.results[i].expire + '</span>' +
+							'</div>';
+							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + dataNum + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + dataNum + ' mui-btn-outlined">已领取</button>'
+					
+						str_html += '</div>' +
+							'<div class="hongbao_bottom">';
+						// '<span class="btm_text" data-type="'+ data.results[i].type +'">'+ data.results[i].type_des +'</span>' +
+						if (data.results[i].type === "heyue") {
+							if(data.results[i].settle_amount > 0){
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">结算金额' + data.results[i].settle_amount + '元</div>'
+							}
+							if(data.results[i].settle_count > 0){
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">结算单数' + data.results[i].settle_count + '单</div>'
+							}
+						} else if (data.results[i].type === "guanzhu") {
+							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">关注官微并且绑定账户</div>'
+						} else if (data.results[i].type === "shoudan") {
+							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">首次交单并且审核通过</div>'
+						} else {
+							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">绑定银行卡</div>'
+						}
+						str_html += '</div>' +
+							'</div>';
+						li.innerHTML = str_html;
+						html3.appendChild(li);
 					} else {
 						str_html = '';
 						failure_hongbao++;
@@ -252,8 +302,13 @@
 				//将统计好的红包个数放入顶部tab切换栏
 				top_left.innerHTML = "(" + effective_hongbao + ")"
 				top_right.innerHTML = "(" + failure_hongbao + ")";
+				top_3.innerHTML = "(" + received + ")";
+				//当没有红包的时候显示图片
 				if(failure_hongbao == 0){
 					html2.innerHTML=("<div class='f_tips'><img class='f_img' src='{% static 'images/hongbao_nodata.png' %}'></div>");
+				}
+				if(received == 0){
+					html3.innerHTML=("<div class='f_tips'><img class='f_img' src='{% static 'images/hongbao_nodata.png' %}'></div>");
 				}
 			},
 			error: function (xhr, type, errorThrown) {

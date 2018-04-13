@@ -84,6 +84,7 @@
     "use strict";//声明严格模式
     $(function () {
         $('.back-a14').toggleClass("on");
+       
         /**
          tab效果
         **/
@@ -114,7 +115,7 @@
                     // console.log("-- is_expired --",data.results[i].is_expired)
                     if (data.results[i].is_expired === false && dataNum != 2) {
                         str_html += '<div class="hongbao_box">'+
-                                        '<div class="hongbao">'+
+                                        '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：'+ data.results[i].start_date +'至'+ data.results[i].end_date +'结算金额达到'+ data.results[i].settle_amount +'元，结算单数达到'+ data.results[i].settle_count +'单" data-microtip-position="top">'+
                                             '<div class="top_box">'+
                                                 '<span style="color: white;">'+
                                                     '￥<span class="amount">'+ data.results[i].award +'</span>'+
@@ -124,7 +125,7 @@
                                             if (data.results[i].type === "heyue") {
                                                 if(data.results[i].settle_amount > 0||data.results[i].settle_count > 0){
                                                     // str_html +='<span class="all ">结算金额'+ data.results[i].settle_amount +'元,结算单数'+ data.results[i].settle_count +'单</span>'
-                                                    str_html +='<span class="all ">激活条件：至'+ data.results[i].settle_amount +'元,结算单数'+ data.results[i].settle_count +'单</span>'
+                                                    str_html +='<div class="btm_box"><span class="all">激活条件：'+ data.results[i].start_date +'至'+ data.results[i].end_date +'结算金额达到'+ data.results[i].settle_amount +'元，结算单数达到'+ data.results[i].settle_count +'单"</span></div>'
                                                 }
                                                 if(data.results[i].settle_amount > 0){
                                                     str_html +='<p class="p_tips"><span data-type="'+ data.results[i].type +'">结算金额'+ data.results[i].settle_amount +'元</span></p>'
@@ -134,11 +135,11 @@
                                                 }
                                                 // str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
                                             } else if(data.results[i].type === "guanzhu"){
-                                                str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">关注官微并且绑定账户</div>'
+                                                str_html +='<div class="btm_desc btm_box" data-type="'+ data.results[i].type +'">关注官微并且绑定账户</div>'
                                             } else if(data.results[i].type === "shoudan"){
-                                                str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">首次交单并且审核通过</div>'
+                                                str_html +='<div class="btm_desc btm_box" data-type="'+ data.results[i].type +'">首次交单并且审核通过</div>'
                                             } else{
-                                                str_html +='<div class="btm_desc card" data-type="'+ data.results[i].type +'">绑定银行卡</div>'
+                                                str_html +='<div class="btm_desc btm_box card" data-type="'+ data.results[i].type +'">绑定银行卡</div>'
                                             }
                             str_html += '</div>';
                                             if (dataNum == 1) {
@@ -216,10 +217,20 @@
                     }
                     
                 }
+                $(".btm_box").each(function () { 
+                    let pHeight = $(this).height();
+                    let chlidHeight = $(this).find(".all").height();
+                    console.log("---相差的值:",pHeight - chlidHeight);
+                    if (pHeight - chlidHeight <= 0) {
+                        $(this).addClass("after")
+                       console.log("---1")
+                    }else{
+                        $(this).parent().removeAttr("data-microtip");
+                        console.log("---2")
+                    }
+                 })
                 //当failure_hongbao的等于0的时候 将span标签渲染出来
                 if(failure_hongbao == 0){ 
-                    console.log(122222)
-                    // $(".failure").html("<div class='f_tips'>123</div>");
                     $(".failure").html("<div class='f_tips'><img class='f_img' src='{% static 'images/hongbao_nodata.png' %}'></div>");
                 } 
             },

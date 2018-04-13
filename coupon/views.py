@@ -82,5 +82,5 @@ def get_coupon_schedule(request):
 @login_required_ajax
 def get_coupon_num(request):
     user = request.user
-    count = user.usercoupons.filter(expire__gte=datetime.date.today()).exclude(state='2').count()
+    count = user.usercoupons.filter(expire__gte=datetime.date.today(), state='1').count()
     return JsonResponse({'count':count})

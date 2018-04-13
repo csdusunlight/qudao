@@ -384,7 +384,7 @@
 					// window.open("{% url 'account_submit' %}");
 					return;
 				} else { //首单红包
-					mui.ajax('/coupon/open_coupon/', {
+					mui.ajax('/coupon/get_coupon_schedule/', {
 						dataType: 'json', //服务器返回json格式数据 
 						type: 'post', //HTTP请求类型
 						data: {

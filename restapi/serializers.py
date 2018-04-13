@@ -28,6 +28,9 @@ class UserSerializer(serializers.ModelSerializer):
         
 class ProjectSerializer(serializers.ModelSerializer):
 #     subscribers = UserSerializer(many=True)
+    qq_name = serializers.CharField(source='user.qq_name', read_only=True)
+    user_mobile = serializers.CharField(source='user.mobile', read_only=True)
+    state_des = serializers.CharField(source='get_state_display', read_only=True)
     class Meta:
         model = Project
         fields = '__all__'

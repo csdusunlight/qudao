@@ -18,7 +18,7 @@ from account.models import MyUser, ApplyLog
 from rest_framework.filters import SearchFilter,OrderingFilter
 from public.permissions import IsOwnerOrStaff, IsSelfOrStaff
 from restapi.Filters import InvestLogFilter, SubscribeShipFilter, UserFilter,\
-    ApplyLogFilter, TranslistFilter, WithdrawLogFilter
+    ApplyLogFilter, TranslistFilter, WithdrawLogFilter, ProjectFilter
 from django.db.models import Q
 from wafuli_admin.models import DayStatis
 from statistic.models import UserDetailStatis, UserAverageStatis
@@ -41,7 +41,8 @@ class ProjectList(BaseViewMixin, generics.ListCreateAPIView):
         
     serializer_class = ProjectSerializer
     filter_backends = (SearchFilter, django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
-    filter_fields = ['state','type','is_multisub_allowed','is_official','category']
+    filter_class = ProjectFilter
+#     filter_fields = ['state','type','is_multisub_allowed','is_official','category']
     ordering_fields = ('state','pub_date','pinyin')
     search_fields = ('title', 'introduction')
     pagination_class = MyPageNumberPagination

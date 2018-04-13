@@ -51,7 +51,7 @@
     color: white;
     display: block;
     cursor: pointer;
-    line-height: 15px;
+    line-height: 17px;
 }
 .failure{
     width: 100%;
@@ -59,8 +59,8 @@
 }
 .f_tips{
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 60%;
+    left: 60%;
     transform: translate(-50%,-50%);
 }
 .hongbao_box{
@@ -84,8 +84,8 @@
     color: white;
     font-size: 20px;
     position: absolute;
-    bottom: 2px;
-    left: 166px;
+    bottom: 0;
+    left: 170px;
     z-index: 999;
     letter-spacing: 0;
 }
@@ -117,12 +117,15 @@
     line-height: 15px;
     color: white;
     margin: 35px 20px;
+    /* position: absolute; */
 }
 .btm_box{
-    width: 140px;
+    width: 180px;
     height: 35px;
     margin: 45px 10px;
     overflow: hidden;
+    position: absolute;top: 55px;left: 1px;
+    font-size: 13px;
 }
 .card{
     text-align: center;

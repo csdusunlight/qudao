@@ -117,9 +117,15 @@
                     // console.log("-- is_expired --",data.results[i].is_expired)
                     if (data.results[i].is_expired === false && dataNum != 2) {
                         effective_hongbao ++;
-                        str_html += '<div class="hongbao_box">'+
-                                        '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：'+ data.results[i].start_date +'至'+ data.results[i].end_date +'结算金额达到'+ data.results[i].settle_amount +'元，结算单数达到'+ data.results[i].settle_count +'单" data-microtip-position="top">'+
-                                            '<div class="top_box">'+
+                        str_html += '<div class="hongbao_box">';
+                                            if(data.results[i].settle_amount > 0 && data.results[i].settle_count > 0 ){
+                                                str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，结算单数达到'+ data.results[i].settle_count +'单，结算金额达到'+ data.results[i].settle_amount +'元" data-microtip-position="top">';
+                                            } else if(data.results[i].settle_amount > 0){
+                                                str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，结算金额达到'+ data.results[i].settle_amount +'元" data-microtip-position="top">';
+                                            } else if(data.results[i].settle_count > 0){
+                                                str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，结算单数达到'+ data.results[i].settle_count +'单" data-microtip-position="top">';
+                                            }
+                                    str_html+='<div class="top_box">'+
                                                 '<span style="color: white;">'+
                                                     '￥<span class="amount">'+ data.results[i].award +'</span>'+
                                                 '</span>'+
@@ -128,15 +134,12 @@
                                             if (data.results[i].type === "heyue") {
                                                 if(data.results[i].settle_amount > 0||data.results[i].settle_count > 0){
                                                     // str_html +='<span class="all ">结算金额'+ data.results[i].settle_amount +'元,结算单数'+ data.results[i].settle_count +'单</span>'
-                                                    str_html +='<div class="btm_box"><span class="all">激活条件：'+ data.results[i].start_date +'至'+ data.results[i].end_date +'结算金额达到'+ data.results[i].settle_amount +'元，结算单数达到'+ data.results[i].settle_count +'单"</span></div>'
-                                                }
-                                                if(data.results[i].settle_amount > 0){
+                                                    str_html +='<div class="btm_box"><span class="all">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，结算单数达到'+ data.results[i].settle_count +'单结算金额达到'+ data.results[i].settle_amount +'元"</span></div>'
+                                                }else if(data.results[i].settle_amount > 0){
                                                     str_html +='<p class="p_tips"><span data-type="'+ data.results[i].type +'">结算金额'+ data.results[i].settle_amount +'元</span></p>'
-                                                }
-                                                if(data.results[i].settle_count > 0){
+                                                }else if(data.results[i].settle_count > 0){
                                                     str_html +='<p class="p_tip"><span data-type="'+ data.results[i].type +'">结算单数'+ data.results[i].settle_count +'单</span></p>'
                                                 }
-                                                // str_html +='<div class="btm_desc" data-type="'+ data.results[i].type +'">累计提交'+ data.results[i].settle_amount +'单并且审核通过</div>'
                                             } else if(data.results[i].type === "guanzhu"){
                                                 str_html +='<div class="btm_desc btm_box" data-type="'+ data.results[i].type +'">关注官微并且绑定账户</div>'
                                             } else if(data.results[i].type === "shoudan"){
@@ -168,11 +171,9 @@
                                             if (data.results[i].type === "heyue") {
                                                 if(data.results[i].settle_amount > 0||data.results[i].settle_count > 0){
                                                     str_html2 +='<span class="all receive">结算金额'+ data.results[i].settle_amount +'元,结算单数'+ data.results[i].settle_count +'单</span>'
-                                                }
-                                                if(data.results[i].settle_amount > 0){
+                                                }else if(data.results[i].settle_amount > 0){
                                                     str_html2 +='<p class="p_tips"><span data-type="'+ data.results[i].type +'">结算金额'+ data.results[i].settle_amount +'元</span></p>'
-                                                }
-                                                if(data.results[i].settle_count > 0){
+                                                }else if(data.results[i].settle_count > 0){
                                                     str_html2 +='<p class="p_tip"><span data-type="'+ data.results[i].type +'">结算单数'+ data.results[i].settle_count +'单</span></p>'
                                                 }
                                             } else if(data.results[i].type === "guanzhu"){
@@ -243,6 +244,14 @@
                 if(effective_hongbao == 0){
                     $(".effective").html("<div class='f_tips'><img class='f_img' src='{% static 'images/hongbao_nodata.png' %}'></div>");
                 }
+                // $(".hongbao").each(function () { 
+                //     if(data.results[i].settle_amount == 0){
+                //         $(this).attr("data-microtip","激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，结算单数达到'+ data.results[i].settle_count +'单");
+                //     }else if(data.results[i].settle_count == 0){
+                //         $(this).attr("data-microtip","激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，结算金额达到'+ data.results[i].settle_amount +'元");
+                //     }   
+                //  })
+
             },
             error: function (xhr, textStatus) {
                 console.log('错误:' + xhr.responseText);

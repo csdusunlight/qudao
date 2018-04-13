@@ -196,7 +196,7 @@
                 </li>
                 <li class="mui-table-view-cell">
                     <a href="{% url 'account_hongbao' %}" class="mui-navigate-right" style="color: RGB(102,102,102);">我的红包</a>
-                    <span class="left_tip_num" id="coupon_num"></span>
+                    <span style="display: none;" class="left_tip_num" id="coupon_num"></span>
                 </li>
 			</ul>
 			<div id="out" class="outbtn">
@@ -327,6 +327,7 @@
                     console.log(ret.count);
                     if (ret.count > 0) {
                     	document.getElementById('coupon_num').innerText = ret.count;
+                    	document.getElementById('coupon_num').style.display = 'block';
                     } else{
                     	document.getElementById('coupon_num').style.display = 'none';
                     }

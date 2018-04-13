@@ -2,23 +2,17 @@
 <link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/admin_margin_query.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />{% endblock css %} {% block js %}
 <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
-
 <script type="text/javascript">
     $(function () {
-        $("li.home22").toggleClass("on");
+        $("li.home24").toggleClass("on");
         //数据
-        var data = '<table width="100%"><tr><th>发放日期</th><th>红包方案</th><th>QQ昵称</th><th>手机号</th><th>红包金额</th><th>有效期</th><th>是否领取</th>' +
-            '[results]<tr><td>{create_date}</td><td>{contract_name}</td><td>{qq_name}</td><td>{mobile}</td><td>{award}</td>' +
-            '<td>{expire}</td><td class="is_get" data-state="{state}">否</td></tr>[/results]</table>';
+        var data = '<table width="100%"><tr><th>项目名称</th><th>标期</th><th>结算价格</th><th>渠道价格</th><th>佣金</th><th>放单人</th><th>进行程度</th>' +
+            '[results]<tr><td>{title}</td><td>{term}</td><td>{up_price}</td><td>{default_price}</td><td>{broker_rate}</td><td>{user_mobile}</td>' +
+            '<td>{state_des}</td></tr>[/results]</table>';
 
         //回调函数
         function pagecallback() {
             console.log("回调函数");
-            $('.is_get').each(function(){
-                if ($(this).data('state') == 2) {
-                	$(this).text('是');
-                }
-            })
             //时间分割展示
 //          $('.time').each(function () {
 //              var time = $(this).text().split('T');//分割字符串 获取年月日
@@ -28,7 +22,7 @@
 //          });
         }
         $("#pagedata").ajaxPage({
-            url: '/coupon/coupons/?page={page}&pageSize={pageSize}',
+            url: '/restapi/projects/?page={page}&pageSize={pageSize}&category=merchant',
             pageId: $("#page"),
             pageSize: 10,
             run: true,
@@ -69,7 +63,7 @@
     });
 </script> {% endblock js %} {% block right %}
 <div class="wrapper">
-    <div class="searchTop">
+    <!--<div class="searchTop">
         <span>搜索条件</span>
     </div>
     <div class="tab">
@@ -94,7 +88,7 @@
         <div class="operateBox">
             <input type="button" value="搜索" class="search">
         </div>
-    </div>
+    </div>-->
     <div class="Tin-table">
         <div id="pagedata">
         </div>

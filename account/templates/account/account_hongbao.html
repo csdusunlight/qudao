@@ -105,6 +105,8 @@
             dataType: 'json', //返回数据格式Json
             success: function (data) {
                 var failure_hongbao = 0;
+                var received_hongbao = 0;
+                var effective_hongbao = 0;
                 console.log(data.results);
                 let str_html;
                 let str_html1;
@@ -114,6 +116,7 @@
                     str_html = '';
                     // console.log("-- is_expired --",data.results[i].is_expired)
                     if (data.results[i].is_expired === false && dataNum != 2) {
+                        effective_hongbao ++;
                         str_html += '<div class="hongbao_box">'+
                                         '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：'+ data.results[i].start_date +'至'+ data.results[i].end_date +'结算金额达到'+ data.results[i].settle_amount +'元，结算单数达到'+ data.results[i].settle_count +'单" data-microtip-position="top">'+
                                             '<div class="top_box">'+
@@ -152,6 +155,7 @@
                             str_html += '</div>'; 
                         $(".effective").append(str_html);       
                     }else if(dataNum === 2){
+                        received_hongbao ++;
                             str_html2 = '';
                             str_html2 += '<div class="hongbao_box">'+
                                         '<div class="hongbao">'+
@@ -163,7 +167,7 @@
                                             '<p class="time">有效期至：'+data.results[i].expire+'</p>';
                                             if (data.results[i].type === "heyue") {
                                                 if(data.results[i].settle_amount > 0||data.results[i].settle_count > 0){
-                                                    str_html2 +='<span class="all">结算金额'+ data.results[i].settle_amount +'元,结算单数'+ data.results[i].settle_count +'单</span>'
+                                                    str_html2 +='<span class="all receive">结算金额'+ data.results[i].settle_amount +'元,结算单数'+ data.results[i].settle_count +'单</span>'
                                                 }
                                                 if(data.results[i].settle_amount > 0){
                                                     str_html2 +='<p class="p_tips"><span data-type="'+ data.results[i].type +'">结算金额'+ data.results[i].settle_amount +'元</span></p>'
@@ -233,6 +237,12 @@
                 if(failure_hongbao == 0){ 
                     $(".failure").html("<div class='f_tips'><img class='f_img' src='{% static 'images/hongbao_nodata.png' %}'></div>");
                 } 
+                if(received_hongbao == 0){
+                    $(".received").html("<div class='f_tips'><img class='f_img' src='{% static 'images/hongbao_nodata.png' %}'></div>");
+                }
+                if(effective_hongbao == 0){
+                    $(".effective").html("<div class='f_tips'><img class='f_img' src='{% static 'images/hongbao_nodata.png' %}'></div>");
+                }
             },
             error: function (xhr, textStatus) {
                 console.log('错误:' + xhr.responseText);

@@ -310,6 +310,9 @@
 				if(received == 0){
 					html3.innerHTML=("<div class='f_tips'><img class='f_img' src='{% static 'images/hongbao_nodata.png' %}'></div>");
 				}
+				if(effective_hongbao == 0){
+					html1.innerHTML=("<div class='f_tips'><img class='f_img' src='{% static 'images/hongbao_nodata.png' %}'></div>");
+				}
 			},
 			error: function (xhr, type, errorThrown) {
 				console.log(xhr.responseText);

@@ -1,8 +1,18 @@
+.tips__icon[data-microtip-position|="top"]:after {
+    transform: translate3d(-50%, 0, 0);
+    bottom: 30px;
+    left: 50%;
+}
+.tips__icon[data-microtip-position|="top"]:before {
+    transform: translate3d(-50%, 0, 0);
+    bottom: 30px;
+    left: 50%;
+}    
 .RightCont{
     background: white;
 }
 .tab{
-    width: 200px;
+    width: 299px;
     height: 40px;
     margin: 20px;
     border:1px solid #91c11d;
@@ -30,12 +40,28 @@
     width: 100%;
     overflow: hidden;
 }
+.received{
+    width: 100%;
+    display: none;
+}
+.receive{
+    margin-top: 40px;
+}
+.all{
+    color: white;
+    display: block;
+    cursor: pointer;
+    line-height: 17px;
+}
 .failure{
     width: 100%;
     display: none;
 }
 .f_tips{
-    margin-left: 20px;
+    position: absolute;
+    top: 60%;
+    left: 60%;
+    transform: translate(-50%,-50%);
 }
 .hongbao_box{
     margin: 20px 0;
@@ -52,6 +78,16 @@
     height: 140px;
     background: url(../../../static/images/hongbao_1.png) no-repeat;
     position: relative;
+}
+.after::after{
+    content: "...";
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    bottom: 0;
+    left: 170px;
+    z-index: 999;
+    letter-spacing: 0;
 }
 .top_box{
     width: 100%;
@@ -76,11 +112,24 @@
 .btm_desc{
     width: 120px;
     height: 40px;
-    text-align: center;
+    /* text-align: center; */
     padding-left: 5px;
     line-height: 15px;
     color: white;
     margin: 35px 20px;
+    /* position: absolute; */
+}
+.btm_box{
+    width: 180px;
+    height: 35px;
+    margin: 45px 10px;
+    overflow: hidden;
+    position: absolute;top: 55px;left: 1px;
+    font-size: 13px;
+}
+.card{
+    text-align: center;
+    line-height: 35px;
 }
 .p_tips{
     margin-left: 20px;

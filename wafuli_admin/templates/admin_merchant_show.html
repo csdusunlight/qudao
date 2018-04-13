@@ -7,8 +7,8 @@
         $("li.home24").toggleClass("on");
         //数据
         var data = '<table width="100%"><tr><th>项目名称</th><th>标期</th><th>结算价格</th><th>渠道价格</th><th>佣金</th><th>放单人</th><th>进行程度</th>' +
-            '[results]<tr><td>{title}</td><td>{term}</td><td>{up_price}</td><td>{default_price}</td><td>{broker_rate}</td><td>{broker_rate}</td><td>{broker_rate}</td>' +
-            '<td>{expire}</td></tr>[/results]</table>';
+            '[results]<tr><td>{title}</td><td>{term}</td><td>{up_price}</td><td>{default_price}</td><td>{broker_rate}</td><td>{user_mobile}</td>' +
+            '<td>{state_des}</td></tr>[/results]</table>';
 
         //回调函数
         function pagecallback() {
@@ -63,7 +63,7 @@
     });
 </script> {% endblock js %} {% block right %}
 <div class="wrapper">
-    <div class="searchTop">
+    <!--<div class="searchTop">
         <span>搜索条件</span>
     </div>
     <div class="tab">
@@ -88,7 +88,7 @@
         <div class="operateBox">
             <input type="button" value="搜索" class="search">
         </div>
-    </div>
+    </div>-->
     <div class="Tin-table">
         <div id="pagedata">
         </div>

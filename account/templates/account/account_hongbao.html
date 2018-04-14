@@ -181,7 +181,7 @@
                                             '<p class="time">有效期至：'+data.results[i].expire+'</p>';
                                             if (data.results[i].type === "heyue") {
                                                 if(data.results[i].settle_amount > 0 && data.results[i].settle_count > 0){
-                                                    str_html2 +='<div class="btm_box"><span class="all">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，结算单数达到'+ data.results[i].settle_count +'单结算金额达到'+ data.results[i].settle_amount +'元"</span></div>'
+                                                    str_html2 +='<div class="btm_box after"><span class="all">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，结算单数达到'+ data.results[i].settle_count +'单结算金额达到'+ data.results[i].settle_amount +'元"</span></div>'
                                                 }else if(data.results[i].settle_amount > 0){
                                                     str_html2 += '<div class="btm_box"><span class="all" data-type="'+ data.results[i].type +'">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单'+ data.results[i].settle_amount +'元</span></div>'
                                                 }else if(data.results[i].settle_count > 0){

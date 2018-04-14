@@ -218,11 +218,11 @@
 						// '<span class="btm_text" data-type="'+ data.results[i].type +'">'+ data.results[i].type_des +'</span>' +
 						if (data.results[i].type === "heyue") {
 							if(data.results[i].settle_amount > 0 && data.results[i].settle_count > 0){
-								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '"><span>激活条件：结算金额' + data.results[i].settle_amount + '元,结算单数' + data.results[i].settle_count + '单</span></div>'
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '"><span>激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内结算金额' + data.results[i].settle_amount + '元，结算单数' + data.results[i].settle_count + '单</span></div>'
 							}else if(data.results[i].settle_amount > 0){
-								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：结算金额' + data.results[i].settle_amount + '元</div>'
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内结算金额' + data.results[i].settle_amount + '元</div>'
 							}else if(data.results[i].settle_count > 0){
-								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：结算单数' + data.results[i].settle_count + '单</div>'
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内结算单数' + data.results[i].settle_count + '单</div>'
 							}
 						} else if (data.results[i].type === "guanzhu") {
 							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">关注官微并且绑定账户</div>'
@@ -255,11 +255,11 @@
 						// '<span class="btm_text" data-type="'+ data.results[i].type +'">'+ data.results[i].type_des +'</span>' +
 						if (data.results[i].type === "heyue") {
 							if(data.results[i].settle_amount > 0 && data.results[i].settle_count > 0){
-								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '"><span>激活条件：结算金额' + data.results[i].settle_amount + '元,结算单数' + data.results[i].settle_count + '单</span></div>'
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '"><span>激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内结算金额' + data.results[i].settle_amount + '元,结算单数' + data.results[i].settle_count + '单</span></div>'
 							}else if(data.results[i].settle_amount > 0){
-								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：结算金额' + data.results[i].settle_amount + '元</div>'
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内结算金额' + data.results[i].settle_amount + '元</div>'
 							}else if(data.results[i].settle_count > 0){
-								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：结算单数' + data.results[i].settle_count + '单</div>'
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内结算单数' + data.results[i].settle_count + '单</div>'
 							}
 						} else if (data.results[i].type === "guanzhu") {
 							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">关注官微并且绑定账户</div>'
@@ -291,11 +291,11 @@
 						// str_html +='<span class="btm_text" data-type="' + data.results[i].type + '">' + data.results[i].type_des + '</span>' +
 						if (data.results[i].type === "heyue") {
 							if(data.results[i].settle_amount > 0 && data.results[i].settle_count > 0){
-								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '"><span>激活条件：结算金额' + data.results[i].settle_amount + '元,结算单数' + data.results[i].settle_count + '单</span></div>'
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '"><span>激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内，结算金额' + data.results[i].settle_amount + '元，结算单数' + data.results[i].settle_count + '单</span></div>'
 							}else if(data.results[i].settle_amount > 0){
-								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：结算金额' + data.results[i].settle_amount + '元</div>'
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内结算金额' + data.results[i].settle_amount + '元</div>'
 							}else if(data.results[i].settle_count > 0){
-								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：结算单数' + data.results[i].settle_count + '单</div>'
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内结算单数' + data.results[i].settle_count + '单</div>'
 							}
 						} else if (data.results[i].type === "guanzhu") {
 							str_html += '<span class="btm_text" data-type="' + data.results[i].type + '">关注官微并且绑定账户</span>'

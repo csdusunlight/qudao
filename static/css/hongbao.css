@@ -8,6 +8,10 @@
     bottom: 30px;
     left: 50%;
 }    
+input[type="button"]{
+    outline: none;
+    border: none;
+}
 .RightCont{
     background: white;
 }

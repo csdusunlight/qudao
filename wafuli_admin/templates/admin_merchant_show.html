@@ -6,9 +6,9 @@
     $(function () {
         $("li.home24").toggleClass("on");
         //数据
-        var data = '<table width="100%"><tr><th>项目名称</th><th>标期</th><th>结算价格</th><th>渠道价格</th><th>佣金</th><th>放单人</th><th>进行程度</th>' +
+        var data = '<table width="100%"><tr><th>项目名称</th><th>标期</th><th>结算价格</th><th>渠道价格</th><th>佣金</th><th>放单人手机号</th><th>放单人QQ</th><th>进行程度</th>' +
             '[results]<tr><td>{title}</td><td>{term}</td><td>{up_price}</td><td>{default_price}</td><td>{broker_rate}</td><td>{user_mobile}</td>' +
-            '<td>{state_des}</td></tr>[/results]</table>';
+            '<td>{qq_name}</td><td>{state_des}</td></tr>[/results]</table>';
 
         //回调函数
         function pagecallback() {
@@ -21,8 +21,9 @@
 //              $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
 //          });
         }
+        var base_url = '/restapi/projects/?page={page}&pageSize={pageSize}&category=merchant';
         $("#pagedata").ajaxPage({
-            url: '/restapi/projects/?page={page}&pageSize={pageSize}&category=merchant',
+            url: base_url,
             pageId: $("#page"),
             pageSize: 10,
             run: true,
@@ -31,29 +32,29 @@
         });
         //搜过功能
         $('.search').click(function () {
-            var sTime = $('.startTime').val();
-            var eTime = $('.endTime').val();
-            var phone = $('.phone').val();
-            var coupon_plan = $('.coupon_plan').val();
-            var newUrl = '/coupon/coupons/?page={page}&pageSize={pageSize}';
-            if (sTime) {
-                newUrl += '&create_0=' + sTime;
+            var project_name = $('.project_name').val();
+            var project_state = $('.project_state').val();
+            var creater_phone = $('.creater_phone').val();
+            var creater_qq = $('.creater_qq').val();
+            var newUrl = base_url;
+            if (project_name) {
+                newUrl += '&search=' + project_name;
             }
-            if (eTime) {
-                newUrl += '&create_1=' + eTime;
+            if (project_state) {
+                newUrl += '&state=' + project_state;
             }
-            if (phone) {
-                newUrl += '&user_mobile=' + phone;
+            if (creater_phone) {
+                newUrl += '&user_mobile=' + creater_phone;
             }
-            if (coupon_plan) {
-                newUrl += '&contract_contains=' + coupon_plan;
+            if (creater_qq) {
+                newUrl += '&qq_name=' + creater_qq;
             }
             console.log(newUrl);
 
             $("#pagedata").ajaxPage({
                 url: newUrl,
                 pageId: $("#page"),
-                pageSize: 6,
+                pageSize: 10,
                 run: true,
                 content: data,
                 complete: pagecallback,
@@ -63,32 +64,39 @@
     });
 </script> {% endblock js %} {% block right %}
 <div class="wrapper">
-    <!--<div class="searchTop">
+    <div class="searchTop">
         <span>搜索条件</span>
     </div>
     <div class="tab">
         <table>
             <tr>
-                <td>开始时间：
-                    <input type="datetime-local" class="startTime">
+                <td>项目名称：
+                    <input type="text" class="project_name">
                 </td>
-                <td>结束时间：
-                    <input type="datetime-local" class="endTime">
+                <td>项目状态：
+                    <select name="state" class="project_state select" style="width: 60%;">
+                    	<option value="">---------</option>
+                        <option value="00">即将开始</option>
+                        <option value="10" selected="selected">正在进行</option>
+                        <option value="20">已结束</option>
+                        <option value="30">已删除</option>
+                    </select>
+                    <!--<input type="datetime-local" class="project_state">-->
                 </td>
             </tr>
             <tr>
-                <td>用户手机号：
-                    <input type="text" class="phone">
+                <td>创建人手机号：
+                    <input type="text" class="creater_phone">
                 </td>
-                <td>红包方案：
-                    <input type="text" class="coupon_plan">
+                <td>创建人QQ：
+                    <input type="text" class="creater_qq">
                 </td>
             </tr>
         </table>
         <div class="operateBox">
             <input type="button" value="搜索" class="search">
         </div>
-    </div>-->
+    </div>
     <div class="Tin-table">
         <div id="pagedata">
         </div>

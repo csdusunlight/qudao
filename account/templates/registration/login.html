@@ -62,9 +62,9 @@ function check(){
 	<div class="bgd">
     	<div class="lodet">
         	<h2 class="lo-h2">用户登录</h2>
-        	{% if form.errors %}
+        	{% if form.error_msg %}
         	<span class="tipsl" id="divname">
-        	<font class="login-tips">用户名或密码输入有误!</font>
+        	<font class="login-tips">{{form.error_msg}}</font>
         	</span>
         	{% endif %}
             <form class="login-form" name="myform" method="post" action="">

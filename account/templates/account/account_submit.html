@@ -453,6 +453,7 @@
                         fileElementId: fileElementId2, //file标签的id
                         dataType: 'json', //返回数据的类型
                         success: function(data, status) {
+                            console.log(data);
                             $(".img-mask").css("display", "none");
                             if(data.code == 0) {
                                 console.log("yes")

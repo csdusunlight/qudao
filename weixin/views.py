@@ -178,14 +178,14 @@ def autoreply(request):
             except Reply_KeyWords.DoesNotExist:
                 pass
             if content == '':
-                prolist = list(Project.objects.filter(is_official=True, title__contains=message))
+                prolist = list(Project.objects.filter(is_official=True, title__contains=message, state='10'))
                 for pro in prolist:
                     content += '\n' if content else ''
                     content += pro.title + u'：' + pro.strategy
                     if weixin_user:
                         userlevel = weixin_user.user.level
                         price = getattr(pro, 'price' + userlevel)
-                        content += ' ' + price
+                        content += u' 渠道价格：' + price
         elif msg_type == 'event':
             event = xmlData.find('Event').text
             if event == 'subscribe':

@@ -38,11 +38,12 @@ def deliver_coupon(request):
         select_user = request.POST.get('selectuser')
         bulk = []
         users = []
+        user_set = set()
         if select_user == '1':
             users = MyUser.objects.all()
-            print users
             for user in users:
                 coupon = UserCoupon(user=user, contract=contract, type='heyue', award=contract.award)
+                user_set.add(user.mobile)
                 bulk.append(coupon)
                 success_count += 1
         elif select_user == '2':
@@ -50,7 +51,6 @@ def deliver_coupon(request):
             select_list_str = str(select_list_str)
             select_list = select_list_str.strip().split('\n')
             print select_list   #jzy
-            user_set = set([])
             for user in select_list:
                 if user:
                     user_set.add(user)

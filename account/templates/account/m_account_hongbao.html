@@ -171,6 +171,8 @@
 		var top_left = document.querySelector(".top_left");
 		var top_right = document.querySelector(".top_right");
 		var top_3 = document.querySelector(".top_3");
+		var count;
+		var amount;
 		mui.ajax('/coupon/coupons/?' + "user_mobile={{user.mobile}}&pageSize=999", {
 			dataType: 'json', //服务器返回json格式数据 
 			type: 'get', //HTTP请求类型
@@ -184,6 +186,8 @@
 				var received = 0;
 				var str_html;
 				for (var i in data.results) {
+					count = data.results[i].settle_count;
+					amount =  data.results[i].settle_amount;
 					str_html = '';
 					var li = document.createElement("li");
 					li.className = "mui-table-view-cell";
@@ -213,18 +217,20 @@
 							'<div class="hongbao_bottom">';
 						// '<span class="btm_text" data-type="'+ data.results[i].type +'">'+ data.results[i].type_des +'</span>' +
 						if (data.results[i].type === "heyue") {
-							if(data.results[i].settle_amount > 0){
-								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">结算金额' + data.results[i].settle_amount + '元</div>'
-							}
-							if(data.results[i].settle_count > 0){
-								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">结算单数' + data.results[i].settle_count + '单</div>'
+							if(data.results[i].settle_amount > 0 && data.results[i].settle_count > 0){
+								//激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，结算单数达到'+ data.results[i].settle_count +'单结算金额达到'+ data.results[i].settle_amount +'元"
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '"><span>激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算单数达到'+ data.results[i].settle_count +'单，结算金额达到'+ data.results[i].settle_amount +'元</span></div>'
+							}else if(data.results[i].settle_amount > 0){
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算金额达到' + data.results[i].settle_amount + '元</div>'
+							}else if(data.results[i].settle_count > 0){
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算单数' + data.results[i].settle_count + '单</div>'
 							}
 						} else if (data.results[i].type === "guanzhu") {
-							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">关注官微并且绑定账户</div>'
+							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：关注官微并且绑定账户</div>'
 						} else if (data.results[i].type === "shoudan") {
-							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">首次交单并且审核通过</div>'
+							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：首次交单并且审核通过</div>'
 						} else {
-							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">绑定银行卡</div>'
+							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：绑定银行卡</div>'
 						}
 						str_html += '</div>' +
 							'</div>';
@@ -249,18 +255,19 @@
 							'<div class="hongbao_bottom">';
 						// '<span class="btm_text" data-type="'+ data.results[i].type +'">'+ data.results[i].type_des +'</span>' +
 						if (data.results[i].type === "heyue") {
-							if(data.results[i].settle_amount > 0){
-								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">结算金额' + data.results[i].settle_amount + '元</div>'
-							}
-							if(data.results[i].settle_count > 0){
-								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">结算单数' + data.results[i].settle_count + '单</div>'
+							if(data.results[i].settle_amount > 0 && data.results[i].settle_count > 0){
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '"><span>激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内，在红包有效期内，结算金额达到' + data.results[i].settle_amount + '元,结算单数达到' + data.results[i].settle_count + '单</span></div>'
+							}else if(data.results[i].settle_amount > 0){
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内，在红包有效期内，结算金额达到' + data.results[i].settle_amount + '元</div>'
+							}else if(data.results[i].settle_count > 0){
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内，在红包有效期内，结算单数达到' + data.results[i].settle_count + '单</div>'
 							}
 						} else if (data.results[i].type === "guanzhu") {
-							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">关注官微并且绑定账户</div>'
+							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：关注官微并且绑定账户</div>'
 						} else if (data.results[i].type === "shoudan") {
-							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">首次交单并且审核通过</div>'
+							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：首次交单并且审核通过</div>'
 						} else {
-							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">绑定银行卡</div>'
+							str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：绑定银行卡</div>'
 						}
 						str_html += '</div>' +
 							'</div>';
@@ -284,13 +291,19 @@
 							'<div class="hongbao_bottom">';
 						// str_html +='<span class="btm_text" data-type="' + data.results[i].type + '">' + data.results[i].type_des + '</span>' +
 						if (data.results[i].type === "heyue") {
-							str_html += '<span class="btm_text" data-type="' + data.results[i].type + '">累计提交' + data.results[i].settle_amount + '单并且审核通过</span>'
+							if(data.results[i].settle_amount > 0 && data.results[i].settle_count > 0){
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '"><span>激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内，在红包有效期内，结算金额达到' + data.results[i].settle_amount + '元，结算单数达到' + data.results[i].settle_count + '单</span></div>'
+							}else if(data.results[i].settle_amount > 0){
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内，在红包有效期内，结算金额达到' + data.results[i].settle_amount + '元</div>'
+							}else if(data.results[i].settle_count > 0){
+								str_html += '<div class="btm_text" data-type="' + data.results[i].type + '">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内，，在红包有效期内，结算单数达到' + data.results[i].settle_count + '单</div>'
+							}
 						} else if (data.results[i].type === "guanzhu") {
-							str_html += '<span class="btm_text" data-type="' + data.results[i].type + '">关注官微并且绑定账户</span>'
+							str_html += '<span class="btm_text" data-type="' + data.results[i].type + '">激活条件：关注官微并且绑定账户</span>'
 						} else if (data.results[i].type === "shoudan") {
-							str_html += '<span class="btm_text" data-type="' + data.results[i].type + '">首次交单并且审核通过</span>'
+							str_html += '<span class="btm_text" data-type="' + data.results[i].type + '">激活条件：首次交单并且审核通过</span>'
 						} else {
-							str_html += '<span class="btm_text" data-type="' + data.results[i].type + '">绑定银行卡</span>'
+							str_html += '<span class="btm_text" data-type="' + data.results[i].type + '">激活条件：绑定银行卡</span>'
 						}
 						str_html += '</div>' +
 							'</div>';
@@ -368,8 +381,19 @@
 							id: hongbao_id
 						},
 						success: function (data) {
+							// var count;
+							// var amount;
+							console.log(count);
+							console.log(amount);
 							if (data.code == 0) {
-								mui.toast(`已经结算了${data.count}单，结算了${data.amount}元`);
+								// mui.toast(`已经结算单数${data.count}单，结算金额${data.amount}元`);
+								if(count > 0 && amount > 0){
+									mui.toast(`已经结算单数${data.count}单，结算金额${data.amount}元`);
+								}else if(count > 0){
+									mui.toast(`已经结算单数${data.count}单`);
+								}else if(amount > 0){
+									mui.toast(`已经结算金额${data.amount}元`);
+								}
 							} else if(data.code == 1){
 								// mui(this).style.background = "RGB(249,86,60)";
 								that.className = "mui-btn take takefalse state1 mui-btn-outlined";

@@ -1440,7 +1440,7 @@ def coupon_count(request):
     coupon_user_total = dic.get('count_user') or 0
     coupon_total = dic.get('count_coupon') or 0
     coupon_award = dic.get('sum') or 0
-    dic = UserCoupon.objects.filter(type='heyue', state='1').aggregate(count_user=Count('user', distinct=True),
+    dic = UserCoupon.objects.filter(type='heyue', state='2').aggregate(count_user=Count('user', distinct=True),
                 count_coupon=Count('*'), sum=Sum('award'))
     coupon_user_total_unlock = dic.get('count_user') or 0
     coupon_total_unlock = dic.get('count_coupon') or 0

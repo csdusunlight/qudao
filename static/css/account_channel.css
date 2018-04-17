@@ -75,7 +75,7 @@ h5 {
 .submit-way li {
 	border: 1px solid #e4e4e4;
 	display: inline-block;
-	width: 80px;
+	width: 160px;
 	line-height: 44px;
 	text-align: center;
 }
@@ -306,7 +306,8 @@ h5 {
 	color: #fff;
 }
 
-#choose {
+#choose,
+#choose2 {
 	display: none;
 }
 

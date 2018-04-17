@@ -40,6 +40,14 @@ $(function(){
 	} 	
 });
 function check(){
+    var username = $("#txtUserName").val();
+    var passward = $("#txtPassWord").val();
+    if (!username || !passward) {
+        alert('填写项不能为空！');
+        event.preventDefault();
+        return false;
+    }
+    
 	if($('#agreeChk').attr("checked") == "checked") 
 	{ 
 		
@@ -75,7 +83,7 @@ function check(){
                 </div>
             	<div>
                 	<span class="input-name">密码</span>
-                	<input id="txtPassWord" name="password" type="password" placeholder="请输入密码" class="lo-input"/>
+                	<input id="txtPassWord" name="password" type="password" autocomplete = 'new-password' placeholder="请输入密码" class="lo-input"/>
                 </div>
                 <div class="rememberme">
 	                <span class="g-checkbox"></span>

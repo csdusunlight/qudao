@@ -45,7 +45,8 @@
 						<div class="content-in content">
 							<ul id="submit_way" class="submit-way">
 								<li class="submit-on">逐条提交</li>
-								<li>表格提交</li>
+								<li>表格提交（单项目）</li>
+								<li>表格提交（多项目）</li>
 							</ul>
 
 							<div class="submit-content by-item" id="submit_content">
@@ -173,6 +174,38 @@
 									</p>
 								</div>
 							</div>
+							<div class="submit-content" style="display: none">
+                                <div class="upload-box">
+                                    <a class="download-templete" href="/static/download/template.xls">下载表格模版</a>
+                                    <b>支持小于1M的表格文件格式（.xls 和 .xlsx）</b>
+                                    <form id="form" name="form" method="post" action="" enctype="multipart/form-data">
+                                        <input name="userfile2" id="choose2" type="file" onchange="filechange2(this)" /><br/>
+                                        <p class="table-choosed" style="padding-left: 50px;">已选择表格：<span id="hint2" class="hint">未选择任何文件</span></p><br />
+                                        <a class="upload-box-btn" id="upload2">选择表格</a>
+                                        <a class="upload-box-btn" id="uploadsubmit2">提交表格</a>
+                                        </from>
+
+                                        <div class="img-mask m-02">
+                                            <div class="loader-inner ball-triangle-path">
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                            </div>
+                                            <p>文件上传中</p>
+                                        </div>
+                                </div>
+                                <div class="attention">
+                                    <h6>注意事项：</h6>
+                                    <p>1、可以同时导入多个项目的数据<br /> 2、提交的表格需为挖福利提供的表格模版
+                                        <br /> 3、所有数字需在英文格式下输入
+                                        <br /> 4、输入日期时，设置单元格式中的“日期”分类，“xxxx/x/x”或者“xxxx-x-x”类型
+                                        <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若投资1万元，只能在表格中填纯数字“10000”，不能填“10000元”或者“1万元”
+                                        <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;若投资日期为一个月，
+                                        <span style="color: #ff6767">只能在表格中填纯数字</span>“30”，不能填“30天”或者“1个月”<br /> 5、上传文件大小需小于1M，若导入数据超过上传大小，建议拆分为多个文件再逐个导入
+                                        <br /> 6、暂不支持IE浏览器
+                                    </p>
+                                </div>
+                            </div>
 							<!-- submit-content_________end -->
 						</div>
 						<!-- content_________end -->
@@ -308,14 +341,19 @@
 					run: true,
 					content: data,
 				});
-							var filechooser = document.getElementById("choose");
+				var filechooser = document.getElementById("choose");
 				var upload = document.getElementById("upload");
 				var hint = document.getElementById("hint");
 				upload.onclick = function() {
-//					//				var temp = document.getElementById("choose");
-//					//				alert(temp);
 					document.getElementById("choose").click();
 				}
+				
+				var filechooser2 = document.getElementById("choose2");
+                var upload2 = document.getElementById("upload2");
+                var hint2 = document.getElementById("hint2");
+                upload2.onclick = function() {
+                    document.getElementById("choose2").click();
+                }
 
 				function filechange(that) {
 					var aa = that.value.toLowerCase().split('.');
@@ -338,6 +376,27 @@
 						}
 					}
 				}
+				function filechange2(that) {
+                    var aa = that.value.toLowerCase().split('.');
+                    //      alert(document.getElementById('choose').value);
+                    if(document.form.userfile2.value == "") {
+                        alert('文件不能为空！');
+                        return false;
+                    } else {
+                        if(aa[aa.length - 1] == 'xls' || aa[aa.length - 1] == 'xlsx') {
+                            var fileSize = that.files[0].size;
+                            if(fileSize > 1024 * 1024 * 1) {
+                                alert("文件大小不能超过1M");
+                                return false;
+                            } else {
+                                hint2.innerHTML = that.files[0].name;
+                            }
+                        } else {
+                            alert('请选择excel格式文件');
+                            return false;
+                        }
+                    }
+                }
 				$('a#uploadsubmit').click(function() {
 					var fileElementId = 'choose';
 					if(!document.getElementById(fileElementId).value) {
@@ -379,6 +438,40 @@
 						}
 					});
 				});
+				
+				$('a#uploadsubmit2').click(function() {
+                    var fileElementId2 = 'choose2';
+                    if(!document.getElementById(fileElementId2).value) {
+                        alert("请先选择上传文件");
+                        return;
+                    }
+                    //      alert(document.getElementById('choose').value);
+                    $(".img-mask.m-2").css("display", "block");
+                    $.ajaxFileUpload({
+                        url: '',
+                        secureuri: false,
+                        fileElementId: fileElementId2, //file标签的id
+                        dataType: 'json', //返回数据的类型
+                        success: function(data, status) {
+                            $(".img-mask").css("display", "none");
+                            if(data.code == 0) {
+                                console.log("yes")
+
+                                $(".data-submit").text(data.anum);
+                                $(".data-repeat").text(data.dup1);
+                                $(".data-exist").text(data.dup2);
+                                $(".data-valid").text(data.sun);
+                                $(".submit-phonenumber").text(data.dupstr);
+                                popupInMistake();
+                            } else {
+                                alert(data.msg);
+                            }
+                        },
+                        error: function(data, status, e) {
+                            alert(e);
+                        }
+                    });
+                });
 
 				//			选项卡切换
 //				var tabs = document.getElementById("tab_head").getElementsByTagName("li");

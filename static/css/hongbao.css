@@ -68,13 +68,12 @@ input[type="button"]{
     transform: translate(-50%,-50%);
 }
 .hongbao_box{
-    margin: 20px 0;
     width: 198px;
     height: 240px;
-    /* background: yellow; */
     padding-top: 12px;
     float: left;
     margin-left: 40px;
+    position: relative;
 }
 .hongbao{
     padding:12px 20px;
@@ -98,10 +97,10 @@ input[type="button"]{
     height: 25px;
     line-height: 25px;
     text-align: center;
+    color: white;
 }
 .amount{
     font-size: 20px;
-    color: white;
 }
 .desc{
     font-size: 14px;
@@ -113,30 +112,43 @@ input[type="button"]{
     color: white;
     margin: 0 17px;
 }
-.btm_desc{
+/* .btm_desc{
     width: 120px;
     height: 40px;
-    /* text-align: center; */
     padding-left: 5px;
     line-height: 15px;
     color: white;
     margin: 35px 20px;
-    /* position: absolute; */
-}
+} */
 .btm_box{
     width: 180px;
     height: 35px;
-    margin: 45px 10px;
     overflow: hidden;
-    position: absolute;top: 55px;left: 1px;
+    position: absolute;top: 100px;left: 12px;
     font-size: 13px;
+    color: white;
 }
+.bindWechant{
+    margin-left: 20px;
+ }
 .card{
-    text-align: center;
-    line-height: 35px;
+    margin-left: 55px;
+ }
+ .first{
+    margin-left: 20px;
+ }
+.btn{
+    width: 164px;
+    height: 44px;
+    line-height:44px;
+    color: white;
+    border-radius: 10px;
+    margin: 20px 15px;
+    cursor: pointer;
+    background: RGB(145,193,29);
 }
+
 .p_tips{
-    /* margin-left: 10px; */
     margin-top: 35px;
     color: white;
     line-height: 20px;
@@ -159,14 +171,17 @@ input[type="button"]{
     background: RGB(199,199,199);
     cursor: not-allowed;
 }
-.fail_hongbao_box{
+.top_amount{
+    color: white;
+}
+/* .fail_hongbao_box{
     margin: 20px 0;
     width: 198px;
     height: 240px;
     padding-top: 12px;
     float: left;
     margin-left: 40px;
-}
+} */
 .fail_hongbao{
     padding:10px 20px;
     width: 198px;
@@ -186,7 +201,6 @@ input[type="button"]{
     line-height: 15px;
     color: white;
     margin-left: 60px;
-    /* position: absolute;bottom: 0;left: 38px; */
 }
 .fbtn{
     background: #c7c7c7;

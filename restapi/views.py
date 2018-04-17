@@ -33,11 +33,11 @@ class BaseViewMixin(object):
 class ProjectList(BaseViewMixin, generics.ListCreateAPIView):
     def get_queryset(self):
         user = self.request.user
-        queryset = Project.objects.filter(state__in=['10','20'], )
+        queryset = Project.objects.all()
         if user.is_staff:
             return queryset
         else:
-            return queryset.filter(Q(is_official=True) | Q(user__id=user.id))
+            return queryset.filter(Q(is_official=True) | Q(user__id=user.id)).filter(state__in=['10','20'], )
         
     serializer_class = ProjectSerializer
     filter_backends = (SearchFilter, django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)

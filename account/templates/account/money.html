@@ -44,11 +44,6 @@ var data = '<table width="100%"><thead><tr><th height="44">项目</th>' +
 '<td>{user_balance}</td><td class="submit-time">{time}</td><td>{remark}</td></tr>[/results]'+
 '</tbody></table>';
 var url = "/restapi/translist/" + "?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}";
-//function emptydisplay(obj){
-//	pic_url = "/restapi/projects/";
-//	obj.html('<div class="Defa-in"><img src="' + pic_url + '">'+
-//			'<h2>咦~~ 您还没有相关记录~~</h2></div>');
-//}
 function pagecallback(){
     $('.shouzhi').each(function(){
         console.log($(this).data('shouzhi'))

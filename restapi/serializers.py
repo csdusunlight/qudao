@@ -33,7 +33,8 @@ class ProjectSerializer(serializers.ModelSerializer):
     state_des = serializers.CharField(source='get_state_display', read_only=True)
     class Meta:
         model = Project
-        fields = '__all__'
+        exclude = ('subscribers',)
+#         fields = '__all__'
         read_only_fields = ('user', 'pub_date', 'state', 'is_official', 'category')
         
 class InvestLogSerializer(serializers.ModelSerializer):

@@ -327,6 +327,8 @@ def export_investlog(request):
     response['Content-Disposition'] = 'attachment; filename=投资记录表.xls'
     response.write(sio.getvalue())
     return response
+
+#用户返现数据导入
 @csrf_exempt
 @login_required
 def import_investlog(request):
@@ -427,4 +429,126 @@ def import_investlog(request):
     finally:
         os.remove(tempfile)
     ret['num'] = suc_num
+    return JsonResponse(ret)
+
+#初始导入，不选择项目（通过项目名称列辨别）
+@csrf_exempt
+@login_required
+def import_investlog_all(request):
+    fid = request.POST.get('fid')
+    ret = {'code':-1}
+    file = request.FILES.get('userfile2')
+#         print file.name
+    filename = os.path.join(STATIC_DIR, 'excel', request.user.mobile + '.xls').replace('\\','/')
+    with open(filename, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+    data = xlrd.open_workbook(filename)
+    table = data.sheets()[0]
+    nrows = table.nrows
+    ncols = table.ncols
+    if ncols!=8:
+        ret['msg'] = u"文件格式与模板不符，请下载最新模板填写！"
+        return JsonResponse(ret)
+    rtable = []
+    projecttitle_mobilelist_map = {}
+    project_data_map = {}
+    try:
+        for i in range(1,nrows):
+            temp = []
+            project_id = 0
+            for j in range(ncols):
+                cell = table.cell(i,j)
+                if j==0:
+                    name = cell.value
+                    projects = list(Project.objects.filter(title=name, state__in=['10','20']).exclude(category='self'))
+                    if len(projects)==0:
+                        raise Exception(u"项目名称不存在：%s。请确认该项目是否为官方项目。" % name)
+                    elif len(projects)>1:
+                        raise Exception(u"项目库中存在重复的项目名称：%s，请联系管理员" % name)
+                    else:
+                        project_id = projects[0].id
+                        temp.append(projects[0])
+                elif j==1:
+                    if(cell.ctype!=3):
+                        raise Exception(u"投资日期列格式错误，请修改后重新提交。")
+                    else:
+                        time = xlrd.xldate.xldate_as_datetime(cell.value, 0)
+                        temp.append(time)
+                elif j==2:
+                    try:
+                        mobile = str(int(cell.value)).strip()
+                    except Exception,e:
+                        raise Exception(u"手机号必须是11位数字，请修改后重新提交。")
+                    if name in projecttitle_mobilelist_map: 
+                        if mobile in projecttitle_mobilelist_map[name]:
+                            raise Exception(u'项目"%s"存在重复手机号，请排重后再提交。' % name)
+                        else:
+                            projecttitle_mobilelist_map[name].append(mobile)
+                    else:
+                        projecttitle_mobilelist_map[name] = []
+                    if len(mobile)==11:
+                        temp.append(mobile)
+                    else:
+                        raise Exception(u"手机号必须是11位数字，请修改后重新提交。")
+                elif j==5:
+                    try:
+                        term = str(int(float(cell.value)))
+                    except Exception,e:
+                        raise Exception(u"投资标期必须为数字，请修改后重新提交。")
+                    temp.append(term)
+                elif j==4:
+                    amount = cell.value
+                    try:
+                        amount = Decimal(amount)
+                    except:
+                        raise Exception(u"投资金额必须为数字")
+                    temp.append(amount)
+                else:
+                    value = cell.value
+                    temp.append(value)
+            if project_id in project_data_map:
+                project_data_map[project_id].append(temp)
+            else:
+                project_data_map[project_id] = [temp]
+            rtable.append(temp)
+    except Exception, e:
+        logger.info(unicode(e))
+#             traceback.print_exc()
+        ret['msg'] = unicode(e)
+        return JsonResponse(ret)
+    ####开始去重
+    print project_data_map
+    log_list = []
+    duplicate_mobile_list = []
+    duplic_num1 = 0
+    with transaction.atomic():
+        db_key = DBlock.objects.select_for_update().get(index='investlog')
+        for project_id, data_list in project_data_map.items():
+            project = data_list[0][0]
+            mobile_list = [x[2] for x in data_list]
+            if project.company is None:
+                temp = InvestLog.objects.filter(project=project, invest_mobile__in=mobile_list).exclude(audit_state='2').values('invest_mobile')
+            else:
+                temp = InvestLog.objects.filter(project__company_id=project.company_id, invest_mobile__in=mobile_list).exclude(audit_state='2').values('invest_mobile')
+            dup_mobile_list = map(lambda x: x['invest_mobile'], temp)
+            points = 0
+            for item in data_list:
+                mobile = item[2]
+                if mobile in dup_mobile_list:
+                    duplicate_mobile_list.append(mobile + '(' +  project.title + ')')
+                    duplic_num1 += 1
+                else:
+                    obj = InvestLog(user=request.user, invest_mobile=mobile, project=project, is_official=project.is_official, category=project.category,
+                                    invest_amount=item[4],invest_term=item[5],invest_date=item[1],invest_name=item[3],submit_way='5',
+                                    audit_state='1',zhifubao=item[6],remark=item[7],submit_type='1')
+                    log_list.append(obj)
+                    points += 1
+            project.points = F('points') + points
+            project.save(update_fields=['points',])
+        InvestLog.objects.bulk_create(log_list)
+    succ_num = len(log_list)
+    
+    duplic_mobile_list_str = u'，'.join(duplicate_mobile_list)
+    ret.update(code=0,sun=succ_num, dup1=duplic_num1, anum=nrows-1, dupstr=duplic_mobile_list_str)
     return JsonResponse(ret)

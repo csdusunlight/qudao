@@ -57,9 +57,12 @@ class UserCoupon(models.Model):
         elif self.type == 'shoudan':
             if self.user.investlog_submit.filter(audit_state='0').exists():
                 self.state = '1'
+        elif self.type == 'guanzhu':
+            if self.user.weixin_users.exists():
+                self.state = '1'
         if self.state == '1':
-            self.create_date = datetime.date.today()
-            self.save(update_fields = ['create_date', 'state'])
+            self.unlock_date = datetime.date.today()
+            self.save(update_fields = ['unlock_date', 'state'])
             return True
         else:
             return False

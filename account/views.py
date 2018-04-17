@@ -80,6 +80,15 @@ def login(request, template_name='registration/login.html',
             Userlogin.objects.create(user=user,)
 #             user.save(update_fields=["last_login_time", "this_login_time"])
             return HttpResponseRedirect(redirect_to)
+        else:
+            errors = form.errors
+            form.error_msg = u'用户名或密码输入有误'     
+            if '__all__' in errors:
+                dic = errors['__all__'].get_json_data()
+                if dic[0]['code'] == 'invalid_login':
+                    form.error_msg = u'用户名或密码输入有误'
+                elif dic[0]['code'] == 'inactive':
+                    form.error_msg = u'账户行为异常，请联系管理员'            
     else:
         form = authentication_form(request)
 

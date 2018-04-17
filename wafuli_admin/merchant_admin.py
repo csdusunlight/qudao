@@ -30,7 +30,7 @@ def admin_margin_query(request):
     return render(request,"admin_margin_query.html",)
 
 @transaction.atomic
-@has_post_permission('004')
+@has_post_permission('011')
 def admin_margin(request):
     admin_user = request.user
     if request.method == "GET":

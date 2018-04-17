@@ -48,9 +48,7 @@
 							var newStrP=getStr;
 							for(var s in opt[name][i]) {
 								var objstr = '' + opt[name][i][s];
-								console.log('++++++++++++++++++++++++'+objstr);
 								objstr = ToHtmlString(objstr);
-								console.log(objstr);
 								newStrP=newStrP.replace(eval("/{"+s+"}/ig"),objstr);
 							}
 							newStr+=newStrP;

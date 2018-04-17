@@ -11,7 +11,7 @@
 		<!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
 		<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
 		<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
-		<link rel="stylesheet" type="text/css" href="{% static 'css/account_channel.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/account_channel.css' %}?v=1" />
 		<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.searchableSelect.css' %}" />
 		<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 		<script type="text/javascript" src="{% static 'js/ajaxfileupload.js'%}"></script>
@@ -28,20 +28,6 @@
 				{% include "account/left.html" %}
 				<div class="RightCont container-box">
 					<div class="content-box">
-						<!--<div class="channel-header">-->
-							<!-- <h3>选择项目名称</h3>
-						<select id="project_select">
-							<option value="0">-</option>
-							{% for x in plist %}
-							    <option value="{{x.id}}">{{x.title}}</option>
-							{%endfor%}
-						</select> -->
-							<!--<ul id="tab_head" class="tab-head">
-								<li class="on">导入数据</li>
-								<li>导出数据</li>
-							</ul>-->
-						<!--</div>-->
-
 						<div class="content-in content">
 							<ul id="submit_way" class="submit-way">
 								<li class="submit-on">逐条提交</li>
@@ -176,7 +162,7 @@
 							</div>
 							<div class="submit-content" style="display: none">
                                 <div class="upload-box">
-                                    <a class="download-templete" href="/static/download/template.xls">下载表格模版</a>
+                                    <a class="download-templete" href="/static/download/template_pro.xls">下载表格模版</a>
                                     <b>支持小于1M的表格文件格式（.xls 和 .xlsx）</b>
                                     <form id="form" name="form" method="post" action="" enctype="multipart/form-data">
                                         <input name="userfile2" id="choose2" type="file" onchange="filechange2(this)" /><br/>
@@ -206,89 +192,19 @@
                                     </p>
                                 </div>
                             </div>
-							<!-- submit-content_________end -->
 						</div>
-						<!-- content_________end -->
-						<!--<div class="content-out content" style="display: none;">
-							<h3 class="project-select-head">选择项目名称</h3>
-							<select id="project_select_out" class="project-select-common">
-								<option value="0">全部</option>
-								{% for x in plist %}
-								<option value="{{x.id}}">{{x.title}}</option>
-								{%endfor%}
-							</select>
-							<input class="export-btn" type="button" name="" id="export" value="导出审核数据" />
-							<h6>注意事项：</h6>
-							<p>1、请按项目名称导出数据<br /> 2、数据自动导出成Excel表格
-								<br /> 3、暂不支持IE浏览器
-							</p>
-						</div>-->
-						<!-- content_________end -->
 					</div>
-					<!-- content-box_________end -->
-
 					<!--表格展示部分-->
 					<div class="Welfare">
-						<!--<div class="Welfare-T">
-							<strong>理财福利</strong>
-							<ul class="Welfare-li" id="Swi-Top">
-								<li class="on">全部</li>
-								<li>已通过</li>
-								<li>审核中</li>
-								<li>已拒绝</li>
-							</ul>
-						</div>-->
 						<div class="table">
 						    <h2 class="table__title">导入的数据</h2>
-							<!--<div class="tabCon">-->
-								<!--<div class="curs">-->
-									<div id="pagedata">
-
-									</div>
-								<!--</div>-->
-							<!--</div>-->
+								<div id="pagedata">
+								</div>
 
 							<div class="changes-p">
 								<div class="page" id="page">
 								</div>
 							</div>
-							<!--<div class="popup-box popup-box-05">
-								<div class="popup-content">
-									<h3>数据修改</h3>
-									<p>
-										<span>项目名称：</span>
-										<select class="invest-project height-add01" placeholder="选择项目">
-											<option value="0">--</option>
-											{% for x in plist %}
-											<option value="{{x.id}}">{{x.title}}</option>
-											{%endfor%}
-										</select>
-									</p>
-									<p>
-										<span>投资日期：</span>
-										<input type="text" class="height-add02 invest-time date_picker" placeholder="选择投资日期" />
-									</p>
-									<p>
-										<span>提交手机号：</span>
-										<input id="project_name_change" class="submit-tel" maxlength=11 type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" placeholder="填写正确的手机号" />
-									</p>
-									<p>
-										<span>投资标期：</span>
-										<input id="contact_person_change" class="invest-days" type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" placeholder="仅限纯数字" />
-									</p>
-									<p>
-										<span>投资金额：</span>
-										<input id="cooperate_type_change" class="invest-money" type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" placeholder="仅限纯数字" />
-									</p>
-									<p>
-										<span>备注：</span>
-										<input id="balance_type_change" class="invest-remarks" type="text" placeholder="选填" />
-									</p>
-
-									<a id="cancel" class="cancel confirm" onclick="popupOutInfo()">取&nbsp;&nbsp;&nbsp;&nbsp;消</a>
-									<a id="confirm_revise" class="confirm">确认修改</a>
-								</div>
-							</div>-->
 
 						</div>
 
@@ -306,6 +222,19 @@
 								<a id="upload_again" class="upload-again table-btn" onclick="popupOutMistake()">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
 							</div>
 						</div>
+						<div class="popup-box popup-box-05">
+                            <div class="popup-content">
+                                <h3>数据提交结果</h3>
+                                <p>有效提交：<span class="data-valid2"></span>项</p>
+                                <p>提交数据：<span class="data-submit2"></span>项</p>
+                                <p>无效数据：<span class="data-exist2"></span>项</p>
+                                <p style="text-align: left;padding-left: 38px;">无效手机号：<br /><span class="submit-phonenumber2"></span></p>
+                                <p style="text-align: left;padding-left: 38px;">注：
+                                    <br /> 无效数据：挖福利数据库中已存在，其他用户或自己之前提交过的数据
+                                </p>
+                                <a id="upload_again" class="upload-again table-btn" onclick="popupOutMistake()">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+                            </div>
+                        </div>
 					</div>
 				</div>
 			</div>
@@ -322,13 +251,6 @@
 					'</tr>[results]<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +
 					'<td>{invest_name}</td><td>{invest_amount}</td><td>{invest_term}</td><td class="w-zfb">{zhifubao}</td><td class="w-remark">{other_remark}</td>' +
 					'</tr>[/results]</table>';
-//				var data2 = '<table width="100%"><tr><th width="12%">项目</th><th>投资日期</th><th>提交手机号</th><th>投资标期</th>' +
-//					'<th>投资金额</th><th width="15%">备注</th><th>审核结果</th><th>返现福币</th><th width="12%">操作</th>' +
-//					'</tr>[data]<tr><td>{project}</td><td>{invest_time}</td><td>{mobile}</td>' +
-//					'<td>{invest_term}</td><td>{invest_amount}</td><td>{remark}</td><td>{audit_result}</td>' +
-//					'<td>{return_amount}</td><td><a class="revise-data" onclick=reviseData({id},this)>修改</a></td></tr>[/data]</table>';
-//				var url = "/restapi/projects/?page={page}&size={pageSize}";
-//				$('.back-a14').toggleClass("on");
 				$.ajaxSetup({
 					data: {
 						csrfmiddlewaretoken: '{{ csrf_token }}'
@@ -453,16 +375,16 @@
                         fileElementId: fileElementId2, //file标签的id
                         dataType: 'json', //返回数据的类型
                         success: function(data, status) {
+                            console.log(data);
                             $(".img-mask").css("display", "none");
                             if(data.code == 0) {
                                 console.log("yes")
 
-                                $(".data-submit").text(data.anum);
-                                $(".data-repeat").text(data.dup1);
-                                $(".data-exist").text(data.dup2);
-                                $(".data-valid").text(data.sun);
-                                $(".submit-phonenumber").text(data.dupstr);
-                                popupInMistake();
+                                $(".data-submit2").text(data.anum);  //提交数
+                                $(".data-exist2").text(data.dup1);   //无效数
+                                $(".data-valid2").text(data.sun);    
+                                $(".submit-phonenumber2").text(data.dupstr);
+                                $(".popup-box-05").addClass("in");
                             } else {
                                 alert(data.msg);
                             }
@@ -473,28 +395,6 @@
                     });
                 });
 
-				//			选项卡切换
-//				var tabs = document.getElementById("tab_head").getElementsByTagName("li");
-//				var contents = $('.content');
-//
-//				for(var i = 0; i < contents.length; i++) {
-//					tabs[i].onclick = function() {
-//						change(this);
-//					}
-//
-//				}
-//
-//				function change(obj) {
-//					for(var i = 0; i < tabs.length; i++) {
-//						if(tabs[i] == obj) {
-//							tabs[i].className = "on";
-//							contents[i].style.display = "block";
-//						} else {
-//							tabs[i].className = "";
-//							contents[i].style.display = "none";
-//						}
-//					}
-//				}
 				// 提交方式切换
 //				var contents = $('.submit-content');
 				var submitWay = document.getElementById("submit_way").getElementsByTagName("li");
@@ -773,39 +673,6 @@
 				});
 				// 单项提交部分----end
 
-//				$("#Swi-Top li").click(function() {
-//					if($(this).attr("class") != "on") {
-//						$(this).toggleClass("on").siblings().removeClass("on")
-//						var index = $(this).index();
-//						$("#page1").empty();
-//						if(index == 2) {
-//							$("#pagedata").ajaxPage({
-//								url: url + "&filter=" + index,
-//								pageId: $("#page"),
-//								pageSize: 30,
-//								run: true,
-//								content: data2,
-//								//	    complete:pagecallback,
-//							});
-//						} else {
-//							$("#pagedata").ajaxPage({
-//								url: url + "&filter=" + index,
-//								pageId: $("#page"),
-//								pageSize: 30,
-//								run: true,
-//								content: data,
-//								//	    complete:pagecallback,
-//							});
-//						}
-//					}
-//				});
-
-//				$("#Swi-Top li").click(function() {
-//					if($(this).attr("class") != "on") {
-//						$(this).toggleClass("on").siblings().removeClass("on")
-//					}
-//				});
-
 				// 上传中调用函数
 				function maskIn() {
 					$(".img-mask").css("display", "block");
@@ -818,6 +685,7 @@
 				// 再次提交调用函数
 				function popupOutMistake() {
 					$(".popup-box-02").removeClass("in");
+					$(".popup-box-05").removeClass("in");
 				}
 				// 单条数据提交成功调用函数
 				function popupInItem() {
@@ -830,124 +698,8 @@
 						location.reload();
 					}
 				}
-//				$("#export").click(function() {
-//					var fid = $("select#project_select_out").val();
-////					if(fid == "0") {
-////						alert("请先选择项目");
-////						return;
-////					}
-//					var html = '<form action="' + "" + '" method="get" target="_self" id="postData_form">';
-//					html += '<input name="fid" type="hidden" value="' + fid + '"/></form>';
-//					var iframe = document.getElementById('myIFrame');
-//					iframe.contentWindow.document.open();
-//					iframe.contentWindow.document.write(html);
-//					iframe.contentWindow.document.close();
-//					document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
-//				});
-
-				//修改审核中项目数据部分
-//				function popupOutRevise() { // 再次提交调用函数
-//					$(".popup-box-05").addClass("in");
-//				}
-				//				$(".tabCon").on("click", ".revise-data", function() {
-				//					popupOutRevise();
-				//				})
 				var project_id;
 				var revise_parent;
-//				function reviseData(id, obj) {
-//					project_id = id;
-//					//					console.log(id);
-//					revise_parent = $(obj).parent().parent();
-//					var parent_dom = $(revise_parent);
-//					var children0 = parent_dom.find("td").eq(0).text(),
-//						children1 = parent_dom.find("td").eq(1).text(),
-//						children2 = parent_dom.find("td").eq(2).text(),
-//						children3 = parent_dom.find("td").eq(3).text(),
-//						children4 = parent_dom.find("td").eq(4).text(),
-//						children5 = parent_dom.find("td").eq(5).text();
-//					//					console.log(children0+", "+children1+", "+children2+", "+children3+", "+children4+", "+children5+", ");
-//					var option_val;
-//					var options = $(".project_select option");
-//					//					var options = $(select).find("option");
-//					for(var i = 0; i < options.length; i++) {
-//						if($(options)[i].text == children0) {
-//							option_val = options[i].value;
-//						}
-//
-//					}
-//					console.log(option_val);
-//					$(".invest-project").val(option_val);
-//					$(".invest-time").val(children1);
-//					$(".submit-tel").val(children2);
-//					$(".invest-days").val(children3);
-//					$(".invest-money").val(children4);
-//					$(".invest-remarks").val(children5);
-//
-//					//					console.log($(options)[0].value);
-////					popupOutRevise();
-//				}
-//				$(".popup-box-05").on("focus", ".date_picker", function() {
-//					$('.date_picker').date_input();
-//				})
-
-//				$("#confirm_revise").click(function() {
-//					var invest_project = $(".invest-project").val(),
-//						invest_time = $(".invest-time").val(),
-//						invest_tel = $(".submit-tel").val(),
-//						invest_days = $(".invest-days").val(),
-//						invest_money = $(".invest-money").val(),
-//						invest_remarks = $(".invest-remarks").val();
-//					console.log(invest_project);
-////					var bank = $("#bank option:selected").val();
-//					console.log(project_id+","+invest_project+","+invest_time+","+invest_tel+","+invest_days+","+invest_money+","+invest_remarks+",");
-//					if(!invest_project || !invest_time || !invest_tel || !invest_days || !invest_money) {
-//						alert("填写项不能为空");
-//						return;
-//					}
-//					if(invest_project == 0) {
-//						alert("请选择项目");
-//						return;
-//					}
-//
-//					var revise_url = url;
-//					$.ajax({
-//						url: revise_url,
-//						dataType: "json",
-//						type: 'POST',
-//						data: {
-//							'project_id': project_id,
-//							'invest_project': invest_project,
-//							'invest_time': invest_time,
-//							'invest_tel': invest_tel,
-//							'invest_days': invest_days,
-//							'invest_money': invest_money,
-//							'invest_remarks': invest_remarks
-//						},
-//						success: function(ret) {
-//							if(ret.code == 1) {
-//								alert("请重新登录！")
-//								window.location.href = ret.url;
-//							} else if(ret.code == 0) {
-//								alert("更改数据成功！");
-//								console.log(ret.data);
-//								var parent_dom = $(revise_parent);
-//								parent_dom.find("td").eq(0).text(ret.data.content_object);
-//								parent_dom.find("td").eq(1).text(ret.data.invest_time);
-//								parent_dom.find("td").eq(2).text(ret.data.invest_account);
-//								parent_dom.find("td").eq(3).text(ret.data.invest_term);
-//								parent_dom.find("td").eq(4).text(ret.data.invest_amount);
-//								parent_dom.find("td").eq(5).text(ret.data.remark);
-//								popupOutInfo();
-//							} else {
-//								alert(ret.res_msg);
-//							}
-//						},
-//						error: function() {
-//							alert("请检查网络连接");
-//						}
-//					});
-//				});
-
 			</script>
 	</body>
 

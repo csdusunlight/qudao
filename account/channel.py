@@ -68,7 +68,7 @@ def channel(request):
                         if len(mobile)==11:
                             temp.append(mobile)
                         else:
-                            raise Exception(u"手机号必须是11位数字，请修改后重新提交。")
+                            raise Exception(u"手机号：'%s'必须是11位数字，请修改后重新提交。" % mobile)
                         if mobile in mobile_list:
                             duplic = True
                             break;

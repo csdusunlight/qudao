@@ -121,7 +121,7 @@ def admin_invest(request):
     admin_user = request.user
     if request.method == "GET":
         if not ( admin_user.is_authenticated() and admin_user.is_staff):
-            return redirect(reverse('admin:login') + "?next=" + reverse('admin_project'))
+            return redirect(reverse('admin:login') + "?next=" + reverse('admin_invest'))
         item_list = InvestLog.objects.filter(category='official', audit_state__in=['1','3'], submit_time__lt=datetime.date.today()).values_list('project_id').distinct().order_by('project_id')
         print item_list
         project_list = ()
@@ -141,7 +141,7 @@ def admin_invest(request):
         type = request.POST.get('type', None)
         reason = request.POST.get('reason', '')
         type = int(type)
-        if not investlog_id or type==1 and not cash or not type in [1, 2, 3]:
+        if not investlog_id or type==1 and not cash or not type in [1, 2, 3, 4]:
             res['code'] = -2
             res['res_msg'] = u'传入参数不足，请联系技术人员！'
             return JsonResponse(res)
@@ -187,15 +187,38 @@ def admin_invest(request):
 #                 #活动插入
 #                 on_audit_pass(request, investlog)
 #                 #活动插入结束
+                investlog.audit_reason = reason
                 res['code'] = 0
         elif type==2:
             if investlog.settle_amount == 0:
                 investlog.audit_state = '2'
+            investlog.audit_reason = reason
             res['code'] = 0
         elif type==3:
             investlog.audit_state = '3'
+            investlog.audit_reason = reason
             res['code'] = 0
-        investlog.audit_reason = reason
+        elif type==4:
+            try:
+                cash = Decimal(cash)
+            except:
+                res['code'] = -2
+                res['res_msg'] = u"操作失败，输入不合法！"
+                return JsonResponse(res)
+            if cash < 0:
+                res['code'] = -2
+                res['res_msg'] = u"操作失败，输入不合法！"
+                return JsonResponse(res)
+            if investlog.audit_state != '0':
+                res['code'] = -3
+                res['res_msg'] = u'该项目已审核过，不要重复审核！'
+                return JsonResponse(res)
+            translist = charge_money(investlog_user, '0', cash, project_title, remark=u"补差价")  #jzy
+            investlog.settle_amount += cash
+            investlog.delta_amount = cash
+            translist.auditlog = investlog
+            translist.save()
+            res['code'] = 0
         if res['code'] == 0:
             investlog.audit_time = datetime.datetime.now()
             investlog.admin_user = admin_user

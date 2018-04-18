@@ -16,7 +16,7 @@
     <script type="text/javascript" src="{% static 'js/page.js' %}?v-1"></script>
     <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
-    
+
 </head>
 
 <body>
@@ -30,12 +30,14 @@
                 </div>
             </div>
             <div class="modal_btn">确定</div>
-        </div>        
+        </div>
     </div>
     <!-- 微信公众号模态框 -->
     <div class="modal_qrBox">
         <div class="qr_code">
-            <div class="qr_close"><span>×</span></div>
+            <div class="qr_close">
+                <span>×</span>
+            </div>
             <img src="{% static 'images/hongbao_qrCode.png' %}">
         </div>
     </div>
@@ -62,15 +64,15 @@
             </ul>
             <ol class="contBox">
                 <li class="effective">
-                    
+
                 </li>
                 <li class="received">
-                 
-                </li>   
-                <li class="failure">
-                    
+
                 </li>
-                
+                <li class="failure">
+
+                </li>
+
             </ol>
     </div>
     <!--底部-->
@@ -84,7 +86,7 @@
     "use strict";//声明严格模式
     $(function () {
         $('.back-a14').toggleClass("on");
-       
+
         /**
          tab效果
         **/
@@ -116,156 +118,149 @@
                     str_html = '';
                     // console.log("-- is_expired --",data.results[i].is_expired)
                     if (data.results[i].is_expired === false && dataNum != 2) {
-                        effective_hongbao ++;
+                        effective_hongbao++;
                         str_html += '<div class="hongbao_box">';
-                                            //根据交单数和结算金额来渲染提示框
-                                            if(data.results[i].type === "heyue"){
-                                                if(data.results[i].settle_amount > 0 && data.results[i].settle_count > 0 ){
-                                                    str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算单数达到'+ data.results[i].settle_count +'单，结算金额达到'+ data.results[i].settle_amount +'元" data-microtip-position="top">';
-                                                    } else if(data.results[i].settle_amount > 0){
-                                                    str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算金额达到'+ data.results[i].settle_amount +'元" data-microtip-position="top">';
-                                                    } else if(data.results[i].settle_count > 0){
-                                                    str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算单数达到'+ data.results[i].settle_count +'单" data-microtip-position="top">';
-                                                    }
-                                            }else if(data.results[i].type === "bangka"){
-                                                str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：请绑定银行卡" data-microtip-position="top">';
-                                            }else if(data.results[i].type === "shoudan"){
-                                                str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="首次交单并且审核通过" data-microtip-position="top">';
-                                            }else{
-                                                str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="关注官微并且绑定账户" data-microtip-position="top">';
-                                            }
-                                    str_html+='<div class="top_box">'+
-                                                '<span style="color: white;">'+
-                                                    '￥<span class="amount">'+ data.results[i].award +'</span>'+
-                                                '</span>'+
-                                            '</div>'+
-                                            '<p class="time">有效期至：'+data.results[i].expire+'</p>';
-                                            if (data.results[i].type === "heyue") {
-                                                if(data.results[i].settle_amount > 0 && data.results[i].settle_count > 0){
-                                                    // str_html +='<span class="all ">结算金额'+ data.results[i].settle_amount +'元,结算单数'+ data.results[i].settle_count +'单</span>'
-                                                    str_html +='<div class="btm_box after"><span class="all">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算单数达到'+ data.results[i].settle_count +'单结算金额达到'+ data.results[i].settle_amount +'元"</span></div>'
-                                                }else if(data.results[i].settle_amount > 0){
-                                                    str_html +='<div class="btm_box after"><span class="all" data-type="'+ data.results[i].type +'">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算金额达到'+ data.results[i].settle_amount +'元</span></div>'
-                                                }else if(data.results[i].settle_count > 0){
-                                                    str_html +='<div class="btm_box after"><span class="all" data-type="'+ data.results[i].type +'">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算单数达到'+ data.results[i].settle_count +'单</span></div>'
-                                                }
-                                            } else if(data.results[i].type === "guanzhu"){
-                                                str_html +='<div class="btm_desc btm_box" style="margin: 55px 30px;" data-type="'+ data.results[i].type +'">关注官微并且绑定账户</div>'
-                                            } else if(data.results[i].type === "shoudan"){
-                                                str_html +='<div class="btm_desc btm_box" style="margin: 55px 30px;" data-type="'+ data.results[i].type +'">首次交单并且审核通过</div>'
-                                            } else{
-                                                str_html +='<div class="btm_desc btm_box" style="margin: 55px 60px;" data-type="'+ data.results[i].type +'">绑定银行卡</div>'
-                                            }
-                            str_html += '</div>';
-                                            if (dataNum == 1) {
-                                                str_html += '<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ dataNum +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ dataNum +'" data-type="'+ data.results[i].type +'">立即领取</a>'
-                                            } else if(dataNum == 2){
-                                                str_html +='<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ dataNum +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ dataNum +'" data-type="'+ data.results[i].type +'">已领取</a>'
-                                            } else{
-                                                str_html +='<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ dataNum +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ dataNum +'" data-type="'+ data.results[i].type +'">立即激活</a>'
-                                            }
-                            str_html += '</div>'; 
-                        $(".effective").append(str_html);       
-                    }else if(dataNum === 2){ //已经领取红包渲染
-                        received_hongbao ++;
-                            str_html2 = '';
-                            str_html2 += '<div class="hongbao_box">';
-                                if(data.results[i].type === "heyue"){
-                                    if(data.results[i].settle_amount > 0 && data.results[i].settle_count > 0 ){
-                                        str_html2 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算单数达到'+ data.results[i].settle_count +'单，结算金额达到'+ data.results[i].settle_amount +'元" data-microtip-position="top">';
-                                        } else if(data.results[i].settle_amount > 0){
-                                        str_html2 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算金额达到'+ data.results[i].settle_amount +'元" data-microtip-position="top">';
-                                        } else if(data.results[i].settle_count > 0){
-                                        str_html2 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算单数达到'+ data.results[i].settle_count +'单" data-microtip-position="top">';
-                                        }
-                                }else if(data.results[i].type === "bangka"){
-                                    str_html2 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：请绑定银行卡" data-microtip-position="top">';
-                                }else if(data.results[i].type === "shoudan"){
-                                    str_html2 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="首次交单并且审核通过" data-microtip-position="top">';
-                                }else{
-                                    str_html2 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="关注官微并且绑定账户" data-microtip-position="top">';
-                                }
-                            str_html2 += '<div class="top_box">'+
-                                                '<span style="color: white;">'+
-                                                    '￥<span class="amount">'+ data.results[i].award +'</span>'+
-                                                '</span>'+
-                                            '</div>'+
-                                            '<p class="time">有效期至：'+data.results[i].expire+'</p>';
-                                            if (data.results[i].type === "heyue") {
-                                                if(data.results[i].settle_amount > 0 && data.results[i].settle_count > 0){
-                                                    str_html2 +='<div class="btm_box after"><span class="all">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算单数达到'+ data.results[i].settle_count +'单结算金额达到'+ data.results[i].settle_amount +'元"</span></div>'
-                                                }else if(data.results[i].settle_amount > 0){
-                                                    str_html2 += '<div class="btm_box after"><span class="all" data-type="'+ data.results[i].type +'">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算金额达到'+ data.results[i].settle_amount +'元</span></div>'
-                                                }else if(data.results[i].settle_count > 0){
-                                                    str_html2 +='<div class="btm_box after"><span class="all" data-type="'+ data.results[i].type +'">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算单数达到'+ data.results[i].settle_count +'单</span></div>'
-                                                }
-                                            } else if(data.results[i].type === "guanzhu"){
-                                                str_html2 +='<div class="btm_desc btm_box" style="margin: 55px 30px;" data-type="'+ data.results[i].type +'">关注官微并且绑定账户</div>'
-                                            } else if(data.results[i].type === "shoudan"){
-                                                str_html2 +='<div class="btm_desc btm_box" style="margin: 55px 30px;" data-type="'+ data.results[i].type +'">首次交单并且审核通过</div>'
-                                            } else{
-                                                str_html2 +='<div class="btm_desc btm_box" style="margin: 55px 60px;" data-type="'+ data.results[i].type +'">绑定银行卡</div>'
-                                            }
-                        str_html2 += '</div>'+
-                                        '<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ dataNum +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ dataNum +'" data-type="'+ data.results[i].type +'">已领取</a>'+
-                                 '</div>'; 
-                            $(".received").append(str_html2);  
-                    }else{
+                        //根据交单数和结算金额来渲染提示框
+                        if (data.results[i].type === "heyue") {
+                            if (data.results[i].settle_amount > 0 && data.results[i].settle_count > 0) {
+
+                                str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算单数达到' + data.results[i].settle_count + '单，结算金额达到' + data.results[i].settle_amount + '元" data-microtip-position="top">';
+                            } else if (data.results[i].settle_amount > 0) {
+                                str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算金额达到' + data.results[i].settle_amount + '元" data-microtip-position="top">';
+                            } else if (data.results[i].settle_count > 0) {
+                                str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算单数达到' + data.results[i].settle_count + '单" data-microtip-position="top">';
+                            }
+                        } else if (data.results[i].type === "bangka") {
+                            str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：请绑定银行卡" data-microtip-position="top">';
+                        } else if (data.results[i].type === "shoudan") {
+                            str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="首次交单并且审核通过" data-microtip-position="top">';
+                        } else {
+                            str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="关注官微并且绑定账户" data-microtip-position="top">';
+                        }
+                        str_html += '<div class="top_box">' +
+                            '<span class="top_amount">' +
+                            '￥<span class="amount">' + data.results[i].award + '</span>' +
+                            '</span>' +
+                            '</div>' +
+                            '<p class="time">有效期至：' + data.results[i].expire + '</p>';
+                        if (data.results[i].type === "heyue") {
+                            if (data.results[i].settle_amount > 0 && data.results[i].settle_count > 0) {
+
+                                str_html += '<div class="btm_box after"><span class="all">激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算单数达到' + data.results[i].settle_count + '单结算金额达到' + data.results[i].settle_amount + '元"</span></div>'
+                            } else if (data.results[i].settle_amount > 0) {
+                                str_html += '<div class="btm_box after"><span class="all" data-type="' + data.results[i].type + '">激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算金额达到' + data.results[i].settle_amount + '元</span></div>'
+                            } else if (data.results[i].settle_count > 0) {
+                                str_html += '<div class="btm_box after"><span class="all" data-type="' + data.results[i].type + '">激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算单数达到' + data.results[i].settle_count + '单</span></div>'
+                            }
+                        } else if (data.results[i].type === "guanzhu") {
+                            str_html += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all bindWechant">关注官微并且绑定账户</span></div>'
+                        } else if (data.results[i].type === "shoudan") {
+                            str_html += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all first">首次交单并且审核通过</span></div>'
+                        } else {
+                            str_html += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all card">绑定银行卡</span></div>'
+                        }
+                        str_html += '</div>';
+                        if (dataNum == 1) {
+                            str_html += '<a class="btn btn' + data.results[i].is_to_expired + ' get state' + dataNum + '" data-id="' + data.results[i].id + '" data-award="' + data.results[i].award + '" data-state="' + dataNum + '" data-type="' + data.results[i].type + '">立即领取</a>'
+                        } else if (dataNum == 2) {
+                            str_html += '<a class="btn btn' + data.results[i].is_to_expired + ' get state' + dataNum + '" data-id="' + data.results[i].id + '" data-award="' + data.results[i].award + '" data-state="' + dataNum + '" data-type="' + data.results[i].type + '">已领取</a>'
+                        } else {
+                            str_html += '<a class="btn btn' + data.results[i].is_to_expired + ' get state' + dataNum + '" data-id="' + data.results[i].id + '" data-award="' + data.results[i].award + '" data-state="' + dataNum + '" data-type="' + data.results[i].type + '">立即激活</a>'
+                        }
+                        str_html += '</div>';
+                        $(".effective").append(str_html);
+                    } else if (dataNum === 2) { //已经领取红包渲染
+                        received_hongbao++;
+                        str_html2 = '';
+                        str_html2 += '<div class="hongbao_box">';
+                        if (data.results[i].type === "heyue") {
+                            if (data.results[i].settle_amount > 0 && data.results[i].settle_count > 0) {
+                                str_html2 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算单数达到' + data.results[i].settle_count + '单，结算金额达到' + data.results[i].settle_amount + '元" data-microtip-position="top">';
+                            } else if (data.results[i].settle_amount > 0) {
+                                str_html2 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算金额达到' + data.results[i].settle_amount + '元" data-microtip-position="top">';
+                            } else if (data.results[i].settle_count > 0) {
+                                str_html2 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算单数达到' + data.results[i].settle_count + '单" data-microtip-position="top">';
+                            }
+                        } else if (data.results[i].type === "bangka") {
+                            str_html2 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：请绑定银行卡" data-microtip-position="top">';
+                        } else if (data.results[i].type === "shoudan") {
+                            str_html2 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="首次交单并且审核通过" data-microtip-position="top">';
+                        } else {
+                            str_html2 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="关注官微并且绑定账户" data-microtip-position="top">';
+                        }
+                        str_html2 += '<div class="top_box">' +
+                            '<span class="top_amount">' +
+                            '￥<span class="amount">' + data.results[i].award + '</span>' +
+                            '</span>' +
+                            '</div>' +
+                            '<p class="time">有效期至：' + data.results[i].expire + '</p>';
+                        if (data.results[i].type === "heyue") {
+                            if (data.results[i].settle_amount > 0 && data.results[i].settle_count > 0) {
+                                str_html2 += '<div class="btm_box after"><span class="all">激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算单数达到' + data.results[i].settle_count + '单结算金额达到' + data.results[i].settle_amount + '元"</span></div>'
+                            } else if (data.results[i].settle_amount > 0) {
+                                str_html2 += '<div class="btm_box after"><span class="all" data-type="' + data.results[i].type + '">激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算金额达到' + data.results[i].settle_amount + '元</span></div>'
+                            } else if (data.results[i].settle_count > 0) {
+                                str_html2 += '<div class="btm_box after"><span class="all" data-type="' + data.results[i].type + '">激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算单数达到' + data.results[i].settle_count + '单</span></div>'
+                            }
+                        } else if (data.results[i].type === "guanzhu") {
+                            str_html2 += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all bindWechant">关注官微并且绑定账户</span></div>'
+                        } else if (data.results[i].type === "shoudan") {
+                            str_html2 += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all first">首次交单并且审核通过</span></div>'
+                        } else {
+                            str_html2 += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all card">绑定银行卡</span></div>'
+                        }
+                        str_html2 += '</div>' +
+                            '<a class="btn get state' + dataNum + '" data-type="' + data.results[i].type + '">已领取</a>' +
+                            '</div>';
+                        $(".received").append(str_html2);
+                    } else {
                         console.log("失效红包")
                         failure_hongbao++;
                         str_html1 = '';
-                        str_html1 += '<div class="fail_hongbao_box">';
-                                        // '<div class="fail_hongbao">'+
-                                            if(data.results[i].type === "heyue"){
-                                                if(data.results[i].settle_amount > 0 && data.results[i].settle_count > 0 ){
-                                                    str_html1 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算单数达到'+ data.results[i].settle_count +'单，结算金额达到'+ data.results[i].settle_amount +'元" data-microtip-position="top">';
-                                                    } else if(data.results[i].settle_amount > 0){
-                                                    str_html1 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，结算金额达到'+ data.results[i].settle_amount +'元" data-microtip-position="top">';
-                                                    } else if(data.results[i].settle_count > 0){
-                                                    str_html1 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算单数达到'+ data.results[i].settle_count +'单" data-microtip-position="top">';
-                                                    }
-                                            }else if(data.results[i].type === "bangka"){
-                                                str_html1 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：请绑定银行卡" data-microtip-position="top">';
-                                            }else if(data.results[i].type === "shoudan"){
-                                                str_html1 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="首次交单并且审核通过" data-microtip-position="top">';
-                                            }else{
-                                                str_html1 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="关注官微并且绑定账户" data-microtip-position="top">';
-                                            }
-                                         str_html1 += '<div class="top_box">'+
-                                                '<span style="color: white;">'+
-                                                    '￥<span class="amount">'+ data.results[i].award +'</span>'+
-                                                '</span>'+
-                                            '</div>'+
-                                             '<p class="time">有效期至：'+data.results[i].expire+'</p>';
-                                            if (data.results[i].type === "heyue") {
-                                                if(data.results[i].settle_amount > 0||data.results[i].settle_count > 0){
-                                                    str_html1 +='<div class="btm_box after"><span class="all">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算单数达到'+ data.results[i].settle_count +'单结算金额达到'+ data.results[i].settle_amount +'元"</span></div>'
-                                                }else if(data.results[i].settle_amount > 0){
-                                                    str_html1 +='<p class="p_tips"><span data-type="'+ data.results[i].type +'">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算金额达到'+ data.results[i].settle_amount +'元</span></p>'
-                                                }else if(data.results[i].settle_count > 0){
-                                                    str_html1 +='<p class="p_tip"><span data-type="'+ data.results[i].type +'">激活条件：在'+ data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算单数达到'+ data.results[i].settle_count +'单</span></p>'
-                                                }
-                                            } else if(data.results[i].type === "guanzhu"){
-                                                //style="margin: 55px 30px;"  style="margin: 55px 30px;"  style="margin: 55px 60px;"
-                                                str_html1 +='<div class="btm_box fbtm_desc" style="margin: 55px 30px;" data-type="'+ data.results[i].type +'">关注官微并且绑定账户</div>'
-                                            } else if(data.results[i].type === "shoudan"){
-                                                str_html1 +='<div class="btm_box fbtm_desc" style="margin: 55px 30px;" data-type="'+ data.results[i].type +'">首次交单并且审核通过</div>'
-                                            } else{
-                                                str_html1 +='<div class="btm_box fbtm_desc" style="margin: 55px 60px;" data-type="'+ data.results[i].type +'">绑定银行卡</div>'
-                                            }
-                                str_html1 +='</div>';
-                                        // '<input class="btn fbtn" type="button" value="'+ data.results[i].state_des+'">'+
-                                        if (dataNum == 1) {
-                                            str_html1 += '<a class="btn fbtn">已过期</a>'
-                                        } else if(dataNum == 2){
-                                            str_html1 += '<a class="btn fbtn">已过期</a>'
-                                        } else{
-                                            str_html1 += '<a class="btn fbtn">已过期</a>'
-                                        }
-                            str_html1 += '</div>'
-                        $(".failure").append(str_html1);  
+                        str_html1 += '<div class="hongbao_box">';
+                        // '<div class="fail_hongbao">'+
+                        if (data.results[i].type === "heyue") {
+                            if (data.results[i].settle_amount > 0 && data.results[i].settle_count > 0) {
+                                str_html1 += '<div class="hongbao fail_hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算单数达到' + data.results[i].settle_count + '单，结算金额达到' + data.results[i].settle_amount + '元" data-microtip-position="top">';
+                            } else if (data.results[i].settle_amount > 0) {
+                                str_html1 += '<div class="hongbao fail_hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，结算金额达到' + data.results[i].settle_amount + '元" data-microtip-position="top">';
+                            } else if (data.results[i].settle_count > 0) {
+                                str_html1 += '<div class="hongbao fail_hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算单数达到' + data.results[i].settle_count + '单" data-microtip-position="top">';
+                            }
+                        } else if (data.results[i].type === "bangka") {
+                            str_html1 += '<div class="hongbao fail_hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：请绑定银行卡" data-microtip-position="top">';
+                        } else if (data.results[i].type === "shoudan") {
+                            str_html1 += '<div class="hongbao fail_hongbao tips__icon" data-microtip-size="large" data-microtip="首次交单并且审核通过" data-microtip-position="top">';
+                        } else {
+                            str_html1 += '<div class="hongbao fail_hongbao tips__icon" data-microtip-size="large" data-microtip="关注官微并且绑定账户" data-microtip-position="top">';
+                        }
+                        str_html1 += '<div class="top_box">' +
+                            '<span class="top_amount">' +
+                            '￥<span class="amount">' + data.results[i].award + '</span>' +
+                            '</span>' +
+                            '</div>' +
+                            '<p class="time">有效期至：' + data.results[i].expire + '</p>';
+                        if (data.results[i].type === "heyue") {
+                            if (data.results[i].settle_amount > 0 || data.results[i].settle_count > 0) {
+                                str_html1 += '<div class="btm_box after"><span class="all">激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算单数达到' + data.results[i].settle_count + '单结算金额达到' + data.results[i].settle_amount + '元"</span></div>'
+                            } else if (data.results[i].settle_amount > 0) {
+                                str_html1 += '<p class="p_tips"><span data-type="' + data.results[i].type + '">激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算金额达到' + data.results[i].settle_amount + '元</span></p>'
+                            } else if (data.results[i].settle_count > 0) {
+                                str_html1 += '<p class="p_tip"><span data-type="' + data.results[i].type + '">激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算单数达到' + data.results[i].settle_count + '单</span></p>'
+                            }
+                        } else if (data.results[i].type === "guanzhu") {
+                            str_html1 += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all bindWechant">关注官微并且绑定账户</span></div>'
+                        } else if (data.results[i].type === "shoudan") {
+                            str_html1 += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all first">首次交单并且审核通过</span></div>'
+                        } else {
+                            str_html1 += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all card">绑定银行卡</span></div>'
+                        }
+                        str_html1 += '</div>';
+                        str_html1 += '<a class="btn fbtn">已过期</a>'
+                        str_html1 += '</div>'
+                        $(".failure").append(str_html1);
                     }
-                    
+
                 }
                 // $(".btm_box").each(function () { 
                 //     let pHeight = $(this).height();
@@ -275,17 +270,17 @@
                 //         $(this).addClass("after")
                 //     }else{
                 //         $(this).parent().removeAttr("data-microtip");
-                      
                 //     }
                 //  })
+
                 //当failure_hongbao的等于0的时候 将没有数据的图渲染出来
-                if(failure_hongbao == 0){ 
+                if (failure_hongbao == 0) {
                     $(".failure").html("<div class='f_tips'><img class='f_img' src='{% static 'images/hongbao_nodata.png' %}'></div>");
-                } 
-                if(received_hongbao == 0){
+                }
+                if (received_hongbao == 0) {
                     $(".received").html("<div class='f_tips'><img class='f_img' src='{% static 'images/hongbao_nodata.png' %}'></div>");
                 }
-                if(effective_hongbao == 0){
+                if (effective_hongbao == 0) {
                     $(".effective").html("<div class='f_tips'><img class='f_img' src='{% static 'images/hongbao_nodata.png' %}'></div>");
                 }
 
@@ -294,9 +289,9 @@
                 console.log('错误:' + xhr.responseText);
             }
         });
-        
+
         //点击领取功能 
-        $(document).on("click",".get",function () { //给动态添加出来的按钮添加监听事件
+        $(document).on("click", ".get", function () { //给动态添加出来的按钮添加监听事件
             let that = $(this);
             let award = $(this).attr("data-award"); //获取data-award的值
             let hongbaoId = $(this).attr("data-id");//获取data-id的值
@@ -304,64 +299,64 @@
             let state = $(this).attr("data-state");//获取当前data-state的值
             let type = $(this).attr("data-type");//获取当前data-type的值
             let hongbao_id = $(this).attr("data-id");
-            if(state == 0){
-                if(type === "guanzhu"){ //关注公众号红包
+            if (state == 0) {
+                if (type === "guanzhu") { //关注公众号红包
                     $(".modal_qrBox").show();
                     return;
-                } else if(type === "bangka"){
+                } else if (type === "bangka") {
                     $(".modal_card").show();
                     // window.open("{% url 'account_bankcard' %}");
                     return;
-                } else if(type === "heyue"){  //合约红包
+                } else if (type === "heyue") {  //合约红包
                     $.ajax({
                         url: '/coupon/get_coupon_schedule/',
                         type: "post", //提交方式post
-                        data:{
-                            id:hongbao_id
+                        data: {
+                            id: hongbao_id
                         },
                         async: true, //是否同步
                         timeout: 5000, //超出时间
                         dataType: 'json', //返回数据格式Json
                         success: function (data) {
                             console.log(data)
-                           if(data.code == 0){
+                            if (data.code == 0) {
                                 $.prompt({
-                                    "Content":`已经结算了${data.count}单，结算了${data.amount}元`
+                                    "Content": `已经结算了${data.count}单，结算了${data.amount}元`
                                 });
-                           }else if(data.code == 1){
-                               that.removeClass("state0").addClass("state1");
-                               that.attr("disabled","disabled")
-                               that.text("立即领取");
-                               that.attr("data-state","1")
-                           }
+                            } else if (data.code == 1) {
+                                that.removeClass("state0").addClass("state1");
+                                that.attr("disabled", "disabled")
+                                that.text("立即领取");
+                                that.attr("data-state", "1")
+                            }
                         },
                         error: function (xhr, textStatus) {
                             console.log('错误:' + xhr.responseText);
                         }
-                    });    
-                   
-                } else{ //首单提交
+                    });
+
+                } else { //首单提交
                     $.ajax({
                         url: '/coupon/get_coupon_schedule/',
                         type: "post", //提交方式post
-                        data:{
-                            id:hongbao_id
+                        data: {
+                            id: hongbao_id
                         },
                         async: true, //是否同步
                         timeout: 5000, //超出时间
                         dataType: 'json', //返回数据格式Json
                         success: function (data) {
                             console.log(data)
-                           if(data.code == 0){
+                            if (data.code == 0) {
                                 $.prompt({
-                                    "Content":`提交首单并且通过才能领取`
+                                    "Content": `提交首单并且通过才能领取`
                                 });
-                           }else if(data.code == 1){
-                               that.removeClass("state0").addClass("state1");
-                               that.attr("disabled","disabled")
-                               that.text("立即领取");
-                               that.attr("data-state","1")
-                           }
+                            } else if (data.code == 1) {
+                                that.removeClass("state0").addClass("state1");
+                                that.attr("disabled", "disabled")
+                                that.text("立即领取");
+                                that.attr("data-state", "1")
+                            }
                         },
                         error: function (xhr, textStatus) {
                             console.log('错误:' + xhr.responseText);
@@ -372,24 +367,24 @@
                 // $.prompt({
                 //     "Content":"您未达到解锁条件，请完成任务后再来领取红包"
                 // });
-            }else if(state == 2){
-                $(this).attr("disabled","disabled");
-            }else{
+            } else if (state == 2) {
+                $(this).attr("disabled", "disabled");
+            } else {
                 $.ajax({
                     url: '/coupon/open_coupon/',
-                    data:{
-                        id:hongbaoId
+                    data: {
+                        id: hongbaoId
                     },
                     type: "post", //提交方式post
                     async: true, //是否同步
                     timeout: 5000, //超出时间
                     dataType: 'json', //返回数据格式Json
                     success: function (res) {
-                        console.log("success this",that);
-                        if(res.code == 0){
-                            that.css("background","#c7c7c7");
+                        console.log("success this", that);
+                        if (res.code == 0) {
+                            that.css("background", "#c7c7c7");
                             that.text("已领取");
-                            that.attr("data-state","2")
+                            that.attr("data-state", "2")
                             //模态框的出现
                             $(".modal_box").show();
                         }
@@ -399,20 +394,20 @@
                     }
                 });
             }
-         })
-         
+        })
+
         //模态框消失
-        $(".modal_btn").click(function () { 
+        $(".modal_btn").click(function () {
             $(".modal_box").hide();
-         })
+        })
         //二维码模态框消失
-        $(".qr_close").click(function () { 
+        $(".qr_close").click(function () {
             $(".modal_qrBox").hide();
-         });
+        });
         // 绑卡模态框消失
-        $(".bind_cancel").click(function () { 
+        $(".bind_cancel").click(function () {
             $(".modal_card").hide();
-         })
+        })
         //跳转到绑卡页面
         $(".bind_sure").click(function () {
             window.open("{% url 'account_bankcard' %}");

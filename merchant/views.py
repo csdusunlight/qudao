@@ -161,6 +161,7 @@ def preaudit_investlog(request):
             translog2.save()
             translist = charge_money(investlog_user, '0', delta, project_title + u"补差价")
             investlog.settle_amount = cash
+            investlog.presettle_amount = cash
             translist.auditlog = investlog
             translist.save(update_fields=['content_type', 'object_id'])
             res['code'] = 0

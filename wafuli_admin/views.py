@@ -199,7 +199,7 @@ def admin_invest(request):
             investlog.audit_reason = reason
             res['code'] = 0
         elif type==4:
-            if investlog.settle_amount > 0:
+            if investlog.delta_amount > 0:
                 res['code'] = 2
                 res['res_msg'] = u"不得重复补差价！"
                 return JsonResponse(res)

@@ -346,6 +346,10 @@ $(function(){
                 is_url = false;
                 $('.url-tips').text('域名格式不正确，限英文、数字及下划线').show();
                 return;
+            } else if(url_name == 'www' ){
+                is_url = false;
+                $('.url-tips').text('域名不能使用"www"').show();
+                return;
             } else {
                 $('.url-tips').text('').hide();
             }

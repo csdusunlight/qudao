@@ -54,13 +54,13 @@
         '</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td></tr>[/results]</table>';
 	var data0 = '<table width="100%"><tr><th>QQ/QQ昵称</th><th>用户级别</th><th>结算价格</th><th>手机号</th><th>项目名称</th>' +
         '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>投资类型</th><th>提交方式</th><th>审核原因</th>' +
-        '<th>审核人</th><th>审核时间</th><th>返现金额</th><th>上传截图</th><th>备注</th></tr>[results]<tr><td>{qq_number}/{qq_name}</td>'+
+        '<th>审核人</th><th>审核时间</th><th>返现金额</th><th>上传截图</th><th>备注</th><th>补差</th></tr>[results]<tr><td>{qq_number}/{qq_name}</td>'+
         '<td>{user_level}</td><td>{project_price}</td><td>{user_mobile}</td><td>{project_title}</td>' +
         '<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
         '<td>{submit_type_des}</td><td>{submit_way_des}</td><td>{audit_reason}<td>{admin_user}</td></td><td>{audit_time}</td><td>{settle_amount}</td>'+
         '<td data-isimg="{invest_image}" class="is-img"><a target="_blank" href="{% url 'screenshot' %}?id={id}">' +
         '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
-        '<td>{remark}</td></tr>[/results]</table>';
+        '<td>{remark}</td><td class="delta-amout" data-delta="{delta_amount}"><a onclick="balance({id},this)">补差</a></td></tr>[/results]</table>';
     var data2 = '<table width="100%"><tr><th>QQ/QQ昵称</th><th>用户级别</th><th>手机号</th><th>项目名称</th>' +
         '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>投资类型</th><th>提交方式</th><th>处理状态</th>' +
         '<th>审核人</th><th>审核时间</th><th>拒绝原因</th><th>上传截图</th><th>备注</th></tr>[results]<tr><td>{qq_number}/{qq_name}</td><td>{user_level}</td><td>{user_mobile}</td><td>{project_title}</td>' +
@@ -77,7 +77,14 @@
                 $(this).html('无');
             }
         })
+        $('.delta-amout').each(function() {
+            if ($(this).data('delta') > 0) {
+                $(this).html($(this).data('delta'));
+            }
+        })
     }
+    var base_id;
+    var base_dom;
 	function pass(id) {
 		$(".BackNow").css("display", "block");
 		$("input#ret_event_id").val(id);
@@ -91,6 +98,12 @@
         $(".Repeat").css("display", "block");
         $("input#repeat_event_id").val(id);
     }
+	function balance(id,obj) {
+	    base_id = id;
+	    base_dom = obj;
+	    console.log(base_dom);
+	    $(".popup__base.m-balance").show();
+	}
 	$(document).ready(function() {
 		$("li.home4").toggleClass("on");
 		$(".Tin-table tr:even").css("background-color", "#fcfcfc");
@@ -211,6 +224,35 @@
 			});
 			$(".Audit").css("display", "none");
 		});
+		$('.popup__base.m-balance input[type="submit"]').click(function() {
+            var balance_amount = $("#balance_amount").val();
+            if(!base_id || !balance_amount) {
+                return;
+            }
+            console.log(base_id +', ' + balance_amount);
+            $.ajax({
+                url: "{%url 'admin_invest' %}",
+                dataType: "json",
+                type: "POST",
+                async: false,
+                data: {
+                    'id': base_id,
+                    'cash': balance_amount,
+                    'type': 4,
+                },
+                success: function(ret) {
+                    if(ret.code == 0) {
+                        $(base_dom).parent().html(balance_amount);
+                    } else {
+                        alert(ret.res_msg);
+                    }
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
+            $(".popup__base.m-balance").hide();
+        });
 		$("#search").click(function() {
 			var startTime = $("#startTime").val();
 			var endTime = $("#endTime").val();
@@ -530,6 +572,22 @@
 			</div>
 		</form>
 	</div>
+</div>
+<!--补差价-->
+<div class="popup__base m-balance">
+    <div class="w570-box">
+        <h3>补差价</h3>
+        <button class="none-x"></button>
+        <form class="popup__content">
+            <span>填写补差金额：</span>
+            <input id="balance_event_id" type="hidden" />
+            <input type="text" id="balance_amount" />
+            <div class="Finnow-Sub">
+                <input type="submit" value="确认" class="Deny-box" onclick="return false;" />
+                <input type="button" value="取消" class="none-x-s" />
+            </div>
+        </form>
+    </div>
 </div>
 <iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
 <!--end-->

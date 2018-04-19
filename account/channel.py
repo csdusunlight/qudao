@@ -64,11 +64,11 @@ def channel(request):
                         try:
                             mobile = str(int(cell.value)).strip()
                         except Exception,e:
-                            raise Exception(u"手机号必须是11位数字，请修改后重新提交。")
+                            raise Exception(u"手机号：'%s'格式有误，请设置为文本格式后重新提交。" % cell.value)
                         if len(mobile)==11:
                             temp.append(mobile)
                         else:
-                            raise Exception(u"手机号必须是11位数字，请修改后重新提交。")
+                            raise Exception(u"手机号：'%s'必须是11位，请修改后重新提交。" % cell.value)
                         if mobile in mobile_list:
                             duplic = True
                             break;

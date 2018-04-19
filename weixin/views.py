@@ -74,11 +74,6 @@ def bind_user(request):
                                     headimgurl=json_ret.get('headimgurl',''), unionid=json_ret.get('unionid', ''),)
             try:
                 user = MyUser.objects.get(mobile=mobile)
-                #红包活动插入++++++++++
-                coupons = user.usercoupons.filter(type='guanzhu')
-                for coupon in coupons:
-                    coupon.checklock()
-                #红包活动插入++++++++++
             except MyUser.DoesNotExist:
                 if ApplyLog.objects.filter(mobile=mobile).exists():
                     result['code'] = 3
@@ -93,6 +88,11 @@ def bind_user(request):
                 if not weixinuser.user:
                     weixinuser.user = user
                     weixinuser.save(update_fields=['user'])
+                #红包活动插入++++++++++
+                coupons = user.usercoupons.filter(type='guanzhu')
+                for coupon in coupons:
+                    coupon.checklock()
+                #红包活动插入++++++++++
         return JsonResponse(result)    
     else:
         code = request.GET.get('code','')

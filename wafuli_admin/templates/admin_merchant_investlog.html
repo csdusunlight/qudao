@@ -49,7 +49,16 @@
         '<td>{settle_amount}</td><td>{invest_name}</td><td>{audit_state_des}</td>'+
         '<td>{broker_amount}</td>'+
         '<td>{remark}</td></tr>[/results]</table>';
-    //通过  拒绝
+    //通过  
+    var data_pass = '<table width="100%"><tr><th>QQ/QQ昵称</th><th>项目名称</th><th>手机号</th>' +
+        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>结算金额</th><th>投资姓名</th><th>审核时间</th><th>处理状态</th><th>扣除手续费</th>' +
+        '<th>备注</th><th>操作</th></tr>[results]<tr><td>{qq_number}/{qq_name}</td><td>{project_title}</td><td>{user_mobile}</td>'+
+        '<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
+        '<td>{settle_amount}</td><td>{invest_name}</td><td>{audit_time}</td><td>{audit_state_des}</td>'+
+        '<td>{broker_amount}</td>'+
+        '<td>{remark}</td><td id="item_{id}"><a class="fyin" onclick="complain({id})">申诉' +
+        '</a> | <a data-delta="{delta_amount}" class="balance" onclick="balance({id},this)">补差</a></td></tr>[/results]</table>';
+    //拒绝
     var data1 = '<table width="100%"><tr><th>QQ/QQ昵称</th><th>项目名称</th><th>手机号</th>' +
         '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>结算金额</th><th>投资姓名</th><th>审核时间</th><th>处理状态</th><th>扣除手续费</th>' +
         '<th>备注</th><th>操作</th></tr>[results]<tr><td>{qq_number}/{qq_name}</td><td>{project_title}</td><td>{user_mobile}</td>'+
@@ -68,13 +77,15 @@
         '<td>{remark}</td></tr>[/results]</table>';
 //  var url = "/merchant/investlogs/" + "?page={page}&pageSize={pageSize}&project_user={{user.id}}";
     var url = "/restapi/investlogs/" + "?page={page}&pageSize={pageSize}&category=merchant";
-    
+    var base_id;
+    var base_dom;
     function pagecallback() {
-//      $('.is-img').each(function() {
-//          if ($(this).data('isimg') == "") {
-//              $(this).html('无');
-//          }
-//      })
+        $('.balance').each(function() {
+            if ($(this).data('delta') > 0) {
+                $(this).text('补' + $(this).data('delta'));
+                $(this).removeAttr('onclick');
+            }
+        })
     }
     function pass(id) {
         $(".BackNow").css("display", "block");
@@ -89,10 +100,12 @@
         $(".Complain").css("display", "block");
         $("input#complain_event_id").val(id);
     }
-//  function repeat(id) {
-//      $(".Repeat").css("display", "block");
-//      $("input#repeat_event_id").val(id);
-//  }
+    function balance(id,obj) {
+        base_id = id;
+        base_dom = obj;
+        console.log(base_dom);
+        $(".popup__base.m-balance").show();
+    }
     $(document).ready(function() {
         $("li.home17").toggleClass("on");
         $(".Tin-table tr:even").css("background-color", "#fcfcfc");
@@ -113,12 +126,6 @@
         
         $('.Finnow input[type="submit"]').click(function() {
             id = $("input#ret_event_id").val();
-//          var cash = $("input#add_cash").val();
-//          var audit_reason = $("input#audit_reason").val();
-//          score = $("input#add_score").val();
-//          if(!id || !cash) {
-//              return;
-//          }
             console.log(id)
             $.ajax({
                 url: "{%url 'admin_merchant_investlog' %}",
@@ -127,8 +134,7 @@
                 async: false,
                 data: {
                     'id': id,
-//                  'cash': cash,
-//                  'reason': audit_reason,
+
                     'type': 1,
                 },
                 success: function(ret) {
@@ -147,38 +153,7 @@
             });
             $(".BackNow").css("display", "none");
         });
-//      $('.Repeat-in input[type="submit"]').click(function() {
-//          id = $("input#repeat_event_id").val();
-//          var reason = $("#repeat_reason").val();
-//          if(!id || !reason) {
-//              return;
-//          }
-//          console.log(id +', ' + reason);
-//          $.ajax({
-//              url: "{%url 'admin_merchant_investlog' %}",
-//              dataType: "json",
-//              type: "POST",
-//              data: {
-//                  'id': id,
-//                  'reason': reason,
-//                  'type': 3,
-//              },
-//              success: function(ret) {
-//                  if(ret.code == 0) {
-//                      $("#item_" + id).html("审核完成，异常");
-//                  } else if(ret.code == -1) {
-//                      alert("该页面已过期，请重新登录！");
-//                      window.location.href = ret.url;
-//                  } else {
-//                      alert(ret.res_msg);
-//                  }
-//              },
-//              error: function() {
-//                  alert("请检查网络连接");
-//              }
-//          });
-//          $(".Repeat").css("display", "none");
-//      });
+
         $('.Audit-in input[type="submit"]').click(function() {
             id = $("input#refuse_event_id").val();
             var reason = $("#refuse_reason").val();
@@ -245,6 +220,35 @@
             });
             $(".Complain").css("display", "none");
         });
+        $('.popup__base.m-balance input[type="submit"]').click(function() {
+            var balance_amount = $("#balance_amount").val();
+            if(!base_id || !balance_amount) {
+                return;
+            }
+            console.log(base_id +', ' + balance_amount);
+            $.ajax({
+                url: "{%url 'admin_invest' %}",
+                dataType: "json",
+                type: "POST",
+                async: false,
+                data: {
+                    'id': base_id,
+                    'cash': balance_amount,
+                    'type': 4,
+                },
+                success: function(ret) {
+                    if(ret.code == 0) {
+                        $(base_dom).text('补：'+balance_amount);
+                    } else {
+                        alert(ret.res_msg);
+                    }
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
+            $(".popup__base.m-balance").hide();
+        });
         $("#search").click(function() {
             var startTime = $("#startTime").val();
             var endTime = $("#endTime").val();
@@ -299,7 +303,10 @@
             if(state == '' || state == '1') {
                 newdata = data0;
             }
-            if(state == '0' || state == '2') {
+            if(state == '0') {
+                newdata = data_pass;
+            }
+            if(state == '2') {
                 newdata = data1;
             }
             if(state == '3' || state == '4') {
@@ -587,6 +594,21 @@
             <span>申诉原因：</span>
             <input id="complain_event_id" type="hidden" />
             <textarea id="complain_reason"></textarea>
+            <div class="Finnow-Sub">
+                <input type="submit" value="确认" class="Deny-box" onclick="return false;" />
+                <input type="button" value="取消" class="none-x-s" />
+            </div>
+        </form>
+    </div>
+</div>
+<div class="popup__base m-balance">
+    <div class="w570-box">
+        <h3>补差价</h3>
+        <button class="none-x"></button>
+        <form class="popup__content">
+            <span>填写补差金额：</span>
+            <input id="balance_event_id" type="hidden" />
+            <input type="text" id="balance_amount" />
             <div class="Finnow-Sub">
                 <input type="submit" value="确认" class="Deny-box" onclick="return false;" />
                 <input type="button" value="取消" class="none-x-s" />

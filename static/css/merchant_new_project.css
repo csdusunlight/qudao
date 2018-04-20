@@ -15,6 +15,12 @@
 	text-decoration: underline;
 	color: RGB(145,193,29)
 }
+.input__tips {
+    position: absolute;
+    top:30px;
+    left: 580px;
+    white-space: nowrap;
+}
 .pro{
 	margin-top: 10px;
 	padding: 15px 10px;

@@ -68,9 +68,28 @@
 						</div>
 					</div>
 					<div class="pro pro_price">
+                        <span>推广标期</span>
+                        <div class="pro_right" style="margin-left: 26px;">
+                            <input type="text" name="term" id="term" placeholder="请输入推广标期" />
+                        </div>
+                    </div>
+                    <div class="pro pro_price">
+                        <span>投资档位</span>
+                        <div class="pro_right" style="margin-left: 26px;">
+                            <input type="text" name="invest_range" id="invest_range" placeholder="请输入投资档位" />
+                        </div>
+                    </div>
+                    <div class="pro pro_price">
+                        <span>渠道价格</span>
+                        <div class="pro_right" style="margin-left: 26px;">
+                            <input type="text" name="channel_price" id="channel_price" placeholder="请输入渠道价格" />
+                        </div>
+                    </div>
+					<div class="pro pro_price" style="position: relative;">
 						<span>结算价格</span>
 						<div class="pro_right" style="margin-left: 26px;">
 							<input type="text" name="price" id="price" placeholder="该价格为公返给渠道的价格，请谨慎确定" />
+							<span class="input__tips">（给代理价格）</span>
 						</div>
 					</div>
 					<div class="pro pro_cycle">
@@ -140,6 +159,9 @@
 				console.log(radio);
 				var project = $("#project").val();
 				var strategy_url = $(".seltBox option:selected").val();
+				var term = $("#term").val();
+				var invest_range = $("#invest_range").val();
+				var channel_price = $("#channel_price").val();
 				var price = $("#price").val();
 				var cycle = $("#cycle").val();
 				var remark = $("#remark").val();
@@ -151,7 +173,7 @@
 					return;
 				}
 				//输入框不能为零
-				if (!project || !price || !cycle) {
+				if (!project || !price || !cycle || !term || !invest_range || !channel_price) {
 					$.prompt({
                         "Content":"输入框不能为空！"
                     });
@@ -173,6 +195,9 @@
 					data: {
 						"title": project,        //项目名称
 						"strategy": strategy_url,	//攻略链接
+						"invest_term": term,              //推广标期
+						"invest_amount": invest_range,              //投资档位
+						"promotion_price": channel_price,              //推广价格
 						"price": price,			   //结算价格
 						"settle_period": cycle,   //项目结算周期
 						"remark": remark,    	 //备注说明

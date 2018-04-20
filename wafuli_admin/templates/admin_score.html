@@ -83,6 +83,7 @@ $(document).ready(function(){
 		$.ajax({
 			url:"{%url 'admin_score' %}",
 			dataType:"json",
+			async: false,
 			type:"POST",
 			data:{
 				'id':id,
@@ -116,6 +117,7 @@ $(document).ready(function(){
 		$.ajax({
 			url:"{%url 'admin_score' %}",
 			dataType:"json",
+			async: false,
 			type:"POST",
 			data:{
 				'id':id,

@@ -50,6 +50,7 @@ $(document).ready(function(){
 		$.ajax({
 			url:"{%url 'admin_recommend_return' %}",
 			dataType:"json",
+			async: false,
 			type:"POST",
 			data:{
 				'id':id,
@@ -84,6 +85,7 @@ $(document).ready(function(){
 		$.ajax({
 			url:"{%url 'admin_recommend_return' %}",
 			dataType:"json",
+			async: false,
 			type:"POST",
 			data:{
 				'id':id,

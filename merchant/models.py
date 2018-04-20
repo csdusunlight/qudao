@@ -61,7 +61,8 @@ class Apply_Project(models.Model):
     submit_time = models.DateTimeField(u"申请时间", default=timezone.now)
     user = models.ForeignKey(MyUser, null=True, related_name="apply_projects")
     strategy = models.ForeignKey(Document, on_delete=SET_NULL, null=True)
-    price = models.CharField(u"结算价格",max_length=25, blank=True)
+    price = models.CharField(u"结算价格(给福利联盟的价格)",max_length=25, blank=True)
+    promotion_price = models.CharField(u"放单价格（给渠道的价格）",max_length=25, blank=True)
     settle_period = models.CharField(u"结算周期", max_length=20)
     remark = models.CharField(u"备注", max_length=100, blank=True)
     audit_reason = models.CharField(u"审核原因", max_length=30)
@@ -71,6 +72,8 @@ class Apply_Project(models.Model):
     is_book = models.BooleanField(u"是否限量/需要预约", default=False)
     project = models.OneToOneField(Project, on_delete=SET_NULL, null=True)
     broker_rate = models.DecimalField(u"佣金比例，百分数", max_digits=10, decimal_places=2, default=0)
+    invest_term = models.CharField(u"推广标期", max_length=20)
+    invest_amount = models.CharField(u"推广档位", max_length=20)
     class Meta:
         verbose_name = u"放单申请"
         verbose_name_plural = u"放单申请"

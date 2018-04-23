@@ -54,6 +54,7 @@
    $.ajax({
      url:"{%url 'admin_withdraw' %}",
      dataType:"json",
+     async: false,
      type:"POST",
      data:{
       'id':id,
@@ -86,6 +87,7 @@
    $.ajax({
      url:"{%url 'admin_withdraw' %}",
      dataType:"json",
+     async: false,
      type:"POST",
      data:{
       'id':id,
@@ -253,6 +255,7 @@
            $.ajax({
                 url: "{% url 'batch_withdraw' %}",
                 dataType: "json",
+                async: false,
                 type:"get",
                 success: function(ret) {
                     if(ret.code == 0) {

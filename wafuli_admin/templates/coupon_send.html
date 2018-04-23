@@ -62,6 +62,7 @@
                         $.ajax({
                             url: deliver_coupon_url,
                             dataType:"json",
+                            async: false,
                             type:"POST",
                             data: data,
                             success:function(ret){
@@ -125,6 +126,7 @@
             $.ajax({
                 url: "/coupon/contracts/",
                 dataType:"json",
+                async: false,
                 type:"POST",
                 data: {
                     'name': coupon_name,

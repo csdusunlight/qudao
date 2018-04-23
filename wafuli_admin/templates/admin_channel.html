@@ -67,6 +67,7 @@ $(document).ready(function(){
 	  $.ajax({
 		url:"{%url 'admin_user' %}",
 		dataType:"json",
+		async: false,
 		type:"POST",
 		data:{
 			'id':selected_id,

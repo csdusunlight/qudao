@@ -145,6 +145,7 @@ def preaudit_investlog(request):
                 res['res_msg'] = u"申诉数据修正金额必须大于原结算金额！"
                 return JsonResponse(res)
             delta = cash - investlog.settle_amount
+            broker_rate = investlog.get_project_broker()
             broker_amount = delta * broker_rate/100
             if delta + broker_amount > admin_user.margin_account:
                 res['code'] = 1

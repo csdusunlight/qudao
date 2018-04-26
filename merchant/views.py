@@ -158,10 +158,10 @@ def preaudit_investlog(request):
             investlog.broker_amount = broker_amount
             if broker_amount > 0:
                 translog2 = charge_margin(admin_user, '1', broker_amount, "佣金")
-            translog.auditlog = investlog
-            translog2.auditlog = investlog
-            translog.save()
-            translog2.save()
+                translog.auditlog = investlog
+                translog2.auditlog = investlog
+                translog.save()
+                translog2.save()
             translist = charge_money(investlog_user, '0', delta, project_title + u"补差价")
             investlog.settle_amount = cash
             investlog.presettle_amount = cash

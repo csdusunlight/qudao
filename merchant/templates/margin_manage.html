@@ -308,7 +308,7 @@
                     success: function (res) {
                         console.log(res)
                         if(res.code === 0){
-                            var remarkStr = `<span class="aountItem">金额</span><span class="item">${res.remark}</span>`
+                            var remarkStr = `<span class="aountItem">备注</span><span class="item">${res.remark}</span>`
                             $(".payAmount").html(amountStr);
                             $(".payRemrk").html(remarkStr);
                             $(".payMsk").show();
@@ -327,6 +327,8 @@
             //  支付宝二维码模态框
              $(".payClose").click(function(){
                 $(".payMsk").hide();
+                $(".payBox").hide();
+                $(".tabBox").show();
              })
             //保证金模态框
             $(".wit ").click(function () {

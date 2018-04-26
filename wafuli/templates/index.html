@@ -115,11 +115,11 @@
                         <li class="today__item">
                             <img class="today__img" src="{{item.picture_url}}" alt="平台logo"/>
                             <h2 class="today__title one-line">{{item.title}}</h2>
-                            {%if user.is_authenticated %}
                             <a class="today__btn btn m-green" href="{{item.strategy}}" target="_blank">查看攻略</a>
-                            {%else %}
-                            <a class="today__btn btn m-green"  href='/account/login/?next=/'" target="_blank">登录后可查看</a>
-                            {% endif %}
+                            <!--{%if user.is_authenticated %}-->
+                            <!--{%else %}-->
+                            <!--<a class="today__btn btn m-green"  href='/account/login/?next=/'" target="_blank">登录后可查看</a>-->
+                            <!--{% endif %}-->
                         </li>
                     {%endfor%}
                 </ul>

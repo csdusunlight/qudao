@@ -87,44 +87,56 @@
                         </div>
                     </div>
                 </div>
-            </div>
+                <!-- 支付盒子 -->
+                <div class="payBox">
+                    <div class="payWay">
+                        <p class="payText desc">支付方式</p>
+                        <img src="{% static 'images/zfb.png'%}">
+                    </div>
+                    <div class="rechargeBox">
+                        <p class="recharge desc">充值金额</p>
+                        <input type="text" class="rechargeIpt" placeholder="请输入充值金额">
+                    </div>
+                    <div class="btn rechargeBtn">立即充值</div>
+                    <div class="descBox">
+                        <p><span>*</span>温馨提示：</p>
+                        <p>1、转账充值支持支付宝，以扫码形式完成支付；单词最低充值1元，上不封顶，请根据实际需要充值。</p>
+                        <p>2、转账一定要备注弹框里面红色6位数字（没单不一样，请准确填写），否则会掉单，60-80秒才会到账，延迟是正常的！</p>
+                        <p>3、若充值后发现未到账，请及时联系客服QQ：406051223处理。</p>
+                    </div>
+                </div>
 
-            <!-- 充值弹窗 -->
-            <div class="addMsk">
-                <div class="dataBox">
-                    <span class="cha">
-                        ×
-                    </span>
-                    <span class="card">存入银行卡</span>
-                    <div class="data">
-                        <table width="100% ">
-                            <tr>
-                                <td class="t1" width="40%">账户</td>
-                                <td class="t2" width="60%">6217932602650574</td>
-                            </tr>
-                            <tr>
-                                <td class="t1" width="40%">姓名</td>
-                                <td class="t2" width="60%">龙旺</td>
-                            </tr>
-                            <tr>
-                                <td class="t1" width="40%">开户行</td>
-                                <td class="t2" width="60%">浦发银行长沙分行麓谷科技支行</td>
-                            </tr>
-                            <tr>
-                                <td class="t1" width="40%">存入金额</td>
-                                <td class="t2" width="60%">
-                                    <input type="text" class="addAmount" style="width: 200px;">
-                                </td>
-                            </tr>
-                        </table>
+            </div>
+            <!-- 支付宝模态框 -->
+            <div class="payMsk">
+                <div class="payMskBox">
+                    <div class="payMskTop">
+                        <label>支付二维码</label>
+                        <div class="payClose">
+                            <img src="{% static 'images/payClose.png' %}">
+                        </div>
                     </div>
-                    <div class="moneyTip">
-                        <span>
-                            *请您将资金汇入如上银行卡账户，汇款备注请填写福利联盟注册手机号，汇款完成后将实际金额填入再点击确认。
-                            工作日9点-18点汇款后10分钟内会审核入账，其他时间会不定时审核，如有紧急情况，请联系TEL：18702888275.
-                        </span>
+                    <div class="payContent">
+                        <div class="pay-left">
+                            <p class="leftTxt">1、请打开 手机支付宝 扫码</p>
+                            <img src="{% static 'images/payQrcode.png' %}">
+                        </div>
+                        <div class="pay-right">
+                            <div class="pay-right-top">
+                                <p class="rightTxt">2、依次输入下图中的[金额]和[备注]后完成转账，60秒自动到账</p>
+                            </div>
+                            <div class="transfer">
+                                <img src="{% static 'images/Transfer.png' %}">
+                                <div class= "payAmount">
+                                    <span class="aountItem">金额</span><span class="item">1</span>
+                                </div>
+                                <div class="payRemrk">
+                                    <span class="aountItem">金额</span><span class="item">443630</span>
+                                </div>
+                                <div class="payBtn">确认转账</div>
+                            </div>
+                        </div>
                     </div>
-                    <input type="button " class="submit " value="确定 " />
                 </div>
             </div>
 
@@ -261,12 +273,24 @@
 
             //添加保证金模态框
             $(".add").click(function () {
-                $('.addMsk').show();
+                console.log(123)
+                $(".tabBox").hide();
+                $(".payBox").show();
             });
-            $(".cha").click(function () {
-                $('.addMsk').hide();
-                $('.addAmount').val('');
-            });
+
+
+
+
+
+
+
+
+
+
+            // $(".cha").click(function () {
+            //     $('.addMsk').hide();
+            //     $('.addAmount').val('');
+            // });
             //充值保证金ajax
             $('.submit').click(function () {
                 var addAmount = $('.addAmount').val();

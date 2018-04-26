@@ -54,7 +54,7 @@ nav{
     text-align: center;
     line-height: 40px;
     float: left;
-    border-right:1px solid #91c11d;
+    /* border-right:1px solid #91c11d; */
     cursor: pointer;
 }
 .tabul li:nth-child(3){

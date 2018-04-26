@@ -167,12 +167,12 @@ a { cursor:pointer;}
 .none-x { position:absolute; right:17px; top:13px; width:19px; height:19px; border:none; background:url(../images/none.png) no-repeat center; outline:none;}
 .Finnow { float:left; width:100%; height:auto; padding:20px 6px; box-sizing:border-box; text-align:center;}
 .Finnow span { font-size:12px; color:#666666; line-height:28px; margin-left:30px;}
-.Finnow input[type="text"],.Finnow input[type="datetime-local"], .Finnow select { width:153px; height:28px; border:1px solid #cdcdcd; line-height:28px; outline:none; text-indent:10px;}
+.popup__content input,.Finnow input[type="text"],.Finnow input[type="datetime-local"], .Finnow select { width:153px; height:28px; border:1px solid #cdcdcd; line-height:28px; outline:none; text-indent:10px;}
 .Finnow-Sub {/* float:left;*/ width:100%; height:auto; margin-top:30px;}
 .Finnow-Sub input[type="submit"]{ width:98px; height:26px; background:url(../images/pic2.png) no-repeat right #008fd7; border:none; border-radius: 13px; color:#fff; padding-right:10px; margin:0 5px;}
 .Finnow-Sub input[type="button"]{ width:98px; height:26px; background:url(../images/pic1.png) no-repeat right #c8c8c8; border:none; border-radius: 13px; color:#fff; padding-right:10px; margin:0 5px;}
-.Audit,.Repeat,.Complain { position:fixed; width:100%; height:100%; background:url(../images/back-in.png); display:none;}
-.Audit-in,.Repeat-in,.Complain-in { float:left; width:100%; height:auto; padding:20px 40px; box-sizing:border-box; text-align:center;}
+.popup__base,.Audit,.Repeat,.Complain { position:fixed; width:100%; height:100%; background:url(../images/back-in.png); display:none;}
+.popup__content,.Audit-in,.Repeat-in,.Complain-in { float:left; width:100%; height:auto; padding:20px 40px; box-sizing:border-box; text-align:center;}
 .Audit-in span, .Repeat-in span, .Complain-in span { float:left; width:92px; height:auto;}
 .Audit-in textarea, .Repeat-in textarea , .Complain-in textarea { width:394px; height:80px; line-height:20px; resize:none; box-sizing:border-box; float:left; outline:none;}
 .jion-s { cursor:pointer;}

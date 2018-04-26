@@ -578,7 +578,7 @@
         console.log(value);
         console.log(rate);
         if(Number(value)) {
-            $('.process-money').text('预计扣除手续费：'+ parseFloat((value*rate)/100) +'元');
+            $('.process-money').text('预计扣除手续费：'+ ((value*rate)/100).toFixed(2) +'元');
         } else {
             $('.process-money').text('结算金额请输入纯数字格式');
         }

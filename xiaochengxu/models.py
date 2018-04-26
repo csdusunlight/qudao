@@ -22,6 +22,7 @@ class App(models.Model):
     state = models.CharField(u"小程序状态", choices=APPSTATE, default='0', max_length=2)
     expire_stamp = models.IntegerField(default=0)
     contact_brcode = models.ImageField(u"微信客服名片二维码（390*390）", blank=True)
+    is_on_audite = models.BooleanField(u"是否在审核", blank=True, default=True)
     def __unicode__(self):
         return '%s:%s' % (self.app_name, self.app_id)
 class WXUser(models.Model):

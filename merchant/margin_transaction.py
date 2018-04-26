@@ -1,3 +1,4 @@
+#coding:utf-8
 '''
 Created on 20160318
 
@@ -30,7 +31,7 @@ def charge_margin(user, type, amount, reason, reverse=False, remark=''):
             user.margin_account = F('margin_account') + amount
             user.save(update_fields=['margin_account'])
         elif user.margin_account < amount:
-            raise ChargeValueError('The account ' + user.mobile + '\'s margin_account is not enough!')
+            raise ChargeValueError(u'账号 ' + user.mobile + u'中的资金余额不足，请先充值！')
         else:
             user.margin_account = F('margin_account') - amount
             user.save(update_fields=['margin_account'])

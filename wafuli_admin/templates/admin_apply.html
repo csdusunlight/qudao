@@ -101,6 +101,7 @@ $(document).ready(function(){
 		$.ajax({
 			url:"{%url 'admin_apply' %}",
 			dataType:"json",
+			async: false,
 			type:"POST",
 			data:{
 				'id':id,
@@ -130,6 +131,7 @@ $(document).ready(function(){
 		$.ajax({
 			url:"{%url 'admin_apply' %}",
 			dataType:"json",
+			async: false,
 			type:"POST",
 			data:{
 				'id':id,

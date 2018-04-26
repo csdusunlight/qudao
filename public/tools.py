@@ -72,4 +72,21 @@ def send_mobilemsg_multi(phone_list, content):
         if reg==0:
             tnum += len(frag_list)
     return tnum
-    
+
+from random import Random
+def random_str(randomlength=5):
+    str = ''
+    chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789'
+    length = len(chars) - 1
+    random = Random()
+    for i in range(randomlength):
+        str+=chars[random.randint(0, length)]
+    return str
+def random_code(randomlength=6):
+    str = ''
+    chars = '0123456789'
+    length = len(chars) - 1
+    random = Random()
+    for i in range(randomlength):
+        str+=chars[random.randint(0, length)]
+    return str    

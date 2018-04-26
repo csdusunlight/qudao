@@ -65,7 +65,7 @@ def create_update_selfproject(request, id=None):
                                    cprice=cprice, shortprice=shortprice, term=term,investrange=investrange, intrest=intrest,
                                    is_multisub_allowed=is_multisub_allowed, necessary_fields=necessary_fields
                                    ,company_id=company, state='10', points=points, is_book=is_book, channel=channel,
-                                   up_price=up_price)
+                                   up_price=up_price, category='self', is_official=False)
         else:
             kwargs.update(title=title,strategy=strategy, introduction=introduction, shortprice=shortprice,
                             cprice=cprice, term=term,investrange=investrange, intrest=intrest,

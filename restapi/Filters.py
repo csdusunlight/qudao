@@ -69,7 +69,7 @@ class TranslistFilter(django_filters.rest_framework.FilterSet):
         
 class WithdrawLogFilter(django_filters.rest_framework.FilterSet):
     submit_date = django_filters.DateFromToRangeFilter(name="submit_time")
-    audit_date = django_filters.DateFromToRangeFilter(name="audit_time")
+    audit_date = django_filters.DateTimeFromToRangeFilter(name="audit_time")
     user_mobile = django_filters.CharFilter('user', lookup_expr='mobile')
     qq_number = django_filters.CharFilter('user', lookup_expr='qq_number')
     user_name = django_filters.CharFilter('user', lookup_expr='username')

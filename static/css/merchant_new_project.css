@@ -6,7 +6,7 @@
 }
 .wrapper{
 	width: 600px;
-	height: 600px;
+	/*height: 600px;*/
 	margin: 0 auto;
 	position: relative;
 }
@@ -14,6 +14,12 @@
 	position: absolute;top:185px;right: -40px;
 	text-decoration: underline;
 	color: RGB(145,193,29)
+}
+.input__tips {
+    position: absolute;
+    top:30px;
+    left: 580px;
+    white-space: nowrap;
 }
 .pro{
 	margin-top: 10px;

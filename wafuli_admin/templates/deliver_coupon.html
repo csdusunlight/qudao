@@ -28,6 +28,7 @@
     		$.ajax({
     			url:"{%url 'get_project_list' %}",
     			dataType:"json",
+    			async: false,
     			type:"GET",
     			data:{
     				'id':id,
@@ -77,6 +78,7 @@
     		$.ajax({
     			url: deliver_coupon_url,
     			dataType:"json",
+    			async: false,
     			type:"POST",
     			data: data,
     			success:function(ret){

@@ -768,13 +768,13 @@ def transfer_callback(request):
         remark = item['remark']
         print item
         try:
-            trans = ZhifubaoTransaction.objects.get(remark=remark, amount=amount, tradeNo='')
+            trans = ZhifubaoTransaction.objects.get(remark=remark, amount=amount, transNo='')
             print trans
         except ZhifubaoTransaction.DoesNotExist:
             continue
         else:
             with transaction.atomic():
-                trans.tradeNo = tradeNo
+                trans.transNo = tradeNo
                 trans.time = time
                 trans.save()
                 charge_margin(trans.user, '0', amount, u"充值")

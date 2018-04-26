@@ -94,3 +94,15 @@ class MerchantProjectStatistics(models.Model):
         return self.project.doc.view_count
     def __unicode__(self):
         return self.project.title
+    
+class ZhifubaoTransaction(models.Model):
+    transNo = models.CharField(u"流水号/交易号/订单号", max_length=50, db_index=True)
+    user = models.ForeignKey(MyUser, related_name="zhifubao_translist")
+    create_time = models.DateTimeField(u"创建时间", default=timezone.now)
+    time = models.DateTimeField(u"交易时间", default=None, null=True)
+    amount = models.DecimalField(u'交易金额', max_digits=10, decimal_places=2)
+    remark = models.CharField(u"交易备注", max_length=20)
+    class Meta:
+        unique_together = (('amount', 'remark'),)
+    def __unicode__(self):
+        return self.transNo

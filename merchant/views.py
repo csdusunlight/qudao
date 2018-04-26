@@ -14,7 +14,7 @@ from rest_framework import permissions, generics
 from merchant.serializers import ApplyProjectSerializer, TranslogSerializer,\
     MarginAuditLogSerializer, MerchantProjectStatisticsSerializer
 from merchant.models import Apply_Project, Margin_Translog, Margin_AuditLog,\
-    MerchantProjectStatistics
+    MerchantProjectStatistics, ZhifubaoTransaction
 import django_filters
 from rest_framework.filters import SearchFilter, OrderingFilter
 from public.Paginations import MyPageNumberPagination
@@ -30,12 +30,14 @@ from collections import OrderedDict
 from docs.models import DocStatis
 from django.core.cache import cache
 from public.tools import login_required_ajax, has_permission,\
-    has_post_permission
+    has_post_permission, random_code
 from xlwt.Workbook import Workbook
 from xlwt.Style import easyxf
 import StringIO
 import xlrd
 import traceback
+import json
+from dragon import settings
 logger = logging.getLogger('wafuli')
 # Create your views here.
 @csrf_exempt
@@ -754,3 +756,50 @@ def import_merchant_investlog(request):
     ret['not_exist_list'] = not_exist_list
     ret['had_audited_list'] = had_audited_list
     return JsonResponse(ret)
+
+@csrf_exempt
+def transfer_callback(request):
+    info = json.loads(request.body)
+    if info['secret'] != settings.CALLBACK_TOKEN:
+        return JsonResponse({'code':-1})
+    for item in info['content']:
+        time = item['time']
+        time = datetime.datetime.strptime(time, '%Y.%m.%d %H:%M')
+        tradeNo = item['tradeNo']
+        amount = Decimal(item['amount'])
+        remark = item['remark']
+        print item
+        try:
+            trans = ZhifubaoTransaction.objects.get(remark=remark, amount=amount)
+            print trans
+        except ZhifubaoTransaction.DoesNotExist:
+            continue
+        else:
+            with transaction.atomic():
+                trans.tradeNo = tradeNo
+                trans.time = time
+                trans.save()
+                charge_margin(trans.user, '0', amount, u"充值")
+    return JsonResponse({'code':0})
+
+@csrf_exempt
+@has_permission('100')
+def create_zhifubao_transaction(request):
+    amount = request.POST.get('amount')
+    amount = Decimal(amount)
+    trans = None
+    remark = ''
+    for i in range(5):
+        try:
+            remark = random_code()
+            trans = ZhifubaoTransaction.objects.create(remark=remark, amount=amount, user=request.user)
+        except:
+            continue
+        else:
+            break
+    if trans:
+        code = 0
+    else:
+        code = 1
+        remark = ''
+    return JsonResponse({'code':code, 'remark':remark})

@@ -23,6 +23,8 @@ urlpatterns = [
     url(r'^projectstatislist/$', views.MerchantProjectStatisticsList.as_view()),
     url(r'^export_merchant_investlog/$', views.export_merchant_investlog, name='export_merchant_investlog'),
     url(r'^import_merchant_investlog/$', views.import_merchant_investlog, name='import_merchant_investlog'),
+    url(r'^transfer/callback/$', views.transfer_callback, name='transfer_callback'),
+    
 ]
 
 

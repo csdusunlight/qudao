@@ -6,4 +6,8 @@ from merchant.models import Margin_Translog, Apply_Project,\
 admin.site.register(Margin_Translog,)
 admin.site.register(Apply_Project,)
 admin.site.register(MerchantProjectStatistics,)
-admin.site.register(ZhifubaoTransaction,)
+
+class TRANSAdmin(admin.ModelAdmin):
+    list_display = ('transNo', 'user', 'create_time','time','amount', 'remark')
+    list_filter = ('remark',)
+admin.site.register(ZhifubaoTransaction, TRANSAdmin)

@@ -105,4 +105,4 @@ class ZhifubaoTransaction(models.Model):
     class Meta:
         unique_together = (('amount', 'remark'),)
     def __unicode__(self):
-        return self.transNo
+        return self.remark

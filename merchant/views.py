@@ -1,14 +1,13 @@
 #coding:utf-8
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.db import transaction, connection
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from wafuli.models import InvestLog, Project
 import datetime
 from django.http.response import JsonResponse, HttpResponse
 from decimal import Decimal
 import logging
-from merchant.margin_transaction import charge_margin, ChargeValueError
+from merchant.margin_transaction import charge_margin
 from public.permissions import CsrfExemptSessionAuthentication, IsOwnerOrStaff
 from rest_framework import permissions, generics
 from merchant.serializers import ApplyProjectSerializer, TranslogSerializer,\
@@ -23,7 +22,6 @@ from merchant.Filters import ApplyProjectFilter, TranslogFilter,\
 from django.views.decorators.csrf import csrf_exempt
 from account.transaction import charge_money
 from django.db.models.aggregates import Count, Sum
-from dircache import annotate
 from restapi.Filters import InvestLogFilter
 from restapi.serializers import InvestLogSerializer
 from collections import OrderedDict
@@ -770,13 +768,13 @@ def transfer_callback(request):
         remark = item['remark']
         print item
         try:
-            trans = ZhifubaoTransaction.objects.get(remark=remark, amount=amount)
+            trans = ZhifubaoTransaction.objects.get(remark=remark, amount=amount, transNo='')
             print trans
         except ZhifubaoTransaction.DoesNotExist:
             continue
         else:
             with transaction.atomic():
-                trans.tradeNo = tradeNo
+                trans.transNo = tradeNo
                 trans.time = time
                 trans.save()
                 charge_margin(trans.user, '0', amount, u"充值")
@@ -789,18 +787,20 @@ def create_zhifubao_transaction(request):
     amount = Decimal(amount)
     trans = None
     remark = ''
+    msg = ''
     for i in range(5):
         try:
             remark = random_code()
             trans = ZhifubaoTransaction.objects.create(remark=remark, amount=amount, user=request.user)
         except Exception as e:
-            print e
+            msg = str(e)
             continue
         else:
             break
     if trans:
         code = 0
+        msg = 'ok'
     else:
         code = 1
         remark = ''
-    return JsonResponse({'code':code, 'remark':remark})
+    return JsonResponse({'code':code, 'remark':remark, 'msg':msg})

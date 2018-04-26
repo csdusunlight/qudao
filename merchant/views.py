@@ -793,7 +793,8 @@ def create_zhifubao_transaction(request):
         try:
             remark = random_code()
             trans = ZhifubaoTransaction.objects.create(remark=remark, amount=amount, user=request.user)
-        except:
+        except Exception as e:
+            print e
             continue
         else:
             break

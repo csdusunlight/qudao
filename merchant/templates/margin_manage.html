@@ -89,6 +89,9 @@
                 </div>
                 <!-- 支付盒子 -->
                 <div class="payBox">
+                    <div class="c-payBox">
+                        ×
+                    </div>
                     <div class="payWay">
                         <p class="payText desc">支付方式</p>
                         <img src="{% static 'images/zfb.png'%}">
@@ -128,10 +131,10 @@
                             <div class="transfer">
                                 <img src="{% static 'images/Transfer.png' %}">
                                 <div class= "payAmount">
-                                    <span class="aountItem">金额</span><span class="item">1</span>
+                                    <!-- <span class="aountItem">金额</span><span class="item">1</span> -->
                                 </div>
                                 <div class="payRemrk">
-                                    <span class="aountItem">金额</span><span class="item">443630</span>
+                                    <!-- <span class="aountItem">金额</span><span class="item">443630</span> -->
                                 </div>
                                 <div class="payBtn">确认转账</div>
                             </div>
@@ -271,77 +274,60 @@
             console.log(changeTime);
             $('.changeTime').text(changeTime[0]);
 
-            //添加保证金模态框
+            //点击打开充值模态框
             $(".add").click(function () {
-                console.log(123)
                 $(".tabBox").hide();
                 $(".payBox").show();
             });
-
-
-
-
-
-
-
-
-
-
-            // $(".cha").click(function () {
-            //     $('.addMsk').hide();
-            //     $('.addAmount').val('');
-            // });
-            //充值保证金ajax
-            $('.submit').click(function () {
-                var addAmount = $('.addAmount').val();
-                console.log(addAmount);
-                //正则验证
-                var regx = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/; 
-                if (!regx.test(addAmount)) {
+            // 点击关闭充值模态框
+            $(".c-payBox").click(function () { 
+                $(".payBox").hide();
+                $(".tabBox").show();
+             })
+            $(".rechargeBtn").click(function () { 
+                var addValue = $(".rechargeIpt").val();
+                console.log(addValue);
+                var regx =/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
+                if(!regx.test(addValue)){
                     $.prompt({
-                        "Content":"充值金额仅限数字且只能带两位小数!"
+                        "Content":"请输入正确的金额！"
                     });
                     return;
                 }
-                if(!addAmount){
-                    $.prompt({
-                        "Content":"充值金额不能为零！"
-                    });
-                    return;
-                }else if(addAmount <= 0){
-                    $.prompt({
-                        "Content":"输入正确的充值金额！"
-                    });
-                    return;
-                } 
+                //创建标签分别插入金额和备注码
+                var amountStr = `<span class="aountItem">金额</span><span class="item">${addValue}</span>`;//充值金额
                 $.ajax({
-                    url: '/merchant/margin_manage/',
+                    url: '/merchant/create_transaction/',
                     type: 'post',
                     async: false,
                     timeout: 5000, //超时时间
                     dataType: 'json', //返回的数据格式：json/xml/html/script/jsonp/text
                     data: {
-                        'type': 0,
-                        "amount": addAmount
+                        "amount": addValue
                     },
-                    success: function (ret) {
-                        if (ret.code == 0) {
+                    success: function (res) {
+                        console.log(res)
+                        if(res.code === 0){
+                            var remarkStr = `<span class="aountItem">金额</span><span class="item">${res.remark}</span>`
+                            $(".payAmount").html(amountStr);
+                            $(".payRemrk").html(remarkStr);
+                            $(".payMsk").show();
+                        }else if(res.code === 1){
                             $.prompt({
-                                "Content":"提交充值申请，请等待!"
-                            });
-                            $(".addMsk ").hide();
-                        } else if (ret.code == -2) {
-                            $.prompt({
-                                "Content":"提取失败!"
+                                "Content":`${res.msg}`
                             });
                         }
-                        $('.addAmount').val('');
                     },
                     error: function (xhr, textStatus) {
                         alert(xhr.responseText);
                     }
                 });
-            });
+               
+             })
+            //  支付宝二维码模态框
+             $(".payClose").click(function(){
+                $(".payMsk").hide();
+             })
             //保证金模态框
             $(".wit ").click(function () {
                 $(".witMsk ").show();

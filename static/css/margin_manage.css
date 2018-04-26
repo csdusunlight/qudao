@@ -94,6 +94,21 @@ nav{
     height: 690px;
     background: white;
     display: none;
+    position: relative;
+}
+.c-payBox{
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid RGB(210,210,210);
+    text-align: center;
+    line-height: 30px;
+    font-size: 26px;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer
 }
 .payWay{
     padding: 15px 30px;

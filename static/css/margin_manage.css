@@ -42,10 +42,11 @@ nav{
     /* display: none; */
 }
 .tabul{
-    width: 422px;
+    width: 282px;
     height: 42px;
     border: 1px solid RGB(145,193,29);
     margin-top: 10px;
+    font-size: 0;
 }
 .tabul li{
     width: 140px;
@@ -169,6 +170,7 @@ nav{
 .payClose{
   position: absolute;top: 15px;right: 25px;
   cursor: pointer;
+  padding: 0 10px;
 }
 .payContent{
     width: 100%;

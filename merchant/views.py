@@ -762,7 +762,7 @@ def transfer_callback(request):
         return JsonResponse({'code':-1})
     for item in info['content']:
         time = item['time']
-        time = datetime.datetime.strptime(time, '%Y.%m.%d %H:%M:%S')
+        time = datetime.datetime.strptime(time, '%Y-%m-%d %H:%M:%S')
         tradeNo = item['tradeNo']
         amount = Decimal(item['amount'])
         remark = item['remark']

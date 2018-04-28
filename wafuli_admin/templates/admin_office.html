@@ -408,7 +408,7 @@
                 return;
             }
             $.ajaxFileUpload({
-                url: "{% url 'admin_import_investlog' %}",
+                url: "{% url 'import_delta' %}",
                 secureuri: false,
                 fileElementId: fileElementId, //file标签的id
                 dataType: 'json', //返回数据的类型

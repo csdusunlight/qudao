@@ -147,7 +147,7 @@ def admin_merchant_project(request):
     
 @csrf_exempt
 @transaction.atomic
-@has_post_permission('100')
+@has_post_permission('003')
 def admin_merchant_investlog(request):
     admin_user = request.user
     if request.method == "GET":
@@ -339,7 +339,7 @@ def admin_export_merchant_investlog(request):
     return response
 
 @csrf_exempt
-@has_post_permission('002')
+@has_post_permission('003')
 def admin_import_merchant_investlog(request):
     admin_user = request.user
     ret = {'code':-1}

@@ -149,7 +149,7 @@ class Command(BaseCommand):
         merchant_settle = dic.get('settle_amount') or 0
         merchant_investlogs_audit = dic.get('amount') or 0
         merchant_consume = merchant_settle + merchant_broker
-        dic = Margin_Translog.objects.filter(reason__contains=u"充值",transType='1').aggregate(merchant_charge=Sum('transAmount'))
+        dic = Margin_Translog.objects.filter(reason__contains=u"充值",transType='0').aggregate(merchant_charge=Sum('transAmount'))
         merchant_charge = dic.get('merchant_charge') or 0
         update_fields = {
             'merchant_people': merchant_people,

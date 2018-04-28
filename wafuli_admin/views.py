@@ -414,6 +414,7 @@ def export_investlog(request):
         user_level = con.user.level
         result = ''
         settle_amount = ''
+        delta_amount = con.delta_amount
         settle_price = con.get_project_price()
         reason = con.audit_reason
         submit_type = con.get_submit_type_display()
@@ -423,11 +424,11 @@ def export_investlog(request):
         elif con.audit_state=='2':
             result = u'否'
         data.append([id, project_name, invest_date, qq_number,user_level, settle_price, invest_mobile, invest_name, term,
-                     invest_amount, submit_type, remark, result, settle_amount, reason])
+                     invest_amount, submit_type, remark, result, settle_amount, reason, delta_amount])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
     title_row = [u'记录ID',u'项目名称',u'投资日期', u'QQ', u'用户类型', u'结算价格', u'投资手机号', u'投资姓名' ,u'投资期限' ,u'投资金额',u'投资类型', u'备注',
-                 u'审核通过',u'结算金额',u'拒绝原因']
+                 u'审核通过',u'结算金额',u'拒绝原因',u'补差价']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
     row = len(data)
@@ -522,7 +523,7 @@ def import_investlog(request):
     table = data.sheets()[0]
     nrows = table.nrows
     ncols = table.ncols
-    if ncols!=15:
+    if ncols!=16:
         ret['msg'] = u"文件格式与模板不符，请在导出的待审核记录表中更新后将文件导入！"
         return JsonResponse(ret)
     rtable = []
@@ -1479,3 +1480,74 @@ def coupon_count(request):
     total['coupon_total_unlock'] = coupon_total_unlock
     total['coupon_award_unlock'] = coupon_award_unlock
     return render(request,"coupon_count.html",{'total':total})
+
+@csrf_exempt
+@has_post_permission('002')
+def import_delta(request):
+    admin_user = request.user
+    ret = {'code':-1}
+    file = request.FILES.get('file')
+#     print file.name
+    with open('./out.xls', 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+    data = xlrd.open_workbook('out.xls')
+    table = data.sheets()[0]
+    nrows = table.nrows
+    ncols = table.ncols
+    rtable = []
+    mobile_list = []
+    try:
+        for i in range(1,nrows):
+            temp = []
+            for j in range(ncols):
+                cell = table.cell(i,j)
+                if j==0:
+                    id = int(cell.value)
+                    temp.append(id)
+                elif j==1:
+                    project = cell.value
+                    temp.append(project)
+                elif j==ncols-1:
+                    return_amount = 0
+                    if cell.value:
+                        return_amount = Decimal(cell.value)
+                    else:
+                        return_amount = 0
+                    temp.append(return_amount)
+                else:
+                    continue;
+            rtable.append(temp)
+    except Exception, e:
+        traceback.print_exc()
+        ret['msg'] = unicode(e)
+        ret['num'] = 0
+        return JsonResponse(ret)
+    admin_user = request.user
+    suc_num = 0
+    user_set_temp = set()
+    try:
+        for row in rtable:
+            id = row[0]
+            project = row[1]
+            delta = row[2]
+            if delta <= 0:
+                continue
+            with transaction.atomic():
+                try:
+                    investlog = InvestLog.objects.get(id=id, delta_amount=0, audit_state='0')
+                except InvestLog.DoesNotExist:
+                    continue
+                investlog_user = investlog.user
+                charge_money(investlog_user, '0', delta, project, remark=u"补差价", investlog)
+                investlog.delta_amount = delta
+                investlog.settle_amount += delta
+                investlog.save(update_fields=['delta_amount', 'settle_amount'])
+                suc_num += 1
+        ret['code'] = 0
+    except Exception as e:
+        traceback.print_exc()
+        ret['code'] = 1
+        ret['msg'] = unicode(e)
+    ret['num'] = suc_num
+    return JsonResponse(ret)

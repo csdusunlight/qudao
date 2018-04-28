@@ -80,7 +80,6 @@ input[type="button"]{
     width: 198px;
     height: 140px;
     background: url(../../../static/images/hongbao_1.png) no-repeat;
-    position: relative;
 }
 .after::after{
     content: "...";

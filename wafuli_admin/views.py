@@ -1539,7 +1539,7 @@ def import_delta(request):
                 except InvestLog.DoesNotExist:
                     continue
                 investlog_user = investlog.user
-                charge_money(investlog_user, '0', delta, project, remark=u"补差价", investlog)
+                charge_money(investlog_user, '0', delta, project, remark=u"补差价", auditlog=investlog)
                 investlog.delta_amount = delta
                 investlog.settle_amount += delta
                 investlog.save(update_fields=['delta_amount', 'settle_amount'])

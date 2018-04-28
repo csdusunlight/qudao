@@ -401,6 +401,31 @@
 			});
 			//	hint.innerHTML = '无';
 		});
+		$('#import2').click(function() {
+            var fileElementId = 'fileupload1';
+            if(!document.getElementById(fileElementId).value) {
+                alert("请先选择文件");
+                return;
+            }
+            $.ajaxFileUpload({
+                url: "{% url 'admin_import_investlog' %}",
+                secureuri: false,
+                fileElementId: fileElementId, //file标签的id
+                dataType: 'json', //返回数据的类型
+                data: {}, //一同上传的数据
+                success: function(data, status) {
+                    if(data.code == 0) {
+                        alert("导入成功！ 数量：" + data.num);
+                    } else {
+                        alert(data.msg + " 成功数量：" + data.num);
+                    }
+                },
+                error: function(data, status, e) {
+                    alert(e);
+                }
+            });
+            //  hint.innerHTML = '无';
+        });
 		$('.unhandle-box').on('click', '.unhandle', function(){
 		    $('#projectname').val($(this).text());
 		    $('#search').click();
@@ -500,6 +525,7 @@
 						<a id="input_clone" class="input-clone">选择文件</a>
 						<p class="hint-box">已选择表格：<b id="hint" class="hint">无</b></p>
 						<input id="import" type="button" value="导入" />
+						<input id="import2" type="button" value="补差导入" />
 					</div>
 			</div>
 

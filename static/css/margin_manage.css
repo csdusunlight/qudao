@@ -148,6 +148,7 @@ nav{
     color: white;
     border-radius: 5px;
     margin:25px 130px;
+    border: none;
 }
 .descBox{
     margin:80px 40px;

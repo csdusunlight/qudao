@@ -25,6 +25,7 @@ urlpatterns = [
 
 #     url(r'^parse_excel/$', 'wafuli_admin.channel.parse_excel', name='parse_excel'),
     url(r'^import_investlog/$', 'wafuli_admin.views.import_investlog', name='admin_import_investlog'),
+    url(r'^import_delta/$', 'wafuli_admin.views.import_delta', name='import_delta'),
     url(r'^export_investlog/$', 'wafuli_admin.views.export_investlog', name='admin_export_investlog'),
 
 

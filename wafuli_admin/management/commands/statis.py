@@ -14,7 +14,8 @@ from wafuli.models import Project, WithdrawLog, InvestLog
 from docs.models import Document, DocStatis
 from django.core.cache import cache
 from public.redis import cache_decr_or_set
-from merchant.models import MerchantProjectStatistics, Margin_AuditLog
+from merchant.models import MerchantProjectStatistics, Margin_AuditLog,\
+    Margin_Translog
 from coupon.models import UserCoupon
 logger = logging.getLogger("wafuli")
 from django.core.management.base import BaseCommand, CommandError
@@ -148,7 +149,7 @@ class Command(BaseCommand):
         merchant_settle = dic.get('settle_amount') or 0
         merchant_investlogs_audit = dic.get('amount') or 0
         merchant_consume = merchant_settle + merchant_broker
-        dic = Margin_AuditLog.objects.filter(audit_time__gte=today, audit_state='0').aggregate(merchant_charge=Sum('amount'))
+        dic = Margin_Translog.objects.filter(reason__contains=u"充值",transType='0',time__gte=today).aggregate(merchant_charge=Sum('transAmount'))
         merchant_charge = dic.get('merchant_charge') or 0
         update_fields = {
             'merchant_people': merchant_people,

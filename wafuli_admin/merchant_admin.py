@@ -147,7 +147,7 @@ def admin_merchant_project(request):
     
 @csrf_exempt
 @transaction.atomic
-@has_post_permission('100')
+@has_post_permission('003')
 def admin_merchant_investlog(request):
     admin_user = request.user
     if request.method == "GET":
@@ -289,6 +289,7 @@ def admin_export_merchant_investlog(request):
         settle_price = con.get_project_price()
         reason = con.audit_reason
         opinion = ''
+        delta_amount = con.delta_amount
         submit_type = con.get_submit_type_display()
         if con.audit_state == '0' or con.audit_state == '2'  or con.audit_state == '4':
             opinion = u"已完成"
@@ -310,12 +311,13 @@ def admin_export_merchant_investlog(request):
             result = u'异常'
         elif con.audit_state=='4':
             result = u'申诉'
-        data.append([id, project_name, invest_date, qq_number,user_level, settle_price, invest_mobile, invest_name, term,
-                     invest_amount, submit_type, remark, preresult, presettle_amount,broker_amount, result, settle_amount, opinion, reason])
+        data.append([id, project_name, project.user.qq_name, invest_date, qq_number,user_level, settle_price, invest_mobile, invest_name, term,
+                     invest_amount, submit_type, remark, preresult, presettle_amount,broker_amount, result, settle_amount,
+                      opinion, reason, delta_amount])
     w = Workbook()     #创建一个工作簿
     ws = w.add_sheet(u'待审核记录')     #创建一个工作表
-    title_row = [u'记录ID',u'项目名称',u'投资日期', u'QQ', u'用户类型', u'结算价格', u'投资手机号', u'投资姓名' ,u'投资期限' ,u'投资金额',u'投资类型', u'备注',
-                 u'预审核结果',u'预结算金额',u'佣金',u'审核结果',u'结算金额',u'复审意见（同意/驳回）',u'审核说明']
+    title_row = [u'记录ID',u'项目名称',u'放单人',u'投资日期', u'QQ', u'用户类型', u'结算价格', u'投资手机号', u'投资姓名' ,u'投资期限' ,u'投资金额',u'投资类型', u'备注',
+                 u'预审核结果',u'预结算金额',u'佣金',u'审核结果',u'结算金额',u'复审意见（同意/驳回）',u'审核说明',u'补差价']
     for i in range(len(title_row)):
         ws.write(0,i,title_row[i])
     row = len(data)
@@ -337,7 +339,7 @@ def admin_export_merchant_investlog(request):
     return response
 
 @csrf_exempt
-@has_post_permission('002')
+@has_post_permission('003')
 def admin_import_merchant_investlog(request):
     admin_user = request.user
     ret = {'code':-1}
@@ -350,7 +352,7 @@ def admin_import_merchant_investlog(request):
     table = data.sheets()[0]
     nrows = table.nrows
     ncols = table.ncols
-    if ncols!=19:
+    if ncols!=21:
         ret['msg'] = u"文件格式与模板不符，请在导出的待审核记录表中更新后将文件导入！"
         return JsonResponse(ret)
     rtable = []
@@ -368,7 +370,7 @@ def admin_import_merchant_investlog(request):
                 elif j==1:
                     project = cell.value
                     temp.append(project)
-                elif j==17:
+                elif j==18:
                     result = cell.value.strip()
                     if result == u"同意":
                         result = 1
@@ -379,7 +381,7 @@ def admin_import_merchant_investlog(request):
                     else:
                         raise Exception(u"复审意见必须为同意,驳回或已完成。")
                     temp.append(result)
-                elif j==18:
+                elif j==19:
                     reason = cell.value
                     temp.append(reason)
                     if result == 2 and not reason:

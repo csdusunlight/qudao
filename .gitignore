@@ -11,3 +11,4 @@ reload
 static/excel/*.xls
 debug.log.*
 out*.xls
+*.pem

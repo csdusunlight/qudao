@@ -212,7 +212,7 @@
             }
             return function(value,type){ //type为检测类型,value为检测的值
                 if(!types[type]){
-                    throw "检测类型不存在";
+                    throw "检测类型错误";
                 }
                 if(!types[type](value)){
                     return instructions[type];
@@ -223,7 +223,7 @@
         function detect (value,types){
             var result;
             if(!(types instanceof Array)){
-                throw "检测类型只能为数组";
+                throw "检测类型只能是数组";
             }
             for(var type of types){
                 var msg = validate(value,type);

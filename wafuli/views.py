@@ -82,3 +82,4 @@ def display_qualification(request):
 def cooperate(request):
     template = 'm_cooperation.html' if request.mobile else 'cooperation.html'
     return render(request, template)
+

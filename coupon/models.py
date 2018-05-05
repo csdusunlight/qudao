@@ -83,7 +83,7 @@ class UserCoupon(models.Model):
         if not self.is_expired() and self.state == '1':
             with transaction.atomic():
                 self.state = '2'
-                charge_money(self.user, '0', self.award, u'领取红包')
+                charge_money(self.user, '0', self.award, u'领取红包', auditlog=self)
                 self.save(update_fields = ['state'])
     def __unicode__(self):
         return self.get_type_display() + ' ' + self.user.mobile

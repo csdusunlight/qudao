@@ -25,8 +25,8 @@ class Command(BaseCommand):
             try:
                 with transaction.atomic():
                     amount = user.balance
-                    charge_money(user, '1', amount, u'系统自动提现')
-                    WithdrawLog.objects.create(user=user, amount=amount, audit_state='1')
+                    event = WithdrawLog.objects.create(user=user, amount=amount, audit_state='1')
+                    charge_money(user, '1', amount, u'系统自动提现', auditlog=event)
             except:
                 continue
         end_time = time.time()

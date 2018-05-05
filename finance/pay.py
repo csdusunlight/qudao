@@ -1,0 +1,56 @@
+#coding:utf-8
+'''
+Created on 2018年4月19日
+
+@author: lch
+'''
+from alipay import AliPay
+import datetime
+from finance.models import ZhifubaoTransferLog
+app_private_key_string = open("../dragon/app_pri_key.pem").read()
+alipay_public_key_string = open("../dragon/ali_pub_key.pem").read()
+
+print app_private_key_string, alipay_public_key_string
+alipay = AliPay(
+      appid="2018041860005082",
+      app_notify_url=None,  # the default notify path
+      app_private_key_string=app_private_key_string, 
+      alipay_public_key_string=alipay_public_key_string,  # alipay public key, do not use your public key!
+      sign_type="RSA2", # RSA or RSA2
+      debug=False  # False by default
+)
+
+def batch_transfer_to_zhifubao(account_list):
+    ret_list = []
+    suc_num = 0
+    objs = []
+    ret = {}
+    for account in account_list:
+        result = alipay.api_alipay_fund_trans_toaccount_transfer(
+            datetime.datetime.now().strftime("%Y%m%d%H%M%S"),
+            payee_type="ALIPAY_LOGONID",
+            **account
+#             payee_account="18500581509",
+#             payee_real_name=u'吕春晖',
+#             amount=0.1
+        )
+        msg = result['msg']
+        if msg == 'Success':
+            suc_num += 1
+        else:
+            msg = result['sub_msg']
+            detail = account.copy()
+            detail['msg'] = msg
+            ret_list.append(detail)
+        obj = ZhifubaoTransferLog(result=msg, **account)
+        objs.append(obj)
+    ZhifubaoTransferLog.objects.bulk_create(objs)
+    ret['suc_num'] = suc_num
+    ret['detail'] = ret_list
+    return ret
+
+if __name__ == '__main__':
+    # function_name = "alipay_" + alipay_function_name.replace(".", "_")
+    ret = batch_transfer_to_zhifubao([{'payee_account':"18500581509",'payee_real_name':u'吕春晖','amount':0.1},
+                                {'payee_account':"18500581509",'payee_real_name':u'吕晖','amount':0.1}])
+    print ret

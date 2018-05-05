@@ -9,7 +9,7 @@ import logging
 import time,datetime
 # from django.db import connection
 from django.db.models import Sum, Count,Avg,F
-from wafuli.models import Project, WithdrawLog, InvestLog
+from wafuli.models import Project, WithdrawLog, InvestLog, TransList, AdminLog
 # from activity.models import IPAward, IPLog
 from docs.models import Document, DocStatis
 from django.core.cache import cache
@@ -17,6 +17,7 @@ from public.redis import cache_decr_or_set
 from merchant.models import MerchantProjectStatistics, Margin_AuditLog,\
     Margin_Translog
 from coupon.models import UserCoupon
+from django.contrib.contenttypes.models import ContentType
 logger = logging.getLogger("wafuli")
 from django.core.management.base import BaseCommand, CommandError
 from account.models import MyUser, Userlogin, ApplyLog
@@ -34,14 +35,26 @@ class Command(BaseCommand):
                 aggregate(cou=Count('user_id',distinct=True),sum=Sum('amount'))
         with_amount = dict.get('sum') or 0
         with_num = dict.get('cou')
-        dict = InvestLog.objects.filter(audit_time__gte=today,audit_state='0').\
-                aggregate(cou=Count('user_id',distinct=True),sum1=Sum('settle_amount'),sum2=Sum('invest_amount'))
-        ret_amount = dict.get('sum1') or 0
-        invest_amount = dict.get('sum2') or 0
-        ret_num = dict.get('cou')
+        ret = TransList.objects.filter(time__gte=today,transType='0').values('content_type').\
+                annotate(sum=Sum('transAmount')).order_by('content_type')
+        investtype = ContentType.objects.get_for_model(InvestLog).id
+        admintype = ContentType.objects.get_for_model(AdminLog).id
+        coupontype = ContentType.objects.get_for_model(UserCoupon).id
+        ret_amount = 0
+        admin_amount = 0
+        coupon_amount = 0
+        for item in ret:
+            if item['content_type'] == investtype:
+                ret_amount = item['sum']
+            elif item['content_type'] == admintype:
+                admin_amount = item['sum']
+            elif item['content_type'] == coupontype:
+                coupon_amount = item['sum']
+#         ret_num = dict.get('cou')
         
         new_project_num = Project.objects.filter(pub_date__gte=today).count()
-        
+        ret = InvestLog.objects.filter(submit_time__gte=today).aggregate(sum=Sum('invest_amount'))
+        invest_amount = ret.get('sum') or 0
 #         dict = IPLog.objects.filter(time__gte=today).aggregate(total=Sum('award'))
 #         activity_consume = dict.get('total')
         
@@ -51,9 +64,11 @@ class Command(BaseCommand):
                         'new_reg_num':new_reg_num,
                         'with_amount':with_amount,
                         'with_num':with_num,
+                        'admin_amount':admin_amount,
+                        'coupon_amount':coupon_amount,
                         'ret_amount':ret_amount,
                         'invest_amount':invest_amount,
-                        'ret_num':ret_num,
+#                         'ret_num':ret_num,
                         'new_project_num':new_project_num,
 #                         'activity_consume':activity_consume
         }

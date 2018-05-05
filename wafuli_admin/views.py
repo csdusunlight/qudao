@@ -33,6 +33,7 @@ from coupon.views import on_register
 from django_redis import get_redis_connection
 from django.core.cache import cache
 from coupon.models import UserCoupon
+from finance.pay import batch_transfer_to_zhifubao
 # Create your views here.
 logger = logging.getLogger('wafuli')
 def index(request):
@@ -172,11 +173,9 @@ def admin_invest(request):
                 res['code'] = -3
                 res['res_msg'] = u"操作失败，返现重复！"
             else:
-                translist = charge_money(investlog_user, '0', cash, project_title)  #jzy
+                translist = charge_money(investlog_user, '0', cash, project_title, auditlog=investlog)
                 investlog.audit_state = '0'
                 investlog.settle_amount += cash
-                translist.auditlog = investlog
-                translist.save()
                 #红包插入+++++++++++++++++++
                 with cache.lock("admin_invest"):
                     users = cache.get('invest_user_set') or ''
@@ -217,11 +216,9 @@ def admin_invest(request):
                 res['code'] = -3
                 res['res_msg'] = u'该项目已审核过，不要重复审核！'
                 return JsonResponse(res)
-            translist = charge_money(investlog_user, '0', cash, project_title, remark=u"补差价")  #jzy
+            translist = charge_money(investlog_user, '0', cash, project_title, remark=u"补差价", auditlog=investlog)
             investlog.settle_amount += cash
             investlog.delta_amount = cash
-            translist.auditlog = investlog
-            translist.save()
             res['code'] = 0
         if res['code'] == 0:
             investlog.audit_time = datetime.datetime.now()
@@ -585,11 +582,9 @@ def import_investlog(request):
                 translist = None
                 if result==1:
                     amount = row[3]
-                    translist = charge_money(investlog_user, '0', amount, row[1])
+                    translist = charge_money(investlog_user, '0', amount, row[1], auditlog=investlog)
                     investlog.audit_state = '0'
                     investlog.settle_amount = amount
-                    translist.auditlog = investlog
-                    translist.save()
                     #红包插入+++++++++++++++++++
                     user_set_temp.add(str(investlog_user.id))
                     #红包插入+++++++++++++++++++
@@ -672,13 +667,11 @@ def admin_user(request):
                 res['res_msg'] = u"操作失败，输入不合法！"
                 return JsonResponse(res)
             translist = None
-            if pcash > 0:
-                translist = charge_money(obj_user, '0', pcash, reason)
-            elif mcash > 0:
-                translist = charge_money(obj_user, '1', mcash, reason)
             adminlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=reason, type='1')
-            translist.auditlog = adminlog
-            translist.save()
+            if pcash > 0:
+                translist = charge_money(obj_user, '0', pcash, reason, auditlog=adminlog)
+            elif mcash > 0:
+                translist = charge_money(obj_user, '1', mcash, reason, auditlog=adminlog)
             res['code'] = 0
 
 
@@ -726,13 +719,11 @@ def admin_user(request):
                 res['res_msg'] = u"操作失败，输入不合法！"
                 return JsonResponse(res)
             translist = None
-            if pcash > 0:
-                translist = charge_margin(obj_user, '0', pcash, reason)
-            elif mcash > 0:
-                translist = charge_margin(obj_user, '1', mcash, reason)
             adminlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=reason, type='4')
-            translist.auditlog = adminlog
-            translist.save()
+            if pcash > 0:
+                translist = charge_margin(obj_user, '0', pcash, reason, auditlog=adminlog)
+            elif mcash > 0:
+                translist = charge_margin(obj_user, '1', mcash, reason, auditlog=adminlog)
             res['code'] = 0
         elif type == 6:
             try:
@@ -892,7 +883,7 @@ def admin_withdraw(request):
                 return JsonResponse(res)
             withdrawlog.audit_state = '2'
             withdrawlog.audit_reason = reason
-            charge_money(withdrawlog.user, '0', withdrawlog.amount, u'冲账', True, reason)
+            charge_money(withdrawlog.user, '0', withdrawlog.amount, u'冲账', True, reason, auditlog=withdrawlog)
             res['code'] = 0
         withdrawlog.audit_time = datetime.datetime.now()
         withdrawlog.admin_user = admin_user
@@ -906,6 +897,23 @@ def admin_withdraw(request):
         #
         return JsonResponse(res)
 
+@transaction.atomic
+@has_post_permission('004')
+def admin_withdraw_autoaudit(request):
+    admin_user = request.user
+    if request.method == "GET":
+        raise Http404
+    if request.method == "POST":
+        batch_list = []
+        withlist = list(WithdrawLog.objects.filter(audit_state='1', amount__lt=50000).all())
+        for obj in withlist:
+            batch_list.append({
+                'payee_account':obj.user.zhifubao,
+                'payee_real_name':obj.user.zhifubao_name,
+                'amount':obj.amount
+            })
+        ret = batch_transfer_to_zhifubao(batch_list)
+        return JsonResponse(ret)
 def get_admin_with_page(request):
     res={'code':0,}
     user = request.user
@@ -1179,7 +1187,7 @@ def import_withdrawlog(request):
                         raise Exception(u"拒绝原因缺失")
                     withdrawlog.audit_state = '2'
                     withdrawlog.audit_reason = reason
-                    charge_money(withdrawlog.user, '0', withdrawlog.amount, u'冲账', True, reason)
+                    charge_money(withdrawlog.user, '0', withdrawlog.amount, u'冲账', True, reason, auditlog=withdrawlog)
                     fail_list.append((withdrawlog_user,withdrawlog))
                 withdrawlog.audit_time = datetime.datetime.now()
                 withdrawlog.admin_user = admin_user
@@ -1447,8 +1455,8 @@ def batch_withdraw(request):
         try:
             with transaction.atomic():
                 amount = user.balance
-                charge_money(user, '1', amount, u'系统自动提现')
-                WithdrawLog.objects.create(user=user, amount=amount, audit_state='1')
+                withdrawlog = WithdrawLog.objects.create(user=user, amount=amount, audit_state='1')
+                charge_money(user, '1', amount, u'系统自动提现', auditlog=withdrawlog)
         except:
             continue
     return JsonResponse({'code':0})

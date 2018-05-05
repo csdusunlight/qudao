@@ -782,10 +782,8 @@ def withdraw(request):
 
         try:
             with transaction.atomic():
-                translist = charge_money(user, '1', withdraw_amount, u'提现')
                 event = WithdrawLog.objects.create(user=user, amount=withdraw_amount, audit_state='1')
-                translist.auditlog = event
-                translist.save()
+                translist = charge_money(user, '1', withdraw_amount, u'提现', auditlog=event)
                 result['code'] = 0
             try:
                 sendWeixinNotify.delay([(request.user, event),], 'withdraw_apply')

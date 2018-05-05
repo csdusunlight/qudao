@@ -180,10 +180,8 @@ def admin_merchant_investlog(request):
         project_title = investlog.project.title
         if type==1:
             investlog.audit_state = '0'
-            translist = charge_money(investlog_user, '0', cash, project_title)
+            translist = charge_money(investlog_user, '0', cash, project_title, auditlog=investlog)
             investlog.settle_amount += cash
-            translist.auditlog = investlog
-            translist.save()
             res['code'] = 0
         elif type == 2:
             investlog.audit_state = '1'
@@ -411,10 +409,8 @@ def admin_import_merchant_investlog(request):
                 cash = investlog.presettle_amount
                 if result==1:
                     investlog.audit_state = '0'
-                    translist = charge_money(investlog_user, '0', cash, project_title)
+                    translist = charge_money(investlog_user, '0', cash, project_title, auditlog=investlog)
                     investlog.settle_amount += cash
-                    translist.auditlog = investlog
-                    translist.save()
 #                     #活动插入
 #                     on_audit_pass(request, investlog)
 #                     #活动插入结束

@@ -161,7 +161,7 @@
         <!--弹窗部分-->
         <script type="text/javascript" charset="utf-8">
                 mui.init({
-                    swipeBack:false //启用右滑关闭功能
+                    swipeBack:false //启用右滑关闭功能 
                 });
                 
                 //      检验填写格式
@@ -189,7 +189,7 @@
                     return false;
                 },
                 isPhone:function(value){
-                    var reg = /^1[34578]\d{9}$/;
+                    var reg = /^1\d{10}$/;
                     if(reg.test(value)){
                         return true;
                     }
@@ -212,18 +212,18 @@
             }
             return function(value,type){ //type为检测类型,value为检测的值
                 if(!types[type]){
-                    throw "检测类型不存在";
+                    throw "检测类型错误";
                 }
                 if(!types[type](value)){
                     return instructions[type];
                 }
                 return false;
-            }
+            } 
         })();
         function detect (value,types){
             var result;
             if(!(types instanceof Array)){
-                throw "检测类型只能为数组";
+                throw "检测类型只能是数组";
             }
             for(var type of types){
                 var msg = validate(value,type);
@@ -266,7 +266,6 @@
     //          }
     //      })
     //  })
-//      检验填写格式---end
                 
 
         

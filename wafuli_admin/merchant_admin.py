@@ -324,7 +324,7 @@ def admin_export_merchant_investlog(request):
         lis = data[i]
         col = len(lis)
         for j in range(col):
-            if j==2:
+            if j==3:
                 ws.write(i+1,j,lis[j],style1)
             else:
                 ws.write(i+1,j,lis[j])

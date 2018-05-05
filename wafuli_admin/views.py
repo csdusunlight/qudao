@@ -905,15 +905,22 @@ def admin_withdraw_autoaudit(request):
         raise Http404
     if request.method == "POST":
         batch_list = []
-        withlist = list(WithdrawLog.objects.filter(audit_state='1', amount__lt=50000).all())
+        withlist = WithdrawLog.objects.filter(audit_state='1', amount__lt=50000).all()
         for obj in withlist:
             batch_list.append({
+                'obj': obj,
                 'payee_account':obj.user.zhifubao,
                 'payee_real_name':obj.user.zhifubao_name,
                 'amount':obj.amount
             })
         ret = batch_transfer_to_zhifubao(batch_list)
-        return JsonResponse(ret)
+        fail_id_list = []
+        for item in ret['detail']:
+            fail_id_list.append(item['obj'].id)
+            obj.except_info = item['msg']
+            obj.save(update_fields=['except_info'])
+        withlist.exclude(id__in=fail_id_list).update(audit_state='0')
+        return JsonResponse({'suc_num':ret.get('suc_num')})
 def get_admin_with_page(request):
     res={'code':0,}
     user = request.user

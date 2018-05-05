@@ -332,6 +332,7 @@ class WithdrawLog(models.Model):
     admin_user = models.ForeignKey(MyUser, related_name="withdrawlog_admin", null=True)
     audit_reason = models.CharField(u"审核原因", max_length=30)
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
+    except_info = models.CharField(max_length=100, verbose_name=u"异常信息") 
     class Meta:
         ordering = ["submit_time","-amount"]
     def __unicode__(self):

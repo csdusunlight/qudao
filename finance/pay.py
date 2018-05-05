@@ -28,23 +28,24 @@ def batch_transfer_to_zhifubao(account_list):
     objs = []
     ret = {}
     for account in account_list:
+        payee_account=account.get('payee_account')
+        payee_real_name=account.get('payee_real_name')
+        amount=account.get('amount')
         result = alipay.api_alipay_fund_trans_toaccount_transfer(
             datetime.datetime.now().strftime("%Y%m%d%H%M%S"),
             payee_type="ALIPAY_LOGONID",
-            **account
-#             payee_account="18500581509",
-#             payee_real_name=u'吕春晖',
-#             amount=0.1
+            payee_account=payee_account,
+            payee_real_name=payee_real_name,
+            amount=amount
         )
         msg = result['msg']
         if msg == 'Success':
             suc_num += 1
         else:
-            msg = result['sub_msg']
-            detail = account.copy()
-            detail['msg'] = msg
-            ret_list.append(detail)
-        obj = ZhifubaoTransferLog(result=msg, **account)
+            account['msg'] = msg
+            ret_list.append(account)
+        obj = ZhifubaoTransferLog(result=msg, payee_account=payee_account, 
+                                  payee_real_name=payee_real_name, amount=amount)
         objs.append(obj)
     ZhifubaoTransferLog.objects.bulk_create(objs)
     ret['suc_num'] = suc_num

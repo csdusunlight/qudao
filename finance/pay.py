@@ -7,8 +7,10 @@ Created on 2018年4月19日
 from alipay import AliPay
 import datetime
 from finance.models import ZhifubaoTransferLog
-app_private_key_string = open("../dragon/app_pri_key.pem").read()
-alipay_public_key_string = open("../dragon/ali_pub_key.pem").read()
+from django.conf import settings
+from os import path as ospath
+app_private_key_string = open(ospath.join(settings.CONFIG_DIR, "app_pri_key.pem")).read()
+alipay_public_key_string = open(ospath.join(settings.CONFIG_DIR, "ali_pub_key.pem")).read()
 
 print app_private_key_string, alipay_public_key_string
 alipay = AliPay(

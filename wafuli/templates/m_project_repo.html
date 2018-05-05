@@ -41,8 +41,8 @@
                     <ul id="mui-table-view-right" class="mui-table-view-right">
                         <li class="item_line m-head m-right">
                             <div class="column_2 column m-head">推广标期</div>
-                            <div class="column_3 column m-head">投资档位</div>
-                            <div class="column_4 column m-head">结算价格</div>
+                            <div class="column_3 column m-head">结算价格</div>
+                            <div class="column_4 column m-head">投资档位</div>
                             <!--<div class="column_5 column m-head">客户指导价</div>-->
                             <div class="column_6 column m-head">备注说明</div>
                             <div class="column_7 column m-head">操作</div>
@@ -113,9 +113,9 @@
                                 var left_html = '<div class="column_1 column"><span class="item opa'+data.results[i].project_state+' "><a href="' + data.results[i].project_strategy + '">' + data.results[i].project_title + '</a></span></div>';
 
                                 var right_html = '<div class="column_2 column"><span class="item">' + data.results[i].project_term + '</span></div>' +
-                                    '<div class="column_3 column"><span class="item">' + data.results[i].project_investrange + '</span></div>' +
+                                    '<div class="column_3 column"><span class="item">' + data.results[i].project_price + '</span></div>' +
                                     '<div class="column_4 column"><span class="item">';
-                                right_html += data.results[i].project_price;
+                                right_html += data.results[i].project_investrange;
                                     right_html += '</span></div>' +
 //                                  '<div class="column_5 column"><span class="item">' + data.results[i].project_cprice + '</span></div>' +
                                     '<div class="column_6 column"><span class="item">'+data.results[i].project_remark+'</div>' +

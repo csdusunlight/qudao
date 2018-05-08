@@ -281,6 +281,10 @@
                     <span style="display: block;text-align:right; margin-right: 32px;">每笔结算扣除<span class="rate-num">2</span>%手续费</span>
                     <p class="process-money"></p>
                 </div>
+                <div class="popup__item">
+                    <span class="popup__itemname">审核说明：</span>
+                    <input type="text" class="audit_reason" placeholder="填写审核说明，选填" />
+                </div>
             </div>
             <div class="popup__btnbox">
                 <a class="cancel btn m-green m-right" onclick="canclePopup(this)">取消</a>
@@ -524,6 +528,7 @@
     }
     $('#confirm_pass_02').click(function() {
         var return_amount = $(".return_amount_02").val();
+        var audit_reason = $(".audit_reason").val();
         if(!return_amount || !Number(return_amount)) {
 //          alert('结算金额不能为空，且必须为数字格式');
             $.prompt({
@@ -539,6 +544,7 @@
             data: {
                 'id': base_id,
                 'cash': return_amount,
+                'reason': audit_reason
                 'type': base_type,
             },
             success: function(ret) {

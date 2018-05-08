@@ -9,18 +9,23 @@ import datetime
 from finance.models import ZhifubaoTransferLog
 from django.conf import settings
 from os import path as ospath
-app_private_key_string = open(ospath.join(settings.CONFIG_DIR, "app_pri_key.pem")).read()
-alipay_public_key_string = open(ospath.join(settings.CONFIG_DIR, "ali_pub_key.pem")).read()
-
-print app_private_key_string, alipay_public_key_string
-alipay = AliPay(
-      appid="2018041860005082",
-      app_notify_url=None,  # the default notify path
-      app_private_key_string=app_private_key_string, 
-      alipay_public_key_string=alipay_public_key_string,  # alipay public key, do not use your public key!
-      sign_type="RSA2", # RSA or RSA2
-      debug=False  # False by default
-)
+app_pri_key_file = ospath.join(settings.CONFIG_DIR, "app_pri_key.pem")
+ali_pub_key_file = ospath.join(settings.CONFIG_DIR, "ali_pub_key.pem")
+alipay = None
+if ospath.exists(app_pri_key_file) and ospath.exists(ali_pub_key_file):
+    app_private_key_string = open(ospath.join(settings.CONFIG_DIR, "app_pri_key.pem")).read()
+    alipay_public_key_string = open(ospath.join(settings.CONFIG_DIR, "ali_pub_key.pem")).read()
+    try:
+        alipay = AliPay(
+              appid="2018041860005082",
+              app_notify_url=None,  # the default notify path
+              app_private_key_string=app_private_key_string, 
+              alipay_public_key_string=alipay_public_key_string,  # alipay public key, do not use your public key!
+              sign_type="RSA2", # RSA or RSA2
+              debug=False  # False by default
+        )
+    except:
+        pass
 
 def batch_transfer_to_zhifubao(account_list):
     ret_list = []

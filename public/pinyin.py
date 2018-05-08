@@ -65,4 +65,4 @@ if __name__ == "__main__":
     string = "钓鱼岛是中国的"
     print "in: %s" % string
     print "out: %s" % str(test.hanzi2pinyin(string=string))
-    print "out: %s" % test.hanzi2pinyin_split(string=string, split="-")
+    print  test.hanzi2pinyin_split(string=string, split="-")

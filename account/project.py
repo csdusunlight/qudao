@@ -75,10 +75,10 @@ def create_update_selfproject(request, id=None):
         with transaction.atomic():
             if id is None:
                 obj = Project.objects.create(**kwargs)
-                sub = SubscribeShip.objects.create(project=obj, user=user, cprice=cprice, shortprice=shortprice)
+                sub = SubscribeShip.objects.create(project=obj, user=user, price=cprice, shortprice=shortprice)
             else:
                 Project.objects.filter(id=id, user=user).update(**kwargs)
-                sub = SubscribeShip.objects.get(user=user, project_id=id, cprice=cprice, shortprice=shortprice)
+                sub = SubscribeShip.objects.get(user=user, project_id=id, price=cprice, shortprice=shortprice)
             sub.marks = marks
         ret['code'] = 0
         return JsonResponse(ret)

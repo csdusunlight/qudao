@@ -616,7 +616,6 @@ def import_investlog(request):
     return JsonResponse(ret)
 
 @transaction.atomic
-@has_post_permission("005")
 def admin_user(request):
     admin_user = request.user
     if request.method == "GET":
@@ -625,10 +624,6 @@ def admin_user(request):
         return render(request,"admin_user.html")
     if request.method == "POST":
         res = {}
-        if not admin_user.has_admin_perms('005'):
-            res['code'] = -5
-            res['res_msg'] = u'您没有操作权限！'
-            return JsonResponse(res)
         if not request.is_ajax():
             raise Http404
         if not ( admin_user.is_authenticated() and admin_user.is_staff):
@@ -644,6 +639,10 @@ def admin_user(request):
 #             return JsonResponse(res)
         obj_user = MyUser.objects.get(id=user_id)
         if type==1:
+            if not admin_user.has_admin_perms('050'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
             pcash = request.POST.get('pcash', 0)
             mcash = request.POST.get('mcash', 0)
             if not pcash:
@@ -676,16 +675,28 @@ def admin_user(request):
 
 
         elif type == 2:
+            if not admin_user.has_admin_perms('051'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
             obj_user.is_active = False
             obj_user.save(update_fields=['is_active'])
             admin_investlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, type='2', remark=u"加黑")
             res['code'] = 0
         elif type == 3:
+            if not admin_user.has_admin_perms('051'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
             obj_user.is_active = True
             obj_user.save(update_fields=['is_active'])
             admin_investlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, type='2', remark=u"去黑")
             res['code'] = 0
         elif type == 4:
+            if not admin_user.has_admin_perms('052'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
             level = request.POST.get('level')
             if level:
                 obj_user.level=level
@@ -696,6 +707,10 @@ def admin_user(request):
                 res['code'] = -6
                 res['res_msg'] = u"没有level"
         elif type == 5:
+            if not admin_user.has_admin_perms('053'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
             pcash = request.POST.get('pcash', 0)
             mcash = request.POST.get('mcash', 0)
             if not pcash:
@@ -726,6 +741,10 @@ def admin_user(request):
                 translist = charge_margin(obj_user, '1', mcash, reason, auditlog=adminlog)
             res['code'] = 0
         elif type == 6:
+            if not admin_user.has_admin_perms('054'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
             try:
                 perm = AdminPermission.objects.get(code='100')
             except AdminPermission.DoesNotExist:
@@ -733,6 +752,10 @@ def admin_user(request):
             obj_user.admin_permissions.add(perm)
             res['code'] = 0
         elif type == 7:
+            if not admin_user.has_admin_perms('054'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
             perm = AdminPermission.objects.get(code='100')
             obj_user.admin_permissions.remove(perm)
             res['code'] = 0

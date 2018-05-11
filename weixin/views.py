@@ -127,7 +127,7 @@ def bind_user(request):
                 except Exception,e:
                     return redirect('account_index')
         else:
-            logger.error('Getting access_token error:' + str(json_ret) )
+            logger.info('Getting access_token failed:' + str(json_ret) )
             return HttpResponse(u"本页面转发或刷新无效，请在微信公众号中重新打开")
 
 def bind_user_success(request):

@@ -75,7 +75,7 @@ def create_update_selfproject(request, id=None):
         with transaction.atomic():
             if id is None:
                 obj = Project.objects.create(**kwargs)
-                sub = SubscribeShip.objects.create(project=obj, user=user)
+                sub = SubscribeShip.objects.create(project=obj, user=user, cprice=cprice, shortprice=shortprice)
             else:
                 Project.objects.filter(id=id, user=user).update(**kwargs)
                 sub = SubscribeShip.objects.get(user=user, project_id=id)

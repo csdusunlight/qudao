@@ -78,7 +78,7 @@ def create_update_selfproject(request, id=None):
                 sub = SubscribeShip.objects.create(project=obj, user=user, cprice=cprice, shortprice=shortprice)
             else:
                 Project.objects.filter(id=id, user=user).update(**kwargs)
-                sub = SubscribeShip.objects.get(user=user, project_id=id)
+                sub = SubscribeShip.objects.get(user=user, project_id=id, cprice=cprice, shortprice=shortprice)
             sub.marks = marks
         ret['code'] = 0
         return JsonResponse(ret)

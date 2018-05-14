@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^password_change/$', 'account.views.password_change', name='password_change'),
     url(r'^change_pay_password/$', 'account.views.change_pay_password', name='change_pay_password'),
     url(r'^bind_bankcard/$', 'account.views.bind_bankcard', name='bind_bankcard'),
+    url(r'^bind_zhifubao/$', 'account.views.bind_zhifubao', name='bind_zhifubao'),
     url(r'^change_bankcard/$', 'account.views.change_bankcard', name='change_bankcard'),
 #     url(r'^password_change/done/$', auth_views.password_change_done, name='password_change_done'),
 #     url(r'^password_reset/$', auth_views.password_reset, name='password_reset'),

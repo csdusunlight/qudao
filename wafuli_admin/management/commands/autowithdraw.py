@@ -12,22 +12,12 @@ from account.models import MyUser
 from account.transaction import charge_money
 from wafuli.models import WithdrawLog
 from django.db import transaction
+from wafuli_admin.views import batch_withdraw_task
 logger = logging.getLogger("wafuli")
 class Command(BaseCommand):
     def handle(self, *args, **options):
         logger.info("******Auto-withdrawing is beginning*********")
         begin_time = time.time()
-        users = MyUser.objects.filter(balance__gte=10, is_autowith=True)
-        for user in users:
-            card = user.user_bankcard.first()
-            if not card:
-                continue
-            try:
-                with transaction.atomic():
-                    amount = user.balance
-                    event = WithdrawLog.objects.create(user=user, amount=amount, audit_state='1')
-                    charge_money(user, '1', amount, u'系统自动提现', auditlog=event)
-            except:
-                continue
+        batch_withdraw_task()
         end_time = time.time()
         logger.info("******Auto-withdrawing is finished, time:%s*********",end_time-begin_time)

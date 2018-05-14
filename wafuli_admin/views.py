@@ -1473,14 +1473,10 @@ def send_multiple_msg(request):
 def award_logs(request):
     return render(request,"award_logs.html",)
 
-@login_required
-def batch_withdraw(request):
-    if not request.user.is_staff or not request.is_ajax():
-        raise Http404
+def batch_withdraw_task():
     users = MyUser.objects.filter(balance__gte=10, is_autowith=True)
     for user in users:
-        card = user.user_bankcard.first()
-        if not card:
+        if not user.zhifubao:
             continue
         try:
             with transaction.atomic():
@@ -1489,8 +1485,13 @@ def batch_withdraw(request):
                 charge_money(user, '1', amount, u'系统自动提现', auditlog=withdrawlog)
         except:
             continue
+@login_required
+def batch_withdraw(request):
+    if not request.user.is_staff or not request.is_ajax():
+        raise Http404
+    batch_withdraw_task()
     return JsonResponse({'code':0})
-
+    
 def admin_merchant_show(request):    #jzy
     return render(request,"admin_merchant_show.html",{})
 def coupon_send(request):    #jzy

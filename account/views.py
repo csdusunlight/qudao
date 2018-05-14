@@ -673,6 +673,32 @@ def change_bankcard(request):
             card = user.user_bankcard.first()
             return render(request, 'account/account_bankcard.html', {"card":card, 'banks':banks})
 
+@login_required_ajax
+@transaction.atomic
+def bind_zhifubao(request):
+    result={'code':-1}
+    if not request.is_ajax():
+        raise Http404
+    user = request.user
+    zhifubao = request.POST.get('zhifubao', '')
+    zhifubao_real_name = request.POST.get("zhifubao_real_name", '')
+    telcode = request.POST.get("code", '')
+    if user.zhifubao != '':
+        ret = verifymobilecode(user.mobile,telcode)
+        if ret != 0:
+            result['code'] = '2'
+            if ret == -1:
+                result['res_msg'] = u'请先获取手机验证码'
+            elif ret == 1:
+                result['res_msg'] = u'手机验证码输入错误！'
+            elif ret == 2:
+                result['res_msg'] = u'手机验证码已过期，请重新获取'
+            return JsonResponse(result)
+    user.zhifubao = zhifubao
+    user.zhifubao_real_name = zhifubao_real_name
+    user.save(update_fields=['zhifubao', 'zhifubao_real_name'])
+    result['code'] = 0
+
 @login_required
 def money(request):
     template = 'account/m_money.html' if request.mobile else 'account/money.html'
@@ -774,12 +800,16 @@ def withdraw(request):
         #     result['code'] = -1
         #     result['res_msg'] = u'请先绑定支付宝！'
         #     return JsonResponse(result)
-        card = user.user_bankcard.first()
-        if not card:
+        if withdraw_amount >= 50000:
+            card = user.user_bankcard.first()
+            if not card:
+                result['code'] = -1
+                result['res_msg'] = u'请先绑定银行卡！'
+                return JsonResponse(result)
+        elif user.zhifubao == '':
             result['code'] = -1
-            result['res_msg'] = u'请先绑定银行卡！'
+            result['res_msg'] = u'请先绑定支付宝账号！'
             return JsonResponse(result)
-
         try:
             with transaction.atomic():
                 event = WithdrawLog.objects.create(user=user, amount=withdraw_amount, audit_state='1')

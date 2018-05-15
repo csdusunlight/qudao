@@ -36,6 +36,7 @@ urlpatterns = [
     url(r'^award_logs/$', 'wafuli_admin.views.award_logs', name='award_logs'),
     
     url(r'^batch_withdraw/$', 'wafuli_admin.views.batch_withdraw', name='batch_withdraw'),
+    url(r'^withdraw_autoaudit/$', 'wafuli_admin.views.admin_withdraw_autoaudit', name='withdraw_autoaudit'),
     
     url(r'^admin_merchant_project/$', merchant_admin.admin_merchant_project, name='admin_merchant_project'),
     url(r'^admin_merchant_investlog/$', merchant_admin.admin_merchant_investlog, name='admin_merchant_investlog'),

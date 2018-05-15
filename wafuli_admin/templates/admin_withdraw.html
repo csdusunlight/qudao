@@ -8,11 +8,11 @@
   });
   var data = '<table width="100%"><tr><th>QQ</th><th>手机号</th><th>开户行</th><th>开户行姓名</th>'+
   '<th>银行卡号</th><th>申请提现金额</th><th>申请时间</th>'+
-  '<th>处理</th><th>拒绝原因</th>'+
+  '<th>处理</th><th>自动审核失败原因</th>'+
   '</tr>[results]<tr><td>{qq_number}</td><td>{mobile}</td><td>{bank}</td>'+
   '<td>{real_name}</td><td>{card_number}</td><td>{amount}</td><td>{submit_time}</td>'+
   '<td id="item_{id}"><a class="fyin" onclick="pass({id})">接受'+
-  '</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td><td>{audit_reason}</td></tr>[/results]</table>';
+  '</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td><td>{except_info}</td></tr>[/results]</table>';
   var data2 = '<table width="100%"><tr><th>QQ</th><th>手机号</th><th>开户行</th><th>开户行姓名</th>'+
   '<th>银行卡号</th><th>申请提现金额</th><th>申请时间</th>'+
   '<th>处理人</th><th>处理时间</th><th>拒绝原因</th>'+
@@ -269,7 +269,31 @@
                 }
             });
        }
-   })
+   });
+    class BreakSignal { }
+    $('#audit_zhifubao').click(function(){
+    	Promise.resolve($.ajax('/Admin/withdraw_autoaudit/')).
+    	then(function(value){
+    	   var is_sure = confirm(`共${value.count}笔，${value.sum}元，确定通过支付宝转账？`);
+    	   if (is_sure == true) {
+    	   	   return $.ajax({url:'/Admin/withdraw_autoaudit/',type:'post'});
+    	   }
+    	   else{
+    		   throw  new BreakSignal();
+    	   }
+    	}).then(function(value){
+    		console.log('正在处理，可能需要一分钟的时间，请稍后刷新查看结果');
+    	})
+    	.catch(function(error){
+            // promise chain中出现异常的时候会被调用
+            if(error instanceof BreakSignal){
+            	
+            }
+            else{
+            	alert(error.statusText);
+            }
+        });
+    });
  });
 </script>
 {% endblock js %}
@@ -349,6 +373,7 @@
    <a id="input_clone" class="input-clone">选择文件</a>
    <p class="hint-box">已选择表格：<b id="hint" class="hint">无</b></p>
    <input id="import" type="button" value="导入" />
+   <input style="float: right;" id="audit_zhifubao" type="button" value="一键审核（支付宝）" />
    <input style="float: right;" id="withdraw" type="button" value="一键提现" />
  </div>
 </form>

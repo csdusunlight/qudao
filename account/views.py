@@ -683,6 +683,7 @@ def bind_zhifubao(request):
     zhifubao = request.POST.get('zhifubao', '')
     zhifubao_real_name = request.POST.get("zhifubao_real_name", '')
     telcode = request.POST.get("code", '')
+    print user.zhifubao
     if user.zhifubao != '':
         ret = verifymobilecode(user.mobile,telcode)
         if ret != 0:

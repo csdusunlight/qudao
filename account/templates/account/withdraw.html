@@ -52,7 +52,7 @@
 
         /* 未绑定银行卡 */
 
-        .no_bindCard>span:nth-child(2) {
+        .bind_card {
             color: #91c11d;
             text-decoration: underline;
             margin-left: 36px;
@@ -108,22 +108,17 @@
             width: 1030px;
             min-height: 700px;
             background: white;
-        }
-
-        /* 更换、绑定银行卡 */
-
-        .bindCardBox {
             padding: 18px 24px;
             color: #666666;
             display: none;
         }
 
-        .bindCardBox>span {
+        .back_bindCard {
             font-size: 18px;
             cursor: pointer;
         }
 
-        .bindCardBox>span:hover {
+        .back_bindCard:hover {
             color: #91c11d;
         }
 
@@ -168,8 +163,57 @@
             color: white;
             margin: 30px 200px
         }
-
-        /* 更换、绑定支付宝盒子 */
+        /* 更换银行卡盒子 */
+        .change_bankBox{
+            width: 1030px;
+            min-height: 700px;
+            background: white;
+            padding: 18px 24px;
+            color: #666666;
+            position: relative;
+            display: none;
+        }
+        .back_changeBox{
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .back_changeBox:hover{
+            color: #91c11d;
+        }
+        .changeCardInfoBox{
+            margin: 30px 30px 30px 10px;
+        }
+        .changeCardInfoBox > p{
+            color: #91c11d;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .c_codeTxt{
+            width: 222px !important;
+            height: 50px !important;
+            border-radius: 10px 0 0 10px; 
+        }
+        .c_code{
+            width: 130px;
+            height: 50px;
+            background: #e5e5e5;
+            position: absolute;
+            left: 360px;
+            border-radius: 0 10px 10px 0;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+        .change_CardBtn{
+            width: 100px;
+            height: 45px;
+            border-radius: 10px;
+            background: #91c11d;
+            border: none;
+            color: white;
+            margin: 30px 200px
+        }
+        /* 更换支付宝盒子 */
 
         .change_bindAlipayBox {
             padding: 18px 24px;
@@ -440,21 +484,179 @@
                         "zhifubao_real_name":real_name
                     },
                     success: function (ret) {
-                        if (ret.count === 0) {
+                        if (ret.code === 0) {
                             $.prompt({
                                 "Content":"绑定成功"
                             });
                         }
                         bind_zhifubao = '';
                         real_name = '';
+                        location.reload();
                     },
                     error: function (xhr, textStatus) {
                         console.log('错误:' + xhr.responseText);
                     }
                 });
             })
-            
+            // 更换支付宝
+            $(".change_alipay").click(function () { 
+                $(".RightCont1").hide();
+                $(".change_bindAlipayBox").show();
+            })
+            $(".zhifubao_back").click(function () { 
+                $(".RightCont1").show();
+                $(".change_bindAlipayBox").hide();
+             })
+             $(".change_bindAlipayBtn").click(function () { 
+                var c_zhifubao = $(".alipayAccount").val();
+                var c_realName = $(".realName").val();
+                var c_code = $(".codeIpt").val();
+                if(!c_code || !c_zhifubao || !c_realName){
+                    $.prompt({
+                        "Content":"输入框不能为空！"
+                })
+                return;
+                }
+                // $.ajax({
+                //     url: "",
+                //     dataType:"json",
+                //     type:'POST',
+                //     data : {
+                //         'zhifubao': c_zhifubao,
+                //         'zhifubao_real_name': c_realName,
+                //         'code':c_code,
+                //     },
+                //     success:function(ret){
+                        
+                //     },
+                //     error:function(){
+                //         alert("请检查网络连接");
+                //     }
+                // });
+            })
+            // 银行卡绑定切换页面
+            $(".bind_card").click(function () { 
+                $(".RightCont1").hide();
+                $(".bindCardBox").show();
+             })
+            $(".back_bindCard").click(function () { 
+                $(".RightCont1").show();
+                $(".bindCardBox").hide();
+             });
+             //绑定银行卡
+            $(".bindCardBtn").click(function () { 
+                 var bank_name = $(".selectBox option:selected").val();//获取select option的值
+                 var branchBank_name = $(".branchBank").val();
+                 var userName = $(".cardName").val();
+                 var cardNum = $(".cardNum").val();
+                 console.log(bank_name,branchBank_name,userName,cardNum)
+                 if(!bank_name || !branchBank_name || !userName || !cardNum){
+                    $.prompt({
+                        "Content":"输入框不能为空！"
+                    });
+                    return;
+                 }
+                //银行卡正则表达式
+                var cardNum_regx = /^[\d\s]+$/;
+                if (!cardNum_regx.test(cardNum)) {
+                    $.prompt({
+                        "Content":"请输入正确的银行卡号"
+                    });
+                    return;
+                }
+                //持卡人正则表达式（只能是中文）
+                var userName_regx = /^[\u2E80-\u9FFF]+$/;
+                if(!userName_regx.test(userName)){
+                    $.prompt({
+                        "Content":"请输入正确的姓名"
+                    })
+                    return;
+                }
+                //银行支行正则表达式
+                var branchBank_regx = /^[\u2E80-\u9FFF]+$/;
+                if(!branchBank_regx.test(branchBank_name)){
+                    $.prompt({
+                        "Content":"请输入正确的支行（仅限汉字）"
+                    })
+                    return;
+                }
+                //银行卡绑定ajax
+                var post_url = "{%url 'bind_bankcard' %}";
+                $.ajax({
+                    url: post_url,
+                    dataType:"json",
+                    type:'POST',
+                    data : {
+                        'bank': bank,
+                        'subbranch': branchBank_name,
+                        'real_name':userName,
+                        'card_number':cardNum,
+                    },
+                    success:function(ret){
+                        if(ret.code==1){
+                            $.prompt({
+                                "Content":"请重新登陆"
+                            })
+                        }else if(ret.code==0){
+                            $.prompt({
+                                "Content":"银行卡绑定成功"
+                            })
+                        }
+                    },
+                    error:function(){
+                        alert("请检查网络连接");
+                    }
+                });
+            })
+            // 更换银行卡
+            $(".change_bankCard").click(function () { 
+                $(".RightCont1").hide();
+                $(".change_bankBox").show();
+             });
+            $(".back_changeBox").click(function () { 
+                $(".RightCont1").show();
+                $(".change_bankBox").hide();
+             })
+            $(".change_CardBtn").click(function () { 
+                alert(123)
+             }) 
+
         });
+        //获取验倒计时证码
+        var countdown=60; 
+        function settime(obj) { 
+            console.log('获取验证码')
+            if (countdown == 0) { 
+                obj.removeAttribute("disabled");    
+                obj.value="获取验证码"; 
+                countdown = 60; 
+                return;
+            } else { 
+                obj.setAttribute("disabled", true); 
+                obj.value="重新发送(" + countdown + ")"; 
+                countdown--; 
+            } 
+        setTimeout(function() { 
+                settime(obj) 
+            },1000) 
+        }
+        //更换银行卡倒计时
+        function c_settime(obj) { 
+            console.log('更换银行卡验证码')
+            if (countdown == 0) { 
+                obj.removeAttribute("disabled");    
+                obj.value="获取验证码"; 
+                countdown = 60; 
+                return;
+            } else { 
+                obj.setAttribute("disabled", true); 
+                obj.value="重新发送(" + countdown + ")"; 
+                countdown--; 
+            } 
+        setTimeout(function() { 
+            c_settime(obj) 
+            },1000) 
+        }
     </script>
 </head>
 
@@ -485,7 +687,7 @@
                                 <!-- 未绑定银行卡 -->
                                 <div class="no_bindCard">
                                     <span>银行卡绑定</span>
-                                    <span>未绑定</span>
+                                    <span class="bind_card">未绑定</span>
                                 </div>
                             </div>
                             <!-- 已绑定支付宝 -->
@@ -494,7 +696,7 @@
                                     <span >支付宝绑定</span>
                                     <span style="margin-left: 62px">{{user.zhifubao}}</span>
                                     <span style="margin-left: 30px">{{user.zhifubao_real_name}}</span>
-                                    <span class="change Alipay">更换</span>
+                                    <span class="change change_alipay">更换</span>
                                 </div>
                                 <div class="no_bindAlipay">
                                     <span>支付宝绑定</span>
@@ -529,31 +731,68 @@
                     </div>
                 </div>
             </div>
-            <!-- 更换、绑定银行卡盒子 -->
+            <!-- 绑定银行卡盒子 -->
             <div class="bindCardBox">
-                <span><返回</span>
-                    <div class="bankCardInfoBox">
-                        <p>银行卡绑定</p>
-                        <div class="info">
-                            <span class="itemTxt">请选择银行</span>
-                            <select class="selectBox">
-                                <option value="0">----</option>
-                            </select>
-                        </div>
-                        <div class="info">
-                            <span class="itemTxt">请填写支行</span>
-                            <input class="itemIpt branchBank" type="text" maxlength="15" />
-                        </div>
-                        <div class="info">
-                            <span class="itemTxt">持卡人姓名</span>
-                            <input class="itemIpt cardName" type="text" />
-                        </div>
-                        <div class="info">
-                            <span class="itemTxt">请输入卡号</span>
-                            <input class="itemIpt cardNum" type="text" />
-                        </div>
-                        <button class="bindCardBtn">确定</button>
+                <span class="back_bindCard"><返回</span>
+                <div class="bankCardInfoBox">
+                    <p>银行卡绑定</p>
+                    <div class="info">
+                        <span class="itemTxt">请选择银行</span>
+                        <select id='bank' class="selectBox">
+                            <option value ="0">请选择相应的开户行</option>
+                            {% for x in banks %}
+                            <option value="{{x.0}}">{{x.1}}</option>
+                            {%endfor%}
+                        </select>
                     </div>
+                    <div class="info">
+                        <span class="itemTxt">请填写支行</span>
+                        <input class="itemIpt branchBank" type="text" maxlength="15" />
+                    </div>
+                    <div class="info">
+                        <span class="itemTxt">持卡人姓名</span>
+                        <input class="itemIpt cardName" type="text" />
+                    </div>
+                    <div class="info">
+                        <span class="itemTxt">请输入卡号</span>
+                        <input class="itemIpt cardNum" maxlength="15" type="text" />
+                    </div>
+                    <button class="changeCardBtn">确定</button>
+                </div>
+            </div>
+            <!-- 更换银行卡盒子 -->
+            <div class="change_bankBox">
+                <span class="back_changeBox"><返回</span>
+                <div class="changeCardInfoBox">
+                    <p>更换银行卡</p>
+                    <div class="info">
+                        <span class="itemTxt">请选择银行</span>
+                        <select id='bank' class="selectBox">
+                            <option value ="0">请选择相应的开户行</option>
+                            {% for x in banks %}
+                            <option value="{{x.0}}">{{x.1}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                    <div class="info">
+                        <span class="itemTxt">请填写支行</span>
+                        <input class="itemIpt c_branchBank" type="text" />
+                    </div>
+                    <div class="info">
+                        <span class="itemTxt">持卡人姓名</span>
+                        <input class="itemIpt c_cardName" type="text" />
+                    </div>
+                    <div class="info">
+                        <span class="itemTxt">请输入卡号</span>
+                        <input class="itemIpt c_cardNum" maxlength="15" type="text" />
+                    </div>
+                    <div class="info">
+                        <span class="itemTxt" style="margin-left: 30px">验证码</span>
+                        <input type="text" class="itemIpt c_codeTxt"/>
+                        <input type="button" class="c_code" value="获取验证码" onclick="c_settime(this)" /> 
+                    </div>
+                    <button class="change_CardBtn">确定</button>
+                </div>
             </div>
             <!-- 更换支付宝盒子 -->
             <div class="change_bindAlipayBox">
@@ -572,7 +811,7 @@
                         <span class="itemTxt" style="margin-left: 62px;">验证码</span>
                         <div class="codeBox">
                             <input class="codeIpt" type="itemTxt">
-                            <button class="code" onClick="settime(this)">获取验证码</button>
+                            <input type="button" class="code" value="获取验证码" onclick="settime(this)" /> 
                         </div>
                     </div>
                     <button class="change_bindAlipayBtn">确定</button>

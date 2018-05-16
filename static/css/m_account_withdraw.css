@@ -14,7 +14,7 @@ body{
 	border-radius: 5px;
 	background: white;
 	margin: 0.3rem auto;
-	display: flex;
+	display: flex !important;
 	justify-content: space-around;
 	align-items: center;
 	box-shadow: 2px 2px 2px #dcdbdc;
@@ -95,7 +95,7 @@ body{
 	border-radius: 5px;
 	background: white;
 	margin: 0.3rem auto;
-	display: flex;
+	display: flex !important;
 	justify-content: space-around;
 	align-items: center;
 	box-shadow: 3px 3px 3px #dcdbdc;
@@ -127,7 +127,7 @@ body{
 	border: none;
 }
 .submit{
-	width: 7.2rem;
+	width: 7rem;
 	height: 1rem;
 	background: #91c11d;
 	color: white;

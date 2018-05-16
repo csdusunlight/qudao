@@ -82,57 +82,45 @@
         <h1 class="mui-title">提现</h1>
     </header>
     <div class="mui-content">
-        <!-- 已绑定银行卡盒子 -->
-        <div class="bindBankCardBox">
-           <div class="imgBox">
-                {%if card.bank %}
-                <img src="/static/images/{{card.bank}}.png" />
-                {%endif%}
-           </div>
-           <div class="bankBox">
-                <div class="bank_name">
-                    <p><span>{{card.get_bank_display}}</span></p>
-                </div>
-                <div class="bank_num">
-                    <p><span><a>{{card.card_number}}</a></span></p>
-                </div>
-           </div>
-           <div class="operateBox">
-                <p>修改></p>
-           </div>
-        </div>
         <!-- 未绑定银行卡盒子 -->
+        
         <div class="no_bindBankCardBox">
             <div class="no_bindImgBox">
                 <img src="/static/images/no_bindCard.png" />
             </div>
             <div class="bankBox">
                 <div class="bank_name">
-                   <p class="addCard">点击添加银行卡</p>
+                    <p class="addCard">点击添加银行卡</p>
                 </div>
             </div>
             <div class="operateBox">
                 <p class="operate">></p>
             </div>
         </div>
-        <!-- 已绑定支付宝盒子 -->
-        <div class="bindAlipayBox">
-            <div class="imgBox1">
-                <img src="/static/images/zfbLogo.png" />
+        
+        <!-- 已绑定银行卡盒子 -->
+        
+        <div class="bindBankCardBox" id="changeCard">
+            <div class="imgBox">
+                    <!-- {%if card.bank %} -->
+                    <img src="/static/images/{{card.bank}}.png" />
+                    <!-- {%endif%} -->
             </div>
             <div class="bankBox">
                 <div class="bank_name">
-                    <p><span>支付宝（小明明）</span></p>
+                    <p><span>{{card.get_bank_display}}</span></p>
                 </div>
                 <div class="bank_num">
-                    <p><span><a>18570661412</a></span></p>
+                    <p><span><a>{{card.card_number}}</a></span></p>
                 </div>
             </div>
             <div class="operateBox">
-                <p>修改></p>
+                <a href="changeCard" class="mui-btn mui-btn-primary mui-btn-block mui-btn-outlined">修改></a>
             </div>
         </div>
+       
         <!-- 未绑定支付宝盒子 -->
+       
         <div class="no_bindAlipayBox">
             <div class="no_bindImgBox">
                 <img src="/static/images/no_bindZfb.png" />
@@ -146,16 +134,49 @@
                 <p class="operate">></p>
             </div>
         </div>
+        <!-- 已绑定支付宝盒子 -->
+        
+        <div class="bindAlipayBox">
+            <div class="imgBox1">
+                <img src="/static/images/zfbLogo.png" />
+            </div>
+            <div class="bankBox">
+                <div class="bank_name">
+                    <p><span>支付宝（{{user.zhifubao_real_name}}）</span></p>
+                </div>
+                <div class="bank_num">
+                    <p><span><a>{{user.zhifubao}}</a></span></p>
+                </div>
+            </div>
+            <div class="operateBox">
+                <p>修改></p>
+            </div>
+        </div>
+        
         <!-- 可提现金额 -->
         <p style="margin: 0 0.5rem 0.2rem">可提现金额<span style="color: RGB(149,194,38);">{{user.balance}}</span>元</p>
         <div class="amountBox">
             <p style="margin-left: 0.3rem;">提现金额</p>
-            <input type="text" placeholder="输入的提现金额大于10元" />
+            <input id="amontIpt" type="text" placeholder="输入的提现金额大于10元" />
             <p>元</p>
         </div>
         <button class="submit">确定</button>
-        
-        
+        <!-- 弹出层 -->
+        <div id="picture" class="mui-popover mui-popover-action mui-popover-bottom">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <a href="#">拍照或录像</a>
+                </li>
+                <li class="mui-table-view-cell">
+                    <a href="#">选取现有的</a>
+                </li>
+            </ul>
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <a href="#picture"><b>取消</b></a>
+                </li>
+            </ul>
+        </div>
         <!-- <div id="bank_card" class="zhanghu">
                 <div class="msg clearfix">
           {%if card.bank %}
@@ -210,9 +231,65 @@
     <script src="{% static 'js/mui.min.js' %}"></script>
     <!--弹窗部分-->
     <script type="text/javascript" charset="utf-8">
-            // mui.init({
-            //     swipeBack: true //启用右滑关闭功能
-            // });
+            mui.init({
+                swipeBack: true //启用右滑关闭功能
+            });
+            var balance = {{user.balance}};
+            //提现功能
+            var withdraw_url = "{%url 'account_withdraw' %}";
+            document.querySelector(".submit").addEventListener('tap',function(){
+                var amount = document.getElementById("amontIpt").value;
+                console.log(amount);
+                amount = parseInt(amount);
+                if (balance < amount) {
+                    mui.alert("提现金额不能大于可以现金额")
+                    return;
+                }else if(isNaN(amount)){
+                    mui.alert('提现数量必须为整数！');
+                    return;
+                }else if (isNaN(amount) || (amount<10)) {
+                    mui.alert('提现金额应为大于等于为10的整数！');
+                    return;
+                }
+                var confirm_str = "您提现的金额为人民币" + amount + "元，确认？"
+                var btnArray = ['否', '是'];
+                mui.confirm(confirm_str,'提现确认',btnArray,function (e) { 
+                    if(e.index == 1){
+                        mui.ajax({
+                            url: withdraw_url,
+                            dataType:"json",
+                            type:'POST',
+                            data : {
+                                amount: amount,
+                                
+                            },
+                            success:function(ret){
+                                if (ret.code == 0) {
+                                    mui.alert('申请提现成功');
+                                } else {
+                                    mui.alert(ret.res_msg);
+                                }
+                            },
+                            error:function(){
+                                alert("请检查网络连接");
+                            }
+                        });
+                    }else{
+                        console.log(222)
+                    }
+                 })
+            });
+            //更换银行卡
+            document.getElementById("changeCard").addEventListener('tap',function () { 
+                mui.alert("更换~")
+
+             })
+
+
+
+
+
+
             // var withdraw_url = "{%url 'account_withdraw' %}";
             // document.getElementById("Btn").addEventListener('tap', function() {
             //     var amount = document.getElementById("with_amount").value;

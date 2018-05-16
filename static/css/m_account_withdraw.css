@@ -126,12 +126,20 @@ body{
 	margin-right: 0.5rem;
 	border: none;
 }
+.desc{
+	padding: 0.3rem 0.5rem;
+	line-height: 0.5rem;
+}
+.desc > p{
+	color: #007acc;
+	font-size: 14px;
+}
 .submit{
 	width: 7rem;
 	height: 1rem;
 	background: #91c11d;
 	color: white;
-	margin: 0.3rem auto;
+	margin: 0.1rem auto;
 	border-radius: 10px;
 }
 /* 未绑定支付宝盒子 */

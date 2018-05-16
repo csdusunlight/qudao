@@ -700,6 +700,7 @@ def bind_zhifubao(request):
     user.zhifubao_real_name = zhifubao_real_name
     user.save(update_fields=['zhifubao', 'zhifubao_real_name'])
     result['code'] = 0
+    return JsonResponse(result)
 
 @login_required
 def money(request):

@@ -28,7 +28,9 @@
             font-size: 15px;
             border-bottom: 10px solid #f5f5f5;
         }
-
+        .Cash-input i {
+            margin-top: 5px;
+        }
         .topBox>span {
             display: inline-block;
             color: #4d4d4d;
@@ -41,7 +43,6 @@
             margin-top: -4px;
             vertical-align: middle;
         }
-
         .change {
             font-size: 14px;
             text-decoration: underline;
@@ -84,11 +85,14 @@
         }
 
         .tips>span:nth-child(1) {
-            width: 17px;
-            height: 17px;
+            display: inline-block;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             background: #ea5b59;
             color: #fff;
+            line-height: 18px;
+            text-align: center;
         }
 
         .tips>span:nth-child(2) {
@@ -348,7 +352,6 @@
 
         .switch.True {
             background-color: #91C11D;
-            /*border: 1px solid #91C11D;*/
         }
 
         .switch.True:before {
@@ -356,14 +359,15 @@
         }
     </style>
     <script type="text/javascript">
+        var zhifubao;
+        var cardNum;
         var coderefresh_url = "{% url 'captcha-refresh' %}";
         var phoneNum = "{{user.mobile}}";//当前用户手机号
-        var zhifubao;
-        var cardNumber;
+        
         var change_bankcard = "change_bankcard";
         var balance = {{user.balance}};
         console.log("当前用户手机号：",phoneNum);
-        var get_code_url = "{% url 'phoneImageV' %}";//获取验证码url
+        var get_code_url = "{% url 'phoneImageV' %}";//获取手机验证码url
         $.ajaxSetup({
             data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
         });
@@ -371,12 +375,6 @@
         function isadd(obj) {        //是否主页显示调用函数
             var flag = $(obj).data('isadd');
             console.log(flag)
-            if (zhifubao == '' || cardNumber == '') {
-                $(".switch").addClass("False");
-                $.prompt({
-                    "Content":"开启自动提现需要银行卡和支付宝同时绑定！"
-                })
-            } else if(zhifubao && cardNumber){
                 if (flag == 'True') {
                     $.ajax({
                         url: '/restapi/users/' + {{ user.id }} + '/',
@@ -395,6 +393,7 @@
                         }
                     });
                 } else {
+                    if (zhifubao && cardNum) {
                         $.ajax({
                             url: '/restapi/users/' + {{ user.id }} + '/',
                             dataType: "json",
@@ -410,37 +409,45 @@
                             error: function() {
                                 alert("请检查网络连接");
                             }
-                    });
+                        });
+                    }else{
+                       $.prompt({
+                           "Content":"开启自动提现必须同时绑定银行卡与支付宝！"
+                       })
+                    }
+
                 }
-            }
-}
+            // }
+        }
 
         $(function () {
+
+            zhifubao = $(".topBox").data("zhifubao");
+            cardNum = $(".topBox").data("card");
+            console.log("支付宝",zhifubao);
+            console.log("银行卡号码",cardNum)
             var amount;
             $('.back-a9').toggleClass("on");
             $("#submit").click(function () {
-                if(balance < amount){
-                    $.prompt({
-                        "Content":"提现金额不能大于余额！"
-                    })
-                    return;
-                }
                 amount = $("#withdraw_amount").val();
                 amount = parseFloat(amount, 0);
                 if (isNaN(amount) || (amount < 10)) {
                     alert("提现金额最小为10元！");
                     return;
                 }
+                if(balance < amount){
+                    $.prompt({
+                        "Content":"提现金额不能大于余额！"
+                    })
+                    return;
+                }
                 var bank_html;
                 var zhifubao_html;
-                $(".rmb_with").text(amount)
                 if (amount >= 50000) {
-                   bank_html = `<p>您好，您本次提现现金为
-                            <font class="rmb_with"></font>元，预计将在24小时内到达您的<span style="color:blue;">银行卡</span>内，如遇节假日时间将顺延。`
+                   bank_html = `<p>您好，您本次提现现金为<span style="color:blue;">${amount}</span>元，预计将在24小时内到达您的<span style="color:blue;">银行卡</span>内，如遇节假日时间将顺延。`
                     $(".popup__item").html(bank_html);
                 } else if(amount < 50000){
-                    zhifubao_html = `<p>您好，您本次提现现金为
-                            <font class="rmb_with"></font>元，预计将在24小时内到达您的<span style="color:blue;">支付宝</span>内，如遇节假日时间将顺延。`
+                    zhifubao_html = `<p>您好，您本次提现现金为<span style="color:blue;">${amount}</span>元，预计将在24小时内到达您的<span style="color:blue;">支付宝</span>内，如遇节假日时间将顺延。`
                     $(".popup__item").html(zhifubao_html);
                 }
                 $('.popup.m-withdraw').addClass('in');
@@ -476,24 +483,6 @@
                 $(this).parent().parent().parent().parent().hide();
             });
 
-            // 根据zhifubao是否存在来渲染支付宝是否绑定
-            zhifubao = $(".AlipayBox").attr("data-zhifubao");
-            if(zhifubao === ''){
-                $(".no_bindAlipay").css("display","block");
-                $(".bindAlipay").css("display","none");
-            }else if(zhifubao){
-                $(".no_bindAlipay").css("display","none");
-                $(".bindAlipay").css("display","block");
-            }
-            //根据cardNumber是否存在来渲染银行卡是否绑定
-            cardNumber = $(".cardBox").attr("data-card");
-            if (cardNumber === '') {
-                $(".no_bindCard").css("display","block");
-                $(".bindCard").css("display","none");
-            }else if(cardNumber){
-                $(".no_bindCard").css("display","none");
-                $(".bindCard").css("display","block");
-            }
             //支付宝绑定页面出现
             $(".bind_zhifubao").click(function () { 
                 $(".RightCont1").hide();
@@ -507,36 +496,50 @@
 
             //绑定支付宝Ajax
              $(".bindAlipayBtn").click(function () { 
-                var bind_zhifubao = $(".zhifubao").val();
+                var zhifubao = $(".zhifubao").val();
                 var real_name = $(".bind_real_name").val();
-                if (!bind_zhifubao || !real_name) {
+                var zhifubaoRegx = /^0?(13[0-9]|15[012356789]|18[0123456789]|14[0123456789]|17[0123456789])[0-9]{8}$/;
+                if (!zhifubao || !real_name) {
                     $.prompt({
                         "Content":"输入框不能为空！"
                     });
                     return;
                 }
-                //ajax
+
+                if (!zhifubaoRegx.test(zhifubao)){
+                    $.prompt({
+                        "Content":"请输入正确的格式！"
+                    })
+                    return;
+                } 
                 $.ajax({
                     url: '/account/bind_zhifubao/',
-                    type: "post", //提交方式post
+                    type: "post", //提交方式get
                     async: true, //是否同步
                     timeout: 5000, //超出时间
                     dataType: 'json', //返回数据格式Json
                     data: {
-                        "zhifubao": bind_zhifubao,
+                        "zhifubao": zhifubao,
                         "zhifubao_real_name":real_name
                     },
                     success: function (ret) {
-                        if (ret.code === 0) {
-                            $.prompt({
-                                "Content":"绑定成功"
-                            });
+                        console.log(ret)
+                        if(ret.code==1){
+                            alert("请重新登录！")
+                            window.location.href = ret.url;
                         }
-                        bind_zhifubao = '';
-                        real_name = '';
-                        window.location.reload()
+                        else if(ret.code==0){
+                            alert("绑定成功")
+                             window.location.reload();
+                        }
+                        else {
+                            alert(ret.res_msg);
+                        }
                     },
                     error: function (xhr, textStatus) {
+                        $.prompt({
+                            "Content":"出错了"
+                        })
                         console.log('错误:' + xhr.responseText);
                     }
                 });
@@ -580,17 +583,15 @@
                             $.prompt({
                                 "Content":"更换成功！"
                             })
-                            c_zhifubao = '';
-                            c_realName = '';
-                            c_code = '';
-                            window.location.reload()
+                             window.location.reload()
                         }
                         else {
                             alert(ret.res_msg);
                         }
                     },
                     error:function(){
-                        alert("请检查网络连接");
+                        console.log("请检查网络连接");
+                        window.location.reload()
                     }
                 });
             })
@@ -645,7 +646,7 @@
                 $.ajax({
                     url: '/account/bind_bankcard/',
                     dataType:"json",
-                    type:'POST',
+                    type:'GET',
                     data : {
                         'bank': bank_name,
                         'subbranch': branchBank_name,
@@ -721,10 +722,9 @@
                     })
                     return;
                 }
-                //ajax请求
-                var post_url = "{%url 'bind_bankcard' %}";
+                // 更换银行卡ajax请求 初次绑定银行卡get 更换银行卡post
                 $.ajax({
-                    url: post_url,
+                    url: '/account/bind_bankcard/',
                     dataType:"json",
                     type:'POST',
                     data : {
@@ -858,40 +858,47 @@
                 <div class="binding" style=" min-height:515px">
                     <div class="Binding-Top">
                         <!-- <h2>提现</h2> -->
-                        <div class="topBox">
+                        <div class="topBox" data-card="{{card.card_number}}" data-zhifubao="{{user.zhifubao}}">
                             <!-- 已绑定银行卡 -->
-                            <div class="cardBox" data-card="{{card.card_number}}">
-                                <div class="bindCard">
-                                    <span>银行卡绑定</span>
-                                    <span style="margin-left: 62px">
-                                        <img src="/static/images/{{card.bank}}.png" />
-                                        <b style="font-size: 20px;color: #4d4d4d;">{{card.get_bank_display}}</b>
-                                    </span>
-                                    <span style="margin-left: 30px">{{card.card_number}}</span>
-                                    <span style="margin-left: 30px">{{card.real_name}}</span>
-                                    <span class="change change_bankCard">更换</span>
-                                </div>
+                            <div class="cardBox" >
+                                {% if not card.card_number %} 
                                 <!-- 未绑定银行卡 -->
                                 <div class="no_bindCard">
                                     <span>银行卡绑定</span>
                                     <span class="bind_card">未绑定</span>
                                 </div>
+                                {% else %}
+                                <div class="bindCard">
+                                    <span>银行卡绑定</span>
+                                    <span style="margin-left: 62px">
+                                        <img src="/static/images/{{card.bank}}.png" />
+                                        <b style="font-size: 18px;color: #4d4d4d;">{{card.get_bank_display}}</b>
+                                    </span>
+                                    <span style="margin-left: 30px">{{card.card_number}}</span>
+                                    <span style="margin-left: 30px">{{card.real_name}}</span>
+                                    <span class="change change_bankCard">更换</span>
+                                </div>
+                                {% endif %}
                             </div>
-                            <!-- 已绑定支付宝 -->
-                            <div class="AlipayBox" data-zhifubao="{{user.zhifubao}}">
+                            <div class="AlipayBox">
+                                <!-- 未绑定支付宝 -->
+                                {% if not user.zhifubao %} 
+                                <div class="no_bindAlipay">
+                                    <span>支付宝绑定</span>
+                                    <span class="bind_zhifubao">未绑定</span>
+                                </div>
+                                {% else %}
+                                <!-- 已绑定支付宝 --> 
                                 <div class="bindAlipay">
                                     <span >支付宝绑定</span>
                                     <span style="margin-left: 62px">{{user.zhifubao}}</span>
                                     <span style="margin-left: 30px">{{user.zhifubao_real_name}}</span>
                                     <span class="change change_alipay">更换</span>
                                 </div>
-                                <div class="no_bindAlipay">
-                                    <span>支付宝绑定</span>
-                                    <span class="bind_zhifubao">未绑定</span>
-                                </div>
+                                {% endif %}
                             </div>
                             <div class="tips">
-                                <span>！</span>
+                                <span>!</span>
                                 <span>注：单笔提现金额大于5万时，将提现至已绑定银行卡；单笔提现金额小于5万时，将提现至已绑定支付宝，当未绑定相应账号时，</span>
                                 <span>将提现失败！</span>
                             </div>

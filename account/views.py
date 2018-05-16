@@ -530,6 +530,7 @@ def security(request):
 def bankcard(request):
     user = request.user
     card = user.user_bankcard.first()
+    print card
     banks = BANK
     template = 'account/m_account_bankcard.html' if request.mobile else 'account/account_bankcard.html'
     return render(request, template, {"card":card, 'banks':banks})
@@ -697,6 +698,7 @@ def bind_zhifubao(request):
     user.zhifubao = zhifubao
     user.zhifubao_real_name = zhifubao_real_name
     user.save(update_fields=['zhifubao', 'zhifubao_real_name'])
+    print 'sdfsffdfdssfd', user.zhifubao
     result['code'] = 0
     return JsonResponse(result)
 
@@ -779,6 +781,7 @@ def withdraw(request):
         card = user.user_bankcard.first()
         template = 'account/m_withdraw.html' if request.mobile else 'account/withdraw.html'
         banks = BANK
+        print user.mobile
         return render(request, template,{"card":card, "banks":banks})
     elif request.method == 'POST':
         user = request.user

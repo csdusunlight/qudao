@@ -109,9 +109,10 @@ class InvestlogDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     def perform_update(self, serializer):
         if serializer.validated_data.has_key('invest_mobile'):
             project = serializer.instance.project
+            submit_type = serializer.submit_type
             id = serializer.instance.id
             invest_mobile = serializer.validated_data['invest_mobile']
-            if not project.is_multisub_allowed:
+            if not project.is_multisub_allowed or submit_type=='1':
                 if project.company is None:
                     queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project=project)
                 else:

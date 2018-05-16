@@ -925,7 +925,11 @@ def admin_withdraw(request):
 def admin_withdraw_autoaudit(request):
     admin_user = request.user
     if request.method == "GET":
-        raise Http404
+        ret = {}
+        dic = WithdrawLog.objects.filter(audit_state='1', amount__lt=50000).aggregate(count=Count('id'), sum=Sum('amount'))
+        ret['count'] = dic['count'] or 0
+        ret['sum'] = dic['sum'] or 0
+        return JsonResponse(ret)
     if request.method == "POST":
         batch_list = []
         withlist = WithdrawLog.objects.filter(audit_state='1', amount__lt=50000).all()
@@ -933,13 +937,15 @@ def admin_withdraw_autoaudit(request):
             batch_list.append({
                 'obj': obj,
                 'payee_account':obj.user.zhifubao,
-                'payee_real_name':obj.user.zhifubao_name,
-                'amount':obj.amount
+                'payee_real_name':obj.user.zhifubao_real_name,
+                'amount':str(obj.amount)
             })
         ret = batch_transfer_to_zhifubao(batch_list)
+        print ret
         fail_id_list = []
         for item in ret['detail']:
-            fail_id_list.append(item['obj'].id)
+            obj = item['obj']
+            fail_id_list.append(obj.id)
             obj.except_info = item['msg']
             obj.save(update_fields=['except_info'])
         withlist.exclude(id__in=fail_id_list).update(audit_state='0')

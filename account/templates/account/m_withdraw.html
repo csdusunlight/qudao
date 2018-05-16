@@ -1,43 +1,162 @@
-{% load staticfiles %}
-{% load myfilter %}
+{% load staticfiles %} {% load myfilter %}
 <!DOCTYPE html>
 <html>
 
-    <head lang="en">
-        <meta charset="UTF-8">
-        <!-- 优先使用 IE 最新版本和 Chrome -->
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-        <!-- 为移动设备添加 viewport -->
-        <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-        <!-- 添加到主屏后的标题（iOS 6 新增） -->
-        <meta name="apple-mobile-web-app-title" content="">
-        <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <!-- 设置苹果工具栏颜色 -->
-        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-        <!-- 添加智能 App 广告条 Smart App Banner（iOS 6+ Safari） -->
-        <meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">
-        <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
-        <meta name="format-detection" content="telphone=no" />
-        <!--下面三个是清除缓存 微信浏览器缓存严重又无刷新；这个方法调试的时候很方便-->
-        <meta http-equiv="Pragma" content="no-cache">
-        <meta http-equiv="Cache-Control" content="no-cache">
-        <meta http-equiv="Expires" content="0">
-        <title></title>
-        <link href="{% static 'css/mui.min.css' %}" rel="stylesheet" />
-        <link rel="stylesheet" type="text/css" href="{% static 'css/m_common.css' %}" />
-        <link rel="stylesheet" type="text/css" href="{% static 'css/m_account_withdraw.css' %}" />
+<head lang="en">
+    <meta charset="UTF-8">
+    <!-- 优先使用 IE 最新版本和 Chrome -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <!-- 为移动设备添加 viewport -->
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <!-- 添加到主屏后的标题（iOS 6 新增） -->
+    <meta name="apple-mobile-web-app-title" content="">
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <!-- 添加智能 App 广告条 Smart App Banner（iOS 6+ Safari） -->
+    <meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telphone=no" />
+    <!--下面三个是清除缓存 微信浏览器缓存严重又无刷新；这个方法调试的时候很方便-->
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title></title>
+    <link href="{% static 'css/mui.min.css' %}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/m_common.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/m_account_withdraw.css' %}" />
+    <script>
+        (function (designWidth, maxWidth) {
+            var doc = document,
+                win = window,
+                docEl = doc.documentElement,
+                remStyle = document.createElement("style"),
+                tid;
 
-    </head>
+            function refreshRem() {
+                var width = docEl.getBoundingClientRect().width;
+                maxWidth = maxWidth || 540;
+                width > maxWidth && (width = maxWidth);
+                var rem = width * 100 / designWidth;
+                remStyle.innerHTML = 'html{font-size:' + rem + 'px;}';
+            }
 
-    <body>
-        <header id="header" class="mui-bar mui-bar-nav">
-            <a href="{% url 'account_index' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-            <h1 class="mui-title">提现</h1>
-        </header>
-        <div class="mui-content">
-            <!--帐号部分-->
-            <div id="bank_card" class="zhanghu">
+            if (docEl.firstElementChild) {
+                docEl.firstElementChild.appendChild(remStyle);
+            } else {
+                var wrap = doc.createElement("div");
+                wrap.appendChild(remStyle);
+                doc.write(wrap.innerHTML);
+                wrap = null;
+            }
+            //要等 wiewport 设置好后才能执行 refreshRem，不然 refreshRem 会执行2次；
+            refreshRem();
+
+            win.addEventListener("resize", function () {
+                clearTimeout(tid); //防止执行两次
+                tid = setTimeout(refreshRem, 300);
+            }, false);
+
+            win.addEventListener("pageshow", function (e) {
+                if (e.persisted) { // 浏览器后退的时候重新计算
+                    clearTimeout(tid);
+                    tid = setTimeout(refreshRem, 300);
+                }
+            }, false);
+
+            if (doc.readyState === "complete") {
+                doc.body.style.fontSize = "16px";
+            } else {
+                doc.addEventListener("DOMContentLoaded", function (e) {
+                    doc.body.style.fontSize = "16px";
+                }, false);
+            }
+        })(750, 750);
+    </script>
+</head>
+
+<body>
+    <header id="header" class="mui-bar mui-bar-nav">
+        <a href="{% url 'account_index' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">提现</h1>
+    </header>
+    <div class="mui-content">
+        <!-- 已绑定银行卡盒子 -->
+        <div class="bindBankCardBox">
+           <div class="imgBox">
+                {%if card.bank %}
+                <img src="/static/images/{{card.bank}}.png" />
+                {%endif%}
+           </div>
+           <div class="bankBox">
+                <div class="bank_name">
+                    <p><span>{{card.get_bank_display}}</span></p>
+                </div>
+                <div class="bank_num">
+                    <p><span><a>{{card.card_number}}</a></span></p>
+                </div>
+           </div>
+           <div class="operateBox">
+                <p>修改></p>
+           </div>
+        </div>
+        <!-- 未绑定银行卡盒子 -->
+        <div class="no_bindBankCardBox">
+            <div class="no_bindImgBox">
+                <img src="/static/images/no_bindCard.png" />
+            </div>
+            <div class="bankBox">
+                <div class="bank_name">
+                   <p class="addCard">点击添加银行卡</p>
+                </div>
+            </div>
+            <div class="operateBox">
+                <p class="operate">></p>
+            </div>
+        </div>
+        <!-- 已绑定支付宝盒子 -->
+        <div class="bindAlipayBox">
+            <div class="imgBox1">
+                <img src="/static/images/zfbLogo.png" />
+            </div>
+            <div class="bankBox">
+                <div class="bank_name">
+                    <p><span>支付宝（小明明）</span></p>
+                </div>
+                <div class="bank_num">
+                    <p><span><a>18570661412</a></span></p>
+                </div>
+            </div>
+            <div class="operateBox">
+                <p>修改></p>
+            </div>
+        </div>
+        <!-- 未绑定支付宝盒子 -->
+        <div class="no_bindAlipayBox">
+            <div class="no_bindImgBox">
+                <img src="/static/images/no_bindZfb.png" />
+            </div>
+            <div class="bankBox">
+                <div class="bank_name">
+                    <p class="addCard">点击添加银行卡</p>
+                </div>
+            </div>
+            <div class="operateBox">
+                <p class="operate">></p>
+            </div>
+        </div>
+        <!-- 可提现金额 -->
+        <p style="margin: 0 0.5rem 0.2rem">可提现金额<span style="color: RGB(149,194,38);">{{user.balance}}</span>元</p>
+        <div class="amountBox">
+            <p style="margin-left: 0.3rem;">提现金额</p>
+            <input type="text" placeholder="输入的提现金额大于10元" />
+            <p>元</p>
+        </div>
+        <button class="submit">确定</button>
+        
+        
+        <!-- <div id="bank_card" class="zhanghu">
                 <div class="msg clearfix">
           {%if card.bank %}
                        <img src="/static/images/{{card.bank}}.png" />
@@ -53,7 +172,7 @@
                 </div>
 
             </div>
-            <!--提现部分-->
+            
             <form class="mui-input-group">
             {% csrf_token %}
                 <div class="mui-input-row">
@@ -68,7 +187,7 @@
             <button id="Btn" type="button" class="mui-btn mui-btn-green mui-btn-block">确认提现</button>
 
             <div id="sheet1" class="mui-popover mui-popover-bottom mui-popover-action ">
-                <!-- 可选择菜单 -->
+               
                 <ul class="mui-table-view">
                   <li class="mui-table-view-cell">
                     {%if card %}
@@ -78,82 +197,82 @@
                             {%endif%}
                   </li>
                 </ul>
-                <!-- 取消菜单 -->
+               
                 <ul class="mui-table-view">
                   <li class="mui-table-view-cell">
                     <a href="#sheet1"><b>取消</b></a>
                   </li>
                 </ul>
-            </div>
-        </div>
-        {% include "m_footer.html" %}
+            </div> -->
+    </div>
+    {% include "m_footer.html" %}
 
-        <script src="{% static 'js/mui.min.js' %}"></script>
-        <!--弹窗部分-->
-        <script type="text/javascript" charset="utf-8">
-            mui.init({
-                swipeBack: true //启用右滑关闭功能
-            });
-            var withdraw_url = "{%url 'account_withdraw' %}";
-            document.getElementById("Btn").addEventListener('tap', function() {
-                var amount = document.getElementById("with_amount").value;
-                amount = parseInt(amount);
-                if (isNaN(amount)){
-                    mui.alert('提现数量必须为整数！');
-                    return;
-                }
-                if (isNaN(amount) || (amount<10)) {
-                    mui.alert('提现金额应为大于等于为10的整数！');
-                    return;
-                }
-                var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
-                var btnArray = ['否', '是'];
-                var confirm_str = "您提现的金额为人民币" + amount + "元，确认？"
-                mui.confirm(confirm_str, '提现确认', btnArray, function(e) {
-                    if (e.index == 1) {
-                        mui.ajax({
-                            url: withdraw_url,
-                            dataType:"json",
-                            type:'POST',
-                            data : {
-                                amount: amount,
-                                csrfmiddlewaretoken:csrfmiddlewaretoken
-                            },
-                            success:function(ret){
-                                if (ret.code == 0) {
-                                    mui.alert('申请提现成功');
-                                } else {
-                                    mui.alert(ret.res_msg);
-                                }
-                            },
-                            error:function(){
-                                alert("请检查网络连接");
-                            }
-                        });
-                    }
-                })
-            });
-            document.getElementById("bank_card").addEventListener('tap', function() {
-                mui('#sheet1').popover('toggle');
-            });
-            mui('.mui-bar').on('tap', '.mui-action-back', function() {
-                var href = this.getAttribute("href");
-                mui.openWindow({
-                    url: href,
-                    styles: {
-                        top: 0,
-                        bottom: 0
-                    },
-                    show: {
-                        aniShow: 'slide-in-right',
-                    },
-                    waiting: {
-                        autoShow: false, //自动显示等待框
-                        title: '正在加载...', //等待对话框上显示的提示内容
-                    }
-                });
-            });
-        </script>
-    </body>
+    <script src="{% static 'js/mui.min.js' %}"></script>
+    <!--弹窗部分-->
+    <script type="text/javascript" charset="utf-8">
+            // mui.init({
+            //     swipeBack: true //启用右滑关闭功能
+            // });
+            // var withdraw_url = "{%url 'account_withdraw' %}";
+            // document.getElementById("Btn").addEventListener('tap', function() {
+            //     var amount = document.getElementById("with_amount").value;
+            //     amount = parseInt(amount);
+            //     if (isNaN(amount)){
+            //         mui.alert('提现数量必须为整数！');
+            //         return;
+            //     }
+            //     if (isNaN(amount) || (amount<10)) {
+            //         mui.alert('提现金额应为大于等于为10的整数！');
+            //         return;
+            //     }
+            //     var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+            //     var btnArray = ['否', '是'];
+            //     var confirm_str = "您提现的金额为人民币" + amount + "元，确认？"
+            //     mui.confirm(confirm_str, '提现确认', btnArray, function(e) {
+            //         if (e.index == 1) {
+            //             mui.ajax({
+            //                 url: withdraw_url,
+            //                 dataType:"json",
+            //                 type:'POST',
+            //                 data : {
+            //                     amount: amount,
+            //                     csrfmiddlewaretoken:csrfmiddlewaretoken
+            //                 },
+            //                 success:function(ret){
+            //                     if (ret.code == 0) {
+            //                         mui.alert('申请提现成功');
+            //                     } else {
+            //                         mui.alert(ret.res_msg);
+            //                     }
+            //                 },
+            //                 error:function(){
+            //                     alert("请检查网络连接");
+            //                 }
+            //             });
+            //         }
+            //     })
+            // });
+            // document.getElementById("bank_card").addEventListener('tap', function() {
+            //     mui('#sheet1').popover('toggle');
+            // });
+            // mui('.mui-bar').on('tap', '.mui-action-back', function() {
+            //     var href = this.getAttribute("href");
+            //     mui.openWindow({
+            //         url: href,
+            //         styles: {
+            //             top: 0,
+            //             bottom: 0
+            //         },
+            //         show: {
+            //             aniShow: 'slide-in-right',
+            //         },
+            //         waiting: {
+            //             autoShow: false, //自动显示等待框
+            //             title: '正在加载...', //等待对话框上显示的提示内容
+            //         }
+            //     });
+            // });
+    </script>
+</body>
 
 </html>

@@ -74,6 +74,16 @@
             }
         })(750, 750);
     </script>
+    <style>
+        .mui-btn-block {
+            font-size: 14px;
+            /* display: block; */
+            /* width: 100%; */
+            margin-bottom: 0;
+            padding: 0 0;
+            color: #8f8f94;
+        }
+    </style>
 </head>
 
 <body>
@@ -97,10 +107,9 @@
                 <p class="operate">></p>
             </div>
         </div>
-        
-        <!-- 已绑定银行卡盒子 -->
-        
-        <div class="bindBankCardBox" id="changeCard">
+       
+        <!-- 已绑定银行卡盒子 -->        
+        <div class="bindBankCardBox" id="change_card">
             <div class="imgBox">
                     <!-- {%if card.bank %} -->
                     <img src="/static/images/{{card.bank}}.png" />
@@ -115,7 +124,7 @@
                 </div>
             </div>
             <div class="operateBox">
-                <a href="changeCard" class="mui-btn mui-btn-primary mui-btn-block mui-btn-outlined">修改></a>
+                <p>修改></p>
             </div>
         </div>
        
@@ -134,9 +143,9 @@
                 <p class="operate">></p>
             </div>
         </div>
-        <!-- 已绑定支付宝盒子 -->
         
-        <div class="bindAlipayBox">
+        <!-- 已绑定支付宝盒子 -->
+        <div class="bindAlipayBox" id="bindAlipayBox">
             <div class="imgBox1">
                 <img src="/static/images/zfbLogo.png" />
             </div>
@@ -154,26 +163,49 @@
         </div>
         
         <!-- 可提现金额 -->
-        <p style="margin: 0 0.5rem 0.2rem">可提现金额<span style="color: RGB(149,194,38);">{{user.balance}}</span>元</p>
+        <p style="margin: 0.3rem 0.5rem 0.2rem">可提现金额<span style="color: RGB(149,194,38);">{{user.balance}}</span>元</p>
         <div class="amountBox">
             <p style="margin-left: 0.3rem;">提现金额</p>
             <input id="amontIpt" type="text" placeholder="输入的提现金额大于10元" />
-            <p>元</p>
+            <p style="margin-right: 0.2rem">元</p>
+        </div>
+        <div class="desc">
+            <p>
+                注：单笔提现金额大于等于5万时，将提现至已绑定银行卡；单笔提现金额小于5万时，将提现至已绑定支付宝，当未绑定相应账号时， 将提现失败！
+            </p>
         </div>
         <button class="submit">确定</button>
-        <!-- 弹出层 -->
-        <div id="picture" class="mui-popover mui-popover-action mui-popover-bottom">
+        <!-- 更换银行卡、绑定银行卡弹出层 -->
+        <div id="changeCard" class="mui-popover mui-popover-action mui-popover-bottom">
             <ul class="mui-table-view">
                 <li class="mui-table-view-cell">
-                    <a href="#">拍照或录像</a>
-                </li>
-                <li class="mui-table-view-cell">
-                    <a href="#">选取现有的</a>
+                   
+                    <a href="{% url 'change_bankcard' %}">更换银行卡</a>
+                    
+                    <a href="{% url 'account_bankcard' %}">绑定银行卡</a>
+                    
                 </li>
             </ul>
             <ul class="mui-table-view">
                 <li class="mui-table-view-cell">
-                    <a href="#picture"><b>取消</b></a>
+                    <a href="#changeCard"><b>取消</b></a>
+                </li>
+            </ul>
+        </div>
+        <!-- 更换支付宝、绑定支付宝弹出层 -->
+        <div id="changeAlipay" class="mui-popover mui-popover-action mui-popover-bottom">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                
+                <a href="{% url 'account_bankcard' %}">绑定支付宝</a>
+                
+                <a href="{% url 'change_bankcard' %}">更换支付宝</a>
+               
+                </li>
+            </ul>
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <a href="#changeAlipay"><b>取消</b></a>
                 </li>
             </ul>
         </div>
@@ -212,10 +244,10 @@
                 <ul class="mui-table-view">
                   <li class="mui-table-view-cell">
                     {%if card %}
-                                <a href="{% url 'change_bankcard' %}">更换银行卡</a>
-                            {%else%}
-                                <a href="{% url 'account_bankcard' %}">绑定银行卡</a>
-                            {%endif%}
+                        <a href="{% url 'change_bankcard' %}">更换银行卡</a>
+                    {%else%}
+                        <a href="{% url 'account_bankcard' %}">绑定银行卡</a>
+                    {%endif%}
                   </li>
                 </ul>
                
@@ -280,12 +312,14 @@
                  })
             });
             //更换银行卡
-            document.getElementById("changeCard").addEventListener('tap',function () { 
-                mui.alert("更换~")
-
-             })
-
-
+            document.getElementById("change_card").addEventListener('tap',function () { 
+                mui('#changeCard').popover('toggle');
+            })
+            
+            document.getElementById("bindAlipayBox").addEventListener('tap',function () { 
+                mui('#changeAlipay').popover('toggle');
+            }) 
+            
 
 
 

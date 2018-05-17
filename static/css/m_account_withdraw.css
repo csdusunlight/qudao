@@ -13,8 +13,8 @@ body{
 	height: 1.5rem;
 	border-radius: 5px;
 	background: white;
-	margin: 0.3rem auto;
-	display: flex;
+	margin: 0.3rem auto 0;
+	display: flex !important;
 	justify-content: space-around;
 	align-items: center;
 	box-shadow: 2px 2px 2px #dcdbdc;
@@ -67,7 +67,7 @@ body{
 	height: 1.5rem;
 	border-radius: 5px;
 	background: white;
-	margin: 0.3rem auto;
+	margin: 0.3rem auto 0;
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
@@ -94,8 +94,8 @@ body{
 	height: 1.5rem;
 	border-radius: 5px;
 	background: white;
-	margin: 0.3rem auto;
-	display: flex;
+	margin: 0.3rem auto 0;
+	display: flex !important;
 	justify-content: space-around;
 	align-items: center;
 	box-shadow: 3px 3px 3px #dcdbdc;
@@ -126,12 +126,20 @@ body{
 	margin-right: 0.5rem;
 	border: none;
 }
+.desc{
+	padding: 0.3rem 0.5rem;
+	line-height: 0.5rem;
+}
+.desc > p{
+	color: #007acc;
+	font-size: 14px;
+}
 .submit{
-	width: 7.2rem;
+	width: 7rem;
 	height: 1rem;
 	background: #91c11d;
 	color: white;
-	margin: 0.3rem auto;
+	margin: 0 auto;
 	border-radius: 10px;
 }
 /* 未绑定支付宝盒子 */
@@ -140,7 +148,7 @@ body{
 	height: 1.5rem;
 	border-radius: 5px;
 	background: white;
-	margin: 0.3rem auto;
+	margin: 0.3rem auto 0;
 	display: flex;
 	justify-content: space-around;
 	align-items: center;

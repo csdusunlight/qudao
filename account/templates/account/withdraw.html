@@ -417,7 +417,6 @@
                     }
 
                 }
-            // }
         }
 
         $(function () {
@@ -438,6 +437,18 @@
                 if(balance < amount){
                     $.prompt({
                         "Content":"提现金额不能大于余额！"
+                    })
+                    return;
+                }
+                if (amount < 50000 && !zhifubao) {
+                    $.prompt({
+                        "Content":"请绑定支付宝！"
+                    })
+                    return;
+                }
+                if(amount >= 50000 && !cardNum){
+                    $.prompt({
+                        "Content":"请绑定银行卡"
                     })
                     return;
                 }
@@ -498,20 +509,21 @@
              $(".bindAlipayBtn").click(function () { 
                 var zhifubao = $(".zhifubao").val();
                 var real_name = $(".bind_real_name").val();
-                var zhifubaoRegx = /^0?(13[0-9]|15[012356789]|18[0123456789]|14[0123456789]|17[0123456789])[0-9]{8}$/;
+                var zhifubaoRegx =  /^1[3456789]\d{9}$/;
+                var zhifubaoRegx1 = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                if (!zhifubaoRegx.test(zhifubao) && !zhifubaoRegx1.test(zhifubao)){
+                    $.prompt({
+                        "Content":"请输入正确的格式！"
+                    })
+                    return;
+                }
+                
                 if (!zhifubao || !real_name) {
                     $.prompt({
                         "Content":"输入框不能为空！"
                     });
                     return;
                 }
-
-                if (!zhifubaoRegx.test(zhifubao)){
-                    $.prompt({
-                        "Content":"请输入正确的格式！"
-                    })
-                    return;
-                } 
                 $.ajax({
                     url: '/account/bind_zhifubao/',
                     type: "post", //提交方式get
@@ -559,12 +571,21 @@
                 var c_zhifubao = $(".alipayAccount").val();
                 var c_realName = $(".realName").val();
                 var c_code = $(".codeIpt").val();
+                var zhifubaoRegx =  /^1[3456789]\d{9}$/;
+                var zhifubaoRegx1 = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                if (!zhifubaoRegx.test(zhifubao) && !zhifubaoRegx1.test(zhifubao)){
+                    $.prompt({
+                        "Content":"请输入正确的格式！"
+                    })
+                    return;
+                }
                 if(!c_code || !c_zhifubao || !c_realName){
                     $.prompt({
                         "Content":"输入框不能为空！"
                     })
                     return;
                 }
+
                 $.ajax({
                     url: '/account/bind_zhifubao/',
                     dataType:"json",
@@ -870,9 +891,9 @@
                                 {% else %}
                                 <div class="bindCard">
                                     <span>银行卡绑定</span>
-                                    <span style="margin-left: 62px">
+                                    <span style="margin-left: 30px">
                                         <img src="/static/images/{{card.bank}}.png" />
-                                        <b style="font-size: 18px;color: #4d4d4d;">{{card.get_bank_display}}</b>
+                                        <b style="font-size: 16px;color: #4d4d4d;">{{card.get_bank_display}}</b>
                                     </span>
                                     <span style="margin-left: 30px">{{card.card_number}}</span>
                                     <span style="margin-left: 30px">{{card.real_name}}</span>
@@ -891,7 +912,7 @@
                                 <!-- 已绑定支付宝 --> 
                                 <div class="bindAlipay">
                                     <span >支付宝绑定</span>
-                                    <span style="margin-left: 62px">{{user.zhifubao}}</span>
+                                    <span style="margin-left: 30px">{{user.zhifubao}}</span>
                                     <span style="margin-left: 30px">{{user.zhifubao_real_name}}</span>
                                     <span class="change change_alipay">更换</span>
                                 </div>
@@ -899,7 +920,7 @@
                             </div>
                             <div class="tips">
                                 <span>!</span>
-                                <span>注：单笔提现金额大于5万时，将提现至已绑定银行卡；单笔提现金额小于5万时，将提现至已绑定支付宝，当未绑定相应账号时，</span>
+                                <span>注：单笔提现金额大于等于5万时，将提现至已绑定银行卡；单笔提现金额小于5万时，将提现至已绑定支付宝，当未绑定相应账号时，</span>
                                 <span>将提现失败！</span>
                             </div>
                         </div>

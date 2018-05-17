@@ -13,6 +13,7 @@ from django.conf import settings
 from decimal import Decimal
 from wafuli_admin.models import RecommendRank, UserStatis
 import datetime
+from statistic.models import PerformanceStatistics
 logger = logging.getLogger("wafuli")
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -28,21 +29,27 @@ class Command(BaseCommand):
         firstday_lastmonth = datetime.date(last_year, last_month, 1)
         firstday_last2month = datetime.date(last2_year, last2_month, 1)
         firstday_last3month = datetime.date(last3_year, last3_month, 1)
+        firstday_thismonth = datetime.date(ttime.localtime()[0],ttime.localtime()[1],1)
+        lastday_lastmonth = firstday_thismonth - datetime.timedelta(days=1)
         invitees = MyUser.objects.filter(inviter__isnull=False, date_joined__gt=firstday_last3month)
         inviters = {}
         for invitee in invitees:
             inviter = invitee.inviter
+            enddate  = lastday_lastmonth
+            if enddate > invitee.date_joined + datetime.timedelta(days=60):            
+                enddate = invitee.date_joined + datetime.timedelta(days=60)
             sum = InvestLog.objects.filter(user=invitee, is_official=True, audit_state='0', audit_time__range=(firstday_lastmonth,
-                    invitee.date_joined + datetime.timedelta(days=60))).aggregate(sum=Sum('settle_amount'))
+                    enddate)).aggregate(sum=Sum('settle_amount'))
             settle_amount = sum.get('sum') or 0
             if inviter.id in inviters:
                 inviters[inviter.id] += settle_amount
             else:
                 inviters[inviter.id] = settle_amount
+            
         print inviters
-        # trunscate table RecommendRank
-        RecommendRank.objects.all().delete()
+        for inviter, amount in inviters:
+            PerformanceStatistics.objects.create(startdate = firstday_lastmonth, enddate=lastday_lastmonth, user_id=inviter,
+                                  amount=amount)
         
-        UserStatis.objects.update(month_statis=0)
         
         logger.info("******MonthTask is finished*********")

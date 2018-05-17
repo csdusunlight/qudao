@@ -39,16 +39,6 @@ class DayStatis(models.Model):
     class Meta:
         ordering = ['-date']
 
-class RecommendRank(models.Model):
-    user = models.OneToOneField(MyUser,related_name="rank_of")
-    rank = models.PositiveIntegerField(u"排名", default=100)
-    sub_num = models.PositiveIntegerField(u"福利提交数", default=0)
-    acc_num = models.PositiveIntegerField(u"福利采纳数", default=0)
-    award = models.IntegerField(u'奖励金额',  default=0)
-    def __unicode__(self):
-        return self.user.username +',' + str(self.acc_num) + ','+str(self.award)+','+str(self.rank)
-    class Meta:
-        ordering = ['rank']
 
 class GlobalStatis(models.Model):
     time = models.DateTimeField(u"统计时间", auto_now=True)
@@ -65,15 +55,6 @@ class Dict(models.Model):
     def __unicode__(self):
         return self.key + ':' + self.value
 
-class Invite_Rank(models.Model):
-    user = models.OneToOneField(MyUser,related_name="invite_rank")
-    rank = models.PositiveSmallIntegerField(u"排名", default=100)
-    num = models.PositiveIntegerField(u"好友获得红包数", default=0)
-    award = models.PositiveIntegerField(u'红包金额总数',  default=0)
-    def __unicode__(self):
-        return self.user.username +',' + str(self.num) +','+str(self.rank)
-    class Meta:
-        ordering = ['rank']
 
 class Invest_Record(models.Model):
     invest_date = models.DateField(u"创建时间", default=timezone.now)
@@ -99,23 +80,4 @@ class Message_Record(models.Model):
     class Meta:
         verbose_name_plural = u"短信群发记录"
         verbose_name = u"短信群发记录"
-
-class Gongzhonghao(models.Model):
-    name = models.CharField(u"公众号全称（如券妈妈、天天挖福利）", max_length=20, blank=False, unique=True)
-    is_on = models.BooleanField(u"开启自动抓取", default=True)
-    def __unicode__(self):
-        return self.name + str(self.is_on)
     
-class UserStatis(models.Model):
-    user = models.OneToOneField(MyUser,related_name="withdraw_statis")
-    week_statis = models.IntegerField(default=0)
-    month_statis = models.IntegerField(default=0)
-    def username_display(self):
-        username = self.user.username
-        if len(username) > 4:
-            username = username[0:4] + '****'
-        else:
-            username = username + '****'
-        return username
-    def __unicode__(self):
-        return self.user.username +',' + str(self.week_statis) + ','+str(self.month_statis)

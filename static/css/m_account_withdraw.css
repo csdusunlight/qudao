@@ -13,7 +13,7 @@ body{
 	height: 1.5rem;
 	border-radius: 5px;
 	background: white;
-	margin: 0.3rem auto;
+	margin: 0.3rem auto 0;
 	display: flex !important;
 	justify-content: space-around;
 	align-items: center;
@@ -67,7 +67,7 @@ body{
 	height: 1.5rem;
 	border-radius: 5px;
 	background: white;
-	margin: 0.3rem auto;
+	margin: 0.3rem auto 0;
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
@@ -94,7 +94,7 @@ body{
 	height: 1.5rem;
 	border-radius: 5px;
 	background: white;
-	margin: 0.3rem auto;
+	margin: 0.3rem auto 0;
 	display: flex !important;
 	justify-content: space-around;
 	align-items: center;
@@ -139,7 +139,7 @@ body{
 	height: 1rem;
 	background: #91c11d;
 	color: white;
-	margin: 0.1rem auto;
+	margin: 0 auto;
 	border-radius: 10px;
 }
 /* 未绑定支付宝盒子 */
@@ -148,7 +148,7 @@ body{
 	height: 1.5rem;
 	border-radius: 5px;
 	background: white;
-	margin: 0.3rem auto;
+	margin: 0.3rem auto 0;
 	display: flex;
 	justify-content: space-around;
 	align-items: center;

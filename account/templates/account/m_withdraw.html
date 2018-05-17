@@ -93,7 +93,7 @@
     </header>
     <div class="mui-content">
         <!-- 未绑定银行卡盒子 -->
-        {% if not card.card_number %} 
+        
         <div class="no_bindBankCardBox">
             <div class="no_bindImgBox">
                 <img src="/static/images/no_bindCard.png" />
@@ -107,7 +107,7 @@
                 <p class="operate">></p>
             </div>
         </div>
-        {% else %}
+       
         <!-- 已绑定银行卡盒子 -->        
         <div class="bindBankCardBox" id="change_card">
             <div class="imgBox">
@@ -127,9 +127,9 @@
                 <p>修改></p>
             </div>
         </div>
-       {% endif %}
+       
         <!-- 未绑定支付宝盒子 -->
-        {% if not user.zhifubao %} 
+       
         <div class="no_bindAlipayBox">
             <div class="no_bindImgBox">
                 <img src="/static/images/no_bindZfb.png" />
@@ -143,7 +143,7 @@
                 <p class="operate">></p>
             </div>
         </div>
-        {% else %}
+        
         <!-- 已绑定支付宝盒子 -->
         <div class="bindAlipayBox" id="bindAlipayBox">
             <div class="imgBox1">
@@ -161,9 +161,9 @@
                 <p>修改></p>
             </div>
         </div>
-        {% endif %}
+        
         <!-- 可提现金额 -->
-        <p style="margin: 0 0.5rem 0.2rem">可提现金额<span style="color: RGB(149,194,38);">{{user.balance}}</span>元</p>
+        <p style="margin: 0.3rem 0.5rem 0.2rem">可提现金额<span style="color: RGB(149,194,38);">{{user.balance}}</span>元</p>
         <div class="amountBox">
             <p style="margin-left: 0.3rem;">提现金额</p>
             <input id="amontIpt" type="text" placeholder="输入的提现金额大于10元" />
@@ -179,11 +179,11 @@
         <div id="changeCard" class="mui-popover mui-popover-action mui-popover-bottom">
             <ul class="mui-table-view">
                 <li class="mui-table-view-cell">
-                    {%if card %}
+                   
                     <a href="{% url 'change_bankcard' %}">更换银行卡</a>
-                    {% else %}
+                    
                     <a href="{% url 'account_bankcard' %}">绑定银行卡</a>
-                    {% endif %}
+                    
                 </li>
             </ul>
             <ul class="mui-table-view">
@@ -196,11 +196,11 @@
         <div id="changeAlipay" class="mui-popover mui-popover-action mui-popover-bottom">
             <ul class="mui-table-view">
                 <li class="mui-table-view-cell">
-                {%if not user.zhifubao %}
+                
                 <a href="{% url 'account_bankcard' %}">绑定支付宝</a>
-                {%else%}
+                
                 <a href="{% url 'change_bankcard' %}">更换支付宝</a>
-                {%endif%}
+               
                 </li>
             </ul>
             <ul class="mui-table-view">
@@ -315,6 +315,7 @@
             document.getElementById("change_card").addEventListener('tap',function () { 
                 mui('#changeCard').popover('toggle');
             })
+            
             document.getElementById("bindAlipayBox").addEventListener('tap',function () { 
                 mui('#changeAlipay').popover('toggle');
             }) 

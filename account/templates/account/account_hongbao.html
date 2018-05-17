@@ -360,9 +360,7 @@
                     });
                     return;
                 }
-                // $.prompt({
-                //     "Content":"您未达到解锁条件，请完成任务后再来领取红包"
-                // });
+                
             } else if (state == 2) {
                 $(this).attr("disabled", "disabled");
             } else {
@@ -406,7 +404,7 @@
         })
         //跳转到绑卡页面
         $(".bind_sure").click(function () {
-            window.open("{% url 'account_bankcard' %}");
+            window.open("{% url 'bind_bankcard_page' %}");
             $(".modal_card").hide();//跳转成功后模态框消失
         })
     });

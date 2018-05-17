@@ -68,7 +68,7 @@ body{
 	border-radius: 5px;
 	background: white;
 	margin: 0.3rem auto 0;
-	display: flex;
+	display: flex !important;
 	justify-content: space-around;
 	align-items: center;
 	box-shadow: 2px 2px 2px #dcdbdc;
@@ -149,7 +149,7 @@ body{
 	border-radius: 5px;
 	background: white;
 	margin: 0.3rem auto 0;
-	display: flex;
+	display: flex !important;
 	justify-content: space-around;
 	align-items: center;
 	box-shadow: 3px 3px 3px #dcdbdc;

@@ -91,10 +91,10 @@
         <a href="{% url 'account_index' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
         <h1 class="mui-title">提现</h1>
     </header>
-    <div class="mui-content">
+    <div class="mui-content" id="box" data-card_number="{{card.card_number}}" data-zhifubao="{{user.zhifubao}}">
         <!-- 未绑定银行卡盒子 -->
-        
-        <div class="no_bindBankCardBox">
+        {% csrf_token %}
+        <div class="no_bindBankCardBox" id="no_bindBankCardBox" style="display: none !important">
             <div class="no_bindImgBox">
                 <img src="/static/images/no_bindCard.png" />
             </div>
@@ -107,9 +107,8 @@
                 <p class="operate">></p>
             </div>
         </div>
-       
         <!-- 已绑定银行卡盒子 -->        
-        <div class="bindBankCardBox" id="change_card">
+        <div class="bindBankCardBox" id="change_card" style="display: none !important">
             <div class="imgBox">
                     <!-- {%if card.bank %} -->
                     <img src="/static/images/{{card.bank}}.png" />
@@ -127,25 +126,24 @@
                 <p>修改></p>
             </div>
         </div>
-       
+      
         <!-- 未绑定支付宝盒子 -->
-       
-        <div class="no_bindAlipayBox">
+        <div class="no_bindAlipayBox" id="no_bindAlipayBox" style="display: none !important">
             <div class="no_bindImgBox">
                 <img src="/static/images/no_bindZfb.png" />
             </div>
             <div class="bankBox">
                 <div class="bank_name">
-                    <p class="addCard">点击添加银行卡</p>
+                    <p class="addCard">点击添加支付宝</p>
                 </div>
             </div>
             <div class="operateBox">
                 <p class="operate">></p>
             </div>
         </div>
-        
+       
         <!-- 已绑定支付宝盒子 -->
-        <div class="bindAlipayBox" id="bindAlipayBox">
+        <div class="bindAlipayBox" id="bindAlipayBox" style="display: none !important">
             <div class="imgBox1">
                 <img src="/static/images/zfbLogo.png" />
             </div>
@@ -175,15 +173,26 @@
             </p>
         </div>
         <button class="submit">确定</button>
-        <!-- 更换银行卡、绑定银行卡弹出层 -->
+        <!-- 绑定银行卡 -->
+        <div id="bindCard" class="mui-popover mui-popover-action mui-popover-bottom">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <!-- <a href="{% url 'change_bankcard_page' %}">添加银行卡</a> -->
+                    <a href="{% url 'bind_bankcard_page' %}">添加银行卡</a>
+                </li>
+            </ul>
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <a href="#bindCard"><b>取消</b></a>
+                </li>
+            </ul>
+        </div>
+        <!-- 更换银行卡 -->
         <div id="changeCard" class="mui-popover mui-popover-action mui-popover-bottom">
             <ul class="mui-table-view">
                 <li class="mui-table-view-cell">
-                   
                     <a href="{% url 'change_bankcard_page' %}">更换银行卡</a>
-                    
-                    <a href="{% url 'bind_bankcard_page' %}">绑定银行卡</a>
-                    
+                    <!-- <a href="{% url 'bind_bankcard_page' %}">绑定银行卡</a> -->
                 </li>
             </ul>
             <ul class="mui-table-view">
@@ -192,20 +201,31 @@
                 </li>
             </ul>
         </div>
-        <!-- 更换支付宝、绑定支付宝弹出层 -->
+        <!-- 更换支付宝弹出层 -->
         <div id="changeAlipay" class="mui-popover mui-popover-action mui-popover-bottom">
             <ul class="mui-table-view">
                 <li class="mui-table-view-cell">
-                
-                <a href="{% url 'bind_zhifubao_page' %}">绑定支付宝</a>
-                
+                <!-- <a href="{% url 'bind_zhifubao_page' %}">绑定支付宝</a> -->
                 <a href="{% url 'change_zhifubao_page' %}">更换支付宝</a>
-               
                 </li>
             </ul>
             <ul class="mui-table-view">
                 <li class="mui-table-view-cell">
                     <a href="#changeAlipay"><b>取消</b></a>
+                </li>
+            </ul>
+        </div>
+        <!-- 绑定支付宝弹出层 -->
+        <div id="bindAlipay" class="mui-popover mui-popover-action mui-popover-bottom">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                <a href="{% url 'bind_zhifubao_page' %}">绑定支付宝</a>
+                <!-- <a href="{% url 'change_zhifubao_page' %}">更换支付宝</a> -->
+                </li>
+            </ul>
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell">
+                    <a href="#bindAlipay"><b>取消</b></a>
                 </li>
             </ul>
         </div>
@@ -218,11 +238,14 @@
             mui.init({
                 swipeBack: true //启用右滑关闭功能
             });
+            var card_number = document.getElementById("box").getAttribute("data-card_number");
+            var alipay_number = document.getElementById("box").getAttribute("data-zhifubao");
             var balance = {{user.balance}};
             //提现功能
             var withdraw_url = "{%url 'account_withdraw' %}";
             document.querySelector(".submit").addEventListener('tap',function(){
                 var amount = document.getElementById("amontIpt").value;
+                var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
                 console.log(amount);
                 amount = parseInt(amount);
                 if (balance < amount) {
@@ -235,6 +258,14 @@
                     mui.alert('提现金额应为大于等于为10的整数！');
                     return;
                 }
+                if(!alipay_number){
+                    mui.alert("请绑定支付宝！");
+                    return;
+                }
+                if(!card_number){
+                    mui.alert("请绑定银行卡！");
+                    return;
+                }
                 var confirm_str = "您提现的金额为人民币" + amount + "元，确认？"
                 var btnArray = ['否', '是'];
                 mui.confirm(confirm_str,'提现确认',btnArray,function (e) { 
@@ -245,7 +276,7 @@
                             type:'POST',
                             data : {
                                 amount: amount,
-                                
+                                csrfmiddlewaretoken:csrfmiddlewaretoken
                             },
                             success:function(ret){
                                 if (ret.code == 0) {
@@ -263,14 +294,39 @@
                     }
                  })
             });
+            
+            //默认样式为隐藏 根据card_number是否存在显示绑定银行卡和更换银行卡
+            if (!card_number) {
+                document.getElementById("no_bindBankCardBox").style.display = "flex";
+            } else if(card_number){
+                document.getElementById("change_card").style.display = "flex";
+            }
+            if (!alipay_number) {
+                document.getElementById("no_bindAlipayBox").style.display = "flex"; 
+            } else if(alipay_number){
+                document.getElementById("bindAlipayBox").style.display= "flex";
+            }
+         
+            //绑定银行卡
+            document.getElementById("no_bindBankCardBox").addEventListener('tap',function () { 
+                mui("#bindCard").popover('toggle');
+            }); 
+        
             //更换银行卡
             document.getElementById("change_card").addEventListener('tap',function () { 
                 mui('#changeCard').popover('toggle');
             })
-            
+        
+            //绑定支付宝
+            document.getElementById("no_bindAlipayBox").addEventListener('tap',function () { 
+                mui("#bindAlipay").popover('toggle');
+            })
+        
+            //更换支付宝
             document.getElementById("bindAlipayBox").addEventListener('tap',function () { 
                 mui('#changeAlipay').popover('toggle');
             }) 
+           
             
 
 

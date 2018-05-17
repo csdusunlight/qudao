@@ -638,9 +638,9 @@ def m_bind_zhifubao_page(request):
 def m_change_zhifubao_page(request):
     return render(request, 'account/m_account_change_zhifubao.html')
 
-@login_required_ajax
 @csrf_exempt
 @transaction.atomic
+@login_required_ajax
 def bind_zhifubao(request):
     result={'code':-1}
     if not request.is_ajax():

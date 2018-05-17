@@ -24,7 +24,18 @@
     <title>银行卡更改</title>
     <link href="{% static 'css/mui.min.css' %}" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/m_common.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/m_account_zhifubao.css' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/m_account_zhifubao.css' %}"/>
+	<style>
+		.mui-bar-nav~.mui-content{
+			padding-top: 20px;
+		}
+		.mui-input-row,.mui-input-row>input{
+			font-size: 14px;
+		}
+		.mui-input-row label~select{
+			font-size: 14px;
+		}
+	</style>
 </head>
 	<body>
 		<header id="header" class="mui-bar mui-bar-nav">
@@ -100,7 +111,7 @@
 				var subbranch = document.getElementById('subbranch').value;
 				var real_name = document.getElementById('real_name').value;
 				var card_number = document.getElementById('card_number').value;
-        var telcode = document.getElementById('telcode').value;
+        	var telcode = document.getElementById('telcode').value;
 
 				var bank = document.getElementById("bank").value;
           console.log("bank:" + bank);

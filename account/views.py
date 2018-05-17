@@ -526,14 +526,6 @@ def account_audited_2(request):
 @login_required
 def security(request):
     return render(request, 'account/account_security.html', {})
-@login_required
-def bankcard(request):
-    user = request.user
-    card = user.user_bankcard.first()
-    print card
-    banks = BANK
-    template = 'account/m_account_bankcard.html' if request.mobile else 'account/account_bankcard.html'
-    return render(request, template, {"card":card, 'banks':banks})
 
 def password_change(request):
     if not request.is_ajax():
@@ -584,15 +576,12 @@ def change_pay_password(request):
         result['code'] = 2
     return JsonResponse(result)
 
+@login_required_ajax
 def bind_bankcard(request):
     result={'code':-1, 'url':''}
     if not request.is_ajax():
         raise Http404
     user = request.user
-    if not user.is_authenticated():
-        result['code'] = 1
-        result['url'] = reverse('login') + "?next=" + reverse('bind_bankcard')
-        return JsonResponse(result)
     if request.method == 'POST':
         card_number = request.POST.get("card_number", '')
         real_name = request.POST.get("real_name", '')
@@ -633,46 +622,23 @@ def bind_bankcard(request):
         #红包活动插入++++++++++
         result['code'] = 0
     return JsonResponse(result)
+
 @login_required
-def change_bankcard(request):
-    if request.method == 'POST':
-        if not request.is_ajax():
-            raise Http404
-        result={}
-        user = request.user
-        card_number = request.POST.get("card_number", '')
-        real_name = request.POST.get("real_name", '')
-        bank = request.POST.get("bank", '')
-        subbranch = request.POST.get("subbranch",'')
-        telcode = request.POST.get("code", '')
-        ret = verifymobilecode(user.mobile,telcode)
-        if ret != 0:
-            result['code'] = 2
-            if ret == -1:
-                result['msg'] = u'请先获取手机验证码！'
-            elif ret == 1:
-                result['msg'] = u'手机验证码输入错误！'
-            elif ret == 2:
-                result['msg'] = u'手机验证码已过期，请重新获取'
-            return JsonResponse(result)
-        else:
-            card = user.user_bankcard.first()
-            card.card_number = card_number
-            card.real_name = real_name
-            card.bank = bank
-            card.subbranch = subbranch
-            card.save()
-            result['code'] = 0
-            result['msg'] = u"银行卡号更改成功！"
-        return JsonResponse(result)
-    else:
-        banks = BANK
-        if request.mobile:
-            return render(request, 'account/m_account_change_bankcard.html', {'banks':banks})
-        else:
-            user = request.user
-            card = user.user_bankcard.first()
-            return render(request, 'account/account_bankcard.html', {"card":card, 'banks':banks})
+def m_bind_bankcard_page(request):
+    banks = BANK
+    template = 'account/m_account_bankcard.html' 
+    return render(request, template, {'banks':banks})
+
+@login_required
+def m_change_bankcard_page(request):
+    banks = BANK
+    return render(request, 'account/m_account_change_bankcard.html', {'banks':banks})
+@login_required
+def m_bind_zhifubao_page(request):
+    return render(request, 'account/m_account_bind_zhifubao.html')
+@login_required
+def m_change_zhifubao_page(request):
+    return render(request, 'account/m_account_change_zhifubao.html')
 
 @login_required_ajax
 @transaction.atomic

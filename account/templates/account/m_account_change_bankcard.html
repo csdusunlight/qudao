@@ -135,7 +135,7 @@
 				}
 				var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 				mui.ajax({
-					url: "{% url 'change_bankcard' %}",
+					url: "{% url 'bind_bankcard' %}",
 					dataType:"json",
 					type:'POST',
 					data : {

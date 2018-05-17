@@ -261,7 +261,6 @@ def register_from_gzh(request):
         apply.qualification = invest_image
         apply.save(update_fields=['qualification',])
         result['code'] = 0
-        print 'here'
         return JsonResponse(result)
     else:
         mobile = request.GET.get('mobile','')
@@ -434,7 +433,6 @@ def phoneImageV(request):
 def account(request):
     announce_list = Announcement.objects.all()
     recom_projects = Project.objects.filter(state='10', is_official=True, is_addedto_repo=True)[0:4]
-    print 'haha'
     template = 'account/m_account_index.html' if request.mobile else 'account/account_index.html'
     return render(request, template,{'announce_list':announce_list, 'recom_projects':recom_projects})
 @login_required
@@ -664,7 +662,6 @@ def bind_zhifubao(request):
     user.zhifubao = zhifubao
     user.zhifubao_real_name = zhifubao_real_name
     user.save(update_fields=['zhifubao', 'zhifubao_real_name'])
-    print 'sdfsffdfdssfd', user.zhifubao
     result['code'] = 0
     return JsonResponse(result)
 
@@ -747,7 +744,6 @@ def withdraw(request):
         card = user.user_bankcard.first()
         template = 'account/m_withdraw.html' if request.mobile else 'account/withdraw.html'
         banks = BANK
-        print user.mobile
         return render(request, template,{"card":card, "banks":banks})
     elif request.method == 'POST':
         user = request.user
@@ -966,7 +962,6 @@ def project_manage(request):
         subdic = {}
         for pro in subprojects:
             subdic[pro['project_id']] = pro
-        print subprojects
         page = request.GET.get("page", None)
         size = request.GET.get("size", 20)
         try:

@@ -127,7 +127,7 @@ class WithdrawLogSerializer(serializers.ModelSerializer):
     mobile = serializers.CharField(source='user.mobile', read_only=True)
     admin_mobile = serializers.CharField(source='admin_user.mobile', read_only=True)
     qq_number = serializers.CharField(source='user.qq_number', read_only=True)
-#     balance = serializers.CharField(source='user.banlance', read_only=True)
+    zhifubao = serializers.CharField(source='user.zhifubao', read_only=True)
 #     username = serializers.CharField(source='user.username', read_only=True)
 #     username = serializers.CharField(source='user.username', read_only=True)
     class Meta:

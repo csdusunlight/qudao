@@ -180,9 +180,9 @@
             <ul class="mui-table-view">
                 <li class="mui-table-view-cell">
                    
-                    <a href="{% url 'change_bankcard' %}">更换银行卡</a>
+                    <a href="{% url 'change_bankcard_page' %}">更换银行卡</a>
                     
-                    <a href="{% url 'account_bankcard' %}">绑定银行卡</a>
+                    <a href="{% url 'bind_bankcard_page' %}">绑定银行卡</a>
                     
                 </li>
             </ul>
@@ -197,9 +197,9 @@
             <ul class="mui-table-view">
                 <li class="mui-table-view-cell">
                 
-                <a href="{% url 'account_bankcard' %}">绑定支付宝</a>
+                <a href="{% url 'bind_zhifubao_page' %}">绑定支付宝</a>
                 
-                <a href="{% url 'change_bankcard' %}">更换支付宝</a>
+                <a href="{% url 'change_zhifubao_page' %}">更换支付宝</a>
                
                 </li>
             </ul>
@@ -209,54 +209,6 @@
                 </li>
             </ul>
         </div>
-        <!-- <div id="bank_card" class="zhanghu">
-                <div class="msg clearfix">
-          {%if card.bank %}
-                       <img src="/static/images/{{card.bank}}.png" />
-          {%endif%}
-                    <div class="text">
-                        {%if card %}
-                            <p><span>{{card.get_bank_display}}</span><br />
-                            <span><a>{{card.card_number}}</a></span></p>
-                        {%else%}
-                            <p><span>请点此绑定银行卡，并刷新该页面</span></p>
-                        {%endif%}
-                    </div>
-                </div>
-
-            </div>
-            
-            <form class="mui-input-group">
-            {% csrf_token %}
-                <div class="mui-input-row">
-                    <label>￥</label>
-                    <input id="with_amount" autofocus="autofocus" type="text" class="mui-input-clear" placeholder="请输入提现金额">
-                </div>
-            </form>
-            <p>
-                <span>可提现金额：<number>{{user.balance}}</number></span>
-                <span>最低提现10元</span>
-            </p>
-            <button id="Btn" type="button" class="mui-btn mui-btn-green mui-btn-block">确认提现</button>
-
-            <div id="sheet1" class="mui-popover mui-popover-bottom mui-popover-action ">
-               
-                <ul class="mui-table-view">
-                  <li class="mui-table-view-cell">
-                    {%if card %}
-                        <a href="{% url 'change_bankcard' %}">更换银行卡</a>
-                    {%else%}
-                        <a href="{% url 'account_bankcard' %}">绑定银行卡</a>
-                    {%endif%}
-                  </li>
-                </ul>
-               
-                <ul class="mui-table-view">
-                  <li class="mui-table-view-cell">
-                    <a href="#sheet1"><b>取消</b></a>
-                  </li>
-                </ul>
-            </div> -->
     </div>
     {% include "m_footer.html" %}
 

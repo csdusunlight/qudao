@@ -626,7 +626,7 @@ def bind_bankcard(request):
 @login_required
 def m_bind_bankcard_page(request):
     banks = BANK
-    template = 'account/m_account_bankcard.html' 
+    template = 'account/m_account_bind_bankcard.html' 
     return render(request, template, {'banks':banks})
 
 @login_required

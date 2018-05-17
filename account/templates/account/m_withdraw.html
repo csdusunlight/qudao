@@ -91,9 +91,9 @@
         <a href="{% url 'account_index' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
         <h1 class="mui-title">提现</h1>
     </header>
-    <div class="mui-content" id="box" data-card_number="{{card.card_number}}" data-zhifubao="{{card.zhifubao}}">
+    <div class="mui-content" id="box" data-card_number="{{card.card_number}}" data-zhifubao="{{user.zhifubao}}">
         <!-- 未绑定银行卡盒子 -->
-       
+        {% csrf_token %}
         <div class="no_bindBankCardBox" id="no_bindBankCardBox" style="display: none !important">
             <div class="no_bindImgBox">
                 <img src="/static/images/no_bindCard.png" />
@@ -245,6 +245,7 @@
             var withdraw_url = "{%url 'account_withdraw' %}";
             document.querySelector(".submit").addEventListener('tap',function(){
                 var amount = document.getElementById("amontIpt").value;
+                var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
                 console.log(amount);
                 amount = parseInt(amount);
                 if (balance < amount) {
@@ -275,7 +276,7 @@
                             type:'POST',
                             data : {
                                 amount: amount,
-                                
+                                csrfmiddlewaretoken:csrfmiddlewaretoken
                             },
                             success:function(ret){
                                 if (ret.code == 0) {
@@ -289,12 +290,12 @@
                             }
                         });
                     }else{
-                        console.log("取消")
+                        console.log(222)
                     }
                  })
             });
             
-            //默认样式为隐藏 根据card_number和alipay_number是否存在显示绑定银行卡和更换银行卡
+            //默认样式为隐藏 根据card_number是否存在显示绑定银行卡和更换银行卡
             if (!card_number) {
                 document.getElementById("no_bindBankCardBox").style.display = "flex";
             } else if(card_number){

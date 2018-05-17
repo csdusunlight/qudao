@@ -102,6 +102,27 @@
             sendTelVerifyCodeImageV();
             settime(this);
         });
+        //倒计时ajax
+        var sendTelVerifyCodeImageV = function () {
+            mui.ajax({
+                url: sendtelcode_url,
+                data: {
+                    'action': 'change_bankcard',
+                },
+                timeout: 3000,
+                success: function (data) {
+                    if (data.code != 0) {
+                        mui.alert(data.message);
+                    }
+                    if (data.code == 1) {
+                        countdown = 0;
+                    }
+                },
+                error: function (xhr, type, errorThrown) {
+                    mui.alert(type);
+                }
+            });
+        };
         //立即绑定
         document.getElementById("Btn").addEventListener('tap', function () {
             var real_name = document.getElementById("real_name").value;
@@ -137,7 +158,10 @@
                     }
                     else if(ret.code==0){
                        mui.alert("更改成功")
-                        window.location.reload()
+                       real_name = '';
+                       alipay = '';
+                       code = '';
+                        // window.location.reload()
                     }
                     else {
                         alert(ret.res_msg);
@@ -145,27 +169,6 @@
                 }
             })
         });
-        //倒计时ajax
-        var sendTelVerifyCodeImageV = function () {
-            mui.ajax({
-                url: sendtelcode_url,
-                data: {
-                    'action': 'change_bankcard',
-                },
-                timeout: 3000,
-                success: function (data) {
-                    if (data.code != 0) {
-                        mui.alert(data.message);
-                    }
-                    if (data.code == 1) {
-                        countdown = 0;
-                    }
-                },
-                error: function (xhr, type, errorThrown) {
-                    mui.alert(type);
-                }
-            });
-        };
     </script>
 </body>
 

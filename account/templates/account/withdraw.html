@@ -368,7 +368,9 @@
         var balance = {{user.balance}};
         console.log("当前用户手机号：",phoneNum);
         var get_code_url = "{% url 'phoneImageV' %}";//获取手机验证码url
-
+        $.ajaxSetup({
+            data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
+        });
         //支付宝和银行卡同时绑定才能开启自动提现
         function isadd(obj) {        //是否主页显示调用函数
             var flag = $(obj).data('isadd');
@@ -511,7 +513,7 @@
                 var zhifubaoRegx1 = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
                 if (!zhifubaoRegx.test(zhifubao) && !zhifubaoRegx1.test(zhifubao)){
                     $.prompt({
-                        "Content":"支付宝只能是邮箱或者手机号！"
+                        "Content":"请输入正确的格式！"
                     })
                     return;
                 }
@@ -573,7 +575,7 @@
                 var zhifubaoRegx1 = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
                 if (!zhifubaoRegx.test(zhifubao) && !zhifubaoRegx1.test(zhifubao)){
                     $.prompt({
-                        "Content":"支付宝只能是邮箱或者手机号！"
+                        "Content":"请输入正确的格式！"
                     })
                     return;
                 }

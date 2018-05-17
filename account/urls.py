@@ -52,7 +52,6 @@ urlpatterns = [
     url(r'^submit_excel_all/$', 'account.channel.import_investlog_all', name='submit_excel_all'),
 #     url(r'^revise_project/$', 'account.channel.revise_project', name='revise_project'),
 #
-#     url(r'^vip/$', 'account.views.vip', name='account_vip'),
 # url(r'^get_nums$', 'account.views.get_nums', name='get_nums'),
     url(r'^account_setting/$', 'account.views.account_setting', name='account_setting'),
     url(r'^account_notice/$', 'account.views.account_notice', name='account_notice'),

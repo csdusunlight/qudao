@@ -281,7 +281,7 @@
     	   else{
     		   throw  new BreakSignal();
     	   }
-    	}
+    	})
     	.catch(function(error){
             // promise chain中出现异常的时候会被调用
             if(error instanceof BreakSignal){

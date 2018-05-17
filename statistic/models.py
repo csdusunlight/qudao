@@ -11,7 +11,7 @@ def get_today_date():
 class UserDetailStatis(models.Model):
     user = models.ForeignKey(MyUser, related_query_name="user_detail_statis")
     date = models.DateField(u"日期", default=get_today_date)
-    settle_amount = 
+    settle_amount = models.DecimalField(u'结算数值', max_digits=10, decimal_places=2)
     item_count = models.IntegerField(u"结算条目数量",default=0)
     project_count = models.IntegerField(u"结算项目数量",default=0)
     invest_amount = models.DecimalField(u'投资额', max_digits=10, decimal_places=2)

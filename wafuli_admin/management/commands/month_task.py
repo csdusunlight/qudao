@@ -11,7 +11,6 @@ from django.db.models import Sum
 from account.models import MyUser
 from django.conf import settings
 from decimal import Decimal
-from wafuli_admin.models import RecommendRank, UserStatis
 import datetime
 from statistic.models import PerformanceStatistics
 logger = logging.getLogger("wafuli")
@@ -36,8 +35,8 @@ class Command(BaseCommand):
         for invitee in invitees:
             inviter = invitee.inviter
             enddate  = lastday_lastmonth
-            if enddate > invitee.date_joined + datetime.timedelta(days=60):            
-                enddate = invitee.date_joined + datetime.timedelta(days=60)
+            if enddate > (invitee.date_joined + datetime.timedelta(days=60)).date():            
+                enddate = (invitee.date_joined + datetime.timedelta(days=60)).date()
             sum = InvestLog.objects.filter(user=invitee, is_official=True, audit_state='0', audit_time__range=(firstday_lastmonth,
                     enddate)).aggregate(sum=Sum('settle_amount'))
             settle_amount = sum.get('sum') or 0
@@ -47,7 +46,7 @@ class Command(BaseCommand):
                 inviters[inviter.id] = settle_amount
             
         print inviters
-        for inviter, amount in inviters:
+        for inviter, amount in inviters.items():
             PerformanceStatistics.objects.create(startdate = firstday_lastmonth, enddate=lastday_lastmonth, user_id=inviter,
                                   amount=amount)
         

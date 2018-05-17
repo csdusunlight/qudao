@@ -274,16 +274,13 @@
     $('#audit_zhifubao').click(function(){
     	Promise.resolve($.ajax('/Admin/withdraw_autoaudit/')).
     	then(function(value){
-    	   var is_sure = confirm(`共${value.count}笔，${value.sum}元，确定通过支付宝转账？`);
+    	   var is_sure = confirm(`共${value.count}笔，${value.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
     	   if (is_sure == true) {
     	   	   return $.ajax({url:'/Admin/withdraw_autoaudit/',type:'post'});
     	   }
     	   else{
     		   throw  new BreakSignal();
     	   }
-    	}).then(function(value){
-    		console.log('正在处理，可能需要一分钟的时间，请稍后刷新查看结果');
-    	})
     	.catch(function(error){
             // promise chain中出现异常的时候会被调用
             if(error instanceof BreakSignal){

@@ -507,6 +507,7 @@
              $(".bindAlipayBtn").click(function () { 
                 var zhifubao = $(".zhifubao").val();
                 var real_name = $(".bind_real_name").val();
+                var real_nameRgex=/^[\u2E80-\u9FFF]+$/;
                 var zhifubaoRegx =  /^1[3456789]\d{9}$/;
                 var zhifubaoRegx1 = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
                 if (!zhifubaoRegx.test(zhifubao) && !zhifubaoRegx1.test(zhifubao)){
@@ -522,6 +523,14 @@
                     });
                     return;
                 }
+                
+                if(!real_nameRgex.test(real_name)){
+                    $.prompt({
+                        "Content":"真实姓名只能是汉字！"
+                    });
+                    return;
+                }
+
                 $.ajax({
                     url: '/account/bind_zhifubao/',
                     type: "post", //提交方式get
@@ -569,9 +578,10 @@
                 var c_zhifubao = $(".alipayAccount").val();
                 var c_realName = $(".realName").val();
                 var c_code = $(".codeIpt").val();
+                var c_realNameRegx=/^[\u2E80-\u9FFF]+$/;
                 var zhifubaoRegx =  /^1[3456789]\d{9}$/;
                 var zhifubaoRegx1 = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                if (!zhifubaoRegx.test(zhifubao) && !zhifubaoRegx1.test(zhifubao)){
+                if (!zhifubaoRegx.test(c_zhifubao) && !zhifubaoRegx1.test(c_zhifubao)){
                     $.prompt({
                         "Content":"支付宝只能是邮箱或者手机号！"
                     })
@@ -583,36 +593,41 @@
                     })
                     return;
                 }
-
-                $.ajax({
-                    url: '/account/bind_zhifubao/',
-                    dataType:"json",
-                    type:'POST',
-                    data : {
-                        'zhifubao': c_zhifubao,
-                        'zhifubao_real_name': c_realName,
-                        'code':c_code,
-                    },
-                    success:function(ret){
-                        if(ret.code==1){
-                            alert("请重新登录！")
-                            window.location.href = ret.url;
-                        }
-                        else if(ret.code==0){
-                            $.prompt({
-                                "Content":"更换成功！"
-                            })
-                             window.location.reload()
-                        }
-                        else {
-                            alert(ret.res_msg);
-                        }
-                    },
-                    error:function(){
-                        console.log("请检查网络连接");
-                        window.location.reload()
-                    }
-                });
+                if(!c_realNameRegx.test(c_realName)){
+                    $.prompt({
+                        "Content":"真实姓名只能是汉字！"
+                    })
+                    return;
+                }
+                // $.ajax({
+                //     url: '/account/bind_zhifubao/',
+                //     dataType:"json",
+                //     type:'POST',
+                //     data : {
+                //         'zhifubao': c_zhifubao,
+                //         'zhifubao_real_name': c_realName,
+                //         'code':c_code,
+                //     },
+                //     success:function(ret){
+                //         if(ret.code==1){
+                //             alert("请重新登录！")
+                //             window.location.href = ret.url;
+                //         }
+                //         else if(ret.code==0){
+                //             $.prompt({
+                //                 "Content":"更换成功！"
+                //             })
+                //              window.location.reload()
+                //         }
+                //         else {
+                //             alert(ret.res_msg);
+                //         }
+                //     },
+                //     error:function(){
+                //         console.log("请检查网络连接");
+                //         window.location.reload()
+                //     }
+                // });
             })
             // 银行卡绑定切换页面
             $(".bind_card").click(function () { 

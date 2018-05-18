@@ -157,11 +157,9 @@
                         window.location.href = ret.url;
                     }
                     else if(ret.code==0){
-                       mui.alert("更改成功")
-                       real_name = '';
-                       alipay = '';
-                       code = '';
-                        // window.location.reload()
+                       mui.alert("更改成功",callback=function(){
+                        window.history.back(-1);
+                       })
                     }
                     else {
                         alert(ret.res_msg);

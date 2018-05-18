@@ -160,7 +160,9 @@
 					success:function(ret){
 						mui.alert(ret.msg,callback=function(){
 							if (ret.code==0){
-								window.history.back();
+								mui.alert("绑定成功",callback = function(){
+									window.history.back(-1);
+								})
 							} else {
 							    mui.alert(ret.res_msg)
 							}

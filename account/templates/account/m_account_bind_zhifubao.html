@@ -98,9 +98,9 @@
                     window.location.href = ret.url;
                 }
                 else if(ret.code==0){
-                    mui.alert("绑定成功")
-                    alipay = '';
-                    real_name = ''; 
+                    mui.alert("绑定成功",callback = function () { 
+                        window.history.back(-1);
+                     })
                 }
                 else {
                     mui.alert(ret.res_msg);

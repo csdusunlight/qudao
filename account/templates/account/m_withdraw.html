@@ -248,14 +248,17 @@
                 var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
                 console.log(amount);
                 amount = parseInt(amount);
-                if (balance < amount) {
-                    mui.alert("提现金额不能大于可以现金额")
+                if(amount == 0){
+                    mui.alert("提现金额不能为0！")
                     return;
-                }else if(isNaN(amount)){
-                    mui.alert('提现数量必须为整数！');
+                }else if(!amount){
+                    mui.alert("提现金额输入框不能为空！");
+                    return;
+                }else if (balance < amount) {
+                    mui.alert("提现金额不能高于可提现金额！")
                     return;
                 }else if (isNaN(amount) || (amount<10)) {
-                    mui.alert('提现金额应为大于等于为10的整数！');
+                    mui.alert('提现金额最低额度为10元！');
                     return;
                 }
                 if(!alipay_number){

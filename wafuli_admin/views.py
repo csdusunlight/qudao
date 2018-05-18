@@ -25,7 +25,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.db import transaction
-from public.tools import has_post_permission
+from public.tools import has_post_permission, has_permission
 from decimal import Decimal
 from weixin.tasks import sendWeixinNotify
 from merchant.margin_transaction import charge_margin
@@ -1492,6 +1492,7 @@ def batch_withdraw_task():
         except:
             continue
 @login_required
+@has_permission('008')
 def batch_withdraw(request):
     if not request.user.is_staff or not request.is_ajax():
         raise Http404

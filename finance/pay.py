@@ -5,7 +5,7 @@ Created on 2018年4月19日
 @author: lch
 '''
 from alipay import AliPay
-import datetime
+import time
 from finance.models import ZhifubaoTransferLog
 from django.conf import settings
 from os import path as ospath
@@ -33,21 +33,22 @@ def batch_transfer_to_zhifubao(account_list):
     objs = []
     ret = {}
     for account in account_list:
+        timestamp = time.time()
         payee_account=account.get('payee_account')
         payee_real_name=account.get('payee_real_name')
         amount=account.get('amount')
         result = alipay.api_alipay_fund_trans_toaccount_transfer(
-            datetime.datetime.now().strftime("%Y%m%d%H%M%S"),
+            str(int(timestamp * 1000)),
             payee_type="ALIPAY_LOGONID",
             payee_account=payee_account,
             payee_real_name=payee_real_name,
             amount=amount
         )
-        msg = result['sub_msg']
+        msg = result['msg']
         if msg == 'Success':
             suc_num += 1
         else:
-            account['msg'] = msg
+            account['msg'] = result['sub_msg']
             ret_list.append(account)
         obj = ZhifubaoTransferLog(result=msg, payee_account=payee_account, 
                                   payee_real_name=payee_real_name, amount=amount)

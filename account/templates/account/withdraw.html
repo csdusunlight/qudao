@@ -585,7 +585,7 @@
                 var zhifubaoRegx1 = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
                 if (!zhifubaoRegx.test(c_zhifubao) && !zhifubaoRegx1.test(c_zhifubao)){
                     $.prompt({
-                        "Content":"请输入正确的格式！"
+                        "Content":"支付宝只能为手机号或者邮箱"
                     })
                     return;
                 }
@@ -601,35 +601,35 @@
                     })
                     return;
                 }
-                // $.ajax({
-                //     url: '/account/bind_zhifubao/',
-                //     dataType:"json",
-                //     type:'POST',
-                //     data : {
-                //         'zhifubao': c_zhifubao,
-                //         'zhifubao_real_name': c_realName,
-                //         'code':c_code,
-                //     },
-                //     success:function(ret){
-                //         if(ret.code==1){
-                //             alert("请重新登录！")
-                //             window.location.href = ret.url;
-                //         }
-                //         else if(ret.code==0){
-                //             $.prompt({
-                //                 "Content":"更换成功！"
-                //             })
-                //              window.location.reload()
-                //         }
-                //         else {
-                //             alert(ret.res_msg);
-                //         }
-                //     },
-                //     error:function(){
-                //         console.log("请检查网络连接");
-                //         window.location.reload()
-                //     }
-                // });
+                $.ajax({
+                    url: '/account/bind_zhifubao/',
+                    dataType:"json",
+                    type:'POST',
+                    data : {
+                        'zhifubao': c_zhifubao,
+                        'zhifubao_real_name': c_realName,
+                        'code':c_code,
+                    },
+                    success:function(ret){
+                        if(ret.code==1){
+                            alert("请重新登录！")
+                            window.location.href = ret.url;
+                        }
+                        else if(ret.code==0){
+                            $.prompt({
+                                "Content":"更换成功！"
+                            })
+                             window.location.reload()
+                        }
+                        else {
+                            alert(ret.res_msg);
+                        }
+                    },
+                    error:function(){
+                        console.log("请检查网络连接");
+                        window.location.reload()
+                    }
+                });
             })
             // 银行卡绑定切换页面
             $(".bind_card").click(function () { 

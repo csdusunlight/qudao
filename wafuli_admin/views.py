@@ -948,7 +948,8 @@ def admin_withdraw_autoaudit(request):
             fail_id_list.append(obj.id)
             obj.except_info = item['msg']
             obj.save(update_fields=['except_info'])
-        withlist.exclude(id__in=fail_id_list).update(audit_state='0')
+        withlist.exclude(id__in=fail_id_list).update(audit_state='0', audit_time=datetime.datetime.now(),
+                                                     admin_user=request.user)
         return JsonResponse({'suc_num':ret.get('suc_num')})
 def get_admin_with_page(request):
     res={'code':0,}

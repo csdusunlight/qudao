@@ -25,6 +25,7 @@ from django.contrib.contenttypes.models import ContentType
 import time
 from decimal import Decimal
 from datetime import timedelta
+from django.core.cache import cache
 logger = logging.getLogger("wafuli")
 
 @login_required
@@ -164,22 +165,23 @@ def submit_itembyitem(request):
         remark = temp[7]
         submit_type = temp[8] or '1'
         try:
-            with transaction.atomic():
-                if not project.is_multisub_allowed or submit_type=='1':
-                    if project.company is None:
-                        queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project=project)
-                    else:
-                        queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id)
-                    if queryset.exclude(audit_state='2').exists():
-                        exist_num += 1   #jzy
-                        exist_phone = exist_phone + project.title + invest_mobile + ";"   #jzy
-                        continue
-                InvestLog.objects.create(user=request.user, project=project, invest_date=time, invest_mobile=invest_mobile, invest_term=term,
-                                 invest_amount=Decimal(amount), audit_state='1', is_official=project.is_official,category=project.category,
-                                 zhifubao=zhifubao, invest_name=invest_name, remark=remark, submit_type=submit_type,submit_way='2',)
-                suc_num += 1
-                project.points = F('points') + 1
-                project.save(update_fields=['points',])
+            with cache.lock(str(request.user.mobile)):
+                with transaction.atomic():
+                    if not project.is_multisub_allowed or submit_type=='1':
+                        if project.company is None:
+                            queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project=project)
+                        else:
+                            queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id)
+                        if queryset.exclude(audit_state='2').exists():
+                            exist_num += 1   #jzy
+                            exist_phone = exist_phone + project.title + invest_mobile + ";"   #jzy
+                            continue
+                    InvestLog.objects.create(user=request.user, project=project, invest_date=time, invest_mobile=invest_mobile, invest_term=term,
+                                     invest_amount=Decimal(amount), audit_state='1', is_official=project.is_official,category=project.category,
+                                     zhifubao=zhifubao, invest_name=invest_name, remark=remark, submit_type=submit_type,submit_way='2',)
+                    suc_num += 1
+                    project.points = F('points') + 1
+                    project.save(update_fields=['points',])
         except Exception, e:
             logger.info(e)
     result = {'code':0, 'suc_num':suc_num, 'exist_num':exist_num, 'exist_phone':exist_phone}   #jzy

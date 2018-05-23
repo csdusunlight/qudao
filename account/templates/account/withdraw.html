@@ -471,6 +471,7 @@
                     url: post_url,
                     dataType: "json",
                     type: 'POST',
+                    async: false,
                     data: {
                         'amount': amount,
                     },
@@ -536,7 +537,7 @@
                 $.ajax({
                     url: '/account/bind_zhifubao/',
                     type: "post", //提交方式get
-                    async: true, //是否同步
+                    async: true, //是否异步
                     timeout: 5000, //超出时间
                     dataType: 'json', //返回数据格式Json
                     data: {

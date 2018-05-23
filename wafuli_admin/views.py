@@ -921,18 +921,39 @@ def admin_withdraw(request):
         return JsonResponse(res)
 
 @transaction.atomic
-@has_post_permission('004')
+# @has_post_permission('004')
 def admin_withdraw_autoaudit(request):
     admin_user = request.user
     if request.method == "GET":
         ret = {}
-        dic = WithdrawLog.objects.filter(audit_state='1', amount__lt=50000).aggregate(count=Count('id'), sum=Sum('amount'))
+        withlist = WithdrawLog.objects.filter(audit_state='1', amount__lt=50000).all()
+        sub_from = request.GET.get('sub_from')
+        sub_to = request.GET.get('sub_to')
+        if sub_from and sub_to:
+            dateform = datetime.datetime.strptime(sub_from, '%Y-%m-%dT%H:%M')
+            dateto = datetime.datetime.strptime(sub_to, '%Y-%m-%dT%H:%M')
+            withlist = withlist.filter(submit_time__range=(dateform, dateto))
+        id_list_str = request.GET.get('id_list')
+        if id_list_str:
+            id_list = [ int(x) for x in id_list_str.split(',') ]
+            withlist = withlist.filter(id__in=id_list)
+        dic = withlist.aggregate(count=Count('id'), sum=Sum('amount'))
         ret['count'] = dic['count'] or 0
         ret['sum'] = dic['sum'] or 0
         return JsonResponse(ret)
     if request.method == "POST":
         batch_list = []
         withlist = WithdrawLog.objects.filter(audit_state='1', amount__lt=50000).all()
+        sub_from = request.POST.get('sub_from')
+        sub_to = request.POST.get('sub_to')
+        if sub_from and sub_to:
+            dateform = datetime.datetime.strptime(sub_from, '%Y-%m-%dT%H:%M')
+            dateto = datetime.datetime.strptime(sub_to, '%Y-%m-%dT%H:%M')
+            withlist = withlist.filter(submit_time__range=(dateform, dateto))
+        id_list_str = request.POST.get('id_list')
+        if id_list_str:
+            id_list = [ int(x) for x in id_list_str.split(',') ]
+            withlist = withlist.filter(id__in=id_list)
         for obj in withlist:
             batch_list.append({
                 'obj': obj,

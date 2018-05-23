@@ -656,10 +656,10 @@
                     return;
                  }
                 //银行卡正则表达式
-                var cardNum_regx = /^[\d\s]+$/;
+                var cardNum_regx = /^\d{16}|\d{19}$/;
                 if (!cardNum_regx.test(cardNum)) {
                     $.prompt({
-                        "Content":"请输入正确的银行卡号"
+                        "Content":"请输入正确的银行卡号，银行卡位16位或者19位"
                     });
                     return;
                 }

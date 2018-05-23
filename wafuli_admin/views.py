@@ -1514,7 +1514,7 @@ def batch_withdraw_task():
         except:
             continue
 @login_required
-@has_permission('008')
+@has_permission('004')
 def batch_withdraw(request):
     if not request.user.is_staff or not request.is_ajax():
         raise Http404

@@ -25,6 +25,7 @@ from django.contrib.contenttypes.models import ContentType
 import time
 from decimal import Decimal
 from datetime import timedelta
+from django.core.cache import cache
 logger = logging.getLogger("wafuli")
 
 @login_required

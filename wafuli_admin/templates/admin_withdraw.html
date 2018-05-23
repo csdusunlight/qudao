@@ -38,6 +38,7 @@
     padding: 10px 10px;
     font-size: 16px;
     margin-top: 15px;
+   
   }
   .operate_box > label{
     margin-left: 80px;
@@ -50,7 +51,7 @@
   }
   .time_box{
     font-size: 16px;
-    /* display: none; */
+    display: none;
   }
   .star_time{
     width: 175px;
@@ -370,7 +371,7 @@
     //     });
     // });
     
-    //模态框出现
+    //模态框出现、获取选中cheakbox的值
     var checkVal;
     $(document).on('click','#audit_zhifubao',function () { 
       $(".modal_box").show();
@@ -381,9 +382,17 @@
           checkVal.push(checkboxList[i].value)
         }
       }
-      console.log(checkVal);
+      console.log('checkbox的值',checkVal);
     });
-    
+    //根据用户来显示时间盒子
+    $("#select").change(function () { 
+      var option_val = $("#select > option:selected").val();
+      if(option_val == 1){
+        $(".time_box").hide();
+      }else{
+        $(".time_box").show();
+      }
+     })
     // 一键审核模态框消失 
     $(".close").click(function () { 
       $(".modal_box").hide();
@@ -393,7 +402,6 @@
       var s_value = $("input:radio:checked").val();
       var starTime = $(".star_time").val();
       var endTime = $(".end_time").val();
-      console.log('/Admin/withdraw_autoaudit/?sub_from=' +starTime+ '&sub_to=' +endTime+ '&id_list=' + checkVal)
       console.log("时间：",starTime,endTime)
       Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=' +starTime+ '&sub_to=' +endTime+ '&id_list=' + checkVal)).
       then(function (val) { 
@@ -549,13 +557,13 @@
     <span class="title">一键审核</span>
     <div class="operate_box">
       <label>选中用户:</label>
-      <!-- <select id="select">
+      <select id="select">
         <option value="0">请选择用户</option>
         <option value="1">全部用户</option>
         <option value="2">部分用户</option>
-      </select> -->
-      <input style="margin-left: 20px;" type="radio" class="radio1" value="true" name="selectUser"><span style="margin-left: 5px;">部分用户</span>
-      <input style="margin-left: 20px;" type="radio" class="radio2" value="false" name="selectUser"><span style="margin-left: 5px;">全部用户</span>
+      </select>
+      <!-- <input style="margin-left: 20px;" type="radio" class="radio1" value="true" name="selectUser"><span style="margin-left: 5px;">部分用户</span>
+      <input style="margin-left: 20px;" type="radio" class="radio2" value="false" name="selectUser"><span style="margin-left: 5px;">全部用户</span> -->
     </div>
     <div class="time_box">
         <br>

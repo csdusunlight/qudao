@@ -47,6 +47,7 @@ from weixin.tasks import sendWeixinNotify
 from collections import OrderedDict
 from dragon.settings import FANSHU_DOMAIN
 from docs.models import Document
+from django.core.cache import cache
 
 @sensitive_post_parameters()
 @csrf_protect
@@ -1162,21 +1163,22 @@ def submitOrder(request):
         return JsonResponse(result)
     if invest_date:
         invest_date = datetime.strptime(invest_date, "%Y-%m-%d")
-    if not project.is_multisub_allowed or submit_type=='1':
-        if project.company is None:
-            queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project=project)
-        else:
-            queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id)
-        if queryset.exclude(audit_state='2').exists():
-            result['code'] = 1
-            result['msg'] = u"该手机号（首投）已提交过，请勿重复提交"
-            return JsonResponse(result)
-
-    investlog=InvestLog.objects.create(user=request.user,project_id=project_id, invest_mobile=invest_mobile, invest_date=invest_date,
-                             invest_name=invest_name, remark=remark, qq_number=qq_number, expect_amount=expect_amount,
-                             zhifubao=zhifubao, invest_amount=invest_amount, submit_type=submit_type,
-                              invest_term=invest_term, is_official=project.is_official, category=project.category,
-                              submit_way='4', audit_state='1')
+    with cache.lock(str(request.user.mobile)):
+        if not project.is_multisub_allowed or submit_type=='1':
+            if project.company is None:
+                queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project=project)
+            else:
+                queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id)
+            if queryset.exclude(audit_state='2').exists():
+                result['code'] = 1
+                result['msg'] = u"该手机号（首投）已提交过，请勿重复提交"
+                return JsonResponse(result)
+    
+        investlog=InvestLog.objects.create(user=request.user,project_id=project_id, invest_mobile=invest_mobile, invest_date=invest_date,
+                                 invest_name=invest_name, remark=remark, qq_number=qq_number, expect_amount=expect_amount,
+                                 zhifubao=zhifubao, invest_amount=invest_amount, submit_type=submit_type,
+                                  invest_term=invest_term, is_official=project.is_official, category=project.category,
+                                  submit_way='4', audit_state='1')
     #活动插入
 #     on_submit(request, request.user, investlog)
     #活动插入结束

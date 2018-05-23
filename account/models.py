@@ -93,7 +93,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     invite_code = models.CharField(u"邀请码", blank=True, max_length=10)
     invite_settle = models.DecimalField(u'上月员工推广结算金额', default = Decimal(0), max_digits=10, decimal_places=2)
     
-    zhifubao = models.CharField(u"支付宝账号（邮箱或手机号）", blank=True, max_length=20)
+    zhifubao = models.CharField(u"支付宝账号（邮箱或手机号）", blank=True, max_length=50)
     zhifubao_real_name = models.CharField(u"支付宝实名", blank=True, max_length=20)
     
     objects = MyUserManager()

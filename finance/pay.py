@@ -42,8 +42,12 @@ def batch_transfer_to_zhifubao(account_list):
             payee_type="ALIPAY_LOGONID",
             payee_account=payee_account,
             payee_real_name=payee_real_name,
-            amount=amount
+            amount=amount,
+            remark=u"福利联盟提现"
         )
+        
+        print 'start'
+        print result
         msg = result['msg']
         if msg == 'Success':
             suc_num += 1
@@ -60,6 +64,5 @@ def batch_transfer_to_zhifubao(account_list):
 
 if __name__ == '__main__':
     # function_name = "alipay_" + alipay_function_name.replace(".", "_")
-    ret = batch_transfer_to_zhifubao([{'payee_account':"18500581509",'payee_real_name':u'吕春晖','amount':0.1},
-                                {'payee_account':"18500581509",'payee_real_name':u'吕晖','amount':0.1}])
+    ret = batch_transfer_to_zhifubao([{'payee_account':"18702888275",'payee_real_name':u'彭磊','amount':0.1}])
     print ret

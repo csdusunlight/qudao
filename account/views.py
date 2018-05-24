@@ -1163,7 +1163,7 @@ def submitOrder(request):
         return JsonResponse(result)
     if invest_date:
         invest_date = datetime.strptime(invest_date, "%Y-%m-%d")
-    with cache.lock(str(request.user.mobile)):
+    with cache.lock('project_submit_%s' % project.id, timeout=2):
         if not project.is_multisub_allowed or submit_type=='1':
             if project.company is None:
                 queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project=project)

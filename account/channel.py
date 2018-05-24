@@ -153,37 +153,37 @@ def submit_itembyitem(request):
     suc_num = 0
     exist_num = 0   #jzy
     exist_phone = ""   #jzy
-    with cache.lock(str(request.user.mobile)):
-        for row in table:
-            temp = row.split('|')
-            project = Project.objects.get(id=temp[0])
-            time = datetime.datetime.strptime(temp[1],'%Y-%m-%d')
-            invest_mobile = temp[2]
-            amount = temp[3]
-            term = temp[4]
-            zhifubao = temp[5]
-            invest_name = temp[6]
-            remark = temp[7]
-            submit_type = temp[8] or '1'
-            try:
+    for row in table:
+        temp = row.split('|')
+        project = Project.objects.get(id=temp[0])
+        time = datetime.datetime.strptime(temp[1],'%Y-%m-%d')
+        invest_mobile = temp[2]
+        amount = temp[3]
+        term = temp[4]
+        zhifubao = temp[5]
+        invest_name = temp[6]
+        remark = temp[7]
+        submit_type = temp[8] or '1'
+        try:
+            with cache.lock('project_submit_%s' % project.id, timeout=2):
+                if not project.is_multisub_allowed or submit_type=='1':
+                    if project.company is None:
+                        queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project=project)
+                    else:
+                        queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id)
+                    if queryset.exclude(audit_state='2').exists():
+                        exist_num += 1   #jzy
+                        exist_phone = exist_phone + project.title + invest_mobile + ";"   #jzy
+                        continue
                 with transaction.atomic():
-                    if not project.is_multisub_allowed or submit_type=='1':
-                        if project.company is None:
-                            queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project=project)
-                        else:
-                            queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id)
-                        if queryset.exclude(audit_state='2').exists():
-                            exist_num += 1   #jzy
-                            exist_phone = exist_phone + project.title + invest_mobile + ";"   #jzy
-                            continue
                     InvestLog.objects.create(user=request.user, project=project, invest_date=time, invest_mobile=invest_mobile, invest_term=term,
                                      invest_amount=Decimal(amount), audit_state='1', is_official=project.is_official,category=project.category,
                                      zhifubao=zhifubao, invest_name=invest_name, remark=remark, submit_type=submit_type,submit_way='2',)
                     suc_num += 1
                     project.points = F('points') + 1
                     project.save(update_fields=['points',])
-            except Exception, e:
-                logger.info(e)
+        except Exception, e:
+            logger.info(e)
     result = {'code':0, 'suc_num':suc_num, 'exist_num':exist_num, 'exist_phone':exist_phone}   #jzy
     return JsonResponse(result)
 

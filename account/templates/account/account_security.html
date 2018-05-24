@@ -1,193 +1,385 @@
 {% load staticfiles %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>用户中心</title>
-<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />-->
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>用户中心</title>
+	<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+	<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />-->
+	<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
+	<style>
+		.wrapper {
+			width: 1030px;
+			min-height: 500px;
+			background: white;
+			padding: 25px 45px;
+		}
 
-<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
-<script type="text/javascript">
-$.ajaxSetup({
-    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
-});
-function validate_password(pwd){
-	var ret = false;
-	if (!pwd){
-		alert("不能为空");
-	}
-	else if (pwd.length>16){
-		alert("密码长度不能超过16位");
-	}
-	else if (pwd.length<6){
-		alert("密码长度不能少于6位");
-	}
-	else {
-		ret = true;
-	}
-	return ret;
-}
-$(function(){
-	$('.back-a6').toggleClass("on");
-	email = "{{user.email}}";
-	start = email.indexOf("@");
-	email = email.substr(start+1);
-	mail_addr = 'http://mail.' + email;
-	$("a#goto").attr('href', mail_addr);
-	$(".None-p button").click(function(){
-		$(".Password-modify").css("display","none");
-		$(".Password-modify2").css("display","none");
-		// $(".Password-modify3").css("display","none");
-		$(".Password-modify4").css("display","none");
-	});
-	$(".login-modify").click(function(){
-		$(".Password-modify").css("display","block");
-	});
-	$("#submit").click(function(){
-		initp = $("#initial_password").val();
-		newp = $("#new_password").val();
-		newp_again = $("#new_password_again").val();
-		if (!initp || !newp || !newp_again){
-			alert("不能为空");
-			return;
+		.top_desc {
+			color: #91c11d;
+			font-size: 18px;
 		}
-		else if (!validate_password(newp)){
-			return;
-		}
-		else if (newp_again!=newp){
-			alert("两次密码输入不一致");
-			return;
-		}
-		var post_url = "{%url 'password_change' %}";
-		$.ajax({
-			url: post_url,
-			dataType:"json",
-			type:'POST',
-			data : {
-				'initp': initp,
-				'newp': newp,
-			},
-			success:function(ret){
-				if(ret.code==1){
-					alert("请重新登录！")
-					window.location.href = ret.url;
-				}
-				else if(ret.code==2){
-					alert("初始登录密码输入错误！");
-				}
-				else if(ret.code==0){
-					alert("修改密码成功！");
-				}
-			},
-			error:function(){
-				alert("请检查网络连接");
-			}
-		});
-	});
-	$("#submit2").click(function(){
-		initp = $("#initial_password2").val();
-		newp = $("#new_password2").val();
-		newp_again = $("#new_password_again2").val();
-		if (!initp || !newp || !newp_again){
-			alert("不能为空");
-			return;
-		}
-		else if (!validate_password(newp)){
-			return;
-		}
-		else if (newp_again!=newp){
-			alert("两次密码输入不一致");
-			return;
-		}
-		var post_url = "{%url 'change_pay_password' %}";
-		$.ajax({
-			url: post_url,
-			dataType:"json",
-			type:'POST',
-			data : {
-				'initp': initp,
-				'newp': newp,
-				'type':'set',
-			},
-			success:function(ret){
-				if(ret.code==1){
-					alert("请重新登录！")
-					window.location.href = ret.url;
-				}
-				else if(ret.code==2){
-					alert("初始密码输入错误！");
-				}
-				else if(ret.code==0){
-					alert("修改密码成功！");
-					window.location.reload();
-				}
-			},
-			error:function(){
-				alert("请检查网络连接");
-			}
-		});
-	});
-	$("#submit4").click(function(){
-		initp = $("#initial_password4").val();
-		newp = $("#new_password4").val();
-		newp_again = $("#new_password_again4").val();
-		if (!initp || !newp || !newp_again){
-			alert("不能为空");
-			return;
-		}
-		else if (!validate_password(newp)){
-			return;
-		}
-		else if (newp_again!=newp){
-			alert("两次密码输入不一致");
-			return;
-		}
-		var post_url = "{%url 'change_pay_password' %}";
-		$.ajax({
-			url: post_url,
-			dataType:"json",
-			type:'POST',
-			data : {
-				'initp': initp,
-				'newp': newp,
-				'type':'change',
-			},
-			success:function(ret){
-				if(ret.code==1){
-					alert("请重新登录！")
-					window.location.href = ret.url;
-				}
-				else if(ret.code==2){
-					alert("初始密码输入错误！");
-				}
-				else if(ret.code==0){
-					alert("修改密码成功！");
-					$(".Password-modify4").css("display","none");
-				}
-			},
-			error:function(){
-				alert("请检查网络连接");
-			}
-		});
-	});
-});
-</script>
 
+		.idBox {
+			padding: 10px 0;
+			width: 100%;
+			height: 60px;
+			margin-top: 40px;
+			line-height: 45px;
+		}
+
+		.ipt {
+			margin-left: 60px;
+		}
+
+		.item {
+			margin-left: 10px;
+		}
+
+		.yearBox {
+			padding: 10px 0;
+			width: 100%;
+			height: 60px;
+			margin-top: 50px;
+			line-height: 30px;
+		}
+
+		.customerBox {
+			padding: 10px 0;
+			width: 100%;
+			height: 60px;
+			line-height: 30px;
+		}
+
+		.whereaboutsBox {
+			padding: 10px 0;
+			width: 100%;
+			height: 60px;
+			/* margin-top: 40px; */
+			line-height: 30px;
+		}
+
+		.submit {
+			width: 180px;
+			height: 45px;
+			color: white;
+			border-radius: 10px;
+			background: #91c11d;
+			margin: 20px 240px;
+			outline: none;
+			border: none;
+		}
+
+		.auditBox {
+			width: 1030px;
+			min-height: 500px;
+			background: white;
+			padding: 25px 45px;
+			color: #91c11d;
+		}
+
+		.audit_1 {
+			padding: 10px 10px;
+			width: 550px;
+			min-height: 30px;
+			position: relative;
+			font-size: 16px;
+			margin: 50px auto;
+		}
+
+		.pass {
+			width: 30px;
+			height: 30px;
+			background: url(../../../static/images/right_icon.png) no-repeat center center;
+			border-radius: 50%;
+			display: inline-block;
+			cursor: pointer;
+		}
+
+		.auditing {
+			width: 30px;
+			height: 30px;
+			background: url(../../../static/images/dot_icon.png) no-repeat center center;
+			border-radius: 50%;
+			display: inline-block;
+			cursor: pointer;
+		}
+
+		.result {
+			width: 30px;
+			height: 30px;
+			/* background: url(../../../static/images/dot_icon.png) no-repeat center center; */
+			border-radius: 50%;
+			display: inline-block;
+			text-align: center;
+			line-height: 30px;
+			font-size: 20px;
+			color: #a2ae88;
+			position: relative;
+			top: -10px;
+			left: -18px;
+		}
+
+		.line {
+			width: 194px;
+			height: 2px;
+			background: #91c11d;
+			display: inline-block;
+			position: relative;
+			top: -15px;
+		}
+
+		.get_aduit {
+			width: 150px;
+			height: 50px;
+			text-align: center;
+			line-height: 40px;
+			position: absolute;
+			top: 60px;
+			left: -50px;
+		}
+
+		.audit_title {
+			font-size: 16px;
+		}
+
+		.get_aduiting {
+			width: 150px;
+			height: 50px;
+			text-align: center;
+			line-height: 40px;
+			position: absolute;
+			top: 60px;
+			left: 180px;
+		}
+
+		.get_result {
+			width: 150px;
+			height: 50px;
+			text-align: center;
+			line-height: 40px;
+			position: absolute;
+			top: 60px;
+			right: 0;
+			color: #c3cab3;
+		}
+
+		/* 审核未通过盒子 */
+
+		.audit_2 {
+			padding: 10px 10px;
+			width: 550px;
+			min-height: 30px;
+			position: relative;
+			font-size: 16px;
+			margin: 100px auto;
+		}
+
+		.result1 {
+			width: 30px;
+			height: 30px;
+			background: url(../../../static/images/right_icon.png) no-repeat center center;
+			border-radius: 50%;
+			display: inline-block;
+			cursor: pointer;
+			position: absolute;
+			bottom: 15px;
+			right: 45px;
+		}
+
+		.auditing1 {
+			width: 30px;
+			height: 30px;
+			background: url(../../../static/images/right_icon.png) no-repeat center center;
+			border-radius: 50%;
+			display: inline-block;
+			cursor: pointer;
+		}
+
+		.audit_3 {
+			padding: 10px 10px;
+			width: 800px;
+			min-height: 30px;
+			position: relative;
+			font-size: 16px;
+			margin: 100px auto;
+		}
+		.refuse{
+			width: 30px;
+			height: 30px;
+			background: url(../../../static/images/wrong_icon.png) no-repeat center center;
+			border-radius: 50%;
+			display: inline-block;
+			cursor: pointer;
+		}
+		.again_op{
+			width: 30px;
+			height: 30px;
+			background: url(../../../static/images/again_icon.png) no-repeat center center;
+			border-radius: 50%;
+			display: inline-block;
+			cursor: pointer;
+		}
+		.no_pass{
+			width: 150px;
+			height: 50px;
+			text-align: center;
+			line-height: 40px;
+			position: absolute;
+			top: 60px;
+			right: 230px;
+			color:#8bb815;
+		}
+		.apply_again{
+			width: 150px;
+			height: 50px;
+			text-align: center;
+			line-height: 40px;
+			position: absolute;
+			top: 60px;
+			right: 0;
+			color:#8bb815;
+		}
+	</style>
 </head>
 
 <body>
-    {% include "header.html" %}
+	{% include "header.html" %}
 	<div class="Content">
-    	<!--头部-->
-    	<!--内容-->
-    	{% include "account/left.html" %}
-    	<div class="RightCont">
-                <div class="RightCont">
+		<!--头部-->
+		<!--内容-->
+		{% include "account/left.html" %}
+		<div class="RightCont">
+			<div class="wrapper">
+				<p class="top_desc">渠道申请</p>
+				<form>
+					<div class="idBox">
+						<span class="title">您的身份*：</span>
+						<input style="margin-left: 20px" type="radio" name="id" value="学生党"><span class="item">学生党</span>
+						<input class="ipt" type="radio" name="id" value="宝妈"><span class="item">宝妈</span>
+						<input class="ipt" type="radio" name="id" value="羊毛党"><span class="item">羊毛党</span>
+						<input class="ipt" type="radio" name="id" value="兼职"><span class="item">兼职</span>
+						<input class="ipt" type="radio" name="id" value="个人站长"><span class="item">个人站长</span>
+						<input class="ipt" type="radio" name="id" value="金融大V"><span class="item">金融大V</span>
+						<br>
+						<input style="margin-left: 100px;" class="ipt" type="radio" name="id" value="理财师"><span class="item">理财师</span>
+						<input class="ipt" type="radio" name="id"><span class="item" value="理财推手">理财推手</span>
+					</div>
+					<div class="yearBox">
+						<span class="title">经验年限*：</span>
+						<input style="margin-left: 20px" type="radio" name="year" value="新手"><span class="item">新手</span>
+						<input style="margin-left: 75px" class="ipt" type="radio" name="year" value="1年以内"><span class="item">1年以内</span>
+						<input style="margin-left: 40px" class="ipt" type="radio" name="year" value="1-2年"><span class="item">1-2年</span>
+						<input style="margin-left: 65px" class="ipt" type="radio" name="year" value="3年以上"><span class="item">3年以上</span>
+					</div>
+					<div class="customerBox">
+						<span class="title">客户资源*：</span>
+						<input style="margin-left: 20px" type="radio" name="customer" value="50人以下"><span class="item">50人以下</span>
+						<input style="margin-left: 45px" class="ipt" type="radio" name="customer" value="50-100人"><span class="item">50-100人</span>
+						<input style="margin-left: 32px" class="ipt" type="radio" name="customer" value="100-500人"><span class="item">100-500人</span>
+						<input style="margin-left: 35px" class="ipt" type="radio" name="customer" value="500人以上"><span class="item">500人以上</span>
+					</div>
+					<div class="customerBox">
+						<span class="title">资金体量*：</span>
+						<input style="margin-left: 20px" type="radio" name="amount" value="50万以下"><span class="item">50万以下</span>
+						<input style="margin-left: 45px" class="ipt" type="radio" name="amount" value="50-100万"><span class="item">50-100万</span>
+						<input style="margin-left: 32px" class="ipt" type="radio" name="amount" value="100-500万"><span class="item">100-500万</span>
+						<input style="margin-left: 35px" class="ipt" type="radio" name="amount" value="500万以上"><span class="item">500万以上</span>
+					</div>
+					<div class="whereaboutsBox">
+						<span class="title">投资去向*：</span>
+						<input style="margin-left: 20px" type="radio" name="amount" value="小额大单"><span class="item">小额大单</span>
+						<input style="margin-left: 48px" class="ipt" type="radio" name="amount" value="大额单"><span class="item">大额单</span>
+						<input style="margin-left: 45px" class="ipt" type="radio" name="amount" value="媒体单"><span class="item">媒体单</span>
+						<input style="margin-left: 60px" class="ipt" type="radio" name="amount" value="待定"><span class="item">待定</span>
+					</div>
+					<button class="submit">提交</button>
+				</form>
+			</div> 
+			<!-- <div class="auditBox">
+				<p class="top_desc">渠道申请进度</p>
+				
+				<div class="audit_1">
+					<div class="pass"></div>
+					<span class="line"></span>
+					<div class="auditing"></div>
+					<span class="line" style="background: #e5e5e3;"></span>
+					<div class="result">●</div>
+					<div class="get_aduit">
+						<p class="audit_title">提交时间</p>
+						<span>2017-02-23</span>
+						<span>15:00:00</span>
+					</div>
+					<div class="get_aduiting">
+						<p class="audit_title">提交时间</p>
+						<span>2017-02-23</span>
+						<span>15:00:00</span>
+					</div>
+					<div class="get_result">
+						<p class="audit_title">审核结果</p>
+					</div>
+				</div>
+				
+				<div class="audit_2">
+					<div class="pass"></div>
+					<span class="line"></span>
+					<div class="auditing1"></div>
+					<span class="line"></span>
+					<div class="result1"></div>
+					<div class="get_aduit">
+						<p class="audit_title">提交时间</p>
+						<span>2017-02-23</span>
+						<span>15:00:00</span>
+					</div>
+					<div class="get_aduiting">
+						<p class="audit_title">审核完成</p>
+						<span>2017-02-23</span>
+						<span>15:00:00</span>
+					</div>
+					<div class="get_result">
+						<p class="audit_title" style="margin-left: 20px;color: #91c11d;">审核通过</p>
+						<span style="color: #91c11d;">2017-02-23</span>
+						<span style="color: #91c11d;">15:00:00</span>
+					</div>
+				</div>
+				
+				<div class="audit_3">
+					<div class="pass"></div>
+					<span class="line"></span>
+					<div class="auditing1"></div>
+					<span class="line"></span>
+					<div class="refuse"></div>
+					<span class="line"></span>
+					<div class="again_op"></div>
+					<div class="get_aduit">
+						<p class="audit_title">提交时间</p>
+						<span>2017-02-23</span>
+						<span>15:00:00</span>
+					</div>
+					<div class="get_aduiting">
+						<p class="audit_title">审核完成</p>
+						<span>2017-02-23</span>
+						<span>15:00:00</span>
+					</div>
+					<div class="no_pass">
+						<p class="audit_title">提交时间</p>
+						<span>2017-02-23</span>
+						<span>15:00:00</span>
+					</div>
+					<div class="apply_again">
+						<p class="audit_title">重新申请</p>
+					</div>
+				</div>
+
+
+			</div> -->
+
+
+			<!-- <div class="RightCont">
                 	<div class="binding" style="padding-bottom:0;">
                     	<div class="Binding-Top">
                         	<h2>账户管理</h2>
@@ -250,13 +442,11 @@ $(function(){
                             </ul>
                         </div>
                     </div>
+                </div> -->
+		</div>
 
-
-                </div>
-        </div>
-
-        <!--登录密码修改弹窗-->
-        <div class="Password-modify" style="display:none;">
+		<!--登录密码修改弹窗-->
+		<!-- <div class="Password-modify" style="display:none;">
         	<div class="Passbox">
             	<div class="Passinfo">
                 	<h2>登录密码修改</h2>
@@ -309,15 +499,187 @@ $(function(){
             	<button></button>
             </div>
             </div>
-        </div>
-<!--底部-->
-<div style="clear: both;"></div>
-</div>
-  {% include "footer.html" %}
-  <!--浮动窗口-->
-    </div>
+        </div> -->
+		<!--底部-->
+		<div style="clear: both;"></div>
+	</div>
+	{% include "footer.html" %}
+	<!--浮动窗口-->
+	</div>
 
+	<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+	<script type="text/javascript">
+		$.ajaxSetup({
+			data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
+		});
+		$(function () {
+			$('.back-a6').toggleClass("on");
+		})
+		// function validate_password(pwd){
+		// 	var ret = false;
+		// 	if (!pwd){
+		// 		alert("不能为空");
+		// 	}
+		// 	else if (pwd.length>16){
+		// 		alert("密码长度不能超过16位");
+		// 	}
+		// 	else if (pwd.length<6){
+		// 		alert("密码长度不能少于6位");
+		// 	}
+		// 	else {
+		// 		ret = true;
+		// 	}
+		// 	return ret;
+		// }
+		// $(function(){
+		// 	$('.back-a6').toggleClass("on");
+		// 	email = "{{user.email}}";
+		// 	start = email.indexOf("@");
+		// 	email = email.substr(start+1);
+		// 	mail_addr = 'http://mail.' + email;
+		// 	$("a#goto").attr('href', mail_addr);
+		// 	$(".None-p button").click(function(){
+		// 		$(".Password-modify").css("display","none");
+		// 		$(".Password-modify2").css("display","none");
+		// 		// $(".Password-modify3").css("display","none");
+		// 		$(".Password-modify4").css("display","none");
+		// 	});
+		// 	$(".login-modify").click(function(){
+		// 		$(".Password-modify").css("display","block");
+		// 	});
+		// 	$("#submit").click(function(){
+		// 		initp = $("#initial_password").val();
+		// 		newp = $("#new_password").val();
+		// 		newp_again = $("#new_password_again").val();
+		// 		if (!initp || !newp || !newp_again){
+		// 			alert("不能为空");
+		// 			return;
+		// 		}
+		// 		else if (!validate_password(newp)){
+		// 			return;
+		// 		}
+		// 		else if (newp_again!=newp){
+		// 			alert("两次密码输入不一致");
+		// 			return;
+		// 		}
+		// 		var post_url = "{%url 'password_change' %}";
+		// 		$.ajax({
+		// 			url: post_url,
+		// 			dataType:"json",
+		// 			type:'POST',
+		// 			data : {
+		// 				'initp': initp,
+		// 				'newp': newp,
+		// 			},
+		// 			success:function(ret){
+		// 				if(ret.code==1){
+		// 					alert("请重新登录！")
+		// 					window.location.href = ret.url;
+		// 				}
+		// 				else if(ret.code==2){
+		// 					alert("初始登录密码输入错误！");
+		// 				}
+		// 				else if(ret.code==0){
+		// 					alert("修改密码成功！");
+		// 				}
+		// 			},
+		// 			error:function(){
+		// 				alert("请检查网络连接");
+		// 			}
+		// 		});
+		// 	});
+		// 	$("#submit2").click(function(){
+		// 		initp = $("#initial_password2").val();
+		// 		newp = $("#new_password2").val();
+		// 		newp_again = $("#new_password_again2").val();
+		// 		if (!initp || !newp || !newp_again){
+		// 			alert("不能为空");
+		// 			return;
+		// 		}
+		// 		else if (!validate_password(newp)){
+		// 			return;
+		// 		}
+		// 		else if (newp_again!=newp){
+		// 			alert("两次密码输入不一致");
+		// 			return;
+		// 		}
+		// 		var post_url = "{%url 'change_pay_password' %}";
+		// 		$.ajax({
+		// 			url: post_url,
+		// 			dataType:"json",
+		// 			type:'POST',
+		// 			data : {
+		// 				'initp': initp,
+		// 				'newp': newp,
+		// 				'type':'set',
+		// 			},
+		// 			success:function(ret){
+		// 				if(ret.code==1){
+		// 					alert("请重新登录！")
+		// 					window.location.href = ret.url;
+		// 				}
+		// 				else if(ret.code==2){
+		// 					alert("初始密码输入错误！");
+		// 				}
+		// 				else if(ret.code==0){
+		// 					alert("修改密码成功！");
+		// 					window.location.reload();
+		// 				}
+		// 			},
+		// 			error:function(){
+		// 				alert("请检查网络连接");
+		// 			}
+		// 		});
+		// 	});
+		// 	$("#submit4").click(function(){
+		// 		initp = $("#initial_password4").val();
+		// 		newp = $("#new_password4").val();
+		// 		newp_again = $("#new_password_again4").val();
+		// 		if (!initp || !newp || !newp_again){
+		// 			alert("不能为空");
+		// 			return;
+		// 		}
+		// 		else if (!validate_password(newp)){
+		// 			return;
+		// 		}
+		// 		else if (newp_again!=newp){
+		// 			alert("两次密码输入不一致");
+		// 			return;
+		// 		}
+		// 		var post_url = "{%url 'change_pay_password' %}";
+		// 		$.ajax({
+		// 			url: post_url,
+		// 			dataType:"json",
+		// 			type:'POST',
+		// 			data : {
+		// 				'initp': initp,
+		// 				'newp': newp,
+		// 				'type':'change',
+		// 			},
+		// 			success:function(ret){
+		// 				if(ret.code==1){
+		// 					alert("请重新登录！")
+		// 					window.location.href = ret.url;
+		// 				}
+		// 				else if(ret.code==2){
+		// 					alert("初始密码输入错误！");
+		// 				}
+		// 				else if(ret.code==0){
+		// 					alert("修改密码成功！");
+		// 					$(".Password-modify4").css("display","none");
+		// 				}
+		// 			},
+		// 			error:function(){
+		// 				alert("请检查网络连接");
+		// 			}
+		// 		});
+		// 	});
+		// });
+		$(function () {
 
+		});
+	</script>
 
 </body>
+
 </html>

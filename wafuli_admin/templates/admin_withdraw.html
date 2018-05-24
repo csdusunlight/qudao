@@ -83,7 +83,7 @@
   var data = '<table width="100%"><tr><th width="2%"></th><th width="10%">QQ</th><th width="10%">手机号</th><th width="10%">开户行</th><th width="10%">开户行姓名</th>'+
   '<th width="10%">银行卡号</th><th width="10%">支付宝</th><th width="8%">申请提现金额</th><th>申请时间</th>'+
   '<th width="10%">处理</th><th width="10%">自动审核失败原因</th>'+
-  '</tr>[results]<tr><td><input class="checkBox" type="checkbox" data-id="{id}" value="{id}"><td>{qq_number}</td><td>{mobile}</td><td>{bank}</td>'+
+  '</tr>[results]<tr><td><input class="checkBox" type="checkbox" name="checkbox" data-id="{id}" value="{id}"><td>{qq_number}</td><td>{mobile}</td><td>{bank}</td>'+
   '<td>{real_name}</td><td>{card_number}</td><td>{zhifubao}</td><td>{amount}</td><td>{submit_time}</td>'+
   '<td id="item_{id}"><a class="fyin" onclick="pass({id})">接受'+
   '</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td><td>{except_info}</td></tr>[/results]</table>';
@@ -373,55 +373,138 @@
     
     //模态框出现、获取选中cheakbox的值
     var checkVal;
-    $(document).on('click','#audit_zhifubao',function () { 
-      $(".modal_box").show();
-      var checkboxList = document.querySelectorAll("input[type='checkbox']");
+    $(document).on('click','#audit_zhifubao',function () {
+      // $(".modal_box").show();
+      var checkboxList = document.querySelectorAll("input[name='checkbox']");
       checkVal = [];
       for(var i in checkboxList){
         if(checkboxList[i].checked){
-          checkVal.push(checkboxList[i].value)
+          console.log("check");
+          checkVal.push(checkboxList[i].value);
         }
+      }
+      if(checkVal == ''){
+        $(".modal_box").show();
+        console.log("我没有勾选中了");
+      }else if(checkVal != ''){  
+        console.log("我勾选中了");
+        //单独勾选用户提现ajax
+        Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=' + checkVal)).
+        then(function (val) { 
+          var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
+          if (is_sure == true) {
+              return $.ajax({url:'/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=' + checkVal,type:'post'});
+          }
+          else{
+            throw  new BreakSignal();
+          }
+        })
+        .catch(function(error){
+            if(error instanceof BreakSignal){
+              
+            }
+            else{
+              alert(error.statusText);
+            }
+        });
       }
       console.log('checkbox的值',checkVal);
     });
+
     //根据用户来显示时间盒子
-    $("#select").change(function () { 
-      var option_val = $("#select > option:selected").val();
-      if(option_val == 1){
-        $(".time_box").hide();
-      }else{
+    var i = 1
+    $("#user_checkBox").change(function () { 
+      i ++
+      if(i % 2 == 0){
         $(".time_box").show();
+      }else{
+        $(".time_box").hide();
       }
-     })
+    });
     // 一键审核模态框消失 
     $(".close").click(function () { 
       $(".modal_box").hide();
     });
+    
     class BreakSignal { }
-    $(".submit_btn").click(function () { 
-      var s_value = $("input:radio:checked").val();
+    $(".submit_btn").click(function () {
       var starTime = $(".star_time").val();
       var endTime = $(".end_time").val();
-      console.log("时间：",starTime,endTime)
-      Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=' +starTime+ '&sub_to=' +endTime+ '&id_list=' + checkVal)).
-      then(function (val) { 
-        var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
-        if (is_sure == true) {
-            return $.ajax({url:'/Admin/withdraw_autoaudit/?sub_from=' +starTime+ '&sub_to=' +endTime+ '&id_list=' + checkVal,type:'post'});
-            $(".modal_box").hide();
-    	   }
-    	   else{
-    		   throw  new BreakSignal();
-    	   }
-      })
-      .catch(function(error){
-          if(error instanceof BreakSignal){
+      console.log("时间：",starTime,endTime);
+      
+      if(i % 2 == 0){
+        // console.log("时间段提现")
+        if(!starTime){
+          alert("开始时间必选！")
+          return;
+        }
+        if(!endTime){
+          alert("结束时间必选！")
+          return;
+        }
+        Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=' +starTime+ '&sub_to=' +endTime+ '&id_list=')).
+        then(function (val) { 
+          var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
+          if (is_sure == true) {
+              return $.ajax({url:'/Admin/withdraw_autoaudit/?sub_from=' +starTime+ '&sub_to=' +endTime+ '&id_list=',type:'post'});
+              $(".modal_box").hide();
+           }
+           else{
+        	   throw  new BreakSignal();
+           }
+        })
+        .catch(function(error){
+            if(error instanceof BreakSignal){
+              
+            }
+            else{
+              alert(error.statusText);
+            }
+        });
+      }else{
+        // console.log("全部提现")
+        Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=')).
+        then(function (val) { 
+          var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
+          if (is_sure == true) {
+              return $.ajax({url:'/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=',type:'post'});
+              $(".modal_box").hide();
+           }
+           else{
+        	   throw  new BreakSignal();
+           }
+        })
+        .catch(function(error){
+            if(error instanceof BreakSignal){
+              
+            }
+            else{
+              alert(error.statusText);
+            }
+        });
+      }
+
+
+      // Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=' +starTime+ '&sub_to=' +endTime+ '&id_list=' + checkVal)).
+      // then(function (val) { 
+      //   var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
+      //   if (is_sure == true) {
+      //       return $.ajax({url:'/Admin/withdraw_autoaudit/?sub_from=' +starTime+ '&sub_to=' +endTime+ '&id_list=' + checkVal,type:'post'});
+      //       $(".modal_box").hide();
+    	//    }
+    	//    else{
+    	// 	   throw  new BreakSignal();
+    	//    }
+      // })
+      // .catch(function(error){
+      //     if(error instanceof BreakSignal){
             
-          }
-          else{
-            alert(error.statusText);
-          }
-      });
+      //     }
+      //     else{
+      //       alert(error.statusText);
+      //     }
+      // });
+      
     })
 
  });
@@ -556,14 +639,13 @@
     <div class="close">×</div>
     <span class="title">一键审核</span>
     <div class="operate_box">
-      <label>选中用户:</label>
+      <!-- <label>选择用户:</label>
       <select id="select">
         <option value="0">请选择用户</option>
         <option value="1">全部用户</option>
         <option value="2">部分用户</option>
-      </select>
-      <!-- <input style="margin-left: 20px;" type="radio" class="radio1" value="true" name="selectUser"><span style="margin-left: 5px;">部分用户</span>
-      <input style="margin-left: 20px;" type="radio" class="radio2" value="false" name="selectUser"><span style="margin-left: 5px;">全部用户</span> -->
+      </select> -->
+      <input type="checkbox" id="user_checkBox" style="margin-left: 130px"><span style="margin-left: 30px">用户可选时间段</span>
     </div>
     <div class="time_box">
         <br>

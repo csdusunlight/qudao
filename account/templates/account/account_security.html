@@ -112,7 +112,6 @@
 		.result {
 			width: 30px;
 			height: 30px;
-			/* background: url(../../../static/images/dot_icon.png) no-repeat center center; */
 			border-radius: 50%;
 			display: inline-block;
 			text-align: center;
@@ -254,7 +253,7 @@
 		<!--内容-->
 		{% include "account/left.html" %}
 		<div class="RightCont">
-			<div class="wrapper">
+			<!-- <div class="wrapper">
 				<p class="top_desc">渠道申请</p>
 				<form>
 					<div class="idBox">
@@ -299,7 +298,7 @@
 					</div>
 					<button class="submit">提交</button>
 				</form>
-			</div> 
+			</div>  -->
 			<!-- <div class="auditBox">
 				<p class="top_desc">渠道申请进度</p>
 				
@@ -379,7 +378,7 @@
 			</div> -->
 
 
-			<!-- <div class="RightCont">
+			<div class="RightCont">
                 	<div class="binding" style="padding-bottom:0;">
                     	<div class="Binding-Top">
                         	<h2>账户管理</h2>
@@ -442,11 +441,11 @@
                             </ul>
                         </div>
                     </div>
-                </div> -->
+                </div>
 		</div>
 
 		<!--登录密码修改弹窗-->
-		<!-- <div class="Password-modify" style="display:none;">
+		<div class="Password-modify" style="display:none;">
         	<div class="Passbox">
             	<div class="Passinfo">
                 	<h2>登录密码修改</h2>
@@ -499,7 +498,7 @@
             	<button></button>
             </div>
             </div>
-        </div> -->
+        </div>
 		<!--底部-->
 		<div style="clear: both;"></div>
 	</div>
@@ -515,166 +514,166 @@
 		$(function () {
 			$('.back-a6').toggleClass("on");
 		})
-		// function validate_password(pwd){
-		// 	var ret = false;
-		// 	if (!pwd){
-		// 		alert("不能为空");
-		// 	}
-		// 	else if (pwd.length>16){
-		// 		alert("密码长度不能超过16位");
-		// 	}
-		// 	else if (pwd.length<6){
-		// 		alert("密码长度不能少于6位");
-		// 	}
-		// 	else {
-		// 		ret = true;
-		// 	}
-		// 	return ret;
-		// }
-		// $(function(){
-		// 	$('.back-a6').toggleClass("on");
-		// 	email = "{{user.email}}";
-		// 	start = email.indexOf("@");
-		// 	email = email.substr(start+1);
-		// 	mail_addr = 'http://mail.' + email;
-		// 	$("a#goto").attr('href', mail_addr);
-		// 	$(".None-p button").click(function(){
-		// 		$(".Password-modify").css("display","none");
-		// 		$(".Password-modify2").css("display","none");
-		// 		// $(".Password-modify3").css("display","none");
-		// 		$(".Password-modify4").css("display","none");
-		// 	});
-		// 	$(".login-modify").click(function(){
-		// 		$(".Password-modify").css("display","block");
-		// 	});
-		// 	$("#submit").click(function(){
-		// 		initp = $("#initial_password").val();
-		// 		newp = $("#new_password").val();
-		// 		newp_again = $("#new_password_again").val();
-		// 		if (!initp || !newp || !newp_again){
-		// 			alert("不能为空");
-		// 			return;
-		// 		}
-		// 		else if (!validate_password(newp)){
-		// 			return;
-		// 		}
-		// 		else if (newp_again!=newp){
-		// 			alert("两次密码输入不一致");
-		// 			return;
-		// 		}
-		// 		var post_url = "{%url 'password_change' %}";
-		// 		$.ajax({
-		// 			url: post_url,
-		// 			dataType:"json",
-		// 			type:'POST',
-		// 			data : {
-		// 				'initp': initp,
-		// 				'newp': newp,
-		// 			},
-		// 			success:function(ret){
-		// 				if(ret.code==1){
-		// 					alert("请重新登录！")
-		// 					window.location.href = ret.url;
-		// 				}
-		// 				else if(ret.code==2){
-		// 					alert("初始登录密码输入错误！");
-		// 				}
-		// 				else if(ret.code==0){
-		// 					alert("修改密码成功！");
-		// 				}
-		// 			},
-		// 			error:function(){
-		// 				alert("请检查网络连接");
-		// 			}
-		// 		});
-		// 	});
-		// 	$("#submit2").click(function(){
-		// 		initp = $("#initial_password2").val();
-		// 		newp = $("#new_password2").val();
-		// 		newp_again = $("#new_password_again2").val();
-		// 		if (!initp || !newp || !newp_again){
-		// 			alert("不能为空");
-		// 			return;
-		// 		}
-		// 		else if (!validate_password(newp)){
-		// 			return;
-		// 		}
-		// 		else if (newp_again!=newp){
-		// 			alert("两次密码输入不一致");
-		// 			return;
-		// 		}
-		// 		var post_url = "{%url 'change_pay_password' %}";
-		// 		$.ajax({
-		// 			url: post_url,
-		// 			dataType:"json",
-		// 			type:'POST',
-		// 			data : {
-		// 				'initp': initp,
-		// 				'newp': newp,
-		// 				'type':'set',
-		// 			},
-		// 			success:function(ret){
-		// 				if(ret.code==1){
-		// 					alert("请重新登录！")
-		// 					window.location.href = ret.url;
-		// 				}
-		// 				else if(ret.code==2){
-		// 					alert("初始密码输入错误！");
-		// 				}
-		// 				else if(ret.code==0){
-		// 					alert("修改密码成功！");
-		// 					window.location.reload();
-		// 				}
-		// 			},
-		// 			error:function(){
-		// 				alert("请检查网络连接");
-		// 			}
-		// 		});
-		// 	});
-		// 	$("#submit4").click(function(){
-		// 		initp = $("#initial_password4").val();
-		// 		newp = $("#new_password4").val();
-		// 		newp_again = $("#new_password_again4").val();
-		// 		if (!initp || !newp || !newp_again){
-		// 			alert("不能为空");
-		// 			return;
-		// 		}
-		// 		else if (!validate_password(newp)){
-		// 			return;
-		// 		}
-		// 		else if (newp_again!=newp){
-		// 			alert("两次密码输入不一致");
-		// 			return;
-		// 		}
-		// 		var post_url = "{%url 'change_pay_password' %}";
-		// 		$.ajax({
-		// 			url: post_url,
-		// 			dataType:"json",
-		// 			type:'POST',
-		// 			data : {
-		// 				'initp': initp,
-		// 				'newp': newp,
-		// 				'type':'change',
-		// 			},
-		// 			success:function(ret){
-		// 				if(ret.code==1){
-		// 					alert("请重新登录！")
-		// 					window.location.href = ret.url;
-		// 				}
-		// 				else if(ret.code==2){
-		// 					alert("初始密码输入错误！");
-		// 				}
-		// 				else if(ret.code==0){
-		// 					alert("修改密码成功！");
-		// 					$(".Password-modify4").css("display","none");
-		// 				}
-		// 			},
-		// 			error:function(){
-		// 				alert("请检查网络连接");
-		// 			}
-		// 		});
-		// 	});
-		// });
+		function validate_password(pwd){
+			var ret = false;
+			if (!pwd){
+				alert("不能为空");
+			}
+			else if (pwd.length>16){
+				alert("密码长度不能超过16位");
+			}
+			else if (pwd.length<6){
+				alert("密码长度不能少于6位");
+			}
+			else {
+				ret = true;
+			}
+			return ret;
+		}
+		$(function(){
+			$('.back-a6').toggleClass("on");
+			email = "{{user.email}}";
+			start = email.indexOf("@");
+			email = email.substr(start+1);
+			mail_addr = 'http://mail.' + email;
+			$("a#goto").attr('href', mail_addr);
+			$(".None-p button").click(function(){
+				$(".Password-modify").css("display","none");
+				$(".Password-modify2").css("display","none");
+				// $(".Password-modify3").css("display","none");
+				$(".Password-modify4").css("display","none");
+			});
+			$(".login-modify").click(function(){
+				$(".Password-modify").css("display","block");
+			});
+			$("#submit").click(function(){
+				initp = $("#initial_password").val();
+				newp = $("#new_password").val();
+				newp_again = $("#new_password_again").val();
+				if (!initp || !newp || !newp_again){
+					alert("不能为空");
+					return;
+				}
+				else if (!validate_password(newp)){
+					return;
+				}
+				else if (newp_again!=newp){
+					alert("两次密码输入不一致");
+					return;
+				}
+				var post_url = "{%url 'password_change' %}";
+				$.ajax({
+					url: post_url,
+					dataType:"json",
+					type:'POST',
+					data : {
+						'initp': initp,
+						'newp': newp,
+					},
+					success:function(ret){
+						if(ret.code==1){
+							alert("请重新登录！")
+							window.location.href = ret.url;
+						}
+						else if(ret.code==2){
+							alert("初始登录密码输入错误！");
+						}
+						else if(ret.code==0){
+							alert("修改密码成功！");
+						}
+					},
+					error:function(){
+						alert("请检查网络连接");
+					}
+				});
+			});
+			$("#submit2").click(function(){
+				initp = $("#initial_password2").val();
+				newp = $("#new_password2").val();
+				newp_again = $("#new_password_again2").val();
+				if (!initp || !newp || !newp_again){
+					alert("不能为空");
+					return;
+				}
+				else if (!validate_password(newp)){
+					return;
+				}
+				else if (newp_again!=newp){
+					alert("两次密码输入不一致");
+					return;
+				}
+				var post_url = "{%url 'change_pay_password' %}";
+				$.ajax({
+					url: post_url,
+					dataType:"json",
+					type:'POST',
+					data : {
+						'initp': initp,
+						'newp': newp,
+						'type':'set',
+					},
+					success:function(ret){
+						if(ret.code==1){
+							alert("请重新登录！")
+							window.location.href = ret.url;
+						}
+						else if(ret.code==2){
+							alert("初始密码输入错误！");
+						}
+						else if(ret.code==0){
+							alert("修改密码成功！");
+							window.location.reload();
+						}
+					},
+					error:function(){
+						alert("请检查网络连接");
+					}
+				});
+			});
+			$("#submit4").click(function(){
+				initp = $("#initial_password4").val();
+				newp = $("#new_password4").val();
+				newp_again = $("#new_password_again4").val();
+				if (!initp || !newp || !newp_again){
+					alert("不能为空");
+					return;
+				}
+				else if (!validate_password(newp)){
+					return;
+				}
+				else if (newp_again!=newp){
+					alert("两次密码输入不一致");
+					return;
+				}
+				var post_url = "{%url 'change_pay_password' %}";
+				$.ajax({
+					url: post_url,
+					dataType:"json",
+					type:'POST',
+					data : {
+						'initp': initp,
+						'newp': newp,
+						'type':'change',
+					},
+					success:function(ret){
+						if(ret.code==1){
+							alert("请重新登录！")
+							window.location.href = ret.url;
+						}
+						else if(ret.code==2){
+							alert("初始密码输入错误！");
+						}
+						else if(ret.code==0){
+							alert("修改密码成功！");
+							$(".Password-modify4").css("display","none");
+						}
+					},
+					error:function(){
+						alert("请检查网络连接");
+					}
+				});
+			});
+		});
 		$(function () {
 
 		});

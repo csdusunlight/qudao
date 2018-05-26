@@ -986,7 +986,7 @@
                     </div>
                     <div class="info">
                         <span class="itemTxt">请输入卡号</span>
-                        <input class="itemIpt cardNum" maxlength="19" type="text" />
+                        <input class="itemIpt cardNum" maxlength="23" type="text" onkeyup="this.value =this.value.replace(/\s/g,'').replace(/[^\d]/g,'').replace(/(\d{4})(?=\d)/g,'$1 ');"/>
                     </div>
                     <button class="bindCardBtn">确定</button>
                 </div>
@@ -1015,7 +1015,7 @@
                     </div>
                     <div class="info">
                         <span class="itemTxt">请输入卡号</span>
-                        <input class="itemIpt c_cardNum" maxlength="19" type="text" />
+                        <input class="itemIpt c_cardNum" maxlength="23" type="text" onkeyup="this.value =this.value.replace(/\s/g,'').replace(/[^\d]/g,'').replace(/(\d{4})(?=\d)/g,'$1 ');" />
                     </div>
                     <div class="info">
                         <span class="itemTxt" style="margin-left: 30px">验证码</span>

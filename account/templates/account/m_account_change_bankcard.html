@@ -121,9 +121,9 @@
     			var re_card = /^[\d\s]+$/;  //验证银行卡号
 
 				if(bank == 0){
-					mui.alert("请选择相应的开户行");
-					return;
-				}
+          mui.alert("请选择相应的开户行");
+          return;
+        }
 				if (!subbranch || !real_name || !card_number || !telcode){
 					mui.alert("填写项不能为空！", '提示');
 					return;

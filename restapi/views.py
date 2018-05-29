@@ -253,6 +253,10 @@ class CompanyList(BaseViewMixin, generics.ListAPIView):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
     pagination_class = MyPageNumberPagination
+class CompanyList2(BaseViewMixin, generics.ListAPIView):
+    queryset = Company.objects.filter(project__state__in=['10','20']).distinct()
+    serializer_class = CompanySerializer
+    pagination_class = MyPageNumberPagination
 # class RankList(BaseViewMixin, generics.ListAPIView):
 #     permission_classes = ()
 #     queryset = SubmitRank.objects.all()

@@ -48,6 +48,7 @@ from collections import OrderedDict
 from dragon.settings import FANSHU_DOMAIN
 from docs.models import Document
 from django.core.cache import cache
+from coupon.views import on_register
 
 @sensitive_post_parameters()
 @csrf_protect
@@ -122,15 +123,14 @@ def register(request):
         password = request.POST.get('password', None)
         qq_number = request.POST.get('qq_number', None)
         qq_name = request.POST.get('qq_name', '')
-        profile = request.POST.get('profile', '')
         invite_code = request.POST.get('invite_code', '')
-        if not (telcode and mobile and password and qq_number):
+        if not (telcode and mobile and password and qq_number and qq_name):
             result['code'] = '3'
             result['msg'] = u'传入参数不足！'
             return JsonResponse(result)
-        if ApplyLog.objects.filter(mobile=mobile).exists():
+        if MyUser.objects.filter(mobile=mobile).exists():
             result['code'] = '1'
-            result['msg'] = u'该手机号码已经提交过申请，请等待短信通知或联系管理员'
+            result['msg'] = u'该手机号码已被别人注册过了'
             return JsonResponse(result)
         ret = verifymobilecode(mobile,telcode)
         if ret != 0:
@@ -152,48 +152,54 @@ def register(request):
                 result['msg'] = u'该邀请码不存在，请与工作人员联系'
                 return JsonResponse(result)
             
-        try:
-            username = 'v' + str(mobile)
-            apply = ApplyLog(mobile=mobile, username=username, password=password,
-                            qq_name=qq_name, qq_number=qq_number, profile=profile, audit_state='1', inviter=inviter)
+        level = '05'
+        username = 'flm' + str(mobile)
+        with transaction.atomic():
+            user = MyUser(mobile=mobile, username=username, level=level, qq_name=qq_name, qq_number=qq_number, inviter=apply.inviter,
+                          cs_qq=qq_number, domain_name=qq_number)
+            user.set_password(password)
+            user.save()
+            id_list_list= list(Project.objects.filter(is_official=True, state='10', is_addedto_repo=True).values_list('id'))
+            id_list = []
+            if id_list_list:
+                id_list = reduce(lambda x,y: x + y, id_list_list)
+            subbulk = []
+            for id in id_list:
+                sub = SubscribeShip(user=user, project_id=id)
+                subbulk.append(sub)
+            SubscribeShip.objects.bulk_create(subbulk)
+            apply.audit_state = '0'
+            apply.level = level
+            apply.audit_time = datetime.datetime.now()
             apply.save()
-            logger.info('Creating ApplyLog:' + mobile + ' succeed!')
-        except Exception,e:
-            logger.error(e)
-            result['code'] = '4'
-            result['msg'] = u'创建申请失败！'
-            return JsonResponse(result)
-        imgurl_list = []
-        if len(request.FILES)>6:
-            result = {'code':-2, 'msg':u"上传图片数量不能超过6张"}
-            apply.delete()
-            return JsonResponse(result)
-        for key in request.FILES:
-            block = request.FILES[key]
-            if block.size > 100*1024:
-                result = {'code':-1, 'msg':u"每张图片大小不能超过100k，请重新上传"}
-                apply.delete()
-                return JsonResponse(result)
-        for key in request.FILES:
-            block = request.FILES[key]
-            imgurl = saveImgAndGenerateUrl(key, block, 'qualification')
-            imgurl_list.append(imgurl)
-        invest_image = ';'.join(imgurl_list)
-        apply.qualification = invest_image
-        apply.save(update_fields=['qualification',])
+            sendmsg_bydhst(apply.mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + user.domain_name + '.51fanshu.com' +
+                                 u"，快去分享给小伙伴们吧~")
+            on_register(user)
+            sendmsg_bydhst(apply.mobile, u"88元新手红包已发放到您的账户，请到福利联盟个人中心查看。有效期一个月，快来领取哦~")
+#         imgurl_list = []
+#         if len(request.FILES)>6:
+#             result = {'code':-2, 'msg':u"上传图片数量不能超过6张"}
+#             apply.delete()
+#             return JsonResponse(result)
+#         for key in request.FILES:
+#             block = request.FILES[key]
+#             if block.size > 100*1024:
+#                 result = {'code':-1, 'msg':u"每张图片大小不能超过100k，请重新上传"}
+#                 apply.delete()
+#                 return JsonResponse(result)
+#         for key in request.FILES:
+#             block = request.FILES[key]
+#             imgurl = saveImgAndGenerateUrl(key, block, 'qualification')
+#             imgurl_list.append(imgurl)
+#         invest_image = ';'.join(imgurl_list)
+#         apply.qualification = invest_image
+#         apply.save(update_fields=['qualification',])
         result['code'] = 0
         return JsonResponse(result)
     else:
-        mobile = request.GET.get('mobile','')
-        icode = request.GET.get('icode','')
-        hashkey = CaptchaStore.generate_key()
-        codimg_url = captcha_image_url(hashkey)
         icode = request.GET.get('icode','')
         context = {
-            'hashkey':hashkey,
-            'codimg_url':codimg_url,
             'icode':icode,
-            'mobile':mobile,
         }
         template = 'registration/m_register.html' if request.mobile else 'registration/register.html'
         return render(request,template, context)

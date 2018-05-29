@@ -85,7 +85,7 @@ class Project(models.Model):
     pic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）", blank=True)
     strategy = models.URLField(u"攻略链接")
     doc = models.ForeignKey(Document, null=True, on_delete=models.SET_NULL, default=None, blank=True)
-    company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, verbose_name=u"合作平台")
+    company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, verbose_name=u"合作平台", related_query_name='project')
     type = models.CharField(u"项目类别", max_length=1, choices=Project_TYPE, blank=True)
     is_multisub_allowed = models.BooleanField(u"是否允许同一手机号多次提交", default=False)
     introduction = models.TextField(u"项目简介",max_length=100,blank=True)

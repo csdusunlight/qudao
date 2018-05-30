@@ -522,7 +522,7 @@
                 
                 if (!zhifubao || !real_name) {
                     $.prompt({
-                        "Content":"输入框不能为空！"
+                        "Content":"支付宝只能为手机号或者邮箱"
                     });
                     return;
                 }
@@ -656,7 +656,7 @@
                     return;
                  }
                 //银行卡正则表达式
-                var cardNum_regx = /^\d{16}|\d{19}$/;
+                var cardNum_regx = /^[\d\s]+$/;
                 if (!cardNum_regx.test(cardNum)) {
                     $.prompt({
                         "Content":"请输入正确的银行卡号，银行卡位16位或者19位"
@@ -986,7 +986,7 @@
                     </div>
                     <div class="info">
                         <span class="itemTxt">请输入卡号</span>
-                        <input class="itemIpt cardNum" maxlength="19" type="text" />
+                        <input class="itemIpt cardNum" maxlength="23" type="text" onkeyup="this.value =this.value.replace(/\s/g,'').replace(/[^\d]/g,'').replace(/(\d{4})(?=\d)/g,'$1 ');"/>
                     </div>
                     <button class="bindCardBtn">确定</button>
                 </div>
@@ -1015,7 +1015,7 @@
                     </div>
                     <div class="info">
                         <span class="itemTxt">请输入卡号</span>
-                        <input class="itemIpt c_cardNum" maxlength="19" type="text" />
+                        <input class="itemIpt c_cardNum" maxlength="23" type="text" onkeyup="this.value =this.value.replace(/\s/g,'').replace(/[^\d]/g,'').replace(/(\d{4})(?=\d)/g,'$1 ');" />
                     </div>
                     <div class="info">
                         <span class="itemTxt" style="margin-left: 30px">验证码</span>

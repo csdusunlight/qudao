@@ -393,7 +393,15 @@
         then(function (val) { 
           var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
           if (is_sure == true) {
-              return $.ajax({url:'/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=' + checkVal,type:'post'});
+              return $.ajax({
+                url:'/Admin/withdraw_autoaudit/',
+                data:{
+                  sub_from:'',
+                  sub_to:'',
+                  id_list=checkVal
+                },
+                type:'post'
+              });
           }
           else{
             throw  new BreakSignal();
@@ -446,7 +454,15 @@
         then(function (val) { 
           var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
           if (is_sure == true) {
-              return $.ajax({url:'/Admin/withdraw_autoaudit/?sub_from=' +starTime+ '&sub_to=' +endTime+ '&id_list=',type:'post'});
+              return $.ajax({
+                url:'/Admin/withdraw_autoaudit/',
+                type:'post',
+                data:{
+                  sub_from:starTime,
+                  sub_to:endTime,
+                  id_list:''
+                }
+              });
               $(".modal_box").hide();
            }
            else{
@@ -467,7 +483,13 @@
         then(function (val) { 
           var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
           if (is_sure == true) {
-              return $.ajax({url:'/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=',type:'post'});
+              return $.ajax({
+                url:'/Admin/withdraw_autoaudit/',
+                type:'post',
+                sub_from:'',
+                sub_to:'',
+                id_list:''
+              });
               $(".modal_box").hide();
            }
            else{

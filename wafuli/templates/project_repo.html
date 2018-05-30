@@ -13,26 +13,31 @@
 	<style type="text/css">
 		.state20 {
 			pointer-events: none;
-			/*background-color: #e4e4e4 !important;*/
 		}
+
 		.go_homepage {
-		    display: none;
+			display: none;
 		}
-		.go:hover{
-			color: RGB(150,150,150);
+
+		.go:hover {
+			color: RGB(150, 150, 150);
 			text-decoration: underline;
 		}
-		.over{
+
+		.over {
 			width: 46px;
 			height: 20px;
 			background: #b3b3b3;
 			border-radius: 2px;
 			text-align: center;
 			line-height: 22px;
-			position: absolute;right: 0;top: 0;
+			position: absolute;
+			right: 0;
+			top: 0;
 			z-index: 9;
 		}
-		.over span{
+
+		.over span {
 			color: white !important;
 			font-size: 12px;
 		}
@@ -42,33 +47,68 @@
 
 <body>
 	{% include "header.html" %}
-	<div id="content">
-		<!-- <div class="operateBox">
-			
-		</div> -->
-		<div class="fiter-item-container">
-			<div class="fiter-content">
-				<!--<div class="filter-box-company">
-        <div class="filter-box-name">
-          平台背景：
-        </div>
-        <ul class="filter-item company-background">
-          <li class="on">
-            <a href="javascript:void(0);">不限</a>
-          </li>
-          <li>
-            <a href="javascript:void(0);">民营系</a>
-          </li>
-          <li>
-            <a href="javascript:void(0);">国资系</a>
-          </li>
-          <li>
-            <a href="javascript:void(0);">上市系</a>
-          </li>
-        </ul>
-      </div>-->
-
-				<div class="filter-box-company">
+	<div id="content" style="width: 1293px;margin: 0 auto;">
+		<div class="wrapper">
+			<div class="container on">
+				<p>平台搜索</p>
+				<ul class="projectBox" style="padding-left: 40px;">
+					<li class="item all_project">全部</li>
+					<!-- <li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li> -->
+					<div class="operateBox">
+						<span>展开</span>
+						<div class="trango"></div>
+					</div>
+					<div class="operateBox_1" style="display: none;">
+						<span>收起</span>
+						<div class="trango1"></div>
+					</div>
+				</ul>
+			</div>
+			<div class="btmBox">
+				<div class="searchBox">
+					<input id="searchTxt" type="text">
+					<div class="searchBtn"></div>
+				</div>
+				<span class="hot_search">热搜：</span>
+				{% for x in hot_platforms %}
+				<span class="s_item">{{x.name}}</span>
+				{%endfor%}
+			</div>
+		</div>
+		<!-- llc<div class="fiter-item-container">
+			 <div class="filter-box-company">
 					<div class="filter-box-name">
 						投标次数：
 					</div>
@@ -122,16 +162,16 @@
 				<input class="hongbao-input" name="key" type="text">
 				<input class="hongbao-submit" type="submit" value="">
 			</div>
-			
-		</div> 
+
+		</div> -->
 		<!--fiter-item-container-end-->
 
 		<div class="content-head">
-			<div class="c-item c1">推广标期</div>
-			<div class="c-item c2">投资档位</div>
-			<div class="c-item c3">结算价格</div>
-			<div class="c-item c4">客户指导价</div>
-			<div class="c-item c5">备注说明</div>
+			<div class="c-item">平台</div>
+			<div class="c-item" style="margin-left: 70px;">推广标期</div>
+			<div class="c-item" style="margin-left: 80px;">投资档位</div>
+			<div class="c-item" style="margin-left: 90px;">结算价格</div>
+			<div class="c-item" style="margin-left: 100px;">备注说明</div>
 		</div>
 
 		<ul id="pagedata1" class="item-container clearfix">
@@ -159,31 +199,30 @@
 		console.log(userlevel);
 		var data = '[results]<li class="finance">' +
 			'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox"><div class="over" data-state={project_state}><span>已结束</span></div><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
-			'<div class="item1"><span class="finance__term finance__item">{project_term}</span></div><div class="item2"><span class="finance__range finance__item">{project_investrange}</span></div>' +
-			'<div class="item3"><span class="finance__price finance__item">{project_price}</span></div><div class="item4"><span class="finance__price02 finance__item">{project_cprice}</span></div>' +
-			'<div class="item5"><span class="finance__remark finance__item">{project_remark}</span></div></a>' +
-			'<div class="link_right"><a class="add-project {is_on} btn m-green m-finance" data-isadd = "{is_on}" onclick = "addProject(this, {id})">添加至主页</a>' +
+			'<div class="item1"><span class="finance__term finance__item">{term}</span></div><div class="item2"><span class="finance__range finance__item">{investrange}</span></div>' +
+			'<div class="item3"><span class="finance__price finance__item">{cprice}</span></div>' +
+			'<div class="item5"><span class="finance__remark finance__item">{remark}</span></div></a>' +
 			'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank"><span class="go">进入推广主页-></span></a></div></li>[/results]';
-		var url = "/restapi/sub/?page={page}&pageSize={pageSize}&is_official=2";
+		var url = "/restapi/projects/?page={page}&pageSize={pageSize}&is_official=2";
 
 		function pagecallback() {
-			$('.add-project.true').each(function() {
+			$('.add-project.true').each(function () {
 				this.innerText = '取消添加';
 				$(this).parent().find('.go_homepage').show()
 			})
-//			$('.state20').text('已结束');
+			//			$('.state20').text('已结束');
 
 			/**************添加已结束标识***************/
-			$(".over").each(function(){
+			$(".over").each(function () {
 				if ($(this).attr("data-state") == 20) {
-					$(this).css("display","block");
-				} else{
-					$(this).css("display","none");
+					$(this).css("display", "block");
+				} else {
+					$(this).css("display", "none");
 				}
 			});
-			
-			$('.oneline').each(function(index, el) { //单行
-				if($(this).height() > 30) {
+
+			$('.oneline').each(function (index, el) { //单行
+				if ($(this).height() > 30) {
 					$(this).addClass('one-line')
 					$(this).addTitle();
 				}
@@ -191,71 +230,131 @@
 			var btns = document.querySelectorAll('.copy-link');
 			var clipboard = new Clipboard(btns);
 
-			clipboard.on('success', function(e) {
+			clipboard.on('success', function (e) {
 				console.log(e);
 				$.prompt({
 					Content: '复制成功'
 				})
 			});
 
-			clipboard.on('error', function(e) {
+			clipboard.on('error', function (e) {
 				console.log(e);
 			});
 		}
 		var textarray = [];
 
-		function addProject(obj, id) {
-			var flag = $(obj).data('isadd');
-			console.log(flag)
-			if(flag == true) {
-				$.ajax({
-					url: '/restapi/sub/' + id + '/',
-					dataType: "json",
-					type: "put",
-					data: {
-						'is_on': false
-					},
-					success: function(ret) {
-						console.log('关闭');
-						$(obj).data('isadd', false);
-						obj.innerText = "添加至主页";
-						$(obj).removeClass('true').addClass('false');
-						$(obj).parent().find('.go_homepage').hide();
-					},
-					error: function() {
-						alert("请检查网络连接");
-					}
-				});
+		// function addProject(obj, id) {
+		// 	var flag = $(obj).data('isadd');
+		// 	console.log(flag)
+		// 	if (flag == true) {
+		// 		$.ajax({
+		// 			url: '/restapi/sub/' + id + '/',
+		// 			dataType: "json",
+		// 			type: "put",
+		// 			data: {
+		// 				'is_on': false
+		// 			},
+		// 			success: function (ret) {
+		// 				console.log('关闭');
+		// 				$(obj).data('isadd', false);
+		// 				obj.innerText = "添加至主页";
+		// 				$(obj).removeClass('true').addClass('false');
+		// 				$(obj).parent().find('.go_homepage').hide();
+		// 			},
+		// 			error: function () {
+		// 				alert("请检查网络连接");
+		// 			}
+		// 		});
 
-			} else {
-				$.ajax({
-					url: '/restapi/sub/' + id + '/',
-					dataType: "json",
-					type: "put",
-					data: {
-						'is_on': true
-					},
-					success: function(ret) {
-						console.log('开启');
-						$(obj).data('isadd', true);
-						obj.innerText = "已添加";
-						$(obj).removeClass('false').addClass('true');
-						$(obj).parent().find('.go_homepage').show();
-					},
-					error: function() {
-						alert("请检查网络连接");
-					}
-				});
+		// 	} else {
+		// 		$.ajax({
+		// 			url: '/restapi/sub/' + id + '/',
+		// 			dataType: "json",
+		// 			type: "put",
+		// 			data: {
+		// 				'is_on': true
+		// 			},
+		// 			success: function (ret) {
+		// 				console.log('开启');
+		// 				$(obj).data('isadd', true);
+		// 				obj.innerText = "已添加";
+		// 				$(obj).removeClass('false').addClass('true');
+		// 				$(obj).parent().find('.go_homepage').show();
+		// 			},
+		// 			error: function () {
+		// 				alert("请检查网络连接");
+		// 			}
+		// 		});
 
-			}
-		}
+		// 	}
+		// }
 
 		function emptydisplay(obj) {
 			obj.html('<p style="margin-top:20px;">抱歉，没有找到符合条件的项目！</p>');
 		}
-		$(function() {
+		$(function () {
 			$('.nav__item:eq(1)').addClass('active');
+			let childHeight = $('.projectBox').height();
+			let parentHeight = $('.container').height();
+			let gapHeight = childHeight - parentHeight;
 
+			//展开收起功能
+			$('.operateBox').click(() =>{
+				console.log("子元素超过父元素高度:",gapHeight);
+				if (gapHeight > 0) {
+					$('.container').removeClass("on");
+					$('.operateBox').hide();
+					$('.operateBox_1').show();
+				} 
+			})
+			//收起
+			$('.operateBox_1').click(() =>{
+				$('.container').addClass("on");
+				$('.operateBox').show();
+			})
+			//获取平台列表
+			$.ajax({
+				url:'/restapi/company2/',
+				dataType: "json",
+				type: 'GET',
+				success: function (ret) {
+					if(ret.code == 1){
+						var str_html;
+						console.log(ret.results)
+						for(let i in ret.results){
+							str_html = `<li class="item" data-value="${ret.results[i].name}">${ret.results[i].name}</li>`;
+							$('.projectBox').append(str_html);
+						}
+					}else{
+						alert('网络出错')
+					}
+				},
+				error: function () {
+					console.log("请检查网络连接");
+				}
+			})
+			//点击全部返回所有项目列表
+			$('.all_project').click(() =>{
+				$.ajax({
+					url:'/restapi/projects/',
+					dataType:'json',
+					type:'GET',
+					success:function(ret){
+						console.log(ret)
+					},
+					error:function(){
+						alert("出错啦~")
+					}
+				})
+			})
+			//点击平台项目搜索
+			$('.item').each(() =>{
+				var _that = $(this);
+				_that.click(() =>{
+					var value = _that.attr('data-value');
+					console.log(value);
+				})
+			});
 			var newurl = url;
 			var index = "0",
 				index_text;
@@ -272,40 +371,39 @@
 				complete: pagecallback,
 			});
 
-			$(".fiter-item-container li").click(function() {
-				var parent = $(this).parent(".filter-item");
-				
-				if($(parent).hasClass("invest-count")) {
-					$(this).addClass("on").siblings().removeClass("on");
-					invest_account = $(this).data('key');
-				}
+			// $(".fiter-item-container li").click(function () {
+			// 	var parent = $(this).parent(".filter-item");
 
-				if($(parent).hasClass("project-type")) {
-					$(this).addClass("on").siblings().removeClass("on");
-					project_type = $(this).data('key');
-				}
+			// 	if ($(parent).hasClass("invest-count")) {
+			// 		$(this).addClass("on").siblings().removeClass("on");
+			// 		invest_account = $(this).data('key');
+			// 	}
 
-				if($(parent).hasClass("project-status")) {
-					$(this).addClass("on").siblings().removeClass("on");
-					project_status = $(this).data('key');
-				}
-				newurl = url + "&project_futou=" + invest_account + "&project_type=" + project_type + "&project_state=" + project_status;
-				console.log(newurl)
+			// 	if ($(parent).hasClass("project-type")) {
+			// 		$(this).addClass("on").siblings().removeClass("on");
+			// 		project_type = $(this).data('key');
+			// 	}
 
-				$("#pagedata1").ajaxPage({
-					url: newurl,
-					pageId: $("#page1"),
-					pageSize: 999,
-					run: true,
-					content: data,
-					complete: pagecallback,
-				});
-			})
+			// 	if ($(parent).hasClass("project-status")) {
+			// 		$(this).addClass("on").siblings().removeClass("on");
+			// 		project_status = $(this).data('key');
+			// 	}
+			// 	newurl = url + "&project_futou=" + invest_account + "&project_type=" + project_type + "&project_state=" + project_status;
+			// 	console.log(newurl)
 
-			$('.hongbao-submit').click(function() {
-				var searchValue = $('.hongbao-input').val();
+			// 	$("#pagedata1").ajaxPage({
+			// 		url: newurl,
+			// 		pageId: $("#page1"),
+			// 		pageSize: 999,
+			// 		run: true,
+			// 		content: data,
+			// 		complete: pagecallback,
+			// 	});
+			// })
+			//输入框搜索
+			$('.searchBtn').click(() =>{
+				var searchValue = $('#searchTxt').val();
 				var newurl2 = url + "&project_title_contains=" + encodeURI(searchValue);
-
 				$("#pagedata1").ajaxPage({
 					url: newurl2,
 					pageId: $("#page1"),
@@ -313,11 +411,11 @@
 					run: true,
 					content: data,
 					complete: pagecallback,
-				});
+				});			
 			})
-			$('.hongbao-input').on('keypress', function(e) {
-				if(e.keyCode == 13) {
-					var searchValue = $('.hongbao-input').val();
+			$('#searchTxt').on('keypress',(e) =>{
+				if (e.keyCode == 13) {
+					var searchValue = $('#searchTxt').val();
 					var newurl2 = url + "&project_title_contains=" + encodeURI(searchValue);
 
 					$("#pagedata1").ajaxPage({
@@ -330,13 +428,41 @@
 					});
 				}
 			});
+			// $('.hongbao-submit').click(function () {
+			// 	var searchValue = $('.hongbao-input').val();
+			// 	var newurl2 = url + "&project_title_contains=" + encodeURI(searchValue);
+
+			// 	$("#pagedata1").ajaxPage({
+			// 		url: newurl2,
+			// 		pageId: $("#page1"),
+			// 		pageSize: 12,
+			// 		run: true,
+			// 		content: data,
+			// 		complete: pagecallback,
+			// 	});
+			// })
+			// $('.hongbao-input').on('keypress', function (e) {
+			// 	if (e.keyCode == 13) {
+			// 		var searchValue = $('.hongbao-input').val();
+			// 		var newurl2 = url + "&project_title_contains=" + encodeURI(searchValue);
+
+			// 		$("#pagedata1").ajaxPage({
+			// 			url: newurl2,
+			// 			pageId: $("#page1"),
+			// 			pageSize: 999,
+			// 			run: true,
+			// 			content: data,
+			// 			complete: pagecallback,
+			// 		});
+			// 	}
+			// });
 
 		});
 
 		function tounicode(data) {
-			if(data == '') return '请输入汉字';
+			if (data == '') return '请输入汉字';
 			var str = '';
-			for(var i = 0; i < data.length; i++) {
+			for (var i = 0; i < data.length; i++) {
 				str += "\\u" + parseInt(data[i].charCodeAt(0), 10).toString(16);
 			}
 			return str;

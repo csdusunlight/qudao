@@ -403,7 +403,7 @@
         })
         //跳转到绑卡页面
         $(".bind_sure").click(function () {
-            window.open("{% url 'bind_bankcard_page' %}");
+            window.open("{% url 'account_withdraw' %}");
             $(".modal_card").hide();//跳转成功后模态框消失
         })
     });

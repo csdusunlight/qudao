@@ -13,8 +13,8 @@ from restapi.serializers import UserSerializer, InvestLogSerializer,\
     SubscribeShipSerializer, AnnouncementSerializer, DayStatisSerializer,\
     ApplyLogSerializer, WithdrawLogSerializer, UserDetailStatisSerializer,\
     UserAverageStatisSerializer, MarkSerializer, CompanySerializer,\
-    BookLogSerializer, DocumentSerializer
-from account.models import MyUser, ApplyLog
+    BookLogSerializer, DocumentSerializer, MesssageSerializer
+from account.models import MyUser, ApplyLog, Message
 from rest_framework.filters import SearchFilter,OrderingFilter
 from public.permissions import IsOwnerOrStaff, IsSelfOrStaff
 from restapi.Filters import InvestLogFilter, SubscribeShipFilter, UserFilter,\
@@ -289,3 +289,8 @@ class DocumentDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
         return Document.objects.all()
     serializer_class = DocumentSerializer
     permission_classes = (IsOwnerOrStaff,)
+class MessageList(BaseViewMixin, generics.ListCreateAPIView):
+    def get_queryset(self):
+        return Message.objects.filter(user=self.request.user)
+    serializer_class = MesssageSerializer
+    pagination_class = MyPageNumberPagination

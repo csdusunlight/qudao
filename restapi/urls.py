@@ -50,4 +50,6 @@ urlpatterns = [
     url(r'^docs/(?P<pk>[0-9a-zA-Z]+)/$', views.DocumentDetail.as_view(), kwargs={'partial':True}),
     
 #     url(r'^doc/', include_docs_urls(title='d'))
+    url(r'^msgs/$', views.MessageList.as_view(), ),
+    
 ]

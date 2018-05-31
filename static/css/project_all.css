@@ -141,7 +141,7 @@ body{
 	font-size: 18px;
 }
 .projectBox{
-    width: 1104px;
+    width: 1150px;
     position: relative;
 	font-size: 0;
 }
@@ -153,13 +153,17 @@ body{
 	line-height: 42px;
     border-radius: 5px;
     cursor: pointer;
-    margin: 20px 25px 0;
+    margin: 20px 30px 0;
     color: #3d3d3d;
     font-size: 14px;
 }
 .item:hover{
     background: #91c11d;
     color: white;
+}
+.all_project{
+	background: #92bf35;
+	color: white;
 }
 .operateBox{
     width: 50px;
@@ -232,30 +236,37 @@ body{
 }
 .s_item{
 	color: #a2a2a2;
-	margin-left: 21px;
+	margin-left: 6px;
 }
 /* 顶部css结束 llc */
 
 /*item-container*/
-.item-container {
+/* .item-container {
 	margin: 15px auto 0;
-	/* width: 1250px; */
-	/*height: 844px;*/
-}
+	width: 1250px;
+	height: 844px;
+} */
 
 .finance {
-	padding: 10px;
-	width:1293px;
+	/* padding: 10px; */
+	/* width:1293px; */
+	width: 1150px; /* llc */
+	padding: 20px 20px;
 	background-color: #fff;
-	transition: box-shadow 0.4s ease;
+	/* transition: box-shadow 0.4s ease; */
 	overflow: hidden;
 	border-bottom: 1px solid RGB(245, 245, 245);
 	display: table;
+	position: relative;
+	transition: all 0.5s ease;
+}
+.finance:hover{
+	transform: translateX(-50px);
 }
 
-.finance:hover {
+/* .finance:hover {
 	box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
-}
+} llc 5.31*/
 
 .link_left {
 	width: 1100px;
@@ -296,7 +307,7 @@ body{
 
 .content-head {
 	/* width: 1250px; */
-	width: 1293px;
+	width: 1150px;
 	height: 50px;
 	margin-top: 20px;
 	background: #f5f5f5;

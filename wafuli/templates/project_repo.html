@@ -41,19 +41,24 @@
 			color: white !important;
 			font-size: 12px;
 		}
+		.gapBox{
+			width: 100%;
+			height: 12px;
+			background: #f4f4f4;
+		}
 	</style>
 
 </head>
 
 <body>
 	{% include "header.html" %}
+	<div class="gapBox"></div>
 	<div id="content" style="width: 1293px;margin: 0 auto;">
 		<div class="wrapper">
 			<div class="container on">
 				<p>平台搜索</p>
 				<ul class="projectBox" style="padding-left: 40px;">
 					<li class="item all_project">全部</li>
-					<!-- <li class="item">金融工场</li>
 					<li class="item">金融工场</li>
 					<li class="item">金融工场</li>
 					<li class="item">金融工场</li>
@@ -85,7 +90,8 @@
 					<li class="item">金融工场</li>
 					<li class="item">金融工场</li>
 					<li class="item">金融工场</li>
-					<li class="item">金融工场</li> -->
+					<li class="item">金融工场</li>
+					<li class="item">金融工场</li>
 					<div class="operateBox">
 						<span>展开</span>
 						<div class="trango"></div>
@@ -294,13 +300,12 @@
 		}
 		$(function () {
 			$('.nav__item:eq(1)').addClass('active');
-			let childHeight = $('.projectBox').height();
-			let parentHeight = $('.container').height();
+			let childHeight = $('.projectBox').height();//获取子元素的高度
+			let parentHeight = $('.container').height();//获取父元素的高度
 			let gapHeight = childHeight - parentHeight;
 
 			//展开收起功能
 			$('.operateBox').click(() =>{
-				console.log("子元素超过父元素高度:",gapHeight);
 				if (gapHeight > 0) {
 					$('.container').removeClass("on");
 					$('.operateBox').hide();
@@ -326,7 +331,7 @@
 							$('.projectBox').append(str_html);
 						}
 					}else{
-						alert('网络出错')
+						console.log('暂无数据~~~')
 					}
 				},
 				error: function () {
@@ -335,26 +340,31 @@
 			})
 			//点击全部返回所有项目列表
 			$('.all_project').click(() =>{
-				$.ajax({
-					url:'/restapi/projects/',
-					dataType:'json',
-					type:'GET',
-					success:function(ret){
-						console.log(ret)
-					},
-					error:function(){
-						alert("出错啦~")
-					}
+				$("#pagedata1").ajaxPage({
+					url: '/restapi/projects/',
+					pageId: $("#page1"),
+					pageSize: 999,
+					run: true,
+					content: data,
+					complete: pagecallback,
+				});
+			})
+			//项目点击搜索 llc
+			$('.projectBox').on('click','.item',function () { 
+				var _that = $(this);
+				var value = _that.attr('data-value');
+				console.log(value);
+				var newUrl1 = url + "&search=" + encodeURI(value);
+				$("#pagedata1").ajaxPage({
+					url:newUrl1,
+					pageId:$('#page1'),
+					pageSize:999,
+					run:true,
+					content:data,
+					complete:pagecallback
 				})
 			})
-			//点击平台项目搜索
-			$('.item').each(() =>{
-				var _that = $(this);
-				_that.click(() =>{
-					var value = _that.attr('data-value');
-					console.log(value);
-				})
-			});
+			
 			var newurl = url;
 			var index = "0",
 				index_text;
@@ -400,10 +410,14 @@
 			// 		complete: pagecallback,
 			// 	});
 			// })
-			//输入框搜索
+			//输入框搜索llc
 			$('.searchBtn').click(() =>{
 				var searchValue = $('#searchTxt').val();
-				var newurl2 = url + "&project_title_contains=" + encodeURI(searchValue);
+				if (!searchValue) {
+					alert('搜索内容不能为空');
+					return;
+				}
+				var newurl2 = url + "&search=" + encodeURI(searchValue);
 				$("#pagedata1").ajaxPage({
 					url: newurl2,
 					pageId: $("#page1"),
@@ -416,7 +430,7 @@
 			$('#searchTxt').on('keypress',(e) =>{
 				if (e.keyCode == 13) {
 					var searchValue = $('#searchTxt').val();
-					var newurl2 = url + "&project_title_contains=" + encodeURI(searchValue);
+					var newurl2 = url + "&search=" + encodeURI(searchValue);
 
 					$("#pagedata1").ajaxPage({
 						url: newurl2,

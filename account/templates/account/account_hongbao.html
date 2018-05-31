@@ -154,7 +154,7 @@
                             str_html += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all bindWechant">关注官微并且绑定账户</span></div>'
                         } else if (data.results[i].type === "shoudan") {
                             str_html += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all first">首次交单并且审核通过</span></div>'
-                        } else if (data.results[i].type === "guanzhu") {
+                        } else if(data.results[i].type === "bangka"){
                             str_html += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all card">绑定银行卡</span></div>'
                         }
                         str_html += '</div>';

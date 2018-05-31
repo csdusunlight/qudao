@@ -10,7 +10,8 @@ from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
 from account.models import MyUser, ApplyLog, Message
 from wafuli_admin.models import DayStatis
 from wafuli.models import Company
-from statistic.models import UserDetailStatis, UserAverageStatis
+from statistic.models import UserDetailStatis, UserAverageStatis,\
+    PerformanceStatistics
 # from activity.models import SubmitRank, IPLog
 from docs.models import Document
 
@@ -187,3 +188,10 @@ class MesssageSerializer(serializers.ModelSerializer):
         model = Message
         fields = '__all__'
         read_only_fields = ('id',)
+        
+class PerformStatisSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username')
+    inviter_code = serializers.CharField(source='user.invite_code')
+    class Meta:
+        model = PerformanceStatistics
+        fields = '__all__'

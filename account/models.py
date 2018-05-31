@@ -85,7 +85,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     admin_permissions = models.ManyToManyField('AdminPermission',
         verbose_name='admin permissions', blank=True,
         related_name="user_set", related_query_name="user")
-    is_autowith = models.BooleanField(u'是否自动提现', default=True)
+    is_autowith = models.BooleanField(u'是否自动提现', default=False)
     is_book_email_notice = models.BooleanField(u'是否预约单邮件通知', default=True)
     margin_account = models.DecimalField(u'保证金账户余额', default = Decimal(0), max_digits=10, decimal_places=2)
     inviter = models.ForeignKey('self', related_name = 'invitees',
@@ -93,7 +93,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     invite_code = models.CharField(u"邀请码", blank=True, max_length=10)
     invite_settle = models.DecimalField(u'上月员工推广结算金额', default = Decimal(0), max_digits=10, decimal_places=2)
     
-    zhifubao = models.CharField(u"支付宝账号（邮箱或手机号）", blank=True, max_length=20)
+    zhifubao = models.CharField(u"支付宝账号（邮箱或手机号）", blank=True, max_length=50)
     zhifubao_real_name = models.CharField(u"支付宝实名", blank=True, max_length=20)
     
     objects = MyUserManager()

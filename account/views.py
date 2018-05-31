@@ -47,6 +47,7 @@ from weixin.tasks import sendWeixinNotify
 from collections import OrderedDict
 from dragon.settings import FANSHU_DOMAIN
 from docs.models import Document
+from django.core.cache import cache
 
 @sensitive_post_parameters()
 @csrf_protect
@@ -261,7 +262,6 @@ def register_from_gzh(request):
         apply.qualification = invest_image
         apply.save(update_fields=['qualification',])
         result['code'] = 0
-        print 'here'
         return JsonResponse(result)
     else:
         mobile = request.GET.get('mobile','')
@@ -434,7 +434,6 @@ def phoneImageV(request):
 def account(request):
     announce_list = Announcement.objects.all()
     recom_projects = Project.objects.filter(state='10', is_official=True, is_addedto_repo=True)[0:4]
-    print 'haha'
     template = 'account/m_account_index.html' if request.mobile else 'account/account_index.html'
     return render(request, template,{'announce_list':announce_list, 'recom_projects':recom_projects})
 @login_required
@@ -526,13 +525,6 @@ def account_audited_2(request):
 @login_required
 def security(request):
     return render(request, 'account/account_security.html', {})
-@login_required
-def bankcard(request):
-    user = request.user
-    card = user.user_bankcard.first()
-    banks = BANK
-    template = 'account/m_account_bankcard.html' if request.mobile else 'account/account_bankcard.html'
-    return render(request, template, {"card":card, 'banks':banks})
 
 def password_change(request):
     if not request.is_ajax():
@@ -583,15 +575,12 @@ def change_pay_password(request):
         result['code'] = 2
     return JsonResponse(result)
 
+@login_required_ajax
 def bind_bankcard(request):
     result={'code':-1, 'url':''}
     if not request.is_ajax():
         raise Http404
     user = request.user
-    if not user.is_authenticated():
-        result['code'] = 1
-        result['url'] = reverse('login') + "?next=" + reverse('bind_bankcard')
-        return JsonResponse(result)
     if request.method == 'POST':
         card_number = request.POST.get("card_number", '')
         real_name = request.POST.get("real_name", '')
@@ -632,46 +621,51 @@ def bind_bankcard(request):
         #红包活动插入++++++++++
         result['code'] = 0
     return JsonResponse(result)
+
 @login_required
-def change_bankcard(request):
-    if request.method == 'POST':
-        if not request.is_ajax():
-            raise Http404
-        result={}
-        user = request.user
-        card_number = request.POST.get("card_number", '')
-        real_name = request.POST.get("real_name", '')
-        bank = request.POST.get("bank", '')
-        subbranch = request.POST.get("subbranch",'')
-        telcode = request.POST.get("code", '')
+def m_bind_bankcard_page(request):
+    banks = BANK
+    template = 'account/m_account_bind_bankcard.html' 
+    return render(request, template, {'banks':banks})
+
+@login_required
+def m_change_bankcard_page(request):
+    banks = BANK
+    return render(request, 'account/m_account_change_bankcard.html', {'banks':banks})
+@login_required
+def m_bind_zhifubao_page(request):
+    return render(request, 'account/m_account_bind_zhifubao.html')
+@login_required
+def m_change_zhifubao_page(request):
+    return render(request, 'account/m_account_change_zhifubao.html')
+
+@csrf_exempt
+@transaction.atomic
+@login_required_ajax
+def bind_zhifubao(request):
+    result={'code':-1}
+    if not request.is_ajax():
+        raise Http404
+    user = request.user
+    zhifubao = request.POST.get('zhifubao', '')
+    zhifubao_real_name = request.POST.get("zhifubao_real_name", '')
+    telcode = request.POST.get("code", '')
+    if user.zhifubao != '':
         ret = verifymobilecode(user.mobile,telcode)
         if ret != 0:
-            result['code'] = 2
+            result['code'] = '2'
             if ret == -1:
-                result['msg'] = u'请先获取手机验证码！'
+                result['res_msg'] = u'请先获取手机验证码'
             elif ret == 1:
-                result['msg'] = u'手机验证码输入错误！'
+                result['res_msg'] = u'手机验证码输入错误！'
             elif ret == 2:
-                result['msg'] = u'手机验证码已过期，请重新获取'
+                result['res_msg'] = u'手机验证码已过期，请重新获取'
             return JsonResponse(result)
-        else:
-            card = user.user_bankcard.first()
-            card.card_number = card_number
-            card.real_name = real_name
-            card.bank = bank
-            card.subbranch = subbranch
-            card.save()
-            result['code'] = 0
-            result['msg'] = u"银行卡号更改成功！"
-        return JsonResponse(result)
-    else:
-        banks = BANK
-        if request.mobile:
-            return render(request, 'account/m_account_change_bankcard.html', {'banks':banks})
-        else:
-            user = request.user
-            card = user.user_bankcard.first()
-            return render(request, 'account/account_bankcard.html', {"card":card, 'banks':banks})
+    user.zhifubao = zhifubao
+    user.zhifubao_real_name = zhifubao_real_name
+    user.save(update_fields=['zhifubao', 'zhifubao_real_name'])
+    result['code'] = 0
+    return JsonResponse(result)
 
 @login_required
 def money(request):
@@ -751,7 +745,8 @@ def withdraw(request):
         user = request.user
         card = user.user_bankcard.first()
         template = 'account/m_withdraw.html' if request.mobile else 'account/withdraw.html'
-        return render(request, template,{"card":card})
+        banks = BANK
+        return render(request, template,{"card":card, "banks":banks})
     elif request.method == 'POST':
         user = request.user
         result = {'code':-1, 'res_msg':''}
@@ -774,12 +769,16 @@ def withdraw(request):
         #     result['code'] = -1
         #     result['res_msg'] = u'请先绑定支付宝！'
         #     return JsonResponse(result)
-        card = user.user_bankcard.first()
-        if not card:
+        if withdraw_amount >= 50000:
+            card = user.user_bankcard.first()
+            if not card:
+                result['code'] = -1
+                result['res_msg'] = u'请先绑定银行卡！'
+                return JsonResponse(result)
+        elif user.zhifubao == '':
             result['code'] = -1
-            result['res_msg'] = u'请先绑定银行卡！'
+            result['res_msg'] = u'请先绑定支付宝账号！'
             return JsonResponse(result)
-
         try:
             with transaction.atomic():
                 event = WithdrawLog.objects.create(user=user, amount=withdraw_amount, audit_state='1')
@@ -965,7 +964,6 @@ def project_manage(request):
         subdic = {}
         for pro in subprojects:
             subdic[pro['project_id']] = pro
-        print subprojects
         page = request.GET.get("page", None)
         size = request.GET.get("size", 20)
         try:
@@ -1165,21 +1163,22 @@ def submitOrder(request):
         return JsonResponse(result)
     if invest_date:
         invest_date = datetime.strptime(invest_date, "%Y-%m-%d")
-    if not project.is_multisub_allowed or submit_type=='1':
-        if project.company is None:
-            queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project=project)
-        else:
-            queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id)
-        if queryset.exclude(audit_state='2').exists():
-            result['code'] = 1
-            result['msg'] = u"该手机号（首投）已提交过，请勿重复提交"
-            return JsonResponse(result)
-
-    investlog=InvestLog.objects.create(user=request.user,project_id=project_id, invest_mobile=invest_mobile, invest_date=invest_date,
-                             invest_name=invest_name, remark=remark, qq_number=qq_number, expect_amount=expect_amount,
-                             zhifubao=zhifubao, invest_amount=invest_amount, submit_type=submit_type,
-                              invest_term=invest_term, is_official=project.is_official, category=project.category,
-                              submit_way='4', audit_state='1')
+    with cache.lock('project_submit_%s' % project.id, timeout=2):
+        if not project.is_multisub_allowed or submit_type=='1':
+            if project.company is None:
+                queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project=project)
+            else:
+                queryset=InvestLog.objects.filter(invest_mobile=invest_mobile, project__company_id=project.company_id)
+            if queryset.exclude(audit_state='2').exists():
+                result['code'] = 1
+                result['msg'] = u"该手机号（首投）已提交过，请勿重复提交"
+                return JsonResponse(result)
+    
+        investlog=InvestLog.objects.create(user=request.user,project_id=project_id, invest_mobile=invest_mobile, invest_date=invest_date,
+                                 invest_name=invest_name, remark=remark, qq_number=qq_number, expect_amount=expect_amount,
+                                 zhifubao=zhifubao, invest_amount=invest_amount, submit_type=submit_type,
+                                  invest_term=invest_term, is_official=project.is_official, category=project.category,
+                                  submit_way='4', audit_state='1')
     #活动插入
 #     on_submit(request, request.user, investlog)
     #活动插入结束

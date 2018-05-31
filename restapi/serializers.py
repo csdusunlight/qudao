@@ -23,7 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = MyUser
         fields = ('id', 'mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'with_total','accu_income','is_book_email_notice',
                   'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number', 'is_autowith',
-                  'submit_bg', 'domain_name', 'cs_qq', 'has_permission100','margin_account', 'fanshu_domain')
+                  'submit_bg', 'domain_name', 'cs_qq', 'has_permission100','margin_account', 'fanshu_domain', 'zhifubao')
         read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level', 'margin_account')
         
 class ProjectSerializer(serializers.ModelSerializer):
@@ -127,7 +127,7 @@ class WithdrawLogSerializer(serializers.ModelSerializer):
     mobile = serializers.CharField(source='user.mobile', read_only=True)
     admin_mobile = serializers.CharField(source='admin_user.mobile', read_only=True)
     qq_number = serializers.CharField(source='user.qq_number', read_only=True)
-#     balance = serializers.CharField(source='user.banlance', read_only=True)
+    zhifubao = serializers.CharField(source='user.zhifubao', read_only=True)
 #     username = serializers.CharField(source='user.username', read_only=True)
 #     username = serializers.CharField(source='user.username', read_only=True)
     class Meta:

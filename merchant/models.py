@@ -91,7 +91,7 @@ class MerchantProjectStatistics(models.Model):
     toaudit_count = models.IntegerField(u"待处理单数", default=0)
     settle_amount = models.DecimalField(u'结算金额', max_digits=10, decimal_places=2)
     def view_count(self):
-        return self.project.doc.view_count
+        return self.project.doc.view_count if self.project.doc else ''
     def __unicode__(self):
         return self.project.title
     

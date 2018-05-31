@@ -41,6 +41,8 @@ class UserCoupon(models.Model):
     contract = models.ForeignKey(Contract, null=True)
     state = models.CharField(u"红包状态", choices=COUPONSTATE, default='0', max_length=2)
     create_date = models.DateField(u"发放日期", default=datetime.date.today)
+    start_date = models.DateField(u"开始时间", default=None, null=True)
+    end_date = models.DateField(u"结束时间", default=None, null=True)
     expire = models.DateField(u"过期时间", default=thirty_day_later)
     award = models.DecimalField(u"奖励金额", default=0, decimal_places=2, max_digits=6)
     unlock_date = models.DateField(u"解锁日期", default=None, null=True, blank=True)
@@ -69,8 +71,10 @@ class UserCoupon(models.Model):
     def check_schedule(self):
         if self.type != 'heyue':
             return None, None
-        dic = self.user.investlog_submit.filter(submit_time__range=(self.contract.start_date,
-                 self.contract.end_date + datetime.timedelta(days=1)), audit_state='0').\
+        start_date = self.start_date or self.contract.start_date
+        end_date = self.end_date or self.contract.end_date
+        dic = self.user.investlog_submit.filter(submit_time__range=(start_date,
+                 end_date + datetime.timedelta(days=1)), audit_state='0').\
                  aggregate(cou=Count('*'),sum=Sum('settle_amount'))
         count = dic.get('cou') or 0
         amount = dic.get('sum') or 0

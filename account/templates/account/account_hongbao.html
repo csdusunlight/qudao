@@ -135,7 +135,7 @@
                             str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：请绑定银行卡" data-microtip-position="top">';
                         } else if (data.results[i].type === "shoudan") {
                             str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：首次交单并且审核通过" data-microtip-position="top">';
-                        } else if(data.results[i].type === "guanzhu"){
+                        } else if (data.results[i].type === "guanzhu") {
                             str_html += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：关注官微并且绑定账户" data-microtip-position="top">';
                         }
                         str_html += '<div class="top_box">' +
@@ -150,7 +150,7 @@
                             } else if (data.results[i].settle_count > 0) {
                                 str_html += '<div class="btm_box after"><span class="all" data-type="' + data.results[i].type + '">激活条件：在' + data.results[i].start_date + '至' + data.results[i].end_date + '内交单，在红包有效期内，结算单数达到' + data.results[i].settle_count + '单</span></div>'
                             }
-                        } else if (data.results[i].type === "guanzhu") { 
+                        } else if (data.results[i].type === "guanzhu") {
                             str_html += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all bindWechant">关注官微并且绑定账户</span></div>'
                         } else if (data.results[i].type === "shoudan") {
                             str_html += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all first">首次交单并且审核通过</span></div>'
@@ -159,11 +159,11 @@
                         }
                         str_html += '</div>';
                         if (dataNum == 1) { //根据dataNum的值来渲染按钮的状态 
-                            str_html += '<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ dataNum +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ dataNum +'" data-type="'+ data.results[i].type +'">立即领取</a>'
-                        } else if(dataNum == 2){
-                            str_html +='<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ dataNum +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ dataNum +'" data-type="'+ data.results[i].type +'">已领取</a>'
-                        } else{
-                            str_html +='<a class="btn btn'+ data.results[i].is_to_expired +' get state'+ dataNum +'" data-id="'+ data.results[i].id +'" data-award="'+ data.results[i].award +'" data-state="'+ dataNum +'" data-type="'+ data.results[i].type +'">立即激活</a>'
+                            str_html += '<a class="btn btn' + data.results[i].is_to_expired + ' get state' + dataNum + '" data-id="' + data.results[i].id + '" data-award="' + data.results[i].award + '" data-state="' + dataNum + '" data-type="' + data.results[i].type + '">立即领取</a>'
+                        } else if (dataNum == 2) {
+                            str_html += '<a class="btn btn' + data.results[i].is_to_expired + ' get state' + dataNum + '" data-id="' + data.results[i].id + '" data-award="' + data.results[i].award + '" data-state="' + dataNum + '" data-type="' + data.results[i].type + '">已领取</a>'
+                        } else {
+                            str_html += '<a class="btn btn' + data.results[i].is_to_expired + ' get state' + dataNum + '" data-id="' + data.results[i].id + '" data-award="' + data.results[i].award + '" data-state="' + dataNum + '" data-type="' + data.results[i].type + '">立即激活</a>'
                         }
                         str_html += '</div>';
                         $(".effective").append(str_html);
@@ -185,7 +185,7 @@
                             str_html2 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="请绑定银行卡" data-microtip-position="top">';
                         } else if (data.results[i].type === "shoudan") {
                             str_html2 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="首次交单并且审核通过" data-microtip-position="top">';
-                        } else if(data.results[i].type === "guanzhu"){
+                        } else if (data.results[i].type === "guanzhu") {
                             str_html2 += '<div class="hongbao tips__icon" data-microtip-size="large" data-microtip="关注官微并且绑定账户" data-microtip-position="top">';
                         }
                         str_html2 += '<div class="top_box">' +
@@ -204,7 +204,7 @@
                             str_html2 += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all bindWechant">关注官微并且绑定账户</span></div>'
                         } else if (data.results[i].type === "shoudan") {
                             str_html2 += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all first">首次交单并且审核通过</span></div>'
-                        } else if(data.results[i].type === "guanzhu"){
+                        } else if (data.results[i].type === "guanzhu") {
                             str_html2 += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all card">绑定银行卡</span></div>'
                         }
                         str_html2 += '</div>' +
@@ -229,7 +229,7 @@
                             str_html1 += '<div class="hongbao fail_hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：请绑定银行卡" data-microtip-position="top">';
                         } else if (data.results[i].type === "shoudan") {
                             str_html1 += '<div class="hongbao fail_hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：首次交单并且审核通过" data-microtip-position="top">';
-                        } else if(data.results[i].type === "guanzhu"){
+                        } else if (data.results[i].type === "guanzhu") {
                             str_html1 += '<div class="hongbao fail_hongbao tips__icon" data-microtip-size="large" data-microtip="激活条件：关注官微并且绑定账户" data-microtip-position="top">';
                         }
                         str_html1 += '<div class="top_box">' +
@@ -248,7 +248,7 @@
                             str_html1 += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all bindWechant">关注官微并且绑定账户</span></div>'
                         } else if (data.results[i].type === "shoudan") {
                             str_html1 += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all first">首次交单并且审核通过</span></div>'
-                        } else if(data.results[i].type === "guanzhu"){
+                        } else if (data.results[i].type === "guanzhu") {
                             str_html1 += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all card">绑定银行卡</span></div>'
                         }
                         str_html1 += '</div>' +
@@ -301,7 +301,6 @@
                     return;
                 } else if (type === "bangka") {
                     $(".modal_card").show();
-                    // window.open("{% url 'account_bankcard' %}");
                     return;
                 } else if (type === "heyue") {  //合约红包
                     $.ajax({
@@ -360,9 +359,7 @@
                     });
                     return;
                 }
-                // $.prompt({
-                //     "Content":"您未达到解锁条件，请完成任务后再来领取红包"
-                // });
+                
             } else if (state == 2) {
                 $(this).attr("disabled", "disabled");
             } else {
@@ -406,7 +403,7 @@
         })
         //跳转到绑卡页面
         $(".bind_sure").click(function () {
-            window.open("{% url 'account_bankcard' %}");
+            window.open("{% url 'bind_bankcard_page' %}");
             $(".modal_card").hide();//跳转成功后模态框消失
         })
     });

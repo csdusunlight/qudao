@@ -43,7 +43,9 @@
 <body>
 	{% include "header.html" %}
 	<div id="content">
-
+		<!-- <div class="operateBox">
+			
+		</div> -->
 		<div class="fiter-item-container">
 			<div class="fiter-content">
 				<!--<div class="filter-box-company">
@@ -99,7 +101,6 @@
 						</li>
 					</ul>
 				</div>
-
 				<div class="filter-box-company">
 					<div class="filter-box-name">
 						项目状态：
@@ -117,13 +118,12 @@
 					</ul>
 				</div>
 			</div>
-
 			<div class="hongbao-search">
 				<input class="hongbao-input" name="key" type="text">
 				<input class="hongbao-submit" type="submit" value="">
 			</div>
-
-		</div>
+			
+		</div> 
 		<!--fiter-item-container-end-->
 
 		<div class="content-head">
@@ -274,7 +274,7 @@
 
 			$(".fiter-item-container li").click(function() {
 				var parent = $(this).parent(".filter-item");
-
+				
 				if($(parent).hasClass("invest-count")) {
 					$(this).addClass("on").siblings().removeClass("on");
 					invest_account = $(this).data('key');

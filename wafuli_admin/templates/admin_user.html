@@ -4,12 +4,12 @@
 $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 });
-var data = '<table width="100%"><tr><th>用户名</th><th>渠道等级</th><th>QQ</th><th>QQ昵称</th><th>手机号</th>'+
-	'<th>银行卡号</th><th>持卡人姓名</th><th>加入时间</th><th>账户余额</th><th>保证金</th>'+
+var data = '<table width="100%"><tr><th>渠道等级</th><th>QQ</th><th>QQ昵称</th><th>手机号</th>'+
+	'<th>银行卡号</th><th>持卡人姓名</th><th>支付宝</th><th>加入时间</th><th>账户余额</th><th>保证金</th>'+
 	'<th>累计收入</th><th width="5%">是否为黑名单</th><th>账户操作</th>'+
-	'</tr>[results]<tr><td>{username}</td><td>{level}</td><td>'+
+	'</tr>[results]<tr><td>{level}</td><td>'+
 	'<a href="{fanshu_domain}" style="color:blue; text-decoration:underline">{qq_number}</a></td><td>{qq_name}</td>'+
-	'<td>{mobile}</td><td>{card_number}</td><td>{bank}</td><td>{date_joined}</td>'+
+	'<td>{mobile}</td><td>{card_number}</td><td>{bank}</td><td>{zhifubao}</td><td>{date_joined}</td>'+
 	'<td>{balance}</td><td>{margin_account}</td><td>{accu_income}</td><td class="black" id="is_black_{id}">{is_active}</td>'+
 	'<td id="item_{id}"><a class="btn1-x" onclick="addcash({id})">余额</a>│'+
 	'<a class="btn2-x black_btn" data-isblack="{is_active}" id="black_{id}" onclick="addblack({id})">加黑</a>|<a onclick="change_level({id})">级别</a>|'+

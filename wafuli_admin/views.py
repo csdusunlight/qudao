@@ -25,7 +25,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.db import transaction
-from public.tools import has_post_permission
+from public.tools import has_post_permission, has_permission
 from decimal import Decimal
 from weixin.tasks import sendWeixinNotify
 from merchant.margin_transaction import charge_margin
@@ -616,7 +616,6 @@ def import_investlog(request):
     return JsonResponse(ret)
 
 @transaction.atomic
-@has_post_permission("005")
 def admin_user(request):
     admin_user = request.user
     if request.method == "GET":
@@ -625,10 +624,6 @@ def admin_user(request):
         return render(request,"admin_user.html")
     if request.method == "POST":
         res = {}
-        if not admin_user.has_admin_perms('005'):
-            res['code'] = -5
-            res['res_msg'] = u'您没有操作权限！'
-            return JsonResponse(res)
         if not request.is_ajax():
             raise Http404
         if not ( admin_user.is_authenticated() and admin_user.is_staff):
@@ -644,6 +639,10 @@ def admin_user(request):
 #             return JsonResponse(res)
         obj_user = MyUser.objects.get(id=user_id)
         if type==1:
+            if not admin_user.has_admin_perms('050'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
             pcash = request.POST.get('pcash', 0)
             mcash = request.POST.get('mcash', 0)
             if not pcash:
@@ -676,16 +675,28 @@ def admin_user(request):
 
 
         elif type == 2:
+            if not admin_user.has_admin_perms('051'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
             obj_user.is_active = False
             obj_user.save(update_fields=['is_active'])
             admin_investlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, type='2', remark=u"加黑")
             res['code'] = 0
         elif type == 3:
+            if not admin_user.has_admin_perms('051'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
             obj_user.is_active = True
             obj_user.save(update_fields=['is_active'])
             admin_investlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, type='2', remark=u"去黑")
             res['code'] = 0
         elif type == 4:
+            if not admin_user.has_admin_perms('052'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
             level = request.POST.get('level')
             if level:
                 obj_user.level=level
@@ -696,6 +707,10 @@ def admin_user(request):
                 res['code'] = -6
                 res['res_msg'] = u"没有level"
         elif type == 5:
+            if not admin_user.has_admin_perms('053'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
             pcash = request.POST.get('pcash', 0)
             mcash = request.POST.get('mcash', 0)
             if not pcash:
@@ -726,6 +741,10 @@ def admin_user(request):
                 translist = charge_margin(obj_user, '1', mcash, reason, auditlog=adminlog)
             res['code'] = 0
         elif type == 6:
+            if not admin_user.has_admin_perms('054'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
             try:
                 perm = AdminPermission.objects.get(code='100')
             except AdminPermission.DoesNotExist:
@@ -733,6 +752,10 @@ def admin_user(request):
             obj_user.admin_permissions.add(perm)
             res['code'] = 0
         elif type == 7:
+            if not admin_user.has_admin_perms('054'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
             perm = AdminPermission.objects.get(code='100')
             obj_user.admin_permissions.remove(perm)
             res['code'] = 0
@@ -898,28 +921,56 @@ def admin_withdraw(request):
         return JsonResponse(res)
 
 @transaction.atomic
-@has_post_permission('004')
+# @has_post_permission('004')
 def admin_withdraw_autoaudit(request):
     admin_user = request.user
     if request.method == "GET":
-        raise Http404
+        ret = {}
+        withlist = WithdrawLog.objects.filter(audit_state='1', amount__lt=50000).all()
+        sub_from = request.GET.get('sub_from')
+        sub_to = request.GET.get('sub_to')
+        if sub_from and sub_to:
+            dateform = datetime.datetime.strptime(sub_from, '%Y-%m-%dT%H:%M')
+            dateto = datetime.datetime.strptime(sub_to, '%Y-%m-%dT%H:%M')
+            withlist = withlist.filter(submit_time__range=(dateform, dateto))
+        id_list_str = request.GET.get('id_list')
+        if id_list_str:
+            id_list = [ int(x) for x in id_list_str.split(',') ]
+            withlist = withlist.filter(id__in=id_list)
+        dic = withlist.aggregate(count=Count('id'), sum=Sum('amount'))
+        ret['count'] = dic['count'] or 0
+        ret['sum'] = dic['sum'] or 0
+        return JsonResponse(ret)
     if request.method == "POST":
         batch_list = []
         withlist = WithdrawLog.objects.filter(audit_state='1', amount__lt=50000).all()
+        sub_from = request.POST.get('sub_from')
+        sub_to = request.POST.get('sub_to')
+        if sub_from and sub_to:
+            dateform = datetime.datetime.strptime(sub_from, '%Y-%m-%dT%H:%M')
+            dateto = datetime.datetime.strptime(sub_to, '%Y-%m-%dT%H:%M')
+            withlist = withlist.filter(submit_time__range=(dateform, dateto))
+        id_list_str = request.POST.get('id_list')
+        if id_list_str:
+            id_list = [ int(x) for x in id_list_str.split(',') ]
+            withlist = withlist.filter(id__in=id_list)
         for obj in withlist:
             batch_list.append({
                 'obj': obj,
                 'payee_account':obj.user.zhifubao,
-                'payee_real_name':obj.user.zhifubao_name,
-                'amount':obj.amount
+                'payee_real_name':obj.user.zhifubao_real_name,
+                'amount':str(obj.amount)
             })
         ret = batch_transfer_to_zhifubao(batch_list)
+        print ret
         fail_id_list = []
         for item in ret['detail']:
-            fail_id_list.append(item['obj'].id)
+            obj = item['obj']
+            fail_id_list.append(obj.id)
             obj.except_info = item['msg']
             obj.save(update_fields=['except_info'])
-        withlist.exclude(id__in=fail_id_list).update(audit_state='0')
+        withlist.exclude(id__in=fail_id_list).update(audit_state='0', audit_time=datetime.datetime.now(),
+                                                     admin_user=request.user)
         return JsonResponse({'suc_num':ret.get('suc_num')})
 def get_admin_with_page(request):
     res={'code':0,}
@@ -1450,14 +1501,10 @@ def send_multiple_msg(request):
 def award_logs(request):
     return render(request,"award_logs.html",)
 
-@login_required
-def batch_withdraw(request):
-    if not request.user.is_staff or not request.is_ajax():
-        raise Http404
+def batch_withdraw_task():
     users = MyUser.objects.filter(balance__gte=10, is_autowith=True)
     for user in users:
-        card = user.user_bankcard.first()
-        if not card:
+        if not user.zhifubao:
             continue
         try:
             with transaction.atomic():
@@ -1466,8 +1513,14 @@ def batch_withdraw(request):
                 charge_money(user, '1', amount, u'系统自动提现', auditlog=withdrawlog)
         except:
             continue
+@login_required
+@has_permission('004')
+def batch_withdraw(request):
+    if not request.user.is_staff or not request.is_ajax():
+        raise Http404
+    batch_withdraw_task()
     return JsonResponse({'code':0})
-
+    
 def admin_merchant_show(request):    #jzy
     return render(request,"admin_merchant_show.html",{})
 def coupon_send(request):    #jzy

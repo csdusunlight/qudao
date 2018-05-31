@@ -220,9 +220,9 @@ function settime(val) {
                                     <!-- <input id='bank_choose' maxlength="15" type="text" placeholder="请选择相应的银行卡" /> -->
                                     <select id='bank'>
                                       <option value ="0">请选择相应的开户行</option>
-                                    {% for x in banks %}
-							    		<option value="{{x.0}}">{{x.1}}</option>
-									{%endfor%}
+                                      {% for x in banks %}
+                                      <option value="{{x.0}}">{{x.1}}</option>
+                                      {%endfor%}
                                     </select>
                                 </div>
                               <div class="Inout-box">

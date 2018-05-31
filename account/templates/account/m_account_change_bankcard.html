@@ -24,7 +24,18 @@
     <title>银行卡更改</title>
     <link href="{% static 'css/mui.min.css' %}" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/m_common.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/m_account_zhifubao.css' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/m_account_zhifubao.css' %}"/>
+	<style>
+		.mui-bar-nav~.mui-content{
+			padding-top: 20px;
+		}
+		.mui-input-row,.mui-input-row>input{
+			font-size: 14px;
+		}
+		.mui-input-row label~select{
+			font-size: 14px;
+		}
+	</style>
 </head>
 	<body>
 		<header id="header" class="mui-bar mui-bar-nav">
@@ -100,14 +111,14 @@
 				var subbranch = document.getElementById('subbranch').value;
 				var real_name = document.getElementById('real_name').value;
 				var card_number = document.getElementById('card_number').value;
-        var telcode = document.getElementById('telcode').value;
+        	var telcode = document.getElementById('telcode').value;
 
 				var bank = document.getElementById("bank").value;
           console.log("bank:" + bank);
 
 				var re_account=/^[\u2E80-\u9FFF]+$/;	//验证中文
 				var re_number=/^[0-9]*$/;  //验证数字
-    		var re_card = /^[\d\s]+$/;  //验证银行卡号
+    			var re_card = /^[\d\s]+$/;  //验证银行卡号
 
 				if(bank == 0){
           mui.alert("请选择相应的开户行");
@@ -135,7 +146,7 @@
 				}
 				var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
 				mui.ajax({
-					url: "{% url 'change_bankcard' %}",
+					url: "{% url 'bind_bankcard' %}",
 					dataType:"json",
 					type:'POST',
 					data : {
@@ -149,7 +160,9 @@
 					success:function(ret){
 						mui.alert(ret.msg,callback=function(){
 							if (ret.code==0){
-								window.history.back();
+								mui.alert("绑定成功",callback = function(){
+									window.history.back(-1);
+								})
 							} else {
 							    mui.alert(ret.res_msg)
 							}

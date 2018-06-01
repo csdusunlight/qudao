@@ -63,11 +63,6 @@
 				<p>平台搜索</p>
 				<ul class="projectBox" style="padding-left: 40px;margin-top: 20px;">
 					<li class="item all_project active">全部</li>
-					<!-- <li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li> -->
 					
 					<div class="operateBox">
 						<span>展开</span>
@@ -86,68 +81,11 @@
 				</div>
 				<span class="hot_search">热搜：</span>
 				{% for x in hot_platforms %}
-				<span class="s_item">{{x.name}}</span>
+				<span class="s_item" data-name="{{x.name}}">{{x.name}}</span>
 				{%endfor%}
 			</div>
 		</div>
-		<!-- llc<div class="fiter-item-container">
-			 <div class="filter-box-company">
-					<div class="filter-box-name">
-						投标次数：
-					</div>
-					<ul class="filter-item invest-count">
-						<li data-key="" class="on">
-							<a href="javascript:void(0);">不限</a>
-						</li>
-						<li data-key="3">
-							<a href="javascript:void(0);">首投</a>
-						</li>
-						<li data-key="2">
-							<a href="javascript:void(0);">复投</a>
-						</li>
-					</ul>
-				</div>
 
-				<div class="filter-box-company">
-					<div class="filter-box-name">
-						项目分类：
-					</div>
-					<ul class="filter-item project-type">
-						<li data-key="" class="on">
-							<a href="javascript:void(0);">不限</a>
-						</li>
-						<li data-key="2">
-							<a href="javascript:void(0);">稳健投资</a>
-						</li>
-						<li data-key="3">
-							<a href="javascript:void(0);">高收益区</a>
-						</li>
-					</ul>
-				</div>
-				<div class="filter-box-company">
-					<div class="filter-box-name">
-						项目状态：
-					</div>
-					<ul class="filter-item project-status">
-						<li data-key="" class="on">
-							<a href="javascript:void(0);">不限</a>
-						</li>
-						<li data-key="10">
-							<a href="javascript:void(0);">正在进行</a>
-						</li>
-						<li data-key="20">
-							<a href="javascript:void(0);">已结束</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-			<div class="hongbao-search">
-				<input class="hongbao-input" name="key" type="text">
-				<input class="hongbao-submit" type="submit" value="">
-			</div>
-
-		</div> -->
-		<!--fiter-item-container-end-->
 		<div class="dataBox">
 			<div class="content-head">
 				<div class="c-item" style="margin-left: 20px">平台</div>
@@ -182,10 +120,10 @@
 		var userlevel = '{{user.level}}';
 		console.log(userlevel);
 		var data = '[results]<li class="finance">' +
-			'<a class="link_left" href="{strategy}" target="_blank"><div class="wrapperBox"><div class="over" data-state={project_state}><span>已结束</span></div><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
+			'<a class="link_left" href="{strategy}" target="_blank"><div class="wrapperBox"><div class="over" data-state={project_state}><span>已结束</span></div><img class="finance__img finance__item" src="{pic}" alt="商家logo"></div>' +
 			'<div class="item1"><span class="finance__term finance__item">{term}</span></div><div class="item2"><span class="finance__range finance__item">{investrange}</span></div>' +
 			'<div class="item3"><span class="finance__price finance__item">{display_price}</span></div>' +
-			'<div class="item5"><span class="finance__remark finance__item">我真的是一个备注~</span></div></a>' +
+			'<div class="item5"><span class="finance__remark finance__item">{remark}</span></div></a>' +
 			'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank"><span class="go">进入推广主页-></span></a></div></li>[/results]';
 		var url = "/restapi/projects/?page={page}&pageSize={pageSize}";
 
@@ -234,7 +172,8 @@
 			$('.nav__item:eq(1)').addClass('active');
 			let childHeight = $('.projectBox').height();//获取子元素的高度
 			let parentHeight = $('.container').height();//获取父元素的高度
-			let gapHeight = childHeight - parentHeight;
+			let gapHeight =  parentHeight - childHeight;
+			console.log(gapHeight)
 			
 			//展开收起功能
 			$('.operateBox').click(() =>{
@@ -242,12 +181,13 @@
 					$('.container').removeClass("_on");
 					$('.operateBox').hide();
 					$('.operateBox_1').show();
-				} 
+				}
 			})
 			//收起
 			$('.operateBox_1').click(() =>{
 				$('.container').addClass("_on");
 				$('.operateBox').show();
+				$('.operateBox_1').hide();
 			})
 			//获取平台列表
 			$.ajax({
@@ -272,7 +212,30 @@
 			})
 			//点击全部返回所有项目列表
 			$('.all_project').click(() =>{
-				window.history.go(0) 
+				$("#pagedata1").ajaxPage({
+					url:url,
+					pageId:$('#page1'),
+					pageSize:20,
+					run:true,
+					content:data,
+					complete:pagecallback
+				})
+				
+			})
+			//热搜
+			$('.s_item').each(function () { 
+				$(this).click(function () { 
+					$('#pagedata1').empty();
+					var name = $(this).attr('data-name');
+					$("#pagedata1").ajaxPage({
+						url:url + '&search=' + encodeURI(name),
+						pageId:$('#page1'),
+						pageSize:20,
+						run:true,
+						content:data,
+						complete:pagecallback
+					})
+				})
 				
 			})
 			//项目点击搜索 llc
@@ -290,10 +253,7 @@
 					complete:pagecallback
 				})
 			})
-			//项目的数量少于等于24个 移出class
-			if($('.item').length <= 24){
-				$('.container').removeClass("_on");
-			}
+			
 			//平台搜索active切换
 			$('.projectBox').on('click','.item',function () { 
 				var index = $(this).index();//获取li标签的下表序号

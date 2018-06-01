@@ -63,7 +63,18 @@
 				<p>平台搜索</p>
 				<ul class="projectBox" style="padding-left: 40px;margin-top: 20px;">
 					<li class="item all_project active">全部</li>
-					
+					<!-- <li class="item">钱包金融</li>
+					<li class="item">钱包金融</li>
+					<li class="item">钱包金融</li>
+					<li class="item">钱包金融</li>
+					<li class="item">钱包金融</li>
+					<li class="item">钱包金融</li>
+					<li class="item">钱包金融</li>
+					<li class="item">钱包金融</li>
+					<li class="item">钱包金融</li>
+					<li class="item">钱包金融</li>
+					<li class="item">钱包金融</li>
+					<li class="item">钱包金融</li> -->
 					<div class="operateBox">
 						<span>展开</span>
 						<div class="trango"></div>
@@ -172,7 +183,7 @@
 			$('.nav__item:eq(1)').addClass('active');
 			let childHeight = $('.projectBox').height();//获取子元素的高度
 			let parentHeight = $('.container').height();//获取父元素的高度
-			let gapHeight =  parentHeight - childHeight;
+			let gapHeight =  Math.abs(parentHeight - childHeight);
 			console.log(gapHeight)
 			
 			//展开收起功能

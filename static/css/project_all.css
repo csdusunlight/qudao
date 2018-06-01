@@ -161,9 +161,9 @@ body{
     background: #91c11d;
     color: white;
 }
-.all_project{
-	background: #92bf35;
-	color: white;
+.active{
+	background: #91c11d;
+    color: white;
 }
 .operateBox{
     width: 50px;
@@ -202,7 +202,7 @@ body{
 .btmBox{
    	padding: 10px 0;
     background: white;
-    margin: 0 auto;
+    margin: 30px auto;
 }
 .searchBox{
 	width: 595px;
@@ -236,7 +236,7 @@ body{
 }
 .s_item{
 	color: #a2a2a2;
-	margin-left: 6px;
+	margin-left: 27px;
 }
 /* 顶部css结束 llc */
 
@@ -250,7 +250,7 @@ body{
 .finance {
 	/* padding: 10px; */
 	/* width:1293px; */
-	width: 1150px; /* llc */
+	width: 1230px; /* llc */
 	padding: 20px 20px;
 	background-color: #fff;
 	/* transition: box-shadow 0.4s ease; */
@@ -306,10 +306,9 @@ body{
 }
 
 .content-head {
-	/* width: 1250px; */
-	width: 1150px;
+	width: 1230px;
 	height: 50px;
-	margin-top: 20px;
+	margin-top: 40px;
 	background: #f5f5f5;
 	display: table;
 }

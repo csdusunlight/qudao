@@ -57,6 +57,7 @@ urlpatterns = [
 #     url(r'^parse_file/$', 'wafuli_admin.views.parse_file', name='parse_file'), #jzy
     url(r'^deliver_coupon/$', coupon_admin.deliver_coupon, name='deliver_coupon'),
     url(r'^parse_file/$', coupon_admin.parse_file, name='parse_file'),
+    url(r'^admin_perform/$', TemplateView.as_view(template_name='admin_perform.html'), name='admin_perform'),
 ]
 
 

@@ -26,6 +26,7 @@
         text-align: center;
     }
     .process-money {
+        padding-left: 24px;
         text-align: left;
     }
     /*.handle {
@@ -278,7 +279,7 @@
                 <div class="popup__item">
                     <span class="popup__itemname">结算金额：</span>
                     <input type="text" class="return_amount_02" placeholder="填写结算金额" />
-                    <span style="display: block;text-align:right; margin-right: 32px;">每笔结算扣除<span class="rate-num">2</span>%手续费</span>
+                    <span style="display: block;text-align:right; margin-right: 32px;">每笔结算扣除<span class="rate-num"></span>%手续费</span>
                     <p class="process-money"></p>
                 </div>
                 <div class="popup__item">
@@ -429,7 +430,7 @@
         '<td>{invest_amount}</td><td>{invest_term}</td><td class="submit-time">{submit_time}</td>'+
         '<td class="return-txt">{settle_amount}</td><td>{audit_reason}</td><td>{invest_name}</td><td>{remark}</td>'+
         '<td class="broker-amount">{broker_amount}</td><td>{appeal_reason}</td><td><a onclick="refuse_again(this,{id})">打回</a> | '+
-        '<a onclick="revise(this,{id})">修正</a></td></tr>[/results]</table>';
+        '<a onclick="revise(this,{id},{broker_rate})">修正</a></td></tr>[/results]</table>';
     var url = "/merchant/projectstatislist/?page={page}&pageSize={pageSize}&ordering=project__doc__view_count";
     var url2 = "/merchant/investlogs/?page={page}&pageSize={pageSize}&project_user={{user.id}}";
     
@@ -508,20 +509,25 @@
 //      });
 //  })
     
-    function revise (obj,id) {
+    var rate;
+    function revise (obj,id,broker_rate) {
         base_id = id;
+        rate = broker_rate;
         base_type = 4;
         parent_dom = $(obj).parent();
         $(".return_amount_02").val('');
+        $(".return_amount_02").attr('placeholder', '填写总的结算金额，不要填写差价！');
+        $('.process-money').text('');
+        $('.rate-num').text(rate);
         $('.popup.m-pass-proj-02').addClass('in');
     }
-    var rate;
     function pass_02 (obj,id,broker_rate) {
         base_id = id;
         rate = broker_rate;
         base_type = 1;
         parent_dom = $(obj).parent();
         $(".return_amount_02").val('');
+        $(".return_amount_02").attr('placeholder', '填写结算金额');
         $('.process-money').text('');
         $('.rate-num').text(rate);
         $('.popup.m-pass-proj-02').addClass('in');

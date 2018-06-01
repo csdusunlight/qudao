@@ -46,6 +46,10 @@
 			height: 12px;
 			background: #f4f4f4;
 		}
+		.pagedata1{
+			min-height: 200px;
+			color: #858585;
+		}
 	</style>
 
 </head>
@@ -58,7 +62,7 @@
 			<div class="container on">
 				<p>平台搜索</p>
 				<ul class="projectBox" style="padding-left: 40px;">
-					<li class="item all_project">全部</li>
+					<li class="item all_project active">全部</li>
 					<li class="item">金融工场</li>
 					<li class="item">金融工场</li>
 					<li class="item">金融工场</li>
@@ -174,7 +178,7 @@
 
 		<div class="content-head">
 			<div class="c-item">平台</div>
-			<div class="c-item" style="margin-left: 70px;">推广标期</div>
+			<div class="c-item" style="margin-left: 80px;">推广标期</div>
 			<div class="c-item" style="margin-left: 80px;">投资档位</div>
 			<div class="c-item" style="margin-left: 90px;">结算价格</div>
 			<div class="c-item" style="margin-left: 100px;">备注说明</div>
@@ -204,12 +208,12 @@
 		var userlevel = '{{user.level}}';
 		console.log(userlevel);
 		var data = '[results]<li class="finance">' +
-			'<a class="link_left" href="{project_strategy}" target="_blank"><div class="wrapperBox"><div class="over" data-state={project_state}><span>已结束</span></div><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
+			'<a class="link_left" href="{strategy}" target="_blank"><div class="wrapperBox"><div class="over" data-state={project_state}><span>已结束</span></div><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
 			'<div class="item1"><span class="finance__term finance__item">{term}</span></div><div class="item2"><span class="finance__range finance__item">{investrange}</span></div>' +
-			'<div class="item3"><span class="finance__price finance__item">{cprice}</span></div>' +
+			'<div class="item3"><span class="finance__price finance__item">{display_price}</span></div>' +
 			'<div class="item5"><span class="finance__remark finance__item">{remark}</span></div></a>' +
 			'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank"><span class="go">进入推广主页-></span></a></div></li>[/results]';
-		var url = "/restapi/projects/?page={page}&pageSize={pageSize}&is_official=2";
+		var url = "/restapi/projects/?page={page}&pageSize={pageSize}";
 
 		function pagecallback() {
 			$('.add-project.true').each(function () {
@@ -303,7 +307,7 @@
 			let childHeight = $('.projectBox').height();//获取子元素的高度
 			let parentHeight = $('.container').height();//获取父元素的高度
 			let gapHeight = childHeight - parentHeight;
-
+			
 			//展开收起功能
 			$('.operateBox').click(() =>{
 				if (gapHeight > 0) {
@@ -363,6 +367,11 @@
 					content:data,
 					complete:pagecallback
 				})
+			})
+			//平台搜索active切换
+			$('.projectBox').on('click','.item',function () { 
+				var index = $(this).index();//获取li标签的下表序号
+				$(this).addClass('active').siblings().removeClass('active');
 			})
 			
 			var newurl = url;

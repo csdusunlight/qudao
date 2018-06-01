@@ -7,10 +7,11 @@ Created on 2017年8月10日
 from rest_framework import serializers
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
     Announcement, WithdrawLog, Mark, BookLog
-from account.models import MyUser, ApplyLog
+from account.models import MyUser, ApplyLog, Message
 from wafuli_admin.models import DayStatis
 from wafuli.models import Company
-from statistic.models import UserDetailStatis, UserAverageStatis
+from statistic.models import UserDetailStatis, UserAverageStatis,\
+    PerformanceStatistics
 # from activity.models import SubmitRank, IPLog
 from docs.models import Document
 
@@ -181,3 +182,16 @@ class DocumentSerializer(serializers.ModelSerializer):
         model = Document
         fields = ['id', 'title', 'content', 'update_time', 'is_on', 'secret', 'is_star','fanshu_url','close_time']
         read_only_fields = ('id',)
+        
+class MesssageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = '__all__'
+        read_only_fields = ('id',)
+        
+class PerformStatisSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username')
+    inviter_code = serializers.CharField(source='user.invite_code')
+    class Meta:
+        model = PerformanceStatistics
+        fields = '__all__'

@@ -4,6 +4,7 @@ from account.models import MyUser
 from django.utils import timezone
 from wafuli.data import AUDIT_STATE
 from decimal import Decimal
+import datetime
 class DayStatis(models.Model):
     date = models.DateField(u"日期", primary_key=True)
     apply_num = models.PositiveIntegerField(u"新申请人数", default=0)
@@ -80,4 +81,5 @@ class Message_Record(models.Model):
     class Meta:
         verbose_name_plural = u"短信群发记录"
         verbose_name = u"短信群发记录"
+        
     

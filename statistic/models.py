@@ -33,6 +33,6 @@ class PerformanceStatistics(models.Model):
     startdate = models.DateField(u"统计起始日期")
     enddate = models.DateField(u"统计截止日期")
     user = models.ForeignKey(MyUser, related_query_name="perfoms")
-    amount = models.DecimalField(u'绩效金额', max_digits=10, decimal_places=2)
+    amount = models.DecimalField(u'邀请金额', max_digits=10, decimal_places=2)
     def __unicode__(self):
         return self.user.username + ' ' + str(self.amount)

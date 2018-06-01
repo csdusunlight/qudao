@@ -32,9 +32,26 @@ class ProjectSerializer(serializers.ModelSerializer):
     qq_name = serializers.CharField(source='user.qq_name', read_only=True)
     user_mobile = serializers.CharField(source='user.mobile', read_only=True)
     state_des = serializers.CharField(source='get_state_display', read_only=True)
+    display_price = serializers.SerializerMethodField()
+    up_price = serializers.SerializerMethodField()
+    def get_field_names(self, declared_fields, info):
+        return serializers.ModelSerializer.get_field_names(self, declared_fields, info)
+    def get_display_price(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated():
+            level = str(user.level)
+            return getattr(obj, 'price'+str(level)) or obj.default_price
+        else:
+            return obj.default_price
+    def get_up_price(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated() and (user.is_staff or obj.user==user):
+            return obj.up_price
+        else:
+            return ''
     class Meta:
         model = Project
-        exclude = ('subscribers',)
+        exclude = ('subscribers', 'price01', 'price02', 'price03', 'price04', 'price05')
 #         fields = '__all__'
         read_only_fields = ('user', 'pub_date', 'state', 'is_official', 'category')
         

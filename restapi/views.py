@@ -32,7 +32,7 @@ import re
 class BaseViewMixin(object):
     authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
-class ProjectList(BaseViewMixin, generics.ListCreateAPIView):
+class ProjectList(generics.ListCreateAPIView):
     def get_queryset(self):
         user = self.request.user
         queryset = Project.objects.all()

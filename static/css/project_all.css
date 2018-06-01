@@ -134,7 +134,7 @@ body{
 	overflow: hidden;
 	font-family: 'Microsoft YaHei';
 }
-.on{
+._on{
 	height: 260px;
 }
 .container > p{
@@ -236,7 +236,7 @@ body{
 }
 .s_item{
 	color: #a2a2a2;
-	margin-left: 27px;
+	margin-left: 20px;
 }
 /* 顶部css结束 llc */
 
@@ -246,11 +246,12 @@ body{
 	width: 1250px;
 	height: 844px;
 } */
-
+.dataBox{
+	width: 1287px;
+	margin: 0 auto;
+}
 .finance {
-	/* padding: 10px; */
-	/* width:1293px; */
-	width: 1230px; /* llc */
+	width: 100%; /* llc */
 	padding: 20px 20px;
 	background-color: #fff;
 	/* transition: box-shadow 0.4s ease; */
@@ -259,6 +260,8 @@ body{
 	display: table;
 	position: relative;
 	transition: all 0.5s ease;
+	position: relative;
+	color: #949494;
 }
 .finance:hover{
 	transform: translateX(-50px);
@@ -306,7 +309,8 @@ body{
 }
 
 .content-head {
-	width: 1230px;
+	/* width: 1230px; */
+	width: 100%;
 	height: 50px;
 	margin-top: 40px;
 	background: #f5f5f5;
@@ -390,7 +394,7 @@ body{
 	width: 200px;
 	text-align: center;
 	float: left;
-	margin-left: 105px;
+	margin-left: 120px;
 }
 .item2 > span{
 	display: table-cell;
@@ -405,7 +409,7 @@ body{
 	height: 60px;
 	text-align: center;
 	float: left;
-	margin-left: 45px;
+	margin-left: 80px;
 }
 .item3 > a{
 	line-height: 60px;
@@ -443,6 +447,8 @@ body{
 	/*white-space:nowrap;*/
 	word-wrap:break-word;
 	word-break:break-all;
+	position: absolute;
+    right: 50px;
 }
 
 .item5 > span{

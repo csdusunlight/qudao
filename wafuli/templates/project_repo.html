@@ -59,43 +59,16 @@
 	<div class="gapBox"></div>
 	<div id="content" style="width: 1293px;margin: 0 auto;">
 		<div class="wrapper">
-			<div class="container on">
+			<div class="container _on">
 				<p>平台搜索</p>
-				<ul class="projectBox" style="padding-left: 40px;">
+				<ul class="projectBox" style="padding-left: 40px;margin-top: 20px;">
 					<li class="item all_project active">全部</li>
+					<!-- <li class="item">金融工场</li>
 					<li class="item">金融工场</li>
 					<li class="item">金融工场</li>
 					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
-					<li class="item">金融工场</li>
+					<li class="item">金融工场</li> -->
+					
 					<div class="operateBox">
 						<span>展开</span>
 						<div class="trango"></div>
@@ -175,24 +148,25 @@
 
 		</div> -->
 		<!--fiter-item-container-end-->
+		<div class="dataBox">
+			<div class="content-head">
+				<div class="c-item" style="margin-left: 20px">平台</div>
+				<div class="c-item" style="margin-left: 65px;">推广标期</div>
+				<div class="c-item" style="margin-left: 95px;">投资档位</div>
+				<div class="c-item" style="margin-left: 125px;">结算价格</div>
+				<div class="c-item" style="margin-left: 165px;">备注说明</div>
+			</div>
 
-		<div class="content-head">
-			<div class="c-item">平台</div>
-			<div class="c-item" style="margin-left: 80px;">推广标期</div>
-			<div class="c-item" style="margin-left: 80px;">投资档位</div>
-			<div class="c-item" style="margin-left: 90px;">结算价格</div>
-			<div class="c-item" style="margin-left: 100px;">备注说明</div>
-		</div>
+			<ul id="pagedata1" class="item-container clearfix" style="min-height: 210px;">
 
-		<ul id="pagedata1" class="item-container clearfix">
-
-		</ul>
-		<!--<div style="width: 1250px; margin: 0 auto;" class="page-box clearfix">-->
-		<div style="display:none; width: 1250px; margin: 0 auto;" class="changes-p clearfix">
-			<div style="padding: 10px 20px 6px;" class="page r" id="page1">
+			</ul>
+			<div style="width: 1250px; margin: 0 auto;" class="page-box clearfix">
+				<div style="width: 1250px; margin: 0 auto;" class="changes-p clearfix">
+					<div style="padding: 10px 20px 6px;" class="page r" id="page1">
+					</div>
+				</div>
 			</div>
 		</div>
-		<!--</div>-->
 	</div>
 	<div style="clear:both"></div>
 	{% include "footer.html" %}
@@ -211,7 +185,7 @@
 			'<a class="link_left" href="{strategy}" target="_blank"><div class="wrapperBox"><div class="over" data-state={project_state}><span>已结束</span></div><img class="finance__img finance__item" src="{project_picture}" alt="商家logo"></div>' +
 			'<div class="item1"><span class="finance__term finance__item">{term}</span></div><div class="item2"><span class="finance__range finance__item">{investrange}</span></div>' +
 			'<div class="item3"><span class="finance__price finance__item">{display_price}</span></div>' +
-			'<div class="item5"><span class="finance__remark finance__item">{remark}</span></div></a>' +
+			'<div class="item5"><span class="finance__remark finance__item">我真的是一个备注~</span></div></a>' +
 			'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank"><span class="go">进入推广主页-></span></a></div></li>[/results]';
 		var url = "/restapi/projects/?page={page}&pageSize={pageSize}";
 
@@ -253,52 +227,6 @@
 		}
 		var textarray = [];
 
-		// function addProject(obj, id) {
-		// 	var flag = $(obj).data('isadd');
-		// 	console.log(flag)
-		// 	if (flag == true) {
-		// 		$.ajax({
-		// 			url: '/restapi/sub/' + id + '/',
-		// 			dataType: "json",
-		// 			type: "put",
-		// 			data: {
-		// 				'is_on': false
-		// 			},
-		// 			success: function (ret) {
-		// 				console.log('关闭');
-		// 				$(obj).data('isadd', false);
-		// 				obj.innerText = "添加至主页";
-		// 				$(obj).removeClass('true').addClass('false');
-		// 				$(obj).parent().find('.go_homepage').hide();
-		// 			},
-		// 			error: function () {
-		// 				alert("请检查网络连接");
-		// 			}
-		// 		});
-
-		// 	} else {
-		// 		$.ajax({
-		// 			url: '/restapi/sub/' + id + '/',
-		// 			dataType: "json",
-		// 			type: "put",
-		// 			data: {
-		// 				'is_on': true
-		// 			},
-		// 			success: function (ret) {
-		// 				console.log('开启');
-		// 				$(obj).data('isadd', true);
-		// 				obj.innerText = "已添加";
-		// 				$(obj).removeClass('false').addClass('true');
-		// 				$(obj).parent().find('.go_homepage').show();
-		// 			},
-		// 			error: function () {
-		// 				alert("请检查网络连接");
-		// 			}
-		// 		});
-
-		// 	}
-		// }
-
 		function emptydisplay(obj) {
 			obj.html('<p style="margin-top:20px;">抱歉，没有找到符合条件的项目！</p>');
 		}
@@ -311,14 +239,14 @@
 			//展开收起功能
 			$('.operateBox').click(() =>{
 				if (gapHeight > 0) {
-					$('.container').removeClass("on");
+					$('.container').removeClass("_on");
 					$('.operateBox').hide();
 					$('.operateBox_1').show();
 				} 
 			})
 			//收起
 			$('.operateBox_1').click(() =>{
-				$('.container').addClass("on");
+				$('.container').addClass("_on");
 				$('.operateBox').show();
 			})
 			//获取平台列表
@@ -344,14 +272,8 @@
 			})
 			//点击全部返回所有项目列表
 			$('.all_project').click(() =>{
-				$("#pagedata1").ajaxPage({
-					url: '/restapi/projects/',
-					pageId: $("#page1"),
-					pageSize: 999,
-					run: true,
-					content: data,
-					complete: pagecallback,
-				});
+				window.history.go(0) 
+				
 			})
 			//项目点击搜索 llc
 			$('.projectBox').on('click','.item',function () { 
@@ -362,12 +284,16 @@
 				$("#pagedata1").ajaxPage({
 					url:newUrl1,
 					pageId:$('#page1'),
-					pageSize:999,
+					pageSize:20,
 					run:true,
 					content:data,
 					complete:pagecallback
 				})
 			})
+			//项目的数量少于等于24个 移出class
+			if($('.item').length <= 24){
+				$('.container').removeClass("_on");
+			}
 			//平台搜索active切换
 			$('.projectBox').on('click','.item',function () { 
 				var index = $(this).index();//获取li标签的下表序号
@@ -384,7 +310,7 @@
 			$("#pagedata1").ajaxPage({
 				url: url + "&type=" + "&state=",
 				pageId: $("#page1"),
-				pageSize: 999,
+				pageSize: 20,
 				run: true,
 				content: data,
 				complete: pagecallback,
@@ -430,7 +356,7 @@
 				$("#pagedata1").ajaxPage({
 					url: newurl2,
 					pageId: $("#page1"),
-					pageSize: 12,
+					pageSize: 20,
 					run: true,
 					content: data,
 					complete: pagecallback,
@@ -444,7 +370,7 @@
 					$("#pagedata1").ajaxPage({
 						url: newurl2,
 						pageId: $("#page1"),
-						pageSize: 999,
+						pageSize: 20,
 						run: true,
 						content: data,
 						complete: pagecallback,

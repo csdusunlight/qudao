@@ -196,6 +196,7 @@ SUB_TYPE = (
     ('1', u'首投'),
     ('2', u'复投'),
 )
+
 SUB_WAY = (
     ('1', u'主页提交'),
     ('2', u'逐条提交'),
@@ -204,6 +205,12 @@ SUB_WAY = (
     ('5', u'表格提交(不区分项目)'),
 )
 class InvestLog(models.Model):
+    PAY_STATE = (
+        ('1', u'未打款'),
+        ('2', u'打款中'),
+        ('3', u'已打款'),
+        ('4', u'打款失败'),
+    )
     user = models.ForeignKey(MyUser, related_name="investlog_submit")
     wxuser = models.ForeignKey(WXUser, related_name="investlog_of", blank=True, null=True, on_delete=models.SET_NULL)
     project = models.ForeignKey(Project, related_name="investlogs")
@@ -224,7 +231,7 @@ class InvestLog(models.Model):
     expect_amount = models.CharField(u'用户预期返现金额(6)', max_length=20, blank=True)
     admin_user = models.ForeignKey(MyUser, related_name="investlog_admin", null=True)
     audit_time = models.DateTimeField(u'审核时间', null=True, blank=True, default=None)
-    audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
+    audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态", default='1')
     preaudit_state = models.CharField(max_length=10, choices=AUDIT_STATE, default='1', verbose_name=u"预审状态")
     audit_reason = models.CharField(u"审核说明", max_length=30, blank=True)
     settle_amount = models.DecimalField(u'结算金额', max_digits=10, decimal_places=2, default=0)
@@ -236,6 +243,11 @@ class InvestLog(models.Model):
     appeal_reason = models.CharField(u"申诉理由", max_length=50, blank=True)
     presettle_amount = models.DecimalField(u'预结算金额', max_digits=10, decimal_places=2, default=0)
     preaudit_time = models.DateTimeField(u'预审核时间', null=True, blank=True, default=None)
+    pay_state = models.CharField(max_length=1, choices=PAY_STATE, verbose_name=u"打款状态", default='1')
+#     pay_remark = models.CharField(u"打款转账备注", max_length=50, blank=True)
+    pay_reason = models.CharField(u"打款审核说明", max_length=50, blank=True)
+    pay_apply_time = models.DateTimeField(u'申请打款时间', null=True, blank=True, default=None)
+    pay_time = models.DateTimeField(u'打款时间', null=True, blank=True, default=None)
     translist = GenericRelation('TransList')
     def __unicode__(self):
         return u"来自渠道用户：%s 的投资数据提交：%s" % (self.user, self.invest_amount)

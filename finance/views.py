@@ -21,6 +21,10 @@ import traceback
 
 # Create your views here.
 @has_permission('200')
+def finance_page(request):
+    return render(request, 'finance_pay.html')
+@csrf_exempt
+@has_permission('200')
 def check_transfer(request):
     user = request.user
     choices = request.POST.get('ids', '')
@@ -43,6 +47,7 @@ def check_transfer(request):
     ret_suc = {'code':0, 'total':total, 'count':count, 'balance':user.balance}
     return JsonResponse(ret_suc)
 
+@csrf_exempt
 @has_permission('200')
 def submit_transfer(request):
     user = request.user
@@ -76,7 +81,8 @@ def admin_autopay(request):
     admin_user = request.user
     if request.method == "GET":
         ret = {}
-        paylist = InvestLog.objects.filter(pay_state='2').all()
+        paylist = InvestLog.objects.filter(is_official=True, audit_state='0', 
+                                           pay_state='2', return_amount__lt=50000).all()
         sub_from = request.GET.get('sub_from')
         sub_to = request.GET.get('sub_to')
         if sub_from and sub_to:
@@ -93,7 +99,8 @@ def admin_autopay(request):
         return JsonResponse(ret)
     if request.method == "POST":
         batch_list = []
-        paylist = InvestLog.objects.filter(pay_state='2').all()
+        paylist = InvestLog.objects.filter(is_official=True, audit_state='0', 
+                                           pay_state='2', return_amount__lt=50000).all()
         sub_from = request.POST.get('sub_from')
         sub_to = request.POST.get('sub_to')
         if sub_from and sub_to:
@@ -352,3 +359,19 @@ def import_investlog_for_pay(request):
         os.remove(tempfile)
     ret['num'] = suc_num
     return JsonResponse(ret)
+
+@csrf_exempt
+@has_permission('200')
+def mark_pay_state(request):
+    user = request.user
+    state = request.POST.get('state', '')
+    choices = request.POST.get('ids', '')
+    if not state or not choices:
+        return JsonResponse({'code':1, 'detail':u'参数不足'})
+    id_list = choices.split(',')
+    if state == '1':
+        investlogs = InvestLog.objects.filter(user=user, id__in=id_list, pay_state='4').update(pay_state='1')
+    elif state == '3':
+        investlogs = InvestLog.objects.filter(user=user, id__in=id_list, pay_state='1').update(pay_state='3')
+    return JsonResponse({'code':0})
+        

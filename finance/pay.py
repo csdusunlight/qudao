@@ -37,7 +37,7 @@ def batch_transfer_to_zhifubao(account_list):
         payee_account=account.get('payee_account')
         payee_real_name=account.get('payee_real_name')
         amount=account.get('amount')
-        remark=account.remark or u"福利联盟提现"
+        remark=account.get('remark') or u"福利联盟提现"
         result = alipay.api_alipay_fund_trans_toaccount_transfer(
             str(int(timestamp * 1000)),
             payee_type="ALIPAY_LOGONID",

@@ -45,7 +45,7 @@
                             <div class="column_4 column m-head">投资档位</div>
                             <!--<div class="column_5 column m-head">客户指导价</div>-->
                             <div class="column_6 column m-head">备注说明</div>
-                            <div class="column_7 column m-head">操作</div>
+                            <!-- <div class="column_7 column m-head">操作</div> -->
                         </li>
                         <ul id="right_box" class="right_ul">
                             
@@ -118,10 +118,10 @@
                                 right_html += data.results[i].project_investrange;
                                     right_html += '</span></div>' +
 //                                  '<div class="column_5 column"><span class="item">' + data.results[i].project_cprice + '</span></div>' +
-                                    '<div class="column_6 column"><span class="item">'+data.results[i].project_remark+'</div>' +
-                                    '<div class="column_7 column"><span data-isadd="'+ data.results[i].is_on +'" data-id="'+ data.results[i].id +
-                                    '" class="item add-project '+ data.results[i].is_on +'">'+ (data.results[i].is_on?'取消添加':'添加至主页') +'</span>' +
-                                    '<a '+ (data.results[i].is_on?'':'style="display:none"') +' class="item go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/'+ data.results[i].project+'/">进入推广主页</a></div>';
+                                    '<div class="column_6 column"><span class="item">'+data.results[i].project_remark+'</div>';
+                                    // '<div class="column_7 column"><span data-isadd="'+ data.results[i].is_on +'" data-id="'+ data.results[i].id +
+                                    // '" class="item add-project '+ data.results[i].is_on +'">'+ (data.results[i].is_on?'取消添加':'添加至主页') +'</span>' +
+                                    // '<a '+ (data.results[i].is_on?'':'style="display:none"') +' class="item go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/'+ data.results[i].project+'/">进入推广主页</a></div>';
                                 li_left.innerHTML = left_html;
                                 li_right.innerHTML = right_html;
                                 document.getElementById('left_box').appendChild(li_left);

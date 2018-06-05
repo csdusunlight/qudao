@@ -1,0 +1,26 @@
+.top{
+    padding: 15px 15px;
+    border-bottom: 2px solid RGB(0, 143, 215);
+}
+.top>span:before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    margin-right: 20px;
+    position: relative;
+    top: 5px;
+    background: red;
+}
+.searchBox{
+    padding: 10px 10px;
+}
+.s_ipt{
+    width: 200px;
+    height: 30px;
+}
+.s_btn{
+    width: 100px;
+    height: 32px;
+    margin-left: 20px;
+}

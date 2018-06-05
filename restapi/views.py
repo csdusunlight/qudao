@@ -302,4 +302,4 @@ class PerformStatisList(BaseViewMixin, generics.ListAPIView):
     serializer_class = PerformStatisSerializer
     pagination_class = MyPageNumberPagination
     filter_backends = (SearchFilter,)
-    search_fields = ('user__username', 'inviter_code')
+    search_fields = ('user__username', )

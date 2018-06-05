@@ -38,12 +38,12 @@ def index(request):
 
 def project_all(request):
     hot_platforms = Company.objects.order_by('-view_count')[0:6]
+    print hot_platforms
     if request.user.is_authenticated():
         template = 'm_project_repo.html' if request.mobile else 'project_repo.html'
-        return render(request, template)
     else:
         template = 'm_project_repo_nologin.html' if request.mobile else 'project_repo_nologin.html'
-        return render(request, template, {'hot_platforms':hot_platforms})
+    return render(request, template, {'hot_platforms':hot_platforms})
     
 def user_guide(request):
     return render(request, 'user_guide.html',  )

@@ -64,6 +64,7 @@ class InvestLogSerializer(serializers.ModelSerializer):
     user_level = serializers.CharField(source='user.level', read_only=True)
     user_mobile = serializers.CharField(source='user.mobile', read_only=True)
     audit_state_des = serializers.CharField(source='get_audit_state_display', read_only=True)
+    pay_state_des = serializers.CharField(source='get_pay_state_display', read_only=True)
     preaudit_state_des = serializers.CharField(source='get_preaudit_state_display', read_only=True)
     admin_user = serializers.CharField(source='admin_user.username', read_only=True) 
     admin_user = serializers.CharField(source='admin_user.username', read_only=True)
@@ -77,7 +78,7 @@ class InvestLogSerializer(serializers.ModelSerializer):
         model = InvestLog
         fields = '__all__'
         read_only_fields = ('audit_date','submit_time','user','qq_number','qq_name','user_level','project_price',
-                             'user_mobile', 'settle_amount','return_amount', "admin_user", "is_official",'category')
+                             'user_mobile', 'settle_amount', "admin_user", "is_official",'category')
 class TransListSerializer(serializers.ModelSerializer):
     mobile = serializers.CharField(source='user.mobile', read_only=True)
     user_balance = serializers.CharField(source='balance', read_only=True)

@@ -17,9 +17,9 @@ from . import views
 # ]
 urlpatterns = [
     url(r'^$', views.finance_page),#post参数：ids
-    url(r'^check_transfer$', views.submit_transfer),#post参数：ids
-    url(r'^submit_transfer', views.submit_transfer),#post参数：ids
-    url(r'^export_investlog$', views.export_investlog_for_pay),
-    url(r'^import_investlog', views.import_investlog_for_pay),
-    url(r'^mark_pay_state', views.mark_pay_state),#post参数：ids， state（state：1, 打款失败标记为未打款， state：3， 未打款标记为已打款）
+    url(r'^check_transfer/$', views.check_transfer),#post参数：ids
+    url(r'^submit_transfer/$', views.submit_transfer),#post参数：ids
+    url(r'^export_investlog/$', views.export_investlog_for_pay),
+    url(r'^import_investlog/$', views.import_investlog_for_pay),
+    url(r'^mark_pay_state/$', views.mark_pay_state),#post参数：ids， state（state：1, 打款失败标记为未打款， state：3， 未打款标记为已打款）
 ]

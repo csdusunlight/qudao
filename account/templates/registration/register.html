@@ -185,11 +185,10 @@
 </body>
 <script src="https://cdn.bootcss.com/nice-validator/1.1.3/jquery.validator.min.js?local=zh-CN"></script>
 <script>
-    var coderefresh_url = "{% url 'captcha-refresh' %}";
-    var verifyemail_url = "";
-    var verifymobile_url = "{% url 'verifymobile' %}"; //验证手机号是否存在
-    var verifyqq_url = "{% url 'verifyqq' %}"; //验证QQurl
-    var verifyinviter_url = "{% url 'verifyinviter' %}";
+    // var coderefresh_url = "{% url 'captcha-refresh' %}";
+    var verifymobile_url = "{% url 'verifymobile' %}"; //验证手机号是否存在url
+    var verifyqq_url = "{% url 'verifyqq' %}";        //验证QQurl
+    var verifyinviter_url = "{% url 'verifyinviter' %}"; // 邀请码是否存在url
     var get_code_url = "{% url 'phoneImageV' %}"; //验证码url
     var register_url = "{% url 'register' %}"; //注册url
     var index_url = "";
@@ -200,7 +199,6 @@
         },
     });
     $(function () {
-        console.log(verifyinviter_url)
          /*
             llc
             获取验证码
@@ -240,6 +238,7 @@
                         alert('发送验证码成功');
                     } else if(ret.code == 1){
                         alert('发送验证码失败')
+                        return;
                     }else if(ret.code == 2){
                         alert(ret.message);
                     }
@@ -254,8 +253,8 @@
     })
     $('#form').validator({
         dataFilter: function(data) {
-            if (data.status === 200) return "";
-            else return data.msg;
+            if (data.code == 0){ return "";}
+            else if(data.code == 1) {return data.msg;}
         },
         validClass: "has-success",
         invalidClass: "has-error",
@@ -271,7 +270,7 @@
             'password':'required;password',
             'qq_number':'required;qq_number;remote(' + verifyqq_url + ', csrfmiddlewaretoken={{ csrf_token }})',
             'qq_name':'required;qq_name',
-            'invite_code':'invite_code;remote('+  +'csrfmiddlewaretoken={{ csrf_token }})'
+            'invite_code':'invite_code;remote('+ verifyinviter_url +', csrfmiddlewaretoken={{ csrf_token }})'
         },
         theme: 'simple_bottom',
         invalid: function() {
@@ -280,7 +279,7 @@
         target: "#msgbox",
         msgStyle: "margin-right:0; line-height: 20px;font-size:16px;",
         valid: function(e) {
-          me.holdSubmit();
+        //   me.holdSubmit();
         
           var phone_number = $('.phone_number').val();
           var auth_code = $('.auth_code').val();
@@ -303,8 +302,8 @@
             },
             success: function(ret) {
               if(ret.code == 0) {
-                me.holdSubmit(false);
-                alert('提交成功');
+                // me.holdSubmit(false);
+                alert('注册成功');
               } else {
                 console.log(ret);
                 alert(ret.msg);

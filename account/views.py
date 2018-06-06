@@ -285,7 +285,7 @@ def verifymobile(request):
     users = None
     code = '0' # is used
     if mobilev:
-        users = ApplyLog.objects.filter(mobile=mobilev)
+        users = MyUser.objects.filter(mobile=mobilev)
         if not users.exists():
             code = '1'
     result = {'code':code,}
@@ -305,7 +305,7 @@ def verifyqq(request):
     users = None
     code = '0' # is used
     if qqv:
-        users = ApplyLog.objects.filter(qq_number=qqv)
+        users = MyUser.objects.filter(qq_number=qqv)
         if not users.exists():
             code = '1'
     result = {'code':code,}
@@ -527,6 +527,10 @@ def account_audited_2(request):
 @login_required
 def security(request):
     return render(request, 'account/account_security.html', {})
+@login_required
+def message(request):
+    template = 'account/m_account_message.html' if request.mobile else 'account/account_message.html'
+    return render(request, template)
 
 def password_change(request):
     if not request.is_ajax():

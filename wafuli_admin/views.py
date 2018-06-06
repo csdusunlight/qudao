@@ -921,7 +921,7 @@ def admin_withdraw(request):
         return JsonResponse(res)
 
 @transaction.atomic
-# @has_post_permission('004')
+@has_post_permission('004')
 def admin_withdraw_autoaudit(request):
     admin_user = request.user
     if request.method == "GET":

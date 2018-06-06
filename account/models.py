@@ -96,6 +96,9 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     zhifubao = models.CharField(u"支付宝账号（邮箱或手机号）", blank=True, max_length=50)
     zhifubao_real_name = models.CharField(u"支付宝实名", blank=True, max_length=20)
     
+    is_channel = models.BooleanField(u"是否渠道", default=False)
+#     default_transfer_remark = models.CharField(u"默认打款转账备注", default="P2P")
+    
     objects = MyUserManager()
 
     USERNAME_FIELD = 'mobile'

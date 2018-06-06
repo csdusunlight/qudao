@@ -780,7 +780,7 @@ def admin_user(request):
                 Message.objects.create(user=user_id, title="渠道申请审核反馈", time=datetime.datetime.now(), is_read=False,
                                        content=u"尊敬的用户：您申请成为渠道用申用户失败。被拒绝原因如下："+refuse_reason)  # 写入审核原因，加个字段
                 AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=refuse_reason, type='3')
-                obj_user.update(channel_refuse_reason＝refuse_reason) # is_channel设置为０
+                #obj_user.update(channel_refuse_reason＝refuse_reason) # is_channel设置为０
                 sendmsg_bydhst(obj_user.mobile, u"您申请成为渠道用户失败" + refuse_reason)
                 res['code'] = 0
             else:

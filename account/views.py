@@ -280,6 +280,45 @@ def register_from_gzh(request):
         template = 'registration/m_register_from_gzh.html'
         return render(request,template, context)
 
+from account.models import USER_ORIGIN,USER_EXP_YEAR,USER_CUSTOME_VOLUMN,USER_FUNDS_VOLUMN,USER_INVEST_ORIENTATION
+@csrf_exempt
+def apply_for_channel_user(request):
+    if request.method == 'POST':
+        if not request.is_ajax():
+            raise Http404
+        result = {}
+        current_user=request.user
+        user_origin = request.POST.get('origin', None)
+        user_exp_year = request.POST.get('exp_year', None)
+        user_custom_volumn = request.POST.get('custom_volumn', None)
+        user_funds_volumn = request.POST.get('funds_volumn', None)
+        user_invest_orientation = request.POST.get('invest_orientation', None)
+            #所有字段的传入内容都是合法的，那么设置
+            #写入数据库，设置待审核状态，发送站内消息和短信
+        #######################
+        def para_check_in_model_choice(para,choices):
+            return para in [i[0] for i in choices]
+        #######################
+        if all([para_check_in_model_choice(user_origin,USER_ORIGIN), \
+                para_check_in_model_choice(user_exp_year, USER_EXP_YEAR), \
+                para_check_in_model_choice(user_custom_volumn, USER_CUSTOME_VOLUMN), \
+                para_check_in_model_choice(user_funds_volumn, USER_FUNDS_VOLUMN),\
+                para_check_in_model_choice(user_invest_orientation, USER_INVEST_ORIENTATION)]):
+            current_user.user_origin = user_origin
+            current_user.user_exp_year = user_exp_year
+            current_user.user_custom_volumn = user_custom_volumn
+            current_user.user_funds_volumn = user_funds_volumn
+            current_user.user_invest_orientation = user_invest_orientation
+            current_user.is_channel = -1
+            current_user.update()
+            result['code'] = 0
+            return JsonResponse(result)
+
+        else:
+            result['code'] = '3'
+            result['msg'] = u'传入参数不合法！'
+            return JsonResponse(result)
+
 def verifymobile(request):
     mobilev = request.GET.get('mobile', None)
     users = None

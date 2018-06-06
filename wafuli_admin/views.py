@@ -759,7 +759,36 @@ def admin_user(request):
             perm = AdminPermission.objects.get(code='100')
             obj_user.admin_permissions.remove(perm)
             res['code'] = 0
+
+        elif type == 8:#添加关于渠道用户被拒绝的操作，返回拒绝的消息和拒绝的原因，消息是固定的，原因是审核者填写的
+            if not admin_user.has_admin_perms('055'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
+            user_level = request.POST.get('user_level', 0)
+            user_is_allow = request.POST.get('is_allow',0)
+            refuse_reason = request.POST.get('refuse_reason', 0)
+            #根据传入的字段
+            if user_is_allow =='1':#
+                reason="success"
+               # Message.objects.create(user=user_id, title="渠道申请审核反馈", time=datetime.datetime.now(), is_read=False,
+               #                        content=u"尊敬的用户：您申请成为渠道用户成功！")
+                obj_user.update(is_channel=1, user_level=user_level)  # is_channel设置为１，并且user_level等级提升
+                AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=reason, type='3')
+                sendmsg_bydhst(obj_user.mobile, u"您申请成为渠道用户成功！")
+                res['code'] = 0
+            elif user_is_allow=='0':
+               # Message.objects.create(user=user_id, title="渠道申请审核反馈", time=datetime.datetime.now(), is_read=False,
+               #                        content=u"尊敬的用户：您申请成为渠道用申用户失败。被拒绝原因如下："+refuse_reason)  # 写入审核原因，加个字段
+                AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=refuse_reason, type='3')
+                #obj_user.update(channel_refuse_reason＝refuse_reason) # is_channel设置为０
+                sendmsg_bydhst(obj_user.mobile, u"您申请成为渠道用户失败" + refuse_reason)
+                res['code'] = 0
+            else:
+                res['code'] = -2
+                res['res_msg'] = u'输入不合法！'
         return JsonResponse(res)
+
 
 def get_admin_user_page(request):
     res={'code':0,}

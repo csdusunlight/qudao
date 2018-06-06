@@ -103,7 +103,7 @@
 
 		b.each = function (res) {
 			if (res) {
-				if (res.code === 1) {
+				if (res.code === 0) {
 					if (c.content) {
 						c.pageCount = res.pageCount;
 						c.recordCount = res.recordCount;
@@ -115,7 +115,7 @@
 						}
 						self.html(b.r(s,res));
 					}
-				} else if(res.code === 0){
+				} else if(res.code === 1){
 					c.pageCount = 0;
 					c.recordCount = 0;
 					self.html(c.noData);

@@ -15,12 +15,16 @@
     <style type="text/css">
       #app {
         margin: 20px;
-        padding: 0 20px;
+        padding: 20px;
         background-color: #fff;
       }
       .search__item {
         width: 150px;
       }
+      /*样式覆盖*/
+     .el-popover {
+       min-width: 60px;
+     }
     </style>
   </head>
 
@@ -131,6 +135,13 @@
           </el-input>
         </el-col>
         <el-col :span="4">
+          <span>支付宝账号：</span>
+          <el-input
+            class="search__item"
+            placeholder="请输入内容"
+            v-model="zfbValue"
+            clearable>
+          </el-input>
         </el-col>
         <el-col :span="8">
           <el-button type="primary" @click="searchData">搜索</el-button>
@@ -140,17 +151,19 @@
         <el-col :span="12">
           <el-upload
             class="avatar-uploader"
-            action="/import_investlog/"
-            name="uploadName"
+            action="/finance/import_investlog/"
+            name="file"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload">
             <el-button size="small" type="primary">上传Exel</el-button>
             <div slot="tip" class="el-upload__tip">只能上传xls文件</div>
           </el-upload>
+          <el-button size="small" type="primary" @click="exportExel">导出Exel</el-button>
         </el-col>
         <el-col :span="12">
-          <el-button type="success" @click="badgeSelect">一键标记</el-button>
+          <el-button type="success" @click="badgeSelect(1)">标记未打款</el-button>
+          <el-button type="success" @click="badgeSelect(3)">标记已打款</el-button>
           <el-button type="warning" @click="transferSelect">一键转账</el-button>
         </el-col>
       </el-row>
@@ -169,43 +182,43 @@
           width="55">
         </el-table-column>
         <el-table-column
-          label="项目名称"
-          width="120">
+          label="项目名称">
           <template slot-scope="scope">${ scope.row.project_title }</template>
         </el-table-column>
         <el-table-column
-          label="结算金额"
-          width="120">
+          label="结算金额">
           <template slot-scope="scope">${ scope.row.settle_amount }</template>
         </el-table-column>
         <el-table-column
-          label="投资日期"
-          width="120">
+          label="投资日期">
           <template slot-scope="scope">${ scope.row.invest_date }</template>
         </el-table-column>
         <el-table-column
-          label="支付宝账号"
-          width="120">
-          <template slot-scope="scope">${ scope.row.zhifubao }</template>
+          label="审核时间">
+          <template slot-scope="scope">${ (scope.row.audit_time).slice(0,10) }</template>
         </el-table-column>
         <el-table-column
-          label="返现金额"
-          width="120">
+          label="返现金额">
           <template slot-scope="scope">${ scope.row.return_amount }</template>
         </el-table-column>
         <el-table-column
-          label="投资手机号"
-          width="120">
+          label="支付宝账号">
+          <template slot-scope="scope">${ scope.row.zhifubao }</template>
+        </el-table-column>
+                <el-table-column
+          label="支付宝姓名">
+          <template slot-scope="scope">${ scope.row.zhifubao_name }</template>
+        </el-table-column>
+        <el-table-column
+          label="投资手机号">
           <template slot-scope="scope">${ scope.row.invest_mobile }</template>
         </el-table-column>
         <el-table-column
-          label="投资姓名"
-          width="120">
+          label="投资姓名">
           <template slot-scope="scope">${ scope.row.invest_name }</template>
         </el-table-column>
         <el-table-column
-          label="返现状态"
-          width="120">
+          label="返现状态">
           <template slot-scope="scope">
             <!--<span :class="{'all' : scope.row.pay_state==1}">${ scope.row.pay_state_des }</span>-->
             <span :class="'pay-state-' + scope.row.pay_state">${ scope.row.pay_state_des }</span>
@@ -213,13 +226,13 @@
         </el-table-column>
         <el-table-column
           label="操作"
-          width="120">
+          width="90">
           <template slot-scope="scope">
             <template v-if="scope.row.pay_state == 2 || scope.row.pay_state == 3 || scope.row.pay_state == 4">
               <el-button disabled>操作</el-button>
             </template>
             <template v-else>
-              <el-popover trigger="hover" placement="top">
+              <el-popover trigger="hover" placement="left">
                 <p>
                   <el-button v-if="scope.row.pay_state==1" type="success" size="mini" icon="el-icon-edit" @click="edit(scope.row)">编辑</el-button>
                   <!--<el-button type="primary" size="mini" icon="el-icon-edit"  @click="badge(scope.row)">标记</el-button>-->
@@ -230,7 +243,7 @@
                 </div>
               </el-popover>
             </template>
-            <el-dialog title="填写转账金额" width="600px" :visible.sync="dialogAmountVisible">
+            <!--<el-dialog title="填写转账金额" width="600px" :visible.sync="dialogAmountVisible">
               <el-form :model="dialogData">
                 <el-form-item label="转账金额" label-width="90px">
                   <el-input v-model="dialogData.return_ammount" auto-complete="off"></el-input>
@@ -240,22 +253,22 @@
                 <el-button @click="dialogAmountVisible = false">取 消</el-button>
                 <el-button type="primary" @click="amountComfirm">确 定</el-button>
               </div>
-            </el-dialog>
+            </el-dialog>-->
             <el-dialog title="填写标记信息" width="600px" :visible.sync="dialogEditVisible">
               <el-form :model="dialogData">
                 <el-form-item label="转账金额" label-width="90px">
-                  <el-input v-model="dialogData.return_ammount" auto-complete="off"></el-input>
+                  <el-input type="number" v-model="dialogData.return_amount" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="转账金额" label-width="90px">
-                  <el-input v-model="dialogData.return_ammount" auto-complete="off"></el-input>
+                <el-form-item label="支付宝账号" label-width="90px">
+                  <el-input v-model="dialogData.zhifubao" auto-complete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="转账金额" label-width="90px">
-                  <el-input v-model="dialogData.return_ammount" auto-complete="off"></el-input>
+                <el-form-item label="支付宝姓名" label-width="90px">
+                  <el-input v-model="dialogData.zhifubao_name" auto-complete="off"></el-input>
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogEditVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogEditVisible = false">确 定</el-button>
+                <el-button type="primary" @click="editConfirm">确 定</el-button>
               </div>
             </el-dialog>
           </template>
@@ -276,6 +289,7 @@
     </div>    <!--pagination-->
       <p>key值为：${key}</p>
     </div>
+    <iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
     <script type="text/javascript">
 //    $.ajax({
 //      type: "get",
@@ -300,19 +314,21 @@
             pageSize: 10,
             multipleSelection: [],
             checkIdList: '',
-            amountSelect:'',
+//          amountSelect:'',
             key: '123',
             dialogAmountVisible: false,
             dialogEditVisible: false,
             dialogData: {
-              type: '',
               id: '',
-              return_amount: ''
+              return_amount: '',
+              zhifubao: '',
+              zhifubao_name: ''
             },
             rowStyle: {
               'text-align': 'center'
             },
             page: 1,
+            currentPage: 1,
             stateValue: '',
             stateOptions: [{
               value: '',
@@ -325,7 +341,7 @@
               label: '打款中'
             }, {
               value: '3',
-              label: '打款成功'
+              label: '已打款'
             }, {
               value: '4',
               label: '打款失败'
@@ -341,7 +357,8 @@
               value: '30',
               label: '30天内数据'
             }],
-            telValue: ''
+            telValue: '',
+            zfbValue: '',
         },
         created: function() {
           $.ajax({
@@ -350,7 +367,7 @@
               async: true,
               success: function(res) {
                 console.log(res);
-                if(res.code == 1) {
+                if(res.code == 0) {
                   console.log('created');
                   console.log(res);
                   console.log(app.tableData);
@@ -380,14 +397,14 @@
           },
           handleSelectionChange: function(val) {
             app.checkIdList = '';
-            app.amountSelect = 0;
+//          app.amountSelect = 0;
             console.log(val);
             if (val.length) {
               for (let i = 0; i < val.length; i++) {
                 app.checkIdList += val[i].id + ','
-                if (val[i].return_amount) {
-                	app.amountSelect += parseFloat(val[i].return_amount);
-                }
+//              if (val[i].return_amount) {
+//              	app.amountSelect += parseFloat(val[i].return_amount);
+//              }
               }
               app.checkIdList = app.checkIdList.slice(0,app.checkIdList.length-1);
               console.log(app.checkIdList);
@@ -400,10 +417,10 @@
           handleCurrentChange: function (val) {
             console.log(app.searchKeys);
             console.log(app.stateValue);
-            this.currentPage = val;
+            app.currentPage = val;
             $.ajax({
               type: "get",
-              url: '/restapi/investlogs/?page='+ val + '&pageSize=' + app.pageSize +'&audit_state=0' + app.searchKeys,
+              url: '/restapi/investlogs/?page='+ app.currentPage + '&pageSize=' + app.pageSize +'&audit_state=0' + app.searchKeys,
               async: true,
               success: function(res) {
                 console.log(res);
@@ -418,12 +435,37 @@
           edit: function(row) {
             console.log(row);
             app.dialogData.id = row.id;
+            app.dialogData.return_amount = row.return_amount;
+            app.dialogData.zhifubao = row.zhifubao;
+            app.dialogData.zhifubao_name = row.zhifubao_name;
             app.dialogEditVisible = true;
           },
-          badgeSelect: function() {
+          editConfirm: function() {
+            console.log(app.dialogData)
+            $.ajax({
+              type: "put",
+              url: '/restapi/investlogs/' + app.dialogData.id + '/',
+              data: {
+                return_amount: app.dialogData.return_amount,
+                zhifubao: app.dialogData.zhifubao,
+                zhifubao_name: app.dialogData.zhifubao_name
+              },
+              async: true,
+              success: function(res) {
+                app.dialogEditVisible = false;
+              }
+            });
+          },
+          badgeSelect: function(state) {
             var that = this;
-            console.log(app.checkIdList)
-            console.log(app.amountSelect)
+            if (!app.checkIdList) {
+                this.$notify.error({
+                  title: '错误',
+                  message: '请先选择要操作的数据'
+                });
+                return false;
+            }
+//          console.log(app.amountSelect)
             this.$alert('请确认是否一键标记所选数据？', '温馨提示', {
               confirmButtonText: '确定',
               callback: function(action) {
@@ -431,14 +473,22 @@
                 if (action == 'confirm') {
                 	$.ajax({
                     type: "post",
-                    url: '/check_transfer/?ids='+ app.checkIdList,
+                    url: '/finance/mark_pay_state/',
+                    data: {
+                      state: state,
+                      ids: app.checkIdList
+                    },
                     async: true,
                     success: function(res) {
                       console.log(res);
                       if(res.code == 0) {
                         app.tableData = res;
                       } else {
-                        console.log(res)
+//                      that.$message.error(res.detail);
+                        that.$notify.error({
+                          title: '错误',
+                          message: res.detail
+                        });
                       }
                     }
                   });
@@ -447,29 +497,62 @@
             });
           },
           transferSelect: function() {
+            var that = this;
             console.log(app.checkIdList)
-            console.log(app.amountSelect)
-            this.$alert('请确认是否一键提现所选数据？', '温馨提示', {
-              confirmButtonText: '确定',
-              callback: function(action) {
-                console.log(action);
-                if (action == 'confirm') {
-                  $.ajax({
-                    type: "post",
-                    url: '/check_transfer/?ids='+ app.checkIdList,
-                    async: true,
-                    success: function(res) {
-                      console.log(res);
-                      if(res.code == 0) {
-                        app.tableData = res;
-                      } else {
-                        console.log(res)
+//          console.log(app.amountSelect)
+            if (!app.checkIdList) {
+                this.$notify.error({
+                  title: '错误',
+                  message: '请先选择要操作的数据'
+                });
+                return false;
+            }
+            $.ajax({
+              type: "post",
+              url: '/finance/check_transfer/',
+              async: true,
+              data: {
+                ids: app.checkIdList
+              },
+              success: function(res) {
+                console.log(res);
+                if(res.code == 0) {
+                  that.$alert('共转账 '+ res.total + ' 元，余额 '+ res.balance + ' 元', '温馨提示', {
+                    confirmButtonText: '确定',
+                    callback: function(action) {
+                      console.log(action);
+                      if (action == 'confirm') {
+                        $.ajax({
+                          type: "post",
+                          url: '/finance/submit_transfer/',
+                          async: true,
+                          data: {
+                            ids: app.checkIdList
+                          },
+                          success: function(res) {
+                            console.log(res);
+                            if(res.code == 0) {
+      //                            app.tableData = res;
+                            } else {
+                              that.$notify.error({
+                                title: '错误',
+                                message: res.detail
+                              });
+                            }
+                          }
+                        });
                       }
                     }
+                  });
+                } else {
+                  that.$notify.error({
+                    title: '错误',
+                    message: res.detail
                   });
                 }
               }
             });
+            
           },
           amountComfirm: function() {
             $.ajax({
@@ -486,12 +569,50 @@
               }
             });
           },
-          beforeAvatarUpload (file) {
+          beforeAvatarUpload: function (file) {
             console.log(file)
             this.$message('正在上传...')
           },
           handleAvatarSuccess: function(response, file) {
             console.log(response)
+          },
+          exportExel: function() {
+              var html = '<form action="'+"/finance/export_investlog/"+'" method="get" target="_self" id="postData_form">';
+              html += '<input name="audit_state" type="hidden" value="0"/>';
+              if (app.dateValue == 7) {
+                var startTime = app.getDate(0);
+                var endTime = app.getDate(7);
+              } else if (app.dateValue == 30){
+                var startTime = app.getDate(0);
+                var endTime = app.getDate(30);
+              } else {
+                var startTime = '';
+                var endTime = '';
+              }
+              
+              if(startTime && endTime){
+               html += '<input name="auditdate_0" type="hidden" value="'+ startTime + '"/>';
+               html += '<input name="auditdate_1" type="hidden" value="'+ endTime + '"/>';
+             }
+             var pay_state = app.stateValue;
+             var invest_mobile = app.telValue;
+             var zhifubao = app.zfbValue;
+             console.log(pay_state);
+             if(pay_state){
+               html += '<input name="pay_state" type="hidden" value="'+ pay_state + '"/>';
+             }
+             if(invest_mobile){
+               html += '<input name="invest_mobile" type="hidden" value="'+ invest_mobile + '"/>';
+             }
+             if(zhifubao){
+               html += '<input name="zhifubao" type="hidden" value="'+ zhifubao + '"/>';
+             }
+             html += '</form>';
+             var iframe = document.getElementById('myIFrame');
+             iframe.contentWindow.document.open();
+             iframe.contentWindow.document.write(html);
+             iframe.contentWindow.document.close();
+             document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
           },
           getDate: function (AddDayCount) {     
              var dd = new Date();    
@@ -516,7 +637,7 @@
               auditdate_0 = '';
               auditdate_1 = '';
             }
-            return '&pay_state='+ app.stateValue + '&invest_mobile='+ app.telValue + '&auditdate_0='+ auditdate_0 + '&auditdate_1='+ auditdate_1;
+            return '&pay_state='+ app.stateValue + '&invest_mobile='+ app.telValue + '&zhifubao='+ app.zfbValue + '&auditdate_0='+ auditdate_0 + '&auditdate_1='+ auditdate_1;
           }
         }
       })

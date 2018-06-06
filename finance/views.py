@@ -29,7 +29,7 @@ def check_transfer(request):
     user = request.user
     choices = request.POST.get('ids', '')
     if not choices:
-        return {'code':1, 'detail':u'请勾选申请打款的记录'}
+        return JsonResponse({'code':1, 'detail':u'请勾选申请打款的记录'})
     id_list = choices.split(',')
     investlogs = InvestLog.objects.filter(id__in=id_list)
     count = 0
@@ -40,7 +40,7 @@ def check_transfer(request):
                investlog.zhifubao and investlog.zhifubao_name and investlog.pay_state == '1':
             total += investlog.return_amount
         else:
-            return JsonResponse({'code':1, 'detail':u"参数有误，请检查勾选项是否含有支付宝账号、姓名和返现金额，且状态为未打款"})
+            return JsonResponse({'code':3, 'detail':u"参数有误，请检查勾选项是否含有支付宝账号、姓名和返现金额，且状态为未打款"})
     if total > user.balance:
         return JsonResponse({'code':2, 'detail':u'您的账户余额不足（申请打款：%s元，您的余额：%s元）'\
                  % (str(total), str(user.balance))})
@@ -56,16 +56,16 @@ def submit_transfer(request):
         return JsonResponse({'code':1, 'detail':u'请勾选申请打款的记录'})
     id_list = choices.split(',')
     investlogs = InvestLog.objects.filter(id__in=id_list)
-    statis = investlogs.aggegate(total=Sum('return_amount'))
-    if statis['return_amount'] > user.balance:
+    statis = investlogs.aggregate(total=Sum('return_amount'))
+    if statis['total'] > user.balance:
         return JsonResponse({'code':2, 'detail':u'您的账户余额不足（申请打款：%s元，您的余额：%s元）'\
-                 % (str(statis['return_amount']), str(user.balance))})
+                 % (str(statis['total']), str(user.balance))})
     suc_num = 0
     fail_num = 0
     for investlog in investlogs:
         if investlog.return_amount > 0 and investlog.audit_state == '0' and \
                investlog.zhifubao and investlog.zhifubao_name and investlog.pay_state == '1':
-            with transaction.atomic:
+            with transaction.atomic():
                 charge_money(user, '1', investlog.return_amount, reason=u'给客户打款', auditlog=investlog)
                 investlog.pay_state = '2'
                 investlog.save(update_fields=['pay_state'])
@@ -369,9 +369,7 @@ def mark_pay_state(request):
     if not state or not choices:
         return JsonResponse({'code':1, 'detail':u'参数不足'})
     id_list = choices.split(',')
-    if state == '1':
-        investlogs = InvestLog.objects.filter(user=user, id__in=id_list, pay_state='4').update(pay_state='1')
-    elif state == '3':
-        investlogs = InvestLog.objects.filter(user=user, id__in=id_list, pay_state='1').update(pay_state='3')
+    if state == '1' or state == '3':
+        investlogs = InvestLog.objects.filter(user=user, id__in=id_list).exclude(state='2').update(pay_state=state)
     return JsonResponse({'code':0})
         

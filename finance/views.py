@@ -184,6 +184,7 @@ def export_investlog_for_pay(request):
     audittime_0 = request.GET.get("auditdate_0", None)
     audittime_1 = request.GET.get("auditdate_1", None)
     state = request.GET.get("audit_state",'')
+    pay_state = request.GET.get("pay_state",'')
     if submittime_0 and submittime_1:
         s = datetime.datetime.strptime(submittime_0,'%Y-%m-%d')
         e = datetime.datetime.strptime(submittime_1,'%Y-%m-%d')
@@ -229,6 +230,8 @@ def export_investlog_for_pay(request):
         item_list = item_list.filter(zhifubao__contains=zhifubao)
     if state:
         item_list = item_list.filter(audit_state=state)
+    if pay_state:
+        item_list = item_list.filter(pay_state=pay_state)
     item_list = item_list.select_related('project').order_by('-submit_time')
     data = []
     for con in item_list:

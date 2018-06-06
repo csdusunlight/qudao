@@ -322,40 +322,40 @@ def apply_for_channel_user(request):
 def verifymobile(request):
     mobilev = request.GET.get('mobile', None)
     users = None
-    code = '0' # is used
+    code = '1' # is used
     if mobilev:
         users = MyUser.objects.filter(mobile=mobilev)
         if not users.exists():
-            code = '1'
+            code = '0'
     result = {'code':code,}
     return JsonResponse(result)
 def verifyusername(request):
     namev = request.GET.get('username', None)
     users = None
-    code = '0' # is used
+    code = '1' # is used
     if namev:
         users = ApplyLog.objects.filter(username=namev)
         if not users.exists():
-            code = '1'
+            code = '0'
     result = {'code':code,}
     return JsonResponse(result)
 def verifyqq(request):
     qqv = request.GET.get('qq_number', None)
     users = None
-    code = '0' # is used
+    code = '1' # is used
     if qqv:
         users = MyUser.objects.filter(qq_number=qqv)
         if not users.exists():
-            code = '1'
+            code = '0'
     result = {'code':code,}
     return JsonResponse(result)
 def verifyinviter(request):
     invite_code = request.GET.get('invite', None)
-    code = '0' # not exist
+    code = '1' # not exist
     if invite_code:
         users = MyUser.objects.filter(invite_code=invite_code)
         if users.exists():
-            code = '1'
+            code = '0'
     result = {'code':code,}
     return JsonResponse(result)
 @login_required

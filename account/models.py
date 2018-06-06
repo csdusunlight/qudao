@@ -58,6 +58,47 @@ USER_LEVEL = (
     ('04', u'四级代理'),
     ('05', u'五级代理'),
 )
+USER_ORIGIN = (
+    ('1',u'学生党'),
+    ('2',u'宝妈'),
+    ('3',u'羊毛党'),
+    ('4',u'兼职'),
+    ('5',u'个人站长'),
+    ('6',u'金融大Ｖ'),
+    ('7',u'理财师'),
+    ('8',u'理财推手'),
+
+)
+USER_EXP_YEAR = (
+    ('1',u'新手'),
+    ('2',u'1年之内'),
+    ('3',u'1-2年'),
+    ('4',u'３年以上'),
+)
+USER_CUSTOME_VOLUMN = (
+    ('1',u'50人以下'),
+    ('2',u'50到100人'),
+    ('3',u'100到500'),
+    ('3',u'500'),
+)
+USER_FUNDS_VOLUMN = (
+    ('1', u'50万以下'),
+    ('2', u'50到100人'),
+    ('3', u'100到５00'),
+    ('3', u'500'),
+)
+USER_INVEST_ORIENTATION = (
+    ('1','小额单'),
+    ('2','大额单'),
+    ('3','媒体单'),
+)
+IS_CHANNEL = (
+    (0,'非渠道用户'),
+    (-1,'审核中'),
+    (1,'渠道用户'),
+)
+
+
 class MyUser(AbstractBaseUser, PermissionsMixin):
 #     email = models.EmailField('email address', max_length=255)
     mobile = models.CharField('mobile number', max_length=11, unique=True,)
@@ -96,7 +137,13 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     zhifubao = models.CharField(u"支付宝账号（邮箱或手机号）", blank=True, max_length=50)
     zhifubao_real_name = models.CharField(u"支付宝实名", blank=True, max_length=20)
     
-    is_channel = models.BooleanField(u"是否渠道", default=False)
+    is_channel = models.CharField(u"是否渠道",choices=IS_CHANNEL, default=False,max_length=2) #
+    channel_refuse_reason = models.CharField(u"渠道拒绝原因",default=False,null=True,blank=True,max_length=300) #
+    user_origin = models.CharField(u"用户来源", choices=USER_ORIGIN, default='0', max_length=2)
+    user_exp_year = models.CharField(u"用户经验年限", choices=USER_EXP_YEAR, default='0', max_length=2)
+    user_custom_volumn = models.CharField(u"用户客户体量", choices=USER_CUSTOME_VOLUMN, default='0', max_length=2)
+    user_funds_volumn = models.CharField(u"用户资金体量", choices=USER_FUNDS_VOLUMN, default='0', max_length=2)
+    user_invest_orientation = models.CharField(u"用户投资去向", choices=USER_INVEST_ORIENTATION,default='0', max_length=2)
 #     default_transfer_remark = models.CharField(u"默认打款转账备注", default="P2P")
     
     objects = MyUserManager()

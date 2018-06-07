@@ -326,12 +326,6 @@
             // 银行卡充值ajax
             $('.card_add').click(() =>{
                 var value = $('.bank_rechargeIpt').val();
-                if(!value){
-                    $.prompt({
-                        "Content":"输入框不能为空"
-                    });
-                    return;
-                }
                 var regx =/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
                 if(!regx.test(value)){
                     $.prompt({
@@ -339,21 +333,42 @@
                     });
                     return;
                 }
-                // $.ajax({
-                //     url:url,
-                //     type:"POST",
-                //     timeout:5000,
-                //     dataType:"json",
-                //     data:{
-
-                //     },
-                //     success:function(){
-
-                //     },
-                //     error:function(){
-
-                //     }
-                // })
+                if(!value){
+                    $.prompt({
+                        "Content":"充值金额不能为零！"
+                    });
+                    return;
+                }else if(value <= 0){
+                    $.prompt({
+                        "Content":"输入正确的充值金额！"
+                    });
+                    return;
+                } 
+                $.ajax({
+                    url:'/merchant/margin_manage/',
+                    type:"POST",
+                    timeout:5000,
+                    dataType:"json",
+                    data:{
+                        'type': 0,
+                        "amount": value
+                    },
+                    success:function(ret){
+                        if (ret.code == 0) {
+                            $.prompt({
+                                "Content":"提交充值申请，请等待!"
+                            });
+                            // $(".bank_rechargeIpt ").val('');
+                        } else if (ret.code == -2) {
+                            $.prompt({
+                                "Content":"充值失败!"
+                            });
+                        }
+                    },
+                    error:function(xhr, textStatus){
+                        alert(xhr.responseText);
+                    }
+                })
 
             });
             // 点击关闭充值模态框

@@ -67,6 +67,25 @@ class UserList(BaseViewMixin, generics.ListCreateAPIView):
 #     filter_fields = ['state',]
     pagination_class = MyPageNumberPagination
 
+from restapi.serializers import UserApplyChannelSerializer
+from restapi.Filters  import UserApplyChannelFilter
+class UserApplyChannelList(BaseViewMixin, generics.ListAPIView):
+    queryset = MyUser.objects.all()
+    permission_classes = (IsAdmin,)
+    serializer_class = UserApplyChannelSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
+    filter_class = UserApplyChannelFilter
+    ordering_fields = ('user_apply_channel_time',)
+#     filter_fields = ['state',]
+    pagination_class = MyPageNumberPagination
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return MyUser.objects.all()
+        else:
+            return MyUser.objects.filter(user=user)
+
+
 class UserDetail(BaseViewMixin,generics.RetrieveUpdateDestroyAPIView):
     queryset = MyUser.objects.all()
     serializer_class = UserSerializer

@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^projects/(?P<pk>[0-9]+)/$', views.ProjectDetail.as_view(), kwargs={'partial':True}),
     
     url(r'^users/$', views.UserList.as_view()),
+    url(r'^admin_get_apply_user/$', views.UserApplyChannelList.as_view()),
     url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view(), kwargs={'partial':True}),
     
     url(r'^investlogs/$', views.InvestlogList.as_view()),

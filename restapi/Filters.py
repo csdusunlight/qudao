@@ -48,6 +48,20 @@ class UserFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = MyUser
         fields = ['mobile', 'username', 'qq_name', 'qq_number', 'join_date', 'level', 'is_active', 'domain_name']
+
+
+class UserApplyChannelFilter(django_filters.rest_framework.FilterSet):
+    user_apply_channel_time = django_filters.DateFromToRangeFilter(name="user_apply_channel_time")
+    is_channel = django_filters.CharFilter(name="is_channel") #处理状态
+    username = django_filters.CharFilter(name="username")
+    audit_mobile = django_filters.CharFilter(name="user_apply_auditor.mobile")#审核者手机
+    mobile = django_filters.CharFilter(name="mobile")#
+    qq_number = django_filters.CharFilter(name="qq_number")#
+    qq_name = django_filters.CharFilter(name="qq_name")
+
+    class Meta:
+        model = MyUser
+        fields = ['id','username','qq_number','qq_name','profile','mobile','user_apply_channel_time','level','user_apply_auditor','is_channel','audit_mobile']
         
 class ApplyLogFilter(django_filters.rest_framework.FilterSet):
     submit_date = django_filters.DateFromToRangeFilter(name="submit_time")

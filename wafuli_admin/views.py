@@ -771,17 +771,19 @@ def admin_user(request):
             #根据传入的字段
             if user_is_allow =='1':#
                 reason="success"
-                Message.objects.create(user=user_id, title="渠道申请审核反馈", time=datetime.datetime.now(), is_read=False,
+                nowtime = datetime.datetime.now()
+                Message.objects.create(user=user_id, title="渠道申请审核反馈", time=nowtime, is_read=False,
                                         content=u"尊敬的用户：您申请成为渠道用户成功！")
-                obj_user.update(is_channel=1, user_level=user_level)  # is_channel设置为１，并且user_level等级提升
-                AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=reason, type='3')
+                obj_user.save(is_channel=1, user_level=user_level,user_apply_channel_time＝nowtime)  # is_channel设置为１，并且user_level等级提升
+                AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=reason, type='3',time=nowtime)
                 sendmsg_bydhst(obj_user.mobile, u"您申请成为渠道用户成功！")
                 res['code'] = 0
             elif user_is_allow=='0':
-                Message.objects.create(user=user_id, title="渠道申请审核反馈", time=datetime.datetime.now(), is_read=False,
+                nowtime = datetime.datetime.now()
+                Message.objects.create(user=user_id, title="渠道申请审核反馈", time=nowtime, is_read=False,
                                        content=u"尊敬的用户：您申请成为渠道用申用户失败。被拒绝原因如下："+refuse_reason)  # 写入审核原因，加个字段
-                AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=refuse_reason, type='3')
-                #obj_user.update(channel_refuse_reason＝refuse_reason) # is_channel设置为０
+                AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=refuse_reason, type='3',time=nowtime)
+                obj_user.save(channel_refuse_reason＝refuse_reason,user_apply_channel_time＝nowtime) # is_channel设置为０
                 sendmsg_bydhst(obj_user.mobile, u"您申请成为渠道用户失败" + refuse_reason)
                 res['code'] = 0
             else:

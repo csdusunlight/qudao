@@ -254,24 +254,25 @@
     $('#form').validator({
         dataFilter: function(data) {
             if (data.code == 0){ return "";}
-            else if(data.code == 1) {return data.msg;}
+            else {return data.msg;}
         },
         validClass: "has-success",
         invalidClass: "has-error",
         bindClassTo: ".itemBox",
         rules:{
             phone_number:[/^1[3456789]\d{9}$/,'请输入正确的手机号码'],
-            pwd:[/^(?![0-9]+$)(?![a-zA-Z]+$)[A-Za-z_][A-Za-z_0-9]{0,}$/, '请输入6~16位数字、字母或下划线中的两种'],
+            password:[/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/, '请输入6~16位数字、字母或下划线中的两种'],
             qq_number:[/^[1-9][0-9]{8,11}$/,'请输入正确的QQ'],
         },
         fields:{
-            'mobile':'required;mobile;remote(' + verifymobile_url + ', csrfmiddlewaretoken={{ csrf_token }})',
+            'mobile':'required;mobile;remote(get:' + verifymobile_url + ', csrfmiddlewaretoken={{ csrf_token }})',
             'code':'required;code;',
             'password':'required;password',
-            'qq_number':'required;qq_number;remote(' + verifyqq_url + ', csrfmiddlewaretoken={{ csrf_token }})',
+            'qq_number':'required;qq_number;remote(get:' + verifyqq_url + ', csrfmiddlewaretoken={{ csrf_token }})',
             'qq_name':'required;qq_name',
-            'invite_code':'invite_code;remote('+ verifyinviter_url +', csrfmiddlewaretoken={{ csrf_token }})'
+            'invite_code':'invite_code;remote(get:'+ verifyinviter_url +', csrfmiddlewaretoken={{ csrf_token }})'
         },
+
         theme: 'simple_bottom',
         invalid: function() {
           console.log('valid fail');

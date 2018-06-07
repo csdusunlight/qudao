@@ -93,7 +93,7 @@ def admin_autopay(request):
         if id_list_str:
             id_list = [ int(x) for x in id_list_str.split(',') ]
             paylist = paylist.filter(id__in=id_list)
-        dic = paylist.aggregate(count=Count('id'), sum=Sum('amount'))
+        dic = paylist.aggregate(count=Count('id'), sum=Sum('return_amount'))
         ret['count'] = dic['count'] or 0
         ret['sum'] = dic['sum'] or 0
         return JsonResponse(ret)
@@ -373,6 +373,6 @@ def mark_pay_state(request):
         return JsonResponse({'code':1, 'detail':u'参数不足'})
     id_list = choices.split(',')
     if state == '1' or state == '3':
-        investlogs = InvestLog.objects.filter(user=user, id__in=id_list).exclude(state='2').update(pay_state=state)
+        investlogs = InvestLog.objects.filter(user=user, id__in=id_list).exclude(pay_state='2').update(pay_state=state)
     return JsonResponse({'code':0})
         

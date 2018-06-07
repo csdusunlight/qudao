@@ -7,7 +7,7 @@ Created on 2017年8月23日
 import django_filters
 from wafuli.models import InvestLog, Project, SubscribeShip, TransList,\
     WithdrawLog
-from account.models import MyUser, ApplyLog
+from account.models import MyUser, ApplyLog,Message
 # class ProjectInvestDateFilter(django_filters.rest_framework.FilterSet):
 #     investtime = django_filters.DateFromToRangeFilter(name="invest_time")
 #     audittime = django_filters.DateTimeFromToRangeFilter(name="audit_time")
@@ -87,3 +87,12 @@ class ProjectFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = Project
         fields = ['state','type','is_multisub_allowed','is_official','category', 'user_mobile', 'qq_name']
+
+class MessageFilter(django_filters.rest_framework.FilterSet):
+    title =django_filters.CharFilter(name="title")
+    time = django_filters.DateTimeFilter(name="time")
+    is_read = django_filters.BooleanFilter(name="is_read")
+    content = django_filters.CharFilter(name="content")
+    class Meta:
+        model = Message
+        fields = ['title','time','is_read','content']

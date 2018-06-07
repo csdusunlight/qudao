@@ -52,5 +52,6 @@ urlpatterns = [
 #     url(r'^doc/', include_docs_urls(title='d'))
     url(r'^msgs/$', views.MessageList.as_view(), ),
     url(r'^perform/$', views.PerformStatisList.as_view(), ),
+    url(r'^msgs/(?P<pk>[0-9]+)/$',views.MessageDetail.as_view(),kwargs={'partial':True}, name='sitemessagedetail'),
     
 ]

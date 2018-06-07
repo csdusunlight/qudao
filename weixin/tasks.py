@@ -87,7 +87,7 @@ def sendWeixinNotify(user_obj_list, type):
             kwarg.update(data=data, touser=openid)
             ret = httpconn(url, kwarg, 1)
             logger.info(ret)
-    elif type == 'withdraw_success':
+    elif type == 'withdraw_success_yhk':
         kwarg.update(template_id=withdraw_success_notify_templateid)
         for user_withdrawlog in user_obj_list:
             user = user_withdrawlog[0]
@@ -104,6 +104,30 @@ def sendWeixinNotify(user_obj_list, type):
                     'keyword1':{'value':bank.get_bank_display(), 'color':"#173177"},
                     'keyword2':{'value':bank.card_number, 'color':"#173177"},
                     'keyword3':{'value':bank.real_name, 'color':"#173177"},
+                    'keyword4':{'value':amount, 'color':"#173177"},
+                    'keyword5':{'value':audittime, 'color':"#173177"},
+                    'remark':{'value':common_remark, 'color':"#173177"},}
+            kwarg.update(data=data, touser=openid)
+            ret = httpconn(url, kwarg, 1)
+            logger.info(ret)
+    elif type == 'withdraw_success_zhifubao':
+        kwarg.update(template_id=withdraw_success_notify_templateid)
+        for user_withdrawlog in user_obj_list:
+            user = user_withdrawlog[0]
+            withdrawlog = user_withdrawlog[1]
+            wuser = user.weixin_users.first()
+            if not wuser:
+                continue
+            amount = str(withdrawlog.amount) + u'元'
+            balance = str(user.balance)
+            audittime = withdrawlog.audit_time.strftime('%Y-%m-%d %H:%M')
+            zhifubao = user.zhifubao
+            zhifubao_real_name = user.zhifubao_real_name
+            openid = wuser.openid
+            data = {'first':{'value':u"提现成功，请查收", 'color':"#173177"},
+                    'keyword1':{'value':u"支付宝", 'color':"#173177"},
+                    'keyword2':{'value':zhifubao, 'color':"#173177"},
+                    'keyword3':{'value':zhifubao_real_name, 'color':"#173177"},
                     'keyword4':{'value':amount, 'color':"#173177"},
                     'keyword5':{'value':audittime, 'color':"#173177"},
                     'remark':{'value':common_remark, 'color':"#173177"},}

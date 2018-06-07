@@ -93,9 +93,9 @@ USER_INVEST_ORIENTATION = (
     ('3','媒体单'),
 )
 IS_CHANNEL = (
-    (0,'非渠道用户'),
-    (-1,'审核中'),
-    (1,'渠道用户'),
+    ('0','非渠道用户'),
+    ('-1','审核中'),
+    ('1','渠道用户'),
 )
 
 
@@ -136,18 +136,19 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     
     zhifubao = models.CharField(u"支付宝账号（邮箱或手机号）", blank=True, max_length=50)
     zhifubao_real_name = models.CharField(u"支付宝实名", blank=True, max_length=20)
-    
-    is_channel = models.CharField(u"是否渠道",choices=IS_CHANNEL, default=False,max_length=2) #
-    channel_refuse_reason = models.CharField(u"渠道拒绝原因",default=False,null=True,blank=True,max_length=300) #
+
+    is_channel = models.CharField(u"是否渠道", choices=IS_CHANNEL, default=False, max_length=2)  #
+    channel_refuse_reason = models.CharField(u"渠道拒绝原因", default=False, null=True, blank=True, max_length=300)  #
     user_origin = models.CharField(u"用户来源", choices=USER_ORIGIN, default='0', max_length=2)
     user_exp_year = models.CharField(u"用户经验年限", choices=USER_EXP_YEAR, default='0', max_length=2)
     user_custom_volumn = models.CharField(u"用户客户体量", choices=USER_CUSTOME_VOLUMN, default='0', max_length=2)
     user_funds_volumn = models.CharField(u"用户资金体量", choices=USER_FUNDS_VOLUMN, default='0', max_length=2)
-    user_invest_orientation = models.CharField(u"用户投资去向", choices=USER_INVEST_ORIENTATION,default='0', max_length=2)
-#     default_transfer_remark = models.CharField(u"默认打款转账备注", default="P2P")
-    
-    objects = MyUserManager()
+    user_invest_orientation = models.CharField(u"用户投资去向", choices=USER_INVEST_ORIENTATION, default='0', max_length=2)
+    user_apply_channel_time = models.DateTimeField(u'申请渠道用户时间',null=True,blank=True)
+    user_apply_auditor = models.ForeignKey('self', related_name='auditor',
+                                           blank=True, null=True, on_delete=models.SET_NULL, default=None)
 
+    objects = MyUserManager()
     USERNAME_FIELD = 'mobile'
     REQUIRED_FIELDS = ['username','qq_number']
     def get_fanshu_domain(self):

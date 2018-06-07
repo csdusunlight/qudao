@@ -1,0 +1,391 @@
+.wrapper {
+    width: 1920px;
+    margin: 0 auto;
+}
+
+.item1 {
+    width: 100%;
+    height: 723px;
+    padding-top: 85px;
+    padding-left: 1050px;
+    background: url(../../../static/images/bg_register.jpg) no-repeat center center;
+    position: relative;
+}
+
+.item2 {
+    width: 100%;
+    height: 612px;
+    background: #ffe8bc;
+    position: relative;
+}
+
+.hongbao1 {
+    width: 125px;
+    height: 163px;
+    background: url(../../../static/images/reg_hongbao.png) no-repeat center center;
+    background-size: 100% 100%;
+    position: absolute;
+    bottom: 104px;
+    left: 352px;
+}
+
+.hongbao1>p {
+    font-size: 45px;
+    color: #e3b672;
+    padding-left: 40px;
+    padding-top: 45px;
+    transform: rotateZ(-5deg);
+}
+
+.hongbao1>span {
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 45px;
+    margin-left: 30px;
+    color: white;
+    display: block;
+}
+
+.hongbao2 {
+    width: 152px;
+    height: 197px;
+    background: url(../../../static/images/reg_hongbao.png) no-repeat center center;
+    background-size: 100% 100%;
+    position: absolute;
+    bottom: 104px;
+    left: 557px;
+}
+
+.hongbao2>span {
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 62px;
+    margin-left: 42px;
+    color: white;
+    display: block;
+}
+
+.hongbao2>p {
+    font-size: 50px;
+    color: #e3b672;
+    padding-left: 55px;
+    padding-top: 55px;
+    transform: rotateZ(-5deg);
+}
+
+.hongbao3 {
+    width: 177px;
+    height: 232px;
+    background: url(../../../static/images/reg_hongbao.png) no-repeat center center;
+    background-size: 100% 100%;
+    position: absolute;
+    bottom: 104px;
+    left: 792px;
+}
+
+.hongbao3>span {
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 75px;
+    margin-left: 55px;
+    color: white;
+    display: block;
+}
+
+.hongbao3>p {
+    font-size: 60px;
+    color: #e3b672;
+    padding-left: 65px;
+    padding-top: 65px;
+    transform: rotateZ(-5deg);
+}
+
+.hongbao4 {
+    width: 213px;
+    height: 275px;
+    background: url(../../../static/images/reg_hongbao.png) no-repeat center center;
+    background-size: 100% 100%;
+    position: absolute;
+    bottom: 104px;
+    left: 1053px;
+}
+
+.descBox {
+    padding: 5px 5px;
+    margin-top: 80px;
+    margin-left: 55px;
+}
+
+.descBox>p {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.hongbao4>p {
+    font-size: 70px;
+    color: #e3b672;
+    padding-left: 55px;
+    padding-top: 75px;
+    transform: rotateZ(-5deg);
+}
+
+.hongbao5 {
+    width: 250px;
+    height: 323px;
+    background: url(../../../static/images/reg_hongbao.png) no-repeat center center;
+    background-size: 100% 100%;
+    position: absolute;
+    bottom: 104px;
+    left: 1358px;
+}
+
+.desc_box {
+    padding: 5px 5px;
+    margin-top: 100px;
+    margin-left: 65px;
+}
+
+.desc_box>p {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.hongbao5>p {
+    font-size: 70px;
+    color: #e3b672;
+    padding-left: 45px;
+    padding-top: 95px;
+    transform: rotateZ(-5deg);
+}
+
+.tips {
+    position: absolute;
+    bottom: -40px;
+    left: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #2f2921;
+}
+
+.item3 {
+    width: 100%;
+    height: 680px;
+    background: #ffda94;
+    position: relative;
+}
+
+.item3>ul {
+    width: 100%;
+    height: 408px;
+    position: absolute;
+    top: 182px;
+    left: 0;
+}
+
+.item_li {
+    width: 266px;
+    height: 408px;
+    display: inline-block;
+    position: relative;
+}
+
+.li1 {
+    margin-left: 351px;
+}
+
+.c_item {
+    width: 266px;
+    height: 266px;
+    border-radius: 50%;
+    border: 3px solid #563313;
+    background: #ffe8bc;
+    position: relative;
+}
+
+.c_pic1 {
+    position: absolute;
+    left: 83px;
+    top: 62px;
+}
+
+.desc_txt {
+    font-size: 18px;
+    color: #634121;
+    position: absolute;
+    left: 96px;
+    top: 188px;
+}
+
+.desc_txt1 {
+    font-size: 18px;
+    color: #634121;
+    position: absolute;
+    left: 55px;
+    top: 290px;
+}
+
+.desc_txt2 {
+    font-size: 18px;
+    color: #634121;
+    position: absolute;
+    left: 64px;
+    top: 340px;
+}
+
+.desc_txt3 {
+    font-size: 18px;
+    color: #634121;
+    position: absolute;
+    left: 80px;
+    top: 385px;
+}
+
+.li2 {
+    margin-left: 237px;
+}
+
+.li3 {
+    margin-left: 237px;
+}
+
+.dataBox {
+    width: 552px;
+    height: 600px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px #4e4e4e;
+}
+.tip_box {
+    text-align: center;
+    height: 30px;
+    line-height: 50px;
+    color: #fd4546;
+}
+
+.error_tip {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 17px;
+    background: #fd4546;
+    color: white;
+    font-size: 12px;
+}
+
+.c_tips {
+    margin-left: 5px;
+    font-size: 13px;
+}
+
+.form_box {
+    width: 420px;
+    height: 410px;
+    margin: 0 auto;
+    /* background: yellow; */
+}
+
+.itemBox {
+    width: 400px;
+    padding: 5px 5px;
+    border-bottom: 1px solid #eeeeee;
+    margin-top: 15px;
+    position: relative;
+}
+
+.f_ipt {
+    width: 230px !important;
+    height: 30px;
+    border: none !important;
+    outline: none;
+    background: transparent !important;
+    margin-left: 20px;
+}
+
+.send_code {
+    width: 100px;
+    height: 32px;
+    border: 1px solid #9bc735;
+    color: #9bc735;
+    background: white;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    cursor: pointer;
+}
+
+.reg_btn {
+    width: 366px;
+    height: 48px;
+    border-radius: 5px;
+    background: #91c11d;
+    color: white;
+    margin: 52px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+}
+/* checkbox */
+label {
+    font-size: 12px;
+    cursor: pointer;
+}
+
+label i {
+    font-size: 14px;
+    font-style: normal;
+    display: inline-block;
+    width: 1.2rem;
+    height: 1.2rem;
+    text-align: center;
+    line-height: 1.2rem;
+    color: #fff;
+    vertical-align: middle;
+    margin: -2px 2px 1px 0px;
+    border: #92c11d 1px solid;
+}
+
+.check_box {
+    display: none !important;
+}
+
+.check_box:checked+i{
+    background: url(../../../static/images/skin-on.png) no-repeat center center;
+    background-size:150% 150%;
+}
+.reg_title {
+    width: 243px;
+    height: 60px;
+    position: absolute;
+    top: 76px;
+    left: 855px;
+}
+
+title_pic {
+    width: 100%;
+    height: 100%;
+}
+
+.item4 {
+    width: 100%;
+    height: 604px;
+    background: #ffe8bc;
+    position: relative;
+}
+
+.ruleBox{
+    width: 1104px;
+    height: 348px;
+    background: #ffda94;
+    position: absolute;left: 50%;top: 58%;
+    transform: translate(-50%,-50%);
+    border-radius: 15px;
+}
+.ruleBox > p{
+    font-size: 18px;
+    margin-top: 30px;
+    margin-left: 32px;
+}

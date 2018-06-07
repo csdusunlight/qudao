@@ -284,8 +284,8 @@ from account.models import USER_ORIGIN,USER_EXP_YEAR,USER_CUSTOME_VOLUMN,USER_FU
 @csrf_exempt
 def apply_for_channel_user(request):
     if request.method == 'POST':
-        if not request.is_ajax():
-            raise Http404
+        #if not request.is_ajax():
+        #    raise Http404
         result = {}
         current_user=request.user
         user_origin = request.POST.get('origin', None)
@@ -310,7 +310,7 @@ def apply_for_channel_user(request):
             current_user.user_funds_volumn = user_funds_volumn
             current_user.user_invest_orientation = user_invest_orientation
             current_user.is_channel = -1
-            current_user.update()
+            current_user.save()
             result['code'] = 0
             return JsonResponse(result)
 
@@ -318,8 +318,10 @@ def apply_for_channel_user(request):
             result['code'] = '3'
             result['msg'] = u'传入参数不合法！'
             return JsonResponse(result)
+    else:
+        return render(request,"apply_for_channel_user.html")
 
-def verifymobile(request):
+def verifymobile(request):# not exist  return 0  exist return 1
     mobilev = request.GET.get('mobile', None)
     users = None
     print(mobilev)
@@ -1248,4 +1250,9 @@ def reaudit(request):
     log.save(update_fields=['audit_state', 'reaudit_reason'])
     res['code'] = 0
     return JsonResponse(res)
-    
+
+
+
+
+
+

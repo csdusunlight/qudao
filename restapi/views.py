@@ -296,6 +296,11 @@ class MessageList(BaseViewMixin, generics.ListAPIView):
         return Message.objects.filter(user=self.request.user)
     serializer_class = MesssageSerializer
     pagination_class = MyPageNumberPagination
+
+class MessageDetail():
+    serializer_class = MesssageSerializer
+    pagination_class = MyPageNumberPagination
+
 class PerformStatisList(BaseViewMixin, generics.ListAPIView):
     queryset = PerformanceStatistics.objects.all()
     permission_classes = (IsAdmin,)

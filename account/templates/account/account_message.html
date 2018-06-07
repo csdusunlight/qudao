@@ -5,10 +5,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>用户中心</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />-->
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
 <link rel="stylesheet" type="text/css" href="{% static 'css/page.css' %}" />
 <script src="{% static 'js/jquery-1.11.2.min.js' %}" type="text/javascript"></script>
 <script type="text/javascript" src="{% static 'js/page.js' %}?v-1"></script>
@@ -16,10 +17,10 @@
 $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 });
-var data = '<ul>[data]<li onclick="readon($(this),{id})" class="{state}"><div ' + 
+var data = '<ul>[results]<li onclick="readon($(this),{id})" class="{state}"><div ' + 
 'class="New-title"><strong>{title}</strong>'+
-'<span>{time}</span></div><p>{content}</p></li>[/data]</ul>';
-var url = "{% url 'get_user_message_page' %}" + "?page={page}&size={pageSize}";
+'<span>{time}</span></div><p>{content}</p></li>[/results]</ul>';
+var url = "";
 function readon(a,n){
 	if(a.attr("class")!="on"){
 		a.toggleClass("on");
@@ -27,13 +28,14 @@ function readon(a,n){
 	a.removeAttr("onclick");
 
 	$.ajax({
-		url:"{%url 'account_message' %}",
+		url:"/restapi/msgs/",
 		dataType:"json",
 		type:"POST",
 		data : {
 			'id': n,
 		},
 		success:function(ret){
+		  console.log(ret)
 		},
 		error:function(){
 			alert("请检查网络连接");
@@ -43,7 +45,7 @@ function readon(a,n){
 $(function(){
 	$('.back-a13').parent().toggleClass("on");
 	$("#pagedata").ajaxPage({
-	    url:url, 
+	    url:'/restapi/msgs/',
 	    pageId:$("#page"),
 	    pageSize:5,
 	    run:true,

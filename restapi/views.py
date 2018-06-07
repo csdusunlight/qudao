@@ -292,15 +292,39 @@ class DocumentDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
         return Document.objects.all()
     serializer_class = DocumentSerializer
     permission_classes = (IsOwnerOrStaff,)
-class MessageList(BaseViewMixin, generics.ListAPIView):
+
+from restapi.Filters import MessageFilter
+class MessageList(BaseViewMixin, generics.ListCreateAPIView):
     def get_queryset(self):
         return Message.objects.filter(user=self.request.user)
     serializer_class = MesssageSerializer
+    filter_class = MessageFilter
+    filter_backends = (SearchFilter, OrderingFilter)
     pagination_class = MyPageNumberPagination
+    ordering_fields = ('is_read','time')
+    search_fields = ('title','content')
+    ordering = ('is_read','time')
 
-class MessageDetail():
+
+class MessageDetail(BaseViewMixin,generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MesssageSerializer
-    pagination_class = MyPageNumberPagination
+    queryset = Message.objects.all()
+    def partial_update(self,serializer,*args,**kwargs):
+        Mid=kwargs['pk']
+        para = self.request.data.get("isread",-1)
+        if para =='1' and Mid != -1:
+            objmsgs = Message.objects.filter(id=Mid)
+            if objmsgs.exists():
+                objmsg=objmsgs[0]
+                objmsg.save(isread=True)
+            else:
+                raise Exception("没有目标邮件！")
+        else:
+            raise Exception("传入参数错误!")
+
+
+
+
 
 class PerformStatisList(BaseViewMixin, generics.ListAPIView):
     queryset = PerformanceStatistics.objects.all()

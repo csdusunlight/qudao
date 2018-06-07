@@ -254,7 +254,7 @@
     $('#form').validator({
         dataFilter: function(data) {
             if (data.code == 0){ return "";}
-            else {return data.msg;}
+            else {return '已存在';}
         },
         validClass: "has-success",
         invalidClass: "has-error",
@@ -305,6 +305,7 @@
               if(ret.code == 0) {
                 // me.holdSubmit(false);
                 alert('注册成功');
+                window.location.href = "/";
               } else {
                 console.log(ret);
                 alert(ret.msg);

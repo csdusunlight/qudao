@@ -155,7 +155,7 @@ def register(request):
         level = '05'
         username = 'flm' + str(mobile)
         with transaction.atomic():
-            user = MyUser(mobile=mobile, username=username, level=level, qq_name=qq_name, qq_number=qq_number, inviter=apply.inviter,
+            user = MyUser(mobile=mobile, username=username, level=level, qq_name=qq_name, qq_number=qq_number, inviter=inviter,
                           cs_qq=qq_number, domain_name=qq_number)
             user.set_password(password)
             user.save()
@@ -168,10 +168,10 @@ def register(request):
                 sub = SubscribeShip(user=user, project_id=id)
                 subbulk.append(sub)
             SubscribeShip.objects.bulk_create(subbulk)
-            sendmsg_bydhst(apply.mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + user.domain_name + '.51fanshu.com' +
+            sendmsg_bydhst(mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + user.domain_name + '.51fanshu.com' +
                                  u"，快去分享给小伙伴们吧~")
             register_signal.send('register', user=user)
-            sendmsg_bydhst(apply.mobile, u"88元新手红包已发放到您的账户，请到福利联盟个人中心查看。有效期一个月，快来领取哦~")
+            sendmsg_bydhst(mobile, u"88元新手红包已发放到您的账户，请到福利联盟个人中心查看。有效期一个月，快来领取哦~")
 #         imgurl_list = []
 #         if len(request.FILES)>6:
 #             result = {'code':-2, 'msg':u"上传图片数量不能超过6张"}
@@ -322,40 +322,40 @@ def apply_for_channel_user(request):
 def verifymobile(request):
     mobilev = request.GET.get('mobile', None)
     users = None
-    code = '0' # is used
+    code = '1' # is used
     if mobilev:
         users = MyUser.objects.filter(mobile=mobilev)
         if not users.exists():
-            code = '1'
+            code = '0'
     result = {'code':code,}
     return JsonResponse(result)
 def verifyusername(request):
     namev = request.GET.get('username', None)
     users = None
-    code = '0' # is used
+    code = '1' # is used
     if namev:
         users = ApplyLog.objects.filter(username=namev)
         if not users.exists():
-            code = '1'
+            code = '0'
     result = {'code':code,}
     return JsonResponse(result)
 def verifyqq(request):
     qqv = request.GET.get('qq_number', None)
     users = None
-    code = '0' # is used
+    code = '1' # is used
     if qqv:
         users = MyUser.objects.filter(qq_number=qqv)
         if not users.exists():
-            code = '1'
+            code = '0'
     result = {'code':code,}
     return JsonResponse(result)
 def verifyinviter(request):
     invite_code = request.GET.get('invite', None)
-    code = '0' # not exist
+    code = '1' # not exist
     if invite_code:
         users = MyUser.objects.filter(invite_code=invite_code)
         if users.exists():
-            code = '1'
+            code = '0'
     result = {'code':code,}
     return JsonResponse(result)
 @login_required

@@ -9,8 +9,9 @@ from django.core.management.base import BaseCommand
 from django.db.models import F
 import datetime
 import time
-from wafuli.models import InvestLog, Company
+from wafuli.models import InvestLog, Company, Project
 from django.db.models.aggregates import Count
+from wafuli.tools import batch_deletesub
 logger = logging.getLogger("wafuli")
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -28,5 +29,14 @@ class Command(BaseCommand):
                 company.save(update_fields="view_count")
             except:
                 pass
+        
+        #设置项目结束时间，并删除结束三天以上的项目    
+        today = datetime.date.today()
+        threedaysago = today - datetime.timedelta(days=3)
+        Project.objects.filter(state='20', end_date__isnull=True).update(end_date=today)
+        projects = Project.objects.filter(state='20', end_date__lte=threedaysago)
+        for item in projects:
+            batch_deletesub(item)
+        projects.update(state='30')
         end_time = time.time()
         logger.info("******Day-task is finished, time:%s*********",end_time-begin_time)

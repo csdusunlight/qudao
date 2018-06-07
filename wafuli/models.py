@@ -82,6 +82,7 @@ class Project(models.Model):
     is_addedto_repo = models.BooleanField(u"是否加入项目库", default=True)
     is_book = models.BooleanField(u"是否需要预约", default=False)
     state = models.CharField(u"项目状态", max_length=2, choices=Project_STATE, default='10')
+    end_date = models.DateField(u"最近暂停日期", default=None, null=True, blank=True)
     pic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）", blank=True)
     strategy = models.URLField(u"攻略链接")
     doc = models.ForeignKey(Document, null=True, on_delete=models.SET_NULL, default=None, blank=True)

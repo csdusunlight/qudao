@@ -5,9 +5,11 @@ $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 });
 var data = '<table width="100%"><tr><th>渠道等级</th><th>QQ</th><th>QQ昵称</th><th>手机号</th>'+
-	'<th>银行卡号</th><th>持卡人姓名</th><th>支付宝</th><th>加入时间</th><th>账户余额</th><th>保证金</th>'+
-	'<th>累计收入</th><th width="5%">是否为黑名单</th><th>账户操作</th>'+
-	'</tr>[results]<tr><td>{level}</td><td>'+
+	'<th>银行卡号</th><th>持卡人姓名</th><th>支付宝</th><th>加入时间</th>'+
+	'<th class="table__filter">账户余额<span class="table__filter-item top">^</span><span class="table__filter-item bottom">^</span>'+
+	'</th><th>保证金</th>'+
+	'<th>累计收入</th>'+
+	'<th width="5%">是否为黑名单</th><th>账户操作</th></tr>[results]<tr><td>{level}</td><td>'+
 	'<a href="{fanshu_domain}" style="color:blue; text-decoration:underline">{qq_number}</a></td><td>{qq_name}</td>'+
 	'<td>{mobile}</td><td>{card_number}</td><td>{bank}</td><td>{zhifubao}</td><td>{date_joined}</td>'+
 	'<td>{balance}</td><td>{margin_account}</td><td>{accu_income}</td><td class="black" id="is_black_{id}">{is_active}</td>'+

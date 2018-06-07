@@ -351,7 +351,8 @@ a { cursor:pointer;}
     height: 22px;
     font-weight: bold;
     font-size: 22px;
-    line-height: 22px;
+    text-align: center;
+    /*line-height: 18px;*/
     cursor: pointer;
 }
 .table__filter-item.top {

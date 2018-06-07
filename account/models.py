@@ -98,6 +98,7 @@ IS_CHANNEL = (
     ('1','渠道用户'),
 )
 
+
 class MyUser(AbstractBaseUser, PermissionsMixin):
 #     email = models.EmailField('email address', max_length=255)
     mobile = models.CharField('mobile number', max_length=11, unique=True,)
@@ -143,6 +144,15 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     user_custom_volumn = models.CharField(u"用户客户体量", choices=USER_CUSTOME_VOLUMN, default='0', max_length=2)
     user_funds_volumn = models.CharField(u"用户资金体量", choices=USER_FUNDS_VOLUMN, default='0', max_length=2)
     user_invest_orientation = models.CharField(u"用户投资去向", choices=USER_INVEST_ORIENTATION, default='0', max_length=2)
+    
+    is_channel = models.CharField(u"是否渠道",choices=IS_CHANNEL, default=False,max_length=2) #
+    channel_refuse_reason = models.CharField(u"渠道拒绝原因",default=False,null=True,blank=True,max_length=300) #
+    user_origin = models.CharField(u"用户来源", choices=USER_ORIGIN, default='0', max_length=2)
+    user_exp_year = models.CharField(u"用户经验年限", choices=USER_EXP_YEAR, default='0', max_length=2)
+    user_custom_volumn = models.CharField(u"用户客户体量", choices=USER_CUSTOME_VOLUMN, default='0', max_length=2)
+    user_funds_volumn = models.CharField(u"用户资金体量", choices=USER_FUNDS_VOLUMN, default='0', max_length=2)
+    user_invest_orientation = models.CharField(u"用户投资去向", choices=USER_INVEST_ORIENTATION,default='0', max_length=2)
+#     default_transfer_remark = models.CharField(u"默认打款转账备注", default="P2P")
     
     objects = MyUserManager()
 
@@ -279,4 +289,15 @@ class ApplyLog(models.Model):
     def __unicode__(self):
         return self.mobile
 
- 
+class Message(models.Model):
+    user = models.ForeignKey(MyUser, related_name="user_msgs")
+    title = models.CharField(u"标题", max_length=30, default=u"系统消息")
+    time = models.DateTimeField(u"日期", default=timezone.now)
+    is_read = models.BooleanField(u"是否已读", default=False)
+    content = models.TextField(u"消息内容")
+    def __unicode__(self):
+        return self.title
+    class Meta:
+        verbose_name = u"消息"
+        verbose_name_plural = u"消息"
+        ordering = ['-time']

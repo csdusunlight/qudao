@@ -48,6 +48,7 @@ from collections import OrderedDict
 from dragon.settings import FANSHU_DOMAIN
 from docs.models import Document
 from django.core.cache import cache
+from account.signals import register_signal
 
 @sensitive_post_parameters()
 @csrf_protect
@@ -122,15 +123,14 @@ def register(request):
         password = request.POST.get('password', None)
         qq_number = request.POST.get('qq_number', None)
         qq_name = request.POST.get('qq_name', '')
-        profile = request.POST.get('profile', '')
         invite_code = request.POST.get('invite_code', '')
-        if not (telcode and mobile and password and qq_number):
+        if not (telcode and mobile and password and qq_number and qq_name):
             result['code'] = '3'
             result['msg'] = u'传入参数不足！'
             return JsonResponse(result)
-        if ApplyLog.objects.filter(mobile=mobile).exists():
+        if MyUser.objects.filter(mobile=mobile).exists():
             result['code'] = '1'
-            result['msg'] = u'该手机号码已经提交过申请，请等待短信通知或联系管理员'
+            result['msg'] = u'该手机号码已被别人注册过了'
             return JsonResponse(result)
         ret = verifymobilecode(mobile,telcode)
         if ret != 0:
@@ -152,48 +152,50 @@ def register(request):
                 result['msg'] = u'该邀请码不存在，请与工作人员联系'
                 return JsonResponse(result)
             
-        try:
-            username = 'v' + str(mobile)
-            apply = ApplyLog(mobile=mobile, username=username, password=password,
-                            qq_name=qq_name, qq_number=qq_number, profile=profile, audit_state='1', inviter=inviter)
-            apply.save()
-            logger.info('Creating ApplyLog:' + mobile + ' succeed!')
-        except Exception,e:
-            logger.error(e)
-            result['code'] = '4'
-            result['msg'] = u'创建申请失败！'
-            return JsonResponse(result)
-        imgurl_list = []
-        if len(request.FILES)>6:
-            result = {'code':-2, 'msg':u"上传图片数量不能超过6张"}
-            apply.delete()
-            return JsonResponse(result)
-        for key in request.FILES:
-            block = request.FILES[key]
-            if block.size > 100*1024:
-                result = {'code':-1, 'msg':u"每张图片大小不能超过100k，请重新上传"}
-                apply.delete()
-                return JsonResponse(result)
-        for key in request.FILES:
-            block = request.FILES[key]
-            imgurl = saveImgAndGenerateUrl(key, block, 'qualification')
-            imgurl_list.append(imgurl)
-        invest_image = ';'.join(imgurl_list)
-        apply.qualification = invest_image
-        apply.save(update_fields=['qualification',])
+        level = '05'
+        username = 'flm' + str(mobile)
+        with transaction.atomic():
+            user = MyUser(mobile=mobile, username=username, level=level, qq_name=qq_name, qq_number=qq_number, inviter=apply.inviter,
+                          cs_qq=qq_number, domain_name=qq_number)
+            user.set_password(password)
+            user.save()
+            id_list_list= list(Project.objects.filter(is_official=True, state='10', is_addedto_repo=True).values_list('id'))
+            id_list = []
+            if id_list_list:
+                id_list = reduce(lambda x,y: x + y, id_list_list)
+            subbulk = []
+            for id in id_list:
+                sub = SubscribeShip(user=user, project_id=id)
+                subbulk.append(sub)
+            SubscribeShip.objects.bulk_create(subbulk)
+            sendmsg_bydhst(apply.mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + user.domain_name + '.51fanshu.com' +
+                                 u"，快去分享给小伙伴们吧~")
+            register_signal.send('register', user=user)
+            sendmsg_bydhst(apply.mobile, u"88元新手红包已发放到您的账户，请到福利联盟个人中心查看。有效期一个月，快来领取哦~")
+#         imgurl_list = []
+#         if len(request.FILES)>6:
+#             result = {'code':-2, 'msg':u"上传图片数量不能超过6张"}
+#             apply.delete()
+#             return JsonResponse(result)
+#         for key in request.FILES:
+#             block = request.FILES[key]
+#             if block.size > 100*1024:
+#                 result = {'code':-1, 'msg':u"每张图片大小不能超过100k，请重新上传"}
+#                 apply.delete()
+#                 return JsonResponse(result)
+#         for key in request.FILES:
+#             block = request.FILES[key]
+#             imgurl = saveImgAndGenerateUrl(key, block, 'qualification')
+#             imgurl_list.append(imgurl)
+#         invest_image = ';'.join(imgurl_list)
+#         apply.qualification = invest_image
+#         apply.save(update_fields=['qualification',])
         result['code'] = 0
         return JsonResponse(result)
     else:
-        mobile = request.GET.get('mobile','')
-        icode = request.GET.get('icode','')
-        hashkey = CaptchaStore.generate_key()
-        codimg_url = captcha_image_url(hashkey)
         icode = request.GET.get('icode','')
         context = {
-            'hashkey':hashkey,
-            'codimg_url':codimg_url,
             'icode':icode,
-            'mobile':mobile,
         }
         template = 'registration/m_register.html' if request.mobile else 'registration/register.html'
         return render(request,template, context)
@@ -282,8 +284,8 @@ from account.models import USER_ORIGIN,USER_EXP_YEAR,USER_CUSTOME_VOLUMN,USER_FU
 @csrf_exempt
 def apply_for_channel_user(request):
     if request.method == 'POST':
-        if not request.is_ajax():
-            raise Http404
+        #if not request.is_ajax():
+        #    raise Http404
         result = {}
         current_user=request.user
         user_origin = request.POST.get('origin', None)
@@ -308,7 +310,7 @@ def apply_for_channel_user(request):
             current_user.user_funds_volumn = user_funds_volumn
             current_user.user_invest_orientation = user_invest_orientation
             current_user.is_channel = -1
-            current_user.update()
+            current_user.save()
             result['code'] = 0
             return JsonResponse(result)
 
@@ -316,43 +318,47 @@ def apply_for_channel_user(request):
             result['code'] = '3'
             result['msg'] = u'传入参数不合法！'
             return JsonResponse(result)
-def verifymobile(request):
+    else:
+        data = {"result":"code"}
+        return JsonResponse(data)
+
+def verifymobile(request):# not exist  return 0  exist return 1
     mobilev = request.GET.get('mobile', None)
     users = None
-    code = '0' # is used
+    code = '1' # is used
     if mobilev:
-        users = ApplyLog.objects.filter(mobile=mobilev)
+        users = MyUser.objects.filter(mobile=mobilev)
         if not users.exists():
-            code = '1'
+            code = '0'
     result = {'code':code,}
     return JsonResponse(result)
 def verifyusername(request):
     namev = request.GET.get('username', None)
     users = None
-    code = '0' # is used
+    code = '1' # is used
     if namev:
         users = ApplyLog.objects.filter(username=namev)
         if not users.exists():
-            code = '1'
+            code = '0'
     result = {'code':code,}
     return JsonResponse(result)
 def verifyqq(request):
     qqv = request.GET.get('qq_number', None)
     users = None
-    code = '0' # is used
+    code = '1' # is used
     if qqv:
-        users = ApplyLog.objects.filter(qq_number=qqv)
+        users = MyUser.objects.filter(qq_number=qqv)
         if not users.exists():
-            code = '1'
+            code = '0'
     result = {'code':code,}
     return JsonResponse(result)
 def verifyinviter(request):
     invite_code = request.GET.get('invite', None)
-    code = '0' # not exist
+    code = '1' # not exist
     if invite_code:
         users = MyUser.objects.filter(invite_code=invite_code)
         if users.exists():
-            code = '1'
+            code = '0'
     result = {'code':code,}
     return JsonResponse(result)
 @login_required
@@ -563,6 +569,10 @@ def account_audited_2(request):
 @login_required
 def security(request):
     return render(request, 'account/account_security.html', {})
+@login_required
+def message(request):
+    template = 'account/m_account_message.html' if request.mobile else 'account/account_message.html'
+    return render(request, template)
 
 def password_change(request):
     if not request.is_ajax():
@@ -1240,4 +1250,9 @@ def reaudit(request):
     log.save(update_fields=['audit_state', 'reaudit_reason'])
     res['code'] = 0
     return JsonResponse(res)
-    
+
+
+
+
+
+

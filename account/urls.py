@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'security/$', 'account.views.security', name='account_security'),
 #     url(r'^bankcard/$', 'account.views.bankcard', name='account_bankcard'),
     url(r'^withdraw/$', 'account.views.withdraw', name='account_withdraw'),
-#     url(r'^message/$', 'account.views.message', name='account_message'),
+    url(r'^message/$', 'account.views.message', name='account_message'),
 #     url(r'^messagepage/$', 'account.views.get_user_message_page', name='get_user_message_page'),
     url(r'^register/$', 'account.views.register', name='register'),
     url(r'^register_from_gzh/$', 'account.views.register_from_gzh', name='register_from_gzh'),
@@ -35,7 +35,7 @@ urlpatterns = [
     url(r'^verifyusername/$', 'account.views.verifyusername', name='verifyusername'),
     url(r'^verifyqq/$', 'account.views.verifyqq', name='verifyqq'),
     url(r'^verify_domain/$', 'account.views.verify_domainName', name='verify_domain'),
-#     url(r'^verifyinviter/$', 'account.views.verifyinviter', name='verifyinviter'),
+    url(r'^verifyinviter/$', 'account.views.verifyinviter', name='verifyinviter'),
     url(r'^phoneImageV/$', 'account.views.phoneImageV', name='phoneImageV'),
 #    url(r'verifytelcode/$', 'account.views.verifytelcode', name='verifytelcode'),
 #     url(r'^callback/$', 'account.views.callbackby189', name='callback'),
@@ -76,4 +76,7 @@ urlpatterns = [
     url(r'^submitOrder/$', 'account.views.submitOrder', name='submitOrder'),
     
     url(r'^reaudit/$', 'account.views.reaudit', name='reaudit'),
+    url(r'^apply_for_channel_user/$', 'account.views.apply_for_channel_user', name='apply_for_channel'),
+    url(r'^sitemessage/(?P<id>[0-9]+)/$', 'account.views.sitemessage.as_views()', name='sitemessage'),
+
 ]

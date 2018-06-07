@@ -7,10 +7,11 @@ Created on 2017年8月10日
 from rest_framework import serializers
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
     Announcement, WithdrawLog, Mark, BookLog
-from account.models import MyUser, ApplyLog
+from account.models import MyUser, ApplyLog, Message
 from wafuli_admin.models import DayStatis
 from wafuli.models import Company
-from statistic.models import UserDetailStatis, UserAverageStatis
+from statistic.models import UserDetailStatis, UserAverageStatis,\
+    PerformanceStatistics
 # from activity.models import SubmitRank, IPLog
 from docs.models import Document
 
@@ -31,9 +32,27 @@ class ProjectSerializer(serializers.ModelSerializer):
     qq_name = serializers.CharField(source='user.qq_name', read_only=True)
     user_mobile = serializers.CharField(source='user.mobile', read_only=True)
     state_des = serializers.CharField(source='get_state_display', read_only=True)
+    logo = serializers.CharField(source='company.logo', read_only=True)
+    display_price = serializers.SerializerMethodField()
+    up_price = serializers.SerializerMethodField()
+    def get_field_names(self, declared_fields, info):
+        return serializers.ModelSerializer.get_field_names(self, declared_fields, info)
+    def get_display_price(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated():
+            level = str(user.level)
+            return getattr(obj, 'price'+str(level)) or obj.default_price
+        else:
+            return obj.default_price
+    def get_up_price(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated() and (user.is_staff or obj.user==user):
+            return obj.up_price
+        else:
+            return ''
     class Meta:
         model = Project
-        exclude = ('subscribers',)
+        exclude = ('subscribers', 'price01', 'price02', 'price03', 'price04', 'price05')
 #         fields = '__all__'
         read_only_fields = ('user', 'pub_date', 'state', 'is_official', 'category')
         
@@ -45,6 +64,7 @@ class InvestLogSerializer(serializers.ModelSerializer):
     user_level = serializers.CharField(source='user.level', read_only=True)
     user_mobile = serializers.CharField(source='user.mobile', read_only=True)
     audit_state_des = serializers.CharField(source='get_audit_state_display', read_only=True)
+    pay_state_des = serializers.CharField(source='get_pay_state_display', read_only=True)
     preaudit_state_des = serializers.CharField(source='get_preaudit_state_display', read_only=True)
     admin_user = serializers.CharField(source='admin_user.username', read_only=True) 
     admin_user = serializers.CharField(source='admin_user.username', read_only=True)
@@ -58,7 +78,7 @@ class InvestLogSerializer(serializers.ModelSerializer):
         model = InvestLog
         fields = '__all__'
         read_only_fields = ('audit_date','submit_time','user','qq_number','qq_name','user_level','project_price',
-                             'user_mobile', 'settle_amount','return_amount', "admin_user", "is_official",'category')
+                             'user_mobile', 'settle_amount', "admin_user", "is_official",'category')
 class TransListSerializer(serializers.ModelSerializer):
     mobile = serializers.CharField(source='user.mobile', read_only=True)
     user_balance = serializers.CharField(source='balance', read_only=True)
@@ -181,3 +201,16 @@ class DocumentSerializer(serializers.ModelSerializer):
         model = Document
         fields = ['id', 'title', 'content', 'update_time', 'is_on', 'secret', 'is_star','fanshu_url','close_time']
         read_only_fields = ('id',)
+        
+class MesssageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = '__all__'
+        read_only_fields = ('id',)
+        
+class PerformStatisSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username')
+    inviter_code = serializers.CharField(source='user.invite_code')
+    class Meta:
+        model = PerformanceStatistics
+        fields = '__all__'

@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^marks/(?P<pk>[0-9]+)/$', views.MarkDetail.as_view()),
     
     url(r'^company/$', views.CompanyList.as_view()),
+    url(r'^company2/$', views.CompanyList2.as_view()),
     
 #     url(r'^rank/$', views.RankList.as_view()),
     
@@ -49,4 +50,7 @@ urlpatterns = [
     url(r'^docs/(?P<pk>[0-9a-zA-Z]+)/$', views.DocumentDetail.as_view(), kwargs={'partial':True}),
     
 #     url(r'^doc/', include_docs_urls(title='d'))
+    url(r'^msgs/$', views.MessageList.as_view(), ),
+    url(r'^perform/$', views.PerformStatisList.as_view(), ),
+    
 ]

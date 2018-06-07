@@ -13,15 +13,17 @@ from restapi.serializers import UserSerializer, InvestLogSerializer,\
     SubscribeShipSerializer, AnnouncementSerializer, DayStatisSerializer,\
     ApplyLogSerializer, WithdrawLogSerializer, UserDetailStatisSerializer,\
     UserAverageStatisSerializer, MarkSerializer, CompanySerializer,\
-    BookLogSerializer, DocumentSerializer
-from account.models import MyUser, ApplyLog
+    BookLogSerializer, DocumentSerializer, MesssageSerializer,\
+    PerformStatisSerializer
+from account.models import MyUser, ApplyLog, Message
 from rest_framework.filters import SearchFilter,OrderingFilter
 from public.permissions import IsOwnerOrStaff, IsSelfOrStaff
 from restapi.Filters import InvestLogFilter, SubscribeShipFilter, UserFilter,\
     ApplyLogFilter, TranslistFilter, WithdrawLogFilter, ProjectFilter
 from django.db.models import Q
 from wafuli_admin.models import DayStatis
-from statistic.models import UserDetailStatis, UserAverageStatis
+from statistic.models import UserDetailStatis, UserAverageStatis,\
+    PerformanceStatistics
 from rest_framework.exceptions import ValidationError
 # from activity.models import SubmitRank, IPLog
 from docs.models import Document
@@ -30,7 +32,7 @@ import re
 class BaseViewMixin(object):
     authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
-class ProjectList(BaseViewMixin, generics.ListCreateAPIView):
+class ProjectList(generics.ListCreateAPIView):
     def get_queryset(self):
         user = self.request.user
         queryset = Project.objects.all()
@@ -253,6 +255,10 @@ class CompanyList(BaseViewMixin, generics.ListAPIView):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
     pagination_class = MyPageNumberPagination
+class CompanyList2(BaseViewMixin, generics.ListAPIView):
+    queryset = Company.objects.filter(project__state__in=['10','20']).distinct()
+    serializer_class = CompanySerializer
+    pagination_class = MyPageNumberPagination
 # class RankList(BaseViewMixin, generics.ListAPIView):
 #     permission_classes = ()
 #     queryset = SubmitRank.objects.all()
@@ -285,3 +291,15 @@ class DocumentDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
         return Document.objects.all()
     serializer_class = DocumentSerializer
     permission_classes = (IsOwnerOrStaff,)
+class MessageList(BaseViewMixin, generics.ListAPIView):
+    def get_queryset(self):
+        return Message.objects.filter(user=self.request.user)
+    serializer_class = MesssageSerializer
+    pagination_class = MyPageNumberPagination
+class PerformStatisList(BaseViewMixin, generics.ListAPIView):
+    queryset = PerformanceStatistics.objects.all()
+    permission_classes = (IsAdmin,)
+    serializer_class = PerformStatisSerializer
+    pagination_class = MyPageNumberPagination
+    filter_backends = (SearchFilter,)
+    search_fields = ('user__username', )

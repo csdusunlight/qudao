@@ -1000,6 +1000,11 @@ def admin_withdraw_autoaudit(request):
             obj.save(update_fields=['except_info'])
         withlist.exclude(id__in=fail_id_list).update(audit_state='0', audit_time=datetime.datetime.now(),
                                                      admin_user=request.user)
+        sucset = withlist.exclude(id__in=fail_id_list)
+        suc_list = []
+        for item in sucset:
+            suc_list.append((item.user, item))
+        sendWeixinNotify.delay(suc_list, 'withdraw_success_zhifubao')
         return JsonResponse({'suc_num':ret.get('suc_num')})
 def get_admin_with_page(request):
     res={'code':0,}
@@ -1286,7 +1291,7 @@ def import_withdrawlog(request):
         ret['code'] = 1
         ret['msg'] = unicode(e)
     #发送微信通知
-    sendWeixinNotify.delay(suc_list, 'withdraw_success')
+    sendWeixinNotify.delay(suc_list, 'withdraw_success_yhk')
     sendWeixinNotify.delay(fail_list, 'withdraw_fail')
     #
     ret['num'] = suc_num

@@ -61,8 +61,9 @@ class UserList(BaseViewMixin, generics.ListCreateAPIView):
     queryset = MyUser.objects.all()
     permission_classes = (IsAdmin,)
     serializer_class = UserSerializer
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, )
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
     filter_class = UserFilter
+    ordering_fields = ('margin_account','accu_income','balance')
 #     filter_fields = ['state',]
     pagination_class = MyPageNumberPagination
 

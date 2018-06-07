@@ -145,9 +145,10 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     user_funds_volumn = models.CharField(u"用户资金体量", choices=USER_FUNDS_VOLUMN, default='0', max_length=2)
     user_invest_orientation = models.CharField(u"用户投资去向", choices=USER_INVEST_ORIENTATION, default='0', max_length=2)
     user_apply_channel_time = models.DateTimeField(u'申请渠道用户时间',null=True,blank=True)
-    
-    objects = MyUserManager()
+    user_apply_auditor = models.ForeignKey('self', related_name='auditor',
+                                           blank=True, null=True, on_delete=models.SET_NULL, default=None)
 
+    objects = MyUserManager()
     USERNAME_FIELD = 'mobile'
     REQUIRED_FIELDS = ['username','qq_number']
     def get_fanshu_domain(self):

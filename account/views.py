@@ -324,6 +324,7 @@ def apply_for_channel_user(request):
 def verifymobile(request):# not exist  return 0  exist return 1
     mobilev = request.GET.get('mobile', None)
     users = None
+    print(mobilev)
     code = '1' # is used
     if mobilev:
         users = MyUser.objects.filter(mobile=mobilev)

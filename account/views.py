@@ -319,8 +319,7 @@ def apply_for_channel_user(request):
             result['msg'] = u'传入参数不合法！'
             return JsonResponse(result)
     else:
-        data = {"result":"code"}
-        return JsonResponse(data)
+        return render(request,"apply_for_channel_user.html")
 
 def verifymobile(request):# not exist  return 0  exist return 1
     mobilev = request.GET.get('mobile', None)

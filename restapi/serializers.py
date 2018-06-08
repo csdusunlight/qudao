@@ -32,7 +32,7 @@ class UserApplyChannelSerializer(serializers.ModelSerializer):
     class Meta:
         model = MyUser
         fields = ('id','username','qq_number','qq_name','profile','mobile','user_apply_channel_time','level','user_audit_man_name',
-                  'user_origin', 'user_exp_year', 'user_custom_volumn', 'user_funds_volumn', 'user_invest_orientation')
+                  'user_origin', 'user_exp_year', 'user_custom_volumn', 'user_funds_volumn', 'user_invest_orientation','user_beapproved_channel_time')
         read_only_fields = ('id', 'mobile','user_audit_man_name','user_audit_time')
 
 

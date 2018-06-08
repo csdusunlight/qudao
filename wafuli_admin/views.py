@@ -9,7 +9,7 @@ from django.http.response import JsonResponse, Http404, HttpResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from account.transaction import charge_money
 import logging
-from account.models import MyUser, ApplyLog, AdminPermission,Message
+from account.models import MyUser, AdminPermission,Message, ApplyLog
 from django.db.models import Q,F
 from wafuli_admin.models import DayStatis, Invest_Record
 from django.conf import settings
@@ -42,9 +42,9 @@ def index(request):
         return redirect(reverse('admin:login') + "?next=" + reverse('admin_index'))
 
     total = {}
-    total['apply_num'] = ApplyLog.objects.count()
+    total['apply_num'] = ApplyLogForChannel.objects.count()
     dict1 = MyUser.objects.aggregate(cou=Count('id'), sumb=Sum('balance'))
-    total['user_num'] = ApplyLog.objects.filter(audit_state='0').count()
+    total['user_num'] = MyUser.objects.count()
     total['balance'] = dict1.get('sumb') or 0
 #     print TransList.objects.filter(user_investlog__investlog_type='2',user_investlog__audit_state='0').aggregate(cou=Count('id'),sum=Sum('transAmount'))
     dict_with = WithdrawLog.objects.filter(audit_state='0').\
@@ -775,7 +775,7 @@ def admin_user(request):
                 Message.objects.create(user=user_id, title="渠道申请审核反馈", time=nowtime, is_read=False,
                                         content=u"尊敬的用户：您申请成为渠道用户成功！")
                 obj_user.save(is_channel=1,user_level=user_level,user_apply_auditor=admin_user,
-                              user_apply_channel_time=nowtime)
+                              user_beapproved_channel_time=nowtime)
                 AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=reason, type='3',time=nowtime)
                 sendmsg_bydhst(obj_user.mobile, u"您申请成为渠道用户成功！")
                 res['code'] = 0

@@ -75,7 +75,7 @@ class UserApplyChannelList(BaseViewMixin, generics.ListAPIView):
     serializer_class = UserApplyChannelSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
     filter_class = UserApplyChannelFilter
-    ordering_fields = ('user_apply_channel_time',)
+    ordering_fields = ('user_apply_channel_time','user_beapproved_channel_time')
 #     filter_fields = ['state',]
     pagination_class = MyPageNumberPagination
     def get_queryset(self):

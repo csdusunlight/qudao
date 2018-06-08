@@ -275,8 +275,8 @@ class ApplyLog(models.Model):
 class ApplyLogForChannel(models.Model):
     submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
     audit_time = models.DateTimeField(u'审核时间', null=True, blank=True)
-    admin_user = models.ForeignKey(MyUser, related_name="applylog_admin", null=True)
-    custom_user = models.ForeignKey(MyUser, related_name="applylog_custom")
+    admin_user = models.ForeignKey(MyUser, related_name="admin_user", null=True)
+    user = models.ForeignKey(MyUser, related_name="user")
     audit_reason = models.CharField(u"审核原因", max_length=30)
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
     user_origin = models.CharField(u"用户来源", choices=USER_ORIGIN, max_length=2)

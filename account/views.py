@@ -342,7 +342,7 @@ def verifyqq(request):
     result = {'code':code,}
     return JsonResponse(result)
 def verifyinviter(request):
-    invite_code = request.GET.get('invite', None)
+    invite_code = request.GET.get('invite_code', None)
     code = '1' # not exist
     if invite_code:
         users = MyUser.objects.filter(invite_code=invite_code)

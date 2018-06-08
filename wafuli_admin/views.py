@@ -9,7 +9,8 @@ from django.http.response import JsonResponse, Http404, HttpResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from account.transaction import charge_money
 import logging
-from account.models import MyUser, AdminPermission,Message, ApplyLog
+from account.models import MyUser, AdminPermission,Message, ApplyLog,\
+    ApplyLogForChannel
 from django.db.models import Q,F
 from wafuli_admin.models import DayStatis, Invest_Record
 from django.conf import settings

@@ -26,7 +26,16 @@ class UserSerializer(serializers.ModelSerializer):
                   'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number', 'is_autowith',
                   'submit_bg', 'domain_name', 'cs_qq', 'has_permission100','margin_account', 'fanshu_domain', 'zhifubao')
         read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level', 'margin_account')
-        
+
+class UserApplyChannelSerializer(serializers.ModelSerializer):
+    user_audit_man_name =serializers.RelatedField(source="user_apply_auditor.username",read_only=True)
+    class Meta:
+        model = MyUser
+        fields = ('id','username','qq_number','qq_name','profile','mobile','user_apply_channel_time','level','user_audit_man_name',
+                  'user_origin', 'user_exp_year', 'user_custom_volumn', 'user_funds_volumn', 'user_invest_orientation','user_beapproved_channel_time')
+        read_only_fields = ('id', 'mobile','user_audit_man_name','user_audit_time')
+
+
 class ProjectSerializer(serializers.ModelSerializer):
 #     subscribers = UserSerializer(many=True)
     qq_name = serializers.CharField(source='user.qq_name', read_only=True)

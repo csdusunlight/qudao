@@ -7,7 +7,7 @@ Created on 2017年8月10日
 from rest_framework import serializers
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
     Announcement, WithdrawLog, Mark, BookLog
-from account.models import MyUser, ApplyLog, Message
+from account.models import MyUser, ApplyLog, Message,ApplyLogForChannel
 from wafuli_admin.models import DayStatis
 from wafuli.models import Company
 from statistic.models import UserDetailStatis, UserAverageStatis,\
@@ -27,13 +27,22 @@ class UserSerializer(serializers.ModelSerializer):
                   'submit_bg', 'domain_name', 'cs_qq', 'has_permission100','margin_account', 'fanshu_domain', 'zhifubao')
         read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level', 'margin_account')
 
-class UserApplyChannelSerializer(serializers.ModelSerializer):
-    user_audit_man_name =serializers.RelatedField(source="user_apply_auditor.username",read_only=True)
+class ApplyLogForChannelSerializer(serializers.ModelSerializer):
+    username =serializers.RelatedField(source="user.username",read_only=True)
+    admin_name =serializers.RelatedField(source="admin_user.username",read_only=True)
+    mobile = serializers.RelatedField(source="user.mobile",read_only=True)
+
+    qq_number = serializers.RelatedField(source="user.qq_number",read_only=True)
+    qq_name =  serializers.RelatedField(source="user.mobile",read_only=True)
+    level =  serializers.RelatedField(source="user.level",read_only=True)
+    profile =  serializers.RelatedField(source="user.profile",read_only=True)
+    audit_time = serializers.DateTimeField()
+    submit_time = serializers.DateTimeField()
     class Meta:
-        model = MyUser
-        fields = ('id','username','qq_number','qq_name','profile','mobile','user_apply_channel_time','level','user_audit_man_name',
-                  'user_origin', 'user_exp_year', 'user_custom_volumn', 'user_funds_volumn', 'user_invest_orientation','user_beapproved_channel_time')
-        read_only_fields = ('id', 'mobile','user_audit_man_name','user_audit_time')
+        model = ApplyLogForChannel
+        fields = ('id','username','qq_number','qq_name','mobile','audit_time','submit_time','profile','level','admin_name',
+                  'user_origin', 'user_exp_year', 'user_custom_volumn', 'user_funds_volumn', 'user_invest_orientation','audit_reason')
+        read_only_fields = ('adminname','username')
 
 
 class ProjectSerializer(serializers.ModelSerializer):

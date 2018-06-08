@@ -67,23 +67,24 @@ class UserList(BaseViewMixin, generics.ListCreateAPIView):
 #     filter_fields = ['state',]
     pagination_class = MyPageNumberPagination
 
-from restapi.serializers import UserApplyChannelSerializer
-from restapi.Filters  import UserApplyChannelFilter
-class UserApplyChannelList(BaseViewMixin, generics.ListAPIView):
-    queryset = MyUser.objects.all()
+from restapi.serializers import ApplyLogForChannelSerializer
+from restapi.Filters  import ApplyLogForChannelFilter
+from account.models import ApplyLogForChannel
+class ApplyLogForChannelList(BaseViewMixin, generics.ListCreateAPIView):
+    queryset = ApplyLogForChannel.objects.all()
     permission_classes = (IsAdmin,)
-    serializer_class = UserApplyChannelSerializer
+    serializer_class = ApplyLogForChannelSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
-    filter_class = UserApplyChannelFilter
-    ordering_fields = ('user_apply_channel_time','user_beapproved_channel_time')
+    filter_class = ApplyLogForChannelFilter
+    ordering_fields = ('submit_time','audit_time')
 #     filter_fields = ['state',]
     pagination_class = MyPageNumberPagination
-    def get_queryset(self):
+    def get_queryset(self):#如果是查询已拒绝用户，那么用is_channle=0 和审批未通过字段为空
         user = self.request.user
         if user.is_staff:
-            return MyUser.objects.all()
+            return ApplyLogForChannel.objects.all()
         else:
-            return MyUser.objects.filter(user=user)
+            return ApplyLogForChannel.objects.filter(user=user)
 
 
 class UserDetail(BaseViewMixin,generics.RetrieveUpdateDestroyAPIView):

@@ -137,7 +137,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     zhifubao = models.CharField(u"支付宝账号（邮箱或手机号）", blank=True, max_length=50)
     zhifubao_real_name = models.CharField(u"支付宝实名", blank=True, max_length=20)
 
-    is_channel = models.CharField(u"是否渠道", choices=IS_CHANNEL, default=False, max_length=2)  #
+    is_channel = models.CharField(u"是否渠道", choices=IS_CHANNEL, default='1', max_length=2)  #
     channel_refuse_reason = models.CharField(u"渠道拒绝原因", default=False, null=True, blank=True, max_length=300)  #
     user_origin = models.CharField(u"用户来源", choices=USER_ORIGIN, default='0', max_length=2)
     user_exp_year = models.CharField(u"用户经验年限", choices=USER_EXP_YEAR, default='0', max_length=2)

@@ -283,6 +283,9 @@ def register_from_gzh(request):
 from account.models import USER_ORIGIN,USER_EXP_YEAR,USER_CUSTOME_VOLUMN,USER_FUNDS_VOLUMN,USER_INVEST_ORIENTATION
 @csrf_exempt
 def apply_for_channel_user(request):
+    if request.method == 'GET':
+        template = 'account/apply_for_channel_user.html'
+        return render(request, template)
     if request.method == 'POST':
         #if not request.is_ajax():
         #    raise Http404

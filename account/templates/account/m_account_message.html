@@ -1,0 +1,43 @@
+{% load staticfiles %}
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="{% static 'css/mui.min.css' %}" rel="stylesheet" />
+    <script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
+    <style type="text/css">
+      .mui-table-view{background-color: #efeff4 !important;}
+    	.list{margin: 1.8rem 1.2rem; background-color:#fff; overflow: hidden; box-sizing: border-box; padding: 2rem;}
+   </style>
+  </head>
+  <body>
+    <header class="mui-bar mui-bar-nav" style="position: relative;background: white;">
+      <a href="{% url 'account_index' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
+      <h1 class="mui-title" style="style=" color: RGB(102,102,102); "">消息中心</h1>
+      <!--<img src="{% static 'images/icon_03.jpg' %}" class="header_icon" />
+      <span class="header_audit">全部</span>-->
+    </header>
+    <div id="pullrefresh" class="mui-scroll-wrapper" style="top:32px;">
+      <div class="mui-content">
+        <ul class="mui-table-view">
+          <li class="list">
+            <div class="title">
+              <h2>渠道申请审核反馈</h2>
+              <span>2018-05-16 12:00:00</span>
+            </div>
+            <div class="content">
+              <p>尊敬的用户：您申请成为渠道用户失败。失败原因：列出在审核中的原因是巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉巴拉</p><i></i>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <script src="{% static 'js/mui.min.js' %}"></script>
+    <script type="text/javascript">
+      mui.init();
+    </script>
+  </body>
+
+</html>

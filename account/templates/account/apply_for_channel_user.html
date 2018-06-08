@@ -1,0 +1,181 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>渠道申请</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />-->
+<link rel="stylesheet" type="text/css" href="{% static 'css/apply_for_channel_user.css' %}" />
+<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+</head>
+
+<body>
+    	<!--头部-->
+{% include "header.html" %}
+  <div class="channel">
+    <div class="channel_user">
+      <div class="title"><img src="{% static 'images/afc_qudao_user.png' %}" /></div>
+      <div class="privilege">
+        <i class="icon"><img src="{% static 'images/afc_teq.png' %}"/></i>
+        <h2>专属特权</h2>
+        <p>优势渠道价格&nbsp;&nbsp;一对一专属客服&nbsp;&nbsp;推单工具优先使用</p>
+      </div>
+      <div class="privilege">
+        <i class="icon"><img src="{% static 'images/afc_mxrq.png' %}"/></i>
+        <h2>面向人群</h2>
+        <p>有用户群资源、各种推广渠道，如站长、金融类大V、理财师、推手等等</p>
+      </div>
+    </div>
+    <div class="channel_apply">
+      <div class="title"><img src="{% static 'images/afc_qudao_sq.png' %}"/></div>
+      <form class="form" method="post" id="form1">
+        <div class="radio_group">
+          <label class="location margin">您的身份<i>*</i> :</label>
+          <div class="column">
+            <label class="radio_item">
+              <input class="radio" type="radio" name="radio1" id="student" value="1" data-rule="checked"/><label class="label_item" for="student"></label><span>学生党</span>
+            </label>
+            <label class="radio_item">
+              <input class="radio" type="radio" name="radio1" id="mother" value="2"/><label class="label_item" for="mother"></label><span>宝妈</span>
+            </label>
+            <label class="radio_item">
+              <input class="radio" type="radio" name="radio1" id="hair" value="3"/><label class="label_item" for="hair"></label><span>羊毛党</span>
+            </label>
+            <label class="radio_item">
+              <input class="radio" type="radio" name="radio1" id="timejob" value="4"/><label class="label_item" for="timejob"></label><span>兼职</span>
+            </label>
+            <label class="radio_item">
+              <input class="radio" type="radio" name="radio1" id="stationmaster" value="5"/><label class="label_item" for="stationmaster"></label><span>个人站长</span>
+            </label>
+            <label class="radio_item">
+              <input class="radio" type="radio" name="radio1" id="finance" value="6"/><label class="label_item" for="finance"></label><span>金融大V</span>
+            </label>
+            <label class="radio_item">
+              <input class="radio" type="radio" name="radio1" id="lics" value="7"/><label class="label_item" for="lics"></label><span>理财师</span>
+            </label>
+            <label class="radio_item lastys" style="width: 50px;">
+              <input class="radio" type="radio" name="radio1" id="tlins" value="8"/><label class="label_item" for="tlins"></label><span>宝妈</span>
+            </label>
+          </div>
+        </div>
+        <div class="radio_group">
+          <label class="margin">经验年限<i>*</i> :</label>
+          <label class="radio_item">
+            <input class="radio" type="radio" name="radio2" id="xins" value="1" data-rule="checked"/><label class="label_item" for="xins"></label><span>新手</span>
+          </label>
+          <label class="radio_item">
+            <input class="radio" type="radio" name="radio2" id="ynianzn" value="2"/><label class="label_item" for="ynianzn"></label><span>一年之内</span>
+          </label>
+          <label class="radio_item">
+            <input class="radio" type="radio" name="radio2" id="ydaoen" value="3"/><label class="label_item" for="ydaoen"></label><span>1-2年</span>
+          </label>
+          <label class="radio_item lastys" style="width: 70px;">
+            <input class="radio" type="radio" name="radio2" id="snianys" value="4"/><label class="label_item" for="snianys"></label><span>3年以上</span>
+          </label>
+        </div>
+        <div class="radio_group">
+          <label class="margin">客户资源<i>*</i> :</label>
+          <label class="radio_item">
+            <input class="radio" type="radio" name="radio3" id="wshirys" value="1" data-rule="checked"/><label class="label_item" for="wshirys"></label><span>50人以上</span>
+          </label>
+          <label class="radio_item">
+            <input class="radio" type="radio" name="radio3" id="wshidyb" value="2"/><label class="label_item" for="wshidyb"></label><span>50-100人</span>
+          </label>
+          <label class="radio_item">
+            <input class="radio" type="radio" name="radio3" id="ybaidwbr" value="3"/><label class="label_item" for="ybaidwbr"></label><span>100-500人</span>
+          </label>
+          <label class="radio_item lastys" style="width: 85px;">
+            <input class="radio" type="radio" name="radio3" id="wbairys" value="4"/><label class="label_item" for="wbairys"></label><span>500人以上</span>
+          </label>
+        </div>
+        <div class="radio_group">
+          <label class="margin">资金体量<i>*</i> :</label>
+          <label class="radio_item">
+            <input class="radio" type="radio" name="radio4" id="wshiwyx" value="1" data-rule="checked"/><label class="label_item" for="wshiwyx"></label><span>50万以下</span>
+          </label>
+          <label class="radio_item">
+            <input class="radio" type="radio" name="radio4" id="wshidybw" value="2"/><label class="label_item" for="wshidybw"></label><span>50-100万</span>
+          </label>
+          <label class="radio_item">
+            <input class="radio" type="radio" name="radio4" id="ybaidwbw" value="3"/><label class="label_item" for="ybaidwbw"></label><span>100-500万</span>
+          </label>
+          <label class="radio_item lastys" style="width: 85px;">
+            <input class="radio" type="radio" name="radio4" id="wbaiwys" value="4"/><label class="label_item" for="wbaiwys"></label><span>500万以上</span>
+          </label>
+        </div>
+        <div class="radio_group">
+          <label class="margin">推单偏好<i>*</i> :</label>
+          <label class="radio_item">
+            <input class="radio" type="radio" name="radio5" id="xerldd" value="1" data-rule="checked"/><label class="label_item" for="xerldd"></label><span>小额量大单</span>
+          </label>
+          <label class="radio_item">
+            <input class="radio" type="radio" name="radio5" id="dxicded" value="2"/><label class="label_item" for="dxicded"></label><span>低息大额单</span>
+          </label>
+          <label class="radio_item">
+            <input class="radio" type="radio" name="radio5" id="dqigfd" value="4"/><label class="label_item" for="dqigfd"></label><span>短期高返单</span>
+          </label>
+          <label class="radio_item lastys" style="width: 70px;">
+            <input class="radio" type="radio" name="radio5" id="mtid" value="3"/><label class="label_item" for="mtid"></label><span>媒体单</span>
+          </label>
+        </div>
+        <div class="form-sub">
+            <button type="submit">提交</button>
+        </div>
+      </form>
+    </div>
+    <div class="message">
+      <div class="message_item">
+        <i class="icon"><img src="{% static 'images/skin-on.png' %}"/></i>
+        <h2>提交成功</h2>
+        <p>您已成功提交新模板申请，请等待7-15天左右的审核期，审核结果将会在系统站内信中通知您</p>
+        <div class="butt_return">返回</div>
+      </div>
+    </div>
+  </div>
+{% include "footer.html" %}
+
+<!--<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>-->
+<script type="text/javascript" src="{% static 'js/jquery.validator.min.js' %}?local=zh-CN"></script>
+<!--<script type="text/javascript" src="{% static "js/ZeroClipboard.js" %}"></script>-->
+
+<script type="text/javascript">
+$(function(){
+  $('#form1').validator({
+      valid: function(form) {
+        var data = {
+          'origin': $('input[name="radio1"]:checked').val(),
+          'exp_year': $('input[name="radio2"]:checked').val(),
+          'custom_volumn': $('input[name="radio3"]:checked').val(),
+          'funds_volumn': $('input[name="radio4"]:checked').val(),
+          'invest_orientation': $('input[name="radio5"]:checked').val()
+        }
+        console.log(data)
+        $.ajax({
+          type: 'POST',
+          url: '/account/apply_for_channel_user/',
+          data: data,
+          dataType:'json',
+          success: function (data) {
+            if (data.code === 0) {
+              $('.message').addClass('animation')
+            }
+          },
+          error: function (err) {
+            console.log(err);
+          }
+        });
+      }
+  });
+  $('.butt_return').click(function () {
+    window.location.replace("/");
+  })
+})
+
+</script>
+</body>
+</html>

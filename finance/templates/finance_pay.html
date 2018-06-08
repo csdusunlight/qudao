@@ -28,6 +28,10 @@
      .el-popover {
        min-width: 60px;
      }
+     .pay-state {
+       font-weight: bold;
+       font-family: "宋体";
+     }
      .pay-state-1 {
        color: #59b9ff;
      }
@@ -143,7 +147,7 @@
         </el-col>
         <el-col :span="4">
           <span>时间区域：</span>
-          <el-select class="search__item" v-model="dateValue" placeholder="请选择时间跨度">
+          <el-select class="search__item" v-model="dateValue" placeholder="请选择时间区域">
             <el-option
               v-for="item in dateOptions"
               :key="item.value"
@@ -196,6 +200,7 @@
           <el-button type="warning" @click="transferSelect">一键转账</el-button>
         </el-col>
       </el-row>
+      <p style="margin-right: 153px;text-align: right;">*注：打款中的数据标记无效。</p>
      </div>
     <div class="line"></div>
     <div class="table-box">
@@ -242,15 +247,25 @@
           label="支付宝账号">
           <template slot-scope="scope">${ scope.row.zhifubao }</template>
         </el-table-column>
-                <el-table-column
+        <el-table-column
           label="支付宝姓名">
           <template slot-scope="scope">${ scope.row.zhifubao_name }</template>
         </el-table-column>
+        <!--<el-table-column
+          label="打款审核备注">
+          <template slot-scope="scope">${ scope.row.pay_reason }</template>
+        </el-table-column>-->
         <el-table-column
-          label="返现状态">
+          label="打款状态">
           <template slot-scope="scope">
+            <el-popover trigger="hover" placement="left">
+              <p>备注：${ scope.row.pay_reason ? scope.row.pay_reason : '无' }</p>
+              <div slot="reference" class="name-wrapper">
+                <!--<el-button>操作</el-button>-->
+                <span :class="'pay-state pay-state-' + scope.row.pay_state">${ scope.row.pay_state_des }</span>
+              </div>
+            </el-popover>
             <!--<span :class="{'all' : scope.row.pay_state==1}">${ scope.row.pay_state_des }</span>-->
-            <span :class="'pay-state-' + scope.row.pay_state">${ scope.row.pay_state_des }</span>
           </template>
         </el-table-column>
         <el-table-column

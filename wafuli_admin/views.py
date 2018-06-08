@@ -775,7 +775,7 @@ def admin_user(request):
                 Message.objects.create(user=user_id, title="渠道申请审核反馈", time=nowtime, is_read=False,
                                         content=u"尊敬的用户：您申请成为渠道用户成功！")
                 obj_user.save(is_channel=1,user_level=user_level,user_apply_auditor=admin_user,
-                              user_apply_channel_time=nowtime)
+                              user_beapproved_channel_time=nowtime)
                 AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=reason, type='3',time=nowtime)
                 sendmsg_bydhst(obj_user.mobile, u"您申请成为渠道用户成功！")
                 res['code'] = 0

@@ -7,7 +7,7 @@ Created on 2017年8月23日
 import django_filters
 from wafuli.models import InvestLog, Project, SubscribeShip, TransList,\
     WithdrawLog
-from account.models import MyUser, ApplyLog
+from account.models import MyUser, ApplyLog,Message
 # class ProjectInvestDateFilter(django_filters.rest_framework.FilterSet):
 #     investtime = django_filters.DateFromToRangeFilter(name="invest_time")
 #     audittime = django_filters.DateTimeFromToRangeFilter(name="audit_time")
@@ -48,6 +48,20 @@ class UserFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = MyUser
         fields = ['mobile', 'username', 'qq_name', 'qq_number', 'join_date', 'level', 'is_active', 'domain_name']
+
+
+class UserApplyChannelFilter(django_filters.rest_framework.FilterSet):
+    user_apply_channel_time = django_filters.DateFromToRangeFilter(name="user_apply_channel_time")
+    is_channel = django_filters.CharFilter(name="is_channel") #处理状态
+    username = django_filters.CharFilter(name="username")
+    audit_mobile = django_filters.CharFilter(name="user_apply_auditor.mobile")#审核者手机
+    mobile = django_filters.CharFilter(name="mobile")#
+    qq_number = django_filters.CharFilter(name="qq_number")#
+    qq_name = django_filters.CharFilter(name="qq_name")
+
+    class Meta:
+        model = MyUser
+        fields = ['id','username','qq_number','qq_name','profile','mobile','user_apply_channel_time','level','user_apply_auditor','is_channel','audit_mobile']
         
 class ApplyLogFilter(django_filters.rest_framework.FilterSet):
     submit_date = django_filters.DateFromToRangeFilter(name="submit_time")
@@ -87,3 +101,12 @@ class ProjectFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = Project
         fields = ['state','type','is_multisub_allowed','is_official','category', 'user_mobile', 'qq_name']
+
+class MessageFilter(django_filters.rest_framework.FilterSet):
+    title =django_filters.CharFilter(name="title")
+    time = django_filters.DateTimeFilter(name="time")
+    is_read = django_filters.BooleanFilter(name="is_read")
+    content = django_filters.CharFilter(name="content")
+    class Meta:
+        model = Message
+        fields = ['title','time','is_read','content']

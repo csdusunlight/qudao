@@ -145,6 +145,20 @@
 
 <script type="text/javascript">
 $(function(){
+  $.ajax({
+    type: 'get',
+    url: '/restapi/applylog/',
+    data: data,
+    dataType:'json',
+    success: function (data) {
+      console.log(data)
+      if (data.code === 0) {
+      }
+    },
+    error: function (err) {
+      console.log(err);
+    }
+  });
   $('#form1').validator({
       valid: function(form) {
         var data = {

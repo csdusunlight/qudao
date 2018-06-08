@@ -313,7 +313,14 @@ def apply_for_channel_user(request):
             current_user.user_funds_volumn = user_funds_volumn
             current_user.user_invest_orientation = user_invest_orientation
             current_user.is_channel = -1
-            current_user.save()
+            current_user.user_apply_channel_time = datetime.now()
+            current_user.save(update_fields=['user_origin',
+                                             'user_exp_year',
+                                             'user_custom_volumn',
+                                             'user_funds_volumn',
+                                             'user_invest_orientation',
+                                             'is_channel',
+                                             'user_apply_channel_time'])
             result['code'] = 0
             return JsonResponse(result)
 
@@ -322,12 +329,12 @@ def apply_for_channel_user(request):
             result['msg'] = u'传入参数不合法！'
             return JsonResponse(result)
     else:
-        data = {"result":"code"}
-        return JsonResponse(data)
+        return render(request,"apply_for_channel_user.html")
 
 def verifymobile(request):# not exist  return 0  exist return 1
     mobilev = request.GET.get('mobile', None)
     users = None
+    print(mobilev)
     code = '1' # is used
     if mobilev:
         users = MyUser.objects.filter(mobile=mobilev)

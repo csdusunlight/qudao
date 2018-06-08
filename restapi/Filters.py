@@ -60,26 +60,15 @@ class ApplyLogForChannelFilter(django_filters.rest_framework.FilterSet):
     mobile = django_filters.CharFilter(name="user.mobile")#
     qq_number = django_filters.CharFilter(name="user.qq_number")#
     qq_name = django_filters.CharFilter(name="user.qq_name")
-    #profile = django_filters.CharFilter(name="user.profile")
+    profile = django_filters.CharFilter(name="user.profile")
     level = django_filters.CharFilter(name="user.level")
-
-
+    user_orgin = django_filters.CharFilter(name='user_origin')
+    audit_state = django_filters.CharFilter(name='audit_state')
     class Meta:
         model = ApplyLogForChannel
-        fields = ['id',
-                  'username',
-                  'qq_number',
-                  'qq_name',
-     #             'profile',
-                  'mobile',
-                  'audit_time',
-                  'level',
-                  'is_channel',
-                  'audit_mobile',
-                  'audit_username',
-                  'audit_mobile',
-                  'is_channel',
-                  'submit_time']
+        fields = ['id', 'username', 'qq_number', 'qq_name', 'mobile', 'audit_time', 'submit_time', 'level',
+
+         'audit_reason','audit_username','audit_mobile','audit_state']
         
 class ApplyLogFilter(django_filters.rest_framework.FilterSet):
     submit_date = django_filters.DateFromToRangeFilter(name="submit_time")

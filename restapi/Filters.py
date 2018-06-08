@@ -7,7 +7,7 @@ Created on 2017年8月23日
 import django_filters
 from wafuli.models import InvestLog, Project, SubscribeShip, TransList,\
     WithdrawLog
-from account.models import MyUser, ApplyLog,Message
+from account.models import MyUser, ApplyLog,Message,ApplyLogForChannel
 # class ProjectInvestDateFilter(django_filters.rest_framework.FilterSet):
 #     investtime = django_filters.DateFromToRangeFilter(name="invest_time")
 #     audittime = django_filters.DateTimeFromToRangeFilter(name="audit_time")
@@ -50,18 +50,25 @@ class UserFilter(django_filters.rest_framework.FilterSet):
         fields = ['mobile', 'username', 'qq_name', 'qq_number', 'join_date', 'level', 'is_active', 'domain_name']
 
 
-class UserApplyChannelFilter(django_filters.rest_framework.FilterSet):
-    user_apply_channel_time = django_filters.DateFromToRangeFilter(name="user_apply_channel_time")
-    is_channel = django_filters.CharFilter(name="is_channel") #处理状态
-    username = django_filters.CharFilter(name="username")
-    audit_mobile = django_filters.CharFilter(name="user_apply_auditor.mobile")#审核者手机
-    mobile = django_filters.CharFilter(name="mobile")#
-    qq_number = django_filters.CharFilter(name="qq_number")#
-    qq_name = django_filters.CharFilter(name="qq_name")
-
+class ApplyLogForChannelFilter(django_filters.rest_framework.FilterSet):
+    audit_time = django_filters.DateFromToRangeFilter(name="audit_time")
+    submit_time = django_filters.DateFromToRangeFilter(name="submit_time")
+    is_channel = django_filters.CharFilter(name="user.is_channel") #处理状态
+    username = django_filters.CharFilter(name="user.username")
+    audit_username = django_filters.CharFilter(name="admin_user.username")
+    audit_mobile = django_filters.CharFilter(name="admin_user.mobile")#审核者手机
+    mobile = django_filters.CharFilter(name="user.mobile")#
+    qq_number = django_filters.CharFilter(name="user.qq_number")#
+    qq_name = django_filters.CharFilter(name="user.qq_name")
+    profile = django_filters.CharFilter(name="user.profile")
+    level = django_filters.CharFilter(name="user.level")
+    user_orgin = django_filters.CharFilter(name='user_origin')
+    audit_state = django_filters.CharFilter(name='audit_state')
     class Meta:
-        model = MyUser
-        fields = ['id','username','qq_number','qq_name','profile','mobile','user_apply_channel_time','level','user_apply_auditor','is_channel','audit_mobile']
+        model = ApplyLogForChannel
+        fields = ['id', 'username', 'qq_number', 'qq_name', 'mobile', 'audit_time', 'submit_time', 'level',
+
+         'audit_reason','audit_username','audit_mobile','audit_state']
         
 class ApplyLogFilter(django_filters.rest_framework.FilterSet):
     submit_date = django_filters.DateFromToRangeFilter(name="submit_time")

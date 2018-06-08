@@ -281,6 +281,8 @@ def register_from_gzh(request):
         return render(request,template, context)
 
 from account.models import USER_ORIGIN,USER_EXP_YEAR,USER_CUSTOME_VOLUMN,USER_FUNDS_VOLUMN,USER_INVEST_ORIENTATION
+from account.models import ApplyLogForChannel
+import datetime
 @csrf_exempt
 def apply_for_channel_user(request):
     if request.method == 'GET':
@@ -307,20 +309,18 @@ def apply_for_channel_user(request):
                 para_check_in_model_choice(user_custom_volumn, USER_CUSTOME_VOLUMN), \
                 para_check_in_model_choice(user_funds_volumn, USER_FUNDS_VOLUMN),\
                 para_check_in_model_choice(user_invest_orientation, USER_INVEST_ORIENTATION)]):
-            current_user.user_origin = user_origin
-            current_user.user_exp_year = user_exp_year
-            current_user.user_custom_volumn = user_custom_volumn
-            current_user.user_funds_volumn = user_funds_volumn
-            current_user.user_invest_orientation = user_invest_orientation
+            ApplyLogForChannel.objects.create(user=current_user,
+                                      user_origin=user_origin,
+                                      user_exp_year=user_exp_year,
+                                      user_custom_volumn=user_custom_volumn,
+                                      user_funds_volumn=user_funds_volumn,
+                                      user_invest_orientation=user_invest_orientation,
+                                      submit_time= datetime.datetime.now(),
+                                      audit_state='1')
             current_user.is_channel = -1
-            current_user.user_apply_channel_time = datetime.now()
-            current_user.save(update_fields=['user_origin',
-                                             'user_exp_year',
-                                             'user_custom_volumn',
-                                             'user_funds_volumn',
-                                             'user_invest_orientation',
+            current_user.save(update_fields=[
                                              'is_channel',
-                                             'user_apply_channel_time'])
+                                        ])
             result['code'] = 0
             return JsonResponse(result)
 

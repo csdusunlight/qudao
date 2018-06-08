@@ -147,7 +147,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     user_apply_channel_time = models.DateTimeField(u'申请渠道用户时间',null=True,blank=True)
     user_apply_auditor = models.ForeignKey('self', related_name='auditor',
                                            blank=True, null=True, on_delete=models.SET_NULL, default=None)
-
+    user_beapproved_channel_time = models.DateTimeField(u'申请渠道用户时间',null=True,blank=True)
     objects = MyUserManager()
     USERNAME_FIELD = 'mobile'
     REQUIRED_FIELDS = ['username','qq_number']

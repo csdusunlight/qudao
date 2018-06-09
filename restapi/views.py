@@ -74,7 +74,7 @@ from restapi.Filters  import ApplyLogForChannelFilter
 from account.models import ApplyLogForChannel
 class ApplyLogForChannelList(BaseViewMixin, generics.ListCreateAPIView):
     queryset = ApplyLogForChannel.objects.all()
-    permission_classes = (IsSelfOrStaff,)
+    permission_classes = (IsOwnerOrStaff,)
     serializer_class = ApplyLogForChannelSerializer
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
     filter_class = ApplyLogForChannelFilter

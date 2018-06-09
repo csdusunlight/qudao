@@ -328,7 +328,7 @@ class MessageList(BaseViewMixin, generics.ListCreateAPIView):
     pagination_class = MyPageNumberPagination
     ordering_fields = ('time')
     search_fields = ('title','content')
-    ordering = ('time')
+    ordering = ('-time')
 
 
 class MessageDetail(BaseViewMixin,generics.RetrieveUpdateDestroyAPIView):

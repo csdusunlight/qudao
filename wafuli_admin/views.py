@@ -102,7 +102,7 @@ def admin_apply(request):
             reason = request.POST.get('reason', '')
             nowtime = time.strftime('%Y-%m-%d %H:%M:%S')
             Message.objects.create(user=currentuser, title="渠道申请审核反馈", is_read=False,
-                                   content=u"尊敬的用户：您申请成为渠道用申用户失败。被拒绝原因如下：" + reason)  # 写入审核原因，加个字段
+                                   content=u"尊敬的用户：您申请成为渠道用户失败。被拒绝原因如下：" + reason)  # 写入审核原因，加个字段
             current_applyforchannel.audit_time = nowtime
             current_applyforchannel.audit_state = '2'
             current_applyforchannel.audit_reason = reason

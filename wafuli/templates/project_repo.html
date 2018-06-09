@@ -157,7 +157,7 @@
 				this.innerText = '取消添加';
 				$(this).parent().find('.go_homepage').show()
 			})
-			//			$('.state20').text('已结束');
+			//$('.state20').text('已结束');
 
 			/**************添加已结束标识***************/
 			$(".over").each(function () {
@@ -222,7 +222,7 @@
 				success: function (ret) {
 					if(ret.code == 0){
 						var str_html;
-						console.log(ret.results)
+						console.log('ret',ret.results)
 						for(let i in ret.results){
 							str_html = `<li class="item" data-value="${ret.results[i].name}">${ret.results[i].name}</li>`;
 							$('.projectBox').append(str_html);
@@ -333,10 +333,6 @@
 			//输入框搜索llc
 			$('.searchBtn').click(() =>{
 				var searchValue = $('#searchTxt').val();
-				if (!searchValue) {
-					alert('搜索内容不能为空');
-					return;
-				}
 				var newurl2 = url + "&search=" + encodeURI(searchValue);
 				$("#pagedata1").ajaxPage({
 					url: newurl2,

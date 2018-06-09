@@ -246,7 +246,7 @@
             document.querySelector(".submit").addEventListener('tap',function(){
                 var amount = document.getElementById("amontIpt").value;
                 var csrfmiddlewaretoken = document.getElementsByName("csrfmiddlewaretoken")[0].value;
-                console.log(amount);
+                console.log('提现金额：',amount);
                 amount = parseInt(amount);
                 if(amount == 0){
                     mui.alert("提现金额不能为0！")
@@ -265,10 +265,11 @@
                     mui.alert("请绑定支付宝！");
                     return;
                 }
-                if(!card_number){
+                if(!card_number){  
                     mui.alert("请绑定银行卡！");
                     return;
                 }
+                
                 var confirm_str = "您提现的金额为人民币" + amount + "元，确认？"
                 var btnArray = ['否', '是'];
                 mui.confirm(confirm_str,'提现确认',btnArray,function (e) { 

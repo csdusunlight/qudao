@@ -37,6 +37,14 @@ class ApplyLogForChannelSerializer(serializers.ModelSerializer):
     qq_name =  serializers.CharField(source="user.mobile",read_only=True)
     level =  serializers.CharField(source="user.level",read_only=True)
     profile =  serializers.CharField(source="user.profile",read_only=True)
+    user_origin = serializers.CharField(source='get_user_origin_display')
+    user_exp_year = serializers.CharField(source='get_user_exp_year_display')
+    user_custom_volumn = serializers.CharField(source='get_user_custom_volumn_display')
+    user_funds_volumn = serializers.CharField(source='get_user_funds_volumn_display')
+    user_invest_orientation = serializers.CharField(source='get_user_invest_orientation_display')
+
+
+
 
     class Meta:
         model = ApplyLogForChannel

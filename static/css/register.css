@@ -1,6 +1,7 @@
 .wrapper {
     width: 100%;
     margin: 0 auto;
+    position: relative;
 }
 
 .item1 {
@@ -253,6 +254,7 @@
 .dataBox {
     width: 552px;
     height: 600px;
+    position: absolute;top: 85px;right: 15%;
     background: white;
     border-radius: 10px;
     box-shadow: 5px 5px 10px rgba(104,101,94,.5);

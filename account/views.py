@@ -329,7 +329,7 @@ def verifyqq(request):
         users = MyUser.objects.filter(qq_number=qqv)
         if not users.exists():
             code = '0'
-    result = {'code':code,}
+    result = {'code':code}
     return JsonResponse(result)
 def verifyinviter(request):
     invite_code = request.GET.get('invite_code', None)
@@ -338,7 +338,7 @@ def verifyinviter(request):
         users = MyUser.objects.filter(invite_code=invite_code)
         if users.exists():
             code = '0'
-    result = {'code':code,}
+    result = {'code':code,'msg':'该邀请码不存在，请联系客服索取'}
     return JsonResponse(result)
 @login_required
 def verify_domainName(request):

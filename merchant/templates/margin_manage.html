@@ -328,6 +328,7 @@
             });
             // 银行卡充值ajax
             $('.card_add').click(() =>{
+               
                 var value = $('.bank_rechargeIpt').val();
                 var regx =/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
                 if(!regx.test(value)){

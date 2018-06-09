@@ -80,21 +80,20 @@
   $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
   });
-  var data = '<table width="100%"><tr><th width="2%"></th><th width="10%">QQ</th><th width="10%">手机号</th><th width="10%">开户行</th><th width="10%">开户行姓名</th>'+
-  '<th width="10%">银行卡号</th><th width="10%">支付宝</th><th width="8%">申请提现金额</th><th>申请时间</th>'+
-  '<th width="10%">处理</th><th width="10%">自动审核失败原因</th>'+
-  '</tr>[results]<tr><td><input class="checkBox" type="checkbox" name="checkbox" data-id="{id}" value="{id}"><td>{qq_number}</td><td>{mobile}</td><td>{bank}</td>'+
-  '<td>{real_name}</td><td>{card_number}</td><td>{zhifubao}</td><td>{amount}</td><td>{submit_time}</td>'+
+  var data = '<table width="100%"><tr><th width="2%"></th><th>项目名称</th><th>投资姓名</th><th>投资手机号</th>'+
+  '<th width="10%">投资日期</th><th width="10%">审核时间</th><th width="8%">结算金额</th><th>返现金额</th>'+
+  '<th>支付宝账号</th><th>支付宝姓名</th><th>打款状态</th><th>处理</th>'+
+  '</tr>[results]<tr><td><input class="checkBox" type="checkbox" name="checkbox" data-id="{id}" value="{id}"><td>{project_title}</td><td>{invest_name}</td><td>{invest_mobile}</td>'+
+  '<td>{invest_date}</td><td>{audit_time}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{pay_state_des}</td>'+
   '<td id="item_{id}"><a class="fyin" onclick="pass({id})">接受'+
-  '</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td><td>{except_info}</td></tr>[/results]</table>';
-  var data2 = '<table width="100%"><tr><th>QQ</th><th>手机号</th><th>开户行</th><th>开户行姓名</th>'+
-  '<th>银行卡号</th><th>申请提现金额</th><th>申请时间</th>'+
-  '<th>处理人</th><th>处理时间</th><th>拒绝原因</th>'+
-  '</tr>[results]<tr><td>{qq_number}</td><td>{mobile}</td><td>{bank}</td>'+
-  '<td>{real_name}</td><td>{card_number}</td><td>{amount}</td><td>{submit_time}</td>'+
-  '<td>{admin_mobile}</td><td>{audit_time}</td>'+
-  '<td>{audit_reason}</td></tr>[/results]</table>';
-  var url = "/restapi/withdrawlogs/" + "?page={page}&pageSize={pageSize}";
+  '</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td></tr>[/results]</table>';
+  var data2 = '<table width="100%"><tr><th width="2%"></th><th>项目名称</th><th>投资姓名</th><th>投资手机号</th>'+
+  '<th width="10%">投资日期</th><th width="10%">审核时间</th><th width="8%">结算金额</th><th>返现金额</th>'+
+  '<th>支付宝账号</th><th>支付宝姓名</th><th>打款状态</th>'+
+  '</tr>[results]<tr><td><input class="checkBox" type="checkbox" name="checkbox" data-id="{id}" value="{id}"><td>{project_title}</td><td>{invest_name}</td><td>{invest_mobile}</td>'+
+  '<td>{invest_date}</td><td>{audit_time}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{pay_state_des}</td>'+
+  '</tr>[/results]</table>';
+  var url = "/restapi/investlogs/" + "?page={page}&pageSize={pageSize}";
   var selected_id = 0;
   function pass(id){
    $(".Deny-y").css("display","block");
@@ -108,7 +107,7 @@
    $("li.home26").toggleClass("on");
    $(".Tin-table-box tr:even").css("background-color","#fcfcfc");
    $("#pagedata").ajaxPage({
-     url:url +'&audit_state=1',
+     url:url +'&audit_state=0&pay_state=2',
      pageId:$("#page"),
      pageSize:10,
      run:true,
@@ -126,7 +125,7 @@
      return;
    }
    $.ajax({
-     url:"{%url 'admin_withdraw' %}",
+     url:"/Admin/admin_pay/",
      dataType:"json",
      async: false,
      type:"POST",
@@ -159,7 +158,7 @@
      return;
    }
    $.ajax({
-     url:"{%url 'admin_withdraw' %}",
+     url:"/Admin/admin_pay/",
      dataType:"json",
      async: false,
      type:"POST",
@@ -189,48 +188,25 @@
    $("#search").click(function(){
     var startTime = $("#startTime").val();
     var endTime = $("#endTime").val();
-    console.log(startTime,endTime);
     var newurl = url;
     if(startTime && endTime){
-     newurl += "&submit_date_0="+startTime;
-     newurl += "&submit_date_1="+endTime;
+     newurl += "&auditdate_0="+startTime;
+     newurl += "&auditdate_1="+endTime;
    }
-   var startTime2 = $("#startTime2").val();
-   var endTime2 = $("#endTime2").val();
-   if(startTime2 && endTime2){
-     newurl += "&audit_date_0="+startTime2;
-     newurl += "&audit_date_1="+endTime2;
-   }
-   var qq = $("#qq").val();
    var mobile = $("#mobile").val();
-   if(qq){
-     newurl += "&qq_number="+qq;
-   }
    if(mobile){
-     newurl += "&user_mobile="+mobile;
+     newurl += "&invest_mobile="+mobile;
    }
-   var card_number = $("#card_number").val();
-   var real_name = $("#real_name").val();
-   if(card_number){
-     newurl += "&card_number="+card_number;
+   var zhifubao = $("#zhifubao").val();
+   if(zhifubao){
+     newurl += "&zhifubao="+zhifubao;
    }
-   if(real_name){
-     newurl += "&real_name="+real_name;
-   }
-   var adminname = $("#adminname").val();
-   var usertype = $("#usertype").val();
    var state = $("#state").val();
-   if(adminname){
-     newurl += "&admin_mobile="+adminname;
-   }
-   if(usertype){
-     newurl += "&user_level="+usertype;
-   }
    if(state){
-     newurl += "&audit_state="+state;
+     newurl += "&pay_state="+state;
    }
    var newdata = data;
-   if(state!='1'){
+   if(state!='2'){
      newdata = data2;
    }
    $("#page").empty();
@@ -242,109 +218,109 @@
     content:newdata,
   });
  });
-   $("#export").click(function(){
-    var html = '<form action="'+"{% url 'export_withdraw_excel' %}"+'" method="get" target="_self" id="postData_form">';
-    var startTime = $("#startTime").val();
-    var endTime = $("#endTime").val();
-    if(startTime && endTime){
-     html += '<input name="submit_date_0" type="hidden" value="'+ startTime + '"/>';
-     html += '<input name="submit_date_1" type="hidden" value="'+ endTime + '"/>';
-   }
-   var startTime2 = $("#startTime2").val();
-   var endTime2 = $("#endTime2").val();
-   if(startTime2 && endTime2){
-     html += '<input name="audit_date_0" type="hidden" value="'+ startTime2 + '"/>';
-     html += '<input name="audit_date_1" type="hidden" value="'+ endTime2 + '"/>';
-   }
-   var qq = $("#qq").val();
-   var mobile = $("#mobile").val();
-   if(qq){
-     html += '<input name="qq_number" type="hidden" value="'+ qq + '"/>';
-   }
-   if(mobile){
-     html += '<input name="user_mobile" type="hidden" value="'+ mobile + '"/>';
-   }
-   var card_number = $("#card_number").val();
-   var real_name = $("#real_name").val();
-   if(card_number){
-     html += '<input name="card_number" type="hidden" value="'+ card_number + '"/>';
-   }
-   if(real_name){
-     html += '<input name="real_name" type="hidden" value="'+ real_name + '"/>';
-   }
-   var adminname = $("#adminname").val();
-   var usertype = $("#usertype").val();
-   var state = $("#state").val();
-   if(adminname){
-     html += '<input name="admin_mobile" type="hidden" value="'+ adminname + '"/>';
-   }
-   if(usertype){
-     html += '<input name="user_level" type="hidden" value="'+ usertype + '"/>';
-   }
-   if(state){
-     html += '<input name="audit_state" type="hidden" value="'+ state + '"/>';
-   }
-   html += '</form>';
-   var iframe = document.getElementById('myIFrame');
-   iframe.contentWindow.document.open();
-   iframe.contentWindow.document.write(html);
-   iframe.contentWindow.document.close();
-   document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
- });
-   $('#import').click(function() {
-    var fileElementId  = 'fileupload1';
-    if(!document.getElementById(fileElementId).value){
-     alert("请先选择文件");
-     return;
-   }
-   $.ajaxFileUpload({
-    url:"{% url 'import_withdraw_excel'%}",
-    secureuri:false,
-            fileElementId:fileElementId,//file标签的id
-            dataType: 'json',//返回数据的类型
-            data:{},//一同上传的数据
-            success: function (data, status) {
-            	if (data.code==0){
-            		alert("导入成功！ 数量：" + data.num);
-            	}
-            	else {
-            		alert(data.msg + " 成功数量："+data.num);
-            	}
-            },
-            error: function (data, status, e) {
-              alert(e);
-            }
-          });
-    //	hint.innerHTML = '无';
-  });
+// $("#export").click(function(){
+//  var html = '<form action="'+"{% url 'export_withdraw_excel' %}"+'" method="get" target="_self" id="postData_form">';
+//  var startTime = $("#startTime").val();
+//  var endTime = $("#endTime").val();
+//  if(startTime && endTime){
+//   html += '<input name="submit_date_0" type="hidden" value="'+ startTime + '"/>';
+//   html += '<input name="submit_date_1" type="hidden" value="'+ endTime + '"/>';
+// }
+// var startTime2 = $("#startTime2").val();
+// var endTime2 = $("#endTime2").val();
+// if(startTime2 && endTime2){
+//   html += '<input name="audit_date_0" type="hidden" value="'+ startTime2 + '"/>';
+//   html += '<input name="audit_date_1" type="hidden" value="'+ endTime2 + '"/>';
+// }
+// var qq = $("#qq").val();
+// var mobile = $("#mobile").val();
+// if(qq){
+//   html += '<input name="qq_number" type="hidden" value="'+ qq + '"/>';
+// }
+// if(mobile){
+//   html += '<input name="user_mobile" type="hidden" value="'+ mobile + '"/>';
+// }
+// var card_number = $("#card_number").val();
+// var real_name = $("#real_name").val();
+// if(card_number){
+//   html += '<input name="card_number" type="hidden" value="'+ card_number + '"/>';
+// }
+// if(real_name){
+//   html += '<input name="real_name" type="hidden" value="'+ real_name + '"/>';
+// }
+// var adminname = $("#adminname").val();
+// var usertype = $("#usertype").val();
+// var state = $("#state").val();
+// if(adminname){
+//   html += '<input name="admin_mobile" type="hidden" value="'+ adminname + '"/>';
+// }
+// if(usertype){
+//   html += '<input name="user_level" type="hidden" value="'+ usertype + '"/>';
+// }
+// if(state){
+//   html += '<input name="audit_state" type="hidden" value="'+ state + '"/>';
+// }
+// html += '</form>';
+// var iframe = document.getElementById('myIFrame');
+// iframe.contentWindow.document.open();
+// iframe.contentWindow.document.write(html);
+// iframe.contentWindow.document.close();
+// document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+// });
+// $('#import').click(function() {
+//  var fileElementId  = 'fileupload1';
+//  if(!document.getElementById(fileElementId).value){
+//   alert("请先选择文件");
+//   return;
+// }
+// $.ajaxFileUpload({
+//  url:"{% url 'import_withdraw_excel'%}",
+//  secureuri:false,
+//          fileElementId:fileElementId,//file标签的id
+//          dataType: 'json',//返回数据的类型
+//          data:{},//一同上传的数据
+//          success: function (data, status) {
+//          	if (data.code==0){
+//          		alert("导入成功！ 数量：" + data.num);
+//          	}
+//          	else {
+//          		alert(data.msg + " 成功数量："+data.num);
+//          	}
+//          },
+//          error: function (data, status, e) {
+//            alert(e);
+//          }
+//        });
+//  //	hint.innerHTML = '无';
+//});
 
-   var choose_file = document.getElementById("input_clone");
-   var hint = document.getElementById("hint");
-   choose_file.onclick = function() {
-     document.getElementById("fileupload1").click();
-   }
+// var choose_file = document.getElementById("input_clone");
+// var hint = document.getElementById("hint");
+// choose_file.onclick = function() {
+//   document.getElementById("fileupload1").click();
+// }
     
-    $('#withdraw').click(function(){
-       var is_sure = confirm('确定是否一键提现？');
-       if (is_sure == true) {
-           $.ajax({
-                url: "{% url 'batch_withdraw' %}",
-                dataType: "json",
-                async: false,
-                type:"get",
-                success: function(ret) {
-                    if(ret.code == 0) {
-                        alert('一键提现成功');
-                    } else {
-                        alert('截获bug一枚，请火速联系前端哥哥')
-                    }
-                },
-                error: function() {
-                    alert("截获bug一枚，请火速联系前端哥哥");
-                }
-            });
-       }
-   });
+//  $('#withdraw').click(function(){
+//     var is_sure = confirm('确定是否一键提现？');
+//     if (is_sure == true) {
+//         $.ajax({
+//              url: "{% url 'batch_withdraw' %}",
+//              dataType: "json",
+//              async: false,
+//              type:"get",
+//              success: function(ret) {
+//                  if(ret.code == 0) {
+//                      alert('一键提现成功');
+//                  } else {
+//                      alert('截获bug一枚，请火速联系前端哥哥')
+//                  }
+//              },
+//              error: function() {
+//                  alert("截获bug一枚，请火速联系前端哥哥");
+//              }
+//          });
+//     }
+// });
 
 
     // class BreakSignal { }
@@ -384,37 +360,60 @@
         }
       }
       if(checkVal == ''){
+        console.log("没有勾选");
         $(".modal_box").show();
-        console.log("我没有勾选中了");
       }else if(checkVal != ''){  
-        console.log("我勾选中了");
+        console.log("勾选了");
         //单独勾选用户提现ajax
-        Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=' + checkVal)).
-        then(function (val) { 
-          var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
-          if (is_sure == true) {
-              return $.ajax({
-                url:'/Admin/withdraw_autoaudit/',
-                data:{
-                  sub_from:'',
-                  sub_to:'',
-                  id_list:checkVal.join(",")
-                },
-                type:'post'
-              });
-          }
-          else{
-            throw  new BreakSignal();
-          }
-        })
-        .catch(function(error){
-            if(error instanceof BreakSignal){
-              
-            }
-            else{
-              alert(error.statusText);
+        $.ajax({
+            type: "get",
+            url: '/Admin/admin_autopay/',
+            data:{
+                id_list:checkVal.join(",")
+            },
+            async: true,
+            success: function(res) {
+              var is_sure = confirm('共'+ res.count +'笔，'+ res.sum +'元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果');
+              if (is_sure == true) {
+                  $.ajax({
+                    url:'/Admin/admin_autopay/',
+                    type:'post',
+                    data:{
+                      id_list:checkVal.join(",")
+                    },
+                    success: function(res) {
+                      console.log(res)
+                    }
+                  });
+              }
             }
         });
+//      Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=' + checkVal)).
+//      then(function (val) { 
+//        var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
+//        if (is_sure == true) {
+//            return $.ajax({
+//              url:'/Admin/withdraw_autoaudit/',
+//              data:{
+//                sub_from:'',
+//                sub_to:'',
+//                id_list:checkVal.join(",")
+//              },
+//              type:'post'
+//            });
+//        }
+//        else{
+//          throw  new BreakSignal();
+//        }
+//      })
+//      .catch(function(error){
+//          if(error instanceof BreakSignal){
+//            
+//          }
+//          else{
+//            alert(error.statusText);
+//          }
+//      });
       }
       console.log('checkbox的值',checkVal);
     });
@@ -439,72 +438,94 @@
       var starTime = $(".star_time").val();
       var endTime = $(".end_time").val();
       console.log("时间：",starTime,endTime);
-      
+      var postData = {};
       if(i % 2 == 0){
-        // console.log("时间段提现")
-        if(!starTime){
-          alert("开始时间必选！")
+        if(!starTime || !endTime){
+          alert("开始和结束时间必选！")
           return;
         }
-        if(!endTime){
-          alert("结束时间必选！")
-          return;
-        }
-        Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=' +starTime+ '&sub_to=' +endTime+ '&id_list=')).
-        then(function (val) { 
-          var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
-          if (is_sure == true) {
-              return $.ajax({
-                url:'/Admin/withdraw_autoaudit/',
-                type:'post',
-                data:{
-                  sub_from:starTime,
-                  sub_to:endTime,
-                  id_list:''
-                }
-              });
-              $(".modal_box").hide();
-           }
-           else{
-        	   throw  new BreakSignal();
-           }
-        })
-        .catch(function(error){
-            if(error instanceof BreakSignal){
-              
-            }
-            else{
-              alert(error.statusText);
-            }
-        });
+        postData = {
+                    sub_from: starTime,
+                    sub_to: endTime,
+                    id_list:checkVal.join(",")
+                };
+//      Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=' +starTime+ '&sub_to=' +endTime+ '&id_list=')).
+//      then(function (val) { 
+//        var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
+//        if (is_sure == true) {
+//            return $.ajax({
+//              url:'/Admin/withdraw_autoaudit/',
+//              type:'post',
+//              data:{
+//                sub_from:starTime,
+//                sub_to:endTime,
+//                id_list:''
+//              }
+//            });
+//            $(".modal_box").hide();
+//         }
+//         else{
+//      	   throw  new BreakSignal();
+//         }
+//      })
+//      .catch(function(error){
+//          if(error instanceof BreakSignal){
+//            
+//          }
+//          else{
+//            alert(error.statusText);
+//          }
+//      });
       }else{
+        postData = {
+                      id_list:checkVal.join(",")
+                  };
         // console.log("全部提现")
-        Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=')).
-        then(function (val) { 
-          var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
-          if (is_sure == true) {
-              return $.ajax({
-                url:'/Admin/withdraw_autoaudit/',
-                type:'post',
-                sub_from:'',
-                sub_to:'',
-                id_list:''
-              });
-              $(".modal_box").hide();
-           }
-           else{
-        	   throw  new BreakSignal();
-           }
-        })
-        .catch(function(error){
-            if(error instanceof BreakSignal){
-              
-            }
-            else{
-              alert(error.statusText);
-            }
-        });
+//      Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=')).
+//      then(function (val) { 
+//        var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
+//        if (is_sure == true) {
+//            return $.ajax({
+//              url:'/Admin/withdraw_autoaudit/',
+//              type:'post',
+//              sub_from:'',
+//              sub_to:'',
+//              id_list:''
+//            });
+//            $(".modal_box").hide();
+//         }
+//         else{
+//      	   throw  new BreakSignal();
+//         }
+//      })
+//      .catch(function(error){
+//          if(error instanceof BreakSignal){
+//            
+//          }
+//          else{
+//            alert(error.statusText);
+//          }
+//      });
       }
+      $.ajax({
+          type: "get",
+          url: '/Admin/admin_autopay/',
+          data:postData,
+          async: true,
+          success: function(res) {
+            var is_sure = confirm('共'+ res.count +'笔，'+ res.sum +'元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果');
+            if (is_sure == true) {
+                $.ajax({
+                  url:'/Admin/admin_autopay/',
+                  type:'post',
+                  data:postData,
+                  success: function(res) {
+                    console.log(res)
+                  }
+                });
+            }
+          }
+      });
 
 
       // Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=' +starTime+ '&sub_to=' +endTime+ '&id_list=' + checkVal)).
@@ -541,75 +562,45 @@
      <table width="100%">
        <tr>
          <td>
-           <i>申请开始时间：</i>
+           <i>审核开始时间：</i>
            <input id="startTime" type="datetime-local" />
          </td>
          <td>
-           <i>申请结束时间：</i>
+           <i>审核结束时间：</i>
            <input id="endTime" type="datetime-local" />
          </td>
          <td>
-           <i>操作开始时间：</i>
-           <input id="startTime2" type="datetime-local" />
+           <i style="letter-spacing:2px;">投资手机号：</i>
+           <input id="mobile" type="text" />
          </td>
          <td>
-           <i>操作结束时间：</i>
-           <input id="endTime2" type="datetime-local" />
+           <i style="letter-spacing:2px;">支付宝账号：</i>
+           <input id="zhifubao" type="text" />
          </td>
        </tr>
        <tr>
          <td>
-           <i>QQ：</i>
-           <input id="qq" type="text" />
+           <i style="letter-spacing:4.8px;">打款状态：</i>
+           <select name="selectAge" id="state">
+             <option value="2">打款中</option>
+             <option value="3">已打款</option>
+             <option value="4">打款失败</option>
+           </select>
          </td>
-         <td>
-           <i style="letter-spacing:2px;">用户手机号：</i>
-           <input id="mobile" type="text" />
-         </td>
-         <td>
-          <i style="letter-spacing:4.8px;">渠道等级</i>
-          <select name="selectAge" id="usertype">
-           <option value="">--</option>
-           <option value="01">01</option>
-           <option value="02">02</option>
-           <option value="03">03</option>
-         </select>
-       </td>
-       <td>
-         <i style="letter-spacing:2px;">开户行姓名：</i>
-         <input id="real_name" type="text" />
-       </td>
-     </tr>
-     <tr>
-       <td>
-         <i style="letter-spacing:2px;">银行卡号：</i>
-         <input id="card_number" type="text" onkeyup="this.value =this.value.replace(/\s/g,'').replace(/[^\d]/g,'').replace(/(\d{4})(?=\d)/g,'$1 ');" />
-       </td>
-       <td>
-         <i>处理人手机号：</i>
-         <input id="adminname" type="text" />
-       </td>
-       <td>
-         <i style="letter-spacing:4.8px;">处理状态：</i>
-         <select name="selectAge" id="state">
-           <option value="1">未审核</option>
-           <option value="0">审核通过</option>
-           <option value="2">审核拒绝</option>
-         </select>
-       </td>
-     </tr>
+         
+       </tr>
    </table>
    <div class="Submit-in">
     <input id="search" type="button" value="搜索" />
-    <input id="export" type="button" value="导出" />
+    <!--<input id="export" type="button" value="导出" />-->
+   <input style="float: right;" id="audit_zhifubao" type="button" value="一键打款" />
   </div>
   <div class="leading-in">
-   <input id="fileupload1" name="file"  type="file" onchange='hint.innerHTML = this.files[0].name;'/>
+   <!--<input id="fileupload1" name="file"  type="file" onchange='hint.innerHTML = this.files[0].name;'/>
    <a id="input_clone" class="input-clone">选择文件</a>
    <p class="hint-box">已选择表格：<b id="hint" class="hint">无</b></p>
-   <input id="import" type="button" value="导入" />
-   <input style="float: right;" id="audit_zhifubao" type="button" value="一键审核（支付宝）" />
-   <input style="float: right;" id="withdraw" type="button" value="一键提现" />
+   <input id="import" type="button" value="导入" />-->
+   <!--<input style="float: right;" id="withdraw" type="button" value="一键提现" />-->
  </div>
 </form>
 </div>
@@ -659,7 +650,7 @@
 <div class="modal_box">
   <div class="modal_desc">
     <div class="close">×</div>
-    <span class="title">一键审核</span>
+    <span class="title">一键打款</span>
     <div class="operate_box">
       <!-- <label>选择用户:</label>
       <select id="select">

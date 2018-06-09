@@ -7,7 +7,7 @@ Created on 2017年8月23日
 import django_filters
 from wafuli.models import InvestLog, Project, SubscribeShip, TransList,\
     WithdrawLog
-from account.models import MyUser, ApplyLog
+from account.models import MyUser, ApplyLog,Message,ApplyLogForChannel
 # class ProjectInvestDateFilter(django_filters.rest_framework.FilterSet):
 #     investtime = django_filters.DateFromToRangeFilter(name="invest_time")
 #     audittime = django_filters.DateTimeFromToRangeFilter(name="audit_time")
@@ -48,6 +48,27 @@ class UserFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = MyUser
         fields = ['mobile', 'username', 'qq_name', 'qq_number', 'join_date', 'level', 'is_active', 'domain_name']
+
+
+class ApplyLogForChannelFilter(django_filters.rest_framework.FilterSet):
+    audit_time = django_filters.DateFromToRangeFilter(name="audit_time")
+    submit_time = django_filters.DateFromToRangeFilter(name="submit_time")
+    is_channel = django_filters.CharFilter(name="user.is_channel") #处理状态
+    username = django_filters.CharFilter(name="user.username")
+    audit_username = django_filters.CharFilter(name="admin_user.username")
+    audit_mobile = django_filters.CharFilter(name="admin_user.mobile")#审核者手机
+    mobile = django_filters.CharFilter(name="user.mobile")#
+    qq_number = django_filters.CharFilter(name="user.qq_number")#
+    qq_name = django_filters.CharFilter(name="user.qq_name")
+    profile = django_filters.CharFilter(name="user.profile")
+    level = django_filters.CharFilter(name="user.level")
+    user_orgin = django_filters.CharFilter(name='user_origin')
+    audit_state = django_filters.CharFilter(name='audit_state')
+    class Meta:
+        model = ApplyLogForChannel
+        fields = ['id', 'username', 'qq_number', 'qq_name', 'mobile', 'audit_time', 'submit_time', 'level',
+
+         'audit_reason','audit_username','audit_mobile','audit_state']
         
 class ApplyLogFilter(django_filters.rest_framework.FilterSet):
     submit_date = django_filters.DateFromToRangeFilter(name="submit_time")
@@ -87,3 +108,12 @@ class ProjectFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = Project
         fields = ['state','type','is_multisub_allowed','is_official','category', 'user_mobile', 'qq_name']
+
+class MessageFilter(django_filters.rest_framework.FilterSet):
+    title =django_filters.CharFilter(name="title")
+    time = django_filters.DateTimeFilter(name="time")
+    is_read = django_filters.BooleanFilter(name="is_read")
+    content = django_filters.CharFilter(name="content")
+    class Meta:
+        model = Message
+        fields = ['title','time','is_read','content']

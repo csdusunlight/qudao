@@ -34,5 +34,5 @@ admin.site.register(MobileCode)
 admin.site.register(AdminPermission)
 admin.site.register(DBlock)
 admin.site.register(BankCard)
-admin.site.register(ApplyLog)
+admin.site.register(ApplyLogForChannel)
 

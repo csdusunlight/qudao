@@ -137,25 +137,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     zhifubao = models.CharField(u"支付宝账号（邮箱或手机号）", blank=True, max_length=50)
     zhifubao_real_name = models.CharField(u"支付宝实名", blank=True, max_length=20)
 
-    is_channel = models.CharField(u"是否渠道", choices=IS_CHANNEL, default=False, max_length=2)  #
-    channel_refuse_reason = models.CharField(u"渠道拒绝原因", default=False, null=True, blank=True, max_length=300)  #
-    user_origin = models.CharField(u"用户来源", choices=USER_ORIGIN, default='0', max_length=2)
-    user_exp_year = models.CharField(u"用户经验年限", choices=USER_EXP_YEAR, default='0', max_length=2)
-    user_custom_volumn = models.CharField(u"用户客户体量", choices=USER_CUSTOME_VOLUMN, default='0', max_length=2)
-    user_funds_volumn = models.CharField(u"用户资金体量", choices=USER_FUNDS_VOLUMN, default='0', max_length=2)
-    user_invest_orientation = models.CharField(u"用户投资去向", choices=USER_INVEST_ORIENTATION, default='0', max_length=2)
-    
-    is_channel = models.CharField(u"是否渠道",choices=IS_CHANNEL, default=False,max_length=2) #
-    channel_refuse_reason = models.CharField(u"渠道拒绝原因",default=False,null=True,blank=True,max_length=300) #
-    user_origin = models.CharField(u"用户来源", choices=USER_ORIGIN, default='0', max_length=2)
-    user_exp_year = models.CharField(u"用户经验年限", choices=USER_EXP_YEAR, default='0', max_length=2)
-    user_custom_volumn = models.CharField(u"用户客户体量", choices=USER_CUSTOME_VOLUMN, default='0', max_length=2)
-    user_funds_volumn = models.CharField(u"用户资金体量", choices=USER_FUNDS_VOLUMN, default='0', max_length=2)
-    user_invest_orientation = models.CharField(u"用户投资去向", choices=USER_INVEST_ORIENTATION,default='0', max_length=2)
-#     default_transfer_remark = models.CharField(u"默认打款转账备注", default="P2P")
-    
+    is_channel = models.CharField(u"是否渠道", choices=IS_CHANNEL, default='1', max_length=2)  #
     objects = MyUserManager()
-
     USERNAME_FIELD = 'mobile'
     REQUIRED_FIELDS = ['username','qq_number']
     def get_fanshu_domain(self):
@@ -288,6 +271,24 @@ class ApplyLog(models.Model):
         ordering = ["submit_time",]
     def __unicode__(self):
         return self.mobile
+
+class ApplyLogForChannel(models.Model):
+    submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
+    audit_time = models.DateTimeField(u'审核时间', null=True, blank=True)
+    admin_user = models.ForeignKey(MyUser, related_name="applylogforchannel", null=True)
+    user = models.ForeignKey(MyUser, related_name="applylog_custom")
+    audit_reason = models.CharField(u"审核原因", max_length=30)
+    audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
+    user_origin = models.CharField(u"用户来源", choices=USER_ORIGIN, max_length=2)
+    user_exp_year = models.CharField(u"用户经验年限", choices=USER_EXP_YEAR, max_length=2)
+    user_custom_volumn = models.CharField(u"用户客户体量", choices=USER_CUSTOME_VOLUMN, max_length=2)
+    user_funds_volumn = models.CharField(u"用户资金体量", choices=USER_FUNDS_VOLUMN, max_length=2)
+    user_invest_orientation = models.CharField(u"用户投资去向", choices=USER_INVEST_ORIENTATION, max_length=2)
+
+    class Meta:
+        ordering = ["submit_time",]
+    def __unicode__(self):
+        return self.user.mobile
 
 class Message(models.Model):
     user = models.ForeignKey(MyUser, related_name="user_msgs")

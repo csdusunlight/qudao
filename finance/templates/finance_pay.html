@@ -14,9 +14,12 @@
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <style type="text/css">
       #app {
+        min-width: 1210px;
         margin: 20px;
-        padding: 20px;
+        padding: 20px 40px;
         background-color: #fff;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        border-radius: 8px;
       }
       .search__item {
         width: 150px;
@@ -24,6 +27,34 @@
       /*样式覆盖*/
      .el-popover {
        min-width: 60px;
+     }
+     .pay-state {
+       font-weight: bold;
+       font-family: "宋体";
+     }
+     .pay-state-1 {
+       color: #59b9ff;
+     }
+     .pay-state-2 {
+       color: #ffab3f;
+     }
+     .pay-state-3 {
+       color: #88d688;
+     }
+     .pay-state-4 {
+       color: #ff5656;
+     }
+     .avatar-uploader {
+       display: inline-block;
+       margin-left: 6px;
+       vertical-align: top;
+     }
+     .el-upload__tip {
+       display: inline-block;
+       vertical-align: bottom;
+     }
+     .table-box {
+       margin-top: 20px;
      }
     </style>
   </head>
@@ -116,7 +147,7 @@
         </el-col>
         <el-col :span="4">
           <span>时间区域：</span>
-          <el-select class="search__item" v-model="dateValue" placeholder="请选择时间跨度">
+          <el-select class="search__item" v-model="dateValue" placeholder="请选择时间区域">
             <el-option
               v-for="item in dateOptions"
               :key="item.value"
@@ -143,30 +174,33 @@
             clearable>
           </el-input>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" style="display: flex;justify-content: flex-end;">
           <el-button type="primary" @click="searchData">搜索</el-button>
         </el-col>
       </el-row>
-      <el-row>
+      <el-row style="margin-top: 20px">
         <el-col :span="12">
+          <el-button type="primary" @click="exportExel">导出Exel</el-button>
           <el-upload
             class="avatar-uploader"
             action="/finance/import_investlog/"
             name="file"
+            accept=".xls"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
+            :on-error="handleAvatarError"
             :before-upload="beforeAvatarUpload">
-            <el-button size="small" type="primary">上传Exel</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传xls文件</div>
+            <el-button type="primary">导入Exel</el-button>
+            <div slot="tip" class="el-upload__tip">&nbsp;只能上传xls文件</div>
           </el-upload>
-          <el-button size="small" type="primary" @click="exportExel">导出Exel</el-button>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" style="display: flex;justify-content: flex-end;">
           <el-button type="success" @click="badgeSelect(1)">标记未打款</el-button>
           <el-button type="success" @click="badgeSelect(3)">标记已打款</el-button>
           <el-button type="warning" @click="transferSelect">一键转账</el-button>
         </el-col>
       </el-row>
+      <p style="margin-right: 153px;text-align: right;">*注：打款中的数据标记无效。</p>
      </div>
     <div class="line"></div>
     <div class="table-box">
@@ -186,8 +220,12 @@
           <template slot-scope="scope">${ scope.row.project_title }</template>
         </el-table-column>
         <el-table-column
-          label="结算金额">
-          <template slot-scope="scope">${ scope.row.settle_amount }</template>
+          label="投资姓名">
+          <template slot-scope="scope">${ scope.row.invest_name }</template>
+        </el-table-column>
+        <el-table-column
+          label="投资手机号">
+          <template slot-scope="scope">${ scope.row.invest_mobile }</template>
         </el-table-column>
         <el-table-column
           label="投资日期">
@@ -198,6 +236,10 @@
           <template slot-scope="scope">${ (scope.row.audit_time).slice(0,10) }</template>
         </el-table-column>
         <el-table-column
+          label="结算金额">
+          <template slot-scope="scope">${ scope.row.settle_amount }</template>
+        </el-table-column>
+        <el-table-column
           label="返现金额">
           <template slot-scope="scope">${ scope.row.return_amount }</template>
         </el-table-column>
@@ -205,23 +247,25 @@
           label="支付宝账号">
           <template slot-scope="scope">${ scope.row.zhifubao }</template>
         </el-table-column>
-                <el-table-column
+        <el-table-column
           label="支付宝姓名">
           <template slot-scope="scope">${ scope.row.zhifubao_name }</template>
         </el-table-column>
+        <!--<el-table-column
+          label="打款审核备注">
+          <template slot-scope="scope">${ scope.row.pay_reason }</template>
+        </el-table-column>-->
         <el-table-column
-          label="投资手机号">
-          <template slot-scope="scope">${ scope.row.invest_mobile }</template>
-        </el-table-column>
-        <el-table-column
-          label="投资姓名">
-          <template slot-scope="scope">${ scope.row.invest_name }</template>
-        </el-table-column>
-        <el-table-column
-          label="返现状态">
+          label="打款状态">
           <template slot-scope="scope">
+            <el-popover trigger="hover" placement="left">
+              <p>备注：${ scope.row.pay_reason ? scope.row.pay_reason : '无' }</p>
+              <div slot="reference" class="name-wrapper">
+                <!--<el-button>操作</el-button>-->
+                <span :class="'pay-state pay-state-' + scope.row.pay_state">${ scope.row.pay_state_des }</span>
+              </div>
+            </el-popover>
             <!--<span :class="{'all' : scope.row.pay_state==1}">${ scope.row.pay_state_des }</span>-->
-            <span :class="'pay-state-' + scope.row.pay_state">${ scope.row.pay_state_des }</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -254,7 +298,7 @@
                 <el-button type="primary" @click="amountComfirm">确 定</el-button>
               </div>
             </el-dialog>-->
-            <el-dialog title="填写标记信息" width="600px" :visible.sync="dialogEditVisible">
+            <el-dialog title="编辑打款信息" width="600px" :visible.sync="dialogEditVisible">
               <el-form :model="dialogData">
                 <el-form-item label="转账金额" label-width="90px">
                   <el-input type="number" v-model="dialogData.return_amount" auto-complete="off"></el-input>
@@ -277,7 +321,7 @@
       <div style="margin-top: 20px">
       </div>
     </div>  <!--table-->
-    <div class="pagination">
+    <div class="pagination" style="display: flex;justify-content: flex-end;">
       <el-pagination
         background
         @current-change="handleCurrentChange"
@@ -287,7 +331,6 @@
         :total="tableData.recordCount">
       </el-pagination>
     </div>    <!--pagination-->
-      <p>key值为：${key}</p>
     </div>
     <iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
     <script type="text/javascript">
@@ -315,7 +358,6 @@
             multipleSelection: [],
             checkIdList: '',
 //          amountSelect:'',
-            key: '123',
             dialogAmountVisible: false,
             dialogEditVisible: false,
             dialogData: {
@@ -381,19 +423,20 @@
         },
         methods: {
           searchData: function() {
-            $.ajax({
-              type: "get",
-              url: '/restapi/investlogs/?page=1&pageSize=' + app.pageSize +'&audit_state=0' + app.searchKeys,
-              async: true,
-              success: function(res) {
-                console.log(res);
-                if(res.code == 0) {
-                  app.tableData = res;
-                } else {
-                  console.log(res)
-                }
-              }
-            });
+            app.getDataList();
+//          $.ajax({
+//            type: "get",
+//            url: '/restapi/investlogs/?page=1&pageSize=' + app.pageSize +'&audit_state=0' + app.searchKeys,
+//            async: true,
+//            success: function(res) {
+//              console.log(res);
+//              if(res.code == 0) {
+//                app.tableData = res;
+//              } else {
+//                console.log(res)
+//              }
+//            }
+//          });
           },
           handleSelectionChange: function(val) {
             app.checkIdList = '';
@@ -418,19 +461,20 @@
             console.log(app.searchKeys);
             console.log(app.stateValue);
             app.currentPage = val;
-            $.ajax({
-              type: "get",
-              url: '/restapi/investlogs/?page='+ app.currentPage + '&pageSize=' + app.pageSize +'&audit_state=0' + app.searchKeys,
-              async: true,
-              success: function(res) {
-                console.log(res);
-                if(res.code == 0) {
-                  app.tableData = res;
-                } else {
-                  console.log(res)
-                }
-              }
-            });
+            app.getDataList();
+//          $.ajax({
+//            type: "get",
+//            url: '/restapi/investlogs/?page='+ app.currentPage + '&pageSize=' + app.pageSize +'&audit_state=0' + app.searchKeys,
+//            async: true,
+//            success: function(res) {
+//              console.log(res);
+//              if(res.code == 0) {
+//                app.tableData = res;
+//              } else {
+//                console.log(res)
+//              }
+//            }
+//          });
           },
           edit: function(row) {
             console.log(row);
@@ -453,6 +497,7 @@
               async: true,
               success: function(res) {
                 app.dialogEditVisible = false;
+                app.getDataList();
               }
             });
           },
@@ -482,7 +527,7 @@
                     success: function(res) {
                       console.log(res);
                       if(res.code == 0) {
-                        app.tableData = res;
+                        app.getDataList();
                       } else {
 //                      that.$message.error(res.detail);
                         that.$notify.error({
@@ -530,9 +575,13 @@
                             ids: app.checkIdList
                           },
                           success: function(res) {
-                            console.log(res);
                             if(res.code == 0) {
-      //                            app.tableData = res;
+                              that.$notify({
+                                title: '操作成功',
+                                message: '成功数量：' + res.suc_num + '，失败数量：' + res.fail_num,
+                                type: 'success'
+                              });
+                              app.getDataList();
                             } else {
                               that.$notify.error({
                                 title: '错误',
@@ -554,27 +603,48 @@
             });
             
           },
-          amountComfirm: function() {
-            $.ajax({
-              type: "get",
-              url: '/restapi/investlogs/?page='+ val + '&pageSize=' + app.pageSize +'&audit_state=0' + app.searchKeys,
-              async: true,
-              success: function(res) {
-                console.log(res);
-                if(res.code == 0) {
-                  app.tableData = res;
-                } else {
-                  console.log(res)
-                }
-              }
-            });
-          },
+//        amountComfirm: function() {
+//          $.ajax({
+//            type: "get",
+//            url: '/restapi/investlogs/?page='+ val + '&pageSize=' + app.pageSize +'&audit_state=0' + app.searchKeys,
+//            async: true,
+//            success: function(res) {
+//              console.log(res);
+//              if(res.code == 0) {
+//                app.tableData = res;
+//              } else {
+//                console.log(res)
+//              }
+//            }
+//          });
+//        },
           beforeAvatarUpload: function (file) {
             console.log(file)
             this.$message('正在上传...')
           },
-          handleAvatarSuccess: function(response, file) {
-            console.log(response)
+          handleAvatarSuccess: function(res, file) {
+            var that = this;
+            console.log(res);
+            if (res.code == 0) {
+            	that.$notify({
+                title: '上传成功',
+                message: '成功数量：' + res.suc_num + '，失败数量：' + res.fail_num,
+                type: 'success'
+              });
+              app.getDataList();
+            } else{
+            	that.$notify.error({
+                title: '错误',
+                message: res.msg
+              });
+            }
+          },
+          handleAvatarError: function(res, file) {
+            var that = this;
+            that.$notify.error({
+              title: '错误',
+              message: '上传失败'
+            });
           },
           exportExel: function() {
               var html = '<form action="'+"/finance/export_investlog/"+'" method="get" target="_self" id="postData_form">';
@@ -614,6 +684,27 @@
              iframe.contentWindow.document.close();
              document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
           },
+          getDataList: function() {
+            var that = this;
+            $.ajax({
+                type: "get",
+                url: '/restapi/investlogs/?page='+ app.currentPage + '&pageSize=' + app.pageSize +'&audit_state=0' + app.searchKeys ,
+                async: true,
+                success: function(res) {
+                  console.log(res);
+                  if(res.code == 0) {
+                    console.log(app.tableData);
+                    app.tableData = res;
+                    console.log(app.tableData)
+                  } else {
+                    that.$notify.error({
+                      title: '错误',
+                      message: res.detail
+                    });
+                  }
+                }
+            });
+          },
           getDate: function (AddDayCount) {     
              var dd = new Date();    
              dd.setDate(dd.getDate()+AddDayCount);//获取AddDayCount天后的日期    
@@ -628,11 +719,11 @@
             var auditdate_0;
             var auditdate_1;
             if (app.dateValue == 7) {
-            	auditdate_0 = app.getDate(0);
-              auditdate_1 = app.getDate(7);
+            	auditdate_0 = app.getDate(-7);
+              auditdate_1 = app.getDate(0);
             } else if (app.dateValue == 30){
-            	auditdate_0 = app.getDate(0);
-              auditdate_1 = app.getDate(30);
+            	auditdate_0 = app.getDate(-30);
+              auditdate_1 = app.getDate(0);
             } else {
               auditdate_0 = '';
               auditdate_1 = '';

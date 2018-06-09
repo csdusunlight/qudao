@@ -7,7 +7,7 @@ Created on 2017年8月10日
 from rest_framework import serializers
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
     Announcement, WithdrawLog, Mark, BookLog
-from account.models import MyUser, ApplyLog, Message
+from account.models import MyUser, ApplyLog, Message,ApplyLogForChannel
 from wafuli_admin.models import DayStatis
 from wafuli.models import Company
 from statistic.models import UserDetailStatis, UserAverageStatis,\
@@ -26,7 +26,42 @@ class UserSerializer(serializers.ModelSerializer):
                   'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number', 'is_autowith',
                   'submit_bg', 'domain_name', 'cs_qq', 'has_permission100','margin_account', 'fanshu_domain', 'zhifubao')
         read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level', 'margin_account')
-        
+
+class ApplyLogForChannelSerializer(serializers.ModelSerializer):
+    username =serializers.CharField(source="user.username",read_only=True)
+    admin_name =serializers.CharField(source="admin_user.username",read_only=True)
+    admin_mobile =serializers.CharField(source="admin_user.mobile",read_only=True)
+
+    mobile = serializers.CharField(source="user.mobile",read_only=True)
+    qq_number = serializers.CharField(source="user.qq_number",read_only=True)
+    qq_name =  serializers.CharField(source="user.mobile",read_only=True)
+    level =  serializers.CharField(source="user.level",read_only=True)
+    profile =  serializers.CharField(source="user.profile",read_only=True)
+
+    class Meta:
+        model = ApplyLogForChannel
+        #fields= '__all__'
+        fields = ('id',
+                  'qq_number',
+                  'qq_name',
+                  'username',
+                  'mobile',
+                  'audit_time',
+                  'submit_time',
+                  'profile',
+                  'admin_name',
+                  'level',
+                  'user_origin',
+                  'user_exp_year',
+                  'user_custom_volumn',
+                  'user_funds_volumn',
+                  'user_invest_orientation',
+                  'audit_reason',
+                  'audit_state',
+                  'admin_mobile')
+        read_only_fields = ('admin_name','username','qq_number','qq_name')
+
+
 class ProjectSerializer(serializers.ModelSerializer):
 #     subscribers = UserSerializer(many=True)
     qq_name = serializers.CharField(source='user.qq_name', read_only=True)

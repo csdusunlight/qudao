@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^projects/(?P<pk>[0-9]+)/$', views.ProjectDetail.as_view(), kwargs={'partial':True}),
     
     url(r'^users/$', views.UserList.as_view()),
+    url(r'^admin_get_apply_user/$', views.ApplyLogForChannelList.as_view()),
     url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view(), kwargs={'partial':True}),
     
     url(r'^investlogs/$', views.InvestlogList.as_view()),
@@ -28,7 +29,7 @@ urlpatterns = [
     
     url(r'^daystatis/$', views.DayStatisList.as_view()),
     
-    url(r'^applylog/$', views.ApplyLogList.as_view()),
+    url(r'^applylog/$', views.ApplyLogForChannelList.as_view()),
     
     url(r'^userstatis/$', views.UserDetailStatisList.as_view()),
     url(r'^useravgstatis/$', views.UserAverageStatisList.as_view()),
@@ -52,5 +53,6 @@ urlpatterns = [
 #     url(r'^doc/', include_docs_urls(title='d'))
     url(r'^msgs/$', views.MessageList.as_view(), ),
     url(r'^perform/$', views.PerformStatisList.as_view(), ),
+    url(r'^msgs/(?P<pk>[0-9]+)/$',views.MessageDetail.as_view(),kwargs={'partial':True}, name='sitemessagedetail'),
     
 ]

@@ -137,7 +137,7 @@
         <img class="circular" src="{% static 'images/yuanyuand.png' %}"/>
         <i class="line"></i>
         <div class="end"></div>
-        <div class="box_alert">三个工作日内审核</div>
+        <div class="box_alert">三个工作日内审核<i></div>
       </div>
       <div class="textt">
         <span class="textlist1">提交申请</span>
@@ -171,31 +171,32 @@ function timeFilter(time) {
 $(function(){
   var state = "{{user.is_channel}}";
   function auditState () {
-    if (state === '1') {
+    if (state === '-1') {
       $('.formshow').hide();
       $('.audit').show();
+      $.ajax({
+      type: 'get',
+      url: '/restapi/applylog/',
+      dataType:'json',
+      success: function (data) {
+        console.log(data)
+        if (data.code === 0 && data.results.length > 0) {
+          var subtime = timeFilter(data.results[0].submit_time);
+          var str = '';
+          str = '<span class="times1">'+ subtime +'</span>';
+          $('.texttimes').html(str);
+        }
+      },
+      error: function (err) {
+        console.log(err);
+      }
+      });
     } else {
       $('.form1').show();
       $('.audit').hide();
     }
   }
   auditState ()
-  $.ajax({
-  type: 'get',
-  url: '/restapi/applylog/',
-  dataType:'json',
-  success: function (data) {
-    if (data.code === 0) {
-      var subtime = timeFilter(data.results[0].submit_time);
-      var str = '';
-      str = '<span class="times1">'+ subtime +'</span>';
-      $('.texttimes').html(str);
-    }
-  },
-  error: function (err) {
-    console.log(err);
-  }
-  });
   $('#form1').validator({
       valid: function(form) {
         var data = {

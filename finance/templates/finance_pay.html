@@ -306,7 +306,7 @@
         created: function() {
           $.ajax({
               type: "get",
-              url: '/restapi/investlogs/?page='+ 1 + '&pageSize=' + 10 +'&audit_state=0' ,
+              url: '/restapi/investlogs/?user={{user.id}}&page='+ 1 + '&pageSize=' + 10 +'&audit_state=0' ,
               async: true,
               success: function(res) {
                 console.log(res);
@@ -554,7 +554,7 @@
             var that = this;
             $.ajax({
                 type: "get",
-                url: '/restapi/investlogs/?page='+ app.currentPage + '&pageSize=' + app.pageSize +'&audit_state=0' + app.searchKeys ,
+                url: '/restapi/investlogs/?user={{user.id}}&page='+ app.currentPage + '&pageSize=' + app.pageSize +'&audit_state=0' + app.searchKeys ,
                 async: true,
                 success: function(res) {
                   console.log(res);

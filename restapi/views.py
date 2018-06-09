@@ -281,7 +281,7 @@ class CompanyList(BaseViewMixin, generics.ListAPIView):
     serializer_class = CompanySerializer
     pagination_class = MyPageNumberPagination
 class CompanyList2(BaseViewMixin, generics.ListAPIView):
-    queryset = Company.objects.filter(project__state__in=['10','20']).distinct()
+    queryset = Company.objects.filter(project__state__in='10',project__is_official=True).distinct()
     serializer_class = CompanySerializer
     pagination_class = MyPageNumberPagination
 # class RankList(BaseViewMixin, generics.ListAPIView):

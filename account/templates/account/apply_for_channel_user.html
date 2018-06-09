@@ -186,12 +186,9 @@ $(function(){
   dataType:'json',
   success: function (data) {
     if (data.code === 0) {
-      console.log(data.results[0]);
-      var subtime = timeFilter(data.results[0].submit_time)
-      var audit = timeFilter(data.results[0].audit_time)
-      var str = ''
-      str = '<span class="times1">'+ subtime +'</span>' +
-            '<span class="times2">'+ audit +'</span>'
+      var subtime = timeFilter(data.results[0].submit_time);
+      var str = '';
+      str = '<span class="times1">'+ subtime +'</span>';
       $('.texttimes').html(str);
     }
   },
@@ -208,7 +205,6 @@ $(function(){
           'funds_volumn': $('input[name="radio4"]:checked').val(),
           'invest_orientation': $('input[name="radio5"]:checked').val()
         }
-        console.log(data)
         $.ajax({
           type: 'POST',
           url: '/account/apply_for_channel_user/',

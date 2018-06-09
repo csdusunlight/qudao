@@ -136,7 +136,7 @@
 			'<div class="item3"><span class="finance__price finance__item">{display_price}</span></div>' +
 			'<div class="item5"><span class="finance__remark finance__item">{remark}</span></div></a>' +
 			'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank"><span class="go">进入推广主页-></span></a></div></li>[/results]';
-		var url = "/restapi/projects/?page={page}&pageSize={pageSize}&is_official=true&state=10";
+		var url = "/restapi/projects/?page={page}&pageSize={pageSize}&is_official=true&state=10&is_addedto_repo=true";
 
 		function pagecallback() {
 			$('.add-project.true').each(function () {

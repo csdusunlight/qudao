@@ -3,7 +3,7 @@
     margin: 0 auto;
 }
 nav{
-    padding: 15px 15px;
+    padding: 60px 15px;
     position: relative;
 }
 
@@ -11,20 +11,26 @@ nav{
     display: inline-block;
     margin-left: 15px;
     color: white;
+    font-size: 16px;
 }
 .amount1 > label{
     color: RGB(217,164,61);
-    font-size: 18px;
+    font-size: 22px;
+    margin-left: 15px;
 }
 
 .btn{
     display: inline-block;
     border: none;
-    margin-left: 10px;
+    width: 142px;
+    height: 54px;
+    font-size: 16px;
+    margin-left: 84px;
     cursor: pointer;
     color: white;
     border: 1px solid RGB(239,174,44);
     background: transparent;
+    border-radius: 10px;
 }
 .add:hover{
     background: RGB(239,174,44);
@@ -37,12 +43,12 @@ nav{
 
 .tabBox{
     background: white;
-    padding: 10px 20px;
+    padding: 30px 25px;
     position: relative;
     /* display: none; */
 }
 .tabul{
-    width: 282px;
+    width: 422px;
     height: 42px;
     border: 1px solid RGB(145,193,29);
     margin-top: 10px;
@@ -54,8 +60,13 @@ nav{
     text-align: center;
     line-height: 40px;
     float: left;
-    /* border-right:1px solid #91c11d; */
+    border-right:1px solid #91c11d;
     cursor: pointer;
+}
+.tabul li:nth-child(2){
+    /* border: 1px solid solid RGB(145,193,29); */
+    border-top: none;
+    border-bottom: none;
 }
 .tabul li:nth-child(3){
     border-right: none;
@@ -79,11 +90,11 @@ nav{
 }
 .tabBox th{
     background-color: #f5f5f5;
-    height: 40px;
+    height: 60px;
     font-weight: normal;
 }
 .tabBox td{
-    height: 50px;
+    height: 72px;
     text-align: center;
 }
 .tabBox tr{
@@ -111,10 +122,10 @@ nav{
     margin-left: 20px;
 }
 .bank_card{
-   margin-left: 20px;
+   margin-left: 30px;
 }
 .zhifubao{
-    margin-left: 60px;
+    margin-left: 18px;
 }
 /* 银行卡盒子 */
 .card_box{
@@ -123,6 +134,7 @@ nav{
     position: relative;
     color: #666666;
     margin-top: 30px;
+    display: none;
 }
 .user_account{
     font-size: 16px;
@@ -181,7 +193,7 @@ nav{
 .payBox{
     width: 100%;
     position: relative;top: 30px;
-    display: none;
+    /* display: none; */
 }
 .c-payBox{
     display: block;

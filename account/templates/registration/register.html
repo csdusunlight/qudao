@@ -76,12 +76,12 @@
                         <div class="form_box">
                             <div class="itemBox">
                                 <span>手机号</span>
-                                <input type="text" name="mobile" class="f_ipt phone_number" placeholder="手机号">
+                                <input type="text" maxlength="11" name="mobile" autocomplete="off" class="f_ipt phone_number" placeholder="手机号">
                                 <span class="tip_box" id="msgbox"></span>
                             </div>
                             <div class="itemBox">
                                 <span>验证码</span>
-                                <input type="text" name="code" class="f_ipt auth_code" style="width: 222px !important;" placeholder="验证码">
+                                <input type="text" name="code" autocomplete="off" class="f_ipt auth_code" style="width: 222px !important;" placeholder="验证码">
                                 <input type="button" class="send_code" value="获取验证码">
                             </div>
                             <div class="itemBox">
@@ -90,15 +90,15 @@
                             </div>
                             <div class="itemBox">
                                 <span>QQ</span>
-                                <input type="text" placeholder="QQ" name="qq_number" class="f_ipt qq_number" style="margin-left: 40px;">
+                                <input type="text" placeholder="QQ" autocomplete="off" name="qq_number" class="f_ipt qq_number" style="margin-left: 40px;">
                             </div>
                             <div class="itemBox">
                                 <span>QQ昵称</span>
-                                <input type="text" placeholder="QQ昵称" name="qq_name" class="f_ipt qq_name" style="margin-left: 14px;">
+                                <input type="text" placeholder="QQ昵称" autocomplete="off" name="qq_name" class="f_ipt qq_name" style="margin-left: 14px;">
                             </div>
                             <div class="itemBox">
                                 <span>邀请码（选填）</span>
-                                <input type="text" placeholder="邀请码" value="{{icode}}" name="invite_code" class="f_ipt invite_code" style="margin-left: 10px;">
+                                <input type="text" placeholder="邀请码" autocomplete="off" value="{{icode}}" name="invite_code" class="f_ipt invite_code" style="margin-left: 10px;">
                             </div>
                             <div class="itemBox" style="border: none;margin-top: 30px;">
                                     <label>
@@ -230,19 +230,6 @@
                 alert('手机号码不能为空')
                 return;
             }
-            var _that = $(this);
-            timer = setInterval(function () {
-                times--;
-                if (times <= 0) {
-                    _that.val("获取验证码");
-                    clearInterval(timer);//清除计时器
-                    _that.attr("disabled", false);
-                    times = 60;
-                } else {
-                    _that.val(`${times}秒后重新获取`);
-                    _that.attr("disabled", true);
-                }
-            }, 1000);
             // ajax获取验证码
             $.ajax({
                 url:"/account/phoneImageV/",
@@ -250,10 +237,21 @@
                 type:"GET",
                 data:{
                     "phone":phoneNum,
-                    
                 },
                 success:function(ret){
                     if (ret.code == 0) {
+                        timer = setInterval(function () {
+                            times--;
+                            if (times <= 0) {
+                                $(".send_code").val("获取验证码");
+                                clearInterval(timer);//清除计时器
+                                $(".send_code").attr("disabled", false);
+                                times = 60;
+                            } else {
+                                $(".send_code").val(`${times}秒后重新获取`);
+                                $(".send_code").attr("disabled", true);
+                            }
+                        }, 1000);
                         alert('发送验证码成功');
                     } else if(ret.code == 1){
                         alert('发送验证码失败')
@@ -280,7 +278,7 @@
         // bindClassTo: ".itemBox",
         rules:{
             phone_number:[/^1[3456789]\d{9}$/,'请输入正确的手机号码'],
-            password:[/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/, '密码应为6~16位数字、字母或下划线中的两种'],
+            password:[/((?=.*[a-z])(?=.*\d)|(?=[a-z])(?=.*[#@!~%^&*])|(?=.*\d)(?=.*[#@!~%^&*]))[a-z\d#@!~%^&*]{6,16}/i, '密码应为6~16位数字、字母或特殊字符中的两种'],
             qq_number:[/^[1-9][0-9]{8,11}$/,'请输入正确的QQ'],
         },
         display: function(el){

@@ -84,8 +84,8 @@ function change_tweeter(id){
 }
 function change_dakuan(id){
     selected_id = id;
-    var opertype=$("a#tweeter_"+id).html();
-    if(opertype == "添加商家"){
+    var opertype=$("a#dakuan_"+id).html();
+    if(opertype == "添加打款"){
         $(".m-dakuan").css("display","block");
     }
     else {
@@ -366,11 +366,11 @@ $(document).ready(function(){
                 alert("请检查网络连接");
             }
         });
-        $("a#tweeter_"+selected_id).html("撤消打款");
+        $("a#dakuan_"+selected_id).html("撤消打款");
 //      $("td#is_black_"+selected_id).html("是");
-        $(".m-tweeter").css("display","none");
+        $(".m-dakuan").css("display","none");
     });
-    $('.m-tweeter-none input[type="submit"]').click(function(){
+    $('.m-dakuan-none input[type="submit"]').click(function(){
         var id = selected_id;
         if (!id){
             return;
@@ -395,9 +395,9 @@ $(document).ready(function(){
                 alert("请检查网络连接");
             }
         });
-        $("a#tweeter_"+selected_id).html("添加打款");
+        $("a#dakuan_"+selected_id).html("添加打款");
 //      $("td#is_black_"+selected_id).html("否");
-        $(".m-tweeter-none").css("display","none");
+        $(".m-dakuan-none").css("display","none");
     });
 
 	$("#search").click(function(){

@@ -16,7 +16,7 @@ class MyPageNumberPagination(PageNumberPagination):
         else:
             code = 0
         return Response(OrderedDict([
-            ('code', code),
+            ('code', 0),
             ('recordCount', self.page.paginator.count),
             ('pageCount', self.page.paginator.num_pages),
             ('next', self.get_next_link()),

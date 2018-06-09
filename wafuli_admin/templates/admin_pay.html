@@ -1,0 +1,675 @@
+{% extends "base.html" %}
+{%load staticfiles%}
+{% block js %}
+<script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
+<style>
+  .modal_box{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background:rgba(128,128,128,.4);
+    display: none;
+  }
+  .modal_desc{
+    width: 500px;
+    padding: 0 0 40px;
+    background: white;
+    position: absolute;left: 50%;top: 50%;
+    margin-left: -250px;
+    margin-top: -150px;
+  }
+  .close{
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    border: 1px solid #808080;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #808080;
+    cursor: pointer;
+    margin: 5px 465px; 
+  }
+  .title{
+    margin-left: 210px;
+    font-size: 18px;
+  }
+  .operate_box{
+    padding: 10px 10px;
+    font-size: 16px;
+    margin-top: 15px;
+   
+  }
+  .operate_box > label{
+    margin-left: 80px;
+  }
+  .operate_box > select{
+    width: 180px;
+    height: 25px;
+    margin-left: 20px;
+    font-size: 12px;
+  }
+  .time_box{
+    font-size: 16px;
+    display: none;
+  }
+  .star_time{
+    width: 175px;
+    height: 25px;
+    font-size: 12px;
+    margin-left: 20px;
+  }
+  .end_time{
+    width: 175px;
+    height: 25px;
+    font-size: 12px;
+    margin-left: 20px;
+  }
+  .star_desc{
+    margin-left:90px;
+    margin-top: 20px;
+  }
+  .submit_btn{
+    width: 100px;
+    height: 30px;
+    margin-left: 180px;
+    margin-top: 40px;
+  }
+</style>
+<script type="text/javascript">
+  $.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+  });
+  var data = '<table width="100%"><tr><th width="2%"></th><th>项目名称</th><th>投资姓名</th><th>投资手机号</th>'+
+  '<th width="10%">投资日期</th><th width="10%">审核时间</th><th width="8%">结算金额</th><th>返现金额</th>'+
+  '<th>支付宝账号</th><th>支付宝姓名</th><th>打款状态</th><th>处理</th>'+
+  '</tr>[results]<tr><td><input class="checkBox" type="checkbox" name="checkbox" data-id="{id}" value="{id}"><td>{project_title}</td><td>{invest_name}</td><td>{invest_mobile}</td>'+
+  '<td>{invest_date}</td><td>{audit_time}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{pay_state_des}</td>'+
+  '<td id="item_{id}"><a class="fyin" onclick="pass({id})">接受'+
+  '</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td></tr>[/results]</table>';
+  var data2 = '<table width="100%"><tr><th width="2%"></th><th>项目名称</th><th>投资姓名</th><th>投资手机号</th>'+
+  '<th width="10%">投资日期</th><th width="10%">审核时间</th><th width="8%">结算金额</th><th>返现金额</th>'+
+  '<th>支付宝账号</th><th>支付宝姓名</th><th>打款状态</th>'+
+  '</tr>[results]<tr><td><input class="checkBox" type="checkbox" name="checkbox" data-id="{id}" value="{id}"><td>{project_title}</td><td>{invest_name}</td><td>{invest_mobile}</td>'+
+  '<td>{invest_date}</td><td>{audit_time}</td><td>{settle_amount}</td><td>{return_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{pay_state_des}</td>'+
+  '</tr>[/results]</table>';
+  var url = "/restapi/investlogs/" + "?page={page}&pageSize={pageSize}";
+  var selected_id = 0;
+  function pass(id){
+   $(".Deny-y").css("display","block");
+   selected_id = id;
+ }
+ function refuse(id){
+   $(".Audit").css("display","block");
+   selected_id = id;
+ }
+ $(document).ready(function(){
+   $("li.home26").toggleClass("on");
+   $(".Tin-table-box tr:even").css("background-color","#fcfcfc");
+   $("#pagedata").ajaxPage({
+     url:url +'&audit_state=0&pay_state=2',
+     pageId:$("#page"),
+     pageSize:10,
+     run:true,
+     content:data,
+   });
+   $(".none-x").click(function(){
+    $(this).parent().parent().css("display","none");//<!--隐藏-->
+  })
+   $(".none-x-s").click(function(){
+    $(this).parent().parent().parent().parent().css("display","none");//<!--隐藏-->
+  })
+   $('.Deny-y input[type="submit"]').click(function(){
+    id = selected_id;
+    if (!id){
+     return;
+   }
+   $.ajax({
+     url:"/Admin/admin_pay/",
+     dataType:"json",
+     async: false,
+     type:"POST",
+     data:{
+      'id':id,
+      'type':1,
+    },
+    success:function(ret){
+          if(ret.code==0){
+           $("#item_"+id).html("审核完成，通过");
+         }
+         else if(ret.code==-1){
+           alert("该页面已过期，请重新登录！");
+           window.location.href = ret.url;
+         }
+         else {
+           alert(ret.res_msg);
+         }
+       },
+       error:function(){
+        alert("请检查网络连接");
+      }
+    });
+   $(".Deny-y").css("display","none");
+ });
+   $('.Audit input[type="submit"]').click(function(){
+    id = selected_id;
+    reason = $("#refuse_reason").val();
+    if (!id || !reason){
+     return;
+   }
+   $.ajax({
+     url:"/Admin/admin_pay/",
+     dataType:"json",
+     async: false,
+     type:"POST",
+     data:{
+      'id':id,
+      'reason':reason,
+      'type':2,
+    },
+    success:function(ret){
+      if(ret.code==0){
+       $("#item_"+id).html("审核完成，拒绝");
+     }
+     else if(ret.code==-1){
+       alert("该页面已过期，请重新登录！");
+       window.location.href = ret.url;
+     }
+     else {
+       alert(ret.res_msg);
+     }
+   },
+   error:function(){
+    alert("请检查网络连接");
+  }
+});
+   $(".Audit").css("display","none");
+ });
+   $("#search").click(function(){
+    var startTime = $("#startTime").val();
+    var endTime = $("#endTime").val();
+    var newurl = url;
+    if(startTime && endTime){
+     newurl += "&auditdate_0="+startTime;
+     newurl += "&auditdate_1="+endTime;
+   }
+   var mobile = $("#mobile").val();
+   if(mobile){
+     newurl += "&invest_mobile="+mobile;
+   }
+   var zhifubao = $("#zhifubao").val();
+   if(zhifubao){
+     newurl += "&zhifubao="+zhifubao;
+   }
+   var state = $("#state").val();
+   if(state){
+     newurl += "&pay_state="+state;
+   }
+   var newdata = data;
+   if(state!='2'){
+     newdata = data2;
+   }
+   $("#page").empty();
+   $("#pagedata").ajaxPage({
+    url:newurl,
+    pageId:$("#page"),
+    pageSize:10,
+    run:true,
+    content:newdata,
+  });
+ });
+// $("#export").click(function(){
+//  var html = '<form action="'+"{% url 'export_withdraw_excel' %}"+'" method="get" target="_self" id="postData_form">';
+//  var startTime = $("#startTime").val();
+//  var endTime = $("#endTime").val();
+//  if(startTime && endTime){
+//   html += '<input name="submit_date_0" type="hidden" value="'+ startTime + '"/>';
+//   html += '<input name="submit_date_1" type="hidden" value="'+ endTime + '"/>';
+// }
+// var startTime2 = $("#startTime2").val();
+// var endTime2 = $("#endTime2").val();
+// if(startTime2 && endTime2){
+//   html += '<input name="audit_date_0" type="hidden" value="'+ startTime2 + '"/>';
+//   html += '<input name="audit_date_1" type="hidden" value="'+ endTime2 + '"/>';
+// }
+// var qq = $("#qq").val();
+// var mobile = $("#mobile").val();
+// if(qq){
+//   html += '<input name="qq_number" type="hidden" value="'+ qq + '"/>';
+// }
+// if(mobile){
+//   html += '<input name="user_mobile" type="hidden" value="'+ mobile + '"/>';
+// }
+// var card_number = $("#card_number").val();
+// var real_name = $("#real_name").val();
+// if(card_number){
+//   html += '<input name="card_number" type="hidden" value="'+ card_number + '"/>';
+// }
+// if(real_name){
+//   html += '<input name="real_name" type="hidden" value="'+ real_name + '"/>';
+// }
+// var adminname = $("#adminname").val();
+// var usertype = $("#usertype").val();
+// var state = $("#state").val();
+// if(adminname){
+//   html += '<input name="admin_mobile" type="hidden" value="'+ adminname + '"/>';
+// }
+// if(usertype){
+//   html += '<input name="user_level" type="hidden" value="'+ usertype + '"/>';
+// }
+// if(state){
+//   html += '<input name="audit_state" type="hidden" value="'+ state + '"/>';
+// }
+// html += '</form>';
+// var iframe = document.getElementById('myIFrame');
+// iframe.contentWindow.document.open();
+// iframe.contentWindow.document.write(html);
+// iframe.contentWindow.document.close();
+// document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+// });
+// $('#import').click(function() {
+//  var fileElementId  = 'fileupload1';
+//  if(!document.getElementById(fileElementId).value){
+//   alert("请先选择文件");
+//   return;
+// }
+// $.ajaxFileUpload({
+//  url:"{% url 'import_withdraw_excel'%}",
+//  secureuri:false,
+//          fileElementId:fileElementId,//file标签的id
+//          dataType: 'json',//返回数据的类型
+//          data:{},//一同上传的数据
+//          success: function (data, status) {
+//          	if (data.code==0){
+//          		alert("导入成功！ 数量：" + data.num);
+//          	}
+//          	else {
+//          		alert(data.msg + " 成功数量："+data.num);
+//          	}
+//          },
+//          error: function (data, status, e) {
+//            alert(e);
+//          }
+//        });
+//  //	hint.innerHTML = '无';
+//});
+
+// var choose_file = document.getElementById("input_clone");
+// var hint = document.getElementById("hint");
+// choose_file.onclick = function() {
+//   document.getElementById("fileupload1").click();
+// }
+    
+//  $('#withdraw').click(function(){
+//     var is_sure = confirm('确定是否一键提现？');
+//     if (is_sure == true) {
+//         $.ajax({
+//              url: "{% url 'batch_withdraw' %}",
+//              dataType: "json",
+//              async: false,
+//              type:"get",
+//              success: function(ret) {
+//                  if(ret.code == 0) {
+//                      alert('一键提现成功');
+//                  } else {
+//                      alert('截获bug一枚，请火速联系前端哥哥')
+//                  }
+//              },
+//              error: function() {
+//                  alert("截获bug一枚，请火速联系前端哥哥");
+//              }
+//          });
+//     }
+// });
+
+
+    // class BreakSignal { }
+    // $('#audit_zhifubao').click(function(){
+
+    // 	Promise.resolve($.ajax('/Admin/withdraw_autoaudit/')).
+    // 	then(function(value){
+    // 	   var is_sure = confirm(`共${value.count}笔，${value.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
+    // 	   if (is_sure == true) {
+    // 	   	   return $.ajax({url:'/Admin/withdraw_autoaudit/',type:'post'});
+    // 	   }
+    // 	   else{
+    // 		   throw  new BreakSignal();
+    // 	   }
+    // 	})
+    // 	.catch(function(error){
+    //         // promise chain中出现异常的时候会被调用
+    //         if(error instanceof BreakSignal){
+            	
+    //         }
+    //         else{
+    //         	alert(error.statusText);
+    //         }
+    //     });
+    // });
+    
+    //模态框出现、获取选中cheakbox的值
+    var checkVal;
+    $(document).on('click','#audit_zhifubao',function () {
+      // $(".modal_box").show();
+      var checkboxList = document.querySelectorAll("input[name='checkbox']");
+      checkVal = [];
+      for(var i in checkboxList){
+        if(checkboxList[i].checked){
+          console.log("check");
+          checkVal.push(checkboxList[i].value);
+        }
+      }
+      if(checkVal == ''){
+        console.log("没有勾选");
+        $(".modal_box").show();
+      }else if(checkVal != ''){  
+        console.log("勾选了");
+        //单独勾选用户提现ajax
+        $.ajax({
+            type: "get",
+            url: '/Admin/admin_autopay/',
+            data:{
+                id_list:checkVal.join(",")
+            },
+            async: true,
+            success: function(res) {
+              var is_sure = confirm('共'+ res.count +'笔，'+ res.sum +'元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果');
+              if (is_sure == true) {
+                  $.ajax({
+                    url:'/Admin/admin_autopay/',
+                    type:'post',
+                    data:{
+                      id_list:checkVal.join(",")
+                    },
+                    success: function(res) {
+                      console.log(res)
+                    }
+                  });
+              }
+            }
+        });
+//      Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=' + checkVal)).
+//      then(function (val) { 
+//        var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
+//        if (is_sure == true) {
+//            return $.ajax({
+//              url:'/Admin/withdraw_autoaudit/',
+//              data:{
+//                sub_from:'',
+//                sub_to:'',
+//                id_list:checkVal.join(",")
+//              },
+//              type:'post'
+//            });
+//        }
+//        else{
+//          throw  new BreakSignal();
+//        }
+//      })
+//      .catch(function(error){
+//          if(error instanceof BreakSignal){
+//            
+//          }
+//          else{
+//            alert(error.statusText);
+//          }
+//      });
+      }
+      console.log('checkbox的值',checkVal);
+    });
+
+    //根据用户来显示时间盒子
+    var i = 1
+    $("#user_checkBox").change(function () { 
+      i ++
+      if(i % 2 == 0){
+        $(".time_box").show();
+      }else{
+        $(".time_box").hide();
+      }
+    });
+    // 一键审核模态框消失 
+    $(".close").click(function () { 
+      $(".modal_box").hide();
+    });
+    
+    class BreakSignal { }
+    $(".submit_btn").click(function () {
+      var starTime = $(".star_time").val();
+      var endTime = $(".end_time").val();
+      console.log("时间：",starTime,endTime);
+      var postData = {};
+      if(i % 2 == 0){
+        if(!starTime || !endTime){
+          alert("开始和结束时间必选！")
+          return;
+        }
+        postData = {
+                    sub_from: starTime,
+                    sub_to: endTime,
+                    id_list:checkVal.join(",")
+                };
+//      Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=' +starTime+ '&sub_to=' +endTime+ '&id_list=')).
+//      then(function (val) { 
+//        var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
+//        if (is_sure == true) {
+//            return $.ajax({
+//              url:'/Admin/withdraw_autoaudit/',
+//              type:'post',
+//              data:{
+//                sub_from:starTime,
+//                sub_to:endTime,
+//                id_list:''
+//              }
+//            });
+//            $(".modal_box").hide();
+//         }
+//         else{
+//      	   throw  new BreakSignal();
+//         }
+//      })
+//      .catch(function(error){
+//          if(error instanceof BreakSignal){
+//            
+//          }
+//          else{
+//            alert(error.statusText);
+//          }
+//      });
+      }else{
+        postData = {
+                      id_list:checkVal.join(",")
+                  };
+        // console.log("全部提现")
+//      Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=')).
+//      then(function (val) { 
+//        var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
+//        if (is_sure == true) {
+//            return $.ajax({
+//              url:'/Admin/withdraw_autoaudit/',
+//              type:'post',
+//              sub_from:'',
+//              sub_to:'',
+//              id_list:''
+//            });
+//            $(".modal_box").hide();
+//         }
+//         else{
+//      	   throw  new BreakSignal();
+//         }
+//      })
+//      .catch(function(error){
+//          if(error instanceof BreakSignal){
+//            
+//          }
+//          else{
+//            alert(error.statusText);
+//          }
+//      });
+      }
+      $.ajax({
+          type: "get",
+          url: '/Admin/admin_autopay/',
+          data:postData,
+          async: true,
+          success: function(res) {
+            var is_sure = confirm('共'+ res.count +'笔，'+ res.sum +'元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果');
+            if (is_sure == true) {
+                $.ajax({
+                  url:'/Admin/admin_autopay/',
+                  type:'post',
+                  data:postData,
+                  success: function(res) {
+                    console.log(res)
+                  }
+                });
+            }
+          }
+      });
+
+
+      // Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=' +starTime+ '&sub_to=' +endTime+ '&id_list=' + checkVal)).
+      // then(function (val) { 
+      //   var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
+      //   if (is_sure == true) {
+      //       return $.ajax({url:'/Admin/withdraw_autoaudit/?sub_from=' +starTime+ '&sub_to=' +endTime+ '&id_list=' + checkVal,type:'post'});
+      //       $(".modal_box").hide();
+    	//    }
+    	//    else{
+    	// 	   throw  new BreakSignal();
+    	//    }
+      // })
+      // .catch(function(error){
+      //     if(error instanceof BreakSignal){
+            
+      //     }
+      //     else{
+      //       alert(error.statusText);
+      //     }
+      // });
+      
+    })
+
+ });
+</script>
+{% endblock js %}
+{% block right %}
+<div class="Criteria">
+
+ <span>搜索条件</span>
+ <div class="Crite-box">
+   <form>
+     <table width="100%">
+       <tr>
+         <td>
+           <i>审核开始时间：</i>
+           <input id="startTime" type="datetime-local" />
+         </td>
+         <td>
+           <i>审核结束时间：</i>
+           <input id="endTime" type="datetime-local" />
+         </td>
+         <td>
+           <i style="letter-spacing:2px;">投资手机号：</i>
+           <input id="mobile" type="text" />
+         </td>
+         <td>
+           <i style="letter-spacing:2px;">支付宝账号：</i>
+           <input id="zhifubao" type="text" />
+         </td>
+       </tr>
+       <tr>
+         <td>
+           <i style="letter-spacing:4.8px;">打款状态：</i>
+           <select name="selectAge" id="state">
+             <option value="2">打款中</option>
+             <option value="3">已打款</option>
+             <option value="4">打款失败</option>
+           </select>
+         </td>
+         
+       </tr>
+   </table>
+   <div class="Submit-in">
+    <input id="search" type="button" value="搜索" />
+    <!--<input id="export" type="button" value="导出" />-->
+   <input style="float: right;" id="audit_zhifubao" type="button" value="一键打款" />
+  </div>
+  <div class="leading-in">
+   <!--<input id="fileupload1" name="file"  type="file" onchange='hint.innerHTML = this.files[0].name;'/>
+   <a id="input_clone" class="input-clone">选择文件</a>
+   <p class="hint-box">已选择表格：<b id="hint" class="hint">无</b></p>
+   <input id="import" type="button" value="导入" />-->
+   <!--<input style="float: right;" id="withdraw" type="button" value="一键提现" />-->
+ </div>
+</form>
+</div>
+</div>
+
+<div class="Tin-table">
+ <div id="pagedata">
+ </div>
+ <div class="Page-in-admin">
+   <div class="page"  id="page">
+   </div>
+ </div>
+</div>
+{%endblock%}
+
+{% block modal %}
+<!--审核接受-->
+<div class="Deny-y">
+ <div class="w570-box">
+   <h3>审核接受</h3>
+   <button class="none-x"></button>
+   <h5> 确认接受？</h5>
+   <form class="Audit-in">
+    <div class="Finnow-Sub" style="margin-top:0">
+      <input type="submit" value="确认" onclick="return false;"/>
+      <input type="button" value="取消" class="none-x-s" />
+    </div>
+  </form>
+</div>
+</div>
+<!--审核拒绝-->
+<div class="Audit">
+ <div class="w570-box">
+   <h3>审核拒绝</h3>
+   <button class="none-x"></button>
+   <form class="Audit-in">
+     <span>填写拒绝原因：</span>
+     <textarea id="refuse_reason"></textarea>
+     <div class="Finnow-Sub">
+      <input type="submit" value="确认" class="Deny-box" onclick="return false;"/>
+      <input type="button" value="取消" class="none-x-s" />
+    </div>
+  </form>
+</div>
+</div>
+<!-- 一键审核模态框 -->
+<div class="modal_box">
+  <div class="modal_desc">
+    <div class="close">×</div>
+    <span class="title">一键打款</span>
+    <div class="operate_box">
+      <!-- <label>选择用户:</label>
+      <select id="select">
+        <option value="0">请选择用户</option>
+        <option value="1">全部用户</option>
+        <option value="2">部分用户</option>
+      </select> -->
+      <input type="checkbox" id="user_checkBox" style="margin-left: 130px"><span style="margin-left: 30px">用户可选时间段</span>
+    </div>
+    <div class="time_box">
+        <br>
+      <span class="star_desc">开始时间:</span>
+      <input class="star_time" type="datetime-local"><br><br>
+      <span class="star_desc">结束时间:</span>
+      <input class="end_time" type="datetime-local">
+    </div>
+    <button class="submit_btn">提交</button>
+  </div>
+</div>
+<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
+<!--end-->
+{% endblock modal %}

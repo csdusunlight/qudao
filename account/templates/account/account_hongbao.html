@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/hongbao.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/microtip.css' %}" />
     <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/page.js' %}?v-1"></script>
+    <script type="text/javascript" src="{% static 'js/page.js' %}?v-2"></script>
     <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
 
@@ -154,7 +154,7 @@
                             str_html += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all bindWechant">关注官微并且绑定账户</span></div>'
                         } else if (data.results[i].type === "shoudan") {
                             str_html += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all first">首次交单并且审核通过</span></div>'
-                        } else if (data.results[i].type === "guanzhu") {
+                        } else if(data.results[i].type === "bangka"){
                             str_html += '<div class="btm_box" data-type="' + data.results[i].type + '"><span class="all card">绑定银行卡</span></div>'
                         }
                         str_html += '</div>';
@@ -403,7 +403,7 @@
         })
         //跳转到绑卡页面
         $(".bind_sure").click(function () {
-            window.open("{% url 'bind_bankcard_page' %}");
+            window.open("{% url 'account_withdraw' %}");
             $(".modal_card").hide();//跳转成功后模态框消失
         })
     });

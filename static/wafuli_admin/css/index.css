@@ -14,7 +14,7 @@ a { cursor:pointer;}
 .Content { margin-top:20px; box-sizing:border-box; padding-right:30px; padding-bottom:40px;}
 .LeftNav-in { float:left; width:100%; height:auto; background:#fafafa;}
 .LeftNav-in li {background-color: #e9f8ff;border-bottom: 2px solid #fff; float:left; width:100%; height:auto;}
-.LeftNav-in li a { float:left; width:100%; height:56px; box-sizing:border-box; padding:0 30px 0 54px; font-size:15px; color:#008fd7; line-height:56px;/*font-weight: bold;*/}
+.LeftNav-in li a { float:left; width:100%; height:30px; box-sizing:border-box; padding:0 30px 0 54px; font-size:15px; color:#008fd7; line-height:30px;/*font-weight: bold;*/}
 .LeftNav-in li:hover { background-color:#008fd7}
 .LeftNav-in li:hover a { color:#fff;/* background:url(../images/back.png) right no-repeat ;*/}
 .LeftNav-in .on { background-color:#008fd7}
@@ -341,4 +341,24 @@ a { cursor:pointer;}
     height: 28px;
     border: 1px solid #4daa84;
     border-radius: 4px;
+}
+.table__filter {
+  position: relative;
+}
+.table__filter-item {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    font-weight: bold;
+    font-size: 22px;
+    text-align: center;
+    /*line-height: 18px;*/
+    cursor: pointer;
+}
+.table__filter-item.top {
+  top: 0;
+}
+.table__filter-item.bottom {
+  bottom: 0;
+  transform: rotateX(180deg);
 }

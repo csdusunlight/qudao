@@ -48,7 +48,6 @@ urlpatterns = [
     url(r'^admin_import_merchant_investlog/$', merchant_admin.admin_import_merchant_investlog, name='admin_import_merchant_investlog'),
 
     url(r'^check_new/$', merchant_admin.check_new, name='check_new'),
-    
     url(r'^admin_merchant_show/$', 'wafuli_admin.views.admin_merchant_show', name='admin_merchant_show'),  #jzy
     url(r'^coupon_send/$', 'wafuli_admin.views.coupon_send', name='coupon_send'),  #jzy
     url(r'^coupon_manage/$', 'wafuli_admin.views.coupon_manage', name='coupon_manage'),   #jzy
@@ -57,6 +56,10 @@ urlpatterns = [
 #     url(r'^parse_file/$', 'wafuli_admin.views.parse_file', name='parse_file'), #jzy
     url(r'^deliver_coupon/$', coupon_admin.deliver_coupon, name='deliver_coupon'),
     url(r'^parse_file/$', coupon_admin.parse_file, name='parse_file'),
+    url(r'^admin_perform/$', TemplateView.as_view(template_name='admin_perform.html'), name='admin_perform'),
+    
+    url(r'^admin_pay/$', 'finance.views.admin_pay'),
+    url(r'^admin_autopay/$', 'finance.views.admin_autopay'),
 ]
 
 

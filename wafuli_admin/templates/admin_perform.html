@@ -1,0 +1,61 @@
+{% extends "base.html" %} {% load staticfiles %} {% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/admin_perform.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" /> {% endblock css %} {% block js %}
+<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
+<script type="text/javascript"> 
+    //添加token
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+    $(function () {
+        $(".home25").toggleClass("on");
+        var data = '<table width="100%"><tr><th>开始时间</th><th>结束时间</th><th>员工ID(邀请人ID)</th><th>员工姓名</th><th>邀请人结算金额</th>' +
+            '[results]<tr><td>{startdate}</td><td>{enddate}</td><td>{username}</td><td>{inviter_code}</td><td>{amount}</td>' +
+            '</tr>[/results]</table>';
+        var dataUrl = '/restapi/perform/';
+        function pagecallback() {
+            console.log('this is a 回调函数');
+        }
+        $("#pagedata").ajaxPage({
+            url: '/restapi/perform/',
+            pageId: $("#page"),
+            pageSize: 6,
+            run: true,
+            content: data,
+            complete: pagecallback,
+        });
+        $('.s_btn').click(() =>{
+            var value = $('.s_ipt').val();
+            if(!value){
+                alert('搜索框不能为空');
+            }
+            $("#pagedata").ajaxPage({
+                url: '/restapi/perform/?search='+value,
+                pageId: $("#page"),
+                pageSize: 6,
+                run: true,
+                content: data,
+                complete: pagecallback,
+            });
+        })  
+    });    
+</script> {% endblock js %} {% block right %}
+<div class="wrapper">
+    <div class="top">
+        <span>搜索条件</span>
+    </div>
+    <div class="searchBox">
+        <input type="text" class="s_ipt" placeholder="你要搜索点什么..." />
+        <input type="button" class="s_btn" value="搜索">
+    </div>
+    <div class="Tin-table">
+        <div id="pagedata">
+        </div>
+        <div class="Page-in-admin">
+            <div class="page" id="page">
+            </div>
+        </div>
+    </div>
+</div>
+<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
+{% endblock %}

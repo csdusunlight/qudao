@@ -22,7 +22,7 @@
         border-radius: 8px;
       }
       .search__item {
-        width: 150px;
+        width: 160px;
       }
       /*样式覆盖*/
      .el-popover {
@@ -180,7 +180,7 @@
       </el-row>
       <el-row style="margin-top: 20px">
         <el-col :span="12">
-          <el-button type="primary" @click="exportExel">导出Exel</el-button>
+          <el-button type="primary" @click="exportExel">导出投资记录</el-button>
           <el-upload
             class="avatar-uploader"
             action="/finance/import_investlog/"
@@ -190,7 +190,7 @@
             :on-success="handleAvatarSuccess"
             :on-error="handleAvatarError"
             :before-upload="beforeAvatarUpload">
-            <el-button type="primary">导入Exel</el-button>
+            <el-button type="primary">导入打款信息</el-button>
             <div slot="tip" class="el-upload__tip">&nbsp;只能上传xls文件</div>
           </el-upload>
         </el-col>

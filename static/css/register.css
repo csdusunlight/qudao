@@ -257,13 +257,6 @@
     border-radius: 10px;
     box-shadow: 5px 5px 10px rgba(104,101,94,.5);
 }
-.tip_box {
-    position: absolute;left: 0;top: 0;
-    /* text-align: center;
-    height: 10px;
-    color: #fd4546;
-    overflow: hidden; */
-}
 
 .error_tip {
     width: 16px;

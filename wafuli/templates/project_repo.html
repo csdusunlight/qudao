@@ -319,10 +319,6 @@
 			//输入框搜索llc
 			$('.searchBtn').click(() =>{
 				var searchValue = $('#searchTxt').val();
-				if (!searchValue) {
-					alert('搜索内容不能为空');
-					return;
-				}
 				var newurl2 = url + "&search=" + encodeURI(searchValue);
 				$("#pagedata1").ajaxPage({
 					url: newurl2,

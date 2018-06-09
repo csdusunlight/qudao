@@ -394,7 +394,7 @@
 			  	success: function(ret) {
 			  	  console.log(ret.results);
 			  	  for (var i=0; i<ret.results.length; i++) {
-			  	    var li_dom = '<li class="project-end-item">'+ ret.results[i].title +'</li>'
+			  	    var li_dom = '<li class="project-end-item">'+ ret.results[i].title + ' 于'  + ret.results[i].end_date +'日结束</li>'
 			  	    $('.project-end-1').append(li_dom)
 			  	  }
 			  	  scrollLeft();

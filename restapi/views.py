@@ -48,7 +48,7 @@ class ProjectList(generics.ListCreateAPIView):
     filter_class = ProjectFilter
 #     filter_fields = ['state','type','is_multisub_allowed','is_official','category']
     ordering_fields = ('state','pub_date','pinyin')
-    search_fields = ('title',)
+    search_fields = ('title','company__name')
     pagination_class = MyPageNumberPagination
     def perform_create(self, serializer):
         obj = serializer.save(is_official=False, category='self', is_addedto_repo=False, user=self.request.user, state='10')

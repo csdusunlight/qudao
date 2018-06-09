@@ -28,21 +28,38 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level', 'margin_account')
 
 class ApplyLogForChannelSerializer(serializers.ModelSerializer):
-    username =serializers.RelatedField(source="user.username",read_only=True)
-    admin_name =serializers.RelatedField(source="admin_user.username",read_only=True)
-    mobile = serializers.RelatedField(source="user.mobile",read_only=True)
+    username =serializers.CharField(source="user.username",read_only=True)
+    admin_name =serializers.CharField(source="admin_user.username",read_only=True)
+    admin_mobile =serializers.CharField(source="admin_user.mobile",read_only=True)
 
-    qq_number = serializers.RelatedField(source="user.qq_number",read_only=True)
-    qq_name =  serializers.RelatedField(source="user.mobile",read_only=True)
-    level =  serializers.RelatedField(source="user.level",read_only=True)
-    profile =  serializers.RelatedField(source="user.profile",read_only=True)
-    audit_time = serializers.DateTimeField()
-    submit_time = serializers.DateTimeField()
+    mobile = serializers.CharField(source="user.mobile",read_only=True)
+    qq_number = serializers.CharField(source="user.qq_number",read_only=True)
+    qq_name =  serializers.CharField(source="user.mobile",read_only=True)
+    level =  serializers.CharField(source="user.level",read_only=True)
+    profile =  serializers.CharField(source="user.profile",read_only=True)
+
     class Meta:
         model = ApplyLogForChannel
-        fields = ('id','username','qq_number','qq_name','mobile','audit_time','submit_time','profile','level','admin_name',
-                  'user_origin', 'user_exp_year', 'user_custom_volumn', 'user_funds_volumn', 'user_invest_orientation','audit_reason')
-        read_only_fields = ('adminname','username')
+        #fields= '__all__'
+        fields = ('id',
+                  'qq_number',
+                  'qq_name',
+                  'username',
+                  'mobile',
+                  'audit_time',
+                  'submit_time',
+                  'profile',
+                  'admin_name',
+                  'level',
+                  'user_origin',
+                  'user_exp_year',
+                  'user_custom_volumn',
+                  'user_funds_volumn',
+                  'user_invest_orientation',
+                  'audit_reason',
+                  'audit_state',
+                  'admin_mobile')
+        read_only_fields = ('admin_name','username','qq_number','qq_name')
 
 
 class ProjectSerializer(serializers.ModelSerializer):

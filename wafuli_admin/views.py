@@ -97,10 +97,6 @@ def admin_apply(request):
                 sendmsg_bydhst(currentuser.mobile, u"您申请成为渠道用户成功！")
                 res['code'] = 0
                 ####################
-                sendmsg_bydhst(currentuser.mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + currentuser.domain_name + '.51fanshu.com' +
-                                     u"，快去分享给小伙伴们吧~")
-                on_register(currentuser)
-                sendmsg_bydhst(currentuser.mobile, u"88元新手红包已发放到您的账户，请到福利联盟个人中心查看。有效期一个月，快来领取哦~")
         elif type==2:
             reason = request.POST.get('reason', '')
             nowtime = datetime.datetime.now()
@@ -790,6 +786,25 @@ def admin_user(request):
             else:
                 res['code'] = -2
                 res['res_msg'] = u'输入不合法！'
+        elif type == 10:
+            if not admin_user.has_admin_perms('056'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
+            try:
+                perm = AdminPermission.objects.get(code='200')
+            except AdminPermission.DoesNotExist:
+                perm = AdminPermission.objects.create(code='200', name="支付宝打款权限")
+            obj_user.admin_permissions.add(perm)
+            res['code'] = 0
+        elif type == 11:
+            if not admin_user.has_admin_perms('056'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
+            perm = AdminPermission.objects.get(code='200')
+            obj_user.admin_permissions.remove(perm)
+            res['code'] = 0
         return JsonResponse(res)
 
 

@@ -164,6 +164,7 @@
 
 <script type="text/javascript">
 function timeFilter(time) {
+    console.log(time);
     times = time.split(".");
     var timestr = times[0].replace('T', ' ');
     return timestr;
@@ -187,11 +188,10 @@ $(function(){
   success: function (data) {
     if (data.code === 0) {
       console.log(data.results[0]);
-      var subtime = timeFilter(data.results[0].submit_time)
-      var audit = timeFilter(data.results[0].audit_time)
-      var str = ''
-      str = '<span class="times1">'+ subtime +'</span>' +
-            '<span class="times2">'+ audit +'</span>'
+      var subtime = timeFilter(data.results[0].submit_time);
+      console.log(subtime)
+      var str = '';
+      str = '<span class="times1">'+ subtime +'</span>';
       $('.texttimes').html(str);
     }
   },

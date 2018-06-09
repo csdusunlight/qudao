@@ -167,10 +167,7 @@ def register(request):
                 sub = SubscribeShip(user=user, project_id=id)
                 subbulk.append(sub)
             SubscribeShip.objects.bulk_create(subbulk)
-            sendmsg_bydhst(mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + user.domain_name + '.51fanshu.com' +
-                                 u"，快去分享给小伙伴们吧~")
             register_signal.send('register', user=user)
-            sendmsg_bydhst(mobile, u"88元新手红包已发放到您的账户，请到福利联盟个人中心查看。有效期一个月，快来领取哦~")
 #         imgurl_list = []
 #         if len(request.FILES)>6:
 #             result = {'code':-2, 'msg':u"上传图片数量不能超过6张"}
@@ -246,10 +243,7 @@ def register_from_gzh(request):
                 sub = SubscribeShip(user=user, project_id=id)
                 subbulk.append(sub)
             SubscribeShip.objects.bulk_create(subbulk)
-            sendmsg_bydhst(mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + user.domain_name + '.51fanshu.com' +
-                                 u"，快去分享给小伙伴们吧~")
             register_signal.send('register', user=user)
-            sendmsg_bydhst(mobile, u"88元新手红包已发放到您的账户，请到福利联盟个人中心查看。有效期一个月，快来领取哦~")
         result['code'] = 0
         return JsonResponse(result)
     else:

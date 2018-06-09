@@ -97,7 +97,6 @@ def admin_apply(request):
                 sendmsg_bydhst(currentuser.mobile, u"您申请成为渠道用户成功！")
                 res['code'] = 0
                 ####################
-                sendmsg_bydhst(currentuser.mobile, u"您申请成为渠道用户成功!")
         elif type==2:
             reason = request.POST.get('reason', '')
             nowtime = datetime.datetime.now()

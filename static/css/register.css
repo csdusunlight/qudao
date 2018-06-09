@@ -1,5 +1,5 @@
 .wrapper {
-    width: 1920px;
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -255,13 +255,14 @@
     height: 600px;
     background: white;
     border-radius: 10px;
-    box-shadow: 5px 5px 10px #4e4e4e;
+    box-shadow: 5px 5px 10px rgba(104,101,94,.5);
 }
 .tip_box {
-    text-align: center;
-    height: 30px;
-    line-height: 50px;
+    position: absolute;left: 0;top: 0;
+    /* text-align: center;
+    height: 10px;
     color: #fd4546;
+    overflow: hidden; */
 }
 
 .error_tip {
@@ -285,11 +286,12 @@
     width: 420px;
     height: 410px;
     margin: 0 auto;
-    /* background: yellow; */
+    padding-top: 30px;
 }
 
 .itemBox {
     width: 400px;
+    height: 45px;
     padding: 5px 5px;
     border-bottom: 1px solid #eeeeee;
     margin-top: 15px;
@@ -323,7 +325,7 @@
     border-radius: 5px;
     background: #91c11d;
     color: white;
-    margin: 52px 25px;
+    margin: 35px 25px;
     font-size: 16px;
     cursor: pointer;
     border: none;

@@ -1,0 +1,16 @@
+.mui-table-view{background-color: #efeff4 !important; position: static}
+.list{margin: 1.5rem 1rem; background-color:#fff; overflow: hidden; box-sizing: border-box; padding:1.5rem 1.5rem 1rem 1.5rem;  border-radius: 7px;}
+.list .title{display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.8rem;}
+.list h2{padding: 0; margin: 0; font-size:14px; display: inline-block; color: #222222;}
+.list span{display: inline-block; font-size: 12px; color: #676767;}
+.list .content{display: flex; justify-content: space-between;}
+.content{font-size: 14px; color: #676767;}
+.content i{display: inline-block; height: 14px; width: 14px; position: relative; top: 1px;}
+.content p{width: 26rem; line-height: 25px; margin-bottom: 0;}
+.texthided{overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.m_xxicon {background-image: url(../../../static/images/ms_dsjxs.png); background-size: 14px 14px;}
+.m_xsicon {background-image: url(../../../static/images/ms_dsjxx.png); background-size: 14px 14px;}
+.mui-table-view:after{ height:0}
+.mui-table-view:before{ height:0}
+.hideicon{display: none !important;}
+.showicon{display: inline-block;}

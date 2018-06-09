@@ -9,7 +9,7 @@ from django.http.response import JsonResponse, Http404, HttpResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from account.transaction import charge_money
 import logging
-from account.models import MyUser, ApplyLog, AdminPermission,Message,ApplyLogForChannel
+from account.models import MyUser, AdminPermission,Message,ApplyLogForChannel
 from django.db.models import Q,F
 from wafuli_admin.models import DayStatis, Invest_Record
 from django.conf import settings
@@ -42,9 +42,9 @@ def index(request):
         return redirect(reverse('admin:login') + "?next=" + reverse('admin_index'))
 
     total = {}
-    total['apply_num'] = ApplyLog.objects.count()
+    total['apply_num'] = ApplyLogForChannel.objects.count()
     dict1 = MyUser.objects.aggregate(cou=Count('id'), sumb=Sum('balance'))
-    total['user_num'] = ApplyLog.objects.filter(audit_state='0').count()
+    total['user_num'] = MyUser.objects.count()
     total['balance'] = dict1.get('sumb') or 0
 #     print TransList.objects.filter(user_investlog__investlog_type='2',user_investlog__audit_state='0').aggregate(cou=Count('id'),sum=Sum('transAmount'))
     dict_with = WithdrawLog.objects.filter(audit_state='0').\

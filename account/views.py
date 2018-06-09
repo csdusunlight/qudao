@@ -286,7 +286,7 @@ def apply_for_channel_user(request):
                                       user_invest_orientation=user_invest_orientation,
                                       submit_time= datetime.datetime.now(),
                                       audit_state='1')
-            current_user.is_channel = -1
+            current_user.is_channel = '-1'
             current_user.save(update_fields=[
                                              'is_channel',
                                         ])

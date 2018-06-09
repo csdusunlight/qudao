@@ -136,7 +136,7 @@
 			'<div class="item3"><span class="finance__price finance__item">{display_price}</span></div>' +
 			'<div class="item5"><span class="finance__remark finance__item">{remark}</span></div></a>' +
 			'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank"><span class="go">进入推广主页-></span></a></div></li>[/results]';
-		var url = "/restapi/projects/?page={page}&pageSize={pageSize}";
+		var url = "/restapi/projects/?page={page}&pageSize={pageSize}&state=10";
 
 		function pagecallback() {
 			$('.add-project.true').each(function () {
@@ -206,7 +206,7 @@
 				dataType: "json",
 				type: 'GET',
 				success: function (ret) {
-					if(ret.code == 1){
+					if(ret.code == 0){
 						var str_html;
 						console.log(ret.results)
 						for(let i in ret.results){
@@ -279,7 +279,7 @@
 				project_status = "";
 
 			$("#pagedata1").ajaxPage({
-				url: url + "&type=" + "&state=",
+				url: url + "&type=",
 				pageId: $("#page1"),
 				pageSize: 20,
 				run: true,

@@ -2,8 +2,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http.response import Http404
 from .models import MyUser, Userlogin,MobileCode
-from captcha.models import CaptchaStore
-from captcha.helpers import captcha_image_url
 from captcha.views import imageV, generateCap
 from account.varify import verifymobilecode, sendmsg_bydhst
 from django.views.decorators.csrf import csrf_exempt
@@ -25,30 +23,27 @@ from django.utils.http import is_safe_url
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
-from django.contrib.contenttypes.models import ContentType
-from datetime import date, timedelta, datetime
 import time as ttime
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Sum, Count
 from transaction import charge_money
-from account.tools import send_mail, get_client_ip
-from django.db import connection, transaction
+from account.tools import get_client_ip
+from django.db import transaction
 from wafuli.data import BANK
 from wafuli.models import TransList, WithdrawLog, Project, SubscribeShip,\
-    InvestLog, Announcement, Company
+    InvestLog, Announcement
 from public.tools import login_required_ajax
 from wafuli.tools import saveImgAndGenerateUrl
 from decimal import Decimal
-import random
 import re
 from weixin.tasks import sendWeixinNotify
 from collections import OrderedDict
-from dragon.settings import FANSHU_DOMAIN
-from docs.models import Document
 from django.core.cache import cache
 from account.signals import register_signal
-
+from account.models import USER_ORIGIN,USER_EXP_YEAR,USER_CUSTOME_VOLUMN,USER_FUNDS_VOLUMN,USER_INVEST_ORIENTATION
+from account.models import ApplyLogForChannel
+import datetime
 @sensitive_post_parameters()
 @csrf_protect
 @never_cache
@@ -256,9 +251,7 @@ def register_from_gzh(request):
         template = 'registration/m_register_from_gzh.html'
         return render(request,template, context)
 
-from account.models import USER_ORIGIN,USER_EXP_YEAR,USER_CUSTOME_VOLUMN,USER_FUNDS_VOLUMN,USER_INVEST_ORIENTATION
-from account.models import ApplyLogForChannel
-import datetime
+
 @csrf_exempt
 def apply_for_channel_user(request):
     if request.method == 'GET':
@@ -438,7 +431,7 @@ def phoneImageV(request):
             result['message'] = u'请不要频繁提交！'
             result.update(generateCap())
             return JsonResponse(result)
-    today = date.today()
+    today = datetime.date.today()
     remote_ip = get_client_ip(request)
     count_ip = MobileCode.objects.filter(remote_ip=remote_ip, create_at__gt=today).count()
     if count_ip >= 30:
@@ -487,7 +480,7 @@ def account_submit(request):
 @login_required
 def account_audited(request):
     user = request.user
-    today = date.today()
+    today = datetime.date.today()
     submit_num = InvestLog.objects.filter(user=user, submit_time__gte=today).count()
     nums = InvestLog.objects.filter(user=user, audit_time__gte=today).values('audit_state')\
         .annotate(count=Count('*')).order_by('audit_state')
@@ -509,7 +502,7 @@ def account_audited(request):
 @login_required
 def account_audited_2(request):
     user = request.user
-    today = date.today()
+    today = datetime.date.today()
     submit_num = InvestLog.objects.filter(user=user, submit_time__gte=today).count()
     nums = InvestLog.objects.filter(user=user, audit_time__gte=today).values('audit_state')\
         .annotate(count=Count('*')).order_by('audit_state')
@@ -1107,7 +1100,7 @@ def admin_investlog(request, id):
         else:
             log.audit_reason = request.POST['audit_reason']
         log.audit_state = audit_state
-        log.audit_time = datetime.now()
+        log.audit_time = datetime.datetime.now()
     else:
         log.return_amount = request.POST['return_amount']
     log.save()
@@ -1187,7 +1180,7 @@ def submitOrder(request):
     remark = request.POST.get('remark', '')
     invest_amount = None if invest_amount=='' else invest_amount
     invest_term = None if invest_term=='' else invest_term
-    invest_date = date.today() if invest_date=='' else invest_date
+    invest_date = datetime.date.today() if invest_date=='' else invest_date
     submit_type = request.POST.get('submit_type', '1')
     project = Project.objects.get(id=project_id)
 #     fields = re.split(r'[\s,]+', project.necessary_fields)
@@ -1196,7 +1189,7 @@ def submitOrder(request):
         result['msg'] = u"请提交投资手机号"
         return JsonResponse(result)
     if invest_date:
-        invest_date = datetime.strptime(invest_date, "%Y-%m-%d")
+        invest_date = datetime.datetime.strptime(invest_date, "%Y-%m-%d")
     with cache.lock('project_submit_%s' % project.id, timeout=2):
         if not project.is_multisub_allowed or submit_type=='1':
             if project.company is None:

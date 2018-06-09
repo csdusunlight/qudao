@@ -31,24 +31,20 @@ $.ajaxSetup({
 //<a target="_blank" href="{% url 'qualification' %}?id={id}"><span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a>
 var data1 = '<table width="100%"><tr><th>QQ/昵称</th><th>电话号码</th><th>申请时间</th><th>身份</th>'+
 	'<th>经验年限</th><th>客户资源</th><th>资金体量</th><th>推单偏好</th><th>操作</th>'+
-	'<th>操作</th></tr>[results]<tr><td>{qq_number}/{qq_name}</td><td>{mobile}</td><td>{submit_time}</td>'+
-  '<td>身份</td><td>经验年限</td><td>客户资源</td><td>资金体量</td><td>推单偏好</td>'+
+	'</tr>[results]<tr><td>{qq_number}/{qq_name}</td><td>{mobile}</td><td>{submit_time}</td>'+
+  '<td>{user_origin}</td><td>{user_exp_year}</td>{}<td>{user_custom_volumn}</td><td>{user_funds_volumn}</td><td>{user_invest_orientation}</td>'+
 	'<td id="item_{id}"><a class="fyin" onclick="pass({id})">同意'+
 	'</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td></tr>[/results]</table>';
-var data0 = '<table width="100%"><tr><th>QQ</th><th>QQ昵称</th><th>个人简介</th><th>相关截图</th>'+
-    '<th>手机号</th><th>申请时间</th><th>渠道等级</th><th>审核人</th>'+
-    '<th>审核时间</th></tr>[results]<tr><td>{qq_number}</td><td>{qq_name}</td><td>{profile}</td>'+
-  '<td><a target="_blank" href="{% url 'qualification' %}?id={id}">' +
-    '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
-    '<td>{mobile}</td><td>{submit_time}</td>'+
-    '<td>{level}</td><td>{admin_mobile}</td><td>{audit_time}</td></tr>[/results]</table>';
-var data2 = '<table width="100%"><tr><th>QQ</th><th>QQ昵称</th><th>个人简介</th><th>相关截图</th>'+
-    '<th>手机号</th><th>申请时间</th><th>审核人</th>'+
-    '<th>审核时间</th><th>渠道等级</th></tr>[results]<tr><td>{qq_number}</td><td>{qq_name}</td><td>{profile}</td>'+
-  '<td><a target="_blank" href="{% url 'qualification' %}?id={id}">' +
-    '<span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a></td>'+
-    '<td>{mobile}</td><td>{submit_time}</td>'+
-    '<td>{admin_mobile}</td><td>{audit_time}</td><td>{audit_reason}</td></tr>[/results]</table>';
+var data0 = '<table width="100%"><tr><th>QQ/QQ昵称</th><th>电话号码</th>'+
+    '<th>申请时间</th><th>渠道等级</th><th>审核人</th><th>审核时间</th>'+
+    '</tr>[results]<tr><td>{qq_number}/{qq_name}</td><td>{mobile}</td>'+
+    '<td>{submit_time}</td><td>{level}</td><td>{admin_name}</td>'+
+    '<td>{audit_time}</td></tr>[/results]</table>';
+var data2 = '<table width="100%"><tr><th>QQ/QQ昵称</th><th>电话号码</th><th>申请时间</th>'+
+    '<th>审核人</th><th>审核时间</th><th>拒绝理由</th>'+
+    '</tr>[results]<tr><td>{qq_number}/{qq_name}</td><td>{mobile}</td>'+
+    '<td>{submit_time}</td>'+
+    '<td>{admin_name}</td><td>{audit_time}</td><td>{audit_reason}</td></tr>[/results]</table>';
 var url = '/restapi/applylog/?page={page}&size={pageSize}';
 function pagecallback(){
     $(".ret-money").each(function(index, el) {

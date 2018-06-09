@@ -23,3 +23,11 @@ body, div, span, header, footer, nav, section, aside, article, ul, dl, dt, dd, l
 #pages i img{width:14px ; height: 14px;}
 .hideicon{display: none !important;}
 .showicon{display: inline-block;}
+.acme_RightCont{ position: relative;}
+.minheight{min-height: 810px;}
+.box_img{width: 207px; height: 270px; position: absolute; left: 50%; top: 50%; margin-left: -104px; margin-top: -135px;}
+.pagehide{display: none;}
+.pageshow{display: block;}
+.box_imghide{display: none;}
+.box_imgshow{display: none;}
+

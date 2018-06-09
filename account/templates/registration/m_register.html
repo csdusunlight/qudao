@@ -446,6 +446,10 @@
         
         function sendCode(thisBtn) {
           var phone = document.getElementById("phone").value;
+          if (!phone) {
+          	mui.alert('请先填写手机号');
+          	return false;
+          }
           var url = "{% url 'phoneImageV' %}";
           console.log(phone);
           mui.ajax(url, {

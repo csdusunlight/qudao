@@ -79,7 +79,7 @@ class ApplyLogForChannelList(BaseViewMixin, generics.ListCreateAPIView):
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
     filter_class = ApplyLogForChannelFilter
     ordering_fields = ('submit_time','audit_time')
-    ordering = ('submit_time')
+    ordering = ('-submit_time')
     filter_fields = ['id','username','qq_number','qq_name','mobile','audit_time','submit_time','profile','level','admin_name',
                  'user_origin', 'user_exp_year', 'user_custom_volumn', 'user_funds_volumn', 'user_invest_orientation','audit_reason','admin_mobile']
     pagination_class = MyPageNumberPagination

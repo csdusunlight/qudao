@@ -9,7 +9,7 @@ from django.http.response import JsonResponse, Http404, HttpResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from account.transaction import charge_money
 import logging
-from account.models import MyUser, ApplyLog, AdminPermission,Message
+from account.models import MyUser, AdminPermission,Message,ApplyLogForChannel
 from django.db.models import Q,F
 from wafuli_admin.models import DayStatis, Invest_Record
 from django.conf import settings
@@ -42,9 +42,9 @@ def index(request):
         return redirect(reverse('admin:login') + "?next=" + reverse('admin_index'))
 
     total = {}
-    total['apply_num'] = ApplyLog.objects.count()
+    total['apply_num'] = ApplyLogForChannel.objects.count()
     dict1 = MyUser.objects.aggregate(cou=Count('id'), sumb=Sum('balance'))
-    total['user_num'] = ApplyLog.objects.filter(audit_state='0').count()
+    total['user_num'] = MyUser.objects.count()
     total['balance'] = dict1.get('sumb') or 0
 #     print TransList.objects.filter(user_investlog__investlog_type='2',user_investlog__audit_state='0').aggregate(cou=Count('id'),sum=Sum('transAmount'))
     dict_with = WithdrawLog.objects.filter(audit_state='0').\
@@ -62,6 +62,8 @@ def index(request):
 def admin_merchant_look(request):
     return render(request,"admin_merchant_look.html", {})
 
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
 def admin_apply(request):
     if request.method == "POST":
         admin_user = request.user
@@ -73,40 +75,42 @@ def admin_apply(request):
             res['code'] = -2
             res['res_msg'] = u'传入参数不足，请联系技术人员！'
             return JsonResponse(res)
-        apply = ApplyLog.objects.get(id=apply_id)
+        current_applyforchannel = ApplyLogForChannel.objects.get(id=apply_id)
+        currentuser = current_applyforchannel.user
         if type==1:
             level = request.POST.get('level', '03')
             with transaction.atomic():
-                user = MyUser(mobile=apply.mobile, username=apply.username, level=level, profile=apply.profile,
-                              qq_name=apply.qq_name, qq_number=apply.qq_number, inviter=apply.inviter,
-                              cs_qq=apply.qq_number, domain_name=apply.qq_number, qualification=apply.qualification)
-                user.set_password(apply.password)
-                user.save()
-                id_list_list= list(Project.objects.filter(is_official=True, state='10', is_addedto_repo=True).values_list('id'))
-                id_list = []
-                if id_list_list:
-                    id_list = reduce(lambda x,y: x + y, id_list_list)
-                subbulk = []
-                for id in id_list:
-                    sub = SubscribeShip(user=user, project_id=id)
-                    subbulk.append(sub)
-                SubscribeShip.objects.bulk_create(subbulk)
-                apply.audit_state = '0'
-                apply.level = level
-                apply.audit_time = datetime.datetime.now()
-                apply.admin_user = admin_user
-                apply.save()
-                sendmsg_bydhst(apply.mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + user.domain_name + '.51fanshu.com' +
-                                     u"，快去分享给小伙伴们吧~")
-                on_register(user)
-                sendmsg_bydhst(apply.mobile, u"88元新手红包已发放到您的账户，请到福利联盟个人中心查看。有效期一个月，快来领取哦~")
+                ####################
+                reason = "success"
+                nowtime = datetime.datetime.now()
+                Message.objects.create(user=currentuser, title="渠道申请审核反馈", time=nowtime, is_read=False,
+                                       content=u"尊敬的用户：您申请成为渠道用户成功！")
+                currentuser.is_channel='1'
+                currentuser.level=level
+                currentuser.save(update_fields=['is_channel','level'])
+                current_applyforchannel.audit_time = datetime.datetime.now()
+                current_applyforchannel.audit_state = '0'
+                current_applyforchannel.admin_user = admin_user
+                current_applyforchannel.save(update_fields=['audit_time', 'audit_state', 'admin_user'])
+                AdminLog.objects.create(admin_user=admin_user, custom_user=currentuser, remark=reason, type='3',
+                                        time=nowtime)
+                sendmsg_bydhst(currentuser.mobile, u"您申请成为渠道用户成功！")
+                res['code'] = 0
+                ####################
         elif type==2:
             reason = request.POST.get('reason', '')
-            apply.admin_user = admin_user
-            apply.audit_time = datetime.datetime.now()
-            apply.audit_state = '2'
-            apply.audit_reason = reason
-            apply.save()
+            nowtime = datetime.datetime.now()
+            Message.objects.create(user=currentuser, title="渠道申请审核反馈", time=nowtime, is_read=False,
+                                   content=u"尊敬的用户：您申请成为渠道用申用户失败。被拒绝原因如下：" + reason)  # 写入审核原因，加个字段
+            current_applyforchannel.audit_time = datetime.datetime.now()
+            current_applyforchannel.audit_state = '2'
+            current_applyforchannel.audit_reason = reason
+            current_applyforchannel.admin_user = admin_user
+            current_applyforchannel.save(update_fields=['audit_time', 'audit_state', 'admin_user','audit_reason'])
+            AdminLog.objects.create(admin_user=admin_user, custom_user=currentuser, remark=reason, type='3',
+                                    time=nowtime)
+            sendmsg_bydhst(currentuser.mobile, u"您申请成为渠道用户失败" + reason)
+            res['code'] = 0
         res['code'] = 0
         return JsonResponse(res)
     else:
@@ -771,22 +775,36 @@ def admin_user(request):
             #根据传入的字段
             if user_is_allow =='1':#
                 reason="success"
-                Message.objects.create(user=user_id, title="渠道申请审核反馈", time=datetime.datetime.now(), is_read=False,
-                                        content=u"尊敬的用户：您申请成为渠道用户成功！")
-                obj_user.update(is_channel=1, user_level=user_level)  # is_channel设置为１，并且user_level等级提升
-                AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=reason, type='3')
-                sendmsg_bydhst(obj_user.mobile, u"您申请成为渠道用户成功！")
+                nowtime = datetime.datetime.now()
+                obj_user.save(is_channel=1,user_level=user_level)
+                AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=reason, type='3',time=nowtime)
                 res['code'] = 0
             elif user_is_allow=='0':
-                Message.objects.create(user=user_id, title="渠道申请审核反馈", time=datetime.datetime.now(), is_read=False,
-                                       content=u"尊敬的用户：您申请成为渠道用申用户失败。被拒绝原因如下："+refuse_reason)  # 写入审核原因，加个字段
-                AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=refuse_reason, type='3')
-                #obj_user.update(channel_refuse_reason＝refuse_reason) # is_channel设置为０
-                sendmsg_bydhst(obj_user.mobile, u"您申请成为渠道用户失败" + refuse_reason)
+                nowtime = datetime.datetime.now()
+                AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, remark=refuse_reason, type='3',time=nowtime)
                 res['code'] = 0
             else:
                 res['code'] = -2
                 res['res_msg'] = u'输入不合法！'
+        elif type == 10:
+            if not admin_user.has_admin_perms('056'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
+            try:
+                perm = AdminPermission.objects.get(code='200')
+            except AdminPermission.DoesNotExist:
+                perm = AdminPermission.objects.create(code='200', name="支付宝打款权限")
+            obj_user.admin_permissions.add(perm)
+            res['code'] = 0
+        elif type == 11:
+            if not admin_user.has_admin_perms('056'):
+                res['code'] = -5
+                res['res_msg'] = u'您没有操作权限！'
+                return JsonResponse(res)
+            perm = AdminPermission.objects.get(code='200')
+            obj_user.admin_permissions.remove(perm)
+            res['code'] = 0
         return JsonResponse(res)
 
 
@@ -1000,6 +1018,11 @@ def admin_withdraw_autoaudit(request):
             obj.save(update_fields=['except_info'])
         withlist.exclude(id__in=fail_id_list).update(audit_state='0', audit_time=datetime.datetime.now(),
                                                      admin_user=request.user)
+        sucset = withlist.exclude(id__in=fail_id_list)
+        suc_list = []
+        for item in sucset:
+            suc_list.append((item.user, item))
+        sendWeixinNotify.delay(suc_list, 'withdraw_success_zhifubao')
         return JsonResponse({'suc_num':ret.get('suc_num')})
 def get_admin_with_page(request):
     res={'code':0,}
@@ -1286,7 +1309,7 @@ def import_withdrawlog(request):
         ret['code'] = 1
         ret['msg'] = unicode(e)
     #发送微信通知
-    sendWeixinNotify.delay(suc_list, 'withdraw_success')
+    sendWeixinNotify.delay(suc_list, 'withdraw_success_yhk')
     sendWeixinNotify.delay(fail_list, 'withdraw_fail')
     #
     ret['num'] = suc_num

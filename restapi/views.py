@@ -28,6 +28,8 @@ from rest_framework.exceptions import ValidationError
 # from activity.models import SubmitRank, IPLog
 from docs.models import Document
 import re
+from django.http import JsonResponse
+
 # from wafuli.Filters import UserEventFilter
 class BaseViewMixin(object):
     authentication_classes = (CsrfExemptSessionAuthentication,)
@@ -46,7 +48,7 @@ class ProjectList(generics.ListCreateAPIView):
     filter_class = ProjectFilter
 #     filter_fields = ['state','type','is_multisub_allowed','is_official','category']
     ordering_fields = ('state','pub_date','pinyin')
-    search_fields = ('title',)
+    search_fields = ('title','company__name')
     pagination_class = MyPageNumberPagination
     def perform_create(self, serializer):
         obj = serializer.save(is_official=False, category='self', is_addedto_repo=False, user=self.request.user, state='10')
@@ -61,10 +63,33 @@ class UserList(BaseViewMixin, generics.ListCreateAPIView):
     queryset = MyUser.objects.all()
     permission_classes = (IsAdmin,)
     serializer_class = UserSerializer
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, )
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
     filter_class = UserFilter
+    ordering_fields = ('margin_account','accu_income','balance')
 #     filter_fields = ['state',]
     pagination_class = MyPageNumberPagination
+
+from restapi.serializers import ApplyLogForChannelSerializer
+from restapi.Filters  import ApplyLogForChannelFilter
+from account.models import ApplyLogForChannel
+class ApplyLogForChannelList(BaseViewMixin, generics.ListCreateAPIView):
+    queryset = ApplyLogForChannel.objects.all()
+    permission_classes = (IsOwnerOrStaff,)
+    serializer_class = ApplyLogForChannelSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
+    filter_class = ApplyLogForChannelFilter
+    ordering_fields = ('submit_time','audit_time')
+    ordering = ('-submit_time')
+    filter_fields = ['id','username','qq_number','qq_name','mobile','audit_time','submit_time','profile','level','admin_name',
+                 'user_origin', 'user_exp_year', 'user_custom_volumn', 'user_funds_volumn', 'user_invest_orientation','audit_reason','admin_mobile']
+    pagination_class = MyPageNumberPagination
+    def get_queryset(self):#如果是查询已拒绝用户，那么用is_channle=0 和审批未通过字段为空
+        user = self.request.user
+        if user.is_staff:
+            return ApplyLogForChannel.objects.all()
+        else:
+            return ApplyLogForChannel.objects.filter(user=user)
+
 
 class UserDetail(BaseViewMixin,generics.RetrieveUpdateDestroyAPIView):
     queryset = MyUser.objects.all()
@@ -256,7 +281,7 @@ class CompanyList(BaseViewMixin, generics.ListAPIView):
     serializer_class = CompanySerializer
     pagination_class = MyPageNumberPagination
 class CompanyList2(BaseViewMixin, generics.ListAPIView):
-    queryset = Company.objects.filter(project__state__in=['10','20']).distinct()
+    queryset = Company.objects.filter(project__state='10',project__is_official=True)
     serializer_class = CompanySerializer
     pagination_class = MyPageNumberPagination
 # class RankList(BaseViewMixin, generics.ListAPIView):
@@ -291,15 +316,48 @@ class DocumentDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
         return Document.objects.all()
     serializer_class = DocumentSerializer
     permission_classes = (IsOwnerOrStaff,)
-class MessageList(BaseViewMixin, generics.ListAPIView):
+
+from restapi.Filters import MessageFilter
+class MessageList(BaseViewMixin, generics.ListCreateAPIView):
     def get_queryset(self):
         return Message.objects.filter(user=self.request.user)
     serializer_class = MesssageSerializer
+    filter_class = MessageFilter
+    filter_backends = (SearchFilter, OrderingFilter)
     pagination_class = MyPageNumberPagination
+    ordering_fields = ('time')
+    search_fields = ('title','content')
+    ordering = ('time')
 
-class MessageDetail():
+
+class MessageDetail(BaseViewMixin,generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MesssageSerializer
-    pagination_class = MyPageNumberPagination
+    queryset = Message.objects.all()
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Message.objects.all()
+        else:
+            return Message.objects.filter(user=user)
+    def partial_update(self,serializer,*args,**kwargs):
+        Mid=kwargs['pk']
+        para = self.request.data.get("isread",-1)
+        if para =='1' and Mid != -1:
+            objmsgs = self.queryset.filter(id=Mid) #.filter(user=self.request.user)
+            if objmsgs.exists():
+                objmsg=objmsgs[0]
+                objmsg.is_read=True
+                objmsg.save(update_fields=['is_read',])
+                returndict ={"code":0}
+                return JsonResponse(returndict)
+            else:
+                raise Exception("没有目标邮件！")
+        else:
+            raise Exception("传入参数错误!")
+
+
+
+
 
 class PerformStatisList(BaseViewMixin, generics.ListAPIView):
     queryset = PerformanceStatistics.objects.all()

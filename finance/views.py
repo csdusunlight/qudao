@@ -93,7 +93,7 @@ def admin_autopay(request):
         if id_list_str:
             id_list = [ int(x) for x in id_list_str.split(',') ]
             paylist = paylist.filter(id__in=id_list)
-        dic = paylist.aggregate(count=Count('id'), sum=Sum('amount'))
+        dic = paylist.aggregate(count=Count('id'), sum=Sum('return_amount'))
         ret['count'] = dic['count'] or 0
         ret['sum'] = dic['sum'] or 0
         return JsonResponse(ret)
@@ -252,12 +252,11 @@ def export_investlog_for_pay(request):
         user_level = con.user.level
         result = ''
         return_amount = ''
-        settle_amount = ''
+        return_amount = con.return_amount or ''
         reason = con.audit_reason
         if con.audit_state=='0':
             result = u'是'
             settle_amount = str(con.settle_amount)
-            return_amount = str(con.return_amount)
         elif con.audit_state=='2':
             result = u'否'
         elif con.audit_state=='3':
@@ -304,7 +303,7 @@ def import_investlog_for_pay(request):
     table = data.sheets()[0]
     nrows = table.nrows
     ncols = table.ncols
-    if ncols!=16:
+    if ncols!=17:
         ret['msg'] = u"文件格式与模板不符，请在导出的投资记录表中更新后将文件导入！"
         return JsonResponse(ret)
     rtable = []
@@ -347,10 +346,10 @@ def import_investlog_for_pay(request):
         for row in rtable:
             with transaction.atomic():
                 id = row[0]
-                InvestLog.return_amount = row[1]
-                InvestLog.zhifubao = row[2]
-                InvestLog.zhifubao_name = row[3]
                 investlog = InvestLog.objects.filter(user=user).get(id=id)
+                investlog.return_amount = row[1]
+                investlog.zhifubao = row[2]
+                investlog.zhifubao_name = row[3]
                 investlog.save(update_fields=['return_amount','zhifubao','zhifubao_name'])
                 suc_num += 1
         ret['code'] = 0
@@ -373,6 +372,6 @@ def mark_pay_state(request):
         return JsonResponse({'code':1, 'detail':u'参数不足'})
     id_list = choices.split(',')
     if state == '1' or state == '3':
-        investlogs = InvestLog.objects.filter(user=user, id__in=id_list).exclude(state='2').update(pay_state=state)
+        investlogs = InvestLog.objects.filter(user=user, id__in=id_list).exclude(pay_state='2').update(pay_state=state)
     return JsonResponse({'code':0})
         

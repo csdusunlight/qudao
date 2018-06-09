@@ -20,7 +20,7 @@ from coupon.models import UserCoupon
 from django.contrib.contenttypes.models import ContentType
 logger = logging.getLogger("wafuli")
 from django.core.management.base import BaseCommand, CommandError
-from account.models import MyUser, Userlogin, ApplyLog
+from account.models import MyUser, Userlogin, ApplyLogForChannel
 from wafuli_admin.models import DayStatis, GlobalStatis
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -28,9 +28,9 @@ class Command(BaseCommand):
         begin_time = time.time()
         today = datetime.date.today() 
         yesterday = today - datetime.timedelta(days=1)
-        apply_num = ApplyLog.objects.filter(submit_time__gte=today).count()
-        refuse_num = ApplyLog.objects.filter(audit_time__gte=today,audit_state='2').count()
-        new_reg_num = ApplyLog.objects.filter(audit_time__gte=today,audit_state='0').count()
+        apply_num = ApplyLogForChannel.objects.filter(submit_time__gte=today).count()
+        refuse_num = ApplyLogForChannel.objects.filter(audit_time__gte=today,audit_state='2').count()
+        new_reg_num = MyUser.objects.filter(date_joined__gte=today).count()
         dict = WithdrawLog.objects.filter(audit_time__gte=today, audit_state='0').\
                 aggregate(cou=Count('user_id',distinct=True),sum=Sum('amount'))
         with_amount = dict.get('sum') or 0

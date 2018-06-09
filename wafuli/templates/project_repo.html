@@ -126,17 +126,17 @@
 	<script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
 	<!--<script type="text/javascript" src="{% static 'js/jQuery.infiniteCarousel.js' %}"></script>-->
 	<!--<script type="text/javascript" src="{% static 'js/MSClass.js' %}"></script>-->
-	<script type="text/javascript" src="{% static 'js/page.js' %}?v-1"></script>
+	<script type="text/javascript" src="{% static 'js/page.js' %}?v-2"></script>
 	<script type="text/javascript">
 		var userlevel = '{{user.level}}';
 		console.log(userlevel);
 		var data = '[results]<li class="finance">' +
-			'<a class="link_left" href="{strategy}" target="_blank"><div class="wrapperBox"><div class="over" data-state={project_state}><span>已结束</span></div><img class="finance__img finance__item" src="{pic}" alt="商家logo"></div>' +
+			'<a class="link_left" href="{strategy}" target="_blank"><div class="wrapperBox"><div class="over" data-state={project_state}><span>已结束</span></div><img class="finance__img finance__item" src="{logo}" alt="商家logo"></div>' +
 			'<div class="item1"><span class="finance__term finance__item">{term}</span></div><div class="item2"><span class="finance__range finance__item">{investrange}</span></div>' +
 			'<div class="item3"><span class="finance__price finance__item">{display_price}</span></div>' +
 			'<div class="item5"><span class="finance__remark finance__item">{remark}</span></div></a>' +
 			'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank"><span class="go">进入推广主页-></span></a></div></li>[/results]';
-		var url = "/restapi/projects/?page={page}&pageSize={pageSize}";
+		var url = "/restapi/projects/?page={page}&pageSize={pageSize}&is_official=true&state=10";
 
 		function pagecallback() {
 			$('.add-project.true').each(function () {
@@ -202,11 +202,11 @@
 			})
 			//获取平台列表
 			$.ajax({
-				url:'/restapi/company2/',
+				url:'/restapi/company2/?pageSize=999',
 				dataType: "json",
 				type: 'GET',
 				success: function (ret) {
-					if(ret.code == 1){
+					if(ret.code == 0){
 						var str_html;
 						console.log(ret.results)
 						for(let i in ret.results){
@@ -279,7 +279,7 @@
 				project_status = "";
 
 			$("#pagedata1").ajaxPage({
-				url: url + "&type=" + "&state=",
+				url: url + "&type=",
 				pageId: $("#page1"),
 				pageSize: 20,
 				run: true,

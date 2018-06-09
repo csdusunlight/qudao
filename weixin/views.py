@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 import hashlib
 from django.http.response import HttpResponse,Http404, JsonResponse
 import logging
-from account.models import MyUser, ApplyLog
+from account.models import MyUser
 from .models import WeiXinUser
 from django.views.decorators.csrf import csrf_exempt
 from wafuli_admin.models import Dict
@@ -75,10 +75,6 @@ def bind_user(request):
             try:
                 user = MyUser.objects.get(mobile=mobile)
             except MyUser.DoesNotExist:
-                if ApplyLog.objects.filter(mobile=mobile).exists():
-                    result['code'] = 3
-                    result['msg'] = u'您已提交注册申请，请耐心等待审核通过'
-                else:
                     request.session['mobile'] = mobile
                     result['url'] = "/account/register_from_gzh/"
             else:

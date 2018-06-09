@@ -1,0 +1,186 @@
+{% load staticfiles %}
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="{% static 'css/mui.min.css' %}" rel="stylesheet" />
+    <script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
+    <script src="{% static 'js/zepot-1.2.0.min.js' %}" type="text/javascript"></script>
+    <link href="{% static 'css/m_account_message.css' %}" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="mui-bar mui-bar-nav" style="position: relative;background: white;">
+      <a href="{% url 'account_index' %}" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
+      <h1 class="mui-title" style="style=" color: RGB(102,102,102); "">消息中心</h1>
+      <!--<img src="{% static 'images/icon_03.jpg' %}" class="header_icon" />
+      <span class="header_audit">全部</span>-->
+    </header>
+    <div id="pullrefresh" class="mui-scroll-wrapper" style="top:40px;">
+      <div class="mui-content">
+        <ul class="mui-table-view">
+ 
+        </ul>
+      </div>
+    </div>
+    <script src="{% static 'js/mui.min.js' %}"></script>
+    <script type="text/javascript">
+      mui('.mui-scroll-wrapper').scroll({indicators:false}); //隐藏滚动条
+      mui.init({
+        pullRefresh: {
+          container: '#pullrefresh',
+          up: {
+//          auto: true,
+            contentrefresh: '正在加载...',
+            contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
+            callback: pullupRefresh
+          },
+          down : {
+            style:'circle',//必选，下拉刷新样式，目前支持原生5+ ‘circle’ 样式
+            color:'#2BD009', //可选，默认“#2BD009” 下拉刷新控件颜色
+            height:'50px',//可选,默认50px.下拉刷新控件的高度,
+            range:'100px', //可选 默认100px,控件可下拉拖拽的范围
+            offset:'0px', //可选 默认0px,下拉刷新控件的起始位置
+            contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+            contentdown : "下拉刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+            contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+            auto: true,//可选,默认false.首次加载自动下拉刷新一次
+            callback :dropDown //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+          }
+        },
+        swipeBack: true //启用右滑关闭功能
+      });
+      //上拉加载 count 计数  PAGESIZE请求条数  str拼接的字符串
+      var count = 2;
+      var PAGESIZE = 10;
+      var str = '';
+      var html = '';
+      var url = '/restapi/msgs/';
+      
+      function getList(n) {
+        mui.ajax(url, {
+          data: {
+            page: n,
+            pageSize: PAGESIZE
+          },
+          dataType: 'json', //服务器返回json格式数据
+          type: 'get', //HTTP请求类型
+          timeout: 10000, //超时时间设置为10秒；
+          //            headers:{'Content-Type':'application/json'},
+          success: function(data) {
+            console.log("data数据：", data.results);
+            if(!data.results.length) {
+              mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+            } else {
+              mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
+              console.log($('.text'))
+              $.each(data.results, function (index, val) {
+                var li = document.createElement("li");
+                li.className = "list";
+                str = '<div class="title">' +
+                       '<h2>'+ val.title +'</h2><span class="time">'+ val.time +'</span></div>' +
+                       '<div class="content"><p class="text">'+ val.content +'</p>' +
+                       '<i class="m_iconfont m_xxicon"></i></div>'
+                li.innerHTML = str;
+                $('.mui-table-view').append(li);
+                var pHeight = li.getElementsByTagName("p")[0].clientHeight
+                if(pHeight > 30){
+                  li.getElementsByTagName('i')[0].classList.remove('hideicon')
+                  li.getElementsByTagName('i')[0].classList.add('showicon')
+                  li.getElementsByTagName("p")[0].classList.add('texthided')
+                } else {
+                  li.getElementsByTagName('i')[0].classList.add('hideicon')
+                }
+              })
+              $.each($('.time'), function (index, val) {
+                var str = $(this).text()
+                str = str.replace('T', ' ')
+                $(this).text(str)
+              })
+            }
+          },
+          error: function(xhr, type, errorThrown) {
+            if (xhr.responseText == '{"detail":"Invalid page."}') {
+              $('.mui-pull-caption').html('没有更多数据了')
+              $('.mui-pull-loading').hide()
+            }
+            console.log(xhr.responseText);
+          }
+        });
+      }
+      function pullupRefresh() {
+        if(count == 0) {
+          mui('#pullrefresh').pullRefresh().scrollTo(0, 0);
+        }
+        getList(count++);
+      }
+      function dropDown() {
+        console.log('down');
+        mui.ajax(url, {
+          data: {
+            page: 1,
+            pageSize: PAGESIZE
+          },
+          dataType: 'json', //服务器返回json格式数据
+          type: 'get', //HTTP请求类型
+          timeout: 10000, //超时时间设置为10秒；
+          //            headers:{'Content-Type':'application/json'},
+          success: function(data) {
+            console.log("data数据：", data.results);
+            if(!data.results.length) {
+              mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+            } else {
+              mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
+              console.log($('.list'))
+              $('.list').remove();
+              $.each(data.results, function (index, val) {
+                var li = document.createElement("li");
+                li.className = "list";
+                str = '<div class="title">' +
+                       '<h2>'+ val.title +'</h2><span class="time">'+ val.time +'</span></div>' +
+                       '<div class="content"><p class="text">'+ val.content +'</p>' +
+                       '<i class="m_iconfont m_xxicon"></i></div>'
+                li.innerHTML = str;
+                $('.mui-table-view').prepend(li);
+                var pHeight = li.getElementsByTagName("p")[0].clientHeight
+                console.log(pHeight)
+                if(pHeight > 30){
+                  li.getElementsByTagName('i')[0].classList.remove('hideicon')
+                  li.getElementsByTagName('i')[0].classList.add('showicon')
+                  li.getElementsByTagName("p")[0].classList.add('texthided')
+                } else {
+                  li.getElementsByTagName('i')[0].classList.add('hideicon')
+                }
+              })
+              $.each($('.time'), function (index, val) {
+                var str = $(this).text()
+                str = str.replace('T', ' ')
+                $(this).text(str)
+              })
+            }
+          },
+          error: function(xhr, type, errorThrown) {
+            console.log(xhr.responseText);
+          }
+        });
+      }
+      mui('.mui-scroll-wrapper').scroll({
+        deceleration: 0.0005, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+        indicators:false
+      });
+      $('body').on('tap', '.m_iconfont', function () {
+        if($(this).hasClass('m_xxicon')) {
+          $(this).removeClass('m_xxicon')
+          $(this).addClass('m_xsicon')
+          $(this).siblings('p').removeClass('texthided')
+        } else {
+          $(this).removeClass('m_xsicon')
+          $(this).addClass('m_xxicon')
+          $(this).siblings('p').addClass('texthided')
+        }
+      })
+    </script>
+  </body>
+
+</html>

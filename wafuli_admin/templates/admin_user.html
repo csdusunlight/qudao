@@ -5,15 +5,17 @@ $.ajaxSetup({
     data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 });
 var data = '<table width="100%"><tr><th>渠道等级</th><th>QQ</th><th>QQ昵称</th><th>手机号</th>'+
-	'<th>银行卡号</th><th>持卡人姓名</th><th>支付宝</th><th>加入时间</th><th>账户余额</th><th>保证金</th>'+
-	'<th>累计收入</th><th width="5%">是否为黑名单</th><th>账户操作</th>'+
-	'</tr>[results]<tr><td>{level}</td><td>'+
+	'<th>银行卡号</th><th>持卡人姓名</th><th>支付宝</th><th>加入时间</th>'+
+	'<th class="table__filter">账户余额<span data-ordering="balance" class="table__filter-item top">^</span><span data-ordering="-balance" class="table__filter-item bottom">^</span></th>'+
+	'<th class="table__filter">保证金<span data-ordering="margin_account" class="table__filter-item top">^</span><span data-ordering="-margin_account" class="table__filter-item bottom">^</span></th>'+
+	'<th class="table__filter">累计收入<span data-ordering="accu_income" class="table__filter-item top">^</span><span data-ordering="-accu_income" class="table__filter-item bottom">^</span></th>'+
+	'<th width="5%">是否为黑名单</th><th>账户操作</th></tr>[results]<tr><td>{level}</td><td>'+
 	'<a href="{fanshu_domain}" style="color:blue; text-decoration:underline">{qq_number}</a></td><td>{qq_name}</td>'+
 	'<td>{mobile}</td><td>{card_number}</td><td>{bank}</td><td>{zhifubao}</td><td>{date_joined}</td>'+
 	'<td>{balance}</td><td>{margin_account}</td><td>{accu_income}</td><td class="black" id="is_black_{id}">{is_active}</td>'+
 	'<td id="item_{id}"><a class="btn1-x" onclick="addcash({id})">余额</a>│'+
 	'<a class="btn2-x black_btn" data-isblack="{is_active}" id="black_{id}" onclick="addblack({id})">加黑</a>|<a onclick="change_level({id})">级别</a>|'+
-	'<a onclick="change_bail({id})">保证金</a>|<a class="tweeter_btn" id="tweeter_{id}" data-istweeter="{has_permission100}" onclick="change_tweeter({id})">赋予推客</a>'+
+	'<a onclick="change_bail({id})">保证金</a>|<a class="tweeter_btn" id="tweeter_{id}" data-istweeter="{has_permission100}" onclick="change_tweeter({id})">添加商家</a>'+
 	'</td></tr>[/results]</table>';
 var url = "/restapi/users/" + "?page={page}&pageSize={pageSize}";
 var selected_id = 0;
@@ -34,9 +36,9 @@ function pagecallback() {
     })
     $('.tweeter_btn').each(function() {
         if ($(this).data('istweeter') == false) {
-            $(this).text("赋予推客");
+            $(this).text("添加商家");
         } else {
-            $(this).text("取消推客");
+            $(this).text("取消商家");
         }
     })
 }
@@ -66,7 +68,7 @@ function addblack(id){
 function change_tweeter(id){
     selected_id = id;
     var opertype=$("a#tweeter_"+id).html();
-    if(opertype == "赋予推客"){
+    if(opertype == "添加商家"){
         $(".m-tweeter").css("display","block");
     }
     else {
@@ -75,6 +77,7 @@ function change_tweeter(id){
 }
 
 $(document).ready(function(){
+  var newurl = url;
 	$("li.home2").toggleClass("on");
 	$(".Tin-table-box tr:even").css("background-color","#fcfcfc");
 	$("#pagedata").ajaxPage({
@@ -85,6 +88,17 @@ $(document).ready(function(){
 	    content:data,
 	    complete:pagecallback,
 	});
+	$('#pagedata').on('click', '.table__filter-item',function(){
+	  console.log(newurl + '&ordering=' + $(this).data('ordering'));
+	  $("#pagedata").ajaxPage({
+        url:newurl + '&ordering=' + $(this).data('ordering'),
+        pageId:$("#page"),
+        pageSize:10,
+        run:true,
+        content:data,
+        complete:pagecallback,
+    });
+	})
 	$(".none-x").click(function(){
 		$(this).parent().parent().css("display","none");<!--隐藏-->
 	})
@@ -277,7 +291,7 @@ $(document).ready(function(){
                 alert("请检查网络连接");
             }
         });
-        $("a#tweeter_"+selected_id).html("取消推客");
+        $("a#tweeter_"+selected_id).html("取消商家");
 //      $("td#is_black_"+selected_id).html("是");
         $(".m-tweeter").css("display","none");
     });
@@ -306,15 +320,15 @@ $(document).ready(function(){
                 alert("请检查网络连接");
             }
         });
-        $("a#tweeter_"+selected_id).html("赋予推客");
+        $("a#tweeter_"+selected_id).html("添加商家");
 //      $("td#is_black_"+selected_id).html("否");
         $(".m-tweeter-none").css("display","none");
     });
 
 	$("#search").click(function(){
+	  newurl = url;
 		var startTime = $("#startTime").val();
 		var endTime = $("#endTime").val();
-		var newurl = url;
 		if(startTime && endTime){
 			newurl += "&join_date_0="+startTime;
 			newurl += "&join_date_1="+endTime;
@@ -560,12 +574,12 @@ $(document).ready(function(){
             </form>
         </div>
     </div>
-    <!--确认赋予推客权限-->
+    <!--确认添加商家权限-->
     <div class="popup m-tweeter">
         <div class="w570-box">
-            <h3>推客权限操作</h3>
+            <h3>商家权限操作</h3>
             <button class="none-x"></button>
-            <h5 style="font-size: 20px"> 确认赋予推客权限？</h5>
+            <h5 style="font-size: 20px"> 确认添加商家权限？</h5>
             <form class="Audit-in">
                 <div class="Finnow-Sub" style="margin-top:0">
                 <input type="submit" value="确认" onclick="return false;"/>
@@ -574,12 +588,12 @@ $(document).ready(function(){
             </form>
         </div>
     </div>
-    <!--取消推客权限-->
+    <!--取消商家权限-->
     <div class="popup m-tweeter-none">
         <div class="w570-box">
-            <h3>推客权限操作</h3>
+            <h3>商家权限操作</h3>
             <button class="none-x"></button>
-            <h5> 确认撤销推客权限？</h5>
+            <h5> 确认撤销商家权限？</h5>
             <form class="Audit-in">
                 <div class="Finnow-Sub" style="margin-top:0">
                 <input type="submit" value="确认" onclick="return false;"/>

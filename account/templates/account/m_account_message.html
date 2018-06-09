@@ -69,12 +69,10 @@
           timeout: 10000, //超时时间设置为10秒；
           //            headers:{'Content-Type':'application/json'},
           success: function(data) {
-            console.log("data数据：", data.results);
             if(!data.results.length) {
               mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
             } else {
               mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
-              console.log($('.text'))
               $.each(data.results, function (index, val) {
                 var li = document.createElement("li");
                 li.className = "list";
@@ -116,7 +114,6 @@
         getList(count++);
       }
       function dropDown() {
-        console.log('down');
         mui.ajax(url, {
           data: {
             page: 1,
@@ -127,12 +124,10 @@
           timeout: 10000, //超时时间设置为10秒；
           //            headers:{'Content-Type':'application/json'},
           success: function(data) {
-            console.log("data数据：", data.results);
             if(!data.results.length) {
               mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
             } else {
               mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
-              console.log($('.list'))
               $('.list').remove();
               $.each(data.results, function (index, val) {
                 var li = document.createElement("li");
@@ -144,7 +139,6 @@
                 li.innerHTML = str;
                 $('.mui-table-view').prepend(li);
                 var pHeight = li.getElementsByTagName("p")[0].clientHeight
-                console.log(pHeight)
                 if(pHeight > 30){
                   li.getElementsByTagName('i')[0].classList.remove('hideicon')
                   li.getElementsByTagName('i')[0].classList.add('showicon')

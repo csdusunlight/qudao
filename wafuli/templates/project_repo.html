@@ -410,7 +410,17 @@
          var tab = document.getElementById('project_end_box');
          var tab1 = document.getElementById('project_end_1');
          var tab2 = document.getElementById('project_end_2');
-         tab2.innerHTML = tab1.innerHTML;
+         if (tab1.offsetWidth > tab.offsetWidth) {
+           tab2.innerHTML = tab1.innerHTML;
+         	
+           var timer = setInterval(Marquee,speed);
+           tab.onmouseover = function(){
+             clearInterval(timer);
+           };
+           tab.onmouseout = function(){
+             timer = setInterval(Marquee,speed);
+           }
+         }
          function Marquee(){
            if(tab2.offsetWidth - tab.scrollLeft <=0) {    
              tab.scrollLeft = 0;
@@ -418,13 +428,6 @@
              tab.scrollLeft ++;
            }
        
-         }
-         var timer = setInterval(Marquee,speed);
-         tab.onmouseover = function(){
-           clearInterval(timer);
-         };
-         tab.onmouseout = function(){
-           timer = setInterval(Marquee,speed);
          }
        }
 

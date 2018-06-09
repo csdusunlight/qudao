@@ -251,7 +251,7 @@ def register_from_gzh(request):
         template = 'registration/m_register_from_gzh.html'
         return render(request,template, context)
 
-
+import time
 @csrf_exempt
 def apply_for_channel_user(request):
     if request.method == 'GET':
@@ -284,7 +284,6 @@ def apply_for_channel_user(request):
                                       user_custom_volumn=user_custom_volumn,
                                       user_funds_volumn=user_funds_volumn,
                                       user_invest_orientation=user_invest_orientation,
-                                      submit_time= datetime.datetime.now(),
                                       audit_state='1')
             current_user.is_channel = '-1'
             current_user.save(update_fields=[
@@ -299,6 +298,7 @@ def apply_for_channel_user(request):
             return JsonResponse(result)
     else:
         return render(request,"apply_for_channel_user.html")
+
 
 def verifymobile(request):# not exist  return 0  exist return 1
     mobilev = request.GET.get('mobile', None)

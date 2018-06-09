@@ -78,19 +78,20 @@ USER_EXP_YEAR = (
 USER_CUSTOME_VOLUMN = (
     ('1',u'50人以下'),
     ('2',u'50到100人'),
-    ('3',u'100到500'),
-    ('3',u'500'),
+    ('3',u'100人到500人'),
+    ('4',u'500人'),
 )
 USER_FUNDS_VOLUMN = (
     ('1', u'50万以下'),
-    ('2', u'50到100人'),
-    ('3', u'100到５00'),
-    ('3', u'500'),
+    ('2', u'50到100万'),
+    ('3', u'100到５00万'),
+    ('4', u'500万'),
 )
 USER_INVEST_ORIENTATION = (
-    ('1','小额单'),
-    ('2','大额单'),
-    ('3','媒体单'),
+    ('1','小额量大单'),
+    ('2','低息大额单'),
+    ('3','短期高返单'),
+    ('4','媒体单')
 )
 IS_CHANNEL = (
     ('0','非渠道用户'),
@@ -137,7 +138,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     zhifubao = models.CharField(u"支付宝账号（邮箱或手机号）", blank=True, max_length=50)
     zhifubao_real_name = models.CharField(u"支付宝实名", blank=True, max_length=20)
 
-    is_channel = models.CharField(u"是否渠道", choices=IS_CHANNEL, default=False, max_length=2)  #
+    is_channel = models.CharField(u"是否渠道", choices=IS_CHANNEL, default='1', max_length=2)  #
     objects = MyUserManager()
     USERNAME_FIELD = 'mobile'
     REQUIRED_FIELDS = ['username','qq_number']
@@ -275,8 +276,8 @@ class ApplyLog(models.Model):
 class ApplyLogForChannel(models.Model):
     submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
     audit_time = models.DateTimeField(u'审核时间', null=True, blank=True)
-    admin_user = models.ForeignKey(MyUser, related_name="admin_user", null=True)
-    user = models.ForeignKey(MyUser, related_name="user")
+    admin_user = models.ForeignKey(MyUser, related_name="applylogforchannel", null=True)
+    user = models.ForeignKey(MyUser, related_name="applylog_custom")
     audit_reason = models.CharField(u"审核原因", max_length=30)
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
     user_origin = models.CharField(u"用户来源", choices=USER_ORIGIN, max_length=2)
@@ -288,7 +289,7 @@ class ApplyLogForChannel(models.Model):
     class Meta:
         ordering = ["submit_time",]
     def __unicode__(self):
-        return self.mobile
+        return self.user.mobile
 
 class Message(models.Model):
     user = models.ForeignKey(MyUser, related_name="user_msgs")

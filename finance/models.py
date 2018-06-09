@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 
 # Create your models here.
+#支付宝转出记录（渠道提现、渠道给用户打款）
 class ZhifubaoTransferLog(models.Model):
     payer_account = models.CharField(u"付款账号", max_length=30, blank=True)
     payee_account = models.CharField(u"收款账号", max_length=30)
@@ -14,4 +15,3 @@ class ZhifubaoTransferLog(models.Model):
         return u"结果：%s，时间：%s, 收款人：%s, 金额：%s" % (self.result, str(self.time), self.payee_real_name, str(self.amount))
     class Meta():
         ordering = ['-time',]
-    

@@ -23,7 +23,7 @@ import xlrd
 from decimal import Decimal
 import traceback
 import logging
-from account.models import ApplyLog
+from account.models import ApplyLogForChannel
 logger=logging.getLogger('wafuli')
 
 def admin_margin_query(request):
@@ -447,7 +447,7 @@ def check_new(request):
     admin_margin = Margin_AuditLog.objects.filter(audit_state='1').count()
     admin_merchant_investlog = InvestLog.objects.filter(category='merchant', audit_state='1', preaudit_state='0').count()
     admin_merchant_project = Apply_Project.objects.filter(audit_state='1').count()
-    admin_apply = ApplyLog.objects.filter(audit_state='1').count()
+    admin_apply = ApplyLogForChannel.objects.filter(audit_state='1').count()
     admin_withdraw = WithdrawLog.objects.filter(audit_state='1').count()
     admin_office = InvestLog.objects.filter(category='official', audit_state='1').count()
     kw = {

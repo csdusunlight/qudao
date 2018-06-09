@@ -235,6 +235,7 @@ def export_investlog_for_pay(request):
     item_list = item_list.select_related('project').order_by('-submit_time')
     data = []
     for con in item_list:
+        print con
         project = con.project
         project_name=project.title
         invest_mobile=con.invest_mobile

@@ -270,8 +270,15 @@
     })
     $('#form').validator({
         dataFilter: function(data) {
-            if (data.code == 0){ return "";}
-            else {return '已存在！';}
+            if (data.code == 0){
+                 return "";
+            } else {
+                if (data.msg){
+                    return data.msg
+                }else{
+                    return false;
+                }
+            }
         },
         // validClass: "has-success",
         // invalidClass: "has-error",
@@ -283,6 +290,10 @@
         },
         display: function(el){
         return el.getAttribute('placeholder') || ''; //提示错误语法 
+        },
+        messages: {
+            required: '',
+            invite_code: "邀请码不存在",
         },
         fields:{
             'mobile':'required;mobile;remote(get:' + verifymobile_url + ', csrfmiddlewaretoken={{ csrf_token }})',

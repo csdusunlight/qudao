@@ -50,6 +50,26 @@
 			min-height: 200px;
 			color: #858585;
 		}
+		.project-end-container {
+		  width:1000px;
+      height:30px;
+      overflow:hidden;
+      line-height:30px;
+      font-size:14px;
+		}
+		.project-end-box {
+      width: 900px;
+      height: 30px;
+      margin: 0 auto;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .project-end-1,.project-end-2 {
+      display: inline-block;
+    }
+    .project-end-item {
+      display: inline-block;
+    }
 	</style>
 
 </head>
@@ -95,6 +115,18 @@
 				<span class="s_item" data-name="{{x.name}}">{{x.name}}</span>
 				{%endfor%}
 			</div>
+			<!--<div id="project_end_container" class="project-end-container">
+  			<div id="project_end_box" class="project-end-box">
+  				<ul id="project_end_1" class="project-end-1">
+  					<li class="project-end-item">地方撒地方撒地方撒地方撒地方撒</li>
+  					<li class="project-end-item">地方撒东风风纷纷地方赛</li>
+  					<li class="project-end-item">地方撒烽三的刚的刚赛纲地方的</li>
+  					<li class="project-end-item">地方撒冯港反对 东风 东风 反对共非根底</li>
+  					<li class="project-end-item">地方撒森森风个三花骨朵地方似懂非懂</li>
+  				</ul>
+  				<ul id="project_end_2" class="project-end-2"></ul>
+  			</div>
+			</div>-->
 		</div>
 
 		<div class="dataBox">
@@ -376,6 +408,42 @@
 			// 		});
 			// 	}
 			// });
+//			window.onload = function(){
+//			  $.ajax({
+//			  	type:"get",
+//			  	url:"/restapi/projects/?state=10&is_official=true",
+//			  	async:true,
+//			  	success: function(ret) {
+//			  	  console.log(ret.results);
+//			  	  for (var i=0; i<ret.results.length; i++) {
+//			  	    ret.results[i]
+//			  	  }
+//			  	}
+//			  });
+//       scrollLeft();
+//     };
+       function scrollLeft(){
+         var speed = 20;
+         var tab = document.getElementById('project_end_box');
+         var tab1 = document.getElementById('project_end_1');
+         var tab2 = document.getElementById('project_end_2');
+         tab2.innerHTML = tab1.innerHTML;
+         function Marquee(){
+           if(tab2.offsetWidth - tab.scrollLeft <=0) {    
+             tab.scrollLeft = 0;
+           }else{
+             tab.scrollLeft ++;
+           }
+       
+         }
+         var timer = setInterval(Marquee,speed);
+         tab.onmouseover = function(){
+           clearInterval(timer);
+         };
+         tab.onmouseout = function(){
+           timer = setInterval(Marquee,speed);
+         }
+       }
 
 		});
 

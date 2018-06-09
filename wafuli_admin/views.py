@@ -62,8 +62,9 @@ def index(request):
 def admin_merchant_look(request):
     return render(request,"admin_merchant_look.html", {})
 
-from django.views.decorators.csrf import csrf_exempt
+
 @csrf_exempt
+@has_post_permission('055')
 def admin_apply(request):
     if request.method == "POST":
         admin_user = request.user

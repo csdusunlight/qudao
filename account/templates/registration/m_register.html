@@ -184,7 +184,7 @@
 				</tr>
 				<tr>
 					<td>
-						<input type="text" name="invite_code" class="invite_code" id="invite_code" />
+						<input type="text" value="{{icode}}" name="invite_code" class="invite_code" id="invite_code" />
 					</td>
 				</tr>
 				<!-- <tr>
@@ -211,10 +211,10 @@
 				<tr>
 					<td>
 						<label>
-							<input type="checkbox">
+							<input type="checkbox" id="checkbox" checked="true">
 							<i>√</i>
 						</label>
-						<span style="font-size: 12px;">我接受《注册协议》、《免责声明》</span>
+						<span style="font-size: 12px;">我接受<a style="font-size: 12px;color: #666666;" href="http://51fanshu.com/docs/lMOz8">《注册协议》</a>、<a style="font-size: 12px;color: #666666;" href="http://51fanshu.com/docs/laSnD">《免责声明》</a></span>
 					</td>
 				</tr>
 				<tr>
@@ -368,7 +368,7 @@
 			var pwdValue = document.getElementById('pwd').value;
 			var pwdReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
 			if (!pwdReg.test(pwdValue)) {
-				mui.alert('请输入6~16位数字、字母或下划线中的两种');
+				mui.alert('密码为6~16位数字、字母或下划线中的两种');
 				return false;
 			}
 		})
@@ -382,13 +382,16 @@
 			var qqName = document.getElementById("qqName").value; // qq昵称
 			var invite_code = document.getElementById("invite_code").value; //邀请码
 			// var introduce = document.getElementById("introduce").value;
-			// var checkBox = document.getElementById("checkBox");
-
+			var flag = document.getElementById("checkbox");
+			
 			if (!qq || !qqName || !phone || !checkNum || !pwd) {
 				mui.alert("填写不能为空");
 				return;
 			}
-
+			if(!flag.checked){
+				mui.alert('您未同意《注册声明》和《免责协议》')
+				return false;
+			}
 			mui.ajax(register_url, {
 				data: {
 					'qq_number':qq,
@@ -405,6 +408,20 @@
 					console.log(data)
 					if (data.code == 0) {
 						mui.alert("申请成功");
+						mui.openWindow({
+							url: '/account/login',
+							styles: {
+								top: 0,
+								bottom: 0
+							},
+							show: {
+								aniShow: 'slide-in-right',
+							},
+							waiting: {
+								autoShow: false, //自动显示等待框
+								title: '正在加载...', //等待对话框上显示的提示内容
+							}
+						});
 					} else {
 						mui.alert(data.msg);
 					}

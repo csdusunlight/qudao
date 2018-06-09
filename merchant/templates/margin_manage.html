@@ -38,7 +38,8 @@
             text-align: center;
         }
         #pagedata{
-            margin-top: 10px;
+            margin-top: 35px;
+            font-size: 16px;
         }
         .nodata-box {
             min-height: 800px;
@@ -67,18 +68,19 @@
         <div class="Content">
             <div class="wrapperBox">
                 <nav>
-                <span style="position: absolute;top: 21px;left: 0;"  class="tips__icon" data-microtip-size="large" data-microtip="资金账号：商家（您）在审核交单数据时结算使用，可以随时充值和提现，区别于福利联盟个人中心的账户余额" data-microtip-position="bottom">?</span>          
+                <span style="position: absolute;top: 75px;left: 0;"  class="tips__icon" data-microtip-size="large" data-microtip="资金账号：商家（您）在审核交单数据时结算使用，可以随时充值和提现，区别于福利联盟个人中心的账户余额" data-microtip-position="bottom">?</span>          
                     <span class="amount">
                         <span class="amount1">资金账户余额：<label>{{user.margin_account}}元</label></span>
                     </span>
                     <input type="button" class="btn add" value="存入">
-                    <input type="button" class="btn wit" value="提取">
+                    <input type="button" class="btn wit" value="提取保证金">
                 </nav>
                 <div class="tabBox">
                     <ul class="tabul">
                         <li class="act">资金明细</li>
                         <!-- <li>充值</li> -->
                         <li>提取</li>
+                        <li>银行卡充值申请记录</li>
                     </ul>
                     <div id="pagedata" class="page-data">
                     </div>
@@ -93,8 +95,8 @@
                             ×
                     </div>
                     <div class="operateBox">
+                        <input class="zhifubao" type="radio" checked="checked" name="pay" value="1"><span>支付宝</span>
                         <input class="bank_card" type="radio" name="pay" value="0"><span>银行卡</span>
-                        <input class="zhifubao" type="radio" name="pay" value="1"><span>支付宝</span>
                     </div>
                     <!-- 银行卡 -->
                     <div class="card_box">
@@ -282,16 +284,6 @@
                         complete: pagecallback,
                     }); 
                 }
-                // else if (index == 1) {
-                //     $("#pagedata").ajaxPage({
-                //         url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}&type=0',
-                //         pageId: $("#page"),
-                //         pageSize: 10,
-                //         run: true,
-                //         content:addData,
-                //         complete: pagecallback,
-                //     });
-                // }
                 else if(index == 1){
                     $("#pagedata").ajaxPage({
                         url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}&type=1',
@@ -302,7 +294,18 @@
                         complete: pagecallback,
                     });
                 }
+                else if (index == 2) {
+                    $("#pagedata").ajaxPage({
+                        url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}&type=0',
+                        pageId: $("#page"),
+                        pageSize: 10,
+                        run: true,
+                        content:addData,
+                        complete: pagecallback,
+                    });
+                }
                 
+               
             });
             //变更时间处理
             var changeTime = $('.changeTime').text().split('T');
@@ -358,7 +361,9 @@
                             $.prompt({
                                 "Content":"提交充值申请，请等待!"
                             });
-                            // $(".bank_rechargeIpt ").val('');
+                            $('.wrapper_pay').hide();
+                            $('.tabBox').show();
+                            $(".bank_rechargeIpt ").val('');
                         } else if (ret.code == -2) {
                             $.prompt({
                                 "Content":"充值失败!"
@@ -424,9 +429,9 @@
                 $(".tabBox").show();
                 $(".rechargeIpt").val('');
              })
-             $(".payBtn").click(function () { 
+             $(".payBtn").click(function () {  //点击关闭模态框
                 $(".payMsk").hide();
-                $(".payBox").hide();
+                $(".wrapper_pay").hide();
                 $(".tabBox").show();
                 $(".rechargeIpt").val('');
               })

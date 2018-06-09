@@ -19,15 +19,6 @@
 						}
 
 					}
-					var state = "{{user.is_channel}}";
-					state = 1
-					function channelUser () {
-					  if (state === '1') {
-					    document.getElementsByClassName('channelapply').style.display="none";
-					  }
-					}
-					channelUser ();
-					console.log(1)
 				</script>
 				<li class="d-ib">
 					<a class="headertop__navitem link" href="{% url 'register' %}">注册</a>
@@ -39,7 +30,7 @@
 						{%if user.has_permission100 %}
 						<a class="link" href="{% url 'merchant:merchant_index' %}">招商入驻</a>
 						{% endif %}
-            {%if user.is_channel == '1' %}
+            {%if user.is_channel != '1' %}
             <a class="channelapply" class="link" href="/account/apply_for_channel_user/" style="margin-left: 15px;">渠道申请</a>
             {% endif %}
 					</font>

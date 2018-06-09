@@ -133,7 +133,7 @@
 	<div class="mui-content" style="background: white;">
 		<form>
 			<table>
-				<!-- <tr>
+				<tr>
 					<td>手机号</td>
 				</tr>
 				<tr>
@@ -153,7 +153,7 @@
 							/>
 						</div>
 					</td>
-				</tr> -->
+				</tr>
 
 				<tr>
 					<td>密码</td>
@@ -184,17 +184,37 @@
 				</tr>
 				<tr>
 					<td>
-						<input type="text"  value="{{icode}}" name="invite_code" class="invite_code" id="invite_code" />
+						<input type="text" name="invite_code" class="invite_code" id="invite_code" />
 					</td>
 				</tr>
-				
+				<!-- <tr>
+					<td>个人简介</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="text" id="introduce" name="introduce" class="ipt" />
+					</td>
+				</tr> -->
+
+				<!-- <tr>
+					<td>
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell mui-collapse">
+								<a style="display: block;margin: 6px 0 14px;" class="mui-navigate-right" href="#">邀请人ID（选填）</a>
+								<div class="mui-collapse-content">
+									<input type="text" id="invite_code" name="inviter_code" class="mui-input-password ipt">
+								</div>
+							</li>
+						</ul>
+					</td>
+				</tr> -->
 				<tr>
 					<td>
 						<label>
-							<input type="checkbox" id="checkbox" checked="true">
+							<input type="checkbox">
 							<i>√</i>
 						</label>
-						<span style="font-size: 12px;">我接受<a style="font-size: 12px;color: #666666;" href="http://51fanshu.com/docs/lMOz8">《注册协议》</a>、<a style="font-size: 12px;color: #666666;" href="http://51fanshu.com/docs/laSnD">《免责声明》</a></span>
+						<span style="font-size: 12px;">我接受《注册协议》、《免责声明》</span>
 					</td>
 				</tr>
 				<tr>
@@ -217,55 +237,109 @@
 		var index_url = "";
 		var login_url = "{% url 'login' %}";
 		//发送验证码
-		// var countdown = 60;
-		// function settime(val) {
-		// 	console.log('验证码');
-		// 	if (countdown == 0) {
-		// 		val.removeAttribute("disabled");
-		// 		val.value = "获取验证码";
-		// 		countdown = 60;
-		// 		return;
-		// 	} else {
-		// 		val.setAttribute("disabled", true);
-		// 		val.value = "重新发送(" + countdown + ")";
-		// 		countdown--;
-		// 	}
-		// 	setTimeout(function () {
-		// 		settime(val)
-		// 	}, 1000)
-		// }
+		var countdown = 60;
+		function settime(val) {
+			console.log('验证码');
+			if (countdown == 0) {
+				val.removeAttribute("disabled");
+				val.value = "获取验证码";
+				countdown = 60;
+				return;
+			} else {
+				val.setAttribute("disabled", true);
+				val.value = "重新发送(" + countdown + ")";
+				countdown--;
+			}
+			setTimeout(function () {
+				settime(val)
+			}, 1000)
+		}
 
 
 
-		// function sendCode(thisBtn) {
-		// 	var phone = document.getElementById("phone").value;
-		// 	var url = "{% url 'phoneImageV' %}";
-		// 	console.log(phone);
-		// 	mui.ajax(url, {
-		// 		data: {
-		// 			"phone": phone,
-		// 			"csrfmiddlewaretoken": '{{ csrf_token }}',
-		// 		},
-		// 		dataType: 'json', //服务器返回json格式数据
-		// 		type: 'get', //HTTP请求类型
-		// 		timeout: 10000, //超时时间设置为10秒；
-		// 		success: function (data) {
-		// 			console.log(data)
-		// 			if (data.code == "0") {
-		// 				mui.alert("验证码发送成功");
-		// 				settime(document.getElementById("setBtn"));
-		// 			} else {
-		// 				mui.alert("验证码发送失败");
-		// 				console.log(data.message);
-		// 			}
-		// 		},
-		// 		error: function (xhr, type, errorThrown) {
-		// 			console.log("获取数据失败");
-		// 		}
-		// 	});
-		// }
-	
-		
+		function sendCode(thisBtn) {
+			var phone = document.getElementById("phone").value;
+			var url = "{% url 'phoneImageV' %}";
+			console.log(phone);
+			mui.ajax(url, {
+				data: {
+					"phone": phone,
+					"csrfmiddlewaretoken": '{{ csrf_token }}',
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'get', //HTTP请求类型
+				timeout: 10000, //超时时间设置为10秒；
+				success: function (data) {
+					console.log(data)
+					if (data.code == "0") {
+						mui.alert("验证码发送成功");
+						settime(document.getElementById("setBtn"));
+					} else {
+						mui.alert("验证码发送失败");
+						console.log(data.message);
+					}
+				},
+				error: function (xhr, type, errorThrown) {
+					console.log("获取数据失败");
+				}
+			});
+		}
+		//手机号是否存在
+		mui(document).on('change','#phone',function () { 
+			var phone_num = document.getElementById("phone").value;
+			var phoneReg = /^1[3456789]\d{9}$/;
+			if (!phoneReg.test(phone_num)) {
+				mui.alert("请输入正确的手机号");
+				return false;
+			}
+			mui.ajax(verifymobile_url, {
+				dataType: 'json', //服务器返回json格式数据
+				type: 'get', //HTTP请求类型
+				timeout: 10000, //超时时间设置为10秒；
+				data:{
+					'mobile':phone_num
+				},
+				success: function (data) {
+					console.log(data)
+					if (data.code == 0) {
+						console.log('手机号bu存在')
+					} else {
+						mui.alert('手机号已经存在');
+					}
+				},
+				error: function (xhr, type, errorThrown) {
+					console.log("数据请求错误");
+				}
+			});
+		})
+		//QQ号是否存在
+		mui(document).on('change','#qq',function () { 
+			var qq_num = document.getElementById('qq').value;
+			var qqReg = /^\d{5,10}$/;
+			if (!qqReg.test(qq_num)) {
+				mui.alert("请输入正确的QQ");
+				return false;
+			}
+			mui.ajax(verifyqq_url, {
+				dataType: 'json', //服务器返回json格式数据
+				type: 'get', //HTTP请求类型
+				timeout: 10000, //超时时间设置为10秒；
+				data:{
+					'qq_number':qq_num
+				},
+				success: function (data) {
+					console.log(data)
+					if (data.code == 0) {
+						console.log('QQ号不存在')
+					} else {
+						mui.alert('QQ号已存在');
+					}
+				},
+				error: function (xhr, type, errorThrown) {
+					console.log("数据请求错误");
+				}
+			});
+		})
 		//邀请码是否存在
 		mui(document).on('change','.invite_code',function () { 
 			var inviteCode = document.getElementById('invite_code').value;
@@ -294,36 +368,33 @@
 			var pwdValue = document.getElementById('pwd').value;
 			var pwdReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
 			if (!pwdReg.test(pwdValue)) {
-				mui.alert('密码为6~16位数字、字母或下划线中的两种');
+				mui.alert('请输入6~16位数字、字母或下划线中的两种');
 				return false;
 			}
 		})
 		var register_url = "{% url 'register' %}";
 
 		document.getElementById("btn").addEventListener("tap", function () {
-			// var phone = document.getElementById("phone").value; //手机号
-			// var checkNum = document.getElementById("checkNum").value; //验证码
+			var phone = document.getElementById("phone").value; //手机号
+			var checkNum = document.getElementById("checkNum").value; //验证码
 			var pwd = document.getElementById("pwd").value;  //密码
 			var qq = document.getElementById("qq").value; //qq号
 			var qqName = document.getElementById("qqName").value; // qq昵称
 			var invite_code = document.getElementById("invite_code").value; //邀请码
 			// var introduce = document.getElementById("introduce").value;
-			var flag = document.getElementById("checkbox");
-			
-			if (!qq || !qqName || !pwd) {
+			// var checkBox = document.getElementById("checkBox");
+
+			if (!qq || !qqName || !phone || !checkNum || !pwd) {
 				mui.alert("填写不能为空");
 				return;
 			}
-			if(!flag.checked){
-				mui.alert('您未同意《注册声明》和《免责协议》')
-				return false;
-			}
+
 			mui.ajax(register_url, {
 				data: {
 					'qq_number':qq,
 					'qq_name':qqName,
-					// 'code':checkNum,
-					// 'mobile':phone,
+					'code':checkNum,
+					'mobile':phone,
 					'password':pwd,
 					'invite_code':invite_code
 				},
@@ -334,20 +405,6 @@
 					console.log(data)
 					if (data.code == 0) {
 						mui.alert("申请成功");
-						mui.openWindow({
-							url: '/account/login',
-							styles: {
-								top: 0,
-								bottom: 0
-							},
-							show: {
-								aniShow: 'slide-in-right',
-							},
-							waiting: {
-								autoShow: false, //自动显示等待框
-								title: '正在加载...', //等待对话框上显示的提示内容
-							}
-						});
 					} else {
 						mui.alert(data.msg);
 					}

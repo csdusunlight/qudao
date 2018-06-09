@@ -138,7 +138,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     zhifubao = models.CharField(u"支付宝账号（邮箱或手机号）", blank=True, max_length=50)
     zhifubao_real_name = models.CharField(u"支付宝实名", blank=True, max_length=20)
 
-    is_channel = models.CharField(u"是否渠道", choices=IS_CHANNEL, default='1', max_length=2)  #
+    is_channel = models.CharField(u"是否渠道", choices=IS_CHANNEL, default='0', max_length=2)  #
     objects = MyUserManager()
     USERNAME_FIELD = 'mobile'
     REQUIRED_FIELDS = ['username','qq_number']
@@ -172,6 +172,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return self.admin_permissions.filter(code=code).exists()
     def has_permission100(self):
         return self.has_admin_perms('100')
+    def has_permission200(self):
+        return self.has_admin_perms('200')
     def picture_url(self):
         """
         Returns the URL of the image associated with this Object.

@@ -62,8 +62,10 @@ def index(request):
 def admin_merchant_look(request):
     return render(request,"admin_merchant_look.html", {})
 
-from django.views.decorators.csrf import csrf_exempt
-@csrf_exempt
+
+import time
+
+@has_post_permission('052')
 def admin_apply(request):
     if request.method == "POST":
         admin_user = request.user
@@ -82,33 +84,31 @@ def admin_apply(request):
             with transaction.atomic():
                 ####################
                 reason = "success"
-                nowtime = datetime.datetime.now()
-                Message.objects.create(user=currentuser, title="渠道申请审核反馈", time=nowtime, is_read=False,
+                nowtime = time.strftime('%Y-%m-%d %H:%M:%S')
+                Message.objects.create(user=currentuser, title="渠道申请审核反馈", is_read=False,
                                        content=u"尊敬的用户：您申请成为渠道用户成功！")
                 currentuser.is_channel='1'
                 currentuser.level=level
                 currentuser.save(update_fields=['is_channel','level'])
-                current_applyforchannel.audit_time = datetime.datetime.now()
+                current_applyforchannel.audit_time = nowtime
                 current_applyforchannel.audit_state = '0'
                 current_applyforchannel.admin_user = admin_user
                 current_applyforchannel.save(update_fields=['audit_time', 'audit_state', 'admin_user'])
-                AdminLog.objects.create(admin_user=admin_user, custom_user=currentuser, remark=reason, type='3',
-                                        time=nowtime)
+                AdminLog.objects.create(admin_user=admin_user, custom_user=currentuser, remark=reason, type='3')
                 sendmsg_bydhst(currentuser.mobile, u"您申请成为渠道用户成功！")
                 res['code'] = 0
                 ####################
         elif type==2:
             reason = request.POST.get('reason', '')
-            nowtime = datetime.datetime.now()
-            Message.objects.create(user=currentuser, title="渠道申请审核反馈", time=nowtime, is_read=False,
-                                   content=u"尊敬的用户：您申请成为渠道用申用户失败。被拒绝原因如下：" + reason)  # 写入审核原因，加个字段
-            current_applyforchannel.audit_time = datetime.datetime.now()
+            nowtime = time.strftime('%Y-%m-%d %H:%M:%S')
+            Message.objects.create(user=currentuser, title="渠道申请审核反馈", is_read=False,
+                                   content=u"尊敬的用户：您申请成为渠道用户失败。被拒绝原因如下：" + reason)  # 写入审核原因，加个字段
+            current_applyforchannel.audit_time = nowtime
             current_applyforchannel.audit_state = '2'
             current_applyforchannel.audit_reason = reason
             current_applyforchannel.admin_user = admin_user
             current_applyforchannel.save(update_fields=['audit_time', 'audit_state', 'admin_user','audit_reason'])
-            AdminLog.objects.create(admin_user=admin_user, custom_user=currentuser, remark=reason, type='3',
-                                    time=nowtime)
+            AdminLog.objects.create(admin_user=admin_user, custom_user=currentuser, remark=reason, type='3')
             sendmsg_bydhst(currentuser.mobile, u"您申请成为渠道用户失败" + reason)
             res['code'] = 0
         res['code'] = 0
@@ -765,7 +765,7 @@ def admin_user(request):
             res['code'] = 0
 
         elif type == 8:#添加关于渠道用户被拒绝的操作，返回拒绝的消息和拒绝的原因，消息是固定的，原因是审核者填写的
-            if not admin_user.has_admin_perms('055'):
+            if not admin_user.has_admin_perms('052'):
                 res['code'] = -5
                 res['res_msg'] = u'您没有操作权限！'
                 return JsonResponse(res)

@@ -50,6 +50,7 @@
 			min-height: 200px;
 			color: #858585;
 		}
+		
 	</style>
 
 </head>
@@ -95,6 +96,19 @@
 				<span class="s_item" data-name="{{x.name}}">{{x.name}}</span>
 				{%endfor%}
 			</div>
+			<div id="project_end_container" class="project-end-container">
+			  <p class="project-end-left">已结束项目：</p>
+  			<div id="project_end_box" class="project-end-box">
+  				<ul id="project_end_1" class="project-end-1">
+  					<!--<li class="project-end-item">地方撒地方撒地方撒地方撒地方撒</li>
+  					<li class="project-end-item">地方撒东风风纷纷地方赛</li>
+  					<li class="project-end-item">地方撒烽三的刚的刚赛纲地方的</li>
+  					<li class="project-end-item">地方撒冯港反对 东风 东风 反对共非根底</li>
+  					<li class="project-end-item">地方撒森森风个三花骨朵地方似懂非懂</li>-->
+  				</ul>
+  				<ul id="project_end_2" class="project-end-2"></ul>
+  			</div>
+			</div>
 		</div>
 
 		<div class="dataBox">
@@ -131,12 +145,12 @@
 		var userlevel = '{{user.level}}';
 		console.log(userlevel);
 		var data = '[results]<li class="finance">' +
-			'<a class="link_left" href="{strategy}" target="_blank"><div class="wrapperBox"><div class="over" data-state={project_state}><span>已结束</span></div><img class="finance__img finance__item" src="{pic}" alt="商家logo"></div>' +
+			'<a class="link_left" href="{strategy}" target="_blank"><div class="wrapperBox"><div class="over" data-state={project_state}><span>已结束</span></div><img class="finance__img finance__item" src="{logo}" alt="商家logo"></div>' +
 			'<div class="item1"><span class="finance__term finance__item">{term}</span></div><div class="item2"><span class="finance__range finance__item">{investrange}</span></div>' +
 			'<div class="item3"><span class="finance__price finance__item">{display_price}</span></div>' +
 			'<div class="item5"><span class="finance__remark finance__item">{remark}</span></div></a>' +
 			'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank"><span class="go">进入推广主页-></span></a></div></li>[/results]';
-		var url = "/restapi/projects/?page={page}&pageSize={pageSize}";
+		var url = "/restapi/projects/?page={page}&pageSize={pageSize}&is_official=true&state=10&is_addedto_repo=true";
 
 		function pagecallback() {
 			$('.add-project.true').each(function () {
@@ -202,11 +216,11 @@
 			})
 			//获取平台列表
 			$.ajax({
-				url:'/restapi/company2/',
+				url:'/restapi/company2/?pageSize=999',
 				dataType: "json",
 				type: 'GET',
 				success: function (ret) {
-					if(ret.code == 1){
+					if(ret.code == 0){
 						var str_html;
 						console.log('ret',ret.results)
 						for(let i in ret.results){
@@ -279,7 +293,7 @@
 				project_status = "";
 
 			$("#pagedata1").ajaxPage({
-				url: url + "&type=" + "&state=",
+				url: url + "&type=",
 				pageId: $("#page1"),
 				pageSize: 20,
 				run: true,
@@ -372,6 +386,46 @@
 			// 		});
 			// 	}
 			// });
+			window.onload = function(){
+			  $.ajax({
+			  	type:"get",
+			  	url:"/restapi/projects/?state=20&is_official=true",
+			  	async:true,
+			  	success: function(ret) {
+			  	  console.log(ret.results);
+			  	  for (var i=0; i<ret.results.length; i++) {
+			  	    var li_dom = '<li class="project-end-item">'+ ret.results[i].title +'</li>'
+			  	    $('.project-end-1').append(li_dom)
+			  	  }
+			  	  scrollLeft();
+			  	}
+			  });
+       };
+       function scrollLeft(){
+         var speed = 20;
+         var tab = document.getElementById('project_end_box');
+         var tab1 = document.getElementById('project_end_1');
+         var tab2 = document.getElementById('project_end_2');
+         if (tab1.offsetWidth > tab.offsetWidth) {
+           tab2.innerHTML = tab1.innerHTML;
+         	
+           var timer = setInterval(Marquee,speed);
+           tab.onmouseover = function(){
+             clearInterval(timer);
+           };
+           tab.onmouseout = function(){
+             timer = setInterval(Marquee,speed);
+           }
+         }
+         function Marquee(){
+           if(tab2.offsetWidth - tab.scrollLeft <=0) {    
+             tab.scrollLeft = 0;
+           }else{
+             tab.scrollLeft ++;
+           }
+       
+         }
+       }
 
 		});
 

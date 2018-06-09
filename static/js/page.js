@@ -115,6 +115,9 @@
 						}
 						self.html(b.r(s,res));
 					}
+					if (res.recordCount== 0) {
+					  self.html(c.noData);
+					}
 				} else if(res.code === 1){
 					c.pageCount = 0;
 					c.recordCount = 0;

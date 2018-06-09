@@ -23,19 +23,25 @@ var data = '<ul id="pages">[results]<li class="item_list">' +
 $(function(){
   function pagecallback(){
     $('.time').each(function (index, val) {
-      var str = $(this).text()
-      str = str.replace('T', ' ')
-      $(this).text(str)
+      var str = $(this).text();
+      str = str.replace('T', ' ');
+      $(this).text(str);
     })
   }
-	$('.back-a13').parent().toggleClass("on");
+  function notdata () {
+    $('.binding').hide();
+    $('.box_img').show();
+    $('.RightCont').addClass('minheight');
+  }
+	$('.back-a6').toggleClass("on");
 	$("#pagedata").ajaxPage({
 	    url:'/restapi/msgs/?page={page}&pageSize={pageSize}',
 	    pageId:$("#page"),
 	    pageSize:10,
 	    run:true,
 	    content:data,
-	    complete:pagecallback
+	    complete:pagecallback,
+	    noData: notdata
 	});
 });
 </script>
@@ -53,7 +59,10 @@ $(function(){
                 	<div class="binding" style="padding-bottom:0;">
                     <div class="Newlist" id="pagedata"></div>
                     <div class="changes-p-msg"><div class="page" id="page"></div></div>
-                  </div>                    
+                	</div>
+                  <div class="box_img" style="display: none;">
+                    <img src="{% static 'images/ms_zwxiaox.png' %}"/>
+                  </div>
                 </div>
             </div>
         </div>

@@ -28,6 +28,8 @@ from rest_framework.exceptions import ValidationError
 # from activity.models import SubmitRank, IPLog
 from docs.models import Document
 import re
+from django.http import JsonResponse
+
 # from wafuli.Filters import UserEventFilter
 class BaseViewMixin(object):
     authentication_classes = (CsrfExemptSessionAuthentication,)
@@ -322,22 +324,31 @@ class MessageList(BaseViewMixin, generics.ListCreateAPIView):
     filter_class = MessageFilter
     filter_backends = (SearchFilter, OrderingFilter)
     pagination_class = MyPageNumberPagination
-    ordering_fields = ('is_read','time')
+    ordering_fields = ('time')
     search_fields = ('title','content')
-    ordering = ('is_read','time')
+    ordering = ('time')
 
 
 class MessageDetail(BaseViewMixin,generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MesssageSerializer
     queryset = Message.objects.all()
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Message.objects.all()
+        else:
+            return Message.objects.filter(user=user)
     def partial_update(self,serializer,*args,**kwargs):
         Mid=kwargs['pk']
         para = self.request.data.get("isread",-1)
         if para =='1' and Mid != -1:
-            objmsgs = Message.objects.filter(id=Mid)
+            objmsgs = self.queryset.filter(id=Mid) #.filter(user=self.request.user)
             if objmsgs.exists():
                 objmsg=objmsgs[0]
-                objmsg.save(isread=True)
+                objmsg.is_read=True
+                objmsg.save(update_fields=['is_read',])
+                returndict ={"code":0}
+                return JsonResponse(returndict)
             else:
                 raise Exception("没有目标邮件！")
         else:

@@ -33,100 +33,119 @@
     </div>
     <div class="channel_apply">
       <div class="title"><img src="{% static 'images/afc_qudao_sq.png' %}"/></div>
-      <form class="form" method="post" id="form1">
-        <div class="radio_group">
-          <label class="location margin">您的身份<i>*</i> :</label>
-          <div class="column">
+      <div class="formshow">
+        <form class="form" method="post" id="form1">
+          <div class="radio_group">
+            <label class="location margin">您的身份<i>*</i> :</label>
+            <div class="column">
+              <label class="radio_item">
+                <input class="radio" type="radio" name="radio1" id="student" value="1" data-rule="checked"/><label class="label_item" for="student"></label><span>学生党</span>
+              </label>
+              <label class="radio_item">
+                <input class="radio" type="radio" name="radio1" id="mother" value="2"/><label class="label_item" for="mother"></label><span>宝妈</span>
+              </label>
+              <label class="radio_item">
+                <input class="radio" type="radio" name="radio1" id="hair" value="3"/><label class="label_item" for="hair"></label><span>羊毛党</span>
+              </label>
+              <label class="radio_item">
+                <input class="radio" type="radio" name="radio1" id="timejob" value="4"/><label class="label_item" for="timejob"></label><span>兼职</span>
+              </label>
+              <label class="radio_item">
+                <input class="radio" type="radio" name="radio1" id="stationmaster" value="5"/><label class="label_item" for="stationmaster"></label><span>个人站长</span>
+              </label>
+              <label class="radio_item">
+                <input class="radio" type="radio" name="radio1" id="finance" value="6"/><label class="label_item" for="finance"></label><span>金融大V</span>
+              </label>
+              <label class="radio_item">
+                <input class="radio" type="radio" name="radio1" id="lics" value="7"/><label class="label_item" for="lics"></label><span>理财师</span>
+              </label>
+              <label class="radio_item lastys" style="width: 50px;">
+                <input class="radio" type="radio" name="radio1" id="tlins" value="8"/><label class="label_item" for="tlins"></label><span>宝妈</span>
+              </label>
+            </div>
+          </div>
+          <div class="radio_group">
+            <label class="margin">经验年限<i>*</i> :</label>
             <label class="radio_item">
-              <input class="radio" type="radio" name="radio1" id="student" value="1" data-rule="checked"/><label class="label_item" for="student"></label><span>学生党</span>
+              <input class="radio" type="radio" name="radio2" id="xins" value="1" data-rule="checked"/><label class="label_item" for="xins"></label><span>新手</span>
             </label>
             <label class="radio_item">
-              <input class="radio" type="radio" name="radio1" id="mother" value="2"/><label class="label_item" for="mother"></label><span>宝妈</span>
+              <input class="radio" type="radio" name="radio2" id="ynianzn" value="2"/><label class="label_item" for="ynianzn"></label><span>一年之内</span>
             </label>
             <label class="radio_item">
-              <input class="radio" type="radio" name="radio1" id="hair" value="3"/><label class="label_item" for="hair"></label><span>羊毛党</span>
+              <input class="radio" type="radio" name="radio2" id="ydaoen" value="3"/><label class="label_item" for="ydaoen"></label><span>1-2年</span>
             </label>
-            <label class="radio_item">
-              <input class="radio" type="radio" name="radio1" id="timejob" value="4"/><label class="label_item" for="timejob"></label><span>兼职</span>
-            </label>
-            <label class="radio_item">
-              <input class="radio" type="radio" name="radio1" id="stationmaster" value="5"/><label class="label_item" for="stationmaster"></label><span>个人站长</span>
-            </label>
-            <label class="radio_item">
-              <input class="radio" type="radio" name="radio1" id="finance" value="6"/><label class="label_item" for="finance"></label><span>金融大V</span>
-            </label>
-            <label class="radio_item">
-              <input class="radio" type="radio" name="radio1" id="lics" value="7"/><label class="label_item" for="lics"></label><span>理财师</span>
-            </label>
-            <label class="radio_item lastys" style="width: 50px;">
-              <input class="radio" type="radio" name="radio1" id="tlins" value="8"/><label class="label_item" for="tlins"></label><span>宝妈</span>
+            <label class="radio_item lastys" style="width: 70px;">
+              <input class="radio" type="radio" name="radio2" id="snianys" value="4"/><label class="label_item" for="snianys"></label><span>3年以上</span>
             </label>
           </div>
-        </div>
-        <div class="radio_group">
-          <label class="margin">经验年限<i>*</i> :</label>
-          <label class="radio_item">
-            <input class="radio" type="radio" name="radio2" id="xins" value="1" data-rule="checked"/><label class="label_item" for="xins"></label><span>新手</span>
-          </label>
-          <label class="radio_item">
-            <input class="radio" type="radio" name="radio2" id="ynianzn" value="2"/><label class="label_item" for="ynianzn"></label><span>一年之内</span>
-          </label>
-          <label class="radio_item">
-            <input class="radio" type="radio" name="radio2" id="ydaoen" value="3"/><label class="label_item" for="ydaoen"></label><span>1-2年</span>
-          </label>
-          <label class="radio_item lastys" style="width: 70px;">
-            <input class="radio" type="radio" name="radio2" id="snianys" value="4"/><label class="label_item" for="snianys"></label><span>3年以上</span>
-          </label>
-        </div>
-        <div class="radio_group">
-          <label class="margin">客户资源<i>*</i> :</label>
-          <label class="radio_item">
-            <input class="radio" type="radio" name="radio3" id="wshirys" value="1" data-rule="checked"/><label class="label_item" for="wshirys"></label><span>50人以上</span>
-          </label>
-          <label class="radio_item">
-            <input class="radio" type="radio" name="radio3" id="wshidyb" value="2"/><label class="label_item" for="wshidyb"></label><span>50-100人</span>
-          </label>
-          <label class="radio_item">
-            <input class="radio" type="radio" name="radio3" id="ybaidwbr" value="3"/><label class="label_item" for="ybaidwbr"></label><span>100-500人</span>
-          </label>
-          <label class="radio_item lastys" style="width: 85px;">
-            <input class="radio" type="radio" name="radio3" id="wbairys" value="4"/><label class="label_item" for="wbairys"></label><span>500人以上</span>
-          </label>
-        </div>
-        <div class="radio_group">
-          <label class="margin">资金体量<i>*</i> :</label>
-          <label class="radio_item">
-            <input class="radio" type="radio" name="radio4" id="wshiwyx" value="1" data-rule="checked"/><label class="label_item" for="wshiwyx"></label><span>50万以下</span>
-          </label>
-          <label class="radio_item">
-            <input class="radio" type="radio" name="radio4" id="wshidybw" value="2"/><label class="label_item" for="wshidybw"></label><span>50-100万</span>
-          </label>
-          <label class="radio_item">
-            <input class="radio" type="radio" name="radio4" id="ybaidwbw" value="3"/><label class="label_item" for="ybaidwbw"></label><span>100-500万</span>
-          </label>
-          <label class="radio_item lastys" style="width: 85px;">
-            <input class="radio" type="radio" name="radio4" id="wbaiwys" value="4"/><label class="label_item" for="wbaiwys"></label><span>500万以上</span>
-          </label>
-        </div>
-        <div class="radio_group">
-          <label class="margin">推单偏好<i>*</i> :</label>
-          <label class="radio_item">
-            <input class="radio" type="radio" name="radio5" id="xerldd" value="1" data-rule="checked"/><label class="label_item" for="xerldd"></label><span>小额量大单</span>
-          </label>
-          <label class="radio_item">
-            <input class="radio" type="radio" name="radio5" id="dxicded" value="2"/><label class="label_item" for="dxicded"></label><span>低息大额单</span>
-          </label>
-          <label class="radio_item">
-            <input class="radio" type="radio" name="radio5" id="dqigfd" value="4"/><label class="label_item" for="dqigfd"></label><span>短期高返单</span>
-          </label>
-          <label class="radio_item lastys" style="width: 70px;">
-            <input class="radio" type="radio" name="radio5" id="mtid" value="3"/><label class="label_item" for="mtid"></label><span>媒体单</span>
-          </label>
-        </div>
-        <div class="form-sub">
-            <button type="submit">提交</button>
-        </div>
-      </form>
+          <div class="radio_group">
+            <label class="margin">客户资源<i>*</i> :</label>
+            <label class="radio_item">
+              <input class="radio" type="radio" name="radio3" id="wshirys" value="1" data-rule="checked"/><label class="label_item" for="wshirys"></label><span>50人以上</span>
+            </label>
+            <label class="radio_item">
+              <input class="radio" type="radio" name="radio3" id="wshidyb" value="2"/><label class="label_item" for="wshidyb"></label><span>50-100人</span>
+            </label>
+            <label class="radio_item">
+              <input class="radio" type="radio" name="radio3" id="ybaidwbr" value="3"/><label class="label_item" for="ybaidwbr"></label><span>100-500人</span>
+            </label>
+            <label class="radio_item lastys" style="width: 85px;">
+              <input class="radio" type="radio" name="radio3" id="wbairys" value="4"/><label class="label_item" for="wbairys"></label><span>500人以上</span>
+            </label>
+          </div>
+          <div class="radio_group">
+            <label class="margin">资金体量<i>*</i> :</label>
+            <label class="radio_item">
+              <input class="radio" type="radio" name="radio4" id="wshiwyx" value="1" data-rule="checked"/><label class="label_item" for="wshiwyx"></label><span>50万以下</span>
+            </label>
+            <label class="radio_item">
+              <input class="radio" type="radio" name="radio4" id="wshidybw" value="2"/><label class="label_item" for="wshidybw"></label><span>50-100万</span>
+            </label>
+            <label class="radio_item">
+              <input class="radio" type="radio" name="radio4" id="ybaidwbw" value="3"/><label class="label_item" for="ybaidwbw"></label><span>100-500万</span>
+            </label>
+            <label class="radio_item lastys" style="width: 85px;">
+              <input class="radio" type="radio" name="radio4" id="wbaiwys" value="4"/><label class="label_item" for="wbaiwys"></label><span>500万以上</span>
+            </label>
+          </div>
+          <div class="radio_group">
+            <label class="margin">推单偏好<i>*</i> :</label>
+            <label class="radio_item">
+              <input class="radio" type="radio" name="radio5" id="xerldd" value="1" data-rule="checked"/><label class="label_item" for="xerldd"></label><span>小额量大单</span>
+            </label>
+            <label class="radio_item">
+              <input class="radio" type="radio" name="radio5" id="dxicded" value="2"/><label class="label_item" for="dxicded"></label><span>低息大额单</span>
+            </label>
+            <label class="radio_item">
+              <input class="radio" type="radio" name="radio5" id="dqigfd" value="4"/><label class="label_item" for="dqigfd"></label><span>短期高返单</span>
+            </label>
+            <label class="radio_item lastys" style="width: 70px;">
+              <input class="radio" type="radio" name="radio5" id="mtid" value="3"/><label class="label_item" for="mtid"></label><span>媒体单</span>
+            </label>
+          </div>
+          <div class="form-sub">
+              <button type="submit">提交</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="audit">
+      <div class="audit_css">
+        <img class="origin" src="{% static 'images/cgimg.png' %}"/>
+        <i class="outline"></i>
+        <img class="circular" src="{% static 'images/yuanyuand.png' %}"/>
+        <i class="line"></i>
+        <div class="end"></div>
+        <div class="box_alert">三个工作日内审核</div>
+      </div>
+      <div class="textt">
+        <span class="textlist1">提交申请</span>
+        <span class="textlist2">审核中</span>
+        <span class="textlist3">审核结果</span>
+      </div>
+      <div class="texttimes">
+      </div>
     </div>
     <div class="message">
       <div class="message_item">
@@ -140,24 +159,45 @@
 {% include "footer.html" %}
 
 <!--<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>-->
-<script type="text/javascript" src="{% static 'js/jquery.validator.min.js' %}?local=zh-CN"></script>
+<script type="text/javascript" src="{% static 'js/validator/jquery.validator.min.js' %}?local=zh-CN"></script>
 <!--<script type="text/javascript" src="{% static "js/ZeroClipboard.js" %}"></script>-->
 
 <script type="text/javascript">
+function timeFilter(time) {
+    times = time.split(".");
+    var timestr = times[0].replace('T', ' ');
+    return timestr;
+}
 $(function(){
-  $.ajax({
-    type: 'get',
-    url: '/restapi/applylog/',
-    data: data,
-    dataType:'json',
-    success: function (data) {
-      console.log(data)
-      if (data.code === 0) {
-      }
-    },
-    error: function (err) {
-      console.log(err);
+  var state = "{{user.is_channel}}";
+  function auditState () {
+    if (state === '1') {
+      $('.formshow').hide();
+      $('.audit').show();
+    } else {
+      $('.form1').show();
+      $('.audit').hide();
     }
+  }
+  auditState ()
+  $.ajax({
+  type: 'get',
+  url: '/restapi/applylog/',
+  dataType:'json',
+  success: function (data) {
+    if (data.code === 0) {
+      console.log(data.results[0]);
+      var subtime = timeFilter(data.results[0].submit_time)
+      var audit = timeFilter(data.results[0].audit_time)
+      var str = ''
+      str = '<span class="times1">'+ subtime +'</span>' +
+            '<span class="times2">'+ audit +'</span>'
+      $('.texttimes').html(str);
+    }
+  },
+  error: function (err) {
+    console.log(err);
+  }
   });
   $('#form1').validator({
       valid: function(form) {

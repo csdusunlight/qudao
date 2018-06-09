@@ -62,8 +62,9 @@ def index(request):
 def admin_merchant_look(request):
     return render(request,"admin_merchant_look.html", {})
 
-from django.views.decorators.csrf import csrf_exempt
+
 @csrf_exempt
+@has_post_permission('052')
 def admin_apply(request):
     if request.method == "POST":
         admin_user = request.user
@@ -765,7 +766,7 @@ def admin_user(request):
             res['code'] = 0
 
         elif type == 8:#添加关于渠道用户被拒绝的操作，返回拒绝的消息和拒绝的原因，消息是固定的，原因是审核者填写的
-            if not admin_user.has_admin_perms('055'):
+            if not admin_user.has_admin_perms('052'):
                 res['code'] = -5
                 res['res_msg'] = u'您没有操作权限！'
                 return JsonResponse(res)

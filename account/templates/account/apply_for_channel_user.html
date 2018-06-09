@@ -164,7 +164,6 @@
 
 <script type="text/javascript">
 function timeFilter(time) {
-    console.log(time);
     times = time.split(".");
     var timestr = times[0].replace('T', ' ');
     return timestr;
@@ -187,9 +186,7 @@ $(function(){
   dataType:'json',
   success: function (data) {
     if (data.code === 0) {
-      console.log(data.results[0]);
       var subtime = timeFilter(data.results[0].submit_time);
-      console.log(subtime)
       var str = '';
       str = '<span class="times1">'+ subtime +'</span>';
       $('.texttimes').html(str);
@@ -208,7 +205,6 @@ $(function(){
           'funds_volumn': $('input[name="radio4"]:checked').val(),
           'invest_orientation': $('input[name="radio5"]:checked').val()
         }
-        console.log(data)
         $.ajax({
           type: 'POST',
           url: '/account/apply_for_channel_user/',

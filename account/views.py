@@ -251,7 +251,7 @@ def register_from_gzh(request):
         template = 'registration/m_register_from_gzh.html'
         return render(request,template, context)
 
-
+import time
 @csrf_exempt
 def apply_for_channel_user(request):
     if request.method == 'GET':
@@ -273,6 +273,7 @@ def apply_for_channel_user(request):
         def para_check_in_model_choice(para,choices):
             return para in [i[0] for i in choices]
         #######################
+
         if all([para_check_in_model_choice(user_origin,USER_ORIGIN), \
                 para_check_in_model_choice(user_exp_year, USER_EXP_YEAR), \
                 para_check_in_model_choice(user_custom_volumn, USER_CUSTOME_VOLUMN), \
@@ -284,7 +285,7 @@ def apply_for_channel_user(request):
                                       user_custom_volumn=user_custom_volumn,
                                       user_funds_volumn=user_funds_volumn,
                                       user_invest_orientation=user_invest_orientation,
-                                      submit_time= datetime.datetime.now(),
+                                      submit_time= time.strftime("%Y-%m-%d %H:%M:%S"),
                                       audit_state='1')
             current_user.is_channel = '-1'
             current_user.save(update_fields=[

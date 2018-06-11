@@ -116,4 +116,4 @@ class MessageFilter(django_filters.rest_framework.FilterSet):
     content = django_filters.CharFilter(name="content")
     class Meta:
         model = Message
-        fields = ['title','time','is_read','content']
+        fields = ['title','time','is_read','content','num_message_sync']

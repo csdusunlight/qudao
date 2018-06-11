@@ -181,8 +181,8 @@ def export_investlog_for_pay(request):
     investtime_1 = request.GET.get("investtime_1", None)
     submittime_0 = request.GET.get("submittime_0", None)
     submittime_1 = request.GET.get("submittime_1", None)
-    audittime_0 = request.GET.get("auditdate_0", None)
-    audittime_1 = request.GET.get("auditdate_1", None)
+    auditdate_0 = request.GET.get("auditdate_0", None)
+    auditdate_1 = request.GET.get("auditdate_1", None)
     state = request.GET.get("audit_state",'')
     pay_state = request.GET.get("pay_state",'')
     if submittime_0 and submittime_1:
@@ -194,9 +194,9 @@ def export_investlog_for_pay(request):
         s = datetime.datetime.strptime(investtime_0,'%Y-%m-%d')
         e = datetime.datetime.strptime(investtime_1,'%Y-%m-%d')
         item_list = item_list.filter(invest_date__range=(s,e))
-    if audittime_0 and audittime_1:
-        s = datetime.datetime.strptime(audittime_0,'%Y-%m-%d')
-        e = datetime.datetime.strptime(audittime_1,'%Y-%m-%d')
+    if auditdate_0 and auditdate_1:
+        s = datetime.datetime.strptime(auditdate_0,'%Y-%m-%d')
+        e = datetime.datetime.strptime(auditdate_1,'%Y-%m-%d')
         e += datetime.timedelta(days=1)
         item_list = item_list.filter(audit_time__range=(s,e))
     qq_number = request.GET.get("qq_number", None)

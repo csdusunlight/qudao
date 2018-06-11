@@ -43,6 +43,7 @@ def index(request):
 
     total = {}
     total['apply_num'] = ApplyLogForChannel.objects.count()
+    total['apply_success'] = ApplyLogForChannel.objects.filter(audit_state='0').count()
     dict1 = MyUser.objects.aggregate(cou=Count('id'), sumb=Sum('balance'))
     total['user_num'] = MyUser.objects.count()
     total['balance'] = dict1.get('sumb') or 0
@@ -89,7 +90,8 @@ def admin_apply(request):
                                        content=u"尊敬的用户：您申请成为渠道用户成功！")
                 currentuser.is_channel='1'
                 currentuser.level=level
-                currentuser.save(update_fields=['is_channel','level'])
+                currentuser.num_message_sync+=1
+                currentuser.save(update_fields=['is_channel','level','num_message_sync'])
                 current_applyforchannel.audit_time = nowtime
                 current_applyforchannel.audit_state = '0'
                 current_applyforchannel.admin_user = admin_user
@@ -104,7 +106,8 @@ def admin_apply(request):
             Message.objects.create(user=currentuser, title="渠道申请审核反馈", is_read=False,
                                    content=u"尊敬的用户：您申请成为渠道用户失败。被拒绝原因如下：" + reason)  # 写入审核原因，加个字段
             currentuser.is_channel = '０'
-            currentuser.save(update_fields=['is_channel',])
+            currentuser.num_message_sync += 1
+            currentuser.save(update_fields=['is_channel','num_message_sync'])
             current_applyforchannel.audit_time = nowtime
             current_applyforchannel.audit_state = '2'
             current_applyforchannel.audit_reason = reason

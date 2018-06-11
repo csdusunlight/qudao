@@ -12,6 +12,7 @@
 <!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/nice-validator/1.1.3/jquery.validator.min.js?local=zh-CN"></script>
 </head>
 
 <body>
@@ -59,8 +60,8 @@
               <label class="radio_item">
                 <input class="radio" type="radio" name="radio1" id="lics" value="7"/><label class="label_item" for="lics"></label><span>理财师</span>
               </label>
-              <label class="radio_item lastys" style="width: 50px;">
-                <input class="radio" type="radio" name="radio1" id="tlins" value="8"/><label class="label_item" for="tlins"></label><span>宝妈</span>
+              <label class="radio_item lastys" style="width: 80px;">
+                <input class="radio" type="radio" name="radio1" id="tlins" value="8"/><label class="label_item" for="tlins"></label><span>理财推手</span>
               </label>
             </div>
           </div>
@@ -149,9 +150,9 @@
     </div>
     <div class="message">
       <div class="message_item">
-        <i class="icon"><img src="{% static 'images/skin-on.png' %}"/></i>
+        <i class="icon"><img src="{% static 'images/cgimg.png' %}"/></i>
         <h2>提交成功</h2>
-        <p>您已成功提交新模板申请，请等待7-15天左右的审核期，审核结果将会在系统站内信中通知您</p>
+        <p>您已经成功提交申请，请等待1-3天左右的审核期，审核结果将会在系统站内信和手机短信中通知您</p>
         <div class="butt_return">返回</div>
       </div>
     </div>
@@ -159,7 +160,6 @@
 {% include "footer.html" %}
 
 <!--<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>-->
-<script type="text/javascript" src="{% static 'js/validator/jquery.validator.min.js' %}?local=zh-CN"></script>
 <!--<script type="text/javascript" src="{% static "js/ZeroClipboard.js" %}"></script>-->
 
 <script type="text/javascript">
@@ -214,13 +214,13 @@ $(function(){
           success: function (data) {
             if (data.code === 0) {
               $('.message').addClass('animation')
+              }
+            },
+            error: function (err) {
+              console.log(err);
             }
-          },
-          error: function (err) {
-            console.log(err);
-          }
-        });
-      }
+          });
+        }
   });
   $('.butt_return').click(function () {
     window.location.replace("/");

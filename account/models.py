@@ -139,6 +139,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     zhifubao_real_name = models.CharField(u"支付宝实名", blank=True, max_length=20)
 
     is_channel = models.CharField(u"是否渠道", choices=IS_CHANNEL, default='0', max_length=2)  #
+    num_message_sync = models.IntegerField(u"新消息数量",default='0')
     objects = MyUserManager()
     USERNAME_FIELD = 'mobile'
     REQUIRED_FIELDS = ['username','qq_number']

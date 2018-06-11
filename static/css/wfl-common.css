@@ -361,12 +361,12 @@ input[type="text"],select {
 .a_location {
     position: relative; 
 }
-.a_location img{
+.a_location .infoimg{
     position: relative; 
     top: 5px; 
     left: 0;
 }
-.a_location span{ 
+.a_location .infonum{ 
     display:inline-block;
     width: 17px;
     height: 17px;

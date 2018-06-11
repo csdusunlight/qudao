@@ -306,7 +306,7 @@ class AdminLog(models.Model):
     time = models.DateTimeField(u'操作时间', auto_now_add=True)
     remark = models.CharField(u"备注", max_length=100)
     def __unicode__(self):
-        return u"%s给%s做了%s操作,时间：%s" % (self.admin_user, self.custom_user, self.get_event_type_display(),
+        return u"%s给%s做了%s操作,时间：%s" % (self.admin_user, self.custom_user, self.get_type_display(),
                                        self.time)
     class Meta:
         ordering = ["-time",]

@@ -157,7 +157,7 @@
 				this.innerText = '取消添加';
 				$(this).parent().find('.go_homepage').show()
 			})
-			//			$('.state20').text('已结束');
+			//$('.state20').text('已结束');
 
 			/**************添加已结束标识***************/
 			$(".over").each(function () {
@@ -222,7 +222,7 @@
 				success: function (ret) {
 					if(ret.code == 0){
 						var str_html;
-						console.log(ret.results)
+						console.log('ret',ret.results)
 						for(let i in ret.results){
 							str_html = `<li class="item" data-value="${ret.results[i].name}">${ret.results[i].name}</li>`;
 							$('.projectBox').append(str_html);
@@ -333,10 +333,6 @@
 			//输入框搜索llc
 			$('.searchBtn').click(() =>{
 				var searchValue = $('#searchTxt').val();
-				if (!searchValue) {
-					alert('搜索内容不能为空');
-					return;
-				}
 				var newurl2 = url + "&search=" + encodeURI(searchValue);
 				$("#pagedata1").ajaxPage({
 					url: newurl2,
@@ -393,12 +389,12 @@
 			window.onload = function(){
 			  $.ajax({
 			  	type:"get",
-			  	url:"/restapi/projects/?state=10&is_official=true",
+			  	url:"/restapi/projects/?state=20&is_official=true",
 			  	async:true,
 			  	success: function(ret) {
 			  	  console.log(ret.results);
 			  	  for (var i=0; i<ret.results.length; i++) {
-			  	    var li_dom = '<li class="project-end-item">'+ ret.results[i].title +'</li>'
+			  	    var li_dom = '<li class="project-end-item">'+ ret.results[i].title + ' 于'  + ret.results[i].end_date +'日结束</li>'
 			  	    $('.project-end-1').append(li_dom)
 			  	  }
 			  	  scrollLeft();
@@ -410,7 +406,17 @@
          var tab = document.getElementById('project_end_box');
          var tab1 = document.getElementById('project_end_1');
          var tab2 = document.getElementById('project_end_2');
-         tab2.innerHTML = tab1.innerHTML;
+         if (tab1.offsetWidth > tab.offsetWidth) {
+           tab2.innerHTML = tab1.innerHTML;
+         	
+           var timer = setInterval(Marquee,speed);
+           tab.onmouseover = function(){
+             clearInterval(timer);
+           };
+           tab.onmouseout = function(){
+             timer = setInterval(Marquee,speed);
+           }
+         }
          function Marquee(){
            if(tab2.offsetWidth - tab.scrollLeft <=0) {    
              tab.scrollLeft = 0;
@@ -418,13 +424,6 @@
              tab.scrollLeft ++;
            }
        
-         }
-         var timer = setInterval(Marquee,speed);
-         tab.onmouseover = function(){
-           clearInterval(timer);
-         };
-         tab.onmouseout = function(){
-           timer = setInterval(Marquee,speed);
          }
        }
 

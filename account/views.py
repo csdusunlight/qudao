@@ -329,7 +329,7 @@ def verifyqq(request):
         users = MyUser.objects.filter(qq_number=qqv)
         if not users.exists():
             code = '0'
-    result = {'code':code,}
+    result = {'code':code}
     return JsonResponse(result)
 def verifyinviter(request):
     invite_code = request.GET.get('invite_code', None)
@@ -338,7 +338,7 @@ def verifyinviter(request):
         users = MyUser.objects.filter(invite_code=invite_code)
         if users.exists():
             code = '0'
-    result = {'code':code,}
+    result = {'code':code,'msg':'该邀请码不存在，请联系客服索取'}
     return JsonResponse(result)
 @login_required
 def verify_domainName(request):
@@ -550,6 +550,10 @@ def security(request):
     return render(request, 'account/account_security.html', {})
 @login_required
 def message(request):
+    #减同步消息的逻辑,在用户打开消息界面的时候将新消息减０了。
+    current_user=request.user
+    current_user.num_message_sync=0
+    current_user.save(update_fields=['num_message_sync',])
     template = 'account/m_account_message.html' if request.mobile else 'account/account_message.html'
     return render(request, template)
 

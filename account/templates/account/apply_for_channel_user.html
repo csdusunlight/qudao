@@ -12,6 +12,7 @@
 <!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/nice-validator/1.1.3/jquery.validator.min.js?local=zh-CN"></script>
 </head>
 
 <body>
@@ -159,7 +160,6 @@
 {% include "footer.html" %}
 
 <!--<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>-->
-<script type="text/javascript" src="{% static 'js/validator/jquery.validator.min.js' %}?local=zh-CN"></script>
 <!--<script type="text/javascript" src="{% static "js/ZeroClipboard.js" %}"></script>-->
 
 <script type="text/javascript">
@@ -214,13 +214,13 @@ $(function(){
           success: function (data) {
             if (data.code === 0) {
               $('.message').addClass('animation')
+              }
+            },
+            error: function (err) {
+              console.log(err);
             }
-          },
-          error: function (err) {
-            console.log(err);
-          }
-        });
-      }
+          });
+        }
   });
   $('.butt_return').click(function () {
     window.location.replace("/");

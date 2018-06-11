@@ -43,6 +43,7 @@ def index(request):
 
     total = {}
     total['apply_num'] = ApplyLogForChannel.objects.count()
+    total['apply_success'] = ApplyLogForChannel.objects.count(audit_state='0')
     dict1 = MyUser.objects.aggregate(cou=Count('id'), sumb=Sum('balance'))
     total['user_num'] = MyUser.objects.count()
     total['balance'] = dict1.get('sumb') or 0

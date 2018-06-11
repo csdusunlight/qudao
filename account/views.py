@@ -163,6 +163,14 @@ def register(request):
                 subbulk.append(sub)
             SubscribeShip.objects.bulk_create(subbulk)
             register_signal.send('register', user=user)
+            try:
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
+                auth_login(request, user)
+                user.last_login = datetime.datetime.now()
+                user.save(update_fields=['last_login'])
+                Userlogin.objects.create(user=user)
+            except:
+                pass
 #         imgurl_list = []
 #         if len(request.FILES)>6:
 #             result = {'code':-2, 'msg':u"上传图片数量不能超过6张"}

@@ -550,6 +550,10 @@ def security(request):
     return render(request, 'account/account_security.html', {})
 @login_required
 def message(request):
+    #减同步消息的逻辑,在用户打开消息界面的时候将新消息减０了。
+    current_user=request.user
+    current_user.num_message_sync=0
+    current_user.save(update_fields=['num_message_sync',])
     template = 'account/m_account_message.html' if request.mobile else 'account/account_message.html'
     return render(request, template)
 

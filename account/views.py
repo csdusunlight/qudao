@@ -44,7 +44,6 @@ from account.signals import register_signal
 from account.models import USER_ORIGIN,USER_EXP_YEAR,USER_CUSTOME_VOLUMN,USER_FUNDS_VOLUMN,USER_INVEST_ORIENTATION
 from account.models import ApplyLogForChannel
 import datetime
-from django.contrib.auth.backends import ModelBackend
 @sensitive_post_parameters()
 @csrf_protect
 @never_cache
@@ -165,7 +164,7 @@ def register(request):
             SubscribeShip.objects.bulk_create(subbulk)
             register_signal.send('register', user=user)
             try:
-                user.backend = ModelBackend
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
                 auth_login(request, user)
                 user.last_login = datetime.datetime.now()
                 user.save(update_fields=['last_login'])

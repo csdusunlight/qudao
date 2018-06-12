@@ -113,7 +113,7 @@ h5 {
 }
 
 .item-01 {
-	width: 118px;
+	width: 138px;
 }
 
 .item-02 {
@@ -645,4 +645,7 @@ table td {
 }
 .date_selector {
     box-sizing: content-box;
+}
+.searchable-select {
+  min-width: 136px !important;
 }

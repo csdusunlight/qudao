@@ -34,7 +34,7 @@ class ApplyLogForChannelSerializer(serializers.ModelSerializer):
 
     mobile = serializers.CharField(source="user.mobile",read_only=True)
     qq_number = serializers.CharField(source="user.qq_number",read_only=True)
-    qq_name =  serializers.CharField(source="user.mobile",read_only=True)
+    qq_name =  serializers.CharField(source="user.qq_name",read_only=True)
     level =  serializers.CharField(source="user.level",read_only=True)
     profile =  serializers.CharField(source="user.profile",read_only=True)
     user_origin = serializers.CharField(source='get_user_origin_display')

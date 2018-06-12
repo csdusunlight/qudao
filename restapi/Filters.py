@@ -62,8 +62,6 @@ class ApplyLogForChannelFilter(django_filters.rest_framework.FilterSet):
     qq_name = django_filters.CharFilter(name="user.qq_name")
     profile = django_filters.CharFilter(name="user.profile")
     level = django_filters.CharFilter(name="user.level")
-    user_orgin = django_filters.CharFilter(name='user_origin')
-    audit_state = django_filters.CharFilter(name='audit_state')
     class Meta:
         model = ApplyLogForChannel
         fields = ['id', 'username', 'qq_number', 'qq_name', 'mobile', 'audit_time', 'submit_time', 'level',

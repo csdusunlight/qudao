@@ -138,20 +138,17 @@
         <div class="mui-content">
             <form class="f">
                 {% csrf_token %}
-                <div class="limit-input input-box" data-limit="5">
+                <!--<div class="limit-input input-box" data-limit="5">
                     <label class="input-title">手机号&nbsp;&nbsp;</label>
                     <input id="phone" class="form-test" data-form="required isPhone" type="text" maxlength=11 placeholder="平台注册手机号，限11字符">
                     <p class="input-tips">提示内容部分</p>
                 </div>
                 <div class="limit-input input-box" data-limit="1" style="position: relative;">
                   <label class="input-title">验证码</label>
-                  <!--<input type="text" class="form-test" data-form="required isNum" maxlength="10" placeholder="请填写纯数字 如1000，限10字符" id="amount">-->
-                  <!--<div class="numbox" style="position: relative;">-->
                     <input type="text" class="form-test" data-form="required" id="checkNum" name="checkNum" />
                     <input type="button" id="setBtn" onclick="sendCode(this)" value="获取验证码" style="width:90px !important;height:38px;position: absolute;left: 250px;top: 22px;background: RGB(145,193,29);color: white;"/>
-                  <!--</div>-->
                   <p class="input-tips">提示内容部分</p>
-                </div>
+                </div>-->
                 <div class="limit-input input-box" data-limit="2">
                   <label class="input-title">密码&nbsp;&nbsp;</label>
                   <input type="password" autocomplete="new-password" class="form-test" data-form="required password" placeholder="请输入6~16位数字、字母或下划线中的两种" id="password">
@@ -406,8 +403,6 @@
                     }
 //              }
             })
-            var phone = document.getElementById("phone").value; //手机号
-            var checkNum = document.getElementById("checkNum").value; //验证码
             var pwd = document.getElementById("password").value;  //密码
             var qq = document.getElementById("qq").value; //qq号
             var qqName = document.getElementById("qq_name").value; // qq昵称
@@ -421,8 +416,6 @@
                     data: {
                         'qq_number':qq,
                         'qq_name':qqName,
-                        'code':checkNum,
-                        'mobile':phone,
                         'password':pwd,
                         'invite_code':invite_code
                     },
@@ -446,42 +439,6 @@
             }
             
         });
-        
-        function sendCode(thisBtn) {
-          var phone = document.getElementById("phone").value;
-          if (!phone) {
-          	mui.alert('请先填写手机号');
-          	return false;
-          }
-          if (!checkPhone) {
-            mui.alert('手机号校验不成功');
-            return false;
-          }
-          var url = "{% url 'phoneImageV' %}";
-          console.log(phone);
-          mui.ajax(url, {
-            data: {
-              "phone": phone,
-              "csrfmiddlewaretoken": '{{ csrf_token }}',
-            },
-            dataType: 'json', //服务器返回json格式数据
-            type: 'get', //HTTP请求类型
-            timeout: 10000, //超时时间设置为10秒；
-            success: function (data) {
-              console.log(data)
-              if (data.code == "0") {
-                mui.toast("验证码发送成功");
-                settime(document.getElementById("setBtn"));
-              } else {
-                mui.toast("验证码发送失败");
-                console.log(data.message);
-              }
-            },
-            error: function (xhr, type, errorThrown) {
-              console.log("获取数据失败");
-            }
-          });
-        }
         </script>
 
     {% include "m_footer.html" %}

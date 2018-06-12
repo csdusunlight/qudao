@@ -113,35 +113,38 @@ h5 {
 }
 
 .item-01 {
-	width: 148px;
+	width: 118px;
 }
 
 .item-02 {
-	width: 100px;
+	width: 90px;
 }
 
 .item-03 {
-	width: 110px;
+	width: 100px;
 }
 
 .item-04 {
-	width: 100px;
+	width: 90px;
 }
 
 .item-05 {
-	width: 100px;
+	width: 90px;
 }
 
 .item-06 {
-	width: 120px;
+	width: 110px;
 }
 .item-07 {
-    width: 100px;
+    width: 90px;
 }.item-08 {
-    width: 100px;
+    width: 90px;
 }
 .item-10 {
-    width: 80px;
+    width: 70px;
+}
+.item-11 {
+  width: 90px;
 }
 .item-09 {
     float: right;

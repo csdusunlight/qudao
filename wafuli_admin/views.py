@@ -9,7 +9,7 @@ from django.http.response import JsonResponse, Http404, HttpResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from account.transaction import charge_money
 import logging
-from account.models import MyUser, AdminPermission,Message,ApplyLogForChannel
+from account.models import MyUser, AdminPermission,Message,ApplyLogForChannel,ApplyLogForFangdan
 from django.db.models import Q,F
 from wafuli_admin.models import DayStatis, Invest_Record
 from django.conf import settings
@@ -111,6 +111,57 @@ def admin_apply(request):
             AdminLog.objects.create(admin_user=admin_user, custom_user=currentuser, remark=reason, type='3',
                                     time=nowtime)
             sendmsg_bydhst(currentuser.mobile, u"您申请成为渠道用户失败" + reason)
+            res['code'] = 0
+        res['code'] = 0
+        return JsonResponse(res)
+    else:
+        return render(request,"admin_apply.html",)
+
+def admin_apply_for_fangdan_permission(request):
+    if request.method == "POST":
+        admin_user = request.user
+        res = {}
+        apply_id = request.POST.get('id', None)
+        type = request.POST.get('type', None)
+        type = int(type)
+        if not apply_id or type!=1 and type!=2:
+            res['code'] = -2
+            res['res_msg'] = u'传入参数不足，请联系技术人员！'
+            return JsonResponse(res)
+        current_applyforfangdan = ApplyLogForFangdan.objects.get(id=apply_id)
+        currentuser = current_applyforfangdan.user
+        if type==1:
+            level = request.POST.get('level', '03')
+            with transaction.atomic():
+                reason = "success"
+                nowtime = time.strftime("%Y-%m-%d %H:%M:%S")
+                Message.objects.create(user=currentuser, title="放单权限申请审核反馈", time=nowtime, is_read=False,
+                                       content=u"尊敬的用户：您申请放单权限成功！")
+                currentuser.is_fangdan='1'
+                currentuser.level=level
+                currentuser.save(update_fields=['is_fangdan','level'])
+                current_applyforfangdan.audit_time = nowtime
+                current_applyforfangdan.audit_state = '0'
+                current_applyforfangdan.admin_user = admin_user
+                current_applyforfangdan.save(update_fields=['audit_time', 'audit_state', 'admin_user'])
+                AdminLog.objects.create(admin_user=admin_user, custom_user=currentuser, remark=reason, type='3',
+                                        time=nowtime)
+                sendmsg_bydhst(currentuser.mobile, u"尊敬的用户：您申请放单权限成功！")
+                res['code'] = 0
+                ####################
+        elif type==2:
+            reason = request.POST.get('reason', '')
+            nowtime = time.strftime("%Y-%m-%d %H:%M:%S")
+            Message.objects.create(user=currentuser, title="放单权限申请审核反馈", time=nowtime, is_read=False,
+                                   content=u"尊敬的用户：您申请放单权限失败。被拒绝原因如下：" + reason)  # 写入审核原因，加个字段
+            current_applyforfangdan.audit_time = nowtime
+            current_applyforfangdan.audit_state = '2'
+            current_applyforfangdan.audit_reason = reason
+            current_applyforfangdan.admin_user = admin_user
+            current_applyforfangdan.save(update_fields=['audit_time', 'audit_state', 'admin_user','audit_reason'])
+            AdminLog.objects.create(admin_user=admin_user, custom_user=currentuser, remark=reason, type='3',
+                                    time=nowtime)
+            sendmsg_bydhst(currentuser.mobile, u"尊敬的用户：您申请放单权限失败" + reason)
             res['code'] = 0
         res['code'] = 0
         return JsonResponse(res)

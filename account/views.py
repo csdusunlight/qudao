@@ -42,7 +42,7 @@ from collections import OrderedDict
 from django.core.cache import cache
 from account.signals import register_signal
 from account.models import USER_ORIGIN,USER_EXP_YEAR,USER_CUSTOME_VOLUMN,USER_FUNDS_VOLUMN,USER_INVEST_ORIENTATION
-from account.models import ApplyLogForChannel
+from account.models import ApplyLogForChannel,ApplyLogForFangdan
 import datetime
 @sensitive_post_parameters()
 @csrf_protect
@@ -300,6 +300,38 @@ def apply_for_channel_user(request):
             return JsonResponse(result)
     else:
         return render(request,"apply_for_channel_user.html")
+
+def apply_for_fangdan_user(request):
+    if request.method == 'GET':
+        template = 'account/apply_for_fangdan_user.html'
+        return render(request, template)
+    elif request.method == 'POST':
+        result = {}
+        current_user = request.user
+        apply_method = request.POST.get('apply_method', None)
+        id_name = request.POST.get('id_name', None)
+        id_num = request.POST.get('id_num', None)
+        apply_pic_url = request.POST.get('apply_pic_url', None)
+        contract_pic_url = request.POST.get('contract_pic_url', None)
+        rebate_pic_url = request.POST.get('rebate_pic_url', None)
+
+        ApplyLogForFangdan.objects.create(user=current_user,
+                                          apply_method=apply_method,
+                                          id_name=id_name,
+                                          id_num=id_num,
+                                          apply_pic_url=apply_pic_url,
+                                          contract_pic_url=contract_pic_url,
+                                          rebate_pic_url=rebate_pic_url,
+                                          submit_time= time.strftime("%Y-%m-%d %H:%M:%S"),
+                                          audit_state='1')
+        current_user.is_fangdan = '-1'
+        current_user.save(update_fields=[
+                                         'is_fangdan',
+                                    ])
+        result['code'] = 0
+        return JsonResponse(result)
+    else:
+        return render(request, "apply_for_fangdan_user.html")
 
 def verifymobile(request):# not exist  return 0  exist return 1
     mobilev = request.GET.get('mobile', None)

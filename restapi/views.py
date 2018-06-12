@@ -69,9 +69,9 @@ class UserList(BaseViewMixin, generics.ListCreateAPIView):
 #     filter_fields = ['state',]
     pagination_class = MyPageNumberPagination
 
-from restapi.serializers import ApplyLogForChannelSerializer
-from restapi.Filters  import ApplyLogForChannelFilter
-from account.models import ApplyLogForChannel
+from restapi.serializers import ApplyLogForChannelSerializer,ApplyLogForFangdanSerializer
+from restapi.Filters  import ApplyLogForChannelFilter,ApplyLogForFangdanFilter
+from account.models import ApplyLogForChannel,ApplyLogForFangdan
 class ApplyLogForChannelList(BaseViewMixin, generics.ListCreateAPIView):
     queryset = ApplyLogForChannel.objects.all()
     permission_classes = (IsOwnerOrStaff,)
@@ -90,6 +90,21 @@ class ApplyLogForChannelList(BaseViewMixin, generics.ListCreateAPIView):
         else:
             return ApplyLogForChannel.objects.filter(user=user)
 
+class ApplyLogForFangdanList(BaseViewMixin, generics.ListCreateAPIView):
+    queryset = ApplyLogForFangdan.objects.all()
+    permission_classes = (IsOwnerOrStaff,)
+    serializer_class = ApplyLogForFangdanSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
+    filter_class = ApplyLogForFangdanFilter
+    ordering_fields = ('submit_time','audit_time')
+    ordering = ('-submit_time')
+    pagination_class = MyPageNumberPagination
+    def get_queryset(self):#如果是查询已拒绝用户，那么用is_channle=0 和审批未通过字段为空
+        user = self.request.user
+        if user.is_staff:
+            return ApplyLogForFangdan.objects.all()
+        else:
+            return ApplyLogForFangdan.objects.filter(user=user)
 
 class UserDetail(BaseViewMixin,generics.RetrieveUpdateDestroyAPIView):
     queryset = MyUser.objects.all()

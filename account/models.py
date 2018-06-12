@@ -98,7 +98,11 @@ IS_CHANNEL = (
     ('-1',u'审核中'),
     ('1', u'渠道用户'),
 )
-
+IS_FANGDAN = (
+    ('0', u'没有放单权限用户'),
+    ('-1',u'审核中'),
+    ('1', u'有放单权限的用户'),
+)
 
 class MyUser(AbstractBaseUser, PermissionsMixin):
 #     email = models.EmailField('email address', max_length=255)
@@ -139,6 +143,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     zhifubao_real_name = models.CharField(u"支付宝实名", blank=True, max_length=20)
 
     is_channel = models.CharField(u"是否渠道", choices=IS_CHANNEL, default='1', max_length=2)  #
+    is_fangdan = models.CharField(u"是否能放单", choices=IS_FANGDAN, default='1', max_length=2)  #
+
     objects = MyUserManager()
     USERNAME_FIELD = 'mobile'
     REQUIRED_FIELDS = ['username','qq_number']
@@ -285,6 +291,30 @@ class ApplyLogForChannel(models.Model):
     user_custom_volumn = models.CharField(u"用户客户体量", choices=USER_CUSTOME_VOLUMN, max_length=2)
     user_funds_volumn = models.CharField(u"用户资金体量", choices=USER_FUNDS_VOLUMN, max_length=2)
     user_invest_orientation = models.CharField(u"用户投资去向", choices=USER_INVEST_ORIENTATION, max_length=2)
+
+    class Meta:
+        ordering = ["submit_time",]
+    def __unicode__(self):
+        return self.user.mobile
+
+USER_METHODS=(
+    ('1',u'个人认证'),
+    ('2',u'公司认证'),
+)
+class ApplyLogForFangdan(models.Model):
+    submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
+    audit_time = models.DateTimeField(u'审核时间', null=True, blank=True)
+    admin_user = models.ForeignKey(MyUser, related_name="applylogforfandan", null=True)
+    user = models.ForeignKey(MyUser, related_name="applylog_custom_fandan")
+    audit_reason = models.CharField(u"审核原因", max_length=30)
+    audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
+    apply_method = models.CharField(u"认证方式",choices=USER_METHODS,max_length=2)
+    id_name = models.CharField(u"身份证名字",max_length=50)
+    id_num = models.CharField(u"身份证号码",max_length=50)
+    apply_pic_url = models.CharField(u"身份证合照",max_length=200)
+    contract_pic_url = models.CharField(u"合同合照",max_length=200)
+    rebate_pic_url = models.CharField(u"返现截图",max_length=200)
+
 
     class Meta:
         ordering = ["submit_time",]

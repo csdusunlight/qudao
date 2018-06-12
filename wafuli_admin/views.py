@@ -116,7 +116,7 @@ def admin_apply(request):
         return JsonResponse(res)
     else:
         return render(request,"admin_apply.html",)
-
+@csrf_exempt
 def admin_apply_for_fangdan_permission(request):
     if request.method == "POST":
         admin_user = request.user
@@ -131,15 +131,13 @@ def admin_apply_for_fangdan_permission(request):
         current_applyforfangdan = ApplyLogForFangdan.objects.get(id=apply_id)
         currentuser = current_applyforfangdan.user
         if type==1:
-            level = request.POST.get('level', '03')
             with transaction.atomic():
                 reason = "success"
                 nowtime = time.strftime("%Y-%m-%d %H:%M:%S")
                 Message.objects.create(user=currentuser, title="放单权限申请审核反馈", time=nowtime, is_read=False,
                                        content=u"尊敬的用户：您申请放单权限成功！")
-                currentuser.is_fangdan='1'
-                currentuser.level=level
-                currentuser.save(update_fields=['is_fangdan','level'])
+                currentuser.is_merchant='1'
+                currentuser.save(update_fields=['is_merchant',])
                 current_applyforfangdan.audit_time = nowtime
                 current_applyforfangdan.audit_state = '0'
                 current_applyforfangdan.admin_user = admin_user

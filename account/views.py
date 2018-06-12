@@ -300,7 +300,7 @@ def apply_for_channel_user(request):
             return JsonResponse(result)
     else:
         return render(request,"apply_for_channel_user.html")
-
+@csrf_exempt
 def apply_for_fangdan_user(request):
     if request.method == 'GET':
         template = 'account/apply_for_fangdan_user.html'
@@ -324,9 +324,9 @@ def apply_for_fangdan_user(request):
                                           rebate_pic_url=rebate_pic_url,
                                           submit_time= time.strftime("%Y-%m-%d %H:%M:%S"),
                                           audit_state='1')
-        current_user.is_fangdan = '-1'
+        current_user.is_merchant = '-1'
         current_user.save(update_fields=[
-                                         'is_fangdan',
+                                         'is_merchant',
                                     ])
         result['code'] = 0
         return JsonResponse(result)

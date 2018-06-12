@@ -98,10 +98,10 @@ IS_CHANNEL = (
     ('-1',u'审核中'),
     ('1', u'渠道用户'),
 )
-IS_FANGDAN = (
-    ('0', u'没有放单权限用户'),
+IS_MERCHANT = (
+    ('0', u'非商家用户'),
     ('-1',u'审核中'),
-    ('1', u'有放单权限的用户'),
+    ('1', u'商家用户'),
 )
 
 class MyUser(AbstractBaseUser, PermissionsMixin):
@@ -142,8 +142,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     zhifubao = models.CharField(u"支付宝账号（邮箱或手机号）", blank=True, max_length=50)
     zhifubao_real_name = models.CharField(u"支付宝实名", blank=True, max_length=20)
 
-    is_channel = models.CharField(u"是否渠道", choices=IS_CHANNEL, default='1', max_length=2)  #
-    is_fangdan = models.CharField(u"是否能放单", choices=IS_FANGDAN, default='1', max_length=2)  #
+    is_channel = models.CharField(u"是否渠道", choices=IS_CHANNEL, default='0', max_length=2)  #
+    is_merchant = models.CharField(u"是否商家", choices=IS_MERCHANT, default='0', max_length=2)  #
 
     objects = MyUserManager()
     USERNAME_FIELD = 'mobile'

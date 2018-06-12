@@ -1586,6 +1586,8 @@ def coupon_manage(request):    #jzy
     return render(request,"coupon_manage.html",{})
 def coupon_plan(request):    #jzy
     return render(request,"coupon_plan.html",{})
+def vuetest(request):    #jzy
+    return render(request,"vuetest.html",{})
 def coupon_count(request):
     total = {}
     dic = UserCoupon.objects.filter(type='heyue').aggregate(count_user=Count('user', distinct=True),

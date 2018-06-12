@@ -80,8 +80,6 @@ class ApplyLogForChannelList(BaseViewMixin, generics.ListCreateAPIView):
     filter_class = ApplyLogForChannelFilter
     ordering_fields = ('submit_time','audit_time')
     ordering = ('-submit_time')
-    filter_fields = ['id','username','qq_number','qq_name','mobile','audit_time','submit_time','profile','level','admin_name',
-                 'user_origin', 'user_exp_year', 'user_custom_volumn', 'user_funds_volumn', 'user_invest_orientation','audit_reason','admin_mobile']
     pagination_class = MyPageNumberPagination
     def get_queryset(self):#如果是查询已拒绝用户，那么用is_channle=0 和审批未通过字段为空
         user = self.request.user

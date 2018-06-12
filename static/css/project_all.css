@@ -259,22 +259,21 @@ body{
 	width: 100%; /* llc */
 	padding: 20px 20px;
 	background-color: #fff;
-	/* transition: box-shadow 0.4s ease; */
+	transition: box-shadow 0.4s ease;
 	overflow: hidden;
 	border-bottom: 1px solid RGB(245, 245, 245);
 	display: table;
-	position: relative;
-	transition: all 0.5s ease;
+	margin-top: 2px;
 	position: relative;
 	color: #949494;
 }
-.finance:hover{
+/* .finance:hover{
 	transform: translateX(-50px);
-}
+} */
 
-/* .finance:hover {
+.finance:hover {
 	box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
-} llc 5.31*/
+} 
 
 .link_left {
 	width: 1100px;

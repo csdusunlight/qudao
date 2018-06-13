@@ -248,7 +248,7 @@
                                 $(".send_code").attr("disabled", false);
                                 times = 60;
                             } else {
-                                $(".send_code").val(`${times}秒后重新获取`);
+                                $(".send_code").val(""+times+"秒后重新获取");
                                 $(".send_code").attr("disabled", true);
                             }
                         }, 1000);

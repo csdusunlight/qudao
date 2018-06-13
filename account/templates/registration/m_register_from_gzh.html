@@ -1,84 +1,113 @@
 {% load staticfiles %}
-<!doctype html>
+<!DOCTYPE html>
 <html>
-
-<head>
-	<meta charset="UTF-8">
-	<title>注册</title>
-	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-	<link href="{% static 'css/mui.min.css' %}" rel="stylesheet" />
-	<script type="text/javascript" src="{% static 'js/rem.js' %}"></script>
-	<style type="text/css">
-		body {
-			background: white;
-		}
-
-		* {
-			margin: 0;
-			padding: 0;
-			font-family: "微软雅黑";
-			font-size: 15px;
-		}
-
-		table {
-			margin-left: 1.5rem;
-			color: RGB(102, 102, 102);
-		}
-
-		td {
-			padding: 0.5rem 1rem;
-		}
-
-		.ipt {
-			margin-bottom: 0 !important;
-			width: 25rem !important;
-			height: 3rem !important;
-			border-radius: 5px !important;
-			font-size: 14px;
-		}
-
-		.checkbox {
-			width: 1.2rem;
-			height: 1.2rem;
-		}
-
-		.numbox {
-			width: 25rem;
-			height: 3rem;
-			border: 1px solid RGB(204, 204, 204);
-			border-radius: 3px;
-			position: relative;
-		}
-
-		.numbox input[type=text] {
-			border: none;
-			height: 2.8rem;
-			font-size: 15px;
-		}
-
-		.checkbox {
-			width: 1.2rem;
-			height: 1.2rem;
-		}
-
-		.btn {
-			background: RGB(145, 193, 29) !important;
-			width: 14rem;
-			height: 3rem;
-			border-radius: 5px;
-			text-align: center;
-			line-height: 3rem;
-			color: white !important;
-			border: none !important;
-			margin: 1.5rem 5rem;
-		}
-		/* checkbox */
-		label {
+<head lang="en">
+    <meta charset="UTF-8">
+    <!-- 优先使用 IE 最新版本和 Chrome -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <!-- 为移动设备添加 viewport -->
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <!-- 添加到主屏后的标题（iOS 6 新增） -->
+    <meta name="apple-mobile-web-app-title" content="">
+    <!-- 是否启用 WebApp 全屏模式，删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <!-- 设置苹果工具栏颜色 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <!-- 添加智能 App 广告条 Smart App Banner（iOS 6+ Safari） -->
+    <meta name="apple-itunes-app" content="app-id=myAppStoreID, affiliate-data=myAffiliateData, app-argument=myURL">
+    <!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <!--下面三个是清除缓存 微信浏览器缓存严重又无刷新；这个方法调试的时候很方便-->
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>信息登记</title>
+    <link href="{%static 'css/mui.css'%}" rel="stylesheet"/>
+    <!--<link rel="stylesheet" type="text/css" href="{%static 'css/m_common.css'%}"/>-->
+    <link rel="stylesheet" type="text/css" href="{%static 'css/m_expsubmit_project-11.30.css'%}"/>
+    <style type="text/css">
+        .limit-input {
+            /*display: none;*/
+        }
+        #choose {
+            /*display: none;*/
+        }
+        
+        canvas {
+            width: 100%;
+            border: 1px solid #000000;
+        }
+        
+        .img-list {
+            width: 25.2rem;
+            margin: 2rem auto 1rem;
+        }
+        
+        .img-list li {
+            position: relative;
+            display: inline-block;
+            width: 6rem;
+            height: 6rem;
+            margin: 0.2rem 0.2rem 1.6rem 0.2rem;
+            border: 1px solid rgb(100, 149, 198);
+            background: #fff no-repeat center;
+            background-size: cover;
+        }
+        
+        .progress {
+            position: absolute;
+            width: 100%;
+            height: 20px;
+            line-height: 20px;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(100, 149, 198, .5);
+        }
+        
+        .progress span {
+            display: block;
+            width: 0;
+            height: 100%;
+            background-color: rgb(100, 149, 198);
+            text-align: center;
+            color: #FFF;
+            font-size: 13px;
+        }
+        
+        .size {
+            position: absolute;
+            width: 100%;
+            height: 15px;
+            line-height: 15px;
+            bottom: -18px;
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .tips {
+            display: block;
+            text-align: center;
+            font-size: 13px;
+            margin: 10px;
+            color: #999;
+        }
+        .img-btnbox {
+            text-align: center;
+        }
+        .mui-radio {
+            display: inline-block;
+            width: 48%;
+        }
+        .input-title.no:before {
+          display: none;
+        }
+        .check-label {
             font-size: 12px;
             cursor: pointer;
         }
 
-        label i {
+        .check-label i {
             font-size: 14px;
             font-style: normal;
             display: inline-block;
@@ -99,268 +128,319 @@
         input[type="checkbox"]:checked+i{
             background: #92c11d;
         }
-		/*样式覆盖*/
-
-		.mui-table-view-cell.mui-active {
-			background-color: transparent;
-		}
-
-		.mui-table-view:before,
-		.mui-table-view:after {
-			display: none;
-		}
-
-		.mui-table-view-cell {
-			padding: 0;
-		}
-
-		.mui-table-view-cell>a:not(.mui-btn) {
-			margin: 0;
-		}
-
-		.mui-table-view-cell.mui-collapse .mui-collapse-content {
-			margin: 0;
-			padding: 0;
-		}
-	</style>
+    </style>
 </head>
+    <body>
+        <header id="header" class="mui-bar mui-bar-nav">
+            <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+            <h1 class="mui-title">补充信息</h1>
+        </header>
+        <div class="mui-content">
+            <form class="f">
+                {% csrf_token %}
+                <!--<div class="limit-input input-box" data-limit="5">
+                    <label class="input-title">手机号&nbsp;&nbsp;</label>
+                    <input id="phone" class="form-test" data-form="required isPhone" type="text" maxlength=11 placeholder="平台注册手机号，限11字符">
+                    <p class="input-tips">提示内容部分</p>
+                </div>
+                <div class="limit-input input-box" data-limit="1" style="position: relative;">
+                  <label class="input-title">验证码</label>
+                    <input type="text" class="form-test" data-form="required" id="checkNum" name="checkNum" />
+                    <input type="button" id="setBtn" onclick="sendCode(this)" value="获取验证码" style="width:90px !important;height:38px;position: absolute;left: 250px;top: 22px;background: RGB(145,193,29);color: white;"/>
+                  <p class="input-tips">提示内容部分</p>
+                </div>-->
+                <div class="limit-input input-box" data-limit="2">
+                  <label class="input-title">密码&nbsp;&nbsp;</label>
+                  <input type="password" autocomplete="new-password" class="form-test" data-form="required password" placeholder="请输入6~16位数字、字母或下划线中的两种" id="password">
+                  <p class="input-tips">提示内容部分</p>
+                </div>
+                <div class="limit-input input-box" data-limit="3">
+                  <label class="input-title">QQ&nbsp;&nbsp;</label>
+                  <input type="text" class="form-test" data-form="required isQQ" placeholder="请输入QQ号" id="qq">
+                  <p class="input-tips">提示内容部分</p>
+                </div>
+                <div class="input-box">
+                    <label class="input-title">QQ昵称</label>
+                    <input id="qq_name" class="form-test" data-form="required" type="text" placeholder="请输入QQ昵称">
+                    <p class="input-tips">提示内容部分</p>
+                </div>
+                
+                <div class="input-box">
+                    <label class="input-title no">邀请码：</label>
+                    <input type="text" class="form-test" value="{{icode}}" data-form="isCode" maxlength="100" placeholder="选填" id="invite_code">
+                    <p class="input-tips">提示内容部分</p>
+                </div>
+                <div style="margin-left: 20px; margin-top: 10px;">
+                  <label class="check-label">
+                    <input id="accept" type="checkbox" checked="checked">
+                    <i>√</i>
+                  </label>
+                  <span style="font-size: 12px;">我接受《注册协议》、《免责声明》</span>
+                </div>
+            </form>
+            <button style="height: 44px;" id="submit_btn" type="button" class="mui-btn mui-btn-yellow">确认提交</button>
+        </div>
+        <script src="{%static 'js/mui.min.js'%}"></script>
+        <!--弹窗部分-->
+        <script type="text/javascript" charset="utf-8">
+          mui.init({
+              swipeBack:false //启用右滑关闭功能 
+          });
+          var verifymobile_url = "{% url 'verifymobile' %}"; //验证手机号是否存在url
+          var verifyqq_url = "{% url 'verifyqq' %}";        //验证QQurl
+          var verifyinviter_url = "{% url 'verifyinviter' %}"; // 邀请码是否存在url
+          var get_code_url = "{% url 'phoneImageV' %}"; //验证码url
+          var register_url = "{% url 'register' %}"; //注册url
+          var index_url = "";
+          var login_url = "{% url 'login' %}";  
+          var checkPhone = false;
+          //发送验证码
+          var countdown = 60;
+          function settime(val) {
+            console.log('验证码');
+            if (countdown == 0) {
+              val.removeAttribute("disabled");
+              val.value = "获取验证码";
+              countdown = 60;
+              return;
+            } else {
+              val.setAttribute("disabled", true);
+              val.value = "重新发送(" + countdown + ")";
+              countdown--;
+            }
+            setTimeout(function () {
+              settime(val)
+            }, 1000)
+          }
+                  //      检验填写格式
+          var isInputTrue = true;        //填写格式是否正确
+          var validate = (function(){
+            var instructions = {
+                required:"不能为空!",
+                isPhone:"手机号不正确或已存在!",
+                password:"限6~16位数字、字母或特殊字符中的两种",
+                isCheckNum:"验证码不正确",
+                isQQ:"QQ号码不正确或已存在",
+                isCode: "邀请码不存在"
+            };
+            var types = {
+                required:function(value){
+                    if(value==null||value.length===0){
+                        return false;
+                    }
+                    return true;
+                },
+                isPhone:function(value){
+                    var reg = /^1\d{10}$/;
+                    var valueKey = false;
+                    checkPhone = false;
+                    if(reg.test(value)){
+                      mui.ajax(verifymobile_url, {
+                                  dataType: 'json', //服务器返回json格式数据
+                                  async: false,
+                                  type: 'get', //HTTP请求类型
+                                  timeout: 10000, //超时时间设置为10秒；
+                                  data:{
+                                    'mobile': value
+                                  },
+                                  success: function (data) {
+                                    console.log(data)
+                                    if (data.code == 0) {
+                                      valueKey = true;
+                                      checkPhone = true;
+                                    } else {
+                                      return false;
+                                    }
+                                  },
+                                  error: function (xhr, type, errorThrown) {
+                                    console.log("数据请求错误");
+                                    valueKey = false;
+                                  }
+                                });
+                      if (valueKey) {
+                        return true;
+                      } else{
+                        return false;
+                      }
+                    } else {
+                      return false;
+                    }
+                },
+                password:function(value){
+                    var reg = /((?=.*[a-z])(?=.*\d)|(?=[a-z])(?=.*[#@!~%^&*])|(?=.*\d)(?=.*[#@!~%^&*]))[a-z\d#@!~%^&*]{6,16}/i;
+                    if(reg.test(value)){
+                        return true;
+                    }
+                    return false;
+                },
+                isQQ:function(value){
+                    var reg = /[1-9][0-9]{4,14}$/;
+                    var valueKey = false;
+                    if(reg.test(value)){
+                      mui.ajax(verifyqq_url, {
+                        dataType: 'json', //服务器返回json格式数据
+                        async: false,
+                        type: 'get', //HTTP请求类型
+                        timeout: 10000, //超时时间设置为10秒；
+                        data:{
+                          'qq_number': value
+                        },
+                        success: function (data) {
+                          console.log(data)
+                          if (data.code == 0) {
+                            valueKey = true;
+                          } else {
+                            return false;
+                          }
+                        },
+                        error: function (xhr, type, errorThrown) {
+                          console.log("数据请求错误");
+                          valueKey = false;
+                        }
+                      });
+                      if (valueKey) {
+                        return true;
+                      } else{
+                        return false;
+                      }
+                    } else {
+                      return false;
+                    }
+                },
+                isCode:function(value){
+                  if (!value) {
+                    return true;
+                  } else{
+                    var valueKey = false;
+                    mui.ajax(verifyinviter_url, {
+                      dataType: 'json', //服务器返回json格式数据
+                      async: false,
+                      type: 'get', //HTTP请求类型
+                      timeout: 10000, //超时时间设置为10秒；
+                      data:{
+                        'qq_number': value
+                      },
+                      success: function (data) {
+                        console.log(data)
+                        if (data.code == 0) {
+                          valueKey = true;
+                        } else {
+                          return false;
+                        }
+                      },
+                      error: function (xhr, type, errorThrown) {
+                        console.log("数据请求错误");
+                        valueKey = false;
+                      }
+                    });
+                    if (valueKey) {
+                      return true;
+                    } else{
+                      return false;
+                    }
+                  }
+                }
+            }
+            return function(value,type){ //type为检测类型,value为检测的值
+                if(!types[type]){
+                    throw "检测类型错误";
+                }
+                if(!types[type](value)){
+                    return instructions[type];
+                }
+                return false;
+            } 
+        })();
+        function detect (value,types){
+            var result;
+            if(!(types instanceof Array)){
+                throw "检测类型只能是数组";
+            }
+            for(var type of types){
+                var msg = validate(value,type);
+                if(!!msg){
+                    return msg;
+                } 
+            }
+            return false;
+        }
+        
+        mui('.form-test').each(function(){
+            this.onblur = function(){
+                var value = this.value;
+                var test_type = this.getAttribute('data-form').split(' ');
+                console.log(value, test_type);
+                var result = detect(value, test_type);
+                console.log(result);
+                if (result) {
+                    this.parentNode.lastElementChild.innerText = result;
+                    this.parentNode.lastElementChild.style.display = 'block';
+                } else{
+                    this.parentNode.lastElementChild.style.display = 'none';
+                }
+            }
+        })
+        document.getElementById("submit_btn").addEventListener('tap', function() {
+            if(!document.getElementById('accept').checked) {
+              mui.alert('请勾选同意注册协议，免责声明');
+              return false;
+            }
+            isInputTrue = true;
+            mui('.form-test').each(function(){
+//              if (this.parentNode.style.display == 'block') {
+                    var value = this.value;
+                    var test_type = this.getAttribute('data-form').split(' ');
+                    console.log(value, test_type);
+                    var result = detect(value, test_type);
+                    console.log(result);
+                    if (result) {
+                        this.parentNode.lastElementChild.innerText = result;
+                        this.parentNode.lastElementChild.style.display = 'block';
+                        isInputTrue = false;
+                        return;
+                    } else{
+                        this.parentNode.lastElementChild.style.display = 'none';
+                    }
+//              }
+            })
+            var pwd = document.getElementById("password").value;  //密码
+            var qq = document.getElementById("qq").value; //qq号
+            var qqName = document.getElementById("qq_name").value; // qq昵称
+            var invite_code = document.getElementById("invite_code").value; //邀请码
+            console.log('isInputTrue: '+isInputTrue);
+            if (!isInputTrue) {
+                mui.alert("填写格式不正确，请检查格式后重新提交！");
+                return;
+            } else {
+                mui.ajax('/account/register_from_gzh/',{
+                    data: {
+                        'qq_number':qq,
+                        'qq_name':qqName,
+                        'password':pwd,
+                        'invite_code':invite_code
+                    },
+                    async:false,
+                    dataType:'json',//服务器返回json格式数据
+                    type:'post',//HTTP请求类型
+                    timeout:10000,//超时时间设置为10秒；
+                    success:function(ret){
+                        if(ret.code == 0) {
+                            mui.alert("提交成功",function() {
+                              window.location.href='/';
+                            });
+                        }else{
+                            mui.alert(ret.msg);
+                        }
+                    },
+                    error:function(xhr,type,errorThrown){
+                        console.log(xhr.responseText);
+                    }
+                });
+            }
+            
+        });
+        </script>
 
-<body>
-	<header class="mui-bar mui-bar-nav">
-		<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: #656565;"></a>
-		<h1 class="mui-title">申请成为渠道</h1>
-	</header>
-	<div class="mui-content" style="background: white;">
-		<form>
-			<table>
-				<!-- <tr>
-					<td>手机号</td>
-				</tr>
-				<tr>
-					<td>
-						<input type="text" id="phone" name="phone" class="ipt" />
-					</td>
-				</tr>
-
-				<tr>
-					<td>验证码</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="numbox">
-							<input type="text" id="checkNum" name="checkNum" />
-							<input type="button" id="setBtn" onclick="sendCode(this)" value="获取验证码" style="height:100%;position: absolute;right: 0;top: 0;background: RGB(145,193,29);color: white;"
-							/>
-						</div>
-					</td>
-				</tr> -->
-
-				<tr>
-					<td>密码</td>
-				</tr>
-				<tr>
-					<td>
-						<input type="password" id="pwd" name="password" class="mui-input-password ipt">
-					</td>
-				</tr>
-				<tr>
-					<td>QQ</td>
-				</tr>
-				<tr>
-					<td>
-						<input type="text" id="qq" name="qq" class="ipt" />
-					</td>
-				</tr>
-				<tr>
-					<td>QQ昵称</td>
-				</tr>
-				<tr>
-					<td>
-						<input type="text" id="qqName" name="qqName" class="ipt" id="qqTest" />
-					</td>
-				</tr>
-				<tr>
-					<td>邀请码（选填）</td>
-				</tr>
-				<tr>
-					<td>
-						<input type="text"  value="{{icode}}" name="invite_code" class="invite_code" id="invite_code" />
-					</td>
-				</tr>
-				
-				<tr>
-					<td>
-						<label>
-							<input type="checkbox" id="checkbox" checked="true">
-							<i>√</i>
-						</label>
-						<span style="font-size: 12px;">我接受<a style="font-size: 12px;color: #666666;" href="http://51fanshu.com/docs/lMOz8">《注册协议》</a>、<a style="font-size: 12px;color: #666666;" href="http://51fanshu.com/docs/laSnD">《免责声明》</a></span>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<input class="btn" id="btn" type="button" value="立即申请" />
-					</td>
-				</tr>
-			</table>
-		</form>
-	</div>
-	{% include "m_footer.html" %}
-	<script src="{% static 'js/mui.min.js' %}"></script>
-	<script type="text/javascript">
-		mui.init();
-		var verifymobile_url = "{% url 'verifymobile' %}"; //验证手机号是否存在url
-		var verifyqq_url = "{% url 'verifyqq' %}";        //验证QQurl
-		var verifyinviter_url = "{% url 'verifyinviter' %}"; // 邀请码是否存在url
-		var get_code_url = "{% url 'phoneImageV' %}"; //验证码url
-		var register_url = "{% url 'register' %}"; //注册url
-		var index_url = "";
-		var login_url = "{% url 'login' %}";
-		//发送验证码
-		// var countdown = 60;
-		// function settime(val) {
-		// 	console.log('验证码');
-		// 	if (countdown == 0) {
-		// 		val.removeAttribute("disabled");
-		// 		val.value = "获取验证码";
-		// 		countdown = 60;
-		// 		return;
-		// 	} else {
-		// 		val.setAttribute("disabled", true);
-		// 		val.value = "重新发送(" + countdown + ")";
-		// 		countdown--;
-		// 	}
-		// 	setTimeout(function () {
-		// 		settime(val)
-		// 	}, 1000)
-		// }
-
-
-
-		// function sendCode(thisBtn) {
-		// 	var phone = document.getElementById("phone").value;
-		// 	var url = "{% url 'phoneImageV' %}";
-		// 	console.log(phone);
-		// 	mui.ajax(url, {
-		// 		data: {
-		// 			"phone": phone,
-		// 			"csrfmiddlewaretoken": '{{ csrf_token }}',
-		// 		},
-		// 		dataType: 'json', //服务器返回json格式数据
-		// 		type: 'get', //HTTP请求类型
-		// 		timeout: 10000, //超时时间设置为10秒；
-		// 		success: function (data) {
-		// 			console.log(data)
-		// 			if (data.code == "0") {
-		// 				mui.alert("验证码发送成功");
-		// 				settime(document.getElementById("setBtn"));
-		// 			} else {
-		// 				mui.alert("验证码发送失败");
-		// 				console.log(data.message);
-		// 			}
-		// 		},
-		// 		error: function (xhr, type, errorThrown) {
-		// 			console.log("获取数据失败");
-		// 		}
-		// 	});
-		// }
-	
-		
-		//邀请码是否存在
-		mui(document).on('change','.invite_code',function () { 
-			var inviteCode = document.getElementById('invite_code').value;
-			mui.ajax(verifyinviter_url, {
-				dataType: 'json', //服务器返回json格式数据
-				type: 'get', //HTTP请求类型
-				timeout: 10000, //超时时间设置为10秒；
-				data:{
-
-				},
-				success: function (data) {
-					console.log(data)
-					if (data.code == 0) {
-						console.log('邀请码存在')
-					} else {
-						mui.alert('邀请码不存在');
-					}
-				},
-				error: function (xhr, type, errorThrown) {
-					console.log("数据请求错误");
-				}
-			});
-		})
-		//密码正则
-		mui(document).on('change','#pwd',function () { 
-			var pwdValue = document.getElementById('pwd').value;
-			var pwdReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
-			if (!pwdReg.test(pwdValue)) {
-				mui.alert('密码为6~16位数字、字母或下划线中的两种');
-				return false;
-			}
-		})
-		var register_url = "{% url 'register' %}";
-
-		document.getElementById("btn").addEventListener("tap", function () {
-			// var phone = document.getElementById("phone").value; //手机号
-			// var checkNum = document.getElementById("checkNum").value; //验证码
-			var pwd = document.getElementById("pwd").value;  //密码
-			var qq = document.getElementById("qq").value; //qq号
-			var qqName = document.getElementById("qqName").value; // qq昵称
-			var invite_code = document.getElementById("invite_code").value; //邀请码
-			// var introduce = document.getElementById("introduce").value;
-			var flag = document.getElementById("checkbox");
-			
-			if (!qq || !qqName || !pwd) {
-				mui.alert("填写不能为空");
-				return;
-			}
-			if(!flag.checked){
-				mui.alert('您未同意《注册声明》和《免责协议》')
-				return false;
-			}
-			mui.ajax(register_url, {
-				data: {
-					'qq_number':qq,
-					'qq_name':qqName,
-					// 'code':checkNum,
-					// 'mobile':phone,
-					'password':pwd,
-					'invite_code':invite_code
-				},
-				dataType: 'json', //服务器返回json格式数据
-				type: 'post', //HTTP请求类型
-				timeout: 10000, //超时时间设置为10秒；
-				success: function (data) {
-					console.log(data)
-					if (data.code == 0) {
-						mui.alert("申请成功");
-						mui.openWindow({
-							url: '/account/login',
-							styles: {
-								top: 0,
-								bottom: 0
-							},
-							show: {
-								aniShow: 'slide-in-right',
-							},
-							waiting: {
-								autoShow: false, //自动显示等待框
-								title: '正在加载...', //等待对话框上显示的提示内容
-							}
-						});
-					} else {
-						mui.alert(data.msg);
-					}
-				},
-				error: function (xhr, type, errorThrown) {
-					console.log("数据请求错误");
-				}
-			});
-		})
-
-
-
-	</script>
-</body>
-
+    {% include "m_footer.html" %}
+    </body>
 </html>

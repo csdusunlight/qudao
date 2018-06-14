@@ -44,7 +44,7 @@ def channel(request):
         table = data.sheets()[0]
         nrows = table.nrows
         ncols = table.ncols
-        if ncols!=7:
+        if ncols!=8:
             ret['msg'] = u"文件格式与模板不符，请下载最新模板填写！"
             return JsonResponse(ret)
         rtable = []
@@ -120,7 +120,7 @@ def channel(request):
                     item = rtable[i]
                     obj = InvestLog(user=request.user, invest_mobile=mob, project=project, is_official=project.is_official, category=project.category,
                                     invest_amount=item[3],invest_term=item[4],invest_date=item[0],invest_name=item[2],submit_way='3',
-                                    audit_state='1',zhifubao=item[5],remark=item[6],submit_type='1')
+                                    audit_state='1',zhifubao=item[5],zhifubao_name=item[6],remark=item[7],submit_type='1')
                     log_list.append(obj)
             InvestLog.objects.bulk_create(log_list)
         succ_num = len(log_list)
@@ -450,7 +450,7 @@ def import_investlog_all(request):
     table = data.sheets()[0]
     nrows = table.nrows
     ncols = table.ncols
-    if ncols!=8:
+    if ncols!=9:
         ret['msg'] = u"文件格式与模板不符，请下载最新模板填写！"
         return JsonResponse(ret)
     rtable = []
@@ -544,7 +544,7 @@ def import_investlog_all(request):
                 else:
                     obj = InvestLog(user=request.user, invest_mobile=mobile, project=project, is_official=project.is_official, category=project.category,
                                     invest_amount=item[4],invest_term=item[5],invest_date=item[1],invest_name=item[3],submit_way='5',
-                                    audit_state='1',zhifubao=item[6],remark=item[7],submit_type='1')
+                                    audit_state='1',zhifubao=item[6],zhifubao_name=item[7],remark=item[8],submit_type='1')
                     log_list.append(obj)
                     points += 1
             project.points = F('points') + points

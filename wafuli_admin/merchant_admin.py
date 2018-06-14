@@ -420,6 +420,7 @@ def admin_import_merchant_investlog(request):
                     investlog.settle_amount += cash
                     if broker_amount == 0 and new_broker_amount > 0:
                         charge_margin(investlog.project.user, '1', new_broker_amount, "佣金", auditlog=investlog)
+                        investlog.broker_amount = new_broker_amount
 #                     #活动插入
 #                     on_audit_pass(request, investlog)
 #                     #活动插入结束

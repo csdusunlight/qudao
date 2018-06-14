@@ -40,7 +40,7 @@
                   :value="item.id">
                 </el-option>
               </el-select>
-              <el-button type="primary" @click="dialogPlanVisible = true" >增加方案</el-button>
+              <el-button type="primary" @click="addPlan" >增加方案</el-button>
             </el-form-item>
             
             <el-form-item label="选择发送用户" prop="send_user">
@@ -197,9 +197,17 @@
           <el-input type="number" v-model="hongbaoPlanForm.sday"></el-input>
         </el-form-item>
         <el-form-item label="项目关联">
-          <el-select v-model="hongbaoPlanForm.projects" placeholder="请选择活动区域">
-            <el-option label="全部" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+          <el-select 
+            v-model="hongbaoPlanForm.projects"
+            filterable
+            placeholder="请选择活动区域">
+            <el-option label="全部" value="all"></el-option>
+            <el-option
+              v-for="item in projectList"
+              :key="item.id"
+              :label="item.title"
+              :value="item.id">
+            </el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -234,8 +242,9 @@
           hday: '',
           sstart_date: '',
           sday: '',
-          projects: ''
+          projects: 'all'
         },
+        projectList: [],
         rules: {
           hongbao_plan: [
             { required: true, message: '请选择红包方案', trigger: 'change' }
@@ -273,8 +282,9 @@
         currentPage: 1,
       },
       created: function() {
+        console.log(this.activeNav);
         this.getAllPlan();
-        this.getDataList(1,10);
+        this.getDataList(this.page, this.pageSize);
       },
       methods: {
         submitForm: function(formName) {
@@ -362,6 +372,32 @@
         handleCurrentChange: function (val) {
           app.currentPage = val;
           app.getDataList(app.currentPage,app.pageSize);
+        },
+        addPlan: function() {
+          var that = this;
+          $.ajax({
+            url: "/restapi/projects/?page=1&pageSize=999",
+            dataType: "json",
+            type: "GET", 
+            async: false,
+            success: function(ret) {
+              if(ret.code == 0) {
+                app.projectList = ret.results;
+                that.dialogPlanVisible = true;
+              } else {
+                that.$notify.error({
+                  title: '提示',
+                  message: ret.detail
+                });
+              }
+            },
+            error: function() {
+              that.$notify.error({
+                title: '提示',
+                message: '请检查网络连接'
+              });
+            }
+          });
         },
         delPlan: function(id) {
           var that = this;

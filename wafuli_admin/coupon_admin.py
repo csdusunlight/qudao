@@ -14,6 +14,7 @@ from account.models import MyUser
 import logging
 from account.varify import send_multimsg_bydhst
 from public.tools import send_mobilemsg_multi
+import datetime
 logger = logging.getLogger('wafuli')
 @csrf_exempt
 @login_required
@@ -32,7 +33,8 @@ def deliver_coupon(request):
             result['res_msg'] = u'您没有操作权限！'
             return JsonResponse(result)
         contract_id = request.POST.get('contract')
-        contract = Contract.objects.get(id=contract_id)
+        contract_id_list = contract_id.split(',')
+        contracts = Contract.objects.get(id__in=contract_id_list)
         success_count = 0
         fail_list = []
         select_user = request.POST.get('selectuser')
@@ -40,33 +42,27 @@ def deliver_coupon(request):
         users = []
         user_set = set()
         if select_user == '1':
-            users = MyUser.objects.all()
-            for user in users:
-                coupon = UserCoupon(user=user, contract=contract, type='heyue', award=contract.award)
-                user_set.add(user.mobile)
-                bulk.append(coupon)
-                success_count += 1
+            users = list(MyUser.objects.all())
         elif select_user == '2':
             select_list_str = request.POST.get('users')
             select_list_str = str(select_list_str)
             select_list = select_list_str.strip().split('\n')
-            print select_list   #jzy
-            for user in select_list:
-                if user:
-                    user_set.add(user)
-            for mobile in user_set:
-                try:
-                    user = MyUser.objects.get(mobile = mobile)
-                    users.append(user)
-                except:
-                    fail_list.append(mobile)
+            users = MyUser.objects.filter(mobile__in = select_list)
+        for user in users:
+            for contract in contracts:
+                if contract.start_date:
+                    start_date = contract.start_date
                 else:
-                    coupon = UserCoupon(user=user, contract=contract, type='heyue', award=contract.award)
-                    bulk.append(coupon)
-                    success_count += 1
+                    start_date = datetime.date.today()
+                end_date = start_date + datetime.timedelta(days=contract.days)
+                coupon = UserCoupon(user=user, contract=contract, type='heyue', 
+                                    start_date=start_date, end_date=end_date, award=contract.award)
+                bulk.append(coupon)
+                success_count += 1
+            user_set.add(user.mobile)
         if bulk:
             UserCoupon.objects.bulk_create(bulk)
-        send_mobilemsg_multi(user_set, u"送您一张%s元的推单红包，快去个人中心领取吧。联盟地址：%s" % (contract.award, 'http://fuliunion.com/account/hongbao/'))
+        send_mobilemsg_multi(user_set, u"您收到了新的推单红包，快去个人中心领取吧。联盟地址：%s" % (contract.award, 'http://fuliunion.com/account/hongbao/'))
 
         result.update({'succ_num':success_count, 'fail_list':fail_list})
         return JsonResponse(result)

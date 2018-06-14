@@ -3,19 +3,25 @@ import datetime
 
 from django.db import models, transaction
 from account.models import MyUser
-from wafuli.models import InvestLog
+from wafuli.models import InvestLog, Project
 from django.db.models.aggregates import Count, Sum
 from account.transaction import charge_money
 
 # Create your models here.
 
 class Contract(models.Model):
+    CONDTYPE = (
+        ('and', u'且'),
+        ('or', u'或'),
+    )
     name = models.CharField(u"合约名称", max_length=20, unique=True)
-    start_date = models.DateField(u"开始时间")
-    end_date = models.DateField(u"结束时间")
+    start_date = models.DateField(u"开始时间", default=None, null=True, blank=True)
+    days = models.IntegerField(u"持续天数")
     settle_count = models.IntegerField(u"结算单数")
     settle_amount = models.DecimalField(u"结算金额", decimal_places=2, max_digits=10)
     award = models.DecimalField(u"奖励金额", default=0, decimal_places=2, max_digits=6)
+    condtype = models.CharField(choices=CONDTYPE, default='and', max_length=5)
+    project = models.ForeignKey(Project, null=True, default=None, blank=True)
     def __unicode__(self):
         return self.name
     class Meta:
@@ -51,7 +57,10 @@ class UserCoupon(models.Model):
             return True
         if self.type == 'heyue':
             count, amount = self.check_schedule()
-            if count >= self.contract.settle_count and amount >= self.contract.settle_amount:
+            type = self.contract.condtype
+            if type == 'and' and count >= self.contract.settle_count and amount >= self.contract.settle_amount:
+                self.state = '1'
+            elif type == 'or' and (count >= self.contract.settle_count or amount >= self.contract.settle_amount):
                 self.state = '1'
         elif self.type == 'bangka':
             if self.user.user_bankcard.exists():
@@ -71,11 +80,13 @@ class UserCoupon(models.Model):
     def check_schedule(self):
         if self.type != 'heyue':
             return None, None
-        start_date = self.start_date or self.contract.start_date
-        end_date = self.end_date or self.contract.end_date
+        start_date = self.start_date
+        end_date = self.end_date
         dic = self.user.investlog_submit.filter(submit_time__range=(start_date,
-                 end_date + datetime.timedelta(days=1)), audit_state='0').\
-                 aggregate(cou=Count('*'),sum=Sum('settle_amount'))
+                 end_date + datetime.timedelta(days=1)), audit_state='0')
+        if self.contract.project:
+            dic = dic.filter(project=self.contract.project)
+        dic = dic.aggregate(cou=Count('*'),sum=Sum('settle_amount'))
         count = dic.get('cou') or 0
         amount = dic.get('sum') or 0
         return count, amount

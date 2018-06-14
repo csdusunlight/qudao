@@ -7,6 +7,7 @@ Created on 2018年3月20日
 from rest_framework import serializers
 from coupon.models import UserCoupon, Contract
 class ContractSerializer(serializers.ModelSerializer):
+    project_des = serializers.CharField(source='project.title', read_only=True)
     class Meta:
         model = Contract
         fields = '__all__'

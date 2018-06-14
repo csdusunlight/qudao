@@ -34,7 +34,7 @@ def deliver_coupon(request):
             return JsonResponse(result)
         contract_id = request.POST.get('contract')
         contract_id_list = contract_id.split(',')
-        contracts = Contract.objects.get(id__in=contract_id_list)
+        contracts = Contract.objects.filter(id__in=contract_id_list)
         success_count = 0
         fail_list = []
         select_user = request.POST.get('selectuser')
@@ -63,7 +63,8 @@ def deliver_coupon(request):
             user_set.add(user.mobile)
         if bulk:
             UserCoupon.objects.bulk_create(bulk)
-        send_mobilemsg_multi(user_set, u"您收到了新的推单红包，快去个人中心领取吧。联盟地址：%s" % (contract.award, 'http://fuliunion.com/account/hongbao/'))
+        print user_set
+        send_mobilemsg_multi(user_set, u"您收到了新的推单红包，快去个人中心领取吧。联盟地址：%s" %  'http://fuliunion.com/account/hongbao/')
 
         result.update({'succ_num':success_count, 'fail_list':fail_list})
         return JsonResponse(result)

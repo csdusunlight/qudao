@@ -6,8 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 	<title>Document</title>
-	<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
 	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://unpkg.com/element-ui/lib/index.js"></script>
   <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
@@ -93,8 +93,20 @@
               <template slot-scope="scope">${ scope.row.start_date }</template>
             </el-table-column>
             <el-table-column
-              label="结束时间">
-              <template slot-scope="scope">${ scope.row.end_date }</template>
+              label="红包天数">
+              <template slot-scope="scope">${ scope.row.exipire_days }</template>
+            </el-table-column>
+            <el-table-column
+              label="交单天数">
+              <template slot-scope="scope">${ scope.row.continue_days }</template>
+            </el-table-column>
+            <el-table-column
+              label="条件关系">
+              <template slot-scope="scope">${ scope.row.condtype }</template>
+            </el-table-column>
+            <el-table-column
+              label="关联项目">
+              <template slot-scope="scope">${ scope.row.project_des ? scope.row.project_des : '全部项目' }</template>
             </el-table-column>
             <el-table-column
               label="结算单数">
@@ -118,7 +130,7 @@
                 <template v-else>
                   <el-popover trigger="hover" placement="left">
                     <p>
-                      <el-button type="success" size="mini" icon="el-icon-edit" @click="dialogPlanVisible = true">编辑</el-button>
+                      <!--<el-button type="success" size="mini" icon="el-icon-edit" @click="dialogPlanVisible = true">编辑</el-button>-->
                       <el-button type="danger" size="mini" icon="el-icon-delete" @click="delPlan(scope.row.id)">删除</el-button>
                     </p>
                     <div slot="reference" class="name-wrapper">
@@ -154,21 +166,21 @@
         :rules="rules_addplan" 
         ref="hongbaoPlanForm" 
         >
-        <el-form-item label="红包名称" prop="hname">
-          <el-input v-model="hongbaoPlanForm.hname"></el-input>
+        <el-form-item label="红包名称" prop="name">
+          <el-input v-model="hongbaoPlanForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="红包金额" prop="hamount">
-          <el-input type="number" v-model="hongbaoPlanForm.hamount"></el-input>
+        <el-form-item label="红包金额" prop="award">
+          <el-input type="number" v-model="hongbaoPlanForm.award"></el-input>
         </el-form-item>
-        <el-form-item label="结算金额" prop="samount">
-          <el-input type="number" v-model="hongbaoPlanForm.samount"></el-input>
+        <el-form-item label="结算金额" prop="settle_amount">
+          <el-input type="number" v-model="hongbaoPlanForm.settle_amount"></el-input>
         </el-form-item>
-        <el-form-item label="结算单数" prop="snum">
-          <el-input type="number" v-model="hongbaoPlanForm.snum"></el-input>
+        <el-form-item label="结算单数" prop="settle_count">
+          <el-input type="number" v-model="hongbaoPlanForm.settle_count"></el-input>
         </el-form-item>
         <el-form-item label="条件关系">
-          <el-radio v-model="hongbaoPlanForm.relation" label="1" border>结算金额 且 单数</el-radio>
-          <el-radio v-model="hongbaoPlanForm.relation" label="2" border>结算金额 或 单数</el-radio>
+          <el-radio v-model="hongbaoPlanForm.condtype" label='and' border>结算金额 且 单数</el-radio>
+          <el-radio v-model="hongbaoPlanForm.condtype" label='or' border>结算金额 或 单数</el-radio>
         </el-form-item>
         <el-form-item label="开始日期" prop="start_date">
           <el-date-picker
@@ -180,18 +192,18 @@
           </el-date-picker>
           <span>默认不选择日期则为当天</span>
         </el-form-item>
-        <el-form-item label="红包有效天数" prop="hday">
-          <el-input type="number" v-model="hongbaoPlanForm.hday"></el-input>
+        <el-form-item label="红包有效天数" prop="exipire_days">
+          <el-input type="number" v-model="hongbaoPlanForm.exipire_days"></el-input>
         </el-form-item>
-        <el-form-item label="交单有效天数" prop="sday">
-          <el-input type="number" v-model="hongbaoPlanForm.sday"></el-input>
+        <el-form-item label="交单有效天数" prop="continue_days">
+          <el-input type="number" v-model="hongbaoPlanForm.continue_days"></el-input>
         </el-form-item>
         <el-form-item label="项目关联">
           <el-select 
-            v-model="hongbaoPlanForm.projects"
+            v-model="hongbaoPlanForm.project"
             filterable
             placeholder="请选择活动区域">
-            <el-option label="全部" value="all"></el-option>
+            <el-option label="全部" value=""></el-option>
             <el-option
               v-for="item in projectList"
               :key="item.id"
@@ -218,20 +230,20 @@
         hongbaoPlan:[],
         ruleForm: {
           hongbao_plan: [],
-          send_user: '2',
+          send_user: '1',
           userlist: ''
         },
         dialogPlanVisible: false,
         hongbaoPlanForm: {
-          hname: '',
-          hamount: '',
-          samount: '33',
-          snum: '',
-          relation: '1',
+          name: '',
+          award: '',
+          settle_amount: '33',
+          settle_count: '',
+          condtype: 'and',
           start_date: '',
-          hday: '',
-          sday: '',
-          projects: 'all'
+          exipire_days: '',
+          continue_days: '',
+          project: ''
         },
         projectList: [],
         rules: {
@@ -243,22 +255,22 @@
           ]
         },
         rules_addplan: {
-          hname: [
+          name: [
             { required: true, message: '请填写红包名称', trigger: 'blur' }
           ],
-          hamount: [
+          award: [
             { required: true, message: '请填写红包金额', trigger: 'blur' }
           ],
-          samount: [
+          settle_amount: [
             { required: true, message: '请填写结算金额', trigger: 'blur' }
           ],
-          snum: [
+          settle_count: [
             { required: true, message: '请填写结算单数', trigger: 'blur' }
           ],
-          hday: [
+          exipire_days: [
             { required: true, message: '请填写红包天数', trigger: 'blur' }
           ],
-          sday: [
+          continue_days: [
             { required: true, message: '请填写交单天数', trigger: 'blur' }
           ],
         },
@@ -307,7 +319,10 @@
                   success:function(ret){
                       if(ret.code=='0'){
                           console.log(ret);
-                         alert('成功人数：' + ret.succ_num);
+                          that.$notify.success({
+                            title: '提示',
+                            message: '成功人数：' + ret.succ_num
+                          });
                       }
                       else {
                           alert(ret.res_msg);
@@ -324,9 +339,29 @@
           });
         },
         submitHongbaoForm: function(formName) {
+          var that = this;
           this.$refs[formName].validate(function(valid) {
             if (valid) {
               console.log(app.hongbaoPlanForm)
+              $.ajax({
+                  url: "/coupon/contracts/",
+                  dataType:"json",
+                  async: false,
+                  type:"POST",
+                  data: app.hongbaoPlanForm,
+                  success:function(ret){
+                      that.$notify.success({
+                        title: '提示',
+                        message: '新建方案成功'
+                      });
+                      app.getDataList(1,10);
+                      app.getAllPlan();
+                      that.dialogPlanVisible = false;
+                  },
+                  error:function(ret){
+                      alert(ret.responseText);
+                  }
+              });
             } else {
               console.log('error submit!!');
               return false;

@@ -21,3 +21,6 @@
   display: flex;
   justify-content: flex-end;
 }
+.el-popover {
+  min-width: 60px !important;
+}

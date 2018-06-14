@@ -170,9 +170,9 @@
           <el-radio v-model="hongbaoPlanForm.relation" label="1" border>结算金额 且 单数</el-radio>
           <el-radio v-model="hongbaoPlanForm.relation" label="2" border>结算金额 或 单数</el-radio>
         </el-form-item>
-        <el-form-item label="红包开始日期" prop="hstart_date">
+        <el-form-item label="开始日期" prop="start_date">
           <el-date-picker
-            v-model="hongbaoPlanForm.hstart_date"
+            v-model="hongbaoPlanForm.start_date"
             type="date"
             placeholder="选择日期"
             format="yyyy 年 MM 月 dd 日"
@@ -180,20 +180,10 @@
           </el-date-picker>
           <span>默认不选择日期则为当天</span>
         </el-form-item>
-        <el-form-item label="红包天数" prop="hday">
+        <el-form-item label="红包有效天数" prop="hday">
           <el-input type="number" v-model="hongbaoPlanForm.hday"></el-input>
         </el-form-item>
-        <el-form-item label="交单开始日期" prop="sstart_date">
-            <el-date-picker
-              v-model="hongbaoPlanForm.sstart_date"
-              type="date"
-              placeholder="选择日期"
-              format="yyyy 年 MM 月 dd 日"
-              value-format="yyyy-MM-dd">
-            </el-date-picker>
-            <span>默认不选择日期则为当天</span>
-        </el-form-item>
-        <el-form-item label="交单天数" prop="sday">
+        <el-form-item label="交单有效天数" prop="sday">
           <el-input type="number" v-model="hongbaoPlanForm.sday"></el-input>
         </el-form-item>
         <el-form-item label="项目关联">
@@ -238,9 +228,8 @@
           samount: '33',
           snum: '',
           relation: '1',
-          hstart_date: '',
+          start_date: '',
           hday: '',
-          sstart_date: '',
           sday: '',
           projects: 'all'
         },

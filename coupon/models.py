@@ -50,7 +50,7 @@ class UserCoupon(models.Model):
     create_date = models.DateField(u"发放日期", default=datetime.date.today)
     start_date = models.DateField(u"开始时间", default=None, null=True)
     end_date = models.DateField(u"结束时间", default=None, null=True)
-    expire = models.DateField(u"过期时间", default=thirty_day_later)
+    expire = models.DateField(u"过期时间")
     award = models.DecimalField(u"奖励金额", default=0, decimal_places=2, max_digits=6)
     unlock_date = models.DateField(u"解锁日期", default=None, null=True, blank=True)
     def checklock(self):

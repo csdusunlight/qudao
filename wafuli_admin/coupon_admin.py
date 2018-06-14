@@ -54,8 +54,9 @@ def deliver_coupon(request):
                     start_date = contract.start_date
                 else:
                     start_date = datetime.date.today()
-                end_date = start_date + datetime.timedelta(days=contract.days)
-                coupon = UserCoupon(user=user, contract=contract, type='heyue', 
+                end_date = start_date + datetime.timedelta(days=contract.continue_days)
+                expire = start_date + datetime.timedelta(days=contract.exipire_days)
+                coupon = UserCoupon(user=user, contract=contract, type='heyue', expire=expire,
                                     start_date=start_date, end_date=end_date, award=contract.award)
                 bulk.append(coupon)
                 success_count += 1

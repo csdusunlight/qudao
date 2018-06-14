@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-  <!--<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>-->
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 </head>
 <body>
   <div id="app">
@@ -27,45 +27,185 @@
             label-width="150px" 
             class="demo-ruleForm">
             <el-form-item label="红包方案" prop="hongbao_plan">
-              <el-select v-model="ruleForm.hongbao_plan" placeholder="请选择活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+              <el-select 
+                v-model="ruleForm.hongbao_plan" 
+                filterable 
+                multiple 
+                placeholder="请选择"
+                style="width: 500px;">
+                <el-option
+                  v-for="item in hongbaoPlan"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
               </el-select>
               <el-button type="primary" @click="dialogPlanVisible = true" >增加方案</el-button>
             </el-form-item>
+            
             <el-form-item label="选择发送用户" prop="send_user">
-              <el-select v-model="ruleForm.send_user" placeholder="请选择活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+              <el-select v-model="ruleForm.send_user" placeholder="选择发送用户">
+                <el-option label="全部用户" value="1"></el-option>
+                <el-option label="指定用户" value="2"></el-option>
               </el-select>
             </el-form-item>
+            <el-form-item v-if="ruleForm.send_user == 2" label="选择发送用户" prop="userlist">
+              <el-input 
+                type="textarea" 
+                rows="5" 
+                v-model="ruleForm.userlist"
+                style="width: 300px;"
+                ></el-input>
+            </el-form-item>
+            <el-form-item v-if="ruleForm.send_user == 2">
+              <el-upload
+                class="upload-demo"
+                action="{%url 'parse_file'%}"
+                :on-success="handleUserSuccess"
+                :on-error="handleUserError"
+                >
+                <el-button size="small" type="primary">上传用户名单</el-button>
+                <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
+              </el-upload>
+            </el-form-item>
+            
+
             <el-form-item>
-              <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+              <el-button type="primary" @click="submitForm('ruleForm')">发送红包</el-button>
               <el-button @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
           </el-form>
+          
+          <el-header>红包方案展示</el-header>
+          <el-table
+            :header-cell-style="rowStyle"
+            :row-style="rowStyle"
+            ref="multipleTable"
+            :data="planTableData.results"
+            style="width: 100%"
+            border>
+            <el-table-column
+              label="红包名称">
+              <template slot-scope="scope">${ scope.row.name }</template>
+            </el-table-column>
+            <el-table-column
+              label="开始时间">
+              <template slot-scope="scope">${ scope.row.start_date }</template>
+            </el-table-column>
+            <el-table-column
+              label="结束时间">
+              <template slot-scope="scope">${ scope.row.end_date }</template>
+            </el-table-column>
+            <el-table-column
+              label="结算单数">
+              <template slot-scope="scope">${ scope.row.settle_count }</template>
+            </el-table-column>
+            <el-table-column
+              label="结算金额">
+              <template slot-scope="scope">${ scope.row.settle_amount }</template>
+            </el-table-column>
+            <el-table-column
+              label="奖励金额">
+              <template slot-scope="scope">${ scope.row.award }</template>
+            </el-table-column>
+            <el-table-column
+              label="操作"
+              width="90">
+              <template slot-scope="scope">
+                <template v-if="scope.row.pay_state == 2 || scope.row.pay_state == 3 || scope.row.pay_state == 4">
+                  <el-button disabled>操作</el-button>
+                </template>
+                <template v-else>
+                  <el-popover trigger="hover" placement="left">
+                    <p>
+                      <el-button type="success" size="mini" icon="el-icon-edit" @click="dialogPlanVisible = true">编辑</el-button>
+                      <el-button type="danger" size="mini" icon="el-icon-delete" @click="delPlan(scope.row.id)">删除</el-button>
+                    </p>
+                    <div slot="reference" class="name-wrapper">
+                      <el-button>操作</el-button>
+                    </div>
+                  </el-popover>
+                </template>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div class="pagination-box">
+            <el-pagination
+              background
+              @current-change="handleCurrentChange"
+              :page-size="pageSize"
+              :current-page="currentPage"
+              layout="total, prev, pager, next, jumper"
+              :total="planTableData.recordCount">
+            </el-pagination>
+          </div>
         </div>
       </el-col>
     </el-row>
     
-    <el-dialog title="新增红包方案" :visible.sync="dialogPlanVisible">
-      <el-form :model="hongbaoPlanForm" label-width="100px">
-        <el-form-item label="红包名称">
+    <el-dialog 
+      title="新增红包方案" 
+      :visible.sync="dialogPlanVisible"
+      width="700px"
+      >
+      <el-form 
+        :model="hongbaoPlanForm" 
+        label-width="120px"
+        :rules="rules_addplan" 
+        ref="hongbaoPlanForm" 
+        >
+        <el-form-item label="红包名称" prop="hname">
           <el-input v-model="hongbaoPlanForm.hname"></el-input>
         </el-form-item>
-        <el-form-item label="红包金额">
-          <el-input v-model="hongbaoPlanForm.hamount"></el-input>
+        <el-form-item label="红包金额" prop="hamount">
+          <el-input type="number" v-model="hongbaoPlanForm.hamount"></el-input>
         </el-form-item>
-        <el-form-item label="结算金额">
-          <el-input v-model="hongbaoPlanForm.samount"></el-input>
+        <el-form-item label="结算金额" prop="samount">
+          <el-input type="number" v-model="hongbaoPlanForm.samount"></el-input>
         </el-form-item>
-        <el-form-item label="结算单数">
-          <el-input v-model="hongbaoPlanForm.snum"></el-input>
+        <el-form-item label="结算单数" prop="snum">
+          <el-input type="number" v-model="hongbaoPlanForm.snum"></el-input>
+        </el-form-item>
+        <el-form-item label="条件关系">
+          <el-radio v-model="hongbaoPlanForm.relation" label="1" border>结算金额 且 单数</el-radio>
+          <el-radio v-model="hongbaoPlanForm.relation" label="2" border>结算金额 或 单数</el-radio>
+        </el-form-item>
+        <el-form-item label="红包开始日期" prop="hstart_date">
+          <el-date-picker
+            v-model="hongbaoPlanForm.hstart_date"
+            type="date"
+            placeholder="选择日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd">
+          </el-date-picker>
+          <span>默认不选择日期则为当天</span>
+        </el-form-item>
+        <el-form-item label="红包天数" prop="hday">
+          <el-input type="number" v-model="hongbaoPlanForm.hday"></el-input>
+        </el-form-item>
+        <el-form-item label="交单开始日期" prop="sstart_date">
+            <el-date-picker
+              v-model="hongbaoPlanForm.sstart_date"
+              type="date"
+              placeholder="选择日期"
+              format="yyyy 年 MM 月 dd 日"
+              value-format="yyyy-MM-dd">
+            </el-date-picker>
+            <span>默认不选择日期则为当天</span>
+        </el-form-item>
+        <el-form-item label="交单天数" prop="sday">
+          <el-input type="number" v-model="hongbaoPlanForm.sday"></el-input>
+        </el-form-item>
+        <el-form-item label="项目关联">
+          <el-select v-model="hongbaoPlanForm.projects" placeholder="请选择活动区域">
+            <el-option label="全部" value="shanghai"></el-option>
+            <el-option label="区域二" value="beijing"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button @click="dialogPlanVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitHongbaoForm('hongbaoPlanForm')">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -76,17 +216,25 @@
       el: '#app',
       delimiters: ['${', '}'],
       data: {
-        activeNav: '1-5',
+        activeNav: '6-3',
+        hongbaoPlan:[],
         ruleForm: {
-          hongbao_plan: '',
-          send_user: ''
+          hongbao_plan: [],
+          send_user: '2',
+          userlist: ''
         },
         dialogPlanVisible: false,
         hongbaoPlanForm: {
-          hname: '1',
-          hamount: '2',
-          samount: '3',
-          snum: '4'
+          hname: '',
+          hamount: '',
+          samount: '33',
+          snum: '',
+          relation: '1',
+          hstart_date: '',
+          hday: '',
+          sstart_date: '',
+          sday: '',
+          projects: ''
         },
         rules: {
           hongbao_plan: [
@@ -94,15 +242,92 @@
           ],
           send_user: [
             { required: true, message: '请选择要发送的用户', trigger: 'change' }
+          ]
+        },
+        rules_addplan: {
+          hname: [
+            { required: true, message: '请填写红包名称', trigger: 'blur' }
+          ],
+          hamount: [
+            { required: true, message: '请填写红包金额', trigger: 'blur' }
+          ],
+          samount: [
+            { required: true, message: '请填写结算金额', trigger: 'blur' }
+          ],
+          snum: [
+            { required: true, message: '请填写结算单数', trigger: 'blur' }
+          ],
+          hday: [
+            { required: true, message: '请填写红包天数', trigger: 'blur' }
+          ],
+          sday: [
+            { required: true, message: '请填写交单天数', trigger: 'blur' }
           ],
         },
-        message: 'Hello Vue!'
+        rowStyle: {
+          'text-align': 'center'
+        },
+        planTableData:{},
+        page: 1,
+        pageSize: 10,
+        currentPage: 1,
+      },
+      created: function() {
+        this.getAllPlan();
+        this.getDataList(1,10);
       },
       methods: {
         submitForm: function(formName) {
+          var that = this;
           this.$refs[formName].validate(function(valid) {
             if (valid) {
               console.log(app.ruleForm)
+              if(app.ruleForm.send_user == 2 && !app.ruleForm.userlist) {
+                that.$notify.error({
+                  title: '错误',
+                  message: '要发送的用户列表不能为空'
+                });
+                return false;
+              }
+              var data = {
+                'contract': app.ruleForm.hongbao_plan.join(','),
+                'selectuser': app.ruleForm.send_user,
+              };
+              if(app.ruleForm.send_user === '1') {
+                  data.user = 'all';
+              } else if(app.ruleForm.send_user === '2') {
+                  data.users = app.ruleForm.userlist;
+              }
+              console.log('data');
+              $.ajax({
+                  url: "{%url 'deliver_coupon' %}",
+                  dataType:"json",
+                  async: false,
+                  type:"POST",
+                  data: data,
+                  success:function(ret){
+                      if(ret.code=='0'){
+                          console.log(ret);
+                         alert('成功人数：' + ret.succ_num);
+                      }
+                      else {
+                          alert(ret.res_msg);
+                      }
+                  },
+                  error:function(){
+                      alert("请检查网络连接");
+                  }
+              });
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
+        },
+        submitHongbaoForm: function(formName) {
+          this.$refs[formName].validate(function(valid) {
+            if (valid) {
+              console.log(app.hongbaoPlanForm)
             } else {
               console.log('error submit!!');
               return false;
@@ -111,6 +336,100 @@
         },
         resetForm: function(formName) {
           this.$refs[formName].resetFields();
+        },
+        handleUserSuccess: function(ret) {
+          var that = this;
+          if(ret.code == 0) {
+              var value = '';
+              for(x in ret.list) {
+                  value += String(ret.list[x]) + '\n';
+              }
+              app.ruleForm.userlist = value
+          } else {
+            that.$notify.error({
+              title: '错误',
+              message: ret.res_msg
+            });
+          }
+        },
+        handleUserError: function(ret) {
+          var that = this;
+          that.$notify.error({
+            title: '错误',
+            message: '请检查网络连接'
+          });
+        },
+        handleCurrentChange: function (val) {
+          app.currentPage = val;
+          app.getDataList(app.currentPage,app.pageSize);
+        },
+        delPlan: function(id) {
+          var that = this;
+          this.$confirm('请确认是否删除该条数据？', '温馨提示', {
+            confirmButtonText: '确定',
+            callback: function(action) {
+              if (action == 'confirm') {
+                console.log(id);
+                $.ajax({
+                  url: "/coupon/contracts/" + id + '/',
+                  dataType: "json",
+                  type: "delete", 
+                  async: false,
+                  success: function(ret) {
+                    that.$notify.success({
+                      title: '提示',
+                      message: '操作成功'
+                    });
+                    app.getDataList(1,10);
+                    app.getAllPlan();
+                  },
+                  error: function() {
+                    that.$notify.error({
+                      title: '提示',
+                      message: '请检查网络连接'
+                    });
+                  }
+              });
+              }
+            }
+          });
+        },
+        getDataList: function(page, pageSize) {
+          var that = this;
+          $.ajax({
+              type: "get",
+              url: '/coupon/contracts/?page='+ page + '&pageSize=' + pageSize,
+              async: true,
+              success: function(res) {
+                console.log(res);
+                if(res.code == 0) {
+                  app.planTableData = res;
+                } else {
+                  that.$notify.error({
+                    title: '错误',
+                    message: res.detail
+                  });
+                }
+              }
+          });
+        },
+        getAllPlan: function(page, pageSize) {
+          var that = this;
+          $.ajax({
+              url: '/coupon/contracts/?pageSize=999',
+              dataType:"json",
+              type:"get",
+              success:function(ret){
+                app.hongbaoPlan = ret.results;
+                  console.log(app.hongbaoPlan);
+              },
+              error:function(){
+                that.$notify.error({
+                    title: '错误',
+                    message: '请检查网络连接'
+                });
+              }
+          });
         }
       }
     })

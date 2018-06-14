@@ -1,0 +1,23 @@
+.el-submenu .el-menu-item {
+  min-width: 120px !important;
+  padding: 0 !important;
+}
+.el-menu-a {
+  display: block;
+  padding-left: 40px;
+  font-size: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+.el-header {
+  margin-top: 40px;
+  background-color: #B3C0D1;
+  color: #333;
+  text-align: center;
+  line-height: 60px;
+}
+.pagination-box {
+  padding: 20px;
+  display: flex;
+  justify-content: flex-end;
+}

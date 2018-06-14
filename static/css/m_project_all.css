@@ -45,7 +45,8 @@ ul,li {
 	border-bottom: 1px solid #e4e4e4;
 }
 .item_line.m-right {
-	width: 60rem;
+	/* width: 60rem; */
+	width: 44rem;
 	text-align: center;
 	/*border-left:2px solid RGB(233,233,233);*/
 }

@@ -219,21 +219,21 @@
                     var time = $(this).text().split('T');//分割字符串 获取年月日
                     console.log(time);
                     var time_1 = time[1].split('.');//分割字符串 获取时分秒
-                    $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
+                    $(this).text(time[0] + ' ' + time_1[0]);
                 });
 
                 $('.c-time').each(function(){
                     var time = $(this).text().split('T');
-                        console.log('llc'+time);
-                        var time_1 = time[1].split('.');//分割字符串 获取时分秒
-                        $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
+                    console.log('llc'+time);
+                    var time_1 = time[1].split('.');//分割字符串 获取时分秒
+                    $(this).text(time[0] + '  ' + time_1[0]);
                 });
 
                 $('.c-time1').each(function(){
                     var time = $(this).text().split('T');//分割字符串 获取年月日
                     console.log(time);
                     var time_1 = time[1].split('.');//分割字符串 获取时分秒
-                    $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
+                    $(this).text(time[0] + ' ' +time_1[0]);
                 });
                 //根据transType来判断‘+’‘-’号
                 $('.transAmount').each(function(){
@@ -312,12 +312,12 @@
             console.log(changeTime);
             $('.changeTime').text(changeTime[0]);
             // 选中支付宝 支付宝窗口切换
-            $('.zhifubao').change(() =>{
+            $('.zhifubao').change(function(){
                 $('.payBox').show();
                 $('.card_box').hide();
             })
             // 选中银行卡 银行卡盒子切换
-            $('.bank_card').change(() =>{
+            $('.bank_card').change(function(){
                 $('.card_box').show();
                 $('.payBox').hide();
             })
@@ -327,7 +327,7 @@
                 $(".wrapper_pay").show();
             });
             // 银行卡充值ajax
-            $('.card_add').click(() =>{
+            $('.card_add').click(function (){
                
                 var value = $('.bank_rechargeIpt').val();
                 var regx =/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
@@ -393,7 +393,7 @@
                     return;
                 }
                 //创建标签分别插入金额和备注码
-                var amountStr = `<span class="aountItem">金额</span><span class="item">${addValue}</span>`;//充值金额
+                var amountStr = '<span class="aountItem">金额</span><span class="item">'+ addValue +'</span>'
                 $.ajax({
                     url: '/merchant/create_transaction/',
                     type: 'post',
@@ -407,13 +407,13 @@
                         console.log(res)
                         if(res.code === 0){
                             //将创建的标签插入到页面里
-                            var remarkStr = `<span class="aountItem">备注</span><span class="item">${res.remark}</span>`
+                            var remarkStr = '<span class="aountItem">备注</span><span class="item">'+ res.remark +'</span>' 
                             $(".payAmount").html(amountStr);
                             $(".payRemrk").html(remarkStr);
                             $(".payMsk").show();
                         }else if(res.code === 1){
                             $.prompt({
-                                "Content":`${res.msg}`
+                                "Content":res.msg
                             });
                         }
                     },
@@ -426,18 +426,18 @@
             //  支付宝二维码模态框
              $(".payClose").click(function(){
                 $(".payMsk").hide();
-                $(".payBox").hide();
+                // $(".payBox").hide();
                 $(".tabBox").show();
                 $(".rechargeIpt").val('');
              })
              $(".payBtn").click(function () {  //点击关闭模态框
                 $(".payMsk").hide();
-                $(".wrapper_pay").hide();
+                // $(".wrapper_pay").show();
                 $(".tabBox").show();
                 $(".rechargeIpt").val('');
               })
             //保证金模态框
-            $(".wit ").click(function () {
+            $(".wit").click(function () {
                 $(".witMsk ").show();
             });
             $(".cancel").click(function () {
@@ -448,7 +448,7 @@
             var user_account = {{ user.margin_account }};
             console.log("--------账户余额：", user_account);
         //提取保证金
-        $(".send ").click(function () {
+        $(".send").click(function () {
             var amount = $(".witamount ").val();
             //正则
             var regx = /^[0-9]*$/;

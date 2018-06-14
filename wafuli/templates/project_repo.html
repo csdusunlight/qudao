@@ -145,7 +145,7 @@
 		var userlevel = '{{user.level}}';
 		console.log(userlevel);
 		var data = '[results]<li class="finance">' +
-			'<a class="link_left" href="{strategy}" target="_blank"><div class="wrapperBox"><div class="over" data-state={project_state}><span>已结束</span></div><img class="finance__img finance__item" src="{logo}" alt="商家logo"></div>' +
+			'<a class="link_left" href="{strategy}" target="_blank"><div class="wrapperBox"><img class="finance__img finance__item" src="{logo}" alt="商家logo"></div>' +
 			'<div class="item1"><span class="finance__term finance__item">{term}</span></div><div class="item2"><span class="finance__range finance__item">{investrange}</span></div>' +
 			'<div class="item3"><span class="finance__price finance__item">{display_price}</span></div>' +
 			'<div class="item5"><span class="finance__remark finance__item">{remark}</span></div></a>' +
@@ -201,7 +201,7 @@
 			console.log(gapHeight)
 			
 			//展开收起功能
-			$('.operateBox').click(() =>{
+			$('.operateBox').click(function(){
 				if (gapHeight > 0) {
 					$('.container').removeClass("_on");
 					$('.operateBox').hide();
@@ -209,7 +209,7 @@
 				}
 			})
 			//收起
-			$('.operateBox_1').click(() =>{
+			$('.operateBox_1').click(function(){
 				$('.container').addClass("_on");
 				$('.operateBox').show();
 				$('.operateBox_1').hide();
@@ -224,7 +224,7 @@
 						var str_html;
 						console.log('ret',ret.results)
 						for(let i in ret.results){
-							str_html = `<li class="item" data-value="${ret.results[i].name}">${ret.results[i].name}</li>`;
+							str_html = '<li class="item" data-value="'+ret.results[i].name+'">'+ret.results[i].name+'</li>';
 							$('.projectBox').append(str_html);
 						}
 					}else{
@@ -236,7 +236,7 @@
 				}
 			})
 			//点击全部返回所有项目列表
-			$('.all_project').click(() =>{
+			$('.all_project').click(function(){
 				$("#pagedata1").ajaxPage({
 					url:url,
 					pageId:$('#page1'),
@@ -331,7 +331,7 @@
 			// 	});
 			// })
 			//输入框搜索llc
-			$('.searchBtn').click(() =>{
+			$('.searchBtn').click(function(){
 				var searchValue = $('#searchTxt').val();
 				var newurl2 = url + "&search=" + encodeURI(searchValue);
 				$("#pagedata1").ajaxPage({
@@ -343,7 +343,7 @@
 					complete: pagecallback,
 				});			
 			})
-			$('#searchTxt').on('keypress',(e) =>{
+			$('#searchTxt').on('keypress',function(e){
 				if (e.keyCode == 13) {
 					var searchValue = $('#searchTxt').val();
 					var newurl2 = url + "&search=" + encodeURI(searchValue);

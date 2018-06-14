@@ -368,6 +368,11 @@ def admin_import_merchant_investlog(request):
                 elif j==1:
                     project = cell.value
                     temp.append(project)
+                elif j==15:
+                    amount = Decimal(cell.value)
+                    if amount == 0:
+                        raise Exception(u"佣金不能为0。")
+                    temp.append(amount)
                 elif j==18:
                     result = cell.value.strip()
                     if result == u"同意":
@@ -399,34 +404,34 @@ def admin_import_merchant_investlog(request):
             with transaction.atomic():
                 id = row[0]
                 project_title = row[1]
-                result = row[2]
-                reason = row[3]
+                new_broker_amount = row[2]
+                result = row[3]
+                reason = row[4]
                 investlog = InvestLog.objects.get(id=id)
                 if not investlog.audit_state in ['1','3'] or investlog.translist.exists() or investlog.preaudit_state!='0':
                     continue
                 investlog_user = investlog.user
                 translist = None
                 cash = investlog.presettle_amount
+                broker_amount = investlog.broker_amount
                 if result==1:
                     investlog.audit_state = '0'
                     translist = charge_money(investlog_user, '0', cash, project_title, auditlog=investlog)
                     investlog.settle_amount += cash
+                    if broker_amount == 0 and new_broker_amount > 0:
+                        charge_margin(investlog.project.user, '1', new_broker_amount, "佣金", auditlog=investlog)
 #                     #活动插入
 #                     on_audit_pass(request, investlog)
 #                     #活动插入结束
                 elif result==2:
                     investlog.audit_state = '1'
                     investlog.preaudit_state = '1'
-#                     investlog.audit_reason = reason
-                    broker_amount = investlog.broker_amount
                     if cash>0:
-                        translist = charge_margin(investlog.project.user, '0', cash, '冲账（结算额）', True, u'管理员驳回：'+project_title)
-                        translist.auditlog = investlog
-                        translist.save(update_fields=['content_type', 'object_id'])
+                        translist = charge_margin(investlog.project.user, '0', 
+                                cash, '冲账（结算额）', True, u'管理员驳回：'+project_title, auditlog=investlog)
                     if broker_amount>0:    
-                        translist2 = charge_margin(investlog.project.user, '0', broker_amount, '冲账（佣金）', True, u'管理员驳回：'+project_title)
-                        translist2.auditlog = investlog
-                        translist2.save(update_fields=['content_type', 'object_id'])
+                        translist2 = charge_margin(investlog.project.user, '0', 
+                                broker_amount, '冲账（佣金）', True, u'管理员驳回：'+project_title, auditlog=investlog)
                 else:
                     continue
                 investlog.audit_reason = reason

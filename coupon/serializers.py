@@ -21,8 +21,7 @@ class UserCouponSerializer(serializers.ModelSerializer):
     contract_name = serializers.CharField(source='contract.name', read_only=True)
     settle_count = serializers.CharField(source='contract.settle_count', read_only=True)
     settle_amount = serializers.CharField(source='contract.settle_amount', read_only=True)
-    start_date = serializers.CharField(source='contract.start_date', read_only=True)
-    end_date = serializers.CharField(source='contract.end_date', read_only=True)
+    project = serializers.CharField(source='contract.project.title', read_only=True)
     class Meta:
         model = UserCoupon
         fields = '__all__'

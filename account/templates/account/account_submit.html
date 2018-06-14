@@ -11,7 +11,7 @@
 		<!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
 		<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
 		<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
-		<link rel="stylesheet" type="text/css" href="{% static 'css/account_channel.css' %}?v=1" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/account_channel.css' %}?v=2" />
 		<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.searchableSelect.css' %}" />
 		<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 		<script type="text/javascript" src="{% static 'js/ajaxfileupload.js'%}"></script>
@@ -46,7 +46,8 @@
 										<li class="item-04">投资金额(元)</li>
 										<li class="item-05">投资标期(天)</li>
 										<li class="item-10">类型</li>
-										<li class="item-06">用户收款信息</li>
+										<li class="item-06">支付宝</li>
+										<li class="item-11">支付宝姓名</li>
 										<li class="item-08">备注</li>
 									</ul>
 									<ul class="submit-item-box">
@@ -74,8 +75,8 @@
                                                 <option value="2">复投</option>
                                             </select>
 										</li>
-                                        <li class="submit-item item-06"><input type="text" class="zhifubao" id="zhifubao" placeholder="选填">
-                                        </li>
+                    <li class="submit-item item-06"><input type="text" class="zhifubao" id="zhifubao" placeholder="选填"></li>
+                    <li class="submit-item item-11"><input type="text" class="zfbname" id="zfbname" placeholder="选填"></li>
 										<li class="submit-item item-08"><input type="text" class="remark" id="remark" placeholder="选填">
                                         </li>
 										<li class="item-09"><a class="delete-item">删除</a><a class="copy-item">复制</a></li>
@@ -469,6 +470,7 @@
 						'<li class="submit-item item-10"><select class="is_futou " placeholder="选择投资类型">' +
                         '<option selected="selected" value="1">首投</option><option value="2">复投</option></select></li>' +                  
                         '<li class="submit-item item-06"><input type="text" class="zhifubao"></li>' +
+                        '<li class="submit-item item-11"><input type="text" class="zfbname"></li>' +
 						'<li class="submit-item item-08"><input type="text" class="remark"></li>' +
 						'<li class="item-09"><a class="delete-item">删除</a><a class="copy-item">复制</a></li>';
 					submit_data_container.appendChild(ul);
@@ -514,6 +516,7 @@
 							amount01 = $(this).find(".amount"),
 							term01 = $(this).find(".term"),
 							zhifubao01 = $(this).find(".zhifubao"),
+							zfbname01 = $(this).find(".zfbname"),
 							invest_name01 = $(this).find(".invest_name"),
 							remark01 = $(this).find(".remark"),
 							is_futou01 = $(this).find(".is_futou");
@@ -525,10 +528,11 @@
 							amount = amount01.val(),
 							term = term01.val(),
 							zhifubao = zhifubao01.val(),
+							zfbname = zfbname01.val(),
 							invest_name = invest_name01.val(),
 							remark = remark01.val(),
 							is_futou = $(this).find(".is_futou option:selected").val(),
-							data_list = [project_select, time, telnum, amount, term, zhifubao, invest_name, remark, is_futou];
+							data_list = [project_select, time, telnum, amount, term, zhifubao, invest_name, remark, is_futou, zfbname];
 							console.log(project_name);
 							console.log(remark);
 							if (((project_name.search("补差") == -1) && (project_name.search("补价") == -1)) &&

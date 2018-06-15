@@ -1,442 +1,508 @@
 ﻿{% load staticfiles %}
 <!DOCTYPE html>
+<html lang="zh">
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>理财福利，互联网理财平台。</title>
-	<meta name="keywords" content="P2P理财,P2P网贷,投资理财,网络理财,网络投资,小额投资理财,如何投资理财,个人理财,家庭理财,挖福利" />
-	<meta name="description" content="挖福利是一个优质的互联网理财平台！让你感受到不一样的金融理财。" />
-	<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
-	<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
-	<link rel="stylesheet" type="text/css" href="{% static 'css/project_all.css' %}" />
-	<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Document</title>
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/new-common.css" />
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<!--<script src="./header.js" type="text/javascript" charset="utf-8"></script>-->
+	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 	<style type="text/css">
-		.state20 {
-			pointer-events: none;
+		#app {
+			min-width: 1310px;
+			margin: 20px;
+			background-color: #f5f5f5;
+			box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+			margin: 0 auto;
 		}
 
-		.go_homepage {
-			display: none;
+		.wrapper {
+			width: 1310px;
+			margin: 0 auto;
 		}
 
-		.go:hover {
-			color: RGB(150, 150, 150);
-			text-decoration: underline;
+		.table-box {
+			margin-top: 20px;
 		}
 
-		.over {
-			width: 46px;
-			height: 20px;
-			background: #b3b3b3;
-			border-radius: 2px;
-			text-align: center;
-			line-height: 22px;
-			position: absolute;
-			right: 0;
-			top: 0;
-			z-index: 9;
+		.pro_top {
+			padding: 21px 15px;
 		}
 
-		.over span {
-			color: white !important;
-			font-size: 12px;
+		.title {
+			font-size: 18px;
+			color: white;
 		}
-		.gapBox{
-			width: 100%;
-			height: 12px;
-			background: #f4f4f4;
+		.project_box{
+			margin-top: 40px;
 		}
-		.pagedata1{
-			min-height: 200px;
-			color: #858585;
+		.pro_btm {
+			padding: 22px 25px 22px 25px;
+			background: white;
+			font-size: 16px;
 		}
-		
+
+		.new_project {
+			background: linear-gradient(to right, #ff8c18, #ffa83d);
+		}
+
+		.project_item {
+			margin-left: 15px;
+		}
+
+		.pause_project {
+			background: linear-gradient(to right, #3faaff, #36c5ff);
+		}
+
+		.change_project {
+			background: linear-gradient(to right, #37c17c, #20c6a0);
+		}
+		.searchBox{
+			padding: 40px 0;
+		}
 	</style>
-
 </head>
 
 <body>
 	{% include "header.html" %}
-	<div class="gapBox"></div>
-	<div id="content" style="width: 1293px;margin: 0 auto;">
+
+	<div id="app">
 		<div class="wrapper">
-			<div class="container _on">
-				<p>平台搜索</p>
-				<ul class="projectBox" style="padding-left: 40px;margin-top: 20px;">
-					<li class="item all_project active">全部</li>
-					<!-- <li class="item">钱包金融</li>
-					<li class="item">钱包金融</li>
-					<li class="item">钱包金融</li>
-					<li class="item">钱包金融</li>
-					<li class="item">钱包金融</li>
-					<li class="item">钱包金融</li>
-					<li class="item">钱包金融</li>
-					<li class="item">钱包金融</li>
-					<li class="item">钱包金融</li>
-					<li class="item">钱包金融</li>
-					<li class="item">钱包金融</li>
-					<li class="item">钱包金融</li> -->
-					<div class="operateBox">
-						<span>展开</span>
-						<div class="trango"></div>
-					</div>
-					<div class="operateBox_1" style="display: none;">
-						<span>收起</span>
-						<div class="trango1"></div>
-					</div>
-				</ul>
-			</div>
-			<div class="btmBox">
+			<div class="project_box" >
+				<el-row :gutter="60">
+					 <el-col :span="7">
+						<div class="grid-content bg-purple">
+							<div class="pro_top new_project">
+								<span class="title">新上项目</span>
+							</div>
+							<div class="pro_btm">
+								<span class="project_item">银谷在线</span>
+
+							</div>
+						</div>
+					</el-col>
+					<el-col :span="7">
+						<div class="grid-content bg-purple" style="background: lavender"> 
+							<div class="pro_top pause_project">
+								<span class="title">暂停项目</span>
+							</div>
+							<div class="pro_btm">
+								<span class="project_item">银谷在线</span>
+
+							</div>
+						</div>
+					</el-col>
+					<el-col :span="10" >
+						<div class="grid-content bg-purple" style="background: lawngreen">
+							<div class="pro_top change_project">
+								<span class="title">变动项目</span>
+							</div>
+							<div class="pro_btm">
+								<span class="project_item">银谷在线</span>
+
+							</div>
+						</div>
+					</el-col>
+				</el-row>
+				<!-- 搜索框 -->
 				<div class="searchBox">
-					<input id="searchTxt" type="text">
-					<div class="searchBtn"></div>
-				</div>
-				<span class="hot_search">热搜：</span>
-				{% for x in hot_platforms %}
-				<span class="s_item" data-name="{{x.name}}">{{x.name}}</span>
-				{%endfor%}
-			</div>
-			<div id="project_end_container" class="project-end-container">
-			  <p class="project-end-left">已结束项目：</p>
-  			<div id="project_end_box" class="project-end-box">
-  				<ul id="project_end_1" class="project-end-1">
-  					<!--<li class="project-end-item">地方撒地方撒地方撒地方撒地方撒</li>
-  					<li class="project-end-item">地方撒东风风纷纷地方赛</li>
-  					<li class="project-end-item">地方撒烽三的刚的刚赛纲地方的</li>
-  					<li class="project-end-item">地方撒冯港反对 东风 东风 反对共非根底</li>
-  					<li class="project-end-item">地方撒森森风个三花骨朵地方似懂非懂</li>-->
-  				</ul>
-  				<ul id="project_end_2" class="project-end-2"></ul>
-  			</div>
-			</div>
-		</div>
-
-		<div class="dataBox">
-			<div class="content-head">
-				<div class="c-item" style="margin-left: 20px">平台</div>
-				<div class="c-item" style="margin-left: 65px;">推广标期</div>
-				<div class="c-item" style="margin-left: 95px;">投资档位</div>
-				<div class="c-item" style="margin-left: 125px;">结算价格</div>
-				<div class="c-item" style="margin-left: 165px;">备注说明</div>
-			</div>
-
-			<ul id="pagedata1" class="item-container clearfix" style="min-height: 210px;">
-
-			</ul>
-			<div style="width: 1250px; margin: 0 auto;" class="page-box clearfix">
-				<div style="width: 1250px; margin: 0 auto;" class="changes-p clearfix">
-					<div style="padding: 10px 20px 6px;" class="page r" id="page1">
-					</div>
+					
 				</div>
 			</div>
+			<!-- <div class="table-box">
+						<el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="tableData.results" style="width: 100%"
+						 @selection-change="handleSelectionChange">
+							
+							<el-table-column label="项目名称">
+								<template slot-scope="scope">${ scope.row.project_title }</template>
+							</el-table-column>
+							<el-table-column label="投资姓名">
+								<template slot-scope="scope">${ scope.row.invest_name }</template>
+							</el-table-column>
+							<el-table-column label="投资手机号">
+								<template slot-scope="scope">${ scope.row.invest_mobile }</template>
+							</el-table-column>
+							<el-table-column label="投资日期">
+								<template slot-scope="scope">${ scope.row.invest_date }</template>
+							</el-table-column>
+							<el-table-column label="审核时间">
+								<template slot-scope="scope">${ (scope.row.audit_time).slice(0,10) }</template>
+							</el-table-column>
+							<el-table-column label="结算金额">
+								<template slot-scope="scope">${ scope.row.settle_amount }</template>
+							</el-table-column>
+							<el-table-column label="返现金额">
+								<template slot-scope="scope">${ scope.row.return_amount }</template>
+							</el-table-column>
+							<el-table-column label="支付宝账号">
+								<template slot-scope="scope">${ scope.row.zhifubao }</template>
+							</el-table-column>
+							<el-table-column label="支付宝姓名">
+								<template slot-scope="scope">${ scope.row.zhifubao_name }</template>
+							</el-table-column>
+							<el-table-column width="80" label="打款状态">
+								<template slot-scope="scope">
+									<el-popover trigger="hover" placement="left">
+										<p>备注：${ scope.row.pay_reason ? scope.row.pay_reason : '无' }</p>
+										<div slot="reference" class="name-wrapper">
+											<span :class="'pay-state pay-state-' + scope.row.pay_state">${ scope.row.pay_state_des }</span>
+										</div>
+									</el-popover>
+								</template>
+							</el-table-column>
+						</el-table>
+						<div style="margin-top: 20px">
+						</div>
+					</div> -->
+			<!--table-->
+			<!-- <div class="pagination" style="display: flex;justify-content: flex-end;">
+						<el-pagination background @current-change="handleCurrentChange" :page-size="pageSize" :current-page="this.currentPage" layout="total, prev, pager, next, jumper"
+						 :total="tableData.recordCount">
+						</el-pagination>
+					</div> -->
+			<!--pagination-->
+
 		</div>
 	</div>
-	<div style="clear:both"></div>
-	{% include "footer.html" %}
 
-	<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
-	<script type="text/javascript" src="{% static 'js/wfl-common.js' %}"></script>
-	<script type="text/javascript" src="{% static 'js/wfl-popup.js' %}"></script>
-	<script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
-	<!--<script type="text/javascript" src="{% static 'js/jQuery.infiniteCarousel.js' %}"></script>-->
-	<!--<script type="text/javascript" src="{% static 'js/MSClass.js' %}"></script>-->
-	<script type="text/javascript" src="{% static 'js/page.js' %}?v-2"></script>
 	<script type="text/javascript">
-		var userlevel = '{{user.level}}';
-		console.log(userlevel);
-		var data = '[results]<li class="finance">' +
-			'<a class="link_left" href="{strategy}" target="_blank"><div class="wrapperBox"><img class="finance__img finance__item" src="{logo}" alt="商家logo"></div>' +
-			'<div class="item1"><span class="finance__term finance__item">{term}</span></div><div class="item2"><span class="finance__range finance__item">{investrange}</span></div>' +
-			'<div class="item3"><span class="finance__price finance__item">{display_price}</span></div>' +
-			'<div class="item5"><span class="finance__remark finance__item">{remark}</span></div></a>' +
-			'<a class="go_homepage" href="http://{{user.domain_name}}.51fanshu.com/detail/project/{project}/" target="_blank"><span class="go">进入推广主页-></span></a></div></li>[/results]';
-		var url = "/restapi/projects/?page={page}&pageSize={pageSize}&is_official=true&state=10&is_addedto_repo=true";
-
-		function pagecallback() {
-			$('.add-project.true').each(function () {
-				this.innerText = '取消添加';
-				$(this).parent().find('.go_homepage').show()
-			})
-			//$('.state20').text('已结束');
-
-			/**************添加已结束标识***************/
-			$(".over").each(function () {
-				if ($(this).attr("data-state") == 20) {
-					$(this).css("display", "block");
-				} else {
-					$(this).css("display", "none");
-				}
-			});
-
-			$('.oneline').each(function (index, el) { //单行
-				if ($(this).height() > 30) {
-					$(this).addClass('one-line')
-					$(this).addTitle();
-				}
-			});
-			var btns = document.querySelectorAll('.copy-link');
-			var clipboard = new Clipboard(btns);
-
-			clipboard.on('success', function (e) {
-				console.log(e);
-				$.prompt({
-					Content: '复制成功'
-				})
-			});
-
-			clipboard.on('error', function (e) {
-				console.log(e);
-			});
-		}
-		var textarray = [];
-
-		function emptydisplay(obj) {
-			obj.html('<p style="margin-top:20px;">抱歉，没有找到符合条件的项目！</p>');
-		}
-		$(function () {
-			$('.nav__item:eq(1)').addClass('active');
-			let childHeight = $('.projectBox').height();//获取子元素的高度
-			let parentHeight = $('.container').height();//获取父元素的高度
-			let gapHeight =  Math.abs(parentHeight - childHeight);
-			console.log(gapHeight)
-			
-			//展开收起功能
-			$('.operateBox').click(function(){
-				if (gapHeight > 0) {
-					$('.container').removeClass("_on");
-					$('.operateBox').hide();
-					$('.operateBox_1').show();
-				}
-			})
-			//收起
-			$('.operateBox_1').click(function(){
-				$('.container').addClass("_on");
-				$('.operateBox').show();
-				$('.operateBox_1').hide();
-			})
-			//获取平台列表
-			$.ajax({
-				url:'/restapi/company2/?pageSize=999',
-				dataType: "json",
-				type: 'GET',
-				success: function (ret) {
-					if(ret.code == 0){
-						var str_html;
-						console.log('ret',ret.results)
-						for(let i in ret.results){
-							str_html = '<li class="item" data-value="'+ret.results[i].name+'">'+ret.results[i].name+'</li>';
-							$('.projectBox').append(str_html);
+		var app = new Vue({
+			delimiters: ['${', '}'],
+			el: '#app',
+			data: {
+				tableData: {},
+				pageSize: 10,
+				multipleSelection: [],
+				checkIdList: '',
+				dialogAmountVisible: false,
+				dialogEditVisible: false,
+				dialogData: {
+					id: '',
+					return_amount: '',
+					zhifubao: '',
+					zhifubao_name: ''
+				},
+				rowStyle: {
+					'text-align': 'center'
+				},
+				page: 1,
+				currentPage: 1,
+				stateValue: '',
+				dateValue: '',
+				dateOptions: [{
+					value: '',
+					label: '全部'
+				}, {
+					value: '7',
+					label: '7天内数据'
+				}, {
+					value: '30',
+					label: '30天内数据'
+				}],
+				telValue: '',
+				zfbValue: '',
+			},
+			created: function () {
+				$.ajax({
+					type: "get",
+					url: '/restapi/investlogs/?user={{user.id}}&page=' + 1 + '&pageSize=' + 10 + '&audit_state=0',
+					async: true,
+					success: function (res) {
+						console.log(res);
+						if (res.code == 0) {
+							console.log('created');
+							console.log(res);
+							console.log(app.tableData);
+							app.tableData = res;
+							console.log(app.tableData)
+						} else {
+							console.log(res)
 						}
-					}else{
-						console.log('暂无数据~~~')
+					}
+				});
+			},
+			methods: {
+				searchData: function () {
+					app.currentPage = 1;
+					app.getDataList();
+				},
+				resetData: function () {
+					app.stateValue = '';
+					app.dateValue = '';
+					app.telValue = '';
+					app.zfbValue = '';
+					app.currentPage = 1;
+					app.getDataList();
+				},
+				changeSelect: function (val) {
+					app.currentPage = 1;
+					app.getDataList();
+				},
+				handleSelectionChange: function (val) {
+					app.checkIdList = '';
+					console.log(val);
+					if (val.length) {
+						for (let i = 0; i < val.length; i++) {
+							app.checkIdList += val[i].id + ','
+						}
+						app.checkIdList = app.checkIdList.slice(0, app.checkIdList.length - 1);
+						console.log(app.checkIdList);
+					} else {
+						app.checkIdList = '';
+						console.log(app.checkIdList);
+					}
+					this.multipleSelection = val;
+				},
+				handleCurrentChange: function (val) {
+					console.log(app.searchKeys);
+					console.log(app.stateValue);
+					app.currentPage = val;
+					app.getDataList();
+				},
+				edit: function (row) {
+					console.log(row);
+					app.dialogData.id = row.id;
+					app.dialogData.return_amount = row.return_amount;
+					app.dialogData.zhifubao = row.zhifubao;
+					app.dialogData.zhifubao_name = row.zhifubao_name;
+					app.dialogEditVisible = true;
+				},
+				editConfirm: function () {
+					console.log(app.dialogData)
+					$.ajax({
+						type: "put",
+						url: '/restapi/investlogs/' + app.dialogData.id + '/',
+						data: {
+							return_amount: app.dialogData.return_amount,
+							zhifubao: app.dialogData.zhifubao,
+							zhifubao_name: app.dialogData.zhifubao_name
+						},
+						async: true,
+						success: function (res) {
+							app.dialogEditVisible = false;
+							app.getDataList();
+						}
+					});
+				},
+				badgeSelect: function (state) {
+					var that = this;
+					if (!app.checkIdList) {
+						this.$notify.error({
+							title: '错误',
+							message: '请先选择要操作的数据'
+						});
+						return false;
+					}
+					this.$alert('请确认是否一键标记所选数据？', '温馨提示', {
+						confirmButtonText: '确定',
+						callback: function (action) {
+							console.log(action);
+							if (action == 'confirm') {
+								$.ajax({
+									type: "post",
+									url: '/finance/mark_pay_state/',
+									data: {
+										state: state,
+										ids: app.checkIdList
+									},
+									async: true,
+									success: function (res) {
+										console.log(res);
+										if (res.code == 0) {
+											app.getDataList();
+										} else {
+											that.$notify.error({
+												title: '错误',
+												message: res.detail
+											});
+										}
+									}
+								});
+							}
+						}
+					});
+				},
+				transferSelect: function () {
+					var that = this;
+					console.log(app.checkIdList)
+					if (!app.checkIdList) {
+						this.$notify.error({
+							title: '错误',
+							message: '请先选择要操作的数据'
+						});
+						return false;
+					}
+					$.ajax({
+						type: "post",
+						url: '/finance/check_transfer/',
+						async: true,
+						data: {
+							ids: app.checkIdList
+						},
+						success: function (res) {
+							console.log(res);
+							if (res.code == 0) {
+								that.$alert('共转账 ' + res.total + ' 元，余额 ' + res.balance + ' 元', '温馨提示', {
+									confirmButtonText: '确定',
+									callback: function (action) {
+										console.log(action);
+										if (action == 'confirm') {
+											$.ajax({
+												type: "post",
+												url: '/finance/submit_transfer/',
+												async: true,
+												data: {
+													ids: app.checkIdList
+												},
+												success: function (res) {
+													if (res.code == 0) {
+														that.$notify({
+															title: '操作成功',
+															message: '成功数量：' + res.suc_num + '，失败数量：' + res.fail_num,
+															type: 'success'
+														});
+														app.getDataList();
+													} else {
+														that.$notify.error({
+															title: '错误',
+															message: res.detail
+														});
+													}
+												}
+											});
+										}
+									}
+								});
+							} else {
+								that.$notify.error({
+									title: '错误',
+									message: res.detail
+								});
+							}
+						}
+					});
+
+				},
+				beforeAvatarUpload: function (file) {
+					console.log(file)
+					this.$message('正在上传...')
+				},
+				handleAvatarSuccess: function (res, file) {
+					var that = this;
+					console.log(res);
+					if (res.code == 0) {
+						that.$notify({
+							title: '上传成功',
+							message: '成功数量：' + res.num + '条',
+							type: 'success'
+						});
+						app.getDataList();
+					} else {
+						that.$notify.error({
+							title: '错误',
+							message: res.msg
+						});
 					}
 				},
-				error: function () {
-					console.log("请检查网络连接");
-				}
-			})
-			//点击全部返回所有项目列表
-			$('.all_project').click(function(){
-				$("#pagedata1").ajaxPage({
-					url:url,
-					pageId:$('#page1'),
-					pageSize:20,
-					run:true,
-					content:data,
-					complete:pagecallback
-				})
-				
-			})
-			//热搜
-			$('.s_item').each(function () { 
-				$(this).click(function () { 
-					$('#pagedata1').empty();
-					var name = $(this).attr('data-name');
-					$("#pagedata1").ajaxPage({
-						url:url + '&search=' + encodeURI(name),
-						pageId:$('#page1'),
-						pageSize:20,
-						run:true,
-						content:data,
-						complete:pagecallback
-					})
-				})
-				
-			})
-			//项目点击搜索 llc
-			$('.projectBox').on('click','.item',function () { 
-				var _that = $(this);
-				var value = _that.attr('data-value');
-				console.log(value);
-				var newUrl1 = url + "&search=" + encodeURI(value);
-				$("#pagedata1").ajaxPage({
-					url:newUrl1,
-					pageId:$('#page1'),
-					pageSize:20,
-					run:true,
-					content:data,
-					complete:pagecallback
-				})
-			})
-			
-			//平台搜索active切换
-			$('.projectBox').on('click','.item',function () { 
-				var index = $(this).index();//获取li标签的下表序号
-				$(this).addClass('active').siblings().removeClass('active');
-			})
-			
-			var newurl = url;
-			var index = "0",
-				index_text;
-			var invest_account = "",
-				project_type = "",
-				project_status = "";
-
-			$("#pagedata1").ajaxPage({
-				url: url + "&type=",
-				pageId: $("#page1"),
-				pageSize: 20,
-				run: true,
-				content: data,
-				complete: pagecallback,
-			});
-
-			// $(".fiter-item-container li").click(function () {
-			// 	var parent = $(this).parent(".filter-item");
-
-			// 	if ($(parent).hasClass("invest-count")) {
-			// 		$(this).addClass("on").siblings().removeClass("on");
-			// 		invest_account = $(this).data('key');
-			// 	}
-
-			// 	if ($(parent).hasClass("project-type")) {
-			// 		$(this).addClass("on").siblings().removeClass("on");
-			// 		project_type = $(this).data('key');
-			// 	}
-
-			// 	if ($(parent).hasClass("project-status")) {
-			// 		$(this).addClass("on").siblings().removeClass("on");
-			// 		project_status = $(this).data('key');
-			// 	}
-			// 	newurl = url + "&project_futou=" + invest_account + "&project_type=" + project_type + "&project_state=" + project_status;
-			// 	console.log(newurl)
-
-			// 	$("#pagedata1").ajaxPage({
-			// 		url: newurl,
-			// 		pageId: $("#page1"),
-			// 		pageSize: 999,
-			// 		run: true,
-			// 		content: data,
-			// 		complete: pagecallback,
-			// 	});
-			// })
-			//输入框搜索llc
-			$('.searchBtn').click(function(){
-				var searchValue = $('#searchTxt').val();
-				var newurl2 = url + "&search=" + encodeURI(searchValue);
-				$("#pagedata1").ajaxPage({
-					url: newurl2,
-					pageId: $("#page1"),
-					pageSize: 20,
-					run: true,
-					content: data,
-					complete: pagecallback,
-				});			
-			})
-			$('#searchTxt').on('keypress',function(e){
-				if (e.keyCode == 13) {
-					var searchValue = $('#searchTxt').val();
-					var newurl2 = url + "&search=" + encodeURI(searchValue);
-
-					$("#pagedata1").ajaxPage({
-						url: newurl2,
-						pageId: $("#page1"),
-						pageSize: 20,
-						run: true,
-						content: data,
-						complete: pagecallback,
+				handleAvatarError: function (res, file) {
+					var that = this;
+					that.$notify.error({
+						title: '错误',
+						message: '上传失败'
 					});
+				},
+				exportExel: function () {
+					var html = '<form action="' + "/finance/export_investlog/" + '" method="get" target="_self" id="postData_form">';
+					html += '<input name="audit_state" type="hidden" value="0"/>';
+					if (app.dateValue == 7) {
+						var startTime = app.getDate(0);
+						var endTime = app.getDate(7);
+					} else if (app.dateValue == 30) {
+						var startTime = app.getDate(0);
+						var endTime = app.getDate(30);
+					} else {
+						var startTime = '';
+						var endTime = '';
+					}
+
+					if (startTime && endTime) {
+						html += '<input name="auditdate_0" type="hidden" value="' + startTime + '"/>';
+						html += '<input name="auditdate_1" type="hidden" value="' + endTime + '"/>';
+					}
+					var pay_state = app.stateValue;
+					var invest_mobile = app.telValue;
+					var zhifubao = app.zfbValue;
+					console.log(pay_state);
+					if (pay_state) {
+						html += '<input name="pay_state" type="hidden" value="' + pay_state + '"/>';
+					}
+					if (invest_mobile) {
+						html += '<input name="invest_mobile" type="hidden" value="' + invest_mobile + '"/>';
+					}
+					if (zhifubao) {
+						html += '<input name="zhifubao" type="hidden" value="' + zhifubao + '"/>';
+					}
+					html += '</form>';
+					var iframe = document.getElementById('myIFrame');
+					iframe.contentWindow.document.open();
+					iframe.contentWindow.document.write(html);
+					iframe.contentWindow.document.close();
+					document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+				},
+				getDataList: function () {
+					var that = this;
+					$.ajax({
+						type: "get",
+						url: '/restapi/investlogs/?user={{user.id}}&page=' + app.currentPage + '&pageSize=' + app.pageSize + '&audit_state=0' + app.searchKeys,
+						async: true,
+						success: function (res) {
+							console.log(res);
+							if (res.code == 0) {
+								console.log(app.tableData);
+								app.tableData = res;
+								console.log(app.tableData)
+							} else {
+								that.$notify.error({
+									title: '错误',
+									message: res.detail
+								});
+							}
+						}
+					});
+				},
+				getDate: function (AddDayCount) {
+					var dd = new Date();
+					dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期    
+					var y = dd.getFullYear();
+					var m = (dd.getMonth() + 1) < 10 ? "0" + (dd.getMonth() + 1) : (dd.getMonth() + 1);//获取当前月份的日期，不足10补0    
+					var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();//获取当前几号，不足10补0    
+					return y + "-" + m + "-" + d;
 				}
-			});
-			// $('.hongbao-submit').click(function () {
-			// 	var searchValue = $('.hongbao-input').val();
-			// 	var newurl2 = url + "&project_title_contains=" + encodeURI(searchValue);
-
-			// 	$("#pagedata1").ajaxPage({
-			// 		url: newurl2,
-			// 		pageId: $("#page1"),
-			// 		pageSize: 12,
-			// 		run: true,
-			// 		content: data,
-			// 		complete: pagecallback,
-			// 	});
-			// })
-			// $('.hongbao-input').on('keypress', function (e) {
-			// 	if (e.keyCode == 13) {
-			// 		var searchValue = $('.hongbao-input').val();
-			// 		var newurl2 = url + "&project_title_contains=" + encodeURI(searchValue);
-
-			// 		$("#pagedata1").ajaxPage({
-			// 			url: newurl2,
-			// 			pageId: $("#page1"),
-			// 			pageSize: 999,
-			// 			run: true,
-			// 			content: data,
-			// 			complete: pagecallback,
-			// 		});
-			// 	}
-			// });
-			window.onload = function(){
-			  $.ajax({
-			  	type:"get",
-			  	url:"/restapi/projects/?state=20&is_official=true",
-			  	async:true,
-			  	success: function(ret) {
-			  	  console.log(ret.results);
-			  	  for (var i=0; i<ret.results.length; i++) {
-			  	    var li_dom = '<li class="project-end-item">'+ ret.results[i].title + ' 于'  + ret.results[i].end_date +'日结束</li>'
-			  	    $('.project-end-1').append(li_dom)
-			  	  }
-			  	  scrollLeft();
-			  	}
-			  });
-       };
-       function scrollLeft(){
-         var speed = 20;
-         var tab = document.getElementById('project_end_box');
-         var tab1 = document.getElementById('project_end_1');
-         var tab2 = document.getElementById('project_end_2');
-         if (tab1.offsetWidth > tab.offsetWidth) {
-           tab2.innerHTML = tab1.innerHTML;
-         	
-           var timer = setInterval(Marquee,speed);
-           tab.onmouseover = function(){
-             clearInterval(timer);
-           };
-           tab.onmouseout = function(){
-             timer = setInterval(Marquee,speed);
-           }
-         }
-         function Marquee(){
-           if(tab2.offsetWidth - tab.scrollLeft <=0) {    
-             tab.scrollLeft = 0;
-           }else{
-             tab.scrollLeft ++;
-           }
-       
-         }
-       }
-
-		});
-
-		function tounicode(data) {
-			if (data == '') return '请输入汉字';
-			var str = '';
-			for (var i = 0; i < data.length; i++) {
-				str += "\\u" + parseInt(data[i].charCodeAt(0), 10).toString(16);
+			},
+			computed: {
+				searchKeys: function () {
+					var auditdate_0;
+					var auditdate_1;
+					if (app.dateValue == 7) {
+						auditdate_0 = app.getDate(-7);
+						auditdate_1 = app.getDate(0);
+					} else if (app.dateValue == 30) {
+						auditdate_0 = app.getDate(-30);
+						auditdate_1 = app.getDate(0);
+					} else {
+						auditdate_0 = '';
+						auditdate_1 = '';
+					}
+					return '&pay_state=' + app.stateValue + '&invest_mobile=' + app.telValue + '&zhifubao=' + app.zfbValue + '&auditdate_0=' + auditdate_0 + '&auditdate_1=' + auditdate_1;
+				}
 			}
-			return str;
-		}
+		})
 	</script>
 </body>
 

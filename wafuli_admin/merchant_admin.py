@@ -456,12 +456,14 @@ def check_new(request):
     admin_apply = ApplyLogForChannel.objects.filter(audit_state='1').count()
     admin_withdraw = WithdrawLog.objects.filter(audit_state='1').count()
     admin_office = InvestLog.objects.filter(category='official', audit_state='1').count()
+    admin_pay = InvestLog.objects.filter(pay_state='2').count()
     kw = {
         'admin_margin':admin_margin,
         'admin_merchant_investlog':admin_merchant_investlog,
         'admin_merchant_project':admin_merchant_project,
         'admin_apply':admin_apply,
         'admin_withdraw':admin_withdraw,
-        'admin_office':admin_office
+        'admin_office':admin_office,
+        'admin_pay':admin_pay
     }
     return JsonResponse(kw)

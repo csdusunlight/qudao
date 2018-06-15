@@ -308,6 +308,8 @@
         page: 1,
         pageSize: 10,
         currentPage: 1,
+//      test
+        testData: []
       },
       created: function() {
         console.log(this.activeNav);
@@ -315,7 +317,26 @@
         this.getDataList(this.page, this.pageSize);
         
         //test
-        
+        var that = this;
+        $.ajax({
+            url: "/restapi/projects/?state=20&is_official=true",
+            dataType:"json",
+            async: false,
+            type:"get",
+            success:function(ret){
+                if(ret.code=='0'){
+                    console.log(ret);
+                    that.testData = ret.results;
+                    console.log(that.testData)
+                }
+                else {
+                    console.log(ret.res_msg);
+                }
+            },
+            error:function(){
+                alert("请检查网络连接");
+            }
+        });
       },
       methods: {
         submitForm: function(formName) {

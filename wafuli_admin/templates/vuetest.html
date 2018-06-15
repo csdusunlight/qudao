@@ -11,6 +11,26 @@
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://unpkg.com/element-ui/lib/index.js"></script>
   <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+  <style type="text/css">
+   .carousel-box {
+     width: 600px;
+   } 
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 150px;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+     background-color: #99a9bf;
+  }
+  
+  .el-carousel__item:nth-child(2n+1) {
+     background-color: #d3dce6;
+  }
+  </style>
 </head>
 <body>
   <div id="app">
@@ -20,6 +40,13 @@
       </el-col>
       <el-col :span="21">
         <div class="container">
+          <div class="carousel-box">
+            <el-carousel height="150px">
+              <el-carousel-item v-for="item in 4" :key="item">
+                <h3>{{ item }}</h3>
+              </el-carousel-item>
+            </el-carousel>
+          </div>
           <el-form 
             :model="ruleForm" 
             :rules="rules" 
@@ -286,6 +313,9 @@
         console.log(this.activeNav);
         this.getAllPlan();
         this.getDataList(this.page, this.pageSize);
+        
+        //test
+        
       },
       methods: {
         submitForm: function(formName) {

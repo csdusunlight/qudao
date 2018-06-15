@@ -302,6 +302,9 @@ def apply_for_channel_user(request):
         return render(request,"apply_for_channel_user.html")
 @csrf_exempt
 def apply_for_fangdan_user(request):
+    """如果是公司，那么id_name就是公司名称，id_num就是公司的工商注册号
+       如果是个人,那么id_name就是个人名称,id_num就是个人的身份证号
+    """
     if request.method == 'GET':
         template = 'account/apply_for_fangdan_user.html'
         return render(request, template)
@@ -315,20 +318,24 @@ def apply_for_fangdan_user(request):
         contract_pic_url = request.POST.get('contract_pic_url', None)
         rebate_pic_url = request.POST.get('rebate_pic_url', None)
 
-        ApplyLogForFangdan.objects.create(user=current_user,
-                                          apply_method=apply_method,
-                                          id_name=id_name,
-                                          id_num=id_num,
-                                          apply_pic_url=apply_pic_url,
-                                          contract_pic_url=contract_pic_url,
-                                          rebate_pic_url=rebate_pic_url,
-                                          submit_time= time.strftime("%Y-%m-%d %H:%M:%S"),
-                                          audit_state='1')
-        current_user.is_merchant = '-1'
-        current_user.save(update_fields=[
-                                         'is_merchant',
-                                    ])
-        result['code'] = 0
+        if apply_method in ["1","2"]:
+            ApplyLogForFangdan.objects.create(user=current_user,
+                                              apply_method=apply_method,
+                                              id_name=id_name,
+                                              id_num=id_num,
+                                              apply_pic_url=apply_pic_url,
+                                              contract_pic_url=contract_pic_url,
+                                              rebate_pic_url=rebate_pic_url,
+                                              submit_time= time.strftime("%Y-%m-%d %H:%M:%S"),
+                                              audit_state='1')
+            current_user.is_merchant = '-1'
+            current_user.save(update_fields=[
+                                             'is_merchant',
+                                        ])
+            result['code'] ="0"
+        else:
+            result['code']="-1"
+            result['detail']="not pass illegal"
         return JsonResponse(result)
     else:
         return render(request, "apply_for_fangdan_user.html")

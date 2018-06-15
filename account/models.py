@@ -312,8 +312,8 @@ class ApplyLogForFangdan(models.Model):
     id_name = models.CharField(u"身份证名字",max_length=50)
     id_num = models.CharField(u"身份证号码",max_length=50)
     apply_pic_url = models.CharField(u"身份证合照",max_length=200)
-    contract_pic_url = models.CharField(u"合同合照",max_length=200)
-    rebate_pic_url = models.CharField(u"返现截图",max_length=200)
+    contract_pic_url = models.CharField(u"合同合照",max_length=200,null=True)
+    rebate_pic_url = models.CharField(u"返现截图",max_length=200,null=True)
 
 
     class Meta:

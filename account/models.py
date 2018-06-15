@@ -59,45 +59,50 @@ USER_LEVEL = (
     ('05', u'五级代理'),
 )
 USER_ORIGIN = (
-    ('1',u'学生党'),
-    ('2',u'宝妈'),
-    ('3',u'羊毛党'),
-    ('4',u'兼职'),
-    ('5',u'个人站长'),
-    ('6',u'金融大Ｖ'),
-    ('7',u'理财师'),
-    ('8',u'理财推手'),
+    ('1', u'学生党'),
+    ('2', u'宝妈'),
+    ('3', u'羊毛党'),
+    ('4', u'兼职'),
+    ('5', u'个人站长'),
+    ('6', u'金融大Ｖ'),
+    ('7', u'理财师'),
+    ('8', u'理财推手'),
 
 )
 USER_EXP_YEAR = (
-    ('1',u'新手'),
-    ('2',u'1年之内'),
-    ('3',u'1-2年'),
-    ('4',u'３年以上'),
+    ('1', u'新手'),
+    ('2', u'1年之内'),
+    ('3', u'1-2年'),
+    ('4', u'3年以上'),
 )
 USER_CUSTOME_VOLUMN = (
-    ('1',u'50人以下'),
-    ('2',u'50到100人'),
-    ('3',u'100到500'),
-    ('3',u'500'),
+    ('1', u'50人以下'),
+    ('2', u'50到100人'),
+    ('3', u'100人到500人'),
+    ('4', u'500人'),
 )
 USER_FUNDS_VOLUMN = (
     ('1', u'50万以下'),
-    ('2', u'50到100人'),
-    ('3', u'100到５00'),
-    ('3', u'500'),
+    ('2', u'50到100万'),
+    ('3', u'100到500万'),
+    ('4', u'500万'),
 )
 USER_INVEST_ORIENTATION = (
-    ('1','小额单'),
-    ('2','大额单'),
-    ('3','媒体单'),
+    ('1', u'小额量大单'),
+    ('2', u'低息大额单'),
+    ('3', u'短期高返单'),
+    ('4', u'媒体单'),
 )
 IS_CHANNEL = (
-    ('0','非渠道用户'),
-    ('-1','审核中'),
-    ('1','渠道用户'),
+    ('0', u'非渠道用户'),
+    ('-1',u'审核中'),
+    ('1', u'渠道用户'),
 )
-
+IS_MERCHANT = (
+    ('0', u'非商家用户'),
+    ('-1',u'审核中'),
+    ('1', u'商家用户'),
+)
 
 class MyUser(AbstractBaseUser, PermissionsMixin):
 #     email = models.EmailField('email address', max_length=255)
@@ -137,7 +142,9 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     zhifubao = models.CharField(u"支付宝账号（邮箱或手机号）", blank=True, max_length=50)
     zhifubao_real_name = models.CharField(u"支付宝实名", blank=True, max_length=20)
 
-    is_channel = models.CharField(u"是否渠道", choices=IS_CHANNEL, default=False, max_length=2)  #
+    is_channel = models.CharField(u"是否渠道", choices=IS_CHANNEL, default='0', max_length=2)  #
+    is_merchant = models.CharField(u"是否商家", choices=IS_MERCHANT, default='0', max_length=2)  #
+
     objects = MyUserManager()
     USERNAME_FIELD = 'mobile'
     REQUIRED_FIELDS = ['username','qq_number']
@@ -275,8 +282,8 @@ class ApplyLog(models.Model):
 class ApplyLogForChannel(models.Model):
     submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
     audit_time = models.DateTimeField(u'审核时间', null=True, blank=True)
-    admin_user = models.ForeignKey(MyUser, related_name="admin_user", null=True)
-    user = models.ForeignKey(MyUser, related_name="user")
+    admin_user = models.ForeignKey(MyUser, related_name="applylogforchannel", null=True)
+    user = models.ForeignKey(MyUser, related_name="applylog_custom")
     audit_reason = models.CharField(u"审核原因", max_length=30)
     audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
     user_origin = models.CharField(u"用户来源", choices=USER_ORIGIN, max_length=2)
@@ -288,7 +295,31 @@ class ApplyLogForChannel(models.Model):
     class Meta:
         ordering = ["submit_time",]
     def __unicode__(self):
-        return self.mobile
+        return self.user.mobile
+
+USER_METHODS=(
+    ('1',u'个人认证'),
+    ('2',u'公司认证'),
+)
+class ApplyLogForFangdan(models.Model):
+    submit_time = models.DateTimeField(u'提交时间', default=timezone.now)
+    audit_time = models.DateTimeField(u'审核时间', null=True, blank=True)
+    admin_user = models.ForeignKey(MyUser, related_name="applylogforfandan", null=True)
+    user = models.ForeignKey(MyUser, related_name="applylog_custom_fandan")
+    audit_reason = models.CharField(u"审核原因", max_length=30)
+    audit_state = models.CharField(max_length=10, choices=AUDIT_STATE, verbose_name=u"审核状态")
+    apply_method = models.CharField(u"认证方式",choices=USER_METHODS,max_length=2)
+    id_name = models.CharField(u"身份证名字",max_length=50)
+    id_num = models.CharField(u"身份证号码",max_length=50)
+    apply_pic_url = models.CharField(u"身份证合照",max_length=200)
+    contract_pic_url = models.CharField(u"合同合照",max_length=200)
+    rebate_pic_url = models.CharField(u"返现截图",max_length=200)
+
+
+    class Meta:
+        ordering = ["submit_time",]
+    def __unicode__(self):
+        return self.user.mobile
 
 class Message(models.Model):
     user = models.ForeignKey(MyUser, related_name="user_msgs")

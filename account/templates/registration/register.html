@@ -37,9 +37,30 @@
             content: '';
             width: 18px;
             height: 18px;
-            background: url(../../../static/images/wrong_icon.png) no-repeat center center;
+            background: url(../../../static/images/wrong_icon1.png) no-repeat center center;
             background-size:100% 100%; 
             position: absolute;right: -45px;top: 7px;
+        }
+        .n-msg{
+            font-size: 14px;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .n-icon{
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            background: url(../../../static/images/warning.png) no-repeat center center !important;
+            background-size:100% 100%; 
+        }
+        .n-bottom .msg-wrap {
+            margin-top: 15px;
+        }
+        .footer{
+            margin-top: 0;
+        }
+        .msg-box{
+            position: absolute;top: -28px;left:0;
         }
     </style>
 </head>
@@ -51,42 +72,40 @@
             <div class="item1">
                 <!-- 注册表单盒子 -->
                 <div class="dataBox">
-                    <div class="tip_box" id="msgbox"> 
-                        <!-- <span class="error_tip">!</span> -->
-                    </div>
                     <form id="form">
                         <div class="form_box">
                             <div class="itemBox">
                                 <span>手机号</span>
-                                <input type="text" name="mobile" class="f_ipt phone_number">
+                                <input type="text" maxlength="11" name="mobile" autocomplete="off" class="f_ipt phone_number" placeholder="手机号">
+                                <span class="tip_box" id="msgbox"></span>
                             </div>
                             <div class="itemBox">
                                 <span>验证码</span>
-                                <input type="text" name="code" class="f_ipt auth_code" style="width: 222px !important;">
+                                <input type="text" name="code" autocomplete="off" class="f_ipt auth_code" style="width: 222px !important;" placeholder="验证码">
                                 <input type="button" class="send_code" value="获取验证码">
                             </div>
                             <div class="itemBox">
                                 <span>密码</span>
-                                <input type="password" name="password" class="f_ipt pwd" style="width: 222px !important;margin-left: 35px;padding-left: 5px;">
+                                <input type="password" autocomplete="new-password" placeholder="密码" name="password" class="f_ipt pwd" style="width: 222px !important;margin-left: 35px;padding-left: 5px;">
                             </div>
                             <div class="itemBox">
                                 <span>QQ</span>
-                                <input type="text" name="qq_number" class="f_ipt qq_number" style="margin-left: 40px;">
+                                <input type="text" placeholder="QQ" autocomplete="off" name="qq_number" class="f_ipt qq_number" style="margin-left: 40px;">
                             </div>
                             <div class="itemBox">
                                 <span>QQ昵称</span>
-                                <input type="text" name="qq_name" class="f_ipt qq_name" style="margin-left: 14px;">
+                                <input type="text" placeholder="QQ昵称" autocomplete="off" name="qq_name" class="f_ipt qq_name" style="margin-left: 14px;">
                             </div>
                             <div class="itemBox">
                                 <span>邀请码（选填）</span>
-                                <input type="text" name="invite_code" class="f_ipt invite_code" style="margin-left: 10px;">
+                                <input type="text" placeholder="邀请码" autocomplete="off" value="{{icode}}" name="invite_code" class="f_ipt invite_code" style="margin-left: 10px;">
                             </div>
-                            <div class="itemBox" style="border: none;">
+                            <div class="itemBox" style="border: none;margin-top: 30px;">
                                     <label>
-                                        <input class="check_box" checked="checked" type="checkbox" value="true">
+                                        <input class="check_box" checked="checked" type="checkbox" value="true" data-rule="checked">
                                         <i></i>
                                     </label>
-                                    <span style="margin-left: 10px;">我接受<a href="/press/19">《注册协议》</a>、<a href="/press/20">《免责声明》</a></span>
+                                    <span style="margin-left: 10px;">我接受<a href="http://51fanshu.com/docs/lMOz8">《注册协议》</a>、<a href="http://51fanshu.com/docs/laSnD">《免责声明》</a></span>
                             </div>
                             <input class="reg_btn" value="注册领取88元红包" type="submit">
                                 
@@ -181,7 +200,7 @@
 
     </div>
     <div style="clear:both"></div>
-
+    {% include "footer.html" %}
 </body>
 <script src="https://cdn.bootcss.com/nice-validator/1.1.3/jquery.validator.min.js?local=zh-CN"></script>
 <script>
@@ -211,19 +230,6 @@
                 alert('手机号码不能为空')
                 return;
             }
-            var _that = $(this);
-            timer = setInterval(function () {
-                times--;
-                if (times <= 0) {
-                    _that.val("获取验证码");
-                    clearInterval(timer);//清除计时器
-                    _that.attr("disabled", false);
-                    times = 60;
-                } else {
-                    _that.val(`${times}秒后重新获取`);
-                    _that.attr("disabled", true);
-                }
-            }, 1000);
             // ajax获取验证码
             $.ajax({
                 url:"/account/phoneImageV/",
@@ -231,10 +237,21 @@
                 type:"GET",
                 data:{
                     "phone":phoneNum,
-                    
                 },
                 success:function(ret){
                     if (ret.code == 0) {
+                        timer = setInterval(function () {
+                            times--;
+                            if (times <= 0) {
+                                $(".send_code").val("获取验证码");
+                                clearInterval(timer);//清除计时器
+                                $(".send_code").attr("disabled", false);
+                                times = 60;
+                            } else {
+                                $(".send_code").val(`${times}秒后重新获取`);
+                                $(".send_code").attr("disabled", true);
+                            }
+                        }, 1000);
                         alert('发送验证码成功');
                     } else if(ret.code == 1){
                         alert('发送验证码失败')
@@ -254,15 +271,18 @@
     $('#form').validator({
         dataFilter: function(data) {
             if (data.code == 0){ return "";}
-            else {return '已存在';}
+            else {return '已存在！';}
         },
-        validClass: "has-success",
-        invalidClass: "has-error",
-        bindClassTo: ".itemBox",
+        // validClass: "has-success",
+        // invalidClass: "has-error",
+        // bindClassTo: ".itemBox",
         rules:{
             phone_number:[/^1[3456789]\d{9}$/,'请输入正确的手机号码'],
-            password:[/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/, '请输入6~16位数字、字母或下划线中的两种'],
+            password:[/((?=.*[a-z])(?=.*\d)|(?=[a-z])(?=.*[#@!~%^&*])|(?=.*\d)(?=.*[#@!~%^&*]))[a-z\d#@!~%^&*]{6,16}/i, '密码应为6~16位数字、字母或特殊字符中的两种'],
             qq_number:[/^[1-9][0-9]{8,11}$/,'请输入正确的QQ'],
+        },
+        display: function(el){
+        return el.getAttribute('placeholder') || ''; //提示错误语法 
         },
         fields:{
             'mobile':'required;mobile;remote(get:' + verifymobile_url + ', csrfmiddlewaretoken={{ csrf_token }})',
@@ -272,13 +292,14 @@
             'qq_name':'required;qq_name',
             'invite_code':'invite_code;remote(get:'+ verifyinviter_url +', csrfmiddlewaretoken={{ csrf_token }})'
         },
-
         theme: 'simple_bottom',
+        formClass: "nice-flat",
+        msgClass: "n-bottom",
         invalid: function() {
           console.log('valid fail');
         },
-        target: "#msgbox",
-        msgStyle: "margin-right:0; line-height: 20px;font-size:16px;",
+        // target: "#msgbox",
+        // msgStyle: 'margin-right: 5000px; line-height: 20px;',
         valid: function(e) {
         //   me.holdSubmit();
         
@@ -324,4 +345,4 @@
 
 </html>
    
-    
+     

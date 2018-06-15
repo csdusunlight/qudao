@@ -2,8 +2,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http.response import Http404
 from .models import MyUser, Userlogin,MobileCode
-from captcha.models import CaptchaStore
-from captcha.helpers import captcha_image_url
 from captcha.views import imageV, generateCap
 from account.varify import verifymobilecode, sendmsg_bydhst
 from django.views.decorators.csrf import csrf_exempt
@@ -25,31 +23,27 @@ from django.utils.http import is_safe_url
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
-from django.contrib.contenttypes.models import ContentType
-from account.models import UserSignIn, BankCard, ApplyLog
-from datetime import date, timedelta, datetime
 import time as ttime
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Sum, Count
 from transaction import charge_money
-from account.tools import send_mail, get_client_ip
-from django.db import connection, transaction
+from account.tools import get_client_ip
+from django.db import transaction
 from wafuli.data import BANK
 from wafuli.models import TransList, WithdrawLog, Project, SubscribeShip,\
-    InvestLog, Announcement, Company
+    InvestLog, Announcement
 from public.tools import login_required_ajax
 from wafuli.tools import saveImgAndGenerateUrl
 from decimal import Decimal
-import random
 import re
 from weixin.tasks import sendWeixinNotify
 from collections import OrderedDict
-from dragon.settings import FANSHU_DOMAIN
-from docs.models import Document
 from django.core.cache import cache
 from account.signals import register_signal
-
+from account.models import USER_ORIGIN,USER_EXP_YEAR,USER_CUSTOME_VOLUMN,USER_FUNDS_VOLUMN,USER_INVEST_ORIENTATION
+from account.models import ApplyLogForChannel,ApplyLogForFangdan
+import datetime
 @sensitive_post_parameters()
 @csrf_protect
 @never_cache
@@ -168,10 +162,7 @@ def register(request):
                 sub = SubscribeShip(user=user, project_id=id)
                 subbulk.append(sub)
             SubscribeShip.objects.bulk_create(subbulk)
-            sendmsg_bydhst(mobile, u"您申请的福利联盟账号已审核通过，个人主页的地址为：" + user.domain_name + '.51fanshu.com' +
-                                 u"，快去分享给小伙伴们吧~")
             register_signal.send('register', user=user)
-            sendmsg_bydhst(mobile, u"88元新手红包已发放到您的账户，请到福利联盟个人中心查看。有效期一个月，快来领取哦~")
 #         imgurl_list = []
 #         if len(request.FILES)>6:
 #             result = {'code':-2, 'msg':u"上传图片数量不能超过6张"}
@@ -193,9 +184,11 @@ def register(request):
         result['code'] = 0
         return JsonResponse(result)
     else:
+        mobile = request.GET.get('mobile','')
         icode = request.GET.get('icode','')
         context = {
             'icode':icode,
+            'mobile':mobile,
         }
         template = 'registration/m_register.html' if request.mobile else 'registration/register.html'
         return render(request,template, context)
@@ -212,20 +205,14 @@ def register_from_gzh(request):
         profile = request.POST.get('profile', '')
         mobile = request.session.get('mobile')
         invite_code = request.POST.get('invite_code', '')
-        if not (mobile and password and qq_number):
+        if not (mobile and password and qq_number and qq_name):
             result['code'] = '3'
             result['msg'] = u'传入参数不足！'
             return JsonResponse(result)
-        if ApplyLog.objects.filter(mobile=mobile).exists():
-            applog = ApplyLog.objects.filter(mobile=mobile).first()
-            if applog.audit_state == '0':
-                result['code'] = '1'
-                result['msg'] = u'该手机号码已被注册，请直接登录！'
-            else:
-                result['code'] = '1'
-                result['msg'] = u'该手机号已提交注册申请，请等待短信通知！'
+        if MyUser.objects.filter(mobile=mobile).exists():
+            result['code'] = '1'
+            result['msg'] = u'该手机号码已被别人注册过了'
             return JsonResponse(result)
-
         inviter = None
         if invite_code:
             try:
@@ -234,55 +221,37 @@ def register_from_gzh(request):
                 result['code'] = '2'
                 result['msg'] = u'该邀请码不存在，请与工作人员联系'
                 return JsonResponse(result)
-        try:
-            username = 'wx' + str(mobile)
-            apply = ApplyLog(mobile=mobile, username=username, password=password, inviter=inviter,
-                            qq_name=qq_name, qq_number=qq_number, profile=profile, audit_state='1')
-            apply.save()
-            logger.info('Creating ApplyLog:' + mobile + ' succeed!')
-        except Exception,e:
-            logger.error(e)
-            result['code'] = '4'
-            result['msg'] = u'创建申请失败！'
-            return JsonResponse(result)
-        imgurl_list = []
-        if len(request.FILES)>6:
-            result = {'code':-2, 'msg':u"上传图片数量不能超过6张"}
-            apply.delete()
-            return JsonResponse(result)
-        for key in request.FILES:
-            block = request.FILES[key]
-            if block.size > 100*1024:
-                result = {'code':-1, 'msg':u"每张图片大小不能超过100k，请重新上传"}
-                apply.delete()
-                return JsonResponse(result)
-        for key in request.FILES:
-            block = request.FILES[key]
-            imgurl = saveImgAndGenerateUrl(key, block, 'qualification')
-            imgurl_list.append(imgurl)
-        invest_image = ';'.join(imgurl_list)
-        apply.qualification = invest_image
-        apply.save(update_fields=['qualification',])
+            
+        level = '05'
+        username = 'wx' + str(mobile)
+        with transaction.atomic():
+            user = MyUser(mobile=mobile, username=username, level=level, qq_name=qq_name, qq_number=qq_number, inviter=inviter,
+                          cs_qq=qq_number, domain_name=qq_number)
+            user.set_password(password)
+            user.save()
+            id_list_list= list(Project.objects.filter(is_official=True, state='10', is_addedto_repo=True).values_list('id'))
+            id_list = []
+            if id_list_list:
+                id_list = reduce(lambda x,y: x + y, id_list_list)
+            subbulk = []
+            for id in id_list:
+                sub = SubscribeShip(user=user, project_id=id)
+                subbulk.append(sub)
+            SubscribeShip.objects.bulk_create(subbulk)
+            register_signal.send('register', user=user)
         result['code'] = 0
         return JsonResponse(result)
     else:
         mobile = request.GET.get('mobile','')
         icode = request.GET.get('icode','')
-        hashkey = CaptchaStore.generate_key()
-        codimg_url = captcha_image_url(hashkey)
-        icode = request.GET.get('icode','')
         context = {
-            'hashkey':hashkey,
-            'codimg_url':codimg_url,
             'icode':icode,
             'mobile':mobile,
         }
         template = 'registration/m_register_from_gzh.html'
         return render(request,template, context)
 
-from account.models import USER_ORIGIN,USER_EXP_YEAR,USER_CUSTOME_VOLUMN,USER_FUNDS_VOLUMN,USER_INVEST_ORIENTATION
-from account.models import ApplyLogForChannel
-import datetime
+import time
 @csrf_exempt
 def apply_for_channel_user(request):
     if request.method == 'GET':
@@ -304,6 +273,7 @@ def apply_for_channel_user(request):
         def para_check_in_model_choice(para,choices):
             return para in [i[0] for i in choices]
         #######################
+
         if all([para_check_in_model_choice(user_origin,USER_ORIGIN), \
                 para_check_in_model_choice(user_exp_year, USER_EXP_YEAR), \
                 para_check_in_model_choice(user_custom_volumn, USER_CUSTOME_VOLUMN), \
@@ -315,9 +285,9 @@ def apply_for_channel_user(request):
                                       user_custom_volumn=user_custom_volumn,
                                       user_funds_volumn=user_funds_volumn,
                                       user_invest_orientation=user_invest_orientation,
-                                      submit_time= datetime.datetime.now(),
+                                      submit_time= time.strftime("%Y-%m-%d %H:%M:%S"),
                                       audit_state='1')
-            current_user.is_channel = -1
+            current_user.is_channel = '-1'
             current_user.save(update_fields=[
                                              'is_channel',
                                         ])
@@ -330,6 +300,38 @@ def apply_for_channel_user(request):
             return JsonResponse(result)
     else:
         return render(request,"apply_for_channel_user.html")
+@csrf_exempt
+def apply_for_fangdan_user(request):
+    if request.method == 'GET':
+        template = 'account/apply_for_fangdan_user.html'
+        return render(request, template)
+    elif request.method == 'POST':
+        result = {}
+        current_user = request.user
+        apply_method = request.POST.get('apply_method', None)
+        id_name = request.POST.get('id_name', None)
+        id_num = request.POST.get('id_num', None)
+        apply_pic_url = request.POST.get('apply_pic_url', None)
+        contract_pic_url = request.POST.get('contract_pic_url', None)
+        rebate_pic_url = request.POST.get('rebate_pic_url', None)
+
+        ApplyLogForFangdan.objects.create(user=current_user,
+                                          apply_method=apply_method,
+                                          id_name=id_name,
+                                          id_num=id_num,
+                                          apply_pic_url=apply_pic_url,
+                                          contract_pic_url=contract_pic_url,
+                                          rebate_pic_url=rebate_pic_url,
+                                          submit_time= time.strftime("%Y-%m-%d %H:%M:%S"),
+                                          audit_state='1')
+        current_user.is_merchant = '-1'
+        current_user.save(update_fields=[
+                                         'is_merchant',
+                                    ])
+        result['code'] = 0
+        return JsonResponse(result)
+    else:
+        return render(request, "apply_for_fangdan_user.html")
 
 def verifymobile(request):# not exist  return 0  exist return 1
     mobilev = request.GET.get('mobile', None)
@@ -347,7 +349,7 @@ def verifyusername(request):
     users = None
     code = '1' # is used
     if namev:
-        users = ApplyLog.objects.filter(username=namev)
+        users = MyUser.objects.filter(username=namev)
         if not users.exists():
             code = '0'
     result = {'code':code,}
@@ -363,7 +365,7 @@ def verifyqq(request):
     result = {'code':code,}
     return JsonResponse(result)
 def verifyinviter(request):
-    invite_code = request.GET.get('invite', None)
+    invite_code = request.GET.get('invite_code', None)
     code = '1' # not exist
     if invite_code:
         users = MyUser.objects.filter(invite_code=invite_code)
@@ -425,7 +427,7 @@ def phoneImageV(request):
 #             result['message'] = u'图形验证码输入错误！'
 #             result.update(generateCap())
 #             return JsonResponse(result)
-        users = ApplyLog.objects.filter(mobile=phone)
+        users = MyUser.objects.filter(mobile=phone)
         if users.exists():
             result['message'] = u'该手机号码已申请！'
             result.update(generateCap())
@@ -462,7 +464,7 @@ def phoneImageV(request):
             result['message'] = u'请不要频繁提交！'
             result.update(generateCap())
             return JsonResponse(result)
-    today = date.today()
+    today = datetime.date.today()
     remote_ip = get_client_ip(request)
     count_ip = MobileCode.objects.filter(remote_ip=remote_ip, create_at__gt=today).count()
     if count_ip >= 30:
@@ -511,7 +513,7 @@ def account_submit(request):
 @login_required
 def account_audited(request):
     user = request.user
-    today = date.today()
+    today = datetime.date.today()
     submit_num = InvestLog.objects.filter(user=user, submit_time__gte=today).count()
     nums = InvestLog.objects.filter(user=user, audit_time__gte=today).values('audit_state')\
         .annotate(count=Count('*')).order_by('audit_state')
@@ -533,7 +535,7 @@ def account_audited(request):
 @login_required
 def account_audited_2(request):
     user = request.user
-    today = date.today()
+    today = datetime.date.today()
     submit_num = InvestLog.objects.filter(user=user, submit_time__gte=today).count()
     nums = InvestLog.objects.filter(user=user, audit_time__gte=today).values('audit_state')\
         .annotate(count=Count('*')).order_by('audit_state')
@@ -1131,7 +1133,7 @@ def admin_investlog(request, id):
         else:
             log.audit_reason = request.POST['audit_reason']
         log.audit_state = audit_state
-        log.audit_time = datetime.now()
+        log.audit_time = datetime.datetime.now()
     else:
         log.return_amount = request.POST['return_amount']
     log.save()
@@ -1211,7 +1213,7 @@ def submitOrder(request):
     remark = request.POST.get('remark', '')
     invest_amount = None if invest_amount=='' else invest_amount
     invest_term = None if invest_term=='' else invest_term
-    invest_date = date.today() if invest_date=='' else invest_date
+    invest_date = datetime.date.today() if invest_date=='' else invest_date
     submit_type = request.POST.get('submit_type', '1')
     project = Project.objects.get(id=project_id)
 #     fields = re.split(r'[\s,]+', project.necessary_fields)
@@ -1220,7 +1222,7 @@ def submitOrder(request):
         result['msg'] = u"请提交投资手机号"
         return JsonResponse(result)
     if invest_date:
-        invest_date = datetime.strptime(invest_date, "%Y-%m-%d")
+        invest_date = datetime.datetime.strptime(invest_date, "%Y-%m-%d")
     with cache.lock('project_submit_%s' % project.id, timeout=2):
         if not project.is_multisub_allowed or submit_type=='1':
             if project.company is None:

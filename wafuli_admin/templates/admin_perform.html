@@ -28,7 +28,7 @@
             <el-row :gutter="20">
               <el-col :span="4">
                 <div class="grid-content bg-purple">
-                    <el-input v-model="input" placeholder="请输入内容"></el-input>
+                    <el-input v-model="input" v-model="searchValue" placeholder="请输入内容"></el-input>
                 </div>
               </el-col>
               <el-col :span="6">
@@ -88,6 +88,7 @@
       delimiters: ['${', '}'],
       data: {
         input:'',
+        seachValue:'',
         activeNav: '1-4',
         hongbaoPlan:[],
         ruleForm: {
@@ -117,7 +118,7 @@
           var that = this;
           $.ajax({
               type: "get",
-              url: '/restapi/perform/',
+              url: '/restapi/perform/?page=' + page + '&pageSize=' + pageSize,
               async: true,
               success: function(res) {
                 console.log(res);
@@ -133,9 +134,9 @@
           });
         },
         searchData:function(){
-         
-          // app.currentPage = 1;
-          // app.getDataList();
+          console.log('search')
+          app.currentPage = 1;
+          app.getDataList();
         }
       }
     })

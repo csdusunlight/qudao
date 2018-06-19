@@ -48,7 +48,7 @@ class ProjectList(generics.ListCreateAPIView):
     filter_class = ProjectFilter
 #     filter_fields = ['state','type','is_multisub_allowed','is_official','category']
     ordering_fields = ('state','pub_date','pinyin')
-    search_fields = ('title',)
+    search_fields = ('title','company__name')
     pagination_class = MyPageNumberPagination
     def perform_create(self, serializer):
         obj = serializer.save(is_official=False, category='self', is_addedto_repo=False, user=self.request.user, state='10')
@@ -296,7 +296,8 @@ class CompanyList(BaseViewMixin, generics.ListAPIView):
     serializer_class = CompanySerializer
     pagination_class = MyPageNumberPagination
 class CompanyList2(BaseViewMixin, generics.ListAPIView):
-    queryset = Company.objects.filter(project__state__in=['10','20']).distinct()
+    queryset = Company.objects.filter(project__state='10',project__is_official=True,
+                                      project__is_addedto_repo=True).distinct()
     serializer_class = CompanySerializer
     pagination_class = MyPageNumberPagination
 # class RankList(BaseViewMixin, generics.ListAPIView):
@@ -342,7 +343,7 @@ class MessageList(BaseViewMixin, generics.ListCreateAPIView):
     pagination_class = MyPageNumberPagination
     ordering_fields = ('time')
     search_fields = ('title','content')
-    ordering = ('time')
+    ordering = ('-time')
 
 
 class MessageDetail(BaseViewMixin,generics.RetrieveUpdateDestroyAPIView):

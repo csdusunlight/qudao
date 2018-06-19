@@ -26,10 +26,9 @@
     background: url(http://p93w6qyci.bkt.clouddn.com/reg_hongbao.png) no-repeat center center;
     background-size: 100% 100%;
     position: absolute;
-    bottom: 104px;
-    left: 352px;
+    bottom: 17%;
+    left: 18%;
 }
-
 .hongbao1>p {
     font-size: 45px;
     color: #e3b672;
@@ -53,8 +52,8 @@
     background: url(http://p93w6qyci.bkt.clouddn.com/reg_hongbao.png) no-repeat center center;
     background-size: 100% 100%;
     position: absolute;
-    bottom: 104px;
-    left: 557px;
+    bottom: 17%;
+    left: 29%;
 }
 
 .hongbao2>span {
@@ -81,7 +80,9 @@
     background-size: 100% 100%;
     position: absolute;
     bottom: 104px;
-    left: 792px;
+    left: 557px;
+    bottom: 17%;
+    left: 41%;
 }
 
 .hongbao3>span {
@@ -107,8 +108,8 @@
     background: url(http://p93w6qyci.bkt.clouddn.com/reg_hongbao.png) no-repeat center center;
     background-size: 100% 100%;
     position: absolute;
-    bottom: 104px;
-    left: 1053px;
+    bottom: 17%;
+    left: 55%;
 }
 
 .descBox {
@@ -137,8 +138,8 @@
     background: url(http://p93w6qyci.bkt.clouddn.com/reg_hongbao.png) no-repeat center center;
     background-size: 100% 100%;
     position: absolute;
-    bottom: 104px;
-    left: 1358px;
+    bottom: 17%;
+    left: 71%;
 }
 
 .desc_box {
@@ -191,10 +192,19 @@
     display: inline-block;
     position: relative;
 }
-
-.li1 {
-    margin-left: 351px;
+@media screen and (max-width:1366px){
+    .li1{
+        margin-left: 5%;
+    }
 }
+@media screen and (min-width:1366px){
+    .li1 {
+        margin-left: 14%;
+    }
+}
+/* .li1 {
+    margin-left: 14%;
+} */
 
 .c_item {
     width: 266px;
@@ -244,11 +254,11 @@
 }
 
 .li2 {
-    margin-left: 237px;
+    margin-left: 14%;
 }
 
 .li3 {
-    margin-left: 237px;
+    margin-left: 14%;
 }
 
 .dataBox {
@@ -353,13 +363,31 @@ label i {
     background: url(../../../static/images/skin-on.png) no-repeat center center;
     background-size:150% 150%;
 }
-.reg_title {
+@media screen and (max-width:1366px){
+    .reg_title {
+        width: 243px;
+        height: 60px;
+        position: absolute;
+        top: 76px;
+        left: 550px;
+    }
+}
+@media screen and (min-width:1366px){
+    .reg_title {
+        width: 243px;
+        height: 60px;
+        position: absolute;
+        top: 76px;
+        left: 855px;
+    }
+}
+/* .reg_title {
     width: 243px;
     height: 60px;
     position: absolute;
     top: 76px;
     left: 855px;
-}
+} */
 
 title_pic {
     width: 100%;
@@ -386,3 +414,7 @@ title_pic {
     margin-top: 30px;
     margin-left: 32px;
 }
+/* 
+    17%
+    18%
+*/

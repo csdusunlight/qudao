@@ -270,8 +270,15 @@
     })
     $('#form').validator({
         dataFilter: function(data) {
-            if (data.code == 0){ return "";}
-            else {return '已存在！';}
+            if (data.code == 0){
+                 return "";
+            } else {
+                if (data.msg){
+                    return data.msg
+                }else{
+                    return false;
+                }
+            }
         },
         // validClass: "has-success",
         // invalidClass: "has-error",
@@ -279,10 +286,14 @@
         rules:{
             phone_number:[/^1[3456789]\d{9}$/,'请输入正确的手机号码'],
             password:[/((?=.*[a-z])(?=.*\d)|(?=[a-z])(?=.*[#@!~%^&*])|(?=.*\d)(?=.*[#@!~%^&*]))[a-z\d#@!~%^&*]{6,16}/i, '密码应为6~16位数字、字母或特殊字符中的两种'],
-            qq_number:[/^[1-9][0-9]{8,11}$/,'请输入正确的QQ'],
+            qq_number:[/^[1-9][0-9]{4,14}$/,'请输入正确的QQ'],
         },
         display: function(el){
         return el.getAttribute('placeholder') || ''; //提示错误语法 
+        },
+        messages: {
+            required: '',
+            invite_code: "邀请码不存在",
         },
         fields:{
             'mobile':'required;mobile;remote(get:' + verifymobile_url + ', csrfmiddlewaretoken={{ csrf_token }})',

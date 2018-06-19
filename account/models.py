@@ -144,7 +144,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
     is_channel = models.CharField(u"是否渠道", choices=IS_CHANNEL, default='0', max_length=2)  #
     is_merchant = models.CharField(u"是否商家", choices=IS_MERCHANT, default='0', max_length=2)  #
-
+    num_message_sync = models.IntegerField(u"新消息数量",default='0')
     objects = MyUserManager()
     USERNAME_FIELD = 'mobile'
     REQUIRED_FIELDS = ['username','qq_number']
@@ -178,6 +178,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return self.admin_permissions.filter(code=code).exists()
     def has_permission100(self):
         return self.has_admin_perms('100')
+    def has_permission200(self):
+        return self.has_admin_perms('200')
     def picture_url(self):
         """
         Returns the URL of the image associated with this Object.

@@ -31,28 +31,16 @@
         pullRefresh: {
           container: '#pullrefresh',
           up: {
-//          auto: true,
+            auto: true,
             contentrefresh: '正在加载...',
             contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
             callback: pullupRefresh
-          },
-          down : {
-            style:'circle',//必选，下拉刷新样式，目前支持原生5+ ‘circle’ 样式
-            color:'#2BD009', //可选，默认“#2BD009” 下拉刷新控件颜色
-            height:'50px',//可选,默认50px.下拉刷新控件的高度,
-            range:'100px', //可选 默认100px,控件可下拉拖拽的范围
-            offset:'0px', //可选 默认0px,下拉刷新控件的起始位置
-            contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
-            contentdown : "下拉刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
-            contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
-            auto: true,//可选,默认false.首次加载自动下拉刷新一次
-            callback :dropDown //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
           }
         },
         swipeBack: true //启用右滑关闭功能
       });
       //上拉加载 count 计数  PAGESIZE请求条数  str拼接的字符串
-      var count = 2;
+      var count = 1;
       var PAGESIZE = 10;
       var str = '';
       var html = '';
@@ -69,12 +57,11 @@
           timeout: 10000, //超时时间设置为10秒；
           //            headers:{'Content-Type':'application/json'},
           success: function(data) {
-            console.log("data数据：", data.results);
+            console.log(data)
             if(!data.results.length) {
               mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
             } else {
               mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
-              console.log($('.text'))
               $.each(data.results, function (index, val) {
                 var li = document.createElement("li");
                 li.className = "list";
@@ -116,7 +103,6 @@
         getList(count++);
       }
       function dropDown() {
-        console.log('down');
         mui.ajax(url, {
           data: {
             page: 1,
@@ -127,12 +113,10 @@
           timeout: 10000, //超时时间设置为10秒；
           //            headers:{'Content-Type':'application/json'},
           success: function(data) {
-            console.log("data数据：", data.results);
             if(!data.results.length) {
               mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
             } else {
               mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
-              console.log($('.list'))
               $('.list').remove();
               $.each(data.results, function (index, val) {
                 var li = document.createElement("li");
@@ -144,7 +128,6 @@
                 li.innerHTML = str;
                 $('.mui-table-view').prepend(li);
                 var pHeight = li.getElementsByTagName("p")[0].clientHeight
-                console.log(pHeight)
                 if(pHeight > 30){
                   li.getElementsByTagName('i')[0].classList.remove('hideicon')
                   li.getElementsByTagName('i')[0].classList.add('showicon')

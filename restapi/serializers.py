@@ -24,7 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = MyUser
         fields = ('id', 'mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'with_total','accu_income','is_book_email_notice',
                   'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number', 'is_autowith',
-                  'submit_bg', 'domain_name', 'cs_qq', 'has_permission100','margin_account', 'fanshu_domain', 'zhifubao')
+                  'submit_bg', 'domain_name', 'cs_qq', 'has_permission100','num_message_sync','margin_account', 'fanshu_domain', 'zhifubao','has_permission200')
         read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level', 'margin_account')
 
 class ApplyLogForChannelSerializer(serializers.ModelSerializer):
@@ -34,9 +34,17 @@ class ApplyLogForChannelSerializer(serializers.ModelSerializer):
 
     mobile = serializers.CharField(source="user.mobile",read_only=True)
     qq_number = serializers.CharField(source="user.qq_number",read_only=True)
-    qq_name =  serializers.CharField(source="user.mobile",read_only=True)
+    qq_name =  serializers.CharField(source="user.qq_name",read_only=True)
     level =  serializers.CharField(source="user.level",read_only=True)
     profile =  serializers.CharField(source="user.profile",read_only=True)
+    user_origin = serializers.CharField(source='get_user_origin_display')
+    user_exp_year = serializers.CharField(source='get_user_exp_year_display')
+    user_custom_volumn = serializers.CharField(source='get_user_custom_volumn_display')
+    user_funds_volumn = serializers.CharField(source='get_user_funds_volumn_display')
+    user_invest_orientation = serializers.CharField(source='get_user_invest_orientation_display')
+
+
+
 
     class Meta:
         model = ApplyLogForChannel
@@ -100,7 +108,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     qq_name = serializers.CharField(source='user.qq_name', read_only=True)
     user_mobile = serializers.CharField(source='user.mobile', read_only=True)
     state_des = serializers.CharField(source='get_state_display', read_only=True)
-    logo = serializers.CharField(source='company.logo', read_only=True)
+    logo = serializers.CharField(source='company.logo.url', read_only=True)
     display_price = serializers.SerializerMethodField()
     up_price = serializers.SerializerMethodField()
     def get_field_names(self, declared_fields, info):

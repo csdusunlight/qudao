@@ -7,7 +7,7 @@ Created on 2017年8月10日
 from rest_framework import serializers
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
     Announcement, WithdrawLog, Mark, BookLog
-from account.models import MyUser, ApplyLog, Message,ApplyLogForChannel
+from account.models import MyUser, ApplyLog, Message,ApplyLogForChannel,ApplyLogForFangdan
 from wafuli_admin.models import DayStatis
 from wafuli.models import Company
 from statistic.models import UserDetailStatis, UserAverageStatis,\
@@ -69,6 +69,39 @@ class ApplyLogForChannelSerializer(serializers.ModelSerializer):
                   'admin_mobile')
         read_only_fields = ('admin_name','username','qq_number','qq_name')
 
+class ApplyLogForFangdanSerializer(serializers.ModelSerializer):
+    username =serializers.CharField(source="user.username",read_only=True)
+    admin_name =serializers.CharField(source="admin_user.username",read_only=True)
+    admin_mobile =serializers.CharField(source="admin_user.mobile",read_only=True)
+
+    mobile = serializers.CharField(source="user.mobile",read_only=True)
+    qq_number = serializers.CharField(source="user.qq_number",read_only=True)
+    qq_name =  serializers.CharField(source="user.mobile",read_only=True)
+    level =  serializers.CharField(source="user.level",read_only=True)
+    profile =  serializers.CharField(source="user.profile",read_only=True)
+
+    class Meta:
+        model = ApplyLogForFangdan
+        #fields= '__all__'
+        fields = ('id',
+                  'qq_number',
+                  'qq_name',
+                  'username',
+                  'mobile',
+                  'audit_time',
+                  'submit_time',
+                  'profile',
+                  'admin_name',
+                  'level',
+                  "id_name",
+                  "id_num",
+                  "apply_pic_url",
+                  "contract_pic_url",
+                  "rebate_pic_url",
+                  'audit_reason',
+                  'audit_state',
+                  'admin_mobile')
+        read_only_fields = ('admin_name','username','qq_number','qq_name')
 
 class ProjectSerializer(serializers.ModelSerializer):
 #     subscribers = UserSerializer(many=True)

@@ -78,5 +78,8 @@ urlpatterns = [
     url(r'^reaudit/$', 'account.views.reaudit', name='reaudit'),
     url(r'^apply_for_channel_user/$', 'account.views.apply_for_channel_user', name='apply_for_channel'),
 
+    url(r'^apply_for_fangdan_user/$', 'account.views.apply_for_fangdan_user', name='apply_for_fangdan'),
+
+    #    url(r'^sitemessage/(?P<id>[0-9]+)/$', 'account.views.sitemessage.as_views()', name='sitemessage'),
 
 ]

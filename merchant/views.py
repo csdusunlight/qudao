@@ -802,3 +802,7 @@ def create_zhifubao_transaction(request):
         code = 1
         remark = ''
     return JsonResponse({'code':code, 'remark':remark, 'msg':msg})
+
+@csrf_exempt
+def merchant_guide(request): #jzy
+    return render(request, 'merchant_guide.html')

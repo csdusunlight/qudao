@@ -1,0 +1,142 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>招商入驻</title>
+		<link rel="stylesheet" href="{% static 'css/merchant_guide.css' %}" />
+    <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+	</head>
+	<body>
+	  <div class="banner">
+	    <div class="bannerimg"></div>
+	  </div>
+	  <div class="content">
+	    <div class="text_box">
+        <h2 class="title">平台优势</h2>
+        <p class="text">渠道丰富、流量稳定，操作系统方便、快捷</p>
+	    </div>
+	    <div class="concrete">
+	      <ul>
+  	      <li class="list">
+  	        <img src="{% static 'images/mg_user.png' %}"/>
+  	        <h2>渠道</h2>
+  	        <p>数千位大牛渠道资源</p>
+  	        <p>累计返现1.7亿</p>
+  	      </li>
+  	      <li class="list">
+            <img src="{% static 'images/mg_ssx.png' %}"/>
+            <h2>流量</h2>
+            <p>月均引流数十万用户</p>
+            <p>引入资金5亿以上</p>
+  	      </li>
+  	      <li class="list">
+            <img src="{% static 'images/mg_dzang.png' %}"/>
+            <h2>专业</h2>
+            <p>三年深耕，行业领先</p>
+            <p>打造专业的放单系统</p>
+  	      </li>
+	      </ul>
+	    </div>
+	  </div>
+	  <div class="broadcast">
+	    <div class="broadcast_bgimg">
+	      <div class="broadcast_box">
+          <div class="broadcast_title">
+            <h2 class="title">平台优势</h2>
+            <p class="text">渠道丰富、流量稳定，操作系统方便、快捷</p>
+          </div>
+          <div class="lunbo_box">
+            <div class="icon_left"></div>
+            <div class="icon_right"></div>
+            <div class="lunbo">
+              <ul>
+                <li class="item">
+                  <div class="item_logo">
+                    <img src="{% static 'images/wyjrlogo.png' %}"/>
+                  </div>
+                  <p class="item_text">累计引入2.06亿</p>
+                </li>
+                <li class="item">
+                  <div class="item_logo">
+                    <img src="{% static 'images/365logo.png' %}"/>
+                  </div>
+                  <p class="item_text">累计引入2.06亿</p>
+                </li>
+                <li class="item">
+                  <div class="item_logo">
+                    <img src="{% static 'images/yhwlogo.png' %}"/>
+                  </div>
+                  <p class="item_text">累计引入2.06亿</p>
+                </li>
+                <li class="item">
+                  <div class="item_logo">
+                    <img src="{% static 'images/qbjrlogo.png' %}"/>
+                  </div>
+                  <p class="item_text">累计引入2.06亿</p>
+                </li>
+                <li class="item">
+                  <div class="item_logo">
+                    <img src="{% static 'images/jmhz_logo.png' %}"/>
+                  </div>
+                  <p class="item_text">累计引入2.06亿</p>
+                </li>
+                <li class="item">
+                  <div class="item_logo">
+                    <img src="{% static 'images/tzjlogo.png' %}"/>
+                  </div>
+                  <p class="item_text">累计引入2.06亿</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="process">
+	    <h2 class="process_title">入驻流程</h2>
+	    <div class="process_item">
+	      <img class="process_img" src="{% static 'images/mg_process.png' %}"/>
+	    </div>
+	  </div>
+	  <div class="button_box">
+	    <a class="link_subhimt" href="">我要放单</a>
+	  </div>
+	  <div class="footer_text">
+	    <img src="{% static 'images/mg_text.png' %}"/>
+	  </div>
+	</body>
+	<script type="text/javascript">
+		$(function () {
+      var len = $(".lunbo ul li").length;
+      var whlen = len * 260;
+      $(".lunbo ul").css({ "width": whlen + 'px' });
+      var i = 0;
+      var n = 0;
+      $(".icon_right").click(function () {
+        if (n === 2) {
+          return false
+        } else {
+          n++;
+          if (!$(".lunbo ul").is(":animated")) {
+              $(".lunbo ul").animate({ 'marginLeft': '-'+ n * 260 + 'px' }, function () {
+                  $(this).css({ 'margin-left':'-' + n * 260 + 'px' })
+              })
+          }
+        }
+      })
+      $(".icon_left").click(function () {
+          if (n === 0) {
+            return false
+          } else {
+            n--;
+            if (!$(".lunbo ul").is(":animated")) {
+                $(".lunbo ul").animate({ 'marginLeft': '-'+ n * 260 + 'px' }, function () {
+                    $(this).css({ 'margin-left':'-' + n * 260 + 'px' })
+                })
+            }
+          }
+      })
+		})
+	</script>
+</html>

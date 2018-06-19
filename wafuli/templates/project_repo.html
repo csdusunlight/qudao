@@ -6,7 +6,7 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-	<title>Document</title>
+	<title>项目库</title>
 	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 	<link rel="stylesheet" type="text/css" href="/static/css/new-common.css" />
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -25,10 +25,6 @@
 		.wrapper {
 			width: 1310px;
 			margin: 0 auto;
-		}
-
-		.table-box {
-			margin-top: 20px;
 		}
 
 		.pro_top {
@@ -68,17 +64,88 @@
 
 		.searchBox {
 			padding: 40px 0;
+			position: relative;
 		}
-		.searchBar{
+
+		..el-input__inner {
+			outline: none;
+		}
+
+		.searchBar {
 			width: 430px;
 			height: 44px;
 			padding: 2px 2px;
-			background: #91c11d;	
+			background: #91c11d;
 		}
-		.searchBtn{
+
+		.searchBtn {
+			width: 100px;
+			height: 40px;
+			background: url(../../../static/images/search.png) no-repeat center center;
+			cursor: pointer;
+			margin-left: 5px;
+		}
+
+		.hot_search {
+			width: 576px;
+			height: 40px;
+			padding: 10px 10px;
+			color: #b5b5b5;
+			position: absolute;
+			right: 0;
+			top: 40px;
+		}
+
+		.hot_search_item {
+			margin-left: 20px;
+		}
+
+		.hot_search_item:hover {
+			cursor: pointer;
+			color: #a5cb4b;
+		}
+
+		.all_projects_item {
+			display: inline-block;
+			padding: 5px 8px;
+			cursor: pointer;
+		}
+
+		/* table */
+
+		.el-table thead {
+			color: #909399;
+			font-weight: 100 !important;
+		}
+
+		.table-box {
+			background: white;
+			padding: 18px 32px;
+		}
+
+		.el-table td {
+			padding: 30px 0;
+		}
+
+		.el-table th {
+			background: #efefef;
+		}
+
+		.el-table tr {
+			margin-top: 10px;
+			transition: all 0.5 ease-in !important;
+			cursor: pointer;
+		}
+
+		.el-table tr:hover {
+			box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2) !important;
+		}
+		.no_data{
 			width: 100%;
-			height: 100%;
-			
+			height: 50px;
+			line-height: 70px;
+			text-align: center;
+			font-size: 18px;
 		}
 	</style>
 </head>
@@ -134,73 +201,61 @@
 				</el-row>
 				<!-- 搜索框 -->
 				<div class="searchBox">
+					<!-- 搜索部分 -->
 					<div class="searchBar">
-						<el-col :span="20">
+						<el-col :span="18">
 							<div class="grid-content bg-purple">
-								<el-input v-model="input" placeholder="请输入内容"></el-input>
+								<el-input v-model="search_ipt" placeholder="请输入内容"></el-input>
 							</div>
 						</el-col>
 						<el-col :span="4">
 							<div class="grid-content bg-purple">
-								<div class="searchBtn"></div>
+								<div class="searchBtn" @click='search_data'></div>
 							</div>
 						</el-col>
 					</div>
+					<!-- 热搜部分 -->
+					<div class="hot_search">
+						<label>热搜</label>
+						<!-- <span class="hot_search_item">宜人贷</span>
+						<span class="hot_search_item">拍拍贷</span>
+						<span class="hot_search_item">点融网</span>
+						<span class="hot_search_item">你我贷</span>
+						<span class="hot_search_item">金融工场</span>
+						<span class="hot_search_item">爱众财富</span> -->
+						<el-popover placement="bottom-end" width="410" trigger="hover">
+							<div class="all_projects_item">宜人贷</div>
+							
+							<!-- <div class="all_projects_item"></div> -->
+							
+
+							<span class="hot_search_item" slot="reference">全部项目</span>
+						</el-popover>
+					</div>
+				</div>
+				<!-- 项目部分 -->
+				<div class="table-box">
+					<el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="tableData.results" style="width: 100%;">
+
+						<el-table-column label="平台">
+							<template slot-scope="scope">${ scope.row.title }</template>
+						</el-table-column>
+						<el-table-column label="推广标期">
+							<template slot-scope="scope">${ scope.row.term }</template>
+						</el-table-column>
+						<el-table-column label="投资档位">
+							<template slot-scope="scope">${ scope.row.display_price }</template>
+						</el-table-column>
+						<el-table-column label="结算价格">
+							<template slot-scope="scope">${ scope.row.investrange }</template>
+						</el-table-column>
+						<el-table-column label="备注说明">
+							<template slot-scope="scope">${ scope.row.remark }</template>
+						</el-table-column>
+					</el-table>
+					<div class="no_data" v-show="show">没有更多数据了~</div>
 				</div>
 			</div>
-			<!-- <div class="table-box">
-						<el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="tableData.results" style="width: 100%"
-						 @selection-change="handleSelectionChange">
-							
-							<el-table-column label="项目名称">
-								<template slot-scope="scope">${ scope.row.project_title }</template>
-							</el-table-column>
-							<el-table-column label="投资姓名">
-								<template slot-scope="scope">${ scope.row.invest_name }</template>
-							</el-table-column>
-							<el-table-column label="投资手机号">
-								<template slot-scope="scope">${ scope.row.invest_mobile }</template>
-							</el-table-column>
-							<el-table-column label="投资日期">
-								<template slot-scope="scope">${ scope.row.invest_date }</template>
-							</el-table-column>
-							<el-table-column label="审核时间">
-								<template slot-scope="scope">${ (scope.row.audit_time).slice(0,10) }</template>
-							</el-table-column>
-							<el-table-column label="结算金额">
-								<template slot-scope="scope">${ scope.row.settle_amount }</template>
-							</el-table-column>
-							<el-table-column label="返现金额">
-								<template slot-scope="scope">${ scope.row.return_amount }</template>
-							</el-table-column>
-							<el-table-column label="支付宝账号">
-								<template slot-scope="scope">${ scope.row.zhifubao }</template>
-							</el-table-column>
-							<el-table-column label="支付宝姓名">
-								<template slot-scope="scope">${ scope.row.zhifubao_name }</template>
-							</el-table-column>
-							<el-table-column width="80" label="打款状态">
-								<template slot-scope="scope">
-									<el-popover trigger="hover" placement="left">
-										<p>备注：${ scope.row.pay_reason ? scope.row.pay_reason : '无' }</p>
-										<div slot="reference" class="name-wrapper">
-											<span :class="'pay-state pay-state-' + scope.row.pay_state">${ scope.row.pay_state_des }</span>
-										</div>
-									</el-popover>
-								</template>
-							</el-table-column>
-						</el-table>
-						<div style="margin-top: 20px">
-						</div>
-					</div> -->
-			<!--table-->
-			<!-- <div class="pagination" style="display: flex;justify-content: flex-end;">
-						<el-pagination background @current-change="handleCurrentChange" :page-size="pageSize" :current-page="this.currentPage" layout="total, prev, pager, next, jumper"
-						 :total="tableData.recordCount">
-						</el-pagination>
-					</div> -->
-			<!--pagination-->
-
 		</div>
 	</div>
 
@@ -209,45 +264,26 @@
 			delimiters: ['${', '}'],
 			el: '#app',
 			data: {
+				show:false,
+				scroll: '',
+				search_ipt: '',
 				tableData: {},
-				pageSize: 10,
+				pageSize: 20,
+				page: 1,
 				multipleSelection: [],
 				checkIdList: '',
-				dialogAmountVisible: false,
-				dialogEditVisible: false,
-				dialogData: {
-					id: '',
-					return_amount: '',
-					zhifubao: '',
-					zhifubao_name: ''
-				},
 				rowStyle: {
-					'text-align': 'center'
+					'text-align': 'center',
 				},
-				page: 1,
-				currentPage: 1,
-				stateValue: '',
-				dateValue: '',
-				dateOptions: [{
-					value: '',
-					label: '全部'
-				}, {
-					value: '7',
-					label: '7天内数据'
-				}, {
-					value: '30',
-					label: '30天内数据'
-				}],
-				telValue: '',
-				zfbValue: '',
 			},
 			created: function () {
+				var that = this;
 				$.ajax({
 					type: "get",
-					url: '/restapi/investlogs/?user={{user.id}}&page=' + 1 + '&pageSize=' + 10 + '&audit_state=0',
+					url: '/restapi/projects/?state=10&is_official=2&pageSize=' + that.pageSize + '&page=' + that.page,
 					async: true,
 					success: function (res) {
-						console.log(res);
+						console.log(res.results);
 						if (res.code == 0) {
 							console.log('created');
 							console.log(res);
@@ -259,243 +295,40 @@
 						}
 					}
 				});
+				//下拉加载
+				$(window).scroll(function () {
+					var scrollTop = $(this).scrollTop();
+					var scrollHeight = $(document).height();
+					var windowHeight = $(this).height();
+					if (scrollTop + windowHeight === scrollHeight) {
+						var add_page = that.page ++;
+						$.ajax({
+							type: "get",
+							url: '/restapi/projects/?state=10&is_official=2&pageSize=' + that.pageSize + '&page=' + add_page,
+							async: true,
+							success: function (res) {
+								console.log(res.results);
+								if (res.code == 0) {
+									app.tableData = res;
+									app.show = true;
+								} else {
+									console.log(res)
+								}
+							}
+						});
+					}
+				})
+
 			},
 			methods: {
-				searchData: function () {
-					app.currentPage = 1;
-					app.getDataList();
-				},
-				resetData: function () {
-					app.stateValue = '';
-					app.dateValue = '';
-					app.telValue = '';
-					app.zfbValue = '';
-					app.currentPage = 1;
-					app.getDataList();
-				},
-				changeSelect: function (val) {
-					app.currentPage = 1;
-					app.getDataList();
-				},
-				handleSelectionChange: function (val) {
-					app.checkIdList = '';
-					console.log(val);
-					if (val.length) {
-						for (let i = 0; i < val.length; i++) {
-							app.checkIdList += val[i].id + ','
-						}
-						app.checkIdList = app.checkIdList.slice(0, app.checkIdList.length - 1);
-						console.log(app.checkIdList);
-					} else {
-						app.checkIdList = '';
-						console.log(app.checkIdList);
-					}
-					this.multipleSelection = val;
-				},
-				handleCurrentChange: function (val) {
-					console.log(app.searchKeys);
-					console.log(app.stateValue);
-					app.currentPage = val;
-					app.getDataList();
-				},
-				edit: function (row) {
-					console.log(row);
-					app.dialogData.id = row.id;
-					app.dialogData.return_amount = row.return_amount;
-					app.dialogData.zhifubao = row.zhifubao;
-					app.dialogData.zhifubao_name = row.zhifubao_name;
-					app.dialogEditVisible = true;
-				},
-				editConfirm: function () {
-					console.log(app.dialogData)
-					$.ajax({
-						type: "put",
-						url: '/restapi/investlogs/' + app.dialogData.id + '/',
-						data: {
-							return_amount: app.dialogData.return_amount,
-							zhifubao: app.dialogData.zhifubao,
-							zhifubao_name: app.dialogData.zhifubao_name
-						},
-						async: true,
-						success: function (res) {
-							app.dialogEditVisible = false;
-							app.getDataList();
-						}
-					});
-				},
-				badgeSelect: function (state) {
-					var that = this;
-					if (!app.checkIdList) {
-						this.$notify.error({
-							title: '错误',
-							message: '请先选择要操作的数据'
-						});
-						return false;
-					}
-					this.$alert('请确认是否一键标记所选数据？', '温馨提示', {
-						confirmButtonText: '确定',
-						callback: function (action) {
-							console.log(action);
-							if (action == 'confirm') {
-								$.ajax({
-									type: "post",
-									url: '/finance/mark_pay_state/',
-									data: {
-										state: state,
-										ids: app.checkIdList
-									},
-									async: true,
-									success: function (res) {
-										console.log(res);
-										if (res.code == 0) {
-											app.getDataList();
-										} else {
-											that.$notify.error({
-												title: '错误',
-												message: res.detail
-											});
-										}
-									}
-								});
-							}
-						}
-					});
-				},
-				transferSelect: function () {
-					var that = this;
-					console.log(app.checkIdList)
-					if (!app.checkIdList) {
-						this.$notify.error({
-							title: '错误',
-							message: '请先选择要操作的数据'
-						});
-						return false;
-					}
-					$.ajax({
-						type: "post",
-						url: '/finance/check_transfer/',
-						async: true,
-						data: {
-							ids: app.checkIdList
-						},
-						success: function (res) {
-							console.log(res);
-							if (res.code == 0) {
-								that.$alert('共转账 ' + res.total + ' 元，余额 ' + res.balance + ' 元', '温馨提示', {
-									confirmButtonText: '确定',
-									callback: function (action) {
-										console.log(action);
-										if (action == 'confirm') {
-											$.ajax({
-												type: "post",
-												url: '/finance/submit_transfer/',
-												async: true,
-												data: {
-													ids: app.checkIdList
-												},
-												success: function (res) {
-													if (res.code == 0) {
-														that.$notify({
-															title: '操作成功',
-															message: '成功数量：' + res.suc_num + '，失败数量：' + res.fail_num,
-															type: 'success'
-														});
-														app.getDataList();
-													} else {
-														that.$notify.error({
-															title: '错误',
-															message: res.detail
-														});
-													}
-												}
-											});
-										}
-									}
-								});
-							} else {
-								that.$notify.error({
-									title: '错误',
-									message: res.detail
-								});
-							}
-						}
-					});
-
-				},
-				beforeAvatarUpload: function (file) {
-					console.log(file)
-					this.$message('正在上传...')
-				},
-				handleAvatarSuccess: function (res, file) {
-					var that = this;
-					console.log(res);
-					if (res.code == 0) {
-						that.$notify({
-							title: '上传成功',
-							message: '成功数量：' + res.num + '条',
-							type: 'success'
-						});
-						app.getDataList();
-					} else {
-						that.$notify.error({
-							title: '错误',
-							message: res.msg
-						});
-					}
-				},
-				handleAvatarError: function (res, file) {
-					var that = this;
-					that.$notify.error({
-						title: '错误',
-						message: '上传失败'
-					});
-				},
-				exportExel: function () {
-					var html = '<form action="' + "/finance/export_investlog/" + '" method="get" target="_self" id="postData_form">';
-					html += '<input name="audit_state" type="hidden" value="0"/>';
-					if (app.dateValue == 7) {
-						var startTime = app.getDate(0);
-						var endTime = app.getDate(7);
-					} else if (app.dateValue == 30) {
-						var startTime = app.getDate(0);
-						var endTime = app.getDate(30);
-					} else {
-						var startTime = '';
-						var endTime = '';
-					}
-
-					if (startTime && endTime) {
-						html += '<input name="auditdate_0" type="hidden" value="' + startTime + '"/>';
-						html += '<input name="auditdate_1" type="hidden" value="' + endTime + '"/>';
-					}
-					var pay_state = app.stateValue;
-					var invest_mobile = app.telValue;
-					var zhifubao = app.zfbValue;
-					console.log(pay_state);
-					if (pay_state) {
-						html += '<input name="pay_state" type="hidden" value="' + pay_state + '"/>';
-					}
-					if (invest_mobile) {
-						html += '<input name="invest_mobile" type="hidden" value="' + invest_mobile + '"/>';
-					}
-					if (zhifubao) {
-						html += '<input name="zhifubao" type="hidden" value="' + zhifubao + '"/>';
-					}
-					html += '</form>';
-					var iframe = document.getElementById('myIFrame');
-					iframe.contentWindow.document.open();
-					iframe.contentWindow.document.write(html);
-					iframe.contentWindow.document.close();
-					document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
-				},
 				getDataList: function () {
 					var that = this;
 					$.ajax({
 						type: "get",
-						url: '/restapi/investlogs/?user={{user.id}}&page=' + app.currentPage + '&pageSize=' + app.pageSize + '&audit_state=0' + app.searchKeys,
+						url: '/restapi/projects/?state=10&is_official=2&pageSize=' + that.pageSize + '&page=' + that.page,
 						async: true,
 						success: function (res) {
-							console.log(res);
+							console.log(res.results);
 							if (res.code == 0) {
 								console.log(app.tableData);
 								app.tableData = res;
@@ -509,32 +342,31 @@
 						}
 					});
 				},
-				getDate: function (AddDayCount) {
-					var dd = new Date();
-					dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期    
-					var y = dd.getFullYear();
-					var m = (dd.getMonth() + 1) < 10 ? "0" + (dd.getMonth() + 1) : (dd.getMonth() + 1);//获取当前月份的日期，不足10补0    
-					var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();//获取当前几号，不足10补0    
-					return y + "-" + m + "-" + d;
-				}
-			},
-			computed: {
-				searchKeys: function () {
-					var auditdate_0;
-					var auditdate_1;
-					if (app.dateValue == 7) {
-						auditdate_0 = app.getDate(-7);
-						auditdate_1 = app.getDate(0);
-					} else if (app.dateValue == 30) {
-						auditdate_0 = app.getDate(-30);
-						auditdate_1 = app.getDate(0);
-					} else {
-						auditdate_0 = '';
-						auditdate_1 = '';
-					}
-					return '&pay_state=' + app.stateValue + '&invest_mobile=' + app.telValue + '&zhifubao=' + app.zfbValue + '&auditdate_0=' + auditdate_0 + '&auditdate_1=' + auditdate_1;
+				//点击搜索
+				search_data:function(){
+					var that = this;
+					$.ajax({
+						url:'/restapi/projects/?state=10&is_official=2&&search='+that.search_ipt,
+						type: "get",
+						async: true,
+						success: function (res) {
+							console.log(res.results);
+							if (res.code == 0) {
+								console.log(app.tableData);
+								app.tableData = res;
+								console.log(app.tableData)
+							} else {
+								that.$notify.error({
+									title: '错误',
+									message: res.detail
+								});
+							}
+						}
+					})
+					
 				}
 			}
+			
 		})
 	</script>
 </body>

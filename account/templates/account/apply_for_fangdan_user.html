@@ -166,6 +166,14 @@
         <div class="successbtn">朕已阅，继续申请</div>
       </div>
     </div>
+    <div class="message">
+      <div class="message_item">
+        <i class="icon"><img src="{% static 'images/cgimg.png' %}"/></i>
+        <h2>提交成功</h2>
+        <p>您已经成功提交申请，请等待1-3天左右的审核期，审核结果将会在系统站内信和手机短信中通知您</p>
+        <div class="butt_return">返回</div>
+      </div>
+    </div>
     </div>
     {% include "footer.html" %}
     <script>
@@ -466,8 +474,8 @@
                 dataType:'json',
                 success: function (data) {
                   console.log(data)
-                  if (data.code === 0) {
-                    console.log('提交成功')
+                  if (data.code === '0') {
+                    $('.message').addClass('animation')
                   }
                 },
                 error: function (err) {
@@ -567,8 +575,8 @@
                 dataType:'json',
                 success: function (data) {
                   console.log(data)
-                  if (data.code === 0) {
-                    console.log('提交成功')
+                  if (data.code === '0') {
+                    $('.message').addClass('animation')
                   }
                 },
                 error: function (err) {
@@ -605,6 +613,15 @@
           $('.dialogue').addClass('hide')
         })
         
+        //提交成功后，点击返回，返回首页
+        $('.butt_return').click(function () {
+          window.location.replace("/");
+        })
+        
+        //点击取消，返回首页
+        $('.cancelbtn').click(function () {
+          window.location.replace("/");
+        })
       })
       
       //验证操作

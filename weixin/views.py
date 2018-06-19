@@ -91,6 +91,7 @@ def bind_user(request):
                 #红包活动插入++++++++++
         return JsonResponse(result)    
     else:
+#         return render(request, 'm_bind.html')
         code = request.GET.get('code','')
         to_url = request.GET.get('to_url')
         if not code:

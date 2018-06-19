@@ -293,7 +293,6 @@ def apply_for_channel_user(request):
                                       user_custom_volumn=user_custom_volumn,
                                       user_funds_volumn=user_funds_volumn,
                                       user_invest_orientation=user_invest_orientation,
-                                      submit_time= time.strftime("%Y-%m-%d %H:%M:%S"),
                                       audit_state='1')
             current_user.is_channel = '-1'
             current_user.save(update_fields=[
@@ -333,7 +332,6 @@ def apply_for_fangdan_user(request):
                                               apply_pic_url=apply_pic_url,
                                               contract_pic_url=contract_pic_url,
                                               rebate_pic_url=rebate_pic_url,
-                                              submit_time= time.strftime("%Y-%m-%d %H:%M:%S"),
                                               audit_state='1')
             current_user.is_merchant = '-1'
             current_user.save(update_fields=[
@@ -1225,6 +1223,7 @@ def submitOrder(request):
     invest_term = request.POST.get('invest_term')
     invest_date = request.POST.get('invest_date')
     zhifubao = request.POST.get('zhifubao', '')
+    zhifubao_name = request.POST.get('zfbname', '')
     qq_number = request.POST.get('qq_number', '')
     expect_amount = request.POST.get('expect_amount', '')
     invest_name = request.POST.get('invest_name', '')
@@ -1255,7 +1254,7 @@ def submitOrder(request):
     
         investlog=InvestLog.objects.create(user=request.user,project_id=project_id, invest_mobile=invest_mobile, invest_date=invest_date,
                                  invest_name=invest_name, remark=remark, qq_number=qq_number, expect_amount=expect_amount,
-                                 zhifubao=zhifubao, invest_amount=invest_amount, submit_type=submit_type,
+                                 zhifubao=zhifubao, zhifubao_name=zhifubao_name, invest_amount=invest_amount, submit_type=submit_type,
                                   invest_term=invest_term, is_official=project.is_official, category=project.category,
                                   submit_way='4', audit_state='1')
     #活动插入

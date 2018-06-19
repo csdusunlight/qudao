@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^import_merchant_investlog/$', views.import_merchant_investlog, name='import_merchant_investlog'),
     url(r'^transfer/callback/$', views.transfer_callback, name='transfer_callback'),
     url(r'^create_transaction/$', views.create_zhifubao_transaction, name='create_transaction'),
-    
+    url(r'^merchant_guide/$', views.merchant_guide, name='merchant_guide'), #jzy
 ]
 
 

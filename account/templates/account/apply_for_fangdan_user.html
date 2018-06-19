@@ -1,0 +1,665 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>入驻申请页面</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/new-common.css' %}" />
+    <!--<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/apply_for_fangdan_user.css' %}" />
+    <!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
+    <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+	</head>
+	<body>
+    {% include "header.html" %}
+    <div class="admission">
+      <h1 class="title">招商入驻</h1>
+      <div class="admission_apply">
+        <form class="form" method="post" id="form1">
+          <div class="radio_group">
+            <label class="location interval"><i class="red">*</i>认证方式 :</label>
+            <label class="radio_item personal_show">
+              <input class="radio" type="radio" name="radio1" id="personal" value="1" checked="checked"/><label class="label_item" for="personal"><i></i></label><span>个人认证</span>
+            </label>
+            <label class="radio_item business_show">
+              <input class="radio" type="radio" name="radio1" id="business" value="2"/><label class="label_item" for="business"><i></i></label><span>公司认证</span>
+            </label>
+          </div>
+          <div class="personal_gorup">
+            <div class="input_gorup">
+              <div class="input_gorup_item">
+                <label class="interval"><i class="red">*</i>真实姓名 :</label>
+                <input type="text" id="username" class="input_style username" />
+                <div class="prompttext hide">
+                  <span class="red">请输入真实姓名</span>
+                </div>
+              </div>
+              <div class="input_gorup_item">
+                <label class="interval"><i class="red">*</i>二代身份证号码 :</label>
+                <input type="text" id="userID" class="input_style userID" />
+                <div class="prompttext hide">
+                  <span class="red">请输入身份证号</span>
+                </div>
+              </div>
+              <div class="pic_gorup">
+                <div class="pic_gorup_item">
+                  <p class="pic_text"><i class="red">*</i>上传手持身份证合照（请手持本人身份证件有照片的一面，身份证个人信息显示清晰、无遮挡）</p>
+                  <div class="fileidbtn">
+                    <div class="img_update_box input_box">
+                      <img class="plus_img" src="{% static 'images/szjplus.png' %}" />
+                      <input id="fileid" name="fileid" class="ipt fileimg" type="file">
+                    </div>
+                    <div class="img_display" id="sc_sfzimg" style="display: none;"></div>
+                    <div class="prompttext hide">
+                      <span class="red">请上传手持身份证图片</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="pic_gorup_item">
+                  <p class="pic_text">上传一手单合同照片</p>
+                  <div class="filecttbtn">
+                    <div class="img_update_box input_box">
+                      <img class="plus_img" src="{% static 'images/szjplus.png' %}" />
+                      <input id="filectt" name="filect" class="ipt fileimg" multiple type="file">
+                    </div>
+                    <div class="img_display" id="sc_htdimg" style="display: none;"></div>
+                  </div>
+                </div>
+                <div class="pic_gorup_item">
+                  <p class="pic_text">返现截图</p>
+                  <div class="filercebtn">
+                    <div class="img_update_box input_box">
+                      <img class="plus_img" src="{% static 'images/szjplus.png' %}" />
+                      <input id="filerce" name="filerce" class="ipt fileimg" multiple type="file">
+                    </div>
+                    <div class="img_display" id="sc_grfxjtimg" style="display: none;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="btn_box">
+              <div class="button user_button">提交</div>
+            </div>
+          </div>
+          <div class="business_gorup hide">
+            <div class="input_gorup">
+              <div class="input_gorup_item">
+                <label class="interval"><i class="red">*</i>公司名称 :</label>
+                <input type="text" id="companyname" class="input_style companyname" />
+                <div class="prompttext hide">
+                  <span class="red">请输入公司名称</span>
+                </div>
+              </div>
+              <div class="input_gorup_item">
+                <label class="interval"><i class="red">*</i>工商号 :</label>
+                <input type="text" id="businessID" class="input_style businessID" />
+                <div class="prompttext hide">
+                  <span class="red">请输入工商号</span>
+                </div>
+              </div>
+              <div class="pic_gorup">
+                <div class="pic_gorup_item">
+                  <p class="pic_text"><i class="red">*</i>上传营业执照</p>
+                  <div class="fileyyzzidbtn">
+                    <div class="img_update_box input_box">
+                      <img class="plus_img" src="{% static 'images/szjplus.png' %}" />
+                      <input id="fileyyzzid" name="fileyyzzid" class="ipt fileimg" type="file">
+                    </div>
+                    <div class="prompttext hide">
+                      <span class="red">请上传营业执照</span>
+                    </div>
+                    <div class="img_display" id="sc_yyzzimg" style="display: none;"></div>
+                  </div>
+                </div>
+                <div class="pic_gorup_item">
+                  <p class="pic_text">上传一手单合同照片</p>
+                  <div class="filehtpicbtn">
+                    <div class="img_update_box input_box">
+                      <img class="plus_img" src="{% static 'images/szjplus.png' %}" />
+                      <input id="filehtpic" name="filehtpic" class="ipt fileimg" multiple type="file">
+                    </div>
+                    <div class="img_display" id="sc_yshtdimg" style="display: none;"></div>
+                  </div>
+                </div>
+                <div class="pic_gorup_item">
+                  <p class="pic_text">返现截图</p>
+                  <div class="filefxjtbtn">
+                    <div class="img_update_box input_box">
+                      <img class="plus_img" src="{% static 'images/szjplus.png' %}" />
+                      <input id="filefxjt" name="filefxjt" class="ipt fileimg" multiple type="file">
+                    </div>
+                    <div class="img_display" id="sc_gsfxjtimg" style="display: none;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="btn_box">
+              <div class="button company_button">提交</div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="mask_box hide"></div>
+    <div class="alert_img_box hide">
+    </div>
+    <div class="dialoguemask_box"></div>
+    <div class="dialogue">
+      <h1 class="title">放单须知</h1>
+      <div class="dialogue_text">
+        <p>为了提高您的审核通过率，请仔细阅读放单须知。</p>
+        <h2 class="mintitle">1.基本要求</h2>
+        <p>请您保证所提交的认证资料，合法、真实、有效。</p>
+        <h2 class="mintitle">2.审核流程</h2>
+        <p>提交资料之后，管理员会在1-3个工作日内进行审核，并通过QQ或电话与您联系。</p>
+        <h2 class="mintitle">3.关于放单</h2>
+        <p>①请保证您提交的所有项目信息合法、真实、有效;</p>
+        <p>②请每天按时审核数据，如有数据异常请及时联系管理员;</p>
+        <p>③项目信息如有变动请提前通知管理员，如因未及时通知所导致的相关损失，需自行承担;</p>
+        <p>④如项目在5个工作日内未出数据，管理员会与您联系，将项目进行适当调整。</p>
+        <h2 class="mintitle">4.为了保障双方的合法权益，部分项目需要缴纳保证金，保证金将在项目结束后退还。</h2>
+        <h2 class="mintitle">5.本须知会不定期更新，所有解释权归福利联盟所有。</h2>
+      </div>
+      <div class="dialogue_button">
+        <div class="cancelbtn">取消</div>
+        <div class="successbtn">朕已阅，继续申请</div>
+      </div>
+    </div>
+    <div class="message">
+      <div class="message_item">
+        <i class="icon"><img src="{% static 'images/cgimg.png' %}"/></i>
+        <h2>提交成功</h2>
+        <p>您已经成功提交申请，请等待1-3天左右的审核期，审核结果将会在系统站内信和手机短信中通知您</p>
+        <div class="butt_return">返回</div>
+      </div>
+    </div>
+    </div>
+    {% include "footer.html" %}
+    <script>
+      //获取token值
+      function tokenKey(val, dom, objarr) {
+        $.ajax({
+          type: "get",
+          url: "http://120.79.187.115/get_upload_token/",
+          async: true,
+          success: function(res) {
+            if(res.code == 0) {
+              var key = res.key;
+              var token = res.token;
+              var f = val;
+              jsJustUpload(f, token, key, dom, objarr);
+            } else {
+              console.log(res)
+            }
+          }
+        });
+      }
+      //图片上传七牛
+      function jsJustUpload (f, token, key, dom) {
+         var  formData = new FormData();
+         if(key !== null && key !== undefined) {
+           formData.append('key', key);
+         }
+         formData.append('token', token);
+         formData.append('file', f);
+         $.ajax({
+            url: 'http://upload-z2.qiniup.com',
+            type: 'POST',
+            data: formData,                    // 上传formdata封装的数据
+            dataType: 'JSON',
+            cache: false,                      // 不缓存
+            processData: false,                // jQuery不要去处理发送的数据
+            contentType: false,                // jQuery不要去设置Content-Type请求头
+            success:function (data) {           //成功回调
+              $(dom).children('div.img_update_box').hide();
+              $(dom).children('div.img_display').show();
+              $(dom).children('div.untext').show();
+              var strhtml = '<div class="iconposition"><img class="clickimg" src="http://img.fuliunion.com/'+ data.key +'"/><i class="iconpng"></i></div>';
+              $(dom).children('div.img_display').append(strhtml);
+              console.log('http://img.fuliunion.com/' + data.key);
+            }
+        });
+      }
+      //选择图片后执行tokenKey()  获取token值
+      function filesImgtoken (doc, dom, arr) {
+        var $input = $(doc);
+        $input.off('change');
+        $input.on('change', function() {
+          var files = this.files;
+          if (this.files.length <= 3) {
+            $.each(files, function (key, val) {
+              tokenKey(val, dom);
+            })
+          } else {
+            alert('最多三张图片');
+          }
+        })
+      }
+      $(function () {
+        //上传身份证合照
+        $('.fileidbtn').click(function () {
+          var $input = $('#fileid');
+          $input.off('change');
+          if (!$('.fileidbtn').children('div.prompttext').hasClass('hide')) {
+            $('.fileidbtn').children('div.prompttext').addClass('hide');
+          }
+          $input.on('change', function() {
+            var files = this.files;
+            if (this.files.length <= 3) {
+              $.each(files, function (key, val) {
+                tokenKey(val, '.fileidbtn');
+              })
+            } else {
+              alert('最多三张图片');
+            }
+          })
+        })
+        
+        //上传上传一手单合同照片
+        $('.filecttbtn').click(function () {
+          var $input = $('#filectt');
+          $input.off('change');
+          $input.on('change', function() {
+            var files = this.files;
+            if (this.files.length <= 3) {
+              $.each(files, function (key, val) {
+                tokenKey(val, '.filecttbtn');
+              })
+            } else {
+              alert('最多三张图片');
+            }
+          })
+        })
+        
+        //个人用户返现截图
+        $('.filercebtn').click(function () {
+          var $input = $('#filerce');
+          $input.off('change');
+          $input.on('change', function() {
+            var files = this.files;
+            if (this.files.length <= 3) {
+              $.each(files, function (key, val) {
+                tokenKey(val, '.filercebtn');
+              })
+            } else {
+              alert('最多三张图片');
+            }
+          })
+        })
+        
+        //上传营业执照
+        $('.fileyyzzidbtn').click(function () {
+          var $input = $('#fileyyzzid');
+          $input.off('change');
+          if (!$('.fileyyzzidbtn').children('div.prompttext').hasClass('hide')) {
+            $('.fileyyzzidbtn').children('div.prompttext').addClass('hide');
+          }
+          $input.on('change', function() {
+            var files = this.files;
+            if (this.files.length <= 3) {
+              $.each(files, function (key, val) {
+                tokenKey(val, '.fileyyzzidbtn');
+              })
+            } else {
+              alert('最多三张图片');
+            }
+          })
+        })
+        
+        //上传一手单合同照片
+        $('.filehtpicbtn').click(function () {
+          var $input = $('#filehtpic');
+          $input.off('change');
+          $input.on('change', function() {
+            var files = this.files;
+            if (this.files.length <= 3) {
+              $.each(files, function (key, val) {
+                tokenKey(val, '.filehtpicbtn');
+              })
+            } else {
+              alert('最多三张图片');
+            }
+          })
+        })
+        
+        //返现截图
+        $('.filefxjtbtn').click(function () {
+          var $input = $('#filefxjt');
+          $input.off('change');
+          $input.on('change', function() {
+            var files = this.files;
+            if (this.files.length <= 3) {
+              $.each(files, function (key, val) {
+                tokenKey(val, '.filefxjtbtn');
+              })
+            } else {
+              alert('最多三张图片');
+            }
+          })
+        })
+        
+        //显示个人用户提交
+        $('.personal_show').click(function () {
+          $('.personal_gorup').addClass('show');
+          $('.personal_gorup').removeClass('hide');
+          $('.business_gorup').addClass('hide');
+          $('.business_gorup').removeClass('show');
+        })
+        
+        //显示公司认证提交
+        $('.business_show').click(function () {
+          $('.business_gorup').addClass('show');
+          $('.business_gorup').removeClass('hide');
+          $('.personal_gorup').addClass('hide');
+          $('.personal_gorup').removeClass('show');
+        })
+        
+        //关闭遮罩层
+        $('.mask_box').click(function () {
+          $('.mask_box').addClass('hide');
+          $('.alert_img_box').addClass('hide');
+          $('.mask_box').removeClass('show');
+          $('.alert_img_box').removeClass('show');
+        })
+        
+        //点击图片放大
+        $('body').on('click', '.clickimg', function () {
+          var srcPath = $(this)[0].src;
+          var src = '<img src="'+ srcPath +'" />';
+          $('.alert_img_box').empty();
+          $('.alert_img_box').prepend(src);
+          $('.mask_box').addClass('show');
+          $('.alert_img_box').addClass('show');
+          $('.mask_box').removeClass('hide');
+          $('.alert_img_box').removeClass('hide');
+        })
+        
+        //删除图片
+        $('body').on('click', '.iconpng', function () {
+          var that = $(this).parents('div.img_display');
+          $(this).parent('div.iconposition').remove();
+          if (that.find('img').length === 0) {
+            that.siblings('div.img_update_box').show();
+            that.hide();
+          }
+        })
+        
+        //个人用户提交
+        $('.user_button').click(function () {
+          var str = '';
+          if ($('#username').val() == '') {
+            str += '请输入姓名 ';
+            $('#username').siblings('div.prompttext').find('span').text('请输入姓名');
+            docCaoz('#username');
+          } else {
+            if (isChinaName($.trim($('#username').val())) == false) {
+              str += ' 请检查姓名格式是否正确  ';
+              $('#username').siblings('div.prompttext').find('span').text('请检查姓名格式是否正确');
+              docCaoz('#username');
+            }
+          }
+          if ($('#userID').val() == '') {
+            str += ' 请输入身份证号 ';
+            $('#userID').siblings('div.prompttext').find('span').text('请输入身份证号');
+            docCaoz('#userID');
+          } else {
+            if (isCardNo($.trim($('#userID').val())) == false) {
+              str += ' 请检查身份证号格式是否正确 ';
+              $('#userID').siblings('div.prompttext').find('span').text('请检查身份证号格式是否正确');
+              docCaoz('#userID');
+            }
+          }
+          if ($('.fileidbtn').children('div.img_display').find('img').length == 0) {
+            str += ' 请上传手持身份证图片 ';
+            $('.fileidbtn').children('div.prompttext').removeClass('hide');
+          }
+          //验证通过
+          if (str == '') {
+            var filecttstr = '';
+            if ($('.filecttbtn').children('div.img_display').find('img').length > 0) {
+              var imglen = $('.filecttbtn').children('div.img_display').find('img');
+              imglen.each(function (index, val) {
+                filecttstr += $(this).attr('src') + ';';
+              })
+            }
+            console.log(filecttstr)
+            var filercestr = '';
+            if ($('.filercebtn').children('div.img_display').find('img').length > 0) {
+              var imglen = $('.filercebtn').children('div.img_display').find('img');
+              imglen.each(function (index, val) {
+                filercestr += $(this).attr('src') + ';';
+              })
+            }
+            console.log(filercestr);
+            var data = {};
+            if (filecttstr == '' && filercestr == '') {
+              data = {
+                'apply_method': '1',
+                'id_name': $('#username').val(),
+                'id_num': $('#userID').val(),
+                'apply_pic_url': $('.fileidbtn').children('div.img_display').find('img').attr("src")
+              }
+            } else if (filecttstr == '') {
+                data = {
+                  'apply_method': '1',
+                  'id_name': $('#username').val(),
+                  'id_num': $('#userID').val(),
+                  'apply_pic_url': $('.fileidbtn').children('div.img_display').find('img').attr("src"),
+                  'rebate_pic_url': filercestr
+                }
+              } else if (filercestr == '') {
+                  data = {
+                    'apply_method': '1',
+                    'id_name': $('#username').val(),
+                    'id_num': $('#userID').val(),
+                    'apply_pic_url': $('.fileidbtn').children('div.img_display').find('img').attr("src"),                 
+                    'contract_pic_url': filecttstr
+                  }
+              } else {
+                  data = {
+                    'apply_method': '1',
+                    'id_name': $('#username').val(),
+                    'id_num': $('#userID').val(),
+                    'apply_pic_url': $('.fileidbtn').children('div.img_display').find('img').attr("src"),
+                    'contract_pic_url': filecttstr,
+                    'rebate_pic_url': filercestr
+                  }
+              }
+              console.log(data)
+              $.ajax({
+                type: 'POST',
+                url: '/account/apply_for_fangdan_user/',
+                data: data,
+                dataType:'json',
+                success: function (data) {
+                  console.log(data)
+                  if (data.code === '0') {
+                    $('.message').addClass('animation')
+                  }
+                },
+                error: function (err) {
+                  console.log(err);
+                }
+              });
+          } else {
+            alert(str)
+          }
+        })
+        
+        //公司用户提交
+        $(".company_button").click(function () {
+          var str = '';
+          if ($('#companyname').val() == '') {
+            str += '请输入公司名称 ';
+            $('#companyname').siblings('div.prompttext').find('span').text('请输入公司名称');
+            docCaoz('#companyname');
+          } else {
+            if (isCompanyName($.trim($('#companyname').val())) == false) {
+              str += ' 请检查公司名称格式是否正确  ';
+              $('#companyname').siblings('div.prompttext').find('span').text('请检查公司名称格式是否正确');
+              docCaoz('#companyname');
+            }
+          }
+          if ($('#businessID').val() == '') {
+            str += ' 请输入工商号 ';
+            $('#businessID').siblings('div.prompttext').find('span').text('请输入工商号');
+            docCaoz('#businessID');
+          } else {
+            if (isBusinessName($.trim($('#businessID').val())) == false) {
+              str += ' 请检查工商号格式是否正确 ';
+              $('#businessID').siblings('div.prompttext').find('span').text('请检查工商号格式是否正确');
+              docCaoz('#businessID');
+            }
+          }
+          if ($('.fileyyzzidbtn').children('div.img_display').find('img').length == 0) {
+            str += ' 请上传营业执照 ';
+            $('.fileyyzzidbtn').children('div.prompttext').removeClass('hide');
+          }
+          //验证通过
+          if (str == '') {
+            var filehtpicstr = '';
+            if ($('.filehtpicbtn').children('div.img_display').find('img').length > 0) {
+              var imglen = $('.filehtpicbtn').children('div.img_display').find('img');
+              imglen.each(function (index, val) {
+                filehtpicstr += $(this).attr('src') + ';';
+              })
+            }
+            console.log(filehtpicstr);
+            var filefxjtstr = '';
+            if ($('.filefxjtbtn').children('div.img_display').find('img').length > 0) {
+              var imglen = $('.filefxjtbtn').children('div.img_display').find('img');
+              imglen.each(function (index, val) {
+                filefxjtstr += $(this).attr('src') + ';';
+              })
+            }
+            console.log(filefxjtstr);
+            if (filehtpicstr == '' && filefxjtstr == '') {
+              data = {
+                'apply_method': '2',
+                'id_name': $('#companyname').val(),
+                'id_num': $('#businessID').val(),
+                'apply_pic_url': $('.fileyyzzidbtn').children('div.img_display').find('img').attr("src")
+              }
+            } else if (filehtpicstr == '') {
+                data = {
+                  'apply_method': '2',
+                  'id_name': $('#companyname').val(),
+                  'id_num': $('#businessID').val(),
+                  'apply_pic_url': $('.fileyyzzidbtn').children('div.img_display').find('img').attr("src"),
+                  'rebate_pic_url': filefxjtstr
+                }
+              } else if (filefxjtstr == '') {
+                  data = {
+                    'apply_method': '2',
+                    'id_name': $('#companyname').val(),
+                    'id_num': $('#businessID').val(),
+                    'apply_pic_url': $('.fileyyzzidbtn').children('div.img_display').find('img').attr("src"),                 
+                    'contract_pic_url': filehtpicstr
+                  }
+              } else {
+                  data = {
+                    'apply_method': '2',
+                    'id_name': $('#companyname').val(),
+                    'id_num': $('#businessID').val(),
+                    'apply_pic_url': $('.fileyyzzidbtn').children('div.img_display').find('img').attr("src"),
+                    'contract_pic_url': filehtpicstr,
+                    'rebate_pic_url': filefxjtstr
+                  }
+              }
+              console.log(data)
+              $.ajax({
+                type: 'POST',
+                url: '/account/apply_for_fangdan_user/',
+                data: data,
+                dataType:'json',
+                success: function (data) {
+                  console.log(data)
+                  if (data.code === '0') {
+                    $('.message').addClass('animation')
+                  }
+                },
+                error: function (err) {
+                  console.log(err);
+                }
+              });
+          } else {
+            alert(str)
+          }
+        })
+        //获取焦点事件
+        $("input#username").focus(function () {
+          docFocus('#username');
+        })
+        
+        //获取焦点事件
+        $("input#userID").focus(function () {
+          docFocus('#userID');
+        })
+        
+        //获取焦点事件
+        $("input#companyname").focus(function () {
+          docFocus('#companyname');
+        })
+        
+        //获取焦点事件
+        $("input#businessID").focus(function () {
+          docFocus('#businessID');
+        })
+        
+        //点击朕已阅按钮
+        $('.successbtn').click(function () {
+          $('.dialoguemask_box').addClass('hide')
+          $('.dialogue').addClass('hide')
+        })
+        
+        //提交成功后，点击返回，返回首页
+        $('.butt_return').click(function () {
+          window.location.replace("/");
+        })
+        
+        //点击取消，返回首页
+        $('.cancelbtn').click(function () {
+          window.location.replace("/");
+        })
+      })
+      
+      //验证操作
+      function docCaoz(dom) {
+        $(dom).removeClass('border_clear');
+        $(dom).addClass('border_color');
+        $(dom).siblings('div.prompttext').removeClass('hide');
+        $(dom).siblings('div.prompttext').addClass('show');
+      }
+      //获取焦点后操作
+      function docFocus(dom) {
+        $(dom).addClass('border_clear');
+        $(dom).siblings('div.prompttext').addClass('hide');
+        $(dom).siblings('div.prompttext').removeClass('show');
+      }
+      //身份证验证是否出错
+      function isCardNo(card) { 
+       var pattern = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
+       return pattern.test(card); 
+      }
+      
+      //验证中文名称
+      function isChinaName(name) {
+       var pattern = /^[\u4E00-\u9FA5]{1,8}$/;
+       return pattern.test(name);
+      }
+      
+      //验证公司名称
+      function isCompanyName(name) {
+       var pattern = /^[\u4E00-\u9FA5]{1,46}$/;
+       return pattern.test(name);
+      }
+      
+      //验证工商号是否为15位数字
+      function isBusinessName(num) {
+       var pattern = /^\d{15}$/;
+       return pattern.test(num);
+      }
+    </script>
+	</body>
+</html>

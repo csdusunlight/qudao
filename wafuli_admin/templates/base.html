@@ -55,6 +55,11 @@
                 } else {
                     $('.admin_withdraw_num').show().text(ret.admin_withdraw);
                 }
+                if (ret.admin_pay == 0) {
+                    $('.admin_pay_num').hide();
+                } else {
+                    $('.admin_pay_num').show().text(ret.admin_pay);
+                }
 	    	},
 	    	error: function (ret){
 	    	    console.log(ret.msg);
@@ -91,7 +96,7 @@
                         	<li class="home2"><a href="{%url 'admin_user'%}">用户管理</a></li>
                         	<li class="home15"><a href="{%url 'admin_apply'%}">申请名单<span class="new-data admin_apply_num"></span></a></li>
                         	<li class="home3"><a href="{%url 'admin_withdraw'%}">提现管理<span class="new-data admin_withdraw_num"></span></a></li>
-                        	<li class="home26"><a href="/Admin/admin_pay">打款管理</a></li>
+                        	<li class="home26"><a href="/Admin/admin_pay">打款管理<span class="new-data admin_pay_num"></a></li>
                         	<li class="home4"><a href="{%url 'admin_office'%}">官方数据<span class="new-data admin_office_num"></span></a></li>
                         	<li class="home5"><a href="{%url 'admin_private'%}">自建数据</a></li>
                             <!--<li class="home12"><a href="">体验管理</a></li>-->

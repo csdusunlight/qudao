@@ -68,6 +68,7 @@ def admin_merchant_look(request):
 import time
 
 @has_post_permission('052')
+
 def admin_apply(request):
     if request.method == "POST":
         admin_user = request.user
@@ -86,7 +87,7 @@ def admin_apply(request):
             with transaction.atomic():
                 ####################
                 reason = "success"
-                nowtime = time.strftime('%Y-%m-%d %H:%M:%S')
+                nowtime = datetime.datetime.now()
                 Message.objects.create(user=currentuser, title="渠道申请审核反馈", is_read=False,
                                        content=u"尊敬的用户：您申请成为渠道用户成功！")
                 currentuser.is_channel='1'
@@ -103,7 +104,7 @@ def admin_apply(request):
                 ####################
         elif type==2:
             reason = request.POST.get('reason', '')
-            nowtime = time.strftime('%Y-%m-%d %H:%M:%S')
+            nowtime = datetime.datetime.now()
             Message.objects.create(user=currentuser, title="渠道申请审核反馈", is_read=False,
                                    content=u"尊敬的用户：您申请成为渠道用户失败。被拒绝原因如下：" + reason)  # 写入审核原因，加个字段
             currentuser.is_channel = '０'

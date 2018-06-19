@@ -116,9 +116,7 @@ def preaudit_investlog(request):
                 translist.auditlog = investlog
                 translist.save(update_fields=['content_type', 'object_id'])
                 if broker_amount > 0:
-                    translist2 = charge_margin(admin_user, '1', broker_amount, "佣金")
-                    translist2.auditlog = investlog
-                    translist2.save(update_fields=['content_type', 'object_id'])
+                    translist2 = charge_margin(admin_user, '1', broker_amount, "佣金", auditlog=investlog)
 #                 #活动插入
 #                 on_audit_pass(request, investlog)
 #                 #活动插入结束
@@ -802,3 +800,7 @@ def create_zhifubao_transaction(request):
         code = 1
         remark = ''
     return JsonResponse({'code':code, 'remark':remark, 'msg':msg})
+
+@csrf_exempt
+def merchant_guide(request): #jzy
+    return render(request, 'merchant_guide.html')

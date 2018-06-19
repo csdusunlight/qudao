@@ -126,13 +126,14 @@
             }
             
             if(item.is_expired === false && dataNum != 2) {
+              console.log(item.is_expired);
               h_classname = 'hongbao tips__icon';
               if(dataNum == 1) { //根据dataNum的值来渲染按钮的状态 
-                btn_html = '<a class="btn btn' + item.is_to_expired + ' get state' + dataNum + '" data-id="' + item.id + '" data-award="' + item.award + '" data-state="' + dataNum + '" data-type="' + item.type + '">立即领取</a>'
+                btn_html = '<a class="btn btn' + item.is_expired + ' get state' + dataNum + '" data-id="' + item.id + '" data-award="' + item.award + '" data-state="' + dataNum + '" data-type="' + item.type + '">立即领取</a>'
               } else if(dataNum == 2) {
-                btn_html = '<a class="btn btn' + item.is_to_expired + ' get state' + dataNum + '" data-id="' + item.id + '" data-award="' + item.award + '" data-state="' + dataNum + '" data-type="' + item.type + '">已领取</a>'
+                btn_html = '<a class="btn btn' + item.is_expired + ' get state' + dataNum + '" data-id="' + item.id + '" data-award="' + item.award + '" data-state="' + dataNum + '" data-type="' + item.type + '">已领取</a>'
               } else {
-                btn_html = '<a class="btn btn' + item.is_to_expired + ' get state' + dataNum + '" data-id="' + item.id + '" data-award="' + item.award + '" data-state="' + dataNum + '" data-type="' + item.type + '">立即激活</a>'
+                btn_html = '<a class="btn btn' + item.is_expired + ' get state' + dataNum + '" data-id="' + item.id + '" data-award="' + item.award + '" data-state="' + dataNum + '" data-type="' + item.type + '">立即激活</a>'
               }
             } else if(dataNum === 2) { //已经领取红包渲染
               h_classname = 'hongbao tips__icon';

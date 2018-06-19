@@ -229,11 +229,11 @@
 							'<span>' + data.results[i].expire + '</span>' +
 							'</div>';
 						if (dataNum == 1) {
-							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + dataNum + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + dataNum + ' mui-btn-outlined">立即领取</button>'
+							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + dataNum + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_expired + ' state' + dataNum + ' mui-btn-outlined">立即领取</button>'
 						} else if (dataNum == 2) {
-							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + dataNum + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + dataNum + ' mui-btn-outlined">已领取</button>'
+							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + dataNum + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_expired + ' state' + dataNum + ' mui-btn-outlined">已领取</button>'
 						} else {
-							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + dataNum + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + dataNum + ' mui-btn-outlined">立即激活</button>'
+							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + dataNum + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_expired + ' state' + dataNum + ' mui-btn-outlined">立即激活</button>'
 						}
 						str_html += '</div>' +
 							'<div class="hongbao_bottom">';
@@ -270,7 +270,7 @@
 							'<span>有效期至：</span>' +
 							'<span>' + data.results[i].expire + '</span>' +
 							'</div>';
-							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + dataNum + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_to_expired + ' state' + dataNum + ' mui-btn-outlined">已领取</button>'
+							str_html += '<button type="button" data-type="' + data.results[i].type + '" data-state="' + dataNum + '"  data-award="' + data.results[i].award + '" data-id="' + data.results[i].id + '" class="mui-btn take take' + data.results[i].is_expired + ' state' + dataNum + ' mui-btn-outlined">已领取</button>'
 					
 						str_html += '</div>' +
 							'<div class="hongbao_bottom">';

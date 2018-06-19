@@ -202,7 +202,7 @@ class AnnouncementSerializer(serializers.ModelSerializer):
         model = Announcement
         fields = '__all__'
         read_only_fields = ('time',)
-        
+    
 class DayStatisSerializer(serializers.ModelSerializer):
     class Meta:
         model = DayStatis

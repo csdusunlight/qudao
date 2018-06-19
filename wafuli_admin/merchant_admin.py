@@ -408,7 +408,7 @@ def admin_import_merchant_investlog(request):
                 result = row[3]
                 reason = row[4]
                 investlog = InvestLog.objects.get(id=id)
-                if not investlog.audit_state in ['1','3'] or investlog.translist.exists() or investlog.preaudit_state!='0':
+                if not investlog.audit_state in ['1','3'] or investlog.preaudit_state!='0':
                     continue
                 investlog_user = investlog.user
                 translist = None

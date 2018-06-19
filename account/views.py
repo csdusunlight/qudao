@@ -317,7 +317,6 @@ def apply_for_fangdan_user(request):
         apply_pic_url = request.POST.get('apply_pic_url', None)
         contract_pic_url = request.POST.get('contract_pic_url', None)
         rebate_pic_url = request.POST.get('rebate_pic_url', None)
-
         if apply_method in ["1","2"]:
             ApplyLogForFangdan.objects.create(user=current_user,
                                               apply_method=apply_method,

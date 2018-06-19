@@ -138,8 +138,8 @@ def admin_apply_for_fangdan_permission(request):
         if type==1:
             with transaction.atomic():
                 reason = "success"
-                nowtime = time.strftime("%Y-%m-%d %H:%M:%S")
-                Message.objects.create(user=currentuser, title="放单权限申请审核反馈", time=nowtime, is_read=False,
+                nowtime=datetime.datetime.now()
+                Message.objects.create(user=currentuser, title="放单权限申请审核反馈", is_read=False,
                                        content=u"尊敬的用户：您申请放单权限成功！")
                 currentuser.is_merchant='1'
                 currentuser.save(update_fields=['is_merchant',])
@@ -154,8 +154,8 @@ def admin_apply_for_fangdan_permission(request):
                 ####################
         elif type==2:
             reason = request.POST.get('reason', '')
-            nowtime = time.strftime("%Y-%m-%d %H:%M:%S")
-            Message.objects.create(user=currentuser, title="放单权限申请审核反馈", time=nowtime, is_read=False,
+            nowtime = datetime.datetime.now()
+            Message.objects.create(user=currentuser, title="放单权限申请审核反馈", is_read=False,
                                    content=u"尊敬的用户：您申请放单权限失败。被拒绝原因如下：" + reason)  # 写入审核原因，加个字段
             current_applyforfangdan.audit_time = nowtime
             current_applyforfangdan.audit_state = '2'

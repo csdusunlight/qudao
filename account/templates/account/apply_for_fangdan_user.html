@@ -144,6 +144,29 @@
     <div class="mask_box hide"></div>
     <div class="alert_img_box hide">
     </div>
+    <div class="dialoguemask_box"></div>
+    <div class="dialogue">
+      <h1 class="title">放单须知</h1>
+      <div class="dialogue_text">
+        <p>为了提高您的审核通过率，请仔细阅读放单须知。</p>
+        <h2 class="mintitle">1.基本要求</h2>
+        <p>请您保证所提交的认证资料，合法、真实、有效。</p>
+        <h2 class="mintitle">2.审核流程</h2>
+        <p>提交资料之后，管理员会在1-3个工作日内进行审核，并通过QQ或电话与您联系。</p>
+        <h2 class="mintitle">3.关于放单</h2>
+        <p>①请保证您提交的所有项目信息合法、真实、有效;</p>
+        <p>②请每天按时审核数据，如有数据异常请及时联系管理员;</p>
+        <p>③项目信息如有变动请提前通知管理员，如因未及时通知所导致的相关损失，需自行承担;</p>
+        <p>④如项目在5个工作日内未出数据，管理员会与您联系，将项目进行适当调整。</p>
+        <h2 class="mintitle">4.为了保障双方的合法权益，部分项目需要缴纳保证金，保证金将在项目结束后退还。</h2>
+        <h2 class="mintitle">5.本须知会不定期更新，所有解释权归福利联盟所有。</h2>
+      </div>
+      <div class="dialogue_button">
+        <div class="cancelbtn">取消</div>
+        <div class="successbtn">朕已阅，继续申请</div>
+      </div>
+    </div>
+    </div>
     {% include "footer.html" %}
     <script>
       //获取token值
@@ -537,6 +560,21 @@
                   }
               }
               console.log(data)
+              $.ajax({
+                type: 'POST',
+                url: '/account/apply_for_fangdan_user/',
+                data: data,
+                dataType:'json',
+                success: function (data) {
+                  console.log(data)
+                  if (data.code === 0) {
+                    console.log('提交成功')
+                  }
+                },
+                error: function (err) {
+                  console.log(err);
+                }
+              });
           } else {
             alert(str)
           }
@@ -560,6 +598,13 @@
         $("input#businessID").focus(function () {
           docFocus('#businessID');
         })
+        
+        //点击朕已阅按钮
+        $('.successbtn').click(function () {
+          $('.dialoguemask_box').addClass('hide')
+          $('.dialogue').addClass('hide')
+        })
+        
       })
       
       //验证操作

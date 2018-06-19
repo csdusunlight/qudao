@@ -60,7 +60,7 @@ urlpatterns = [
     
     url(r'^admin_pay/$', 'finance.views.admin_pay'),
     url(r'^admin_autopay/$', 'finance.views.admin_autopay'),
-    url(r'^vuetest/$', 'wafuli_admin.views.vuetest', name='vuetest'),  #jzy
+#     url(r'^vuetest/$', 'wafuli_admin.views.vuetest', name='vuetest'),  #jzy
 ]
 
 

@@ -20,11 +20,11 @@ import xlrd
 import traceback
 
 # Create your views here.
-@has_permission('200')
+# @has_permission('200')
 def finance_page(request):
     return render(request, 'finance_pay.html')
 @csrf_exempt
-@has_permission('200')
+# @has_permission('200')
 def check_transfer(request):
     user = request.user
     choices = request.POST.get('ids', '')
@@ -48,7 +48,7 @@ def check_transfer(request):
     return JsonResponse(ret_suc)
 
 @csrf_exempt
-@has_permission('200')
+# @has_permission('200')
 def submit_transfer(request):
     user = request.user
     choices = request.POST.get('ids', '')
@@ -364,7 +364,7 @@ def import_investlog_for_pay(request):
     return JsonResponse(ret)
 
 @csrf_exempt
-@has_permission('200')
+# @has_permission('200')
 def mark_pay_state(request):
     user = request.user
     state = request.POST.get('state', '')

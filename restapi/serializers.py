@@ -76,11 +76,11 @@ class ApplyLogForFangdanSerializer(serializers.ModelSerializer):
 
     mobile = serializers.CharField(source="user.mobile",read_only=True)
     qq_number = serializers.CharField(source="user.qq_number",read_only=True)
-    qq_name =  serializers.CharField(source="user.mobile",read_only=True)
+    qq_name =  serializers.CharField(source="user.qq_name",read_only=True)
     level =  serializers.CharField(source="user.level",read_only=True)
     profile =  serializers.CharField(source="user.profile",read_only=True)
-    audit_time = serializers.DateTimeField(format= "%Y-%m-%d %H:%M:%S")
-    submit_time= serializers.DateTimeField(format= "%Y-%m-%d %H:%M:%S")
+    audit_time = serializers.DateTimeField(format= "%Y-%m-%d ")
+    submit_time= serializers.DateTimeField(format= "%Y-%m-%d ")
 
     class Meta:
         model = ApplyLogForFangdan

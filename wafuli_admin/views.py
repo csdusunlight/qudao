@@ -64,8 +64,11 @@ def admin_merchant_look(request):
     return render(request,"admin_merchant_look.html", {})
 
 
+
+import time
+
 @has_post_permission('052')
-@csrf_exempt
+
 def admin_apply(request):
     if request.method == "POST":
         admin_user = request.user
@@ -84,13 +87,14 @@ def admin_apply(request):
             with transaction.atomic():
                 ####################
                 reason = "success"
+                nowtime = datetime.datetime.now()
                 Message.objects.create(user=currentuser, title="渠道申请审核反馈", is_read=False,
                                        content=u"尊敬的用户：您申请成为渠道用户成功！")
                 currentuser.is_channel='1'
                 currentuser.level=level
                 currentuser.num_message_sync+=1
                 currentuser.save(update_fields=['is_channel','level','num_message_sync'])
-                current_applyforchannel.audit_time = datatime.datetime.now()
+                current_applyforchannel.audit_time = nowtime
                 current_applyforchannel.audit_state = '0'
                 current_applyforchannel.admin_user = admin_user
                 current_applyforchannel.save(update_fields=['audit_time', 'audit_state', 'admin_user'])
@@ -100,12 +104,13 @@ def admin_apply(request):
                 ####################
         elif type==2:
             reason = request.POST.get('reason', '')
+            nowtime = datetime.datetime.now()
             Message.objects.create(user=currentuser, title="渠道申请审核反馈", is_read=False,
                                    content=u"尊敬的用户：您申请成为渠道用户失败。被拒绝原因如下：" + reason)  # 写入审核原因，加个字段
             currentuser.is_channel = '０'
             currentuser.num_message_sync += 1
             currentuser.save(update_fields=['is_channel','num_message_sync'])
-            current_applyforchannel.audit_time = datatime.datetime.now()
+            current_applyforchannel.audit_time = nowtime
             current_applyforchannel.audit_state = '2'
             current_applyforchannel.audit_reason = reason
             current_applyforchannel.admin_user = admin_user
@@ -134,8 +139,8 @@ def admin_apply_for_fangdan_permission(request):
         if type==1:
             with transaction.atomic():
                 reason = "success"
-                nowtime = time.strftime("%Y-%m-%d %H:%M:%S")
-                Message.objects.create(user=currentuser, title="放单权限申请审核反馈", time=nowtime, is_read=False,
+                nowtime=datetime.datetime.now()
+                Message.objects.create(user=currentuser, title="放单权限申请审核反馈", is_read=False,
                                        content=u"尊敬的用户：您申请放单权限成功！")
                 currentuser.is_merchant='1'
                 currentuser.save(update_fields=['is_merchant',])
@@ -150,8 +155,8 @@ def admin_apply_for_fangdan_permission(request):
                 ####################
         elif type==2:
             reason = request.POST.get('reason', '')
-            nowtime = time.strftime("%Y-%m-%d %H:%M:%S")
-            Message.objects.create(user=currentuser, title="放单权限申请审核反馈", time=nowtime, is_read=False,
+            nowtime = datetime.datetime.now()
+            Message.objects.create(user=currentuser, title="放单权限申请审核反馈", is_read=False,
                                    content=u"尊敬的用户：您申请放单权限失败。被拒绝原因如下：" + reason)  # 写入审核原因，加个字段
             current_applyforfangdan.audit_time = nowtime
             current_applyforfangdan.audit_state = '2'
@@ -1632,6 +1637,8 @@ def coupon_manage(request):    #jzy
     return render(request,"coupon_manage.html",{})
 def coupon_plan(request):    #jzy
     return render(request,"coupon_plan.html",{})
+# def vuetest(request):    #jzy
+#     return render(request,"vuetest.html",{})
 def coupon_count(request):
     total = {}
     dic = UserCoupon.objects.filter(type='heyue').aggregate(count_user=Count('user', distinct=True),

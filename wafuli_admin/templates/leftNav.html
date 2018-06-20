@@ -1,0 +1,85 @@
+<el-menu
+  :default-active="activeNav"
+  class="el-menu-vertical-demo"
+  background-color="#545c64"
+  text-color="#fff"
+  active-text-color="#ffd04b">
+  
+  <el-submenu index="1">
+    <template slot="title">
+      <i class="el-icon-star-on"></i>
+      <span>用户</span>
+    </template>
+    <el-menu-item-group>
+      <template slot="title">用户相关的操作</template>
+      <el-menu-item index="1-1"><a class="el-menu-a" href="{%url 'admin_index'%}">首页</a></el-menu-item>
+      <el-menu-item index="1-2"><a class="el-menu-a" href="{%url 'admin_user'%}">用户管理</a></el-menu-item>
+      <el-menu-item index="1-3"><a class="el-menu-a" href="{%url 'admin_apply'%}">申请名单</a></el-menu-item>
+      <el-menu-item index="1-4"><a class="el-menu-a" href="{%url 'admin_perform'%}">邀请奖励</a></el-menu-item>
+    </el-menu-item-group>
+  </el-submenu>
+  
+  <el-submenu index="2">
+    <template slot="title">
+      <i class="el-icon-printer"></i>
+      <span>提现打款</span>
+    </template>
+    <el-menu-item-group>
+      <template slot="title">提现打款相关的操作</template>
+      <el-menu-item index="2-1"><a class="el-menu-a" href="{%url 'admin_withdraw'%}">提现管理</a></el-menu-item>
+      <el-menu-item index="2-2"><a class="el-menu-a" href="/Admin/admin_pay/">打款管理</a></el-menu-item>
+      <el-menu-item index="2-3"><a class="el-menu-a" href="{%url 'admin_charge'%}">记账查询</a></el-menu-item>
+    </el-menu-item-group>
+  </el-submenu>
+  
+  <el-submenu index="3">
+    <template slot="title">
+      <i class="el-icon-document"></i>
+      <span>交单数据</span>
+    </template>
+    <el-menu-item-group>
+      <template slot="title">交单数据相关的操作</template>
+      <el-menu-item index="3-1"><a class="el-menu-a" href="{%url 'admin_office'%}">官方数据</a></el-menu-item>
+      <el-menu-item index="3-2"><a class="el-menu-a" href="{%url 'admin_private'%}">自建数据</a></el-menu-item>
+      <el-menu-item index="3-3"><a class="el-menu-a" href="{%url 'admin_merchant_investlog'%}">放单数据</a></el-menu-item>
+    </el-menu-item-group>
+  </el-submenu>
+  
+  <el-submenu index="4">
+    <template slot="title">
+      <i class="el-icon-rank"></i>
+      <span>放单项目</span>
+    </template>
+    <el-menu-item-group>
+      <template slot="title">放单项目相关的操作</template>
+      <el-menu-item index="4-1"><a class="el-menu-a" href="{%url 'admin_merchant_project'%}">放单项目申请</a></el-menu-item>
+      <el-menu-item index="4-2"><a class="el-menu-a" href="{%url 'admin_merchant_show'%}">放单项目查看</a></el-menu-item>
+      <el-menu-item index="4-3"><a class="el-menu-a" href="{%url 'admin_merchant_look'%}">放单分析</a></el-menu-item>
+    </el-menu-item-group>
+  </el-submenu>
+  
+  <el-submenu index="5">
+    <template slot="title">
+      <i class="el-icon-view"></i>
+      <span>保证金</span>
+    </template>
+    <el-menu-item-group>
+      <template slot="title">保证金相关的操作</template>
+      <el-menu-item index="5-1"><a class="el-menu-a" href="{%url 'admin_margin'%}">保证金</a></el-menu-item>
+      <el-menu-item index="5-2"><a class="el-menu-a" href="{%url 'admin_margin_query'%}">保证金查询</a></el-menu-item>
+    </el-menu-item-group>
+  </el-submenu>
+  
+  <el-submenu index="6">
+    <template slot="title">
+      <i class="el-icon-goods"></i>
+      <span>红包管理</span>
+    </template>
+    <el-menu-item-group>
+      <template slot="title">红包管理相关的操作</template>
+      <el-menu-item index="6-1"><a class="el-menu-a" href="{%url 'coupon_count'%}">红包统计</a></el-menu-item>
+      <el-menu-item index="6-2"><a class="el-menu-a" href="{%url 'coupon_manage'%}">红包管理</a></el-menu-item>
+      <el-menu-item index="6-3"><a class="el-menu-a" href="{%url 'coupon_send'%}">红包发放</a></el-menu-item>
+    </el-menu-item-group>
+  </el-submenu>
+</el-menu>

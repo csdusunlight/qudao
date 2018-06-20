@@ -31,7 +31,7 @@ def index(request):
     data.update(recom_projects=recom_projects)
 
     #合作平台
-    platforms = Company.objects.order_by("-priority")[0:20]
+    platforms = Company.objects.order_by("-priority")[0:18]
     data.update(platforms=platforms)
     template = 'm_index.html' if request.mobile else 'index.html'
     return render(request, template, data)

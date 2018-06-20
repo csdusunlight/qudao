@@ -408,7 +408,7 @@ def admin_import_merchant_investlog(request):
                 result = row[3]
                 reason = row[4]
                 investlog = InvestLog.objects.get(id=id)
-                if not investlog.audit_state in ['1','3'] or investlog.translist.exists() or investlog.preaudit_state!='0':
+                if not investlog.audit_state in ['1','3'] or investlog.preaudit_state!='0':
                     continue
                 investlog_user = investlog.user
                 translist = None
@@ -419,10 +419,7 @@ def admin_import_merchant_investlog(request):
                     translist = charge_money(investlog_user, '0', cash, project_title, auditlog=investlog)
                     investlog.settle_amount += cash
                     if broker_amount == 0 and new_broker_amount > 0:
-                        try:
-                            charge_margin(investlog.project.user, '1', new_broker_amount, "佣金", auditlog=investlog)
-                        except:
-                            continue
+                        charge_margin(investlog.project.user, '1', new_broker_amount, "佣金", auditlog=investlog)
                         investlog.broker_amount = new_broker_amount
 #                     #活动插入
 #                     on_audit_pass(request, investlog)

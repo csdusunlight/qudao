@@ -293,7 +293,6 @@ def apply_for_channel_user(request):
                                       user_custom_volumn=user_custom_volumn,
                                       user_funds_volumn=user_funds_volumn,
                                       user_invest_orientation=user_invest_orientation,
-                                      submit_time= time.strftime("%Y-%m-%d %H:%M:%S"),
                                       audit_state='1')
             current_user.is_channel = '-1'
             current_user.save(update_fields=[
@@ -325,7 +324,6 @@ def apply_for_fangdan_user(request):
         apply_pic_url = request.POST.get('apply_pic_url', None)
         contract_pic_url = request.POST.get('contract_pic_url', None)
         rebate_pic_url = request.POST.get('rebate_pic_url', None)
-
         if apply_method in ["1","2"]:
             ApplyLogForFangdan.objects.create(user=current_user,
                                               apply_method=apply_method,
@@ -334,7 +332,6 @@ def apply_for_fangdan_user(request):
                                               apply_pic_url=apply_pic_url,
                                               contract_pic_url=contract_pic_url,
                                               rebate_pic_url=rebate_pic_url,
-                                              submit_time= time.strftime("%Y-%m-%d %H:%M:%S"),
                                               audit_state='1')
             current_user.is_merchant = '-1'
             current_user.save(update_fields=[

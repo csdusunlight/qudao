@@ -28,7 +28,7 @@ from collections import OrderedDict
 from docs.models import DocStatis
 from django.core.cache import cache
 from public.tools import login_required_ajax, has_permission,\
-    has_post_permission, random_code
+    has_post_permission, random_code, is_merchant
 from xlwt.Workbook import Workbook
 from xlwt.Style import easyxf
 import StringIO
@@ -41,7 +41,7 @@ logger = logging.getLogger('wafuli')
 @csrf_exempt
 @login_required
 @transaction.atomic
-@has_permission('100')
+@is_merchant
 def preaudit_investlog(request):
     admin_user = request.user
     if request.method == "GET":
@@ -175,7 +175,7 @@ def preaudit_investlog(request):
         return JsonResponse(res)
     
 @csrf_exempt
-@has_permission('100')
+@is_merchant
 def stop_project(request):
     res = {}
     id = request.POST.get('id')
@@ -195,21 +195,21 @@ def stop_project(request):
     return JsonResponse(res)
 
 @login_required
-@has_permission('100')
+@is_merchant
 def proj_manage(request):
     return render(request, 'proj_manage.html')  
 @login_required
-@has_permission('100')  
+@is_merchant  
 def proj_add(request):
     return render(request, 'proj_add.html')
 @login_required
-@has_permission('100')
+@is_merchant
 def fangdan_audit(request):
     return render(request, 'fangdan_audited.html')
     
 @csrf_exempt
 @login_required
-@has_permission('100')
+@is_merchant
 def merchant(request):
     user = request.user
     if request.method == 'GET':
@@ -287,18 +287,18 @@ def merchant(request):
 
 @csrf_exempt
 @login_required
-@has_permission('100')
+@is_merchant
 def merchant_detail_proj(request):
     return render(request,'merchant_detail_proj.html',{})
 
 @csrf_exempt
 @login_required
-@has_permission('100')
+@is_merchant
 def merchant_detail_day(request):
     return render(request,'merchant_detail_day.html',{})
 
 @login_required_ajax
-@has_permission('100')
+@is_merchant
 def get_project_statis_byday(request):
     user = request.user
     _range = request.GET.get('range', 0)
@@ -363,7 +363,7 @@ def get_project_statis_byday(request):
     return JsonResponse(projects_statis_dict)
 
 @login_required_ajax
-@has_permission('100')
+@is_merchant
 def get_days_statis(request):
     user = request.user
     _range = request.GET.get('range', 1)
@@ -402,7 +402,7 @@ def get_days_statis(request):
 
 @csrf_exempt
 @login_required
-@has_permission('100')
+@is_merchant
 def margin_manage(request):
     user = request.user
     if request.method == 'GET':
@@ -626,7 +626,7 @@ def export_merchant_investlog(request):
     return response
 
 @csrf_exempt
-@has_post_permission('100')
+@is_merchant
 def import_merchant_investlog(request):
     admin_user = request.user
     ret = {'code':-1}
@@ -777,7 +777,7 @@ def transfer_callback(request):
     return JsonResponse({'code':0})
 
 @csrf_exempt
-@has_permission('100')
+@is_merchant
 def create_zhifubao_transaction(request):
     amount = request.POST.get('amount')
     amount = Decimal(amount)

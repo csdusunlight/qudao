@@ -116,7 +116,7 @@
             }
             
             if(item.type === "heyue") {
-              if(item.settle_amount > 0 && item.settle_count > 0) {
+              if((item.settle_amount > 0 && item.settle_count > 0) || (item.settle_amount == 0 && item.settle_count == 0) ) {
                 hongbao_tips += item.start_date + '至' + item.end_date + '内交单，在红包有效期内，结算单数达到' + item.settle_count + '单' + ((item.condtype === 'or') ? ' 或者 ' : ' 并且 ') + '结算金额达到' + item.settle_amount + '元';
               } else if(item.settle_amount > 0) {
                 hongbao_tips += item.start_date + '至' + item.end_date + '内交单，在红包有效期内，结算金额达到' + item.settle_amount + '元';
@@ -148,7 +148,7 @@
               str_html += '<div class="hongbao_box">';
               //根据type类型来渲染提示框
               if(item.type === "heyue") {
-                if(item.settle_amount > 0 && item.settle_count > 0) {
+                if((item.settle_amount > 0 && item.settle_count > 0) ||(item.settle_amount == 0 && item.settle_count == 0)) {
                   str_html += '<div class="'+ h_classname +'" data-microtip-size="large" data-microtip="'+ hongbao_tips +'" data-microtip-position="top">';
                 } else if(item.settle_amount > 0) {
                   str_html += '<div class="'+ h_classname +'" data-microtip-size="large" data-microtip="'+ hongbao_tips +'" data-microtip-position="top">';
@@ -167,7 +167,7 @@
                 '</div>' +
                 '<p class="time">有效期至：' + item.expire + '</p>';
               if(item.type === "heyue") { //根据type值来渲染底部文字
-                if(item.settle_amount > 0 && item.settle_count > 0) {
+                if((item.settle_amount > 0 && item.settle_count > 0) || (item.settle_amount == 0 && item.settle_count == 0)) {
                   str_html += '<div class="btm_box after"><span class="all">'+ hongbao_tips +'"</span></div>'
                 } else if(item.settle_amount > 0) {
                   str_html += '<div class="btm_box after"><span class="all" data-type="' + item.type + '">'+ hongbao_tips +'</span></div>'

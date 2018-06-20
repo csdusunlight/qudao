@@ -201,7 +201,7 @@
 					  } else {
 					    var project_title = '激活条件：在';
 					  }
-            if(data.results[i].settle_amount > 0 && data.results[i].settle_count > 0){
+            if((data.results[i].settle_amount > 0 && data.results[i].settle_count > 0) || (data.results[i].settle_amount == 0 && data.results[i].settle_count == 0)){
               hongbao_tips += '<div class="btm_text" data-type="' + data.results[i].type + '"><span>'+ project_title + data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算单数达到'+ data.results[i].settle_count +'单'+ ((data.results[i].condtype === 'or') ? ' 或者 ' : ' 并且 ') +'结算金额达到'+ data.results[i].settle_amount +'元</span></div>'
             }else if(data.results[i].settle_amount > 0){
               hongbao_tips += '<div class="btm_text" data-type="' + data.results[i].type + '">'+ project_title + data.results[i].start_date +'至'+ data.results[i].end_date +'内交单，在红包有效期内，结算金额达到' + data.results[i].settle_amount + '元</div>'

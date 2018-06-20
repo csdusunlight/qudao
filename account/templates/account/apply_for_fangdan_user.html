@@ -168,12 +168,13 @@
     </div>
     <div class="message">
       <div class="message_item">
-        <i class="icon"><img src="{% static 'images/cgimg.png' %}"/></i>
+        <i class="icon"><img src="{% static 'images/right_icon.png' %}"/></i>
         <h2>提交成功</h2>
         <p>您已经成功提交申请，请等待1-3天左右的审核期，审核结果将会在系统站内信和手机短信中通知您</p>
         <div class="butt_return">返回</div>
       </div>
     </div>
+    <div class="disappear hide">提交失败，请检查提交内容！</div>
     </div>
     {% include "footer.html" %}
     <script>
@@ -483,7 +484,13 @@
                 }
               });
           } else {
-            alert(str)
+            $('.disappear').addClass('show')
+            $('.disappear').addClass('animation_dlaodit')
+            setTimeout(function () {
+              $('.disappear').removeClass('show')
+              $('.disappear').addClass('hide')
+              $('.disappear').removeClass('animation_dlaodit')
+            },2000)
           }
         })
         
@@ -584,7 +591,13 @@
                 }
               });
           } else {
-            alert(str)
+            $('.disappear').addClass('show')
+            $('.disappear').addClass('animation_dlaodit')
+            setTimeout(function () {
+              $('.disappear').removeClass('show')
+              $('.disappear').addClass('hide')
+              $('.disappear').removeClass('animation_dlaodit')
+            },2000)
           }
         })
         //获取焦点事件

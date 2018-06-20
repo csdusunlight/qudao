@@ -59,18 +59,25 @@ input.input_style:focus {outline:none;border: 1px solid #91c120;}
 .successbtn{float: right; width: 230px; height: 40px; line-height: 40px; text-align: center; background-color: #91c11d; border-radius: 6px; cursor: pointer;}
 .successbtn:hover{background-color: #a3d921;}
 .scroll_hide{padding-left: 17px; overflow: hidden;}
-.message{display: none; position: fixed; top: 50%; left: 50%; margin-top: -90px; margin-left: -310px; background-color: #fff; padding: 20px; border-radius: 5px;}
+.message{display: none; position: fixed; top: 50%; left: 50%; margin-top: -90px; margin-left: -310px; background-color: #f5f5f5; padding: 20px; border-radius: 5px;}
 .message_item{position: relative; padding-left: 55px; width: 620px; height: 130px;}
 .message_item i{position: absolute; left: 0; top: 0; width: 44; height: 44;}
 .message_item i img{width: 44px; height: 44px;}
 .message_item h2{font-size: 18px; color: #353535; margin-bottom: 8px;}
-.message_item p{font-size: 15px; color: #8d8d8d;}
-.message_item .butt_return{width: 95px; font-size: 13px; height: 30px; line-height: 28px; text-align: center; border: 1px solid #D3D3D3; border-radius: 3px; cursor: pointer; margin-top: 20px;}
+.message_item p{font-size: 15px; color: #222;}
+.message_item .butt_return{width: 95px; font-size: 13px; height: 30px; line-height: 28px; text-align: center; border: 1px solid #222; border-radius: 3px; cursor: pointer; margin-top: 20px; color: #222;}
+.disappear{ position: fixed; width: 220px; height: 44px; line-height: 44px; text-align: center; background-color: #000000; font-size: 13px; border-radius: 5px; color: #fff; opacity: 0.5; top: 50%; left: 50%; margin-left: -110px; margin-top: -20px;}
 .animation{
   display: block;
   -webkit-animation: myfirst 0.5s ease-out;  
   -moz-animation: myfirst 0.5s ease-out;  
   animation: myfirst 0.5s ease-out;
+}
+.animation_dlaodit{
+  display: block;
+  -webkit-animation: dlaodit 0.3s ease-out;  
+  -moz-animation: dlaodit 0.3s ease-out;  
+  animation: dlaodit 0.3s ease-out;
 }
 @keyframes myfirst
 {
@@ -150,6 +157,64 @@ input.input_style:focus {outline:none;border: 1px solid #91c120;}
   }
   100% {
     -moz-transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes dlaodit
+{
+  0% {
+    transform: scale(0.7);
+    opacity: 0.7;
+  }
+  30%  {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  60%  {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@-webkit-keyframes dlaodit
+{
+  0% {
+    transform: scale(0.7);
+    opacity: 0.7;
+  }
+  30%  {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  60%  {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@-moz-keyframes dlaodit
+{
+  0% {
+    transform: scale(0.7);
+    opacity: 0.7;
+  }
+  30%  {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  60%  {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
     opacity: 1;
   }
 }

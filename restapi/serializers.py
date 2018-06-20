@@ -24,7 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = MyUser
         fields = ('id', 'mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'with_total','accu_income','is_book_email_notice',
                   'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number', 'is_autowith',
-                  'submit_bg', 'domain_name', 'cs_qq', 'has_permission100','num_message_sync','margin_account', 'fanshu_domain', 'zhifubao','has_permission200')
+                  'submit_bg', 'domain_name', 'cs_qq', 'is_merchant','num_message_sync','margin_account', 'fanshu_domain', 'zhifubao','has_permission200')
         read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level', 'margin_account')
 
 class ApplyLogForChannelSerializer(serializers.ModelSerializer):

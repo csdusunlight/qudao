@@ -79,8 +79,6 @@ class ApplyLogForFangdanFilter(django_filters.rest_framework.FilterSet):
     qq_name = django_filters.CharFilter(name="user",lookup_expr='qq_name__contains')
     profile = django_filters.CharFilter(name="user",lookup_expr='profile__contains')
     level = django_filters.CharFilter(name="user",lookup_expr='level__contains')
-    user_orgin = django_filters.CharFilter(name="user_orgin",lookup_expr='user_orgin__contains')
-    audit_state = django_filters.CharFilter(name="audit_state",lookup_expr='audit_state__contains')
     class Meta:
         model = ApplyLogForFangdan
         fields = '__all__'

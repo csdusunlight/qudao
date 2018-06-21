@@ -29,7 +29,7 @@ body, div, span, header, footer, nav, section, aside, article, ul, dl, dt, dd, l
 .icon_right{position: absolute; width: 77px; height: 156px; top: 50%; right: 0;  margin-top: -78px; background: url(../images/mg_right.png) no-repeat; cursor: pointer;}
 .lunbo{ width: 1040px; height: 150px; overflow: hidden; margin: 0 auto;}
 .lunbo .item{width:250px; height: 150px; float: left; text-align: center; padding-top: 30px; box-sizing: border-box; background-color: #fff; font-size: 13px; margin:0 5px;}
-.lunbo .item_logo{margin-bottom: 25px;}
+.lunbo .item_logo{margin-bottom: 25px; height: 56px;}
 .process{width: 1250px; margin: 0 auto;text-align: center; padding: 70px 0;}
 .process_title{font-weight: normal; font-size: 18px;}
 .process_item{margin-top: 55px;}

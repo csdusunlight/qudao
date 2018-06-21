@@ -212,6 +212,7 @@ class SubscribeShipDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsOwnerOrStaff,)
     
 class AnnouncementList(BaseViewMixin, generics.ListCreateAPIView):
+    permission_classes = ()
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
     ordering_fields = ('state', 'priority')
     queryset = Announcement.objects.all()
@@ -294,6 +295,7 @@ class CompanyList(BaseViewMixin, generics.ListAPIView):
     serializer_class = CompanySerializer
     pagination_class = MyPageNumberPagination
 class CompanyList2(BaseViewMixin, generics.ListAPIView):
+    permission_classes = ()
     queryset = Company.objects.filter(project__state='10',project__is_official=True,
                                       project__is_addedto_repo=True).distinct()
     serializer_class = CompanySerializer

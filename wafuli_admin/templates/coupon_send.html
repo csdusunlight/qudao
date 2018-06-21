@@ -90,7 +90,7 @@
             </el-table-column>
             <el-table-column
               label="开始时间">
-              <template slot-scope="scope">${ scope.row.start_date }</template>
+              <template slot-scope="scope">${ scope.row.start_date ? scope.row.start_date : '立即开始' }</template>
             </el-table-column>
             <el-table-column
               label="红包天数">
@@ -344,7 +344,7 @@
           this.$refs[formName].validate(function(valid) {
             if (valid) {
               console.log(app.hongbaoPlanForm)
-              if (that.submitFlag = 'edit') {
+              if (that.submitFlag == 'edit') {
               	$.ajax({
                   url: "/coupon/contracts/" + app.hongbaoPlanForm.id,
                   dataType:"json",

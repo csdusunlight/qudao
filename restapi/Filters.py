@@ -120,7 +120,8 @@ class ProjectFilter(django_filters.rest_framework.FilterSet):
     qq_name = django_filters.CharFilter('user', lookup_expr='qq_name__contains')
     class Meta:
         model = Project
-        fields = ['state','type','is_multisub_allowed','is_official','category', 'user_mobile', 'qq_name', 'is_addedto_repo']
+        fields = ['state','type','is_multisub_allowed','is_official','category', 'user_mobile', 'qq_name', 'is_addedto_repo',
+                  'current_state_date']
 
 class MessageFilter(django_filters.rest_framework.FilterSet):
     title =django_filters.CharFilter(name="title")

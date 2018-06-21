@@ -212,6 +212,7 @@ class SubscribeShipDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsOwnerOrStaff,)
     
 class AnnouncementList(BaseViewMixin, generics.ListCreateAPIView):
+    permission_classes = ()
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
     ordering_fields = ('state', 'priority')
     queryset = Announcement.objects.all()

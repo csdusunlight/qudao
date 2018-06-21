@@ -77,13 +77,13 @@
 			width: 430px;
 			height: 44px;
 			padding: 2px 2px;
-			background: #91c11d;
+			background: #ff8c19;
 		}
 
 		.searchBtn {
 			width: 100px;
 			height: 40px;
-			background: url(../../../static/images/search.png) no-repeat center center;
+			background: url(../../../static/images/search_2.png) no-repeat center center;
 			cursor: pointer;
 			margin-left: 5px;
 		}
@@ -104,9 +104,11 @@
 		}
 
 		.hot_search_item:hover {
-			color: #a5cb4b;
+			color: #fd8b18;
 		}
-
+		.all{
+			color: #fd8b18;
+		}
 		.all_projects_item {
 			display: inline-block;
 			padding: 5px 8px;
@@ -187,6 +189,9 @@
 		.el-carousel {
 			height: 240px;
 		}
+		.link{
+			color: #91c11d;
+		}
 	</style>
 </head>
 
@@ -206,7 +211,7 @@
 								<el-carousel trigger="click" height="205px" :interval="5000" indicator-position="outside">
 									<el-carousel-item v-for="item in newProject" :key="item[0].id">
 										<div class="newProItem" v-for="i in item" :key="i.id">
-											<span>${i.title}</span>
+											<span>${i.title}{{is_login}}</span>
 											<label class="time">上线时间：${i.pub_date.split('T')[0]}</label>
 										</div>
 									</el-carousel-item>
@@ -274,29 +279,61 @@
 						<el-popover placement="bottom-end" width="410" trigger="hover">
 							<!-- 获取全部项目 -->
 							<div class="all_projects_item" v-for='item in all_project' @click="search_all($event,item.name)">${ item.name }</div>
-							<span class="hot_search_item" slot="reference">全部项目</span>
+							<span class="hot_search_item all" slot="reference">全部项目</span>
 						</el-popover>
 					</div>
 				</div>
 				<!-- 项目部分 -->
-				<div class="table-box">
+				<div class="table-box" v-if='"{{user.is_authenticated}}" == "True"'>
 					<el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="table_data" style="width: 100%;">
 						<el-table-column label="平台">
 							<template slot-scope="scope">
-								<a :href="scope.row.strategy"><img :src="scope.row.logo" /></a>
+								<a :href="scope.row.strategy">
+									<img :src="scope.row.logo" />
+								</a>
 							</template>
 						</el-table-column>
 						<el-table-column label="推广标期">
-							<template slot-scope="scope"><a :href="scope.row.strategy">${ scope.row.term }</a></template>
+							<template slot-scope="scope">
+								<a :href="scope.row.strategy">${ scope.row.term }</a>
+							</template>
 						</el-table-column>
 						<el-table-column label="投资档位">
-							<template slot-scope="scope"><a :href="scope.row.strategy">${ scope.row.display_price }</a></template>
+							<template slot-scope="scope">
+								<a :href="scope.row.strategy">${ scope.row.display_price }</a>
+							</template>
 						</el-table-column>
 						<el-table-column label="结算价格">
-							<template slot-scope="scope"><a :href="scope.row.strategy">${ scope.row.investrange }</a></template>
+							<template slot-scope="scope">
+								<a :href="scope.row.strategy">${ scope.row.investrange }</a>
+							</template>
 						</el-table-column>
 						<el-table-column label="备注说明">
-							<template slot-scope="scope"><a :href="scope.row.strategy">${ scope.row.remark }</a></template>
+							<template slot-scope="scope">
+								<a :href="scope.row.strategy">${ scope.row.remark }</a>
+							</template>
+						</el-table-column>
+					</el-table>
+					<div class="no_data" v-show="show">没有更多数据了~</div>
+				</div>
+				<div class="table-box" v-else>
+					<el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="table_data" style="width: 100%;">
+						<el-table-column label="平台">
+							<template slot-scope="scope">
+								<img :src="scope.row.logo" />
+							</template>
+						</el-table-column>
+						<el-table-column label="推广标期">
+							<template slot-scope="scope"><a class="link" href="/account/login/">登陆后查看</a></template>
+						</el-table-column>
+						<el-table-column label="投资档位">
+							<template slot-scope="scope"><a class="link" href="/account/login/">登陆后查看</a></template>
+						</el-table-column>
+						<el-table-column label="结算价格">
+							<template slot-scope="scope"><a class="link" href="/account/login/">登陆后查看</a></template>
+						</el-table-column>
+						<el-table-column label="备注说明">
+							<template slot-scope="scope">${ scope.row.remark }</template>
 						</el-table-column>
 					</el-table>
 					<div class="no_data" v-show="show">没有更多数据了~</div>
@@ -304,6 +341,7 @@
 			</div>
 		</div>
 	</div>
+	
 
 	<script type="text/javascript">
 		var app = new Vue({
@@ -326,9 +364,10 @@
 				rowStyle: {
 					'text-align': 'center',
 				},
-				loadFlag: true
+				loadFlag: true,
 			},
 			created: function () {
+				console.log('是否登录：','{{user.is_authenticated}}')
 				var that = this;
 				$.ajax({
 					type: "get",
@@ -347,8 +386,6 @@
 					var scrollTop = $(this).scrollTop();
 					var scrollHeight = $(document).height();
 					var windowHeight = $(this).height();
-					var counter = 0;
-					var isEnd = false;
 					if (scrollHeight - scrollTop - windowHeight < 100) {
 						if (that.loadFlag) {
 							that.loadFlag = false;
@@ -363,8 +400,6 @@
 										if (data) {
 											that.table_data = that.table_data.concat(data);
 											that.page++
-											console.log(that.table_data)
-											console.log(that.page)
 										} else {
 											show = true;
 										}
@@ -382,6 +417,7 @@
 					url: '/restapi/company2/',
 					type: 'get',
 					async: true,
+					dataType:'json',
 					success: function (res) {
 						if (res.code == 0) {
 							app.all_project = res.results
@@ -395,7 +431,7 @@
 				})
 				//新上项目数据加载
 				$.ajax({
-					url: '/restapi/projects/?state=00',
+					url: '/restapi/projects/?state=10&current_state_date_range_0='+that.getDate(-3),
 					type: 'get',
 					async: true,
 					dataType: 'json',
@@ -420,9 +456,9 @@
 						console.log('出错了');
 					}
 				})
-				//结束项目
+				//结束项目数据加载
 				$.ajax({
-					url: '/restapi/projects/?state=20',
+					url: '/restapi/projects/?state=20&current_state_date_range_0='+that.getDate(-3),
 					type: "GET",
 					async: true,
 					dataType: 'json',
@@ -468,9 +504,6 @@
 				})
 			},
 			methods: {
-				getData: function () {
-					
-				},
 				//点击搜索
 				search_data: function () {
 					var that = this;
@@ -533,8 +566,17 @@
 
 						}
 					})
+				},
+				getDate: function (AddDayCount) {
+					var dd = new Date();
+					dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期    
+					var y = dd.getFullYear();
+					var m = (dd.getMonth() + 1) < 10 ? "0" + (dd.getMonth() + 1) : (dd.getMonth() + 1);//获取当前月份的日期，不足10补0    
+					var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();//获取当前几号，不足10补0    
+					return y + "-" + m + "-" + d;
 				}
 			}
+
 
 		})
 	</script>

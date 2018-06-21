@@ -42,7 +42,7 @@ def project_all(request):
     if request.user.is_authenticated():
         template = 'm_project_repo.html' if request.mobile else 'project_repo.html'
     else:
-        template = 'm_project_repo_nologin.html' if request.mobile else 'project_repo_nologin.html'
+        template = 'm_project_repo_nologin.html' if request.mobile else 'project_repo.html'         #llc
     return render(request, template, {'hot_platforms':hot_platforms})
     
 def user_guide(request):

@@ -20,7 +20,7 @@ class Command(BaseCommand):
         sevent_days_ago = datetime.datetime.now() - datetime.timedelta(days=7)
         coms = Company.objects.all().update(view_count=0)
         
-        ret =InvestLog.objects.filter(is_official=True, is_osubmit_time__gte=sevent_days_ago, project__state__in=['10','20']).values('project__company_id').\
+        ret =InvestLog.objects.filter(is_official=True, submit_time__gte=sevent_days_ago, project__state__in=['10','20']).values('project__company_id').\
             annotate(count=Count('id')).order_by('project__company_id')
         for item in ret:
             print item

@@ -202,8 +202,7 @@
           <el-select 
             v-model="hongbaoPlanForm.project"
             filterable
-            placeholder="请选择活动区域">
-            <el-option label="全部" value=""></el-option>
+            placeholder="不选默认为全部项目">
             <el-option
               v-for="item in projectList"
               :key="item.id"

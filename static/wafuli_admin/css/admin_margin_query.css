@@ -46,7 +46,8 @@
 .tab input[type='datetime-local']:hover{
     background: none;
 }
-.tab input[type='text']{
+.tab input[type='text'],
+.tab select{
     width: 300px;
     height: 30px;
     padding: 3px 5px;

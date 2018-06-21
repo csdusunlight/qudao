@@ -7,9 +7,9 @@
     $(function () {
         $("li.home22").toggleClass("on");
         //数据
-        var data = '<table width="100%"><tr><th>发放日期</th><th>红包方案</th><th>QQ昵称</th><th>手机号</th><th>红包金额</th><th>有效期</th><th>是否领取</th>' +
+        var data = '<table width="100%"><tr><th>发放日期</th><th>红包方案</th><th>QQ昵称</th><th>手机号</th><th>红包金额</th><th>有效期</th><th>红包状态</th><th>是否领取</th>' +
             '[results]<tr><td>{create_date}</td><td>{contract_name}</td><td>{qq_name}</td><td>{mobile}</td><td>{award}</td>' +
-            '<td>{expire}</td><td class="is_get" data-state="{state}">否</td></tr>[/results]</table>';
+            '<td>{expire}</td><td>{state_des}</td><td class="is_get" data-state="{state}">否</td></tr>[/results]</table>';
 
         //回调函数
         function pagecallback() {
@@ -41,6 +41,7 @@
             var eTime = $('.endTime').val();
             var phone = $('.phone').val();
             var coupon_plan = $('.coupon_plan').val();
+            var state = $('.state').val();
             var newUrl = '/coupon/coupons/?page={page}&pageSize={pageSize}';
             if (sTime) {
                 newUrl += '&create_0=' + sTime;
@@ -53,6 +54,9 @@
             }
             if (coupon_plan) {
                 newUrl += '&contract_contains=' + coupon_plan;
+            }
+            if (state) {
+                newUrl += '&state=' + state;
             }
             console.log(newUrl);
 
@@ -81,13 +85,21 @@
                 <td>结束时间：
                     <input type="datetime-local" class="endTime">
                 </td>
-            </tr>
-            <tr>
                 <td>用户手机号：
                     <input type="text" class="phone">
                 </td>
+            </tr>
+            <tr>
                 <td>红包方案：
                     <input type="text" class="coupon_plan">
+                </td>
+                <td>红包状态：
+                      <select name="selectAge" class="state">
+                          <option value="">全部</option>
+                          <option value="0">未解锁</option>
+                          <option value="1">已解锁</option>
+                          <option value="2">已领取</option>
+                      </select>
                 </td>
             </tr>
         </table>

@@ -130,7 +130,7 @@
                 <template v-else>
                   <el-popover trigger="hover" placement="left">
                     <p>
-                      <!--<el-button type="success" size="mini" icon="el-icon-edit" @click="dialogPlanVisible = true">编辑</el-button>-->
+                      <el-button type="success" size="mini" icon="el-icon-edit" @click="editPlan(scope.row)">编辑</el-button>
                       <el-button type="danger" size="mini" icon="el-icon-delete" @click="delPlan(scope.row.id)">删除</el-button>
                     </p>
                     <div slot="reference" class="name-wrapper">
@@ -245,6 +245,7 @@
           continue_days: '',
           project: ''
         },
+        submitFlag: 'add',
         projectList: [],
         rules: {
           hongbao_plan: [
@@ -321,7 +322,7 @@
                           console.log(ret);
                           that.$notify.success({
                             title: '提示',
-                            message: '成功人数：' + ret.succ_num
+                            message: '发送红包个数：' + ret.succ_num
                           });
                       }
                       else {
@@ -343,16 +344,17 @@
           this.$refs[formName].validate(function(valid) {
             if (valid) {
               console.log(app.hongbaoPlanForm)
-              $.ajax({
-                  url: "/coupon/contracts/",
+              if (that.submitFlag = 'edit') {
+              	$.ajax({
+                  url: "/coupon/contracts/" + app.hongbaoPlanForm.id,
                   dataType:"json",
                   async: false,
-                  type:"POST",
+                  type:"put",
                   data: app.hongbaoPlanForm,
                   success:function(ret){
                       that.$notify.success({
                         title: '提示',
-                        message: '新建方案成功'
+                        message: '修改方案成功'
                       });
                       app.getDataList(1,10);
                       app.getAllPlan();
@@ -361,7 +363,28 @@
                   error:function(ret){
                       alert(ret.responseText);
                   }
-              });
+                });
+              } else{
+                $.ajax({
+                    url: "/coupon/contracts/",
+                    dataType:"json",
+                    async: false,
+                    type:"POST",
+                    data: app.hongbaoPlanForm,
+                    success:function(ret){
+                        that.$notify.success({
+                          title: '提示',
+                          message: '新建方案成功'
+                        });
+                        app.getDataList(1,10);
+                        app.getAllPlan();
+                        that.dialogPlanVisible = false;
+                    },
+                    error:function(ret){
+                        alert(ret.responseText);
+                    }
+                });
+              }
             } else {
               console.log('error submit!!');
               return false;
@@ -399,29 +422,39 @@
         },
         addPlan: function() {
           var that = this;
-          $.ajax({
-            url: "/restapi/projects/?page=1&pageSize=999",
-            dataType: "json",
-            type: "GET", 
-            async: false,
-            success: function(ret) {
-              if(ret.code == 0) {
-                app.projectList = ret.results;
-                that.dialogPlanVisible = true;
-              } else {
-                that.$notify.error({
-                  title: '提示',
-                  message: ret.detail
-                });
-              }
-            },
-            error: function() {
-              that.$notify.error({
-                title: '提示',
-                message: '请检查网络连接'
-              });
-            }
-          });
+          that.submitFlag = 'add';
+          that.getAllProject();
+          that.dialogPlanVisible = true;
+//        $.ajax({
+//          url: "/restapi/projects/?page=1&pageSize=999",
+//          dataType: "json",
+//          type: "GET", 
+//          async: false,
+//          success: function(ret) {
+//            if(ret.code == 0) {
+//              app.projectList = ret.results;
+//            } else {
+//              that.$notify.error({
+//                title: '提示',
+//                message: ret.detail
+//              });
+//            }
+//          },
+//          error: function() {
+//            that.$notify.error({
+//              title: '提示',
+//              message: '请检查网络连接'
+//            });
+//          }
+//        });
+        },
+        editPlan: function(row) {
+          var that = this;
+          that.submitFlag = 'edit';
+          that.getAllProject();
+          that.dialogPlanVisible = true;
+          that.hongbaoPlanForm = row;
+          console.log(row)
         },
         delPlan: function(id) {
           var that = this;
@@ -489,6 +522,31 @@
                     message: '请检查网络连接'
                 });
               }
+          });
+        },
+        getAllProject: function() {
+          var that = this;
+          $.ajax({
+            url: "/restapi/projects/?page=1&pageSize=999",
+            dataType: "json",
+            type: "GET", 
+            async: false,
+            success: function(ret) {
+              if(ret.code == 0) {
+                app.projectList = ret.results;
+              } else {
+                that.$notify.error({
+                  title: '提示',
+                  message: ret.detail
+                });
+              }
+            },
+            error: function() {
+              that.$notify.error({
+                title: '提示',
+                message: '请检查网络连接'
+              });
+            }
           });
         }
       }

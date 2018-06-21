@@ -16,6 +16,7 @@
 	<style type="text/css">
 		#app {
 			min-width: 1310px;
+			min-height: 800px;
 			margin: 20px;
 			background-color: #f5f5f5;
 			box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
@@ -41,9 +42,10 @@
 		}
 
 		.pro_btm {
-			padding: 22px 25px 22px 25px;
+			padding: 5px 25px;
 			background: white;
 			font-size: 16px;
+			min-height: 240px;
 		}
 
 		.new_project {
@@ -54,7 +56,7 @@
 			margin-left: 15px;
 		}
 
-		.pause_project {
+		.end_project {
 			background: linear-gradient(to right, #3faaff, #36c5ff);
 		}
 
@@ -67,7 +69,7 @@
 			position: relative;
 		}
 
-		..el-input__inner {
+		.el-input__inner {
 			outline: none;
 		}
 
@@ -98,10 +100,10 @@
 
 		.hot_search_item {
 			margin-left: 20px;
+			cursor: pointer;
 		}
 
 		.hot_search_item:hover {
-			cursor: pointer;
 			color: #a5cb4b;
 		}
 
@@ -120,7 +122,7 @@
 
 		.table-box {
 			background: white;
-			padding: 18px 32px;
+			padding: 18px 32px 0;
 		}
 
 		.el-table td {
@@ -140,12 +142,50 @@
 		.el-table tr:hover {
 			box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2) !important;
 		}
-		.no_data{
+
+		.no_data {
 			width: 100%;
 			height: 50px;
 			line-height: 70px;
 			text-align: center;
 			font-size: 18px;
+		}
+
+		.newProItem {
+			border-bottom: 1px solid #efefef;
+			font-size: 14px;
+			padding: 5px 0;
+			position: relative;
+		}
+
+		.endProItem {
+			border-bottom: 1px solid #efefef;
+			font-size: 14px;
+			padding: 5px 0;
+			position: relative;
+		}
+
+		.noticeProItem {
+			font-size: 14px;
+			padding: 5px 0;
+			position: relative;
+		}
+
+		.dot {
+			width: 7px;
+			height: 7px;
+			background: #fe9500;
+			border-radius: 50%;
+			display: inline-block;
+		}
+
+		.time {
+			position: absolute;
+			left: 120px;
+		}
+
+		.el-carousel {
+			height: 240px;
 		}
 	</style>
 </head>
@@ -163,37 +203,48 @@
 								<span class="title">新上项目</span>
 							</div>
 							<div class="pro_btm">
-								<!-- <span class="project_item">银谷在线</span> -->
-								<el-carousel height="150px">
-									<el-carousel-item v-for="item in 2" :key="item">
-										<h3>{{ item }}</h3>
+								<el-carousel trigger="click" height="205px" :interval="5000" indicator-position="outside">
+									<el-carousel-item v-for="item in newProject" :key="item[0].id">
+										<div class="newProItem" v-for="i in item" :key="i.id">
+											<span>${i.title}</span>
+											<label class="time">上线时间：${i.pub_date.split('T')[0]}</label>
+										</div>
 									</el-carousel-item>
 								</el-carousel>
 							</div>
 						</div>
 					</el-col>
 					<el-col :span="7">
-						<div class="grid-content bg-purple" style="background: lavender">
-							<div class="pro_top pause_project">
+						<div class="grid-content bg-purple">
+							<div class="pro_top end_project">
 								<span class="title">结束项目</span>
 							</div>
 							<div class="pro_btm">
-								<!-- <span class="project_item">银谷在线</span> -->
-								<el-carousel height="150px">
-									<el-carousel-item v-for="item in 2" :key="item">
-										<h3>{{ item }}</h3>
+								<el-carousel trigger="click" height="205px" :interval="5000" indicator-position="outside">
+									<el-carousel-item v-for="item in endProject" :key="item[0].id">
+										<div class="endProItem" v-for="i in item" :key="i.id">
+											<span>${i.title}</span>
+											<label class="time">上线时间：${i.end_date}</label>
+										</div>
 									</el-carousel-item>
 								</el-carousel>
 							</div>
 						</div>
 					</el-col>
 					<el-col :span="10">
-						<div class="grid-content bg-purple" style="background: lawngreen">
+						<div class="grid-content bg-purple">
 							<div class="pro_top change_project">
 								<span class="title">项目重要通知</span>
 							</div>
 							<div class="pro_btm">
-								<!-- <span class="project_item">银谷在线</span> -->
+								<el-carousel trigger="click" height="205px" :interval="5000" indicator-position="outside">
+									<el-carousel-item v-for="item in noticeProject" :key="item.id">
+										<div class="noticeProItem" v-for="i in item" :key="item.id">
+											<div class="dot"></div>
+											<span style="margin-left: 10px;">${i.content}</span>
+										</div>
+									</el-carousel-item>
+								</el-carousel>
 
 							</div>
 						</div>
@@ -217,40 +268,35 @@
 					<!-- 热搜部分 -->
 					<div class="hot_search">
 						<label>热搜</label>
-						<!-- <span class="hot_search_item">宜人贷</span>
-						<span class="hot_search_item">拍拍贷</span>
-						<span class="hot_search_item">点融网</span>
-						<span class="hot_search_item">你我贷</span>
-						<span class="hot_search_item">金融工场</span>
-						<span class="hot_search_item">爱众财富</span> -->
+						{% for item in hot_platforms %}
+						<span class="hot_search_item" @click="search_item($event,'{{item.name}}')">{{item.name}}</span>
+						{% endfor %}
 						<el-popover placement="bottom-end" width="410" trigger="hover">
-							<div class="all_projects_item">宜人贷</div>
-							
-							<!-- <div class="all_projects_item"></div> -->
-							
-
+							<!-- 获取全部项目 -->
+							<div class="all_projects_item" v-for='item in all_project' @click="search_all($event,item.name)">${ item.name }</div>
 							<span class="hot_search_item" slot="reference">全部项目</span>
 						</el-popover>
 					</div>
 				</div>
 				<!-- 项目部分 -->
 				<div class="table-box">
-					<el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="tableData.results" style="width: 100%;">
-
+					<el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="table_data" style="width: 100%;">
 						<el-table-column label="平台">
-							<template slot-scope="scope">${ scope.row.title }</template>
+							<template slot-scope="scope">
+								<a :href="scope.row.strategy"><img :src="scope.row.logo" /></a>
+							</template>
 						</el-table-column>
 						<el-table-column label="推广标期">
-							<template slot-scope="scope">${ scope.row.term }</template>
+							<template slot-scope="scope"><a :href="scope.row.strategy">${ scope.row.term }</a></template>
 						</el-table-column>
 						<el-table-column label="投资档位">
-							<template slot-scope="scope">${ scope.row.display_price }</template>
+							<template slot-scope="scope"><a :href="scope.row.strategy">${ scope.row.display_price }</a></template>
 						</el-table-column>
 						<el-table-column label="结算价格">
-							<template slot-scope="scope">${ scope.row.investrange }</template>
+							<template slot-scope="scope"><a :href="scope.row.strategy">${ scope.row.investrange }</a></template>
 						</el-table-column>
 						<el-table-column label="备注说明">
-							<template slot-scope="scope">${ scope.row.remark }</template>
+							<template slot-scope="scope"><a :href="scope.row.strategy">${ scope.row.remark }</a></template>
 						</el-table-column>
 					</el-table>
 					<div class="no_data" v-show="show">没有更多数据了~</div>
@@ -264,10 +310,15 @@
 			delimiters: ['${', '}'],
 			el: '#app',
 			data: {
-				show:false,
+				newProject: [],
+				endProject: [],
+				noticeProject: [],
+				show: true,
+				all_project: '',
 				scroll: '',
 				search_ipt: '',
-				tableData: {},
+				table_data: [],
+				// tableData: {},
 				pageSize: 20,
 				page: 1,
 				multipleSelection: [],
@@ -275,6 +326,7 @@
 				rowStyle: {
 					'text-align': 'center',
 				},
+				loadFlag: true
 			},
 			created: function () {
 				var that = this;
@@ -285,76 +337,151 @@
 					success: function (res) {
 						console.log(res.results);
 						if (res.code == 0) {
-							console.log('created');
-							console.log(res);
-							console.log(app.tableData);
-							app.tableData = res;
-							console.log(app.tableData)
+							that.table_data = res.results;
 						} else {
 							console.log(res)
 						}
 					}
 				});
-				//下拉加载
 				$(window).scroll(function () {
 					var scrollTop = $(this).scrollTop();
 					var scrollHeight = $(document).height();
 					var windowHeight = $(this).height();
-					if (scrollTop + windowHeight === scrollHeight) {
-						var add_page = that.page ++;
-						$.ajax({
-							type: "get",
-							url: '/restapi/projects/?state=10&is_official=2&pageSize=' + that.pageSize + '&page=' + add_page,
-							async: true,
-							success: function (res) {
-								console.log(res.results);
-								if (res.code == 0) {
-									app.tableData = res;
-									app.show = true;
-								} else {
-									console.log(res)
+					var counter = 0;
+					var isEnd = false;
+					if (scrollHeight - scrollTop - windowHeight < 100) {
+						if (that.loadFlag) {
+							that.loadFlag = false;
+							$.ajax({
+								type: "get",
+								url: '/restapi/projects/?state=10&is_official=2&pageSize=' + that.pageSize + '&page=' + that.page,
+								async: true,
+								success: function (res) {
+									if (res.code == 0) {
+										that.loadFlag = true;
+										var data = res.results;
+										if (data) {
+											that.table_data = that.table_data.concat(data);
+											that.page++
+											console.log(that.table_data)
+											console.log(that.page)
+										} else {
+											show = true;
+										}
+									} else {
+										console.log('error')
+									}
 								}
-							}
-						});
+							});
+						}
+
 					}
 				})
+				//获取全部项目
+				$.ajax({
+					url: '/restapi/company2/',
+					type: 'get',
+					async: true,
+					success: function (res) {
+						if (res.code == 0) {
+							app.all_project = res.results
+						} else {
+							that.$notify.error({
+								title: '错误',
+								message: res.detail
+							});
+						}
+					}
+				})
+				//新上项目数据加载
+				$.ajax({
+					url: '/restapi/projects/?state=00',
+					type: 'get',
+					async: true,
+					dataType: 'json',
+					success: function (res) {
+						if (res.code == 0) {
+							var arrData = res.results;
+							var length = arrData.length;
+							var num = Math.ceil(length / 6);
+							for (var i = 0; i < num - 1; i++) {
+								that.newProject[i] = arrData.splice(0, 6);
+							}
+							that.newProject[num - 1] = arrData;
 
+						} else {
+							that.$notify.error({
+								title: '错误',
+								message: res.detail
+							});
+						}
+					},
+					error: function () {
+						console.log('出错了');
+					}
+				})
+				//结束项目
+				$.ajax({
+					url: '/restapi/projects/?state=20',
+					type: "GET",
+					async: true,
+					dataType: 'json',
+					success: function (res) {
+						if (res.code == 0) {
+							var arrayData = res.results;
+							var num_1 = Math.ceil(arrayData.length / 6);
+							for (var j = 0; j < num_1 - 1; j++) {
+								that.endProject[j] = arrayData.splice(0, 6);
+							}
+							that.endProject[num_1 - 1] = arrayData
+						} else {
+							that.$notify.error({
+								title: '错误',
+								message: res.detail
+							});
+						}
+					}
+				})
+				//重要项目通知
+				$.ajax({
+					url: '/restapi/announcement/?ordering=state',
+					type: "get",
+					async: false,
+					success: function (res) {
+						console.log('通知：', res.results)
+						if (res.code == 0) {
+							var array_data = res.results;
+							var length = array_data.length;
+							var number = Math.ceil(length / 6);
+							for (var k = 0; k < number - 1; k++) {
+								that.noticeProject[k] = array_data;
+							}
+							that.noticeProject[number - 1] = array_data;
+						} else {
+							that.$notify.error({
+								title: '错误',
+								message: res.detail
+							});
+						}
+
+					}
+				})
 			},
 			methods: {
-				getDataList: function () {
-					var that = this;
-					$.ajax({
-						type: "get",
-						url: '/restapi/projects/?state=10&is_official=2&pageSize=' + that.pageSize + '&page=' + that.page,
-						async: true,
-						success: function (res) {
-							console.log(res.results);
-							if (res.code == 0) {
-								console.log(app.tableData);
-								app.tableData = res;
-								console.log(app.tableData)
-							} else {
-								that.$notify.error({
-									title: '错误',
-									message: res.detail
-								});
-							}
-						}
-					});
+				getData: function () {
+
 				},
 				//点击搜索
-				search_data:function(){
+				search_data: function () {
 					var that = this;
 					$.ajax({
-						url:'/restapi/projects/?state=10&is_official=2&&search='+that.search_ipt,
+						url: '/restapi/projects/?state=10&is_official=2&search=' + that.search_ipt,
 						type: "get",
 						async: true,
 						success: function (res) {
 							console.log(res.results);
 							if (res.code == 0) {
-								console.log(app.tableData);
-								app.tableData = res;
-								console.log(app.tableData)
+								that.table_data = res.results;
 							} else {
 								that.$notify.error({
 									title: '错误',
@@ -363,10 +490,52 @@
 							}
 						}
 					})
-					
+				},
+				//热搜点击搜索
+				search_item: function (e, name) {
+					var that = this;
+					console.log(name)
+					$.ajax({
+						url: '/restapi/projects/?state=10&is_official=2&search=' + encodeURI(name),
+						type: 'get',
+						async: true,
+						dataType: 'json',
+						success: function (res) {
+							if (res.code == 0) {
+								that.table_data = res.results;
+							} else {
+								that.$notify.error({
+									title: '错误',
+									message: res.detail
+								});
+							}
+						}
+					})
+				},
+				//全部项目点击其中一个搜索
+				search_all: function (e, name) {
+					var that = this;
+					console.log(name)
+					$.ajax({
+						url: '/restapi/projects/?state=10&is_official=2&search=' + encodeURI(name),
+						type: 'get',
+						async: false,
+						dataType: 'json',
+						success: function (res) {
+							if (res.code == 0) {
+								that.table_data = res.results;
+							} else {
+								that.$notify.error({
+									title: '错误',
+									message: res.detail
+								});
+							}
+
+						}
+					})
 				}
 			}
-			
+
 		})
 	</script>
 </body>

@@ -118,10 +118,11 @@ class WithdrawLogFilter(django_filters.rest_framework.FilterSet):
 class ProjectFilter(django_filters.rest_framework.FilterSet):
     user_mobile = django_filters.CharFilter('user', lookup_expr='mobile__contains')
     qq_name = django_filters.CharFilter('user', lookup_expr='qq_name__contains')
+    current_state_date_range = django_filters.DateFromToRangeFilter('current_state_date')
     class Meta:
         model = Project
         fields = ['state','type','is_multisub_allowed','is_official','category', 'user_mobile', 'qq_name', 'is_addedto_repo',
-                  'current_state_date']
+                  'current_state_date_range']
 
 class MessageFilter(django_filters.rest_framework.FilterSet):
     title =django_filters.CharFilter(name="title")

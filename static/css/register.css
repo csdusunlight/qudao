@@ -415,6 +415,34 @@ title_pic {
     margin-left: 32px;
 }
 /* 
-    17%
-    18%
+    提交动画
 */
+.hideBox{
+    width: 5px !important;
+    height: 5px !important;
+    position: absolute;right: 245px !important;bottom: 65px !important;
+}
+.loading{
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: yellow;
+    position: absolute;
+    bottom: 15px;
+    right: 108px;
+    animation: typing 1s linear infinite alternate;
+}
+@keyframes typing {
+    0% {
+    background-color: rgba(255,255,255, 1);
+    box-shadow: 12px 0px 0px 0px rgba(255,255,255,0.2), 24px 0px 0px 0px rgba(255,255,255,0.2);
+    }
+    25% {
+        background-color: rgba(255,255,255, 0.4);
+        box-shadow: 12px 0px 0px 0px rgba(255, 255, 255, 1), 24px 0px 0px 0px rgba(255,255,255,0.2);
+    }
+    75% {
+        background-color: rgba(255,255,255, 0.4);
+        box-shadow: 12px 0px 0px 0px rgba(255,255,255,0.2), 24px 0px 0px 0px rgba(255,255,255,1);
+    }
+}

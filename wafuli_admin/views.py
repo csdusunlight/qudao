@@ -1647,6 +1647,11 @@ def coupon_count(request):
     coupon_award = dic.get('sum') or 0
     dic = UserCoupon.objects.filter(type='heyue', state='2').aggregate(count_user=Count('user', distinct=True),
                 count_coupon=Count('*'), sum=Sum('award'))
+    coupon_user_total_obtain = dic.get('count_user') or 0
+    coupon_total_obtain = dic.get('count_coupon') or 0
+    coupon_award_obtain = dic.get('sum') or 0
+    dic = UserCoupon.objects.filter(type='heyue', state='1').aggregate(count_user=Count('user', distinct=True),
+                count_coupon=Count('*'), sum=Sum('award'))
     coupon_user_total_unlock = dic.get('count_user') or 0
     coupon_total_unlock = dic.get('count_coupon') or 0
     coupon_award_unlock = dic.get('sum') or 0
@@ -1656,6 +1661,9 @@ def coupon_count(request):
     total['coupon_user_total_unlock'] = coupon_user_total_unlock
     total['coupon_total_unlock'] = coupon_total_unlock
     total['coupon_award_unlock'] = coupon_award_unlock
+    total['coupon_user_total_obtain'] = coupon_user_total_unlock
+    total['coupon_total_obtain'] = coupon_total_unlock
+    total['coupon_award_obtain'] = coupon_award_unlock
     return render(request,"coupon_count.html",{'total':total})
 
 @csrf_exempt

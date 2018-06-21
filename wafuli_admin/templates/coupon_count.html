@@ -30,9 +30,12 @@ $(document).ready(function(){
                                 	<th>总发放红包个数</th>
                                 	<th>总发放红包用户数</th>
                                 	<th>总发放红包金额</th>
-                                	<th>总激活红包人数</th>
-                                	<th>总激活红包数量</th>
-                                	<th>总激活红包金额</th>
+                                	<th>激活未领取红包人数</th>
+                                	<th>激活未领取红包数量</th>
+                                	<th>激活未领取红包金额</th>
+                                	<th>领取红包人数</th>
+                                	<th>领取红包数量</th>
+                                	<th>领取红包金额</th>
                                 </tr>
                                 <tr>
                                 	<td>{{total.coupon_total}}</td>
@@ -41,6 +44,9 @@ $(document).ready(function(){
                                 	<td>{{total.coupon_user_total_unlock}}</td>
                                 	<td>{{total.coupon_total_unlock}}</td>
                                 	<td>{{total.coupon_award_unlock}}</td>
+                                	<td>{{total.coupon_user_total_obtain}}</td>
+                                	<td>{{total.coupon_total_obtain}}</td>
+                                	<td>{{total.coupon_award_obtain}}</td>
                                 </tr>
                             </table>
                         </div>

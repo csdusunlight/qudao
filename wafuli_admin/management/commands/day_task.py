@@ -35,7 +35,7 @@ class Command(BaseCommand):
         #设置项目结束时间，并删除结束三天以上的项目    
         today = datetime.date.today()
         threedaysago = today - datetime.timedelta(days=3)
-        Project.objects.filter(state='20', current_state_date__isnull=True).update(end_date=today)
+        Project.objects.filter(state='20', current_state_date__isnull=True).update(current_state_date=today)
         projects = Project.objects.filter(state='20', current_state_date__lte=threedaysago)
         for item in projects:
             batch_deletesub(item)

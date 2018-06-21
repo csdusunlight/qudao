@@ -122,7 +122,9 @@ def admin_apply(request):
         return JsonResponse(res)
     else:
         return render(request,"admin_apply.html",)
+
 @csrf_exempt
+@has_post_permission('052')
 def admin_apply_for_fangdan_permission(request):
     if request.method == "POST":
         admin_user = request.user
@@ -805,19 +807,18 @@ def admin_user(request):
                 res['code'] = -5
                 res['res_msg'] = u'您没有操作权限！'
                 return JsonResponse(res)
-            try:
-                perm = AdminPermission.objects.get(code='100')
-            except AdminPermission.DoesNotExist:
-                perm = AdminPermission.objects.create(code='100', name="商家权限")
-            obj_user.admin_permissions.add(perm)
+            obj_user.is_merchant = '1'
+            obj_user.save(update_fields=['is_merchant'])
+            adminlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, type='5')
             res['code'] = 0
         elif type == 7:
             if not admin_user.has_admin_perms('054'):
                 res['code'] = -5
                 res['res_msg'] = u'您没有操作权限！'
                 return JsonResponse(res)
-            perm = AdminPermission.objects.get(code='100')
-            obj_user.admin_permissions.remove(perm)
+            obj_user.is_merchant = '0'
+            obj_user.save(update_fields=['is_merchant'])
+            adminlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, type='5')
             res['code'] = 0
 
         elif type == 8:#添加关于渠道用户被拒绝的操作，返回拒绝的消息和拒绝的原因，消息是固定的，原因是审核者填写的

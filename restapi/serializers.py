@@ -84,26 +84,26 @@ class ApplyLogForFangdanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ApplyLogForFangdan
-        #fields= '__all__'
-        fields = ('id',
-                  'qq_number',
-                  'qq_name',
-                  'username',
-                  'mobile',
-                  'audit_time',
-                  'submit_time',
-                  'profile',
-                  'admin_name',
-                  'level',
-                  "id_name",
-                  "id_num",
-                  "apply_pic_url",
-                  "contract_pic_url",
-                  "rebate_pic_url",
-                  'audit_reason',
-                  'audit_state',
-                  'admin_mobile')
-        read_only_fields = ('admin_name','username','qq_number','qq_name')
+        fields= '__all__'
+        # fields = ('id',
+        #           'qq_number',
+        #           'qq_name',
+        #           'username',
+        #           'mobile',
+        #           'audit_time',
+        #           'submit_time',
+        #           'profile',
+        #           'admin_name',
+        #           'level',
+        #           "id_name",
+        #           "id_num",
+        #           "apply_pic_url",
+        #           "contract_pic_url",
+        #           "rebate_pic_url",
+        #           'audit_reason',
+        #           'audit_state',
+        #           'admin_mobile')
+        #read_only_fields = ('admin_name','uname','qq_number','qq_name')
 
 class ProjectSerializer(serializers.ModelSerializer):
 #     subscribers = UserSerializer(many=True)

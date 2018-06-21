@@ -53,40 +53,35 @@ class UserFilter(django_filters.rest_framework.FilterSet):
 class ApplyLogForChannelFilter(django_filters.rest_framework.FilterSet):
     audit_time = django_filters.DateFromToRangeFilter(name="audit_time")
     submit_time = django_filters.DateFromToRangeFilter(name="submit_time")
-    is_channel = django_filters.CharFilter(name="user.is_channel") #处理状态
-    username = django_filters.CharFilter(name="user.username")
-    audit_username = django_filters.CharFilter(name="admin_user.username")
-    audit_mobile = django_filters.CharFilter(name="admin_user.mobile")#审核者手机
-    mobile = django_filters.CharFilter(name="user.mobile")#
-    qq_number = django_filters.CharFilter(name="user.qq_number")#
-    qq_name = django_filters.CharFilter(name="user.qq_name")
-    profile = django_filters.CharFilter(name="user.profile")
-    level = django_filters.CharFilter(name="user.level")
+    is_channel = django_filters.CharFilter(name="user",lookup_expr='is_channel__contains') #处理状态
+    username = django_filters.CharFilter(name="user",lookup_expr='username__contains')
+    audit_username = django_filters.CharFilter(name="admin_user",lookup_expr='username__contains')
+    audit_mobile = django_filters.CharFilter(name="admin_user",lookup_expr='mobile__contains')#审核者手机
+    mobile = django_filters.CharFilter(name="user",lookup_expr='mobile__contains')#
+    qq_number = django_filters.CharFilter(name="user",lookup_expr='qq_number__contains')#
+    qq_name = django_filters.CharFilter(name="user",lookup_expr='qq_name__contains')
+    profile = django_filters.CharFilter(name="user",lookup_expr='profile__contains')
+    level = django_filters.CharFilter(name="user",lookup_expr='level__contains')
     class Meta:
         model = ApplyLogForChannel
-        fields = ['id', 'username', 'qq_number', 'qq_name', 'mobile', 'audit_time', 'submit_time', 'level',
+        fields = '__all__'
 
-         'audit_reason','audit_username','audit_mobile','audit_state']
 
 class ApplyLogForFangdanFilter(django_filters.rest_framework.FilterSet):
     audit_time = django_filters.DateFromToRangeFilter(name="audit_time")
     submit_time = django_filters.DateFromToRangeFilter(name="submit_time")
-    is_fangdan = django_filters.CharFilter(name="user.is_fangdan") #处理状态
-    username = django_filters.CharFilter(name="user.username")
-    audit_username = django_filters.CharFilter(name="admin_user.username")
-    audit_mobile = django_filters.CharFilter(name="admin_user.mobile")#审核者手机
-    mobile = django_filters.CharFilter(name="user.mobile")#
-    qq_number = django_filters.CharFilter(name="user.qq_number")#
-    qq_name = django_filters.CharFilter(name="user.qq_name")
-    profile = django_filters.CharFilter(name="user.profile")
-    level = django_filters.CharFilter(name="user.level")
-    user_orgin = django_filters.CharFilter(name='user_origin')
-    audit_state = django_filters.CharFilter(name='audit_state')
+    is_fangdan = django_filters.CharFilter(name="user",lookup_expr='is_fangdan__contains') #处理状态
+    username = django_filters.CharFilter(name="user",lookup_expr='username__contains')
+    audit_username = django_filters.CharFilter(name="admin_user",lookup_expr='username__contains')
+    audit_mobile = django_filters.CharFilter(name="admin_user",lookup_expr='mobile__contains')#审核者手机
+    mobile = django_filters.CharFilter(name="user",lookup_expr='mobile__contains')#
+    qq_number = django_filters.CharFilter(name="user",lookup_expr='qq_number__contains')#
+    qq_name = django_filters.CharFilter(name="user",lookup_expr='qq_name__contains')
+    profile = django_filters.CharFilter(name="user",lookup_expr='profile__contains')
+    level = django_filters.CharFilter(name="user",lookup_expr='level__contains')
     class Meta:
         model = ApplyLogForFangdan
-        fields = ['id', 'username', 'qq_number', 'qq_name', 'mobile', 'audit_time', 'submit_time', 'level',
-
-         'audit_reason','audit_username','audit_mobile','audit_state']
+        fields = '__all__'
         
 class ApplyLogFilter(django_filters.rest_framework.FilterSet):
     submit_date = django_filters.DateFromToRangeFilter(name="submit_time")

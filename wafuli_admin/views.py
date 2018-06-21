@@ -122,7 +122,9 @@ def admin_apply(request):
         return JsonResponse(res)
     else:
         return render(request,"admin_apply.html",)
+
 @csrf_exempt
+@has_post_permission('052')
 def admin_apply_for_fangdan_permission(request):
     if request.method == "POST":
         admin_user = request.user

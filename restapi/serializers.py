@@ -42,8 +42,8 @@ class ApplyLogForChannelSerializer(serializers.ModelSerializer):
     user_custom_volumn = serializers.CharField(source='get_user_custom_volumn_display')
     user_funds_volumn = serializers.CharField(source='get_user_funds_volumn_display')
     user_invest_orientation = serializers.CharField(source='get_user_invest_orientation_display')
-    submit_time = serializers.DateTimeField(read_only=True, format= "%Y-%m-%d %H:%M:%S")
-    audit_time = serializers.DateTimeField(read_only=True, format= "%Y-%m-%d %H:%M:%S")
+    submit_time = serializers.DateTimeField(format= "%Y-%m-%d %H:%M:%S")
+    audit_time = serializers.DateTimeField(format= "%Y-%m-%d %H:%M:%S")
 
 
     class Meta:
@@ -76,34 +76,34 @@ class ApplyLogForFangdanSerializer(serializers.ModelSerializer):
 
     mobile = serializers.CharField(source="user.mobile",read_only=True)
     qq_number = serializers.CharField(source="user.qq_number",read_only=True)
-    qq_name =  serializers.CharField(source="user.mobile",read_only=True)
+    qq_name =  serializers.CharField(source="user.qq_name",read_only=True)
     level =  serializers.CharField(source="user.level",read_only=True)
     profile =  serializers.CharField(source="user.profile",read_only=True)
-    audit_time = serializers.DateTimeField(read_only=True, format= "%Y-%m-%d %H:%M:%S")
-    submit_time= serializers.DateTimeField(read_only=True, format= "%Y-%m-%d %H:%M:%S")
+    audit_time = serializers.DateTimeField(format= "%Y-%m-%d ")
+    submit_time= serializers.DateTimeField(format= "%Y-%m-%d ")
 
     class Meta:
         model = ApplyLogForFangdan
-        #fields= '__all__'
-        fields = ('id',
-                  'qq_number',
-                  'qq_name',
-                  'username',
-                  'mobile',
-                  'audit_time',
-                  'submit_time',
-                  'profile',
-                  'admin_name',
-                  'level',
-                  "id_name",
-                  "id_num",
-                  "apply_pic_url",
-                  "contract_pic_url",
-                  "rebate_pic_url",
-                  'audit_reason',
-                  'audit_state',
-                  'admin_mobile')
-        read_only_fields = ('admin_name','username','qq_number','qq_name')
+        fields= '__all__'
+        # fields = ('id',
+        #           'qq_number',
+        #           'qq_name',
+        #           'username',
+        #           'mobile',
+        #           'audit_time',
+        #           'submit_time',
+        #           'profile',
+        #           'admin_name',
+        #           'level',
+        #           "id_name",
+        #           "id_num",
+        #           "apply_pic_url",
+        #           "contract_pic_url",
+        #           "rebate_pic_url",
+        #           'audit_reason',
+        #           'audit_state',
+        #           'admin_mobile')
+        #read_only_fields = ('admin_name','uname','qq_number','qq_name')
 
 class ProjectSerializer(serializers.ModelSerializer):
 #     subscribers = UserSerializer(many=True)

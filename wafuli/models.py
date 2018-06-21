@@ -82,7 +82,7 @@ class Project(models.Model):
     is_addedto_repo = models.BooleanField(u"是否加入项目库", default=True)
     is_book = models.BooleanField(u"是否需要预约", default=False)
     state = models.CharField(u"项目状态", max_length=2, choices=Project_STATE, default='10')
-    end_date = models.DateField(u"最近暂停日期", default=None, null=True, blank=True)
+    current_state_date = models.DateField(u"进入当前状态的日期", default=None, null=True, blank=True)
     pic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）", blank=True)
     strategy = models.URLField(u"攻略链接")
     doc = models.ForeignKey(Document, null=True, on_delete=models.SET_NULL, default=None, blank=True)
@@ -118,9 +118,20 @@ class Project(models.Model):
     broker_rate05 = models.DecimalField(u"5级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True, blank=True)
     def save(self, force_insert=False, force_update=False, using=None, 
              update_fields=None):
-        pyin = PinYin()
-        pyin.load_word()
-        self.szm, self.pinyin = pyin.hanzi2pinyin_split(self.title)
+        if self.id:
+            old_obj = Project.objects.get(id=self.id)
+            old_state = old_obj.state
+            if self.state != old_state:
+                self.current_state_date = datetime.date.today()
+            if self.title != old_obj.title:
+                pyin = PinYin()
+                pyin.load_word()
+                self.szm, self.pinyin = pyin.hanzi2pinyin_split(self.title)
+        else:
+            self.current_state_date = datetime.date.today()
+            pyin = PinYin()
+            pyin.load_word()
+            self.szm, self.pinyin = pyin.hanzi2pinyin_split(self.title)
         return models.Model.save(self, force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
     def clean(self):
         if not self.company:

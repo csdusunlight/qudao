@@ -13,4 +13,4 @@ class UserCouponFilter(django_filters.rest_framework.FilterSet):
     class Meta:
         model = UserCoupon
 #         exclude = ['invest_image', 'invest_date', 'audit_time']
-        fields = ['create','user_mobile', 'contract_contains']
+        fields = ['create','user_mobile', 'contract_contains', 'state']

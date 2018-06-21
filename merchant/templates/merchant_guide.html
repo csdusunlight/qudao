@@ -100,11 +100,12 @@
 	    </div>
 	  </div>
 	  <div class="button_box">
-	    <a class="link_subhimt" href="/account/apply_for_fangdan_user/">我要放单</a>
+	    <span class="link_subhimt">我要放单</span>
 	  </div>
 	  <div class="footer_text">
 	    <img src="{% static 'images/mg_text.png' %}"/>
 	  </div>
+    <div class="disappear hide">审核中，请勿重复提交！</div>
 	</body>
 	<script type="text/javascript">
 		$(function () {
@@ -136,6 +137,21 @@
                 })
             }
           }
+      })
+      
+      $('.link_subhimt').click(function () {
+        var state = "{{user.is_merchant}}";
+        if (state === '-1') {
+          $('.disappear').addClass('show')
+          $('.disappear').addClass('animation_dlaodit')
+          setTimeout(function () {
+            $('.disappear').removeClass('show')
+            $('.disappear').addClass('hide')
+            $('.disappear').removeClass('animation_dlaodit')
+          },2000)
+        } else {
+          window.location.href="/account/apply_for_fangdan_user/"
+        }
       })
 		})
 	</script>

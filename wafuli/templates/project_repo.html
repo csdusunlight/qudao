@@ -286,7 +286,7 @@
 									<el-carousel-item v-for="item in noticeProject" :key="item.id">
 										<div class="noticeProItem" v-for="i in item" :key="item.id">
 											<div class="dot"></div>
-											<span class="important_txt">${i.content}</span>
+											<span style="cursor: pointer;" :title="i.content" class="important_txt">${i.content}</span>
 										</div>
 									</el-carousel-item>
 								</el-carousel>

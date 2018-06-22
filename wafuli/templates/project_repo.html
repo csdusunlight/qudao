@@ -438,7 +438,7 @@
 					var scrollTop = $(this).scrollTop();
 					var scrollHeight = $(document).height();
 					var windowHeight = $(this).height();
-					if (scrollHeight - scrollTop - windowHeight < 30) {
+					if (scrollHeight - scrollTop - windowHeight <= 10) {
 						console.log('out',that.loadFlag);
 						that.getDataList();
 						// if (that.loadFlag) {

@@ -472,6 +472,7 @@
               that.endProject[num - 1] = arrData;
               console.log(that.endProject);
               console.log('end 数据绑定完毕');
+              that.$forceUpdate();
             } else {
               that.$notify.error({
                 title: '错误',
@@ -495,6 +496,7 @@
 								that.newProject[i] = arrData.splice(0, 6);
 							}
 							that.newProject[num - 1] = arrData;
+							that.$forceUpdate()
 
 						} else {
 							that.$notify.error({

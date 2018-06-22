@@ -419,25 +419,26 @@
 				var that = this;
 				console.log('是否登录：', '{{user.is_authenticated}}')
 				var that = this;
-				$.ajax({
-					type: "get",
-					url: '/restapi/projects/?state=10&is_official=true&pageSize=' + that.pageSize + '&page=' + that.page,
-					async: true,
-					success: function (res) {
-						console.log(res.results);
-						if (res.code == 0) {
-							that.table_data = res.results;
-							that.page++;
-						} else {
-							console.log(res)
-						}
-					}
-				});
+				that.getDataList();
+//				$.ajax({
+//					type: "get",
+//					url: '/restapi/projects/?state=10&is_official=true&pageSize=' + that.pageSize + '&page=' + that.page,
+//					async: true,
+//					success: function (res) {
+//						console.log(res.results);
+//						if (res.code == 0) {
+//							that.table_data = res.results;
+//							that.page++;
+//						} else {
+//							console.log(res)
+//						}
+//					}
+//				});
 				$(window).scroll(function () {
 					var scrollTop = $(this).scrollTop();
 					var scrollHeight = $(document).height();
 					var windowHeight = $(this).height();
-					if (scrollHeight - scrollTop - windowHeight < 100) {
+					if (scrollHeight - scrollTop - windowHeight < 30) {
 						console.log('out',that.loadFlag);
 						that.getDataList();
 						// if (that.loadFlag) {

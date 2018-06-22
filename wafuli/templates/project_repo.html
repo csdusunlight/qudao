@@ -223,9 +223,15 @@
 			width: 120px;
 			height: 50px;
 		}
-		/* .back_top{
-			width: ;
-		} */
+		.back_top{
+			width: 60px;
+			height: 60px;
+			background: #b5b5b5;
+			position: fixed;right: ;
+		}
+		.el-table__empty-block {
+			display: none !important;
+		}
 	</style>
 </head>
 
@@ -410,6 +416,7 @@
 				loadFlag: true,
 			},
 			created: function () {
+				var that = this;
 				console.log('是否登录：', '{{user.is_authenticated}}')
 				var that = this;
 				$.ajax({
@@ -431,36 +438,39 @@
 					var scrollHeight = $(document).height();
 					var windowHeight = $(this).height();
 					if (scrollHeight - scrollTop - windowHeight < 100) {
-						if (that.loadFlag) {
-							that.loadFlag = false;
-							$.ajax({
-								type: "get",
-								url: '/restapi/projects/?state=10&is_official=true&pageSize=' + that.pageSize + '&page=' + that.page,
-								async: true,
-								success: function (res) {
-									if (res.code == 0) {
-										var data = res.results;
-										if (data) {
-											that.table_data = that.table_data.concat(data);
-											that.page++
-											that.$nextTick(function () {
-												that.loadFlag = true;
-											})
-										} 
-									} else {
-										console.log('error')
-									}
-								},
-								error:function(res){
-									console.log('Eorror')
-									console.log(res)
-									if(res.responseJSON.detail == 'Invalid page.'){
-										console.log('test_isShow')
-										that.is_show = true;
-									}
-								}
-							});
-						}
+						console.log('out',that.loadFlag);
+						that.getDataList();
+						// if (that.loadFlag) {
+						// 	console.log('inner',that.loadFlag)
+						// 	that.loadFlag = false;
+						// 	$.ajax({
+						// 		type: "get",
+						// 		url: '/restapi/projects/?state=10&is_official=true&pageSize=' + that.pageSize + '&page=' + that.page + '&search=' + that.search_ipt,
+						// 		async: true,
+						// 		success: function (res) {
+						// 			if (res.code == 0) {
+						// 				var data = res.results;
+						// 				if (data) {
+						// 					that.table_data = that.table_data.concat(data);
+						// 					that.page++
+						// 					that.$nextTick(function () {
+						// 						that.loadFlag = true;
+						// 					})
+						// 				} 
+						// 			} else {
+						// 				console.log('error')
+						// 			}
+						// 		},
+						// 		error:function(res){
+						// 			console.log('Eorror')
+						// 			console.log(res)
+						// 			if(res.responseJSON.detail == 'Invalid page.'){
+						// 				console.log('test_isShow')
+						// 				that.is_show = true;
+						// 			}
+						// 		}
+						// 	});
+						// }
 
 					}
 				})
@@ -542,68 +552,127 @@
 			},
 			mounted() {
 				document.body.style.opacity = '1';
+				// console.log($('.nav__itembox'));
+				$('.nav__item').eq(1).addClass('active');
 			},
 			methods: {
+				getDataList: function() {
+					var that = this;
+					if (that.loadFlag) {
+						console.log('inner',that.loadFlag)
+						that.loadFlag = false;
+						$.ajax({
+							type: "get",
+							url: '/restapi/projects/?state=10&is_official=true&pageSize=' + that.pageSize + '&page=' + that.page + '&search=' + that.search_ipt,
+							async: true,
+							success: function (res) {
+								if (res.code == 0) {
+									var data = res.results;
+									if (data.length != 0) {
+										that.table_data = that.table_data.concat(data);
+										that.page++
+										that.$nextTick(function () {
+											that.loadFlag = true;
+										})
+									} else {
+										that.is_show = true;
+									} 
+								} else {
+									console.log('error')
+								}
+							},
+							error:function(res){
+								console.log('Eorror')
+								console.log(res)
+								if(res.responseJSON.detail == 'Invalid page.'){
+									console.log('test_isShow')
+									that.is_show = true;
+								}
+							}
+						});
+					}
+				},
 				//鼠标上移全部项目显示
 				projec_all: function () {
+					var that = this;
 					console.log('mouseover')
-					$.ajax({
-						url: '/restapi/company2/?pageSize=999',
-						type: 'get',
-						async: true,
-						dataType: 'json',
-						success: function (res) {
-							if (res.code == 0) {
-								app.all_project = res.results
-							} else {
-								that.$notify.error({
-									title: '错误',
-									message: res.detail
-								});
+					if (!that.all_project) {
+						$.ajax({
+							url: '/restapi/company2/?pageSize=999',
+							type: 'get',
+							async: true,
+							dataType: 'json',
+							success: function (res) {
+								if (res.code == 0) {
+									app.all_project = res.results
+								} else {
+									that.$notify.error({
+										title: '错误',
+										message: res.detail
+									});
+								}
 							}
-						}
-					})
+						})
+					}
 				},
 				//点击搜索
 				search_data: function () {
 					var that = this;
-					$.ajax({
-						url: '/restapi/projects/?state=10&is_official=true&page=1&search=' + that.search_ipt,
-						type: "get",
-						async: true,
-						success: function (res) {
-							console.log(res.results);
-							if (res.code == 0) {
-								that.table_data = res.results;
-							} else {
-								that.$notify.error({
-									title: '错误',
-									message: res.detail
-								});
-							}
-						}
-					})
+					that.table_data = [];
+					that.page = 1;
+					that.loadFlag = true;
+					that.is_show = false;
+					that.getDataList();
+					// $.ajax({
+					// 	url: '/restapi/projects/?state=10&is_official=true&page='+ that.page +'&search=' + that.search_ipt,
+					// 	type: "get",
+					// 	async: true,
+					// 	success: function (res) {
+					// 		console.log(res.results);
+					// 		if (res.code == 0) {
+					// 			that.page++;
+					// 			that.table_data = res.results;
+					// 			that.is_show = false;
+					// 			that.loadFlag = true;
+					// 			console.log('flag',that.loadFlag)
+					// 		} else {
+					// 			that.$notify.error({
+					// 				title: '错误',
+					// 				message: res.detail
+					// 			});
+					// 		}
+					// 	}
+					// })
 				},
 				//热搜点击搜索
 				search_item: function (e, name) {
 					var that = this;
+					that.table_data = [];
+					that.page = 1;
+					that.search_ipt = name;
+					that.loadFlag = true;
+					that.is_show = false;
+					that.getDataList();
 					console.log(name)
-					$.ajax({
-						url: '/restapi/projects/?state=10&is_official=true&page=1&search=' + encodeURI(name),
-						type: 'get',
-						async: true,
-						dataType: 'json',
-						success: function (res) {
-							if (res.code == 0) {
-								that.table_data = res.results;
-							} else {
-								that.$notify.error({
-									title: '错误',
-									message: res.detail
-								});
-							}
-						}
-					})
+					// $.ajax({
+					// 	// url: '/restapi/projects/?state=10&is_official=true&page=1&search=' + encodeURI(name),
+					// 	url: '/restapi/projects/?state=10&is_official=true&page='+ that.page +'&search=' + that.search_ipt,
+					// 	type: 'get',
+					// 	async: true,
+					// 	dataType: 'json',
+					// 	success: function (res) {
+					// 		if (res.code == 0) {
+					// 			that.is_show = false;
+					// 			that.loadFlag = true;
+					// 			that.table_data = res.results;
+					// 		} else {
+					// 			that.$notify.error({
+					// 				title: '错误',
+					// 				message: res.detail
+					// 			});
+					// 		}
+					// 	}
+					// })
 				},
 				//全部项目点击其中一个搜索
 				search_all: function (e, name) {
@@ -637,10 +706,6 @@
 				}
 			}
 
-		})
-		$(function () {
-			console.log('llcTest');
-			$('.nav__itembox').eq(1).addClass('active');
 		})
 	</script>
 </body>

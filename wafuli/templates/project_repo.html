@@ -19,8 +19,9 @@
 			min-height: 800px;
 			margin: 20px;
 			background-color: #f5f5f5;
-			box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+			/* box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); */
 			margin: 0 auto;
+			position: relative;
 		}
 
 		.wrapper {
@@ -150,7 +151,7 @@
 		.no_data {
 			width: 100%;
 			height: 50px;
-			line-height: 70px;
+			line-height: 55px;
 			text-align: center;
 			font-size: 18px;
 		}
@@ -222,6 +223,9 @@
 			width: 120px;
 			height: 50px;
 		}
+		/* .back_top{
+			width: ;
+		} */
 	</style>
 </head>
 
@@ -302,14 +306,14 @@
 					</div>
 					<!-- 热搜部分 -->
 					<div class="hot_search">
-						<label>热搜</label>
+						<label>热搜：</label>
 						{% for item in hot_platforms %}
 						<span class="hot_search_item" @click="search_item($event,'{{item.name}}')">{{item.name}}</span>
 						{% endfor %}
-						<el-popover placement="bottom-end" width="410" trigger="hover">
+						<el-popover placement="bottom-end" width="800" trigger="click">
 							<!-- 获取全部项目 -->
 							<div class="all_projects_item" v-for='item in all_project' @click="search_all($event,item.name)">${ item.name }</div>
-							<span class="hot_search_item all" slot="reference" @mouseover='projec_all'>全部项目</span>
+							<span class="hot_search_item all" slot="reference" @click='projec_all'>全部项目</span>
 						</el-popover>
 					</div>
 				</div>
@@ -378,6 +382,7 @@
 				</div>
 			</div>
 		</div>
+		<div class='back_top'></div>
 	</div>
 
 
@@ -395,7 +400,7 @@
 				search_ipt: '',
 				table_data: [],
 				// tableData: {},
-				pageSize: 20,
+				pageSize: 10,
 				page: 1,
 				multipleSelection: [],
 				checkIdList: '',
@@ -443,8 +448,15 @@
 											})
 										} 
 									} else {
-										that.is_show = true;
 										console.log('error')
+									}
+								},
+								error:function(res){
+									console.log('Eorror')
+									console.log(res)
+									if(res.responseJSON.detail == 'Invalid page.'){
+										console.log('test_isShow')
+										that.is_show = true;
 									}
 								}
 							});

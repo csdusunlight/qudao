@@ -12,7 +12,7 @@
   <script src="https://unpkg.com/element-ui/lib/index.js"></script>
   <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 </head>
-<body>
+<body style="display: none">
   <div id="app">
     <el-row :gutter="20">
       <el-col :span="3">
@@ -39,7 +39,7 @@
                   :label="item.name"
                   :value="item.id">
                 </el-option>
-              </el-sel  ect>
+              </el-select>
               <el-button type="primary" @click="addPlan" >增加方案</el-button>
             </el-form-item>
             
@@ -217,7 +217,6 @@
         <el-button type="primary" @click="submitHongbaoForm('hongbaoPlanForm')">确 定</el-button>
       </div>
     </el-dialog>
-
   </div>
 	
 	<script type="text/javascript">
@@ -285,7 +284,11 @@
       created: function() {
         console.log(this.activeNav);
         this.getAllPlan();
+        this.getAllProject();
         this.getDataList(this.page, this.pageSize);
+      },
+      mounted: function() {
+        document.body.style.display = 'block';
       },
       methods: {
         submitForm: function(formName) {
@@ -422,7 +425,7 @@
         addPlan: function() {
           var that = this;
           that.submitFlag = 'add';
-          that.getAllProject();
+//        that.getAllProject();
           that.dialogPlanVisible = true;
 //        $.ajax({
 //          url: "/restapi/projects/?page=1&pageSize=999",
@@ -450,7 +453,7 @@
         editPlan: function(row) {
           var that = this;
           that.submitFlag = 'edit';
-          that.getAllProject();
+//        that.getAllProject();
           that.dialogPlanVisible = true;
           that.hongbaoPlanForm = row;
           console.log(row)
@@ -526,13 +529,13 @@
         getAllProject: function() {
           var that = this;
           $.ajax({
-            url: "/restapi/projects/?page=1&pageSize=999",
+            url: "/restapi/projects/?page=1&pageSize=999&state=10&is_official=true",
             dataType: "json",
             type: "GET", 
             async: false,
             success: function(ret) {
               if(ret.code == 0) {
-                app.projectList = ret.results;
+                that.projectList = ret.results;
               } else {
                 that.$notify.error({
                   title: '提示',

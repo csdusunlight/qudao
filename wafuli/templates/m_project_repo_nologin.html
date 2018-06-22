@@ -84,13 +84,13 @@
             mui.init();
             var user_level = '{{user.level}}';
             console.log(user_level);
-            var get_proj_url = "/restapi/projects/?state=10&is_official=2";
+            var get_proj_url = "/restapi/projects/?state=10&is_official=true";
             get_list(get_proj_url);
             document.getElementById('search_btn').addEventListener('tap', function () {
                 var search_txt = document.getElementById('search_input').value;
                 var table = document.body.querySelector('.project-all-box');
                 console.log(table);
-                get_proj_url = "/restapi/projects/?state=10&is_official=2&project_title_contains=" + search_txt;
+                get_proj_url = "/restapi/projects/?state=10&is_official=true&search=" + search_txt;
                 document.getElementById('left_box').innerHTML = '';
                 document.getElementById('right_box').innerHTML = '';
                 get_list(get_proj_url);
@@ -113,14 +113,14 @@
                                 var li_right = document.createElement('li');
                                 li_left.className = 'item_line state'+data.results[i].state+' ';
                                 li_right.className = 'item_line m-right';
-                                var left_html = '<div class="column_1 column"><span class="item opa'+data.results[i].state+' "><a href="' + data.results[i].strategy + '">' + data.results[i].title + '</a></span></div>';
+                                var left_html = '<div class="column_1 column"><span class="item opa'+data.results[i].state+' "><a href="/account/login/">' + data.results[i].title + '</a></span></div>';
 
-                                var right_html = '<div class="column_2 column"><span class="item">登录后查看</span></div>' + //' + data.results[i].term + '
+                                var right_html = '<div class="column_2 column"><span class="item"><a href="/account/login/">登陆后查看</a></span></div>' +                     //' + data.results[i].term + '
                                     // '<div class="column_3 column"><span class="item">' + data.results[i].project_price + '</span></div>' +
                                     '<div class="column_4 column"><span class="item">';
-                                right_html += '登陆后查看'; // data.results[i].display_price
+                                right_html += '<a href="/account/login/">登陆后查看</a>'; // data.results[i].display_price
                                     right_html += '</span></div>' +
-                                    '<div class="column_5 column"><span class="item" >登陆后查看</span></div>' + //' + data.results[i].investrange + '
+                                    '<div class="column_5 column"><span class="item" ><a href="/account/login/">登陆后查看</a></span></div>' + //' + data.results[i].investrange + '
                                     '<div class="column_6 column"><span class="item">'+data.results[i].remark+'</div>';
                                     // '<div class="column_7 column"><span data-isadd="'+ data.results[i].is_on +'" data-id="'+ data.results[i].id +
                                     // '" class="item add-project '+ data.results[i].is_on +'">'+ (data.results[i].is_on?'取消添加':'添加至主页') +'</span>' +

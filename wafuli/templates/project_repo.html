@@ -144,7 +144,7 @@
 		}
 
 		.el-table tr:hover {
-			box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.5) !important;
+			box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5) !important;
 		}
 
 		.no_data {
@@ -404,6 +404,7 @@
 						console.log(res.results);
 						if (res.code == 0) {
 							that.table_data = res.results;
+							that.page++;
 						} else {
 							console.log(res)
 						}
@@ -609,7 +610,10 @@
 				}
 			}
 
-
+		})
+		$(function () { 
+			console.log('llcTest');
+			$('.nav__itembox').eq(1).addClass('active');
 		})
 	</script>
 </body>

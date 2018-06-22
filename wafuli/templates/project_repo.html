@@ -89,7 +89,7 @@
 		}
 
 		.hot_search {
-			width: 576px;
+			width: 600px;
 			height: 40px;
 			padding: 10px 10px;
 			color: #b5b5b5;
@@ -155,6 +155,15 @@
 			font-size: 18px;
 		}
 
+		.get_more_data{
+			width: 100%;
+			height: 50px;
+			line-height: 55px;
+			text-align: center;
+			font-size: 18px;
+			cursor: pointer;
+		}
+
 		.newProItem {
 			border-bottom: 1px solid #efefef;
 			font-size: 14px;
@@ -202,12 +211,14 @@
 		.important_txt {
 			margin-left: 10px;
 		}
-		.logoBox{
+
+		.logoBox {
 			vertical-align: middle;
 			text-align: center;
 			height: 50px;
 		}
-		.logoBox > img{
+
+		.logoBox>img {
 			width: 120px;
 			height: 50px;
 		}
@@ -298,7 +309,7 @@
 						<el-popover placement="bottom-end" width="410" trigger="hover">
 							<!-- 获取全部项目 -->
 							<div class="all_projects_item" v-for='item in all_project' @click="search_all($event,item.name)">${ item.name }</div>
-							<span class="hot_search_item all" slot="reference">全部项目</span>
+							<span class="hot_search_item all" slot="reference" @mouseover='projec_all'>全部项目</span>
 						</el-popover>
 					</div>
 				</div>
@@ -346,12 +357,12 @@
 						</el-table-column>
 						<el-table-column label="推广标期">
 							<template slot-scope="scope">
-								<a class="link" href="/account/login/">登陆后查看</a>
+								<a :href="scope.row.strategy">${ scope.row.display_price }</a>
 							</template>
 						</el-table-column>
 						<el-table-column label="投资档位">
 							<template slot-scope="scope">
-								<a class="link" href="/account/login/">登陆后查看</a>
+								<a :href="scope.row.strategy">${ scope.row.investrange }</a>
 							</template>
 						</el-table-column>
 						<el-table-column label="结算价格">
@@ -378,13 +389,13 @@
 				newProject: [],
 				endProject: [],
 				noticeProject: [],
-				is_show: true,
+				is_show: false,
 				all_project: '',
 				scroll: '',
 				search_ipt: '',
 				table_data: [],
 				// tableData: {},
-				pageSize: 20,
+				pageSize: 5,
 				page: 1,
 				multipleSelection: [],
 				checkIdList: '',
@@ -423,11 +434,14 @@
 								async: true,
 								success: function (res) {
 									if (res.code == 0) {
-										that.loadFlag = true;
+										
 										var data = res.results;
 										if (data) {
 											that.table_data = that.table_data.concat(data);
 											that.page++
+											that.$nextTick(function () {
+												that.loadFlag = true;
+											})
 										} else {
 											app.is_show = true;
 										}
@@ -438,23 +452,6 @@
 							});
 						}
 
-					}
-				})
-				//获取全部项目
-				$.ajax({
-					url: '/restapi/company2/',
-					type: 'get',
-					async: true,
-					dataType: 'json',
-					success: function (res) {
-						if (res.code == 0) {
-							app.all_project = res.results
-						} else {
-							that.$notify.error({
-								title: '错误',
-								message: res.detail
-							});
-						}
 					}
 				})
 				//新上项目数据加载
@@ -537,6 +534,26 @@
 				document.body.style.opacity = '1';
 			},
 			methods: {
+				//鼠标上移全部项目显示
+				projec_all: function () {
+					console.log('mouseover')
+					$.ajax({
+						url: '/restapi/company2/',
+						type: 'get',
+						async: true,
+						dataType: 'json',
+						success: function (res) {
+							if (res.code == 0) {
+								app.all_project = res.results
+							} else {
+								that.$notify.error({
+									title: '错误',
+									message: res.detail
+								});
+							}
+						}
+					})
+				},
 				//点击搜索
 				search_data: function () {
 					var that = this;
@@ -611,7 +628,7 @@
 			}
 
 		})
-		$(function () { 
+		$(function () {
 			console.log('llcTest');
 			$('.nav__itembox').eq(1).addClass('active');
 		})

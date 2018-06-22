@@ -128,7 +128,7 @@
 		}
 
 		.el-table td {
-			padding: 30px 0;
+			padding: 35px 0;
 		}
 
 		.el-table th {
@@ -142,7 +142,7 @@
 		}
 
 		.el-table tr:hover {
-			box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2) !important;
+			box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.5) !important;
 		}
 
 		.no_data {
@@ -314,7 +314,7 @@
 							</template>
 						</el-table-column>
 					</el-table>
-					<div class="no_data" v-show="show">没有更多数据了~</div>
+					<div class="no_data" v-show="is_show">没有更多数据了~</div>
 				</div>
 				<div class="table-box" v-else>
 					<el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="table_data" style="width: 100%;">
@@ -336,7 +336,7 @@
 							<template slot-scope="scope">${ scope.row.remark }</template>
 						</el-table-column>
 					</el-table>
-					<div class="no_data" v-show="show">没有更多数据了~</div>
+					<div class="no_data" v-show="is_show">没有更多数据了~</div>
 				</div>
 			</div>
 		</div>
@@ -351,7 +351,7 @@
 				newProject: [],
 				endProject: [],
 				noticeProject: [],
-				show: true,
+				is_show: true,
 				all_project: '',
 				scroll: '',
 				search_ipt: '',
@@ -401,7 +401,7 @@
 											that.table_data = that.table_data.concat(data);
 											that.page++
 										} else {
-											show = true;
+											app.is_show = true;
 										}
 									} else {
 										console.log('error')

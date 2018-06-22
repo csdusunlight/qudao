@@ -107,14 +107,10 @@ class ApplyLogForFangdanSerializer(serializers.ModelSerializer):
 
 class ProjectSerializer(serializers.ModelSerializer):
 #     subscribers = UserSerializer(many=True)
-    qq_name = serializers.CharField(source='user.qq_name', read_only=True)
-    user_mobile = serializers.CharField(source='user.mobile', read_only=True)
     state_des = serializers.CharField(source='get_state_display', read_only=True)
     logo = serializers.CharField(source='company.logo.url', read_only=True)
     display_price = serializers.SerializerMethodField()
     up_price = serializers.SerializerMethodField()
-    def get_field_names(self, declared_fields, info):
-        return serializers.ModelSerializer.get_field_names(self, declared_fields, info)
     def get_display_price(self, obj):
         user = self.context['request'].user
         if user.is_authenticated():
@@ -130,10 +126,16 @@ class ProjectSerializer(serializers.ModelSerializer):
             return ''
     class Meta:
         model = Project
-        exclude = ('subscribers', 'price01', 'price02', 'price03', 'price04', 'price05')
+        exclude = ('subscribers', 'price01', 'price02', 'price03', 'price04', 'price05', 'broker_rate',
+                   'broker_rate01','broker_rate02','broker_rate03','broker_rate04','broker_rate05')
 #         fields = '__all__'
         read_only_fields = ('user', 'pub_date', 'state', 'is_official', 'category')
-        
+class ProjectSerializerForAdmin(ProjectSerializer):
+#     subscribers = UserSerializer(many=True)
+    qq_name = serializers.CharField(source='user.qq_name', read_only=True)
+    user_mobile = serializers.CharField(source='user.mobile', read_only=True)
+    class Meta(ProjectSerializer.Meta):
+        exclude = ('subscribers', )
 class InvestLogSerializer(serializers.ModelSerializer):
     project_title = serializers.CharField(source='project.title', read_only=True)
     project_channel = serializers.CharField(source='project.channel', read_only=True)

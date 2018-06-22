@@ -454,6 +454,32 @@
 //						that.getDataList();
 //					}
 //				})
+        //结束项目数据加载
+        $.ajax({
+          url: '/restapi/projects/?state=20&current_state_date_range_0=' + that.getDate(-3),
+          type: "GET",
+          async: true,
+          dataType: 'json',
+          success: function (res) {
+            console.log('end 请求 code 为 0');
+            if (res.code == 0) {
+              var arrData = res.results;
+              var length = arrData.length;
+              var num = Math.ceil(length / 6);
+              for (var i = 0; i < num - 1; i++) {
+                that.endProject[i] = arrData.splice(0, 6);
+              }
+              that.endProject[num - 1] = arrData;
+              console.log(that.endProject);
+              console.log('end 数据绑定完毕');
+            } else {
+              that.$notify.error({
+                title: '错误',
+                message: res.detail
+              });
+            }
+          } //endProject
+        })
 				//新上项目数据加载
 				$.ajax({
 					url: '/restapi/projects/?state=10&current_state_date_range_0=' + that.getDate(-3),
@@ -480,29 +506,6 @@
 					error: function () {
 						console.log('出错了');
 					}
-				})
-				//结束项目数据加载
-				$.ajax({
-					url: '/restapi/projects/?state=20&current_state_date_range_0=' + that.getDate(-3),
-					type: "GET",
-					async: true,
-					dataType: 'json',
-					success: function (res) {
-						if (res.code == 0) {
-							var arrData = res.results;
-							var length = arrData.length;
-							var num = Math.ceil(length / 6);
-							for (var i = 0; i < num - 1; i++) {
-								that.endProject[i] = arrData.splice(0, 6);
-							}
-							that.endProject[num - 1] = arrData;
-						} else {
-							that.$notify.error({
-								title: '错误',
-								message: res.detail
-							});
-						}
-					} //endProject
 				})
 				//重要项目通知
 				$.ajax({

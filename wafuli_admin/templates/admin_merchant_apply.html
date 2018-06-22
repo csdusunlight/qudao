@@ -31,7 +31,7 @@
       .a_padd{margin-right: 15px;}
     </style>
 	</head>
-	<body style="display: none;">
+	<body style="opacity: 0;">
 	  <div id="app">
 	    <el-row>
         <el-col :span="3">
@@ -434,7 +434,7 @@
           this.getListData()
         },
         mounted: function() {
-          document.body.style.display = 'block';
+          document.body.style.opacity = 1;
         },
         watch: {
           value_options () {

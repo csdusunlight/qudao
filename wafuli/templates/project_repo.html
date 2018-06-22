@@ -195,7 +195,7 @@
 	</style>
 </head>
 
-<body>
+<body style="opacity: 0;">
 	{% include "header.html" %}
 
 	<div id="app">
@@ -464,19 +464,20 @@
 					dataType: 'json',
 					success: function (res) {
 						if (res.code == 0) {
-							var arrayData = res.results;
-							var num_1 = Math.ceil(arrayData.length / 6);
-							for (var j = 0; j < num_1 - 1; j++) {
-								that.endProject[j] = arrayData.splice(0, 6);
+							var arrData = res.results;
+							var length = arrData.length;
+							var num = Math.ceil(length / 6);
+							for (var i = 0; i < num - 1; i++) {
+								that.endProject[i] = arrData.splice(0, 6);
 							}
-							that.endProject[num_1 - 1] = arrayData
+							that.endProject[num - 1] = arrData;
 						} else {
 							that.$notify.error({
 								title: '错误',
 								message: res.detail
 							});
 						}
-					}
+					} //endProject
 				})
 				//重要项目通知
 				$.ajax({
@@ -486,13 +487,14 @@
 					success: function (res) {
 						console.log('通知：', res.results)
 						if (res.code == 0) {
-							var array_data = res.results;
-							var length = array_data.length;
-							var number = Math.ceil(length / 6);
-							for (var k = 0; k < number - 1; k++) {
-								that.noticeProject[k] = array_data;
+							var arrData = res.results;
+							var length = arrData.length;
+							var num = Math.ceil(length / 6);
+							for (var i = 0; i < num - 1; i++) {
+								that.noticeProject[i] = arrData.splice(0, 6);
 							}
-							that.noticeProject[number - 1] = array_data;
+							that.noticeProject[num - 1] = arrData;
+
 						} else {
 							that.$notify.error({
 								title: '错误',
@@ -502,6 +504,9 @@
 
 					}
 				})
+			},
+			mounted () {
+				document.body.style.opacity = '1';
 			},
 			methods: {
 				//点击搜索

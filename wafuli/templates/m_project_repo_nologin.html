@@ -115,10 +115,10 @@
                                 li_right.className = 'item_line m-right';
                                 var left_html = '<div class="column_1 column"><span class="item opa'+data.results[i].state+' "><a href="/account/login/">' + data.results[i].title + '</a></span></div>';
 
-                                var right_html = '<div class="column_2 column"><span class="item"><a href="/account/login/">登陆后查看</a></span></div>' +                     //' + data.results[i].term + '
+                                var right_html = '<div class="column_2 column"><span class="item"><a href="/account/login/">' + data.results[i].display_price + '</a></span></div>' +                     //
                                     // '<div class="column_3 column"><span class="item">' + data.results[i].project_price + '</span></div>' +
                                     '<div class="column_4 column"><span class="item">';
-                                right_html += '<a href="/account/login/">登陆后查看</a>'; // data.results[i].display_price
+                                right_html += '<a href="/account/login/">'+ data.results[i].term +'</a>'; // 
                                     right_html += '</span></div>' +
                                     '<div class="column_5 column"><span class="item" ><a href="/account/login/">登陆后查看</a></span></div>' + //' + data.results[i].investrange + '
                                     '<div class="column_6 column"><span class="item">'+data.results[i].remark+'</div>';

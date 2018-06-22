@@ -332,12 +332,12 @@
 						</el-table-column>
 						<el-table-column label="投资档位">
 							<template slot-scope="scope">
-								<a :href="scope.row.strategy">${ scope.row.display_price }</a>
+								<a :href="scope.row.strategy">${ scope.row.investrange }</a>
 							</template>
 						</el-table-column>
 						<el-table-column label="结算价格">
 							<template slot-scope="scope">
-								<a :href="scope.row.strategy">${ scope.row.investrange }</a>
+								<a :href="scope.row.strategy">${ scope.row.display_price }</a>
 							</template>
 						</el-table-column>
 						<el-table-column label="备注说明">
@@ -357,7 +357,7 @@
 						</el-table-column>
 						<el-table-column label="推广标期">
 							<template slot-scope="scope">
-								<a :href="scope.row.strategy">${ scope.row.display_price }</a>
+								<a :href="scope.row.strategy">${ scope.row.term }</a>
 							</template>
 						</el-table-column>
 						<el-table-column label="投资档位">
@@ -395,7 +395,7 @@
 				search_ipt: '',
 				table_data: [],
 				// tableData: {},
-				pageSize: 5,
+				pageSize: 20,
 				page: 1,
 				multipleSelection: [],
 				checkIdList: '',
@@ -434,7 +434,6 @@
 								async: true,
 								success: function (res) {
 									if (res.code == 0) {
-										
 										var data = res.results;
 										if (data) {
 											that.table_data = that.table_data.concat(data);
@@ -442,10 +441,9 @@
 											that.$nextTick(function () {
 												that.loadFlag = true;
 											})
-										} else {
-											app.is_show = true;
-										}
+										} 
 									} else {
+										that.is_show = true;
 										console.log('error')
 									}
 								}
@@ -538,7 +536,7 @@
 				projec_all: function () {
 					console.log('mouseover')
 					$.ajax({
-						url: '/restapi/company2/',
+						url: '/restapi/company2/?pageSize=999',
 						type: 'get',
 						async: true,
 						dataType: 'json',

@@ -404,7 +404,7 @@
           scroll: '',
           search_ipt: '',
           table_data: [],
-          pageSize: 10,
+          pageSize: 1,
           page: 1,
           multipleSelection: [],
           checkIdList: '',
@@ -559,9 +559,9 @@
         },
         methods: {
           getDataList: function() {
+            var that = this;
             var scrollTop = document.documentElement.scrollTop;
             console.log('start', scrollTop)
-            var that = this;
             that.loadFlag = false;
             $.ajax({
               type: "get",
@@ -571,8 +571,8 @@
                 if(res.code == 0) {
                   var data = res.results;
                   if(data.length != 0) {
+                    that.page++;
                     that.isLoading = true;
-                    that.page++
                     setTimeout(function() {
                       that.table_data = that.table_data.concat(data);
                     }, 400)

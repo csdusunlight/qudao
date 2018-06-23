@@ -37,7 +37,6 @@
                 </div>
               </el-col>
             </el-row>
-          <!-- <el-header>红包方案展示</el-header> -->
           <el-table
             :header-cell-style="rowStyle"
             :row-style="rowStyle"
@@ -88,7 +87,7 @@
       delimiters: ['${', '}'],
       data: {
         input:'',
-        seachValue:'',
+        searchValue:'',
         activeNav: '1-4',
         hongbaoPlan:[],
         ruleForm: {
@@ -106,6 +105,7 @@
         currentPage: 1,
       },
       created: function() {
+        var that = this;
         // this.getAllPlan();
         this.getDataList(1,10);
       },
@@ -118,7 +118,7 @@
           var that = this;
           $.ajax({
               type: "get",
-              url: '/restapi/perform/?page=' + page + '&pageSize=' + pageSize,
+              url: '/restapi/perform/?page=' + that.page + '&pageSize=' + that.pageSize +'&search=' +that.searchValue,
               async: true,
               success: function(res) {
                 console.log(res);
@@ -134,8 +134,11 @@
           });
         },
         searchData:function(){
+          var that = this;
           console.log('search')
           app.currentPage = 1;
+          that.searchValue = app.searchValue
+          // var search_value = that.searchValue;
           app.getDataList();
         }
       }

@@ -404,7 +404,7 @@
           scroll: '',
           search_ipt: '',
           table_data: [],
-          pageSize: 1,
+          pageSize: 10,
           page: 1,
           multipleSelection: [],
           checkIdList: '',
@@ -445,17 +445,6 @@
             }
           })
           var that = this;
-//        $(window).scroll(function() {                    
-//          var scrollTop = $(this).scrollTop();                    
-//          var scrollHeight = $(document).height();                    
-//          var windowHeight = $(this).height();                    
-//          if(scrollHeight - scrollTop - windowHeight < 100) {
-//            if(that.loadFlag) {
-//              that.loadFlag = false;
-//              that.getDataList();
-//            }
-//          }
-//        })
           //结束项目数据加载
           $.ajax({
             url: '/restapi/projects/?state=20&current_state_date_range_0=' + that.getDate(-3),
@@ -542,10 +531,6 @@
           document.body.style.opacity = '1';
           $('.nav__item').eq(1).addClass('active');
           document.documentElement.scrollTop = 0;
-//        $(".table-box").scroll(function() {
-//          console.log('loadMore');
-//          that.loadMore();
-//        })
           $(window).scroll(function() {                    
             var scrollTop = $(this).scrollTop();                    
             var scrollHeight = $(document).height();                    
@@ -553,18 +538,17 @@
             if(scrollHeight - scrollTop - windowHeight < 100) {
               if(that.loadFlag) {
                 that.loadFlag = false;
-//              that.getDataList();
-                that.loadMore();
+                that.getDataList();
               }
             }
           })
         },
         watch:{ 
             table_data:function(){
-                let height = $(".table-box").scrollTop();
+                let height = $(window).scrollTop();
+                console.log(height);
                 this.$nextTick(() => {
-                    var div = document.getElementsByClassName('table-box')[0];
-                    div.scrollTop = height
+                    $(window).scrollTop = height
                 })
             }
         },
@@ -574,7 +558,6 @@
             var scrollTop = document.documentElement.scrollTop;
             console.log('start', scrollTop)
             var that = this;
-            //					if (that.loadFlag) {
             console.log('inner', that.loadFlag)
             that.loadFlag = false;
             $.ajax({
@@ -607,20 +590,6 @@
               }
             });
             //					}
-          },
-          loadMore() {
-            that = this;
-//          let scrollTop = document.getElementsByClassName("table-box")[0].scrollTop;
-//          let height = $(".table-box").height();
-//          let htmlHeight = $(".table-loading").height()
-            //console.log(scrollTop + ',' + height + "," + scrollHeight)
-//          if(scrollTop + height >= htmlHeight) {
-//          var scrollTop = $(this).scrollTop();                    
-//          var scrollHeight = $(document).height();                    
-//          var windowHeight = $(this).height();                    
-//          if(scrollHeight - scrollTop - windowHeight < 100) {
-//          }
-            that.getDataList()
           }, //鼠标上移全部项目显示
           projec_all: function() {
             var that = this;

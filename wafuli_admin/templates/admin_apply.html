@@ -20,6 +20,9 @@
         .el-input {
             width: 55%;
         }
+        .oprate{
+            padding: 11px 17px;
+        }
     </style>
 </head>
 
@@ -108,7 +111,7 @@
                         <el-col :span="12" style="display: flex;justify-content: flex-end;">
                             <div class="grid-content bg-purple">
                                 <el-button type="primary" @click='search'>搜索</el-button>
-                                <el-button type="primary" @click="export_txt">导出</el-button>
+                                <el-button type="info" @click="export_txt">导出</el-button>
                             </div>
                         </el-col>
                     </el-row>
@@ -143,7 +146,10 @@
                             <template slot-scope="scope">${ scope.row.user_invest_orientation }</template>
                         </el-table-column>
                         <el-table-column label="操作">
-                            <template slot-scope="scope">${ scope.row.user_invest_orientation }</template>
+                            <template slot-scope="scope">
+                                <el-button class="oprate" type="primary">同意</el-button>
+                                <el-button class="oprate" type="danger">拒绝</el-button>
+                            </template>
                         </el-table-column>
                     </el-table>
                     <div class="pagination-box">
@@ -171,7 +177,7 @@
                 qq_name: '',
                 deal_phone_number: '',
                 select: '',
-                activeNav: '1-2',
+                activeNav: '1-3',
                 rowStyle: {
                     'text-align': 'center'
                 },
@@ -193,7 +199,7 @@
                     var that = this;
                     $.ajax({
                         type: "get",
-                        url: '/restapi/applylog/?page=' + that.page + '&pageSize=' + that.pageSize,
+                        url: '/restapi/applylog/?page=' + that.page + '&pageSize=' + that.pageSize + '&submit_date_0='+ that.s_time0 +'&submit_date_1='+ that.e_time0 +'&audit_date_0='+ that.s_time1 +'&audit_date_1='+ that.e_time1 +'&mobile='+that.phone_number+'&qq_number='+ that.qq_number +'&qq_name='+ that.qq_name +'&admin_user_mobile='+ that.deal_phone_number +'&audit_state='+ that.select,
                         async: true,
                         success: function (res) {
                             console.log(res);
@@ -209,7 +215,8 @@
                     });
                 },
                 search: function () {
-                    console.log('searchData')
+                    var that = this;
+
                 },
                 export_txt: function () {
                     console.log('export')

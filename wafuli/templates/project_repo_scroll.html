@@ -225,11 +225,27 @@
       }
       
       .back_top {
-        width: 60px;
-        height: 60px;
-        background: #b5b5b5;
+        width: 52px;
+        height: 52px;
+        vertical-align: middle;
+        text-align: center;
         position: fixed;
-        right: ;
+        right: 110px;
+        bottom: 30px;
+        background: rgba(0, 0, 0, .3);
+        cursor: pointer;
+      }
+      
+      .pic_box {
+        width: 52px;
+        height: 52px;
+        background: url('../../static/images/back_up.png') no-repeat center center;
+      }
+      
+      .pic_box:hover {
+        width: 52px;
+        height: 52px;
+        background: url('../../static/images/back_up1.png') no-repeat center center;
       }
       
       .el-table__empty-block {
@@ -391,7 +407,9 @@
           </div>
         </div>
       </div>
-      <div class='back_top'></div>
+      <div class='back_top' v-show='is_goTop'>
+        <div class="pic_box" @click='backTop'></div>
+      </div>
     </div>
 
     <script type="text/javascript">
@@ -406,6 +424,7 @@
           all_project: '',
           scroll: '',
           search_ipt: '',
+          is_goTop:false,
           table_data: [],
           pageSize: 10,
           page: 1,
@@ -545,20 +564,30 @@
               }
             }
           })
-        },
-        watch:{ 
-            table_data:function(){
-              var that = this;
-                console.log('data chantge')
-                let height = document.documentElement.scrollTop;
-                console.log(height);
-                this.$nextTick(function() {
-                    document.documentElement.scrollTop = height;
-                    console.log(height);
-                    that.loadFlag = true;
-                    that.isLoading = false;
-                })
+          $(window).scroll(function () {
+            var scrollTop = $(this).scrollTop();
+            var scrollHeight = $(document).height();
+            var windowHeight = $(this).height();
+            if(scrollTop >= 650){
+              that.is_goTop = true;
+            }else if(scrollTop == 0){
+              that.is_goTop = false;
             }
+          })
+        },
+        watch: {
+          table_data: function() {
+            var that = this;
+            console.log('data chantge')
+            let height = document.documentElement.scrollTop;
+            console.log(height);
+            this.$nextTick(function() {
+              document.documentElement.scrollTop = height;
+              console.log(height);
+              that.loadFlag = true;
+              that.isLoading = false;
+            })
+          }
         },
         methods: {
           getDataList: function() {
@@ -650,6 +679,10 @@
             that.loadFlag = true;
             that.is_show = false;
             that.getDataList();
+          },
+          backTop: function () {
+            console.log('goTop');
+            $("html,body").animate({ scrollTop: 0 }, 500);
           },
           getDate: function(AddDayCount) {
             var dd = new Date();

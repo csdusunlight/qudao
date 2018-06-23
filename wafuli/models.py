@@ -102,7 +102,7 @@ class Project(models.Model):
     investrange = models.CharField(u"投资额度区间", max_length=20)
     intrest = models.CharField(u"预期年化", max_length=20)
     necessary_fields = models.CharField(u"必填字段", max_length=50,help_text=u"投资用户名(0)，投资金额(1)，投资标期(2)，投资日期(3)，\
-                支付宝信息(4)，投资手机号(5)，预期返现金额(6)，QQ号(7)，投资截图(8)，字段以英文逗号隔开，如0,1,2,3,4,5", default = '1,2,3,4,5,6')
+                支付宝信息(4)，投资手机号(5)，预期返现金额(6)，QQ号(7)，投资截图(8)，支付宝姓名（9）字段以英文逗号隔开，如0,1,2,3,4,5", default = '1,2,3,4,5,6,9')
     subscribers = models.ManyToManyField(MyUser, through='SubscribeShip')
     points = models.IntegerField(u"参与人数", default=0)
     channel = models.CharField(u"项目来源（上游渠道）", max_length=20, blank=True)

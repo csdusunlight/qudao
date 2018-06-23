@@ -28,7 +28,7 @@
             <el-row :gutter="20">
               <el-col :span="4">
                 <div class="grid-content bg-purple">
-                    <el-input v-model="input" v-model="searchValue" placeholder="请输入内容"></el-input>
+                    <el-input v-model="searchValue" placeholder="请输入内容"></el-input>
                 </div>
               </el-col>
               <el-col :span="6">
@@ -106,7 +106,6 @@
       },
       created: function() {
         var that = this;
-        // this.getAllPlan();
         this.getDataList(1,10);
       },
       methods: {
@@ -135,10 +134,7 @@
         },
         searchData:function(){
           var that = this;
-          console.log('search')
           app.currentPage = 1;
-          that.searchValue = app.searchValue
-          // var search_value = that.searchValue;
           app.getDataList();
         }
       }

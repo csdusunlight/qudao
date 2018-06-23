@@ -325,7 +325,7 @@
             </div>
           </div>
           <!-- 项目部分 -->
-          <div v-loading="isLoading" class="table-box" v-if='"{{user.is_authenticated}}" == "True"'>
+          <div v-loading.fullscreen="isLoading" class="table-box" v-if='"{{user.is_authenticated}}" == "True"'>
             <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="table_data" style="width: 100%;">
               <el-table-column label="平台">
                 <template slot-scope="scope">
@@ -360,7 +360,7 @@
             <div class="no_data" v-if="is_show">我可是有底线的~</div>
             <div class="no_data" v-else="is_show">下拉加载更多~</div>
           </div>
-          <div v-loading="isLoading" class="table-box" v-else>
+          <div v-loading.fullscreen="isLoading" class="table-box" v-else>
             <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="table_data" style="width: 100%;">
               <el-table-column label="平台">
                 <template slot-scope="scope">

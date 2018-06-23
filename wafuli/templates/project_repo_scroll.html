@@ -324,7 +324,7 @@
             </div>
           </div>
           <!-- 项目部分 -->
-          <div class="table-box" v-if='"{{user.is_authenticated}}" == "True"'>
+          <div v-loading="isLoading" class="table-box" v-if='"{{user.is_authenticated}}" == "True"'>
             <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="table_data" style="width: 100%;">
               <el-table-column label="平台">
                 <template slot-scope="scope">
@@ -413,6 +413,7 @@
           },
           loadFlag: true,
           currentPage: 1,
+          isLoading: false
         },
         created: function() {
           var that = this;
@@ -544,12 +545,15 @@
         },
         watch:{ 
             table_data:function(){
+              var that = this;
                 console.log('data chantge')
                 let height = document.documentElement.scrollTop;
                 console.log(height);
                 this.$nextTick(function() {
                     document.documentElement.scrollTop = height;
                     console.log(height);
+                    that.loadFlag = true;
+                    that.isLoading = false;
                 })
             }
         },
@@ -567,12 +571,11 @@
                 if(res.code == 0) {
                   var data = res.results;
                   if(data.length != 0) {
+                    that.isLoading = true;
                     that.page++
                     setTimeout(function() {
                       that.table_data = that.table_data.concat(data);
-                      that.loadFlag = true;
-                      console.log(that.loadFlag);
-                    }, 1000)
+                    }, 400)
                   } else {
                     that.is_show = true;
                   }

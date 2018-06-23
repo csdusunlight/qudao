@@ -316,13 +316,13 @@
 				newProject: [],
 				endProject: [],
 				noticeProject: [],
-				show: true,
+				show: false,
 				all_project: '',
 				scroll: '',
 				search_ipt: '',
 				table_data: [],
 				// tableData: {},
-				pageSize: 20,
+				pageSize: 1,
 				page: 1,
 				multipleSelection: [],
 				checkIdList: '',
@@ -368,8 +368,6 @@
 											that.page++
 											console.log(that.table_data)
 											console.log(that.page)
-										} else {
-											show = true;
 										}
 									} else {
 										console.log('error')

@@ -44,7 +44,13 @@ def project_all(request):
     else:
         template = 'm_project_repo_nologin.html' if request.mobile else 'project_repo.html'         #llc
     return render(request, template, {'hot_platforms':hot_platforms})
-    
+
+def project_all_scroll(request):        #jzy
+    hot_platforms = Company.objects.order_by('-view_count')[0:6]
+    print hot_platforms
+    template = 'project_repo_scroll.html'
+    return render(request, template, {'hot_platforms':hot_platforms})
+   
 def user_guide(request):
     return render(request, 'user_guide.html',  )
 def activity_rank(request):

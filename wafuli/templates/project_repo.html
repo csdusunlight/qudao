@@ -24,6 +24,11 @@
 			position: relative;
 		}
 
+		table {
+			border-collapse: collapse;
+			border-spacing: 0;
+		}
+
 		.wrapper {
 			width: 1310px;
 			margin: 0 auto;
@@ -131,7 +136,7 @@
 		}
 
 		.el-table td {
-			padding: 35px 0;
+			padding: 20px 0;
 		}
 
 		.el-table th {
@@ -139,24 +144,34 @@
 		}
 
 		.el-table tr {
-			margin-top: 10px;
-			transition: all 0.5 ease-in !important;
+			/* transition: all 0.5 ease-in !important; */
+			transition: box-shadow 0.4s ease;
 			cursor: pointer;
 		}
 
 		.el-table tr:hover {
-			box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5) !important;
+			box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2) !important;
+		}
+
+		.el-table__body tr.current-row>td {
+			background: transparent !important;
+		}
+
+		.el-table--enable-row-hover .el-table__body tr:hover>td {
+			background-color: transparent;
+			;
 		}
 
 		.no_data {
 			width: 100%;
-			height: 50px;
-			line-height: 55px;
+			height: 100px;
+			line-height: 80px;
 			text-align: center;
 			font-size: 18px;
+			margin-top: 30px;
 		}
 
-		.get_more_data{
+		.get_more_data {
 			width: 100%;
 			height: 50px;
 			line-height: 55px;
@@ -223,14 +238,62 @@
 			width: 120px;
 			height: 50px;
 		}
-		.back_top{
-			width: 60px;
-			height: 60px;
-			background: #b5b5b5;
-			position: fixed;right: ;
+
+		.back_top {
+			width: 52px;
+			height: 52px;
+			vertical-align: middle;
+			text-align: center;
+			position: fixed;
+			right: 110px;
+			bottom: 30px;
+			background: rgba(0, 0, 0, .3);
+			cursor: pointer;
 		}
+
+		.pic_box {
+			width: 52px;
+			height: 52px;
+			background: url('../../static/images/back_up.png') no-repeat center center;
+		}
+
+		.pic_box:hover {
+			width: 52px;
+			height: 52px;
+			background: url('../../static/images/back_up1.png') no-repeat center center;
+		}
+
 		.el-table__empty-block {
 			display: none !important;
+		}
+
+		.search_ipt {
+			background-color: #fff;
+			background-image: none;
+			border: 1px solid #dcdfe6;
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+			color: #606266;
+			display: inline-block;
+			font-size: inherit;
+			height: 40px;
+			line-height: 40px;
+			outline: 0;
+			padding: 0 15px;
+			-webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+			transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+			width: 100%;
+		}
+
+		.el-table tr {
+			background-color:transparent;
+		}
+		.el-table__header-wrapper {
+			overflow: visible;
+		}
+		.el-table__body-wrapper {
+			overflow: visible;
+			position: relative;
 		}
 	</style>
 </head>
@@ -248,7 +311,7 @@
 								<span class="title">新上项目</span>
 							</div>
 							<div class="pro_btm">
-								<el-carousel trigger="click" height="205px" :interval="5000" indicator-position="outside">
+								<el-carousel :autoplay='false' trigger="click" height="205px" :interval="5000" indicator-position="outside">
 									<el-carousel-item v-for="item in newProject" :key="item[0].id">
 										<div class="newProItem" v-for="i in item" :key="i.id">
 											<span>${i.title}{{is_login}}</span>
@@ -265,7 +328,7 @@
 								<span class="title">结束项目</span>
 							</div>
 							<div class="pro_btm">
-								<el-carousel trigger="click" height="205px" :interval="5000" indicator-position="outside">
+								<el-carousel :autoplay='false' trigger="click" height="205px" :interval="5000" indicator-position="outside">
 									<el-carousel-item v-for="item in endProject" :key="item[0].id">
 										<div class="endProItem" v-for="i in item" :key="i.id">
 											<span>${i.title}</span>
@@ -282,7 +345,7 @@
 								<span class="title">项目重要通知</span>
 							</div>
 							<div class="pro_btm">
-								<el-carousel trigger="click" height="205px" :interval="5000" indicator-position="outside">
+								<el-carousel :autoplay='false' trigger="click" height="205px" :interval="5000" indicator-position="outside">
 									<el-carousel-item v-for="item in noticeProject" :key="item.id">
 										<div class="noticeProItem" v-for="i in item" :key="item.id">
 											<div class="dot"></div>
@@ -301,7 +364,8 @@
 					<div class="searchBar">
 						<el-col :span="18">
 							<div class="grid-content bg-purple">
-								<el-input v-model="search_ipt" placeholder="请输入内容"></el-input>
+								<!-- <el-input v-model="search_ipt" placeholder="请输入内容"></el-input> -->
+								<input class="search_ipt" type="text" autocomplete="off" v-model="search_ipt" placeholder="请输入内容" />
 							</div>
 						</el-col>
 						<el-col :span="4">
@@ -356,9 +420,9 @@
 							</template>
 						</el-table-column>
 					</el-table>
-					<div class="no_data" v-show="is_show">没有更多数据了~</div>
-				</div>
-				<div class="table-box" v-else>
+					<div class="no_data" v-show="is_show">无更多项目</div>
+				</div> 
+				 <div class="table-box" v-else>
 					<el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="table_data" style="width: 100%;">
 						<el-table-column label="平台">
 							<template slot-scope="scope">
@@ -384,11 +448,14 @@
 							<template slot-scope="scope">${ scope.row.remark }</template>
 						</el-table-column>
 					</el-table>
-					<div class="no_data" v-show="is_show">没有更多数据了~</div>
+					<div class="no_data" v-show="is_show">无更多项目</div>
 				</div>
 			</div>
 		</div>
-		<div class='back_top'></div>
+		<div class='back_top'>
+			<div class="pic_box" @click='backTop'></div>
+		</div>
+		<!-- <div class='back_top'><img src="{% static 'images/back_up.png' %}" /></div> -->
 	</div>
 
 
@@ -438,7 +505,7 @@
 					var scrollHeight = $(document).height();
 					var windowHeight = $(this).height();
 					if (scrollHeight - scrollTop - windowHeight < 100) {
-						console.log('out',that.loadFlag);
+						console.log('out', that.loadFlag);
 						that.getDataList();
 						// if (that.loadFlag) {
 						// 	console.log('inner',that.loadFlag)
@@ -471,7 +538,6 @@
 						// 		}
 						// 	});
 						// }
-
 					}
 				})
 				//新上项目数据加载
@@ -550,16 +616,16 @@
 					}
 				})
 			},
-			mounted() {
+			mounted: function () {
 				document.body.style.opacity = '1';
 				// console.log($('.nav__itembox'));
 				$('.nav__item').eq(1).addClass('active');
 			},
 			methods: {
-				getDataList: function() {
+				getDataList: function () {
 					var that = this;
 					if (that.loadFlag) {
-						console.log('inner',that.loadFlag)
+						console.log('inner', that.loadFlag)
 						that.loadFlag = false;
 						$.ajax({
 							type: "get",
@@ -576,15 +642,15 @@
 										})
 									} else {
 										that.is_show = true;
-									} 
+									}
 								} else {
 									console.log('error')
 								}
 							},
-							error:function(res){
+							error: function (res) {
 								console.log('Eorror')
 								console.log(res)
-								if(res.responseJSON.detail == 'Invalid page.'){
+								if (res.responseJSON.detail == 'Invalid page.') {
 									console.log('test_isShow')
 									that.is_show = true;
 								}
@@ -695,6 +761,11 @@
 
 						}
 					})
+				},
+				//回到顶部
+				backTop: function () {
+					console.log('goTop');
+					$("html,body").animate({ scrollTop: 0 }, 500);
 				},
 				getDate: function (AddDayCount) {
 					var dd = new Date();

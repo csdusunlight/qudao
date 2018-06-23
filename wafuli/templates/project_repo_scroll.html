@@ -14,6 +14,9 @@
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <style type="text/css">
+      body {
+        min-height: 1100px;
+      }
       #app {
         min-width: 1310px;
         min-height: 800px;
@@ -376,7 +379,7 @@
             <div class="no_data" v-if="is_show">我可是有底线的~</div>
             <div class="no_data" v-else="is_show">下拉加载更多~</div>
           </div>
-          <div v-loading.fullscreen="isLoading" element-loading-background="rgba(255, 255, 255, 0)" class="table-box" v-else>
+          <div v-else v-loading.fullscreen="isLoading" element-loading-background="rgba(255, 255, 255, 0)" class="table-box">
             <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="table_data" style="width: 100%;">
               <el-table-column label="平台">
                 <template slot-scope="scope">

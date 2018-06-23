@@ -537,7 +537,6 @@
             var windowHeight = $(this).height();                    
             if(scrollHeight - scrollTop - windowHeight < 100) {
               if(that.loadFlag) {
-                that.loadFlag = false;
                 that.getDataList();
               }
             }
@@ -545,20 +544,20 @@
         },
         watch:{ 
             table_data:function(){
-                let height = $(window).scrollTop();
+                console.log('data chantge')
+                let height = document.documentElement.scrollTop;
                 console.log(height);
-                this.$nextTick(() => {
-                    $(window).scrollTop = height
+                this.$nextTick(function() {
+                    document.documentElement.scrollTop = height;
+                    console.log(height);
                 })
             }
         },
         methods: {
           getDataList: function() {
-            console.log('getDataList');
             var scrollTop = document.documentElement.scrollTop;
             console.log('start', scrollTop)
             var that = this;
-            console.log('inner', that.loadFlag)
             that.loadFlag = false;
             $.ajax({
               type: "get",
@@ -572,7 +571,8 @@
                     setTimeout(function() {
                       that.table_data = that.table_data.concat(data);
                       that.loadFlag = true;
-                    }, 400)
+                      console.log(that.loadFlag);
+                    }, 1000)
                   } else {
                     that.is_show = true;
                   }

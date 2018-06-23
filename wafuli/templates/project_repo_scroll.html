@@ -404,7 +404,7 @@
           scroll: '',
           search_ipt: '',
           table_data: [],
-          pageSize: 10,
+          pageSize: 1,
           page: 1,
           multipleSelection: [],
           checkIdList: '',
@@ -545,10 +545,10 @@
         watch:{ 
             table_data:function(){
                 console.log('data chantge')
-                let height = $(window).scrollTop();
+                let height = document.documentElement.scrollTop;
                 console.log(height);
                 this.$nextTick(function() {
-                    $(window).scrollTop = height;
+                    document.documentElement.scrollTop = height;
                     console.log(height);
                 })
             }

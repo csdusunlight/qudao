@@ -404,7 +404,7 @@
           scroll: '',
           search_ipt: '',
           table_data: [],
-          pageSize: 1,
+          pageSize: 10,
           page: 1,
           multipleSelection: [],
           checkIdList: '',
@@ -445,17 +445,6 @@
             }
           })
           var that = this;
-          $(window).scroll(function() {                    
-            var scrollTop = $(this).scrollTop();                    
-            var scrollHeight = $(document).height();                    
-            var windowHeight = $(this).height();                    
-            if(scrollHeight - scrollTop - windowHeight < 100) {
-              if (that.loadFlag) {
-              	that.loadFlag = false;
-                that.getDataList();
-              }
-            }
-          })
           //结束项目数据加载
           $.ajax({
             url: '/restapi/projects/?state=20&current_state_date_range_0=' + that.getDate(-3),
@@ -538,19 +527,37 @@
           })
         },
         mounted: function() {
+          var that = this;
           document.body.style.opacity = '1';
-          // console.log($('.nav__itembox'));
           $('.nav__item').eq(1).addClass('active');
           document.documentElement.scrollTop = 0;
-          console.log(document.documentElement.scrollTop);
+          $(window).scroll(function() {                    
+            var scrollTop = $(this).scrollTop();                    
+            var scrollHeight = $(document).height();                    
+            var windowHeight = $(this).height();                    
+            if(scrollHeight - scrollTop - windowHeight < 100) {
+              if(that.loadFlag) {
+                that.loadFlag = false;
+                that.getDataList();
+              }
+            }
+          })
+        },
+        watch:{ 
+            table_data:function(){
+                let height = $(window).scrollTop();
+                console.log(height);
+                this.$nextTick(() => {
+                    $(window).scrollTop = height
+                })
+            }
         },
         methods: {
           getDataList: function() {
             console.log('getDataList');
             var scrollTop = document.documentElement.scrollTop;
-            console.log('start',scrollTop)
+            console.log('start', scrollTop)
             var that = this;
-            //					if (that.loadFlag) {
             console.log('inner', that.loadFlag)
             that.loadFlag = false;
             $.ajax({
@@ -561,15 +568,11 @@
                 if(res.code == 0) {
                   var data = res.results;
                   if(data.length != 0) {
-                    that.table_data = that.table_data.concat(data);
                     that.page++
-                    that.$nextTick(function() {
-                      document.documentElement.scrollTop = scrollTop;
-                      console.log('end',scrollTop)
-                      setTimeout(function() {
-                        that.loadFlag = true;
-                      },200)
-                    })
+                    setTimeout(function() {
+                      that.table_data = that.table_data.concat(data);
+                      that.loadFlag = true;
+                    }, 400)
                   } else {
                     that.is_show = true;
                   }
@@ -587,8 +590,7 @@
               }
             });
             //					}
-          },
-          //鼠标上移全部项目显示
+          }, //鼠标上移全部项目显示
           projec_all: function() {
             var that = this;
             console.log('mouseover')

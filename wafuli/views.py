@@ -46,7 +46,10 @@ def project_all(request):
     return render(request, template, {'hot_platforms':hot_platforms})
 
 def project_all_scroll(request):        #jzy
-    return render(request, 'project_repo_scroll.html',  )
+    hot_platforms = Company.objects.order_by('-view_count')[0:6]
+    print hot_platforms
+    template = 'project_repo_scroll.html'
+    return render(request, template, {'hot_platforms':hot_platforms})
    
 def user_guide(request):
     return render(request, 'user_guide.html',  )

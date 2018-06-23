@@ -263,9 +263,9 @@
 			background: url('../../static/images/back_up1.png') no-repeat center center;
 		}
 
-		.el-table__empty-block {
+		/* .el-table__empty-block {
 			display: none !important;
-		}
+		} */
 
 		.search_ipt {
 			background-color: #fff;
@@ -349,7 +349,7 @@
 									<el-carousel-item v-for="item in noticeProject" :key="item.id">
 										<div class="noticeProItem" v-for="i in item" :key="item.id">
 											<div class="dot"></div>
-											<span class="important_txt">${i.content}</span>
+											<span style="cursor: pointer;" :title="i.content" class="important_txt">${i.content}</span>
 										</div>
 									</el-carousel-item>
 								</el-carousel>
@@ -389,7 +389,7 @@
 				</div>
 				<!-- 项目部分 -->
 				<div class="table-box" v-if='"{{user.is_authenticated}}" == "True"'>
-					<el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="table_data" style="width: 100%;">
+					<el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="table_data.results" style="width: 100%;">
 						<el-table-column label="平台">
 							<template slot-scope="scope">
 								<a :href="scope.row.strategy">
@@ -420,10 +420,10 @@
 							</template>
 						</el-table-column>
 					</el-table>
-					<div class="no_data" v-show="is_show">无更多项目</div>
-				</div> 
-				 <div class="table-box" v-else>
-					<el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="table_data" style="width: 100%;">
+					<div class="no_data" v-show="is_show">没有更多数据了~</div>
+				</div>
+				<div class="table-box" v-else>
+					<el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="table_data.results" style="width: 100%;">
 						<el-table-column label="平台">
 							<template slot-scope="scope">
 								<img :src="scope.row.logo" />
@@ -450,6 +450,16 @@
 					</el-table>
 					<div class="no_data" v-show="is_show">无更多项目</div>
 				</div>
+				<div class="pagination" style="display: flex;justify-content: flex-end;padding: 20px;">
+          <el-pagination
+            background
+            @current-change="handleCurrentChange"
+            :page-size="pageSize"
+            :current-page="this.currentPage"
+            layout="total, prev, pager, next, jumper"
+            :total="table_data.recordCount">
+          </el-pagination>
+        </div>    <!--pagination-->
 			</div>
 		</div>
 		<div class='back_top'>
@@ -471,7 +481,7 @@
 				all_project: '',
 				scroll: '',
 				search_ipt: '',
-				table_data: [],
+				table_data: {},
 				// tableData: {},
 				pageSize: 10,
 				page: 1,
@@ -481,65 +491,63 @@
 					'text-align': 'center',
 				},
 				loadFlag: true,
+				currentPage: 1,
 			},
 			created: function () {
 				var that = this;
 				console.log('是否登录：', '{{user.is_authenticated}}')
 				var that = this;
-				$.ajax({
-					type: "get",
-					url: '/restapi/projects/?state=10&is_official=true&pageSize=' + that.pageSize + '&page=' + that.page,
-					async: true,
-					success: function (res) {
-						console.log(res.results);
-						if (res.code == 0) {
-							that.table_data = res.results;
-							that.page++;
-						} else {
-							console.log(res)
-						}
-					}
-				});
-				$(window).scroll(function () {
-					var scrollTop = $(this).scrollTop();
-					var scrollHeight = $(document).height();
-					var windowHeight = $(this).height();
-					if (scrollHeight - scrollTop - windowHeight < 100) {
-						console.log('out', that.loadFlag);
-						that.getDataList();
-						// if (that.loadFlag) {
-						// 	console.log('inner',that.loadFlag)
-						// 	that.loadFlag = false;
-						// 	$.ajax({
-						// 		type: "get",
-						// 		url: '/restapi/projects/?state=10&is_official=true&pageSize=' + that.pageSize + '&page=' + that.page + '&search=' + that.search_ipt,
-						// 		async: true,
-						// 		success: function (res) {
-						// 			if (res.code == 0) {
-						// 				var data = res.results;
-						// 				if (data) {
-						// 					that.table_data = that.table_data.concat(data);
-						// 					that.page++
-						// 					that.$nextTick(function () {
-						// 						that.loadFlag = true;
-						// 					})
-						// 				} 
-						// 			} else {
-						// 				console.log('error')
-						// 			}
-						// 		},
-						// 		error:function(res){
-						// 			console.log('Eorror')
-						// 			console.log(res)
-						// 			if(res.responseJSON.detail == 'Invalid page.'){
-						// 				console.log('test_isShow')
-						// 				that.is_show = true;
-						// 			}
-						// 		}
-						// 	});
-						// }
-					}
-				})
+				that.getDataList();
+//				$.ajax({
+//					type: "get",
+//					url: '/restapi/projects/?state=10&is_official=true&pageSize=' + that.pageSize + '&page=' + that.page,
+//					async: true,
+//					success: function (res) {
+//						console.log(res.results);
+//						if (res.code == 0) {
+//							that.table_data = res.results;
+//							that.page++;
+//						} else {
+//							console.log(res)
+//						}
+//					}
+//				});
+//				$(window).scroll(function () {
+//					var scrollTop = $(this).scrollTop();
+//					var scrollHeight = $(document).height();
+//					var windowHeight = $(this).height();
+//					if (scrollHeight - scrollTop - windowHeight < 30) {
+//						console.log('out',that.loadFlag);
+//						that.getDataList();
+//					}
+//				})
+        //结束项目数据加载
+        $.ajax({
+          url: '/restapi/projects/?state=20&current_state_date_range_0=' + that.getDate(-3),
+          type: "GET",
+          async: true,
+          dataType: 'json',
+          success: function (res) {
+            console.log('end 请求 code 为 0');
+            if (res.code == 0) {
+              var arrData = res.results;
+              var length = arrData.length;
+              var num = Math.ceil(length / 6);
+              for (var i = 0; i < num - 1; i++) {
+                that.endProject[i] = arrData.splice(0, 6);
+              }
+              that.endProject[num - 1] = arrData;
+              console.log(that.endProject);
+              console.log('end 数据绑定完毕');
+              that.$forceUpdate();
+            } else {
+              that.$notify.error({
+                title: '错误',
+                message: res.detail
+              });
+            }
+          } //endProject
+        })
 				//新上项目数据加载
 				$.ajax({
 					url: '/restapi/projects/?state=10&current_state_date_range_0=' + that.getDate(-3),
@@ -555,6 +563,7 @@
 								that.newProject[i] = arrData.splice(0, 6);
 							}
 							that.newProject[num - 1] = arrData;
+							that.$forceUpdate()
 
 						} else {
 							that.$notify.error({
@@ -566,29 +575,6 @@
 					error: function () {
 						console.log('出错了');
 					}
-				})
-				//结束项目数据加载
-				$.ajax({
-					url: '/restapi/projects/?state=20&current_state_date_range_0=' + that.getDate(-3),
-					type: "GET",
-					async: true,
-					dataType: 'json',
-					success: function (res) {
-						if (res.code == 0) {
-							var arrData = res.results;
-							var length = arrData.length;
-							var num = Math.ceil(length / 6);
-							for (var i = 0; i < num - 1; i++) {
-								that.endProject[i] = arrData.splice(0, 6);
-							}
-							that.endProject[num - 1] = arrData;
-						} else {
-							that.$notify.error({
-								title: '错误',
-								message: res.detail
-							});
-						}
-					} //endProject
 				})
 				//重要项目通知
 				$.ajax({
@@ -622,27 +608,29 @@
 				$('.nav__item').eq(1).addClass('active');
 			},
 			methods: {
-				getDataList: function () {
+				getDataList: function() {
+				  console.log('getDataList');
 					var that = this;
-					if (that.loadFlag) {
-						console.log('inner', that.loadFlag)
+//					if (that.loadFlag) {
+						console.log('inner',that.loadFlag)
 						that.loadFlag = false;
 						$.ajax({
 							type: "get",
-							url: '/restapi/projects/?state=10&is_official=true&pageSize=' + that.pageSize + '&page=' + that.page + '&search=' + that.search_ipt,
+							url: '/restapi/projects/?state=10&is_official=true&is_addedto_repo=true&pageSize=' + that.pageSize + '&page=' + that.page + '&search=' + that.search_ipt,
 							async: true,
 							success: function (res) {
 								if (res.code == 0) {
-									var data = res.results;
-									if (data.length != 0) {
-										that.table_data = that.table_data.concat(data);
-										that.page++
-										that.$nextTick(function () {
-											that.loadFlag = true;
-										})
-									} else {
-										that.is_show = true;
-									}
+								  that.table_data = res;
+//									var data = res.results;
+//									if (data.length != 0) {
+//										that.table_data = that.table_data.concat(data);
+//										that.page++
+//										that.$nextTick(function () {
+//											that.loadFlag = true;
+//										})
+//									} else {
+//										that.is_show = true;
+//									} 
 								} else {
 									console.log('error')
 								}
@@ -656,8 +644,15 @@
 								}
 							}
 						});
-					}
+//					}
 				},
+				handleCurrentChange: function (val) {
+				  var that = this;
+				  that.page = val;
+				  console.log(that.page);
+          that.currentPage = val;
+          that.getDataList();
+        },
 				//鼠标上移全部项目显示
 				projec_all: function () {
 					var that = this;
@@ -684,8 +679,9 @@
 				//点击搜索
 				search_data: function () {
 					var that = this;
-					that.table_data = [];
+//					that.table_data = [];
 					that.page = 1;
+					that.currentPage = 1;
 					that.loadFlag = true;
 					that.is_show = false;
 					that.getDataList();
@@ -713,8 +709,9 @@
 				//热搜点击搜索
 				search_item: function (e, name) {
 					var that = this;
-					that.table_data = [];
+//					that.table_data = [];
 					that.page = 1;
+					that.currentPage = 1;
 					that.search_ipt = name;
 					that.loadFlag = true;
 					that.is_show = false;
@@ -743,24 +740,30 @@
 				//全部项目点击其中一个搜索
 				search_all: function (e, name) {
 					var that = this;
-					console.log(name)
-					$.ajax({
-						url: '/restapi/projects/?state=10&is_official=true&page=1&search=' + encodeURI(name),
-						type: 'get',
-						async: false,
-						dataType: 'json',
-						success: function (res) {
-							if (res.code == 0) {
-								that.table_data = res.results;
-							} else {
-								that.$notify.error({
-									title: '错误',
-									message: res.detail
-								});
-							}
-
-						}
-					})
+//          that.table_data = [];
+          that.page = 1;
+          that.currentPage = 1;
+          that.search_ipt = name;
+          that.loadFlag = true;
+          that.is_show = false;
+          that.getDataList();
+//					$.ajax({
+//						url: '/restapi/projects/?state=10&is_official=true&page=1&search=' + encodeURI(name),
+//						type: 'get',
+//						async: false,
+//						dataType: 'json',
+//						success: function (res) {
+//							if (res.code == 0) {
+//								that.table_data = res.results;
+//							} else {
+//								that.$notify.error({
+//									title: '错误',
+//									message: res.detail
+//								});
+//							}
+//
+//						}
+//					})
 				},
 				//回到顶部
 				backTop: function () {

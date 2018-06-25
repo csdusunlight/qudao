@@ -20,7 +20,7 @@ class Command(BaseCommand):
         coupons = UserCoupon.objects.filter(expire__isnull=True,type='heyue')
         for coupon in coupons:
             contract = coupon.contract
-            coupon.end_date = coupon.start_date + datetime.timedelta(days=contract.continue_days)
-            coupon.save(update_fields=['end_date'])
+            coupon.expire = coupon.start_date + datetime.timedelta(days=contract.expire_days or 30)
+            coupon.save(update_fields=['expire'])
             
             

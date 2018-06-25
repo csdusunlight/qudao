@@ -13,17 +13,16 @@ def my_signal_handler(sender, **kwargs):
     user = kwargs.get('user')
     contracts = Contract.objects.filter(name__startswith=u"新手红包")
     bulks = []
-    for con in contracts:
-        for contract in contracts:
-            if contract.start_date:
-                start_date = contract.start_date
-            else:
-                start_date = datetime.date.today()
-            end_date = start_date + datetime.timedelta(days=contract.continue_days)
-            expire = start_date + datetime.timedelta(days=contract.exipire_days)
-            coupon = UserCoupon(user=user, contract=contract, type='heyue', expire=expire,
-                                start_date=start_date, end_date=end_date, award=contract.award)
-            bulks.append(coupon)
+    for contract in contracts:
+        if contract.start_date:
+            start_date = contract.start_date
+        else:
+            start_date = datetime.date.today()
+        end_date = start_date + datetime.timedelta(days=contract.continue_days)
+        expire = start_date + datetime.timedelta(days=contract.exipire_days)
+        coupon = UserCoupon(user=user, contract=contract, type='heyue', expire=expire,
+                            start_date=start_date, end_date=end_date, award=contract.award)
+        bulks.append(coupon)
     start_date = datetime.date.today()
     expire = start_date + datetime.timedelta(days=30)
     bulks.append(UserCoupon(type='guanzhu', user=user, award=1, expire=expire))

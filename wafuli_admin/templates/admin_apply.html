@@ -147,8 +147,8 @@
                         </el-table-column>
                         <el-table-column label="操作">
                             <template slot-scope="scope">
-                                <el-button class="oprate" type="primary">同意</el-button>
-                                <el-button class="oprate" type="danger">拒绝</el-button>
+                                <el-button class="oprate" type="primary" @click='agree(scope.row)'>同意</el-button>
+                                <el-button class="oprate" type="danger" @click='refuse(scope.row)'>拒绝</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -216,10 +216,22 @@
                 },
                 search: function () {
                     var that = this;
-
+                    that.getDataList();
                 },
                 export_txt: function () {
                     console.log('export')
+                },
+                agree:function(row){
+                    var that = this;
+                    console.log('同意该条数据的id',row.id)
+                    $.ajax({
+                        url:url,
+                        
+                    })
+                },
+                refuse:function(row){
+                    var that = this;
+                    console.log('拒绝该条数据的id',row.id)
                 }
             }
         })

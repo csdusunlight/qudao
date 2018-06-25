@@ -51,7 +51,7 @@ class ProjectList(BaseViewMixin, generics.ListCreateAPIView):
     filter_backends = (SearchFilter, django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
     filter_class = ProjectFilter
 #     filter_fields = ['state','type','is_multisub_allowed','is_official','category']
-    ordering_fields = ('state','pub_date','pinyin')
+    ordering_fields = ('state','pub_date','pinyin','current_state_date')
     search_fields = ('title','company__name')
     pagination_class = MyPageNumberPagination
     def perform_create(self, serializer):

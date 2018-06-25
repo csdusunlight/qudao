@@ -13,6 +13,10 @@ from account.models import MyUser, AdminPermission
 import datetime
 class Command(BaseCommand):
     def handle(self, *args, **options):
+        coupons = UserCoupon.objects.filter(start_date__isnull=True,type='heyue')
+        for coupon in coupons:
+            coupon.start_date = coupon.create_date
+            coupon.save(update_fields=['start_date'])
         coupons = UserCoupon.objects.filter(expire__isnull=True,type='heyue')
         for coupon in coupons:
             contract = coupon.contract

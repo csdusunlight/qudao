@@ -1,4 +1,4 @@
-﻿{% load staticfiles %}
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="zh">
 
@@ -355,7 +355,7 @@
             <div class="searchBar">
               <el-col :span="18">
                 <div class="grid-content bg-purple">
-                  <el-input v-model="search_ipt" placeholder="请输入内容"></el-input>
+                  <el-input v-model="search_ipt" placeholder="请输入内容" @keyup.enter.native='enter'></el-input>
                 </div>
               </el-col>
               <el-col :span="4">
@@ -505,7 +505,7 @@
           var that = this;
           //结束项目数据加载
           $.ajax({
-            url: '/restapi/projects/?state=20&current_state_date_range_0=' + that.getDate(-3),
+            url: '/restapi/projects/?state=20&ordering=-current_state_date&is_official=true&is_addedto_repo=true&current_state_date_range_0=' + that.getDate(-3),
             type: "GET",
             async: true,
             dataType: 'json',
@@ -532,7 +532,7 @@
           })
           //新上项目数据加载
           $.ajax({
-            url: '/restapi/projects/?state=10&current_state_date_range_0=' + that.getDate(-3),
+            url: '/restapi/projects/?state=10&ordering=-current_state_date&is_official=true&is_addedto_repo=true&current_state_date_range_0=' + that.getDate(-3),
             type: 'get',
             async: true,
             dataType: 'json',
@@ -632,7 +632,7 @@
             that.loadFlag = false;
             $.ajax({
               type: "get",
-              url: '/restapi/projects/?state=10&is_official=true&is_addedto_repo=true&pageSize=' + that.pageSize + '&page=' + that.page + '&search=' + that.search_ipt,
+              url: '/restapi/projects/?state=10&ordering=-current_state_date&is_official=true&is_addedto_repo=true&pageSize=' + that.pageSize + '&page=' + that.page + '&search=' + that.search_ipt,
               async: true,
               success: function(res) {
                 if(res.code == 0) {
@@ -715,6 +715,12 @@
             that.is_show = false;
             that.getDataList();
           },
+					//keyup
+					enter:function(){
+						var that = this;
+						that.search_data();
+					},
+					//回到顶部
           backTop: function () {
             console.log('goTop');
             $("html,body").animate({ scrollTop: 0 }, 500);

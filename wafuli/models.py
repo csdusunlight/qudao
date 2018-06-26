@@ -286,6 +286,8 @@ class InvestLog(models.Model):
     def get_project_broker(self):
         level = self.user.level
         return getattr(self.project, 'broker_rate'+str(level)) or self.project.broker_rate
+    def get_shoukuan_info(self):
+        return self.zhifubao + '/' + self.zhifubao_name
 
 STATE = (
     ('0', u'置顶'),

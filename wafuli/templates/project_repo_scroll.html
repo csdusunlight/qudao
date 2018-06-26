@@ -415,7 +415,9 @@
             <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="table_data" style="width: 100%;">
               <el-table-column label="平台">
                 <template slot-scope="scope">
-                  <img :src="scope.row.logo" />
+                  <div class="logoBox">
+                    <img :src="scope.row.logo" />
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column label="推广标期">
@@ -478,7 +480,7 @@
           console.log(document.documentElement.scrollTop);
           $.ajax({
             type: "get",
-            url: '/restapi/projects/?state=10&is_official=true&is_addedto_repo=true&pageSize=' + that.pageSize + '&page=' + that.page + '&search=' + that.search_ipt,
+            url: '/restapi/projects/?state=10&is_official=true&is_addedto_repo=true&pageSize=' + that.pageSize + '&page=' + that.page + '&search=' + encodeURI(that.search_ipt),
             async: true,
             success: function(res) {
               if(res.code == 0) {
@@ -632,7 +634,7 @@
             that.loadFlag = false;
             $.ajax({
               type: "get",
-              url: '/restapi/projects/?state=10&ordering=-current_state_date&is_official=true&is_addedto_repo=true&pageSize=' + that.pageSize + '&page=' + that.page + '&search=' + that.search_ipt,
+              url: '/restapi/projects/?state=10&ordering=-current_state_date&is_official=true&is_addedto_repo=true&pageSize=' + that.pageSize + '&page=' + that.page + '&search=' + encodeURI(that.search_ipt),
               async: true,
               success: function(res) {
                 if(res.code == 0) {

@@ -36,37 +36,38 @@
                 <div class="container">
                    
                     <!-- tabale -->
+                    <el-header>数据总览</el-header>
                     <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"
                         border>
                         <el-table-column label="日期">
-                            <template slot-scope="scope">${ scope.row.qq_number }</template>
+                            <template slot-scope="scope">${ scope.row.date }</template>
                         </el-table-column>
                         <el-table-column label="开通人数">
-                            <template slot-scope="scope">${ scope.row.qq_name }</template>
+                            <template slot-scope="scope">${ scope.row.merchant_people }</template>
                         </el-table-column>
                         <el-table-column label="放单人数">
-                            <template slot-scope="scope">${ scope.row.mobile }</template>
+                            <template slot-scope="scope">${ scope.row.merchant_people_active }</template>
                         </el-table-column>
                         <el-table-column label="项目在线人数">
-                            <template slot-scope="scope">${ scope.row.submit_time.split('T')[0] }</template>
+                            <template slot-scope="scope">${ scope.row.merchant_projects }</template>
                         </el-table-column>
                         <el-table-column label="交单数量">
-                            <template slot-scope="scope">${ scope.row.user_origin }</template>
+                            <template slot-scope="scope">${ scope.row.merchant_investlogs_submit }</template>
                         </el-table-column>
                         <el-table-column label="审核通过数量">
-                            <template slot-scope="scope">${ scope.row.user_exp_year }</template>
+                            <template slot-scope="scope">${ scope.row.merchant_investlogs_audit }</template>
                         </el-table-column>
                         <el-table-column label="保证金充值">
-                            <template slot-scope="scope">${ scope.row.user_custom_volumn }</template>
+                            <template slot-scope="scope">${ scope.row.merchant_charge }</template>
                         </el-table-column>
                         <el-table-column label="保证金消耗">
-                            <template slot-scope="scope">${ scope.row.user_funds_volumn }</template>
+                            <template slot-scope="scope">${ scope.row.merchant_consume }</template>
                         </el-table-column>
                         <el-table-column label="佣金">
-                            <template slot-scope="scope">${ scope.row.user_invest_orientation }</template>
+                            <template slot-scope="scope">${ scope.row.merchant_broker }</template>
                         </el-table-column>
                         <el-table-column label=返现金额>
-                            <template slot-scope="scope">${ scope.row.user_invest_orientation }</template>
+                            <template slot-scope="scope">${ scope.row.merchant_settle }</template>
                         </el-table-column>
                     </el-table>
                     <div class="pagination-box">
@@ -85,16 +86,7 @@
             el: '#app',
             delimiters: ['${', '}'],
             data: {
-                s_time0: '',
-                s_time1: '',
-                e_time0: '',
-                e_time1: '',
-                phone_number: '',
-                qq_number: '',
-                qq_name: '',
-                deal_phone_number: '',
-                select: '',
-                activeNav: '1-3',
+                activeNav: '4-3',
                 rowStyle: {
                     'text-align': 'center'
                 },

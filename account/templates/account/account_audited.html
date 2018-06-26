@@ -181,7 +181,7 @@
                 <input type="text" id="telnum_sub" />
             </div>
             <div style="display: none;" class="search__item">
-                <span class="search__name">收款信息：</span>
+                <span class="search__name">支付宝信息：</span>
                 <input type="text" id="zhifubao" />
             </div>
             <div class="search__item">
@@ -258,7 +258,7 @@
                 <input type="text" id="telnum_sub_02" />
             </div>
             <div class="search__item">
-                <span class="search__name">收款信息：</span>
+                <span class="search__name">支付宝信息：</span>
                 <input type="text" id="zhifubao_02" />
             </div>
             <div class="search__item">
@@ -341,8 +341,12 @@
                     <input type="text" class="term" placeholder="填写投资标期" />
                 </div>
                 <div class="popup__item">
-                    <span class="popup__itemname">收款信息：</span>
-                    <input type="text" class="zfb" placeholder="填写收款支付宝" />
+                    <span class="popup__itemname">支付宝账号：</span>
+                    <input type="text" class="zfb" placeholder="填写收款支付宝账号" />
+                </div>
+                <div class="popup__item">
+                    <span class="popup__itemname">支付宝姓名：</span>
+                    <input type="text" class="zfbman" placeholder="填写收款支付宝姓名" />
                 </div>
                 <div class="popup__item">
                     <span class="popup__itemname">备注：</span>
@@ -405,8 +409,12 @@
                     <input type="text" class="term_02" placeholder="填写投资标期" />
                 </div>
                 <div class="popup__item">
-                    <span class="popup__itemname">收款信息：</span>
-                    <input type="text" class="zfb_02" placeholder="填写投资金额" />
+                    <span class="popup__itemname">支付宝账号：</span>
+                    <input type="text" class="zfb_02" placeholder="填写支付宝账号" />
+                </div>
+                <div class="popup__item">
+                    <span class="popup__itemname">支付宝姓名：</span>
+                    <input type="text" class="zfbman_02" placeholder="填写支付宝姓名" />
                 </div>
                 <div class="popup__item">
                     <span class="popup__itemname">备注：</span>
@@ -512,13 +520,9 @@
         '<td class="return-txt">{return_amount}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
 //  未审核
     var data1 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th>支付宝</th><th>支付宝姓名</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td data-remark="{remark}">{other_remark}</td>' +
-//      '<td id="item_{id}"><a class="fyin" onclick="removeData(this,{id})">删除' +
-//      '</a>│<a class="jion-s" onclick="editData(this,{id})">编辑' +
-//      '</a>│<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
-//      '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span></td>'+
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td data-remark="{remark}">{other_remark}</td>' +
         '<td class="handle">详情<div class="handle-box"><a onclick="removeData(this,{id})">删除</a> | '+
         '<a onclick="editData(this,{id})">编辑</a> | '+
         '<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
@@ -526,15 +530,15 @@
         '</tr>[/results]</table>';
 //  已通过
     var data0 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资金额</th><th>投资标期</th><th>审核时间</th>' +
-        '<th>结算金额</th><th>返现金额</th><th class="w-zfb">收款信息</th><th>审核说明</th><th class="w-remark">备注及其他</th><th>操作</th></tr>[results]' +
+        '<th>结算金额</th><th>返现金额</th><th>支付宝</th><th>支付宝姓名</th><th>审核说明</th><th class="w-remark">备注及其他</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td>' +
-        '<td class="submit-time">{audit_time}</td><td>{settle_amount}</td><td class="return-txt">{return_amount}</td><td>{zhifubao}</td><td>{audit_reason}</td><td>{other_remark}</td>'+
+        '<td class="submit-time">{audit_time}</td><td>{settle_amount}</td><td class="return-txt">{return_amount}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{audit_reason}</td><td>{other_remark}</td>'+
         '<td data-return="{return_amount}" class="return-amount"><a class="handle" onclick="pass(this,{id})">返现</a></td></tr>[/results]</table>';
 //  已拒绝
     var data2 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>审核时间</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th>支付宝</th><th>支付宝姓名</th><th>审核时间</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td class="submit-time">{audit_time}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td class="submit-time">{audit_time}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
 //  异常
     var data3 = '<table width="100%"><tr><th>项目名称3</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
         '<th>投资金额</th><th>投资标期</th><th class="w-zfb">异常原因</th><th class="w-remark">备注及其他</th><th style="width:130px">操作</th></tr>[results]' +
@@ -547,9 +551,9 @@
         '</tr>[/results]</table>';
     //  申诉
     var data4 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>审核时间</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th>支付宝</th><th>支付宝姓名</th><th>审核时间</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td class="submit-time">{audit_time}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td class="submit-time">{audit_time}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
 //  全部
     var data_user = '<table width="100%"><tr><th>项目名称</th><th>项目来源</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
         '<th>投资金额</th><th>投资标期</th><th>审核状态</th><th>结算金额</th><th>返现金额</th><th class="w-remark">备注及其他</th></tr>[results]' +
@@ -558,15 +562,9 @@
         '<td class="return-txt">{return_amount}</td><td>{other_remark}</td></tr>[/results]</table>';    
 //  未审核
     var data_user1 = '<table width="100%"><tr><th>项目名称</th><th>项目来源</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th><th>操作</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th>支付宝</th><th>支付宝姓名</th><th class="w-remark">备注及其他</th><th>操作</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{project_channel}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td data-remark="{remark}">{other_remark}</td>' +
-//      '<td id="item_{id}"><a class="fyin" onclick="removeData_02(this,{id})">删除' +
-//      '</a>│<a class="jion-s" onclick="editData_02(this,{id})">编辑'+
-//      '</a>│<a class="jion-s" onclick="pass_02(this,{id})">返现'+
-//      '</a>│<a class="jion-s" onclick="refuse_02(this,{id})">拒绝'+
-//      '</a>│<span data-isimg="{invest_image}" class="addimg-box is-img"><a class="img-submit jion-s" onclick="addImg(this,{id})">提交截图</a>'+
-//      '<a class="img-have" target="_blank" href="{% url 'screenshot' %}?id={id}">已交截图</a></span></td>'+
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td data-remark="{remark}">{other_remark}</td>' +
         '<td class="handle">详情<div class="handle-box"><a onclick="removeData_02(this,{id})">删除</a> | '+
         '<a onclick="editData_02(this,{id})">编辑</a> | <a onclick="pass_02(this,{id})">审核</a> | '+
         '<a onclick="refuse_02(this,{id})">拒绝</a> | '+
@@ -575,19 +573,19 @@
         '</tr>[/results]</table>';
 //  已通过
     var data_user0 = '<table width="100%"><tr><th>项目名称</th><th>项目来源</th><th>提交日期</th><th>提交手机号</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>结算金额</th><th>返现金额</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th>支付宝</th><th>支付宝姓名</th><th>结算金额</th><th>返现金额</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{project_channel}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{settle_amount}</td><td class="return-txt">{return_amount}</td><td data-remark="{remark}">{other_remark}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{settle_amount}</td><td class="return-txt">{return_amount}</td><td data-remark="{remark}">{other_remark}</td></tr>[/results]</table>';
 //  已拒绝
     var data_user2 = '<table width="100%"><tr><th>项目名称</th><th>项目来源</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th>支付宝</th><th>支付宝姓名</th><th>拒绝原因</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td>{project_channel}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{audit_reason}</td><td>{other_remark}</td></tr>[/results]</table>';
 //  已删除
     var data_user4 = '<table width="100%"><tr><th>项目名称</th><th>提交日期</th><th>提交手机号</th><th>投资姓名</th>' +
-        '<th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th></tr>[results]' +
+        '<th>投资金额</th><th>投资标期</th><th>支付宝</th><th>支付宝姓名</th><th class="w-remark">备注及其他</th></tr>[results]' +
         '<tr><td>{project_title}</td><td class="submit-time">{submit_time}</td><td>{invest_mobile}</td><td>{invest_name}</td>' +
-        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{other_remark}</td></tr>[/results]</table>';
+        '<td>{invest_amount}</td><td>{invest_term}</td><td>{zhifubao}</td><td>{zhifubao_name}</td><td>{other_remark}</td></tr>[/results]</table>';
 
         var url = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=true&user={{user.id}}";
         var url2 = "/restapi/investlogs/?page={page}&pageSize={pageSize}&is_official=false&user={{user.id}}";
@@ -675,6 +673,7 @@
                     $(".money").val(ret.invest_amount);
                     $(".term").val(ret.invest_term);
                     $(".zfb").val(ret.zhifubao);
+                    $(".zfbman").val(ret.zhifubao_name);
                     $(".remark").val(ret.remark);
                     $('.popup.m-edit-proj').addClass('in');
                 },
@@ -683,39 +682,6 @@
                     alert(jqXHR.responseText);
                 }
             });
-            
-//          $('.popup.m-edit-proj').addClass('in');
-//          project_id = id;
-//          edit_parent = $(obj).parent().parent().parent();
-//          var parent_dom = $(edit_parent);
-//          console.log(parent_dom);
-//          var children0 = parent_dom.find("td").eq(0).text(),
-//              children1 = parent_dom.find("td").eq(1).text(),
-//              children2 = parent_dom.find("td").eq(2).text(),
-//              children3 = parent_dom.find("td").eq(3).text(),
-//              children4 = parent_dom.find("td").eq(4).text(),
-//              children5 = parent_dom.find("td").eq(5).text(),
-//              children6 = parent_dom.find("td").eq(6).text(),
-//              children7 = parent_dom.find("td").eq(7).data('remark');
-//                              console.log(children0+", "+children1+", "+children2+", "+children3+", "+children4+", "+children5+", ");
-//          var option_val;
-//          var options = $(".project option");
-//          for(var i = 0; i < options.length; i++) {
-//              if($(options)[i].text == children0) {
-//                  option_val = options[i].value;
-//              }
-//
-//          }
-//          console.log(option_val);
-//          $(".project").val(option_val);
-//          $(".date").val(children1);
-//          $(".telnum").val(children2);
-//          $(".zfbname").val(children3);
-//          $(".money").val(children4);
-//          $(".term").val(children5);
-//          $(".zfb").val(children6);
-//          $(".remark").val(children7);
-
         }
 
         $("#confirm_edit").click(function() {
@@ -724,6 +690,7 @@
                 term = $(".term").val(),
                 money = $(".money").val(),
                 zfb = $(".zfb").val(),
+                zfbman = $(".zfbman").val(),
                 zfbname = $(".zfbname").val(),
                 remark = $(".remark").val();
             if(!telnum) {
@@ -731,12 +698,6 @@
                 return;
             }
 
-//          if(date.match(/^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/)) { 
-//              console.log('日期格式正确');
-//          } else { 
-//              alert('日期格式不符合规范'); 
-//              return;
-//          }
             var re_date = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/, //验证日期
                 re_phone = /^1[1,2,3,4,6,5,7,8,9]\d{9}$/, //验证手机号
                 re_amount = /^\d+(\.\d+)?$/; //验证数字格式
@@ -767,6 +728,7 @@
                     'invest_term': term,
                     'invest_amount': money,
                     'zhifubao': zfb,
+                    'zhifubao_name': zfbman,
                     'invest_name': zfbname,
                     'remark': remark
                 },
@@ -779,7 +741,8 @@
                     parent_dom.find("td").eq(4).text(ret.invest_amount);
                     parent_dom.find("td").eq(5).text(ret.invest_term);
                     parent_dom.find("td").eq(6).text(ret.zhifubao);
-                    parent_dom.find("td").eq(7).text(ret.other_remark);
+                    parent_dom.find("td").eq(7).text(ret.zhifubao_name);
+                    parent_dom.find("td").eq(8).text(ret.other_remark);
                     alert('操作成功');
                     $('.popup.m-edit-proj').removeClass('in');
                 },
@@ -953,10 +916,11 @@
                 term = $(".term_02").val(),
                 money = $(".money_02").val(),
                 zfb = $(".zfb_02").val(),
+                zfbman = $(".zfbman_02").val(),
                 zfbname = $(".zfbname_02").val(),
                 remark = $(".remark_02").val();
             console.log(project);
-            console.log(project_id+","+project+","+date+","+telnum+","+term+","+money+","+remark+","+zfb+","+zfbname+",");
+            console.log(project_id+","+project+","+date+","+telnum+","+term+","+money+","+remark+","+zfb+","+zfbman+","+zfbname+",");
             if(!telnum) {
                 alert("提交手机号不能为空");
                 return;
@@ -976,6 +940,7 @@
                     'invest_term': term,
                     'invest_amount': money,
                     'zhifubao': zfb,
+                    'zhifubao_name': zfbman,
                     'invest_name': zfbname,
                     'remark': remark
                 },
@@ -990,7 +955,8 @@
                         parent_dom.find("td").eq(5).text(ret.invest_amount);
                         parent_dom.find("td").eq(6).text(ret.invest_term);
                         parent_dom.find("td").eq(7).text(ret.zhifubao);
-                        parent_dom.find("td").eq(8).text(ret.other_remark);
+                        parent_dom.find("td").eq(8).text(ret.zhifubao_name);
+                        parent_dom.find("td").eq(9).text(ret.other_remark);
                         $('.popup.m-edit-proj_02').removeClass('in');
                 },
                 error: function() {

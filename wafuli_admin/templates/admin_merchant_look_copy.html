@@ -1,0 +1,38 @@
+{% extends "base.html" %} {% block js %}
+<script type="text/javascript">
+    var data = '<table width="100%"><tr><th>日期</th><th>开通人数</th><th>放单人数</th><th>项目在线数量</th>' +
+        '<th>交单数量</th><th>审核通过数量</th><th>保证金充值</th><th>保证金消耗</th><th>佣金</th><th>返现金额</th>' +
+        '[results]<tr><td>{date}</td><td>{merchant_people}</td><td>{merchant_people_active}</td>' +
+        '<td>{merchant_projects}</td><td>{merchant_investlogs_submit}</td><td>{merchant_investlogs_audit}</td><td>{merchant_charge}</td>' +
+        '<td>{merchant_consume}</td><td>{merchant_broker}</td><td>{merchant_settle}</td>' +
+        '</tr>[/results]</table>';
+    var url = "/restapi/daystatis/" + "?page={page}&pageSize={pageSize}";
+    $(document).ready(function() {
+        $(".ListTable tr:even").css("background-color", "#fcfcfc");
+        $("li.home20").toggleClass("on");
+        $("#pagedata").ajaxPage({
+            url: url,
+            pageId: $("#page"),
+            pageSize: 10,
+            run: true,
+            content: data,
+        });
+    });
+</script>
+{% endblock js %} {% block right %}
+<div class="Dateover">
+    <span>放单分析</span>
+    <div class="Date-box">
+        <div class="ListTable">
+            <div id="pagedata">
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<div class="Page-in-admin">
+    <div class="page" id="page">
+    </div>
+</div>
+{% endblock %}

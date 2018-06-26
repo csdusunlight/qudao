@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block js %}
+<script type="text/javascript"> 
+var data = '<table width="100%"><tr><th>日期</th><th>红包发放个数</th><th>红包发放用户数</th><th>红包发放总额</th>'+
+	'<th>激活红包人数</th><th>激活红包数量</th><th>激活红包总额</th>'+
+	'[results]<tr><td>{date}</td><td>{coupon_total}</td><td>{coupon_user_total}</td>'+
+	'<td>{coupon_award}</td><td>{coupon_user_total_unlock}</td><td>{coupon_total_unlock}</td><td>{coupon_award_unlock}</td>'+
+	'</tr>[/results]</table>';
+var url = "/restapi/daystatis/" + "?page={page}&pageSize={pageSize}";
+$(document).ready(function(){
+	$(".ListTable tr:even").css("background-color","#fcfcfc");
+	$("li.home21").toggleClass("on");
+	$("#pagedata").ajaxPage({
+	    url:url, 
+	    pageId:$("#page"),
+	    pageSize:10,
+	    run:true,
+	    content:data,
+	});
+});
+</script>
+{% endblock js %}
+{% block right %}
+<div class="Need-T">
+                       <span>红包统计</span>
+                        </div>
+                        <div class="Table-in">
+                        	<table width="100%">
+                            	<tr>
+                                	<th>总发放红包个数</th>
+                                	<th>总发放红包用户数</th>
+                                	<th>总发放红包金额</th>
+                                	<th>总激活红包人数</th>
+                                	<th>总激活红包数量</th>
+                                	<th>总激活红包金额</th>
+                                </tr>
+                                <tr>
+                                	<td>{{total.coupon_total}}</td>
+                                	<td>{{total.coupon_user_total}}</td>
+                                	<td>{{total.coupon_award}}</td>
+                                	<td>{{total.coupon_user_total_unlock}}</td>
+                                	<td>{{total.coupon_total_unlock}}</td>
+                                	<td>{{total.coupon_award_unlock}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="Dateover">
+                        	<span>数据总览</span>
+                            <div class="Date-box">
+                            	<div class="Date-Form">
+                                </div>
+                                <p>此表格包括新注册用户红包及老用户红包</p>
+                                <div class="ListTable">
+									<div id="pagedata">
+									</div>
+                                </div>
+                                 
+                            </div>
+                            
+                        </div>
+                        <div class="Page-in-admin">
+				                    	<div class="page"  id="page">
+				                        </div>
+				            </div>
+{% endblock %}

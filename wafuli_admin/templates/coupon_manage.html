@@ -35,14 +35,14 @@
                         <el-col :span="8">
                             <div class="grid-content bg-purple">
                                 <span>开始时间：</span>
-                                <el-date-picker v-model="s_time" type="date" placeholder="选择日期">
+                                <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="s_time" type="date" placeholder="选择日期">
                                 </el-date-picker>
                             </div>
                         </el-col>
                         <el-col :span="8">
                             <div class="grid-content bg-purple-light">
                                 <span>结束时间：</span>
-                                <el-date-picker v-model="e_time" type="date" placeholder="选择日期">
+                                <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="e_time" type="date" placeholder="选择日期">
                                 </el-date-picker>
                             </div>
                         </el-col>
@@ -77,7 +77,7 @@
                             </div>
                         </el-col>
                     </el-row>
-
+                    <el-header>数据总览</el-header>
                     <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"
                         border>
                         <el-table-column label="发放日期">
@@ -125,7 +125,6 @@
                 select: '',
                 searchValue: '',
                 activeNav: '6-2',
-                hongbaoPlan: [],
                 rowStyle: {
                     'text-align': 'center'
                 },
@@ -136,7 +135,7 @@
             },
             created: function () {
                 var that = this;
-                this.getDataList(1, 10);
+                that.getDataList(1, 10);
             },
             methods: {
                 handleCurrentChange: function (val) {
@@ -147,7 +146,7 @@
                     var that = this;
                     $.ajax({
                         type: "get",
-                        url: '/coupon/coupons/?page=' + that.page + '&pageSize=' + that.pageSize + '&create_0=' + that.s_time + '&create_1='+ that.e_time +'&&user_mobile='+ that.mobile +'&contract_contains='+ that.hongbao +'&state='+that.select,
+                        url: '/coupon/coupons/?page=' + that.page + '&pageSize=' + that.pageSize + '&create_0=' + that.s_time + '&create_1='+ that.e_time +'&user_mobile='+ that.mobile +'&contract_contains='+ that.hongbao +'&state='+that.select,
                         async: true,
                         success: function (res) {
                             console.log(res);
@@ -164,9 +163,11 @@
                 },
                 searchData: function () {
                     var that = this;
+					console.log(that.s_time)
                     app.currentPage = 1;
                     app.getDataList();
-                },
+                }
+
 
             }
         })

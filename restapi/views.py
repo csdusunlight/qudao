@@ -14,7 +14,7 @@ from restapi.serializers import UserSerializer, InvestLogSerializer,\
     ApplyLogSerializer, WithdrawLogSerializer, UserDetailStatisSerializer,\
     UserAverageStatisSerializer, MarkSerializer, CompanySerializer,\
     BookLogSerializer, DocumentSerializer, MesssageSerializer,\
-    PerformStatisSerializer
+    PerformStatisSerializer, ProjectSerializerForAdmin
 from account.models import MyUser, ApplyLog, Message
 from rest_framework.filters import SearchFilter,OrderingFilter
 from public.permissions import IsOwnerOrStaff, IsSelfOrStaff
@@ -34,7 +34,8 @@ from django.http import JsonResponse
 class BaseViewMixin(object):
     authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
-class ProjectList(generics.ListCreateAPIView):
+class ProjectList(BaseViewMixin, generics.ListCreateAPIView):
+    permission_classes = ()
     def get_queryset(self):
         user = self.request.user
         queryset = Project.objects.all()
@@ -43,11 +44,14 @@ class ProjectList(generics.ListCreateAPIView):
         else:
             return queryset.filter(Q(is_official=True) | Q(user__id=user.id)).filter(state__in=['10','20'], )
         
-    serializer_class = ProjectSerializer
+    def get_serializer_class(self):
+        if self.request.user.is_authenticated() and self.request.user.is_staff:
+            return ProjectSerializerForAdmin
+        return ProjectSerializer
     filter_backends = (SearchFilter, django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
     filter_class = ProjectFilter
 #     filter_fields = ['state','type','is_multisub_allowed','is_official','category']
-    ordering_fields = ('state','pub_date','pinyin')
+    ordering_fields = ('state','pub_date','pinyin','current_state_date')
     search_fields = ('title','company__name')
     pagination_class = MyPageNumberPagination
     def perform_create(self, serializer):

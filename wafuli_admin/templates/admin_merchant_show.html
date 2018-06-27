@@ -1,0 +1,184 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <style>
+        .grid-content {
+            padding: 25px 0;
+        }
+
+        .descTitle {
+            color: #909399;
+        }
+
+        .el-input {
+            width: 60%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <el-row :gutter="20">
+            <el-col :span="3">
+                {% include "leftNav.html" %}
+            </el-col>
+            <el-col :span="21">
+                <div class="container">
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="descTitle">项目名称：</span>
+                                <el-input v-model="search" placeholder="请输入内容"></el-input>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="descTitle">项目状态：</span>
+                                <el-select v-model="state" slot="prepend" placeholder="请选择项目状态">
+                                    <el-option label="全部" value=" "></el-option>
+                                    <el-option label="即将开始" value="00"></el-option>
+                                    <el-option label="正在进行" value="10"></el-option>
+                                    <el-option label="已结束" value="20"></el-option>
+                                    <el-option label="已删除" value="30"></el-option>
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="descTitle">创建人手机号：</span>
+                                <el-input v-model="user_mobile" placeholder="请输入内容"></el-input>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="descTitle">创建人QQ：</span>
+                                <el-input v-model="qq_name" placeholder="请输入内容"></el-input>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24" style="display: flex;justify-content: flex-end;">
+                            <el-button type="primary" @click='search_data' style="margin-right: 65px;">搜索</el-button>
+                        </el-col>
+                    </el-row>
+
+                    <el-header>数据总览</el-header>
+                    <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"
+                        border>
+                        <el-table-column label="项目名称">
+                            <template slot-scope="scope">${ scope.row.title }</template>
+                        </el-table-column>
+                        <el-table-column label="标期">
+                            <template slot-scope="scope">${ scope.row.term }</template>
+                        </el-table-column>
+                        <el-table-column label="攻略链接">
+                            <template slot-scope="scope">${ scope.row.strategy }</template>
+                        </el-table-column>
+                        <el-table-column label="投资档位">
+                            <template slot-scope="scope">${ scope.row.investrange }</template>
+                        </el-table-column>
+                        <el-table-column label="结算价格">
+                            <template slot-scope="scope">${ scope.row.up_price }</template>
+                        </el-table-column>
+                        <el-table-column label="渠道价格">
+                            <template slot-scope="scope">${ scope.row.default_price }</template>
+                        </el-table-column>
+                        <el-table-column label="佣金">
+                            <template slot-scope="scope">${ scope.row.broker_rate }</template>
+                        </el-table-column>
+                        <el-table-column label="放单人手机号">
+                            <template slot-scope="scope">${ scope.row.user_mobile }</template>
+                        </el-table-column>
+                        <el-table-column label="放单人QQ">
+                            <template slot-scope="scope">${ scope.row.qq_name }</template>
+                        </el-table-column>
+                        <el-table-column label="进行程度">
+                            <template slot-scope="scope">${ scope.row.state_des }</template>
+                        </el-table-column>
+                    </el-table>
+                    <div class="pagination-box">
+                        <el-pagination background @current-change="handleCurrentChange" :page-size="pageSize" :current-page="currentPage" layout="total, prev, pager, next, jumper"
+                            :total="planTableData.recordCount">
+                        </el-pagination>
+                    </div>
+                </div>
+            </el-col>
+        </el-row>
+
+    </div>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#app',
+            delimiters: ['${', '}'],
+            data: {
+                search: '',
+                state: '',
+                user_mobile: '',
+                qq_name: '',
+                activeNav: '4-2',
+                hongbaoPlan: [],
+                ruleForm: {
+                    hongbao_plan: [],
+                    send_user: '2',
+                    userlist: ''
+                },
+                dialogPlanVisible: false,
+                rowStyle: {
+                    'text-align': 'center'
+                },
+                planTableData: {},
+                page: 1,
+                pageSize: 10,
+                currentPage: 1,
+            },
+            created: function () {
+                var that = this;
+                this.getDataList(1, 10);
+            },
+            methods: {
+                handleCurrentChange: function (val) {
+                    app.currentPage = val;
+                    app.getDataList(app.currentPage, app.pageSize);
+                },
+                getDataList: function (page, pageSize) {
+                    var that = this;
+                    $.ajax({
+                        type: "get",   //?page=1&pageSize=10&category=merchant&search=11&state=30&user_mobile=12346457897&qq_name=111
+                        url: '/restapi/projects/?page=' + that.page + '&pageSize=' + that.pageSize + '&category=merchant&search=' + that.search +'&state='+ that.state +'&user_mobile='+ that.user_mobile +'&qq_name='+that.qq_name,
+                        async: true,
+                        success: function (res) {
+                            console.log(res);
+                            if (res.code == 0) {
+                                app.planTableData = res;
+                            } else {
+                                that.$notify.error({
+                                    title: '错误',
+                                    message: res.detail
+                                });
+                            }
+                        }
+                    });
+                },
+                search_data: function () {
+                    var that = this;
+                    app.currentPage = 1;
+                    app.getDataList();
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

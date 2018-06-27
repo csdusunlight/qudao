@@ -1,332 +1,267 @@
-{% extends "base.html" %} {%load staticfiles%} {% block js %}
-<style>
-    .btn-box {
-        margin-top: 20px;
-        overflow: hidden;
-    }
-    .Submit-in {
-        width: 500px;
-        padding: 0;
-        float: right;
-    }
-    .leading-in {
-        float: left;
-    }
-    .unhandle-box {
-        margin-top: 50px;
-    }
-    .unhandle {
-        display: inline-block;
-        padding: 4px 10px;
-        margin-bottom: 4px;
-        color: #fff;
-        background-color: #91c11d;
-        border-radius: 4px;
-    }
-</style>
-<script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
-<script type="text/javascript">
-    $.ajaxSetup({
-        data: {
-            csrfmiddlewaretoken: '{{ csrf_token }}'
-        },
-    });
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
 
-    var data = '<table width="100%"><tr><th>QQ</th><th>项目名称</th>' +
-        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>返现金额</th><th>结算金额</th>' +
-        '<th>备注</th></tr>[results]<tr><td>{qq_number}</td><td>{project_title}</td>' +
-        '<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
-        '</td><td>{return_amount}</td><td>{settle_amount}</td><td>{remark}</td></tr>[/results]</table>';
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <style>
+        .grid-content {
+            padding: 25px 0;
+        }
 
-    var url = "/restapi/investlogs/" + "?page={page}&size={pageSize}&is_official=false";
+        .el-input {
+            width: 55%;
+        }
 
-    function pass(id) {
-        $(".BackNow").css("display", "block");
-        $("input#ret_event_id").val(id);
-    }
+        .oprate {
+            padding: 10px 10px;
+        }
 
-    function refuse(id) {
-        $(".Audit").css("display", "block");
-        $("input#refuse_event_id").val(id);
-    }
-    $(document).ready(function() {
-        $("li.home5").toggleClass("on");
-        $(".Tin-table tr:even").css("background-color", "#fcfcfc");
-        $("#pagedata").ajaxPage({
-            url: url,
-            pageId: $("#page"),
-            pageSize: 10,
-            run: true,
-            content: data,
-        });
-        $(".none-x").click(function() {
-            $(this).parent().parent().css("display", "none"); <!--隐藏-->
-        })
-        $('.Finnow input[type="submit"]').click(function() {
-            id = $("input#ret_event_id").val();
-            cash = $("input#add_cash").val();
-            score = $("input#add_score").val();
-            if(!id || !cash || !score) {
-                return;
-            }
-            $.ajax({
-                url: "/restapi/projects/",
-                dataType: "json",
-                type: "POST", 
-                async: false,
-                data: {
-                    'id': id,
-                    'cash': cash,
-                    'score': score,
-                    'type': 1,
-                },
-                success: function(ret) {
-                    if(ret.code == 0) {
-                        $("#item_" + id).html("审核完成，通过");
-                    } else if(ret.code == -1) {
-                        alert("该页面已过期，请重新登录！");
-                        window.location.href = ret.url;
-                    } else {
-                        alert(ret.res_msg);
-                    }
-                },
-                error: function() {
-                    alert("请检查网络连接");
-                }
-            });
-            $(".BackNow").css("display", "none");
-        });
-        $('.Audit-in input[type="submit"]').click(function() {
-            id = $("input#refuse_event_id").val();
-            reason = $("#refuse_reason").val();
-            if(!id || !reason) {
-                return;
-            }
-            $.ajax({
-                url: "/restapi/projects/",
-                dataType: "json",
-                type: "POST", 
-                async: false,
-                data: {
-                    'id': id,
-                    'reason': reason,
-                    'type': 2,
-                },
-                success: function(ret) {
-                    if(ret.code == 0) {
-                        $("#item_" + id).html("审核完成，拒绝");
-                    } else if(ret.code == -1) {
-                        alert("该页面已过期，请重新登录！");
-                        window.location.href = ret.url;
-                    } else {
-                        alert(ret.res_msg);
-                    }
-                },
-                error: function() {
-                    alert("请检查网络连接");
-                }
-            });
-            $(".Audit").css("display", "none");
-        });
-        $("#search").click(function() {
-            var startTime = $("#startTime").val();
-            var endTime = $("#endTime").val();
-            var newurl = url;
-            if(startTime && endTime) {
-                newurl += "&investtime_0=" + startTime;
-                newurl += "&investtime_1=" + endTime;
-            }
-            var startTime2 = $("#startTime2").val();
-            var endTime2 = $("#endTime2").val();
-            if(startTime2 && endTime2) {
-                newurl += "&audittime_0=" + startTime2;
-                newurl += "&audittime_1=" + endTime2;
-            }
-            var qq = $("#qq").val();
-            var mobile = $("#mobile").val();
-            var mobile_sub = $("#mobile_sub").val();
+        .desc_txt {
+            color: #909399;
+        }
+    </style>
+</head>
 
-            if(qq) {
-                newurl += "&qq_number=" + qq;
-            }
-            if(mobile) {
-                newurl += "&user_mobile=" + mobile;
-            }
-            if(mobile_sub) {
-                newurl += "&invest_mobile=" + mobile_sub;
-            }
-            var projectname = $("#projectname").val();
-            if(projectname) {
-                newurl += "&project_title_contains=" + projectname;
-            }
-            var level = $("#level").val();
-            if(level) {
-                newurl += "&user_level=" + level;
-            }
-            var newdata = data;
-            $("#page").empty();
-            $("#pagedata").ajaxPage({
-                url: newurl,
-                pageId: $("#page"),
-                pageSize: 10,
-                run: true,
-                content: newdata,
-            });
-        });
-        $("#export").click(function() {
-            var html = '<form action="' + "{% url 'admin_export_investlog' %}" + '" method="get" target="_self" id="postData_form">';
-            
-            html += '<input name="is_official" type="hidden" value="false"/>';
-            var startTime = $("#startTime").val();
-            var endTime = $("#endTime").val();
-            if(startTime && endTime) {
-                html += '<input name="investtime_0" type="hidden" value="' + startTime + '"/>';
-                html += '<input name="investtime_1" type="hidden" value="' + endTime + '"/>';
-            }
-            var startTime2 = $("#startTime2").val();
-            var endTime2 = $("#endTime2").val();
-            if(startTime2 && endTime2) {
-                html += '<input name="audittime_0" type="hidden" value="' + startTime2 + '"/>';
-                html += '<input name="audittime_1" type="hidden" value="' + endTime2 + '"/>';
-            }
-            var qq = $("#qq").val();
-            var mobile = $("#mobile").val();
-            if(qq) {
-                html += '<input name="qq_number" type="hidden" value="' + qq + '"/>';
-            }
-            if(mobile) {
-                html += '<input name="user_mobile" type="hidden" value="' + mobile + '"/>';
-            }
-            var projectname = $("#projectname").val();
-            if(projectname) {
-                html += '<input name="project_title_contains" type="hidden" value="' + projectname + '"/>';
-            }
-            var level = $("#level").val();
-            if(level) {
-                html += '<input name="user_level" type="hidden" value="' + level + '"/>';
-            }
-            html += '</form>';
-            var iframe = document.getElementById('myIFrame');
-            iframe.contentWindow.document.open();
-            iframe.contentWindow.document.write(html);
-            iframe.contentWindow.document.close();
-            document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
-        });
-        
+<body>
+    <div id="app">
+        <el-row :gutter="20">
+            <el-col :span="3">
+                {% include "leftNav.html" %}
+            </el-col>
+            <el-col :span="21">
+                <div class="container">
+                    <!-- 第一列 -->
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">申请开始时间：</span>
+                                <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="s_time0" type="date" placeholder="选择日期">
+                                </el-date-picker>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">申请结束时间：</span>
+                                <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="e_time0" type="date" placeholder="选择日期">
+                                </el-date-picker>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">操作开始时间：</span>
+                                <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="s_time1" type="date" placeholder="选择日期">
+                                </el-date-picker>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">操作结束时间：</span>
+                                <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="e_time1" type="date" placeholder="选择日期">
+                                </el-date-picker>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <!-- 第二列 -->
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">QQ：</span>
+                                <el-input placeholder="请输入内容" v-model="qq_number" clearable>
+                                </el-input>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">用户手机号：</span>
+                                <el-input placeholder="请输入内容" v-model="phone_number" clearable>
+                                </el-input>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">渠道等级：</span>
+                                <el-select v-model="select" slot="prepend" placeholder="请选择">
+                                    <el-option label="----" value=" "></el-option>
+                                    <el-option label="01" value="01"></el-option>
+                                    <el-option label="02" value="02"></el-option>
+                                    <el-option label="03" value="03"></el-option>
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">提交手机号：</span>
+                                <el-input placeholder="请输入内容" v-model="submit_moblie" clearable>
+                                </el-input>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <!-- 第三列 -->
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">项目名称</span>
+                                <el-input v-model="project_title" placeholder="请输入"></el-input>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <el-button @click='search_data' type="primary">搜索</el-button>
+                                <el-button @click='export_data' type="danger">导出</el-button>
+                            </div>
+                        </el-col>
 
-    });
-</script>
-{% endblock js %} {% block right %}
-<div class="Criteria">
-    <span>搜索条件</span>
-    <div class="Crite-box">
-        <form>
-            <table width="100%">
-                <tr>
-                    <td>
-                        <i>申请开始时间：</i>
-                        <input id="startTime" type="datetime-local" />
-                    </td>
-                    <td>
-                        <i>申请结束时间：</i>
-                        <input id="endTime" type="datetime-local" />
-                    </td>
-                    <td>
-                        <i>操作开始时间：</i>
-                        <input id="startTime2" type="datetime-local" />
-                    </td>
-                    <td>
-                        <i>操作结束时间：</i>
-                        <input id="endTime2" type="datetime-local" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <i>QQ：</i>
-                        <input id="qq" type="text" />
-                    </td>
-                    <td>
-                        <i style="letter-spacing:2px;">用户手机号：</i>
-                        <input id="mobile" type="text" />
-                    </td>
-                    <td>
-                        <i style="letter-spacing:4.8px;">渠道等级</i>
-                        <select name="selectAge" id="level">
-                            <option value="">--</option>
-                            <option value="01">01</option>
-                            <option value="02">02</option>
-                            <option value="03">03</option>
-                        </select>
-                    </td>
-                    <td>
-                        <i style="letter-spacing:4.8px;">提交手机号</i>
-                        <input id="mobile_sub" type="text" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <i style="letter-spacing:4.8px;">项目名称：</i>
-                        <input id="projectname" type="text" />
-                    </td>
-                </tr>
-            </table>
-
-            <div class="btn-box">
-                    <div class="Submit-in">
-                        <input id="search" type="button" value="搜索" />
-                        <input id="export" type="button" value="导出" />
+                    </el-row>
+                    <!-- tabale -->
+                    <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"
+                        border>
+                        <el-table-column label="QQ">
+                            <template slot-scope="scope">${ scope.row.qq_number }</template>
+                        </el-table-column>
+                        <el-table-column label="项目名称">
+                            <template slot-scope="scope">${ scope.row.project_title }</template>
+                        </el-table-column>
+                        <el-table-column label="投资时间">
+                            <template slot-scope="scope">${ scope.row.invest_date }</template>
+                        </el-table-column>
+                        <el-table-column label="投资手机号">
+                            <template slot-scope="scope">${ scope.row.invest_mobile }</template>
+                        </el-table-column>
+                        <el-table-column label="投资金额">
+                            <template slot-scope="scope">${ scope.row.invest_amount }</template>
+                        </el-table-column>
+                        <el-table-column label="投资标期">
+                            <template slot-scope="scope">${ scope.row.invest_term }</template>
+                        </el-table-column>
+                        <el-table-column label="提交时间">
+                            <template slot-scope="scope">${ scope.row.submit_time }</template>
+                        </el-table-column>
+                        <el-table-column label="返现金额">
+                            <template slot-scope="scope">${ scope.row.return_amount }</template>
+                        </el-table-column>
+                        <el-table-column label="结算金额">
+                            <template slot-scope="scope">${ scope.row.settle_amount }</template>
+                        </el-table-column>
+                        <el-table-column label="备注">
+                            <template slot-scope="scope">${ scope.row.remark }</template>
+                        </el-table-column>
+                    </el-table>
+                    <div class="pagination-box">
+                        <el-pagination background @current-change="handleCurrentChange" :page-size="pageSize" :current-page="currentPage" layout="total, prev, pager, next, jumper"
+                            :total="planTableData.recordCount">
+                        </el-pagination>
                     </div>
-            </div>
+                </div>
+            </el-col>
+        </el-row>
+        <iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
+    </div>
 
-        </form>
-    </div>
-</div>
-<div>
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#app',
+            delimiters: ['${', '}'],
+            data: {
+                s_time0: '',
+                s_time1: '',
+                e_time0: '',
+                e_time1: '',
+                qq_number: '',
+                phone_number: '',
+                select: '',
+                submit_moblie: '',
+                project_title: '',
+                activeNav: '3-2',
+                rowStyle: {
+                    'text-align': 'center'
+                },
+                planTableData: {},
+                page: 1,
+                pageSize: 10,
+                currentPage: 1,
+            },
+            created: function () {
+                var that = this;
+                that.getDataList(1, 10);
+            },
+            methods: {
+                handleCurrentChange: function (val) {
+                    app.currentPage = val;
+                    app.getDataList(app.currentPage, app.pageSize);
+                },
+                getDataList: function (page, pageSize) {
+                    var that = this;
+                    $.ajax({
+                        type: "get",
+                        url: '/restapi/investlogs/?page=' + that.page + '&pagesize=' + that.pageSize + '&is_official=false&investtime_0=' + that.s_time0 + '&investtime_1=' + that.e_time0 + '&audittime_0=' + that.s_time1 + '&audittime_1=' + that.e_time1 + '&qq_number=' + that.qq_number + '&user_mobile=' + that.phone_number + '&invest_mobile=' + that.submit_moblie + '&project_title_contains=' + that.project_title + '&user_level=' + that.select,
+                        async: true,
+                        success: function (res) {
+                            console.log(res);
+                            if (res.code == 0) {
+                                app.planTableData = res;
+                            } else {
+                                that.$notify.error({
+                                    title: '错误',
+                                    message: res.detail
+                                });
+                            }
+                        }
+                    });
+                },
+                search_data: function () {
+                    var that = this;
+                    that.getDataList();
+                },
+                export_data: function () { //导出数据
+                    var that = this;
+                    var html = '<form action="' + "/admin_export_investlog/" + '" methods="get" target="_self" id="postData">';
+                    var startTime = that.s_time0; //申请开始时间
+                    var endTime = that.e_time0;  //申请结束时间
+                    if (startTime && endTime) {
+                        html += '<input name="investtime_0" type="hidden" value="' + startTime + '"/>';
+                        html += '<input name="investtime_1" type="hidden" value="' + endTime + '"/>';
+                    }
+                    var startTime2 = that.s_time1;  //操作开始时间
+                    var endTime2 = that.e_time1;    //操作结束时间
+                    if (startTime2 && endTime2) {
+                        html += '<input name="audittime_0" type="hidden" value="' + startTime2 + '"/>';
+                        html += '<input name="audittime_1" type="hidden" value="' + endTime2 + '"/>';
+                    }
+                    var qq = that.qq_number; //QQ号
+                    if (qq) {
+                        html += '<input name="qq_number" type="hidden" value="' + qq + '"/>';
+                    }
+                    var mobile = that.phone_number; //用户手机号
+                    if (mobile) {
+                        html += '<input name="user_mobile" type="hidden" value="' + mobile + '"/>';
+                    }
+                    var projectname = that.project_title;
+                    if (projectname) {
+                        html += '<input name="project_title_contains" type="hidden" value="' + projectname + '"/>';
+                    }
+                    var level = that.select;
+                    if (level) {
+                        html += '<input name="user_level" type="hidden" value="' + level + '"/>';
+                    }
+                    html += '</form>';
+                    var iframe = document.getElementById('myIFrame');
+                    iframe.contentWindow.document.open();
+                    iframe.contentWindow.document.write(html);
+                    iframe.contentWindow.document.close();
+                    document.getElementById('myIFrame').contentWindow.document.getElementById('postData').submit();
+                }
+            }
+        })
+    </script>
+</body>
 
-    <div style="clear: both;"></div>
-</div>
-<div class="Tin-table">
-    <div id="pagedata">
-    </div>
-    <div class="Page-in-admin">
-        <div class="page" id="page">
-        </div>
-    </div>
-</div>
-{%endblock%} {% block modal %}
-<div class="BackNow">
-    <div class="w570-box">
-        <h3>返现操作</h3>
-        <button class="none-x"></button>
-        <form class="Finnow">
-            <input id="ret_event_id" type="hidden" />
-            <span>添加现金：</span>
-            <input id="add_cash" type="text" />
-            <span>添加积分：</span>
-            <input id="add_score" type="text" />
-            <div class="Finnow-Sub">
-                <input type="submit" value="确认" onclick="return false;" />
-                <input type="button" value="取消" class="none-x-s" />
-            </div>
-        </form>
-    </div>
-</div>
-<!--审核拒绝-->
-<div class="Audit">
-    <div class="w570-box">
-        <h3>审核拒绝</h3>
-        <button class="none-x"></button>
-        <form class="Audit-in">
-            <span>填写拒绝原因：</span>
-            <input id="refuse_event_id" type="hidden" />
-            <textarea id="refuse_reason"></textarea>
-            <div class="Finnow-Sub">
-                <input type="submit" value="确认" class="Deny-box" onclick="return false;" />
-                <input type="button" value="取消" class="none-x-s" />
-            </div>
-        </form>
-    </div>
-</div>
-<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
-<!--end-->
-{% endblock modal %}
+</html>

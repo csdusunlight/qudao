@@ -1,0 +1,150 @@
+{% extends "base.html" %} {% block js %}
+<script type="text/javascript">
+	$.ajaxSetup({
+		data: {
+			csrfmiddlewaretoken: '{{ csrf_token }}'
+		},
+	});
+	var data = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>时间</th><th>初始余额</th>' +
+		'<th>变动值</th><th>变动原因</th><th>备注</th>' +
+		'</tr>[results]<tr><td>{username}</td><td>{mobile}</td><td>{time}</td>' +
+		'<td>{initAmount}</td><td class="shouzhi" data-shouzhi="{transType}">{transAmount}</td><td>{reason}</td>' +
+		'<td>{remark}</td></tr>[/results]</table>';
+
+	var url = "/restapi/translist/" + "?page={page}&size={pageSize}";
+
+	function pagecallback(){
+	    $('.shouzhi').each(function(){
+	        console.log($(this).data('shouzhi'))
+	        if($(this).data('shouzhi') == '0') {
+	            $(this).text('+' + $(this).text());
+	        } else if($(this).data('shouzhi') == '1') {
+	            $(this).text('-' + $(this).text());
+	        }
+	    })
+	}
+	$(document).ready(function() {
+		$("li.home11").toggleClass("on");
+		$(".Tin-table tr:even").css("background-color", "#fcfcfc");
+		$("#pagedata").ajaxPage({
+			url: url,
+			pageId: $("#page"),
+			pageSize: 10,
+			run: true,
+			content: data,
+			complete:pagecallback,
+		});
+
+		$("#search").click(function() {
+			var startTime = $("#startTime").val();
+			var endTime = $("#endTime").val();
+			var newurl = url;
+			if(startTime && endTime) {
+				newurl += "&trans_date_0=" + startTime;
+				newurl += "&trans_date_1=" + endTime;
+			}
+			var username = $("#username").val();
+			var mobile = $("#mobile").val();
+			if(username) {
+				newurl += "&user_name=" + username;
+			}
+			if(mobile) {
+				newurl += "&user_mobile=" + mobile;
+			}
+
+			var charge_reason = $("#charge_reason").val();
+			if(charge_reason) {
+				newurl += "&reason_contains=" + charge_reason;
+			}
+			$("#page").empty();
+			$("#pagedata").ajaxPage({
+				url: newurl,
+				pageId: $("#page"),
+				pageSize: 10,
+				run: true,
+				content: data,
+				complete:pagecallback,
+			});
+		});
+		
+		$("#export").click(function() {
+			var html = '<form action="' + "{% url 'export_charge_excel' %}" + '" method="get" target="_self" id="postData_form">';
+			var startTime = $("#startTime").val();
+			var endTime = $("#endTime").val();
+			if(startTime && endTime) {
+				html += '<input name="trans_date_0" type="hidden" value="' + startTime + '"/>';
+				html += '<input name="trans_date_1" type="hidden" value="' + endTime + '"/>';
+			}
+			var username = $("#username").val();
+			var mobile = $("#mobile").val();
+			if(username) {
+				html += '<input name="user_name" type="hidden" value="' + username + '"/>';
+			}
+			if(mobile) {
+				html += '<input name="user_mobile" type="hidden" value="' + mobile + '"/>';
+			}
+			
+			var charge_reason = $("#charge_reason").val();
+			if(charge_reason) {
+				html += '<input name="reason_contains" type="hidden" value="' + charge_reason + '"/>';
+			}
+			html += '</form>';
+			var iframe = document.getElementById('myIFrame');
+			iframe.contentWindow.document.open();
+			iframe.contentWindow.document.write(html);
+			iframe.contentWindow.document.close();
+			document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+		});
+	});
+</script>
+{% endblock js %} {% block right %}
+<div class="Criteria">
+	<span>搜索条件</span>
+	<div class="Crite-box">
+		<form>
+			<table width="100%">
+				<tr>
+					<td>
+						<i>开始时间：</i>
+						<input id="startTime" type="datetime-local" />
+					</td>
+					<td>
+						<i>结束时间：</i>
+						<input id="endTime" type="datetime-local" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<i>用&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</i>
+						<input id="username" type="text" />
+					</td>
+					<td>
+						<i style="letter-spacing:2px;">用户手机号：</i>
+						<input id="mobile" type="text" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<i>变动原因：</i>
+						<input id="charge_reason" type="text" />
+					</td>
+				</tr>
+			</table>
+			<div class="Submit-in">
+				<input id="export" type="button" value="导出" />
+				<input id="search" type="button" value="搜索" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="Tin-table">
+	<div id="pagedata">
+	</div>
+	<div class="Page-in-admin">
+		<div class="page" id="page">
+		</div>
+	</div>
+</div>
+<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
+{%endblock%}

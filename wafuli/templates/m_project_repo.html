@@ -87,7 +87,7 @@
                 var search_txt = document.getElementById('search_input').value;
                 var table = document.body.querySelector('.project-all-box');
                 console.log(table);
-                get_proj_url = "/restapi/projects/?state=10&is_official=true&search=" + search_txt;
+                get_proj_url = "/restapi/projects/?state=10&is_official=true&is_addedto_repo=true&search=" + search_txt;
                 document.getElementById('left_box').innerHTML = '';
                 document.getElementById('right_box').innerHTML = '';
                 get_list(get_proj_url);

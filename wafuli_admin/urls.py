@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^admin_charge/$', 'wafuli_admin.views.admin_charge', name='admin_charge'),
     url(r'^chargepage/$', 'wafuli_admin.views.get_admin_charge_page', name='get_admin_charge_page'),
 
+    url(r'^admin_send_mobile_msg/$', 'wafuli_admin.views.admin_send_mobile_msg', name='admin_send_mobile_msg'),
     url(r'^send_multiple_msg/$', 'wafuli_admin.views.send_multiple_msg', name='send_multiple_msg'),
 
 #     url(r'^parse_excel/$', 'wafuli_admin.channel.parse_excel', name='parse_excel'),

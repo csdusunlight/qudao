@@ -55,6 +55,11 @@
                 } else {
                     $('.admin_withdraw_num').show().text(ret.admin_withdraw);
                 }
+                if (ret.admin_pay == 0) {
+                    $('.admin_pay_num').hide();
+                } else {
+                    $('.admin_pay_num').show().text(ret.admin_pay);
+                }
 	    	},
 	    	error: function (ret){
 	    	    console.log(ret.msg);
@@ -91,7 +96,7 @@
                         	<li class="home2"><a href="{%url 'admin_user'%}">用户管理</a></li>
                         	<li class="home15"><a href="{%url 'admin_apply'%}">申请名单<span class="new-data admin_apply_num"></span></a></li>
                         	<li class="home3"><a href="{%url 'admin_withdraw'%}">提现管理<span class="new-data admin_withdraw_num"></span></a></li>
-                        	<li class="home26"><a href="/Admin/admin_pay">打款管理</a></li>
+                        	<li class="home26"><a href="/Admin/admin_pay">打款管理<span class="new-data admin_pay_num"></a></li>
                         	<li class="home4"><a href="{%url 'admin_office'%}">官方数据<span class="new-data admin_office_num"></span></a></li>
                         	<li class="home5"><a href="{%url 'admin_private'%}">自建数据</a></li>
                             <!--<li class="home12"><a href="">体验管理</a></li>-->
@@ -103,6 +108,7 @@
                             <li class="home12"><a href="{%url 'award_logs'%}">奖励记录</a></li>
                             <li class="home16"><a href="{%url 'admin_merchant_project'%}">放单项目申请 <span class="new-data admin_merchant_project_num"></span></a></li>
                             <li class="home24"><a href="{%url 'admin_merchant_show'%}">放单项目查看</a></li>
+                            <li><a href="{%url 'admin_merchant_apply'%}">放单用户申请</a></li>
                             <li class="home17"><a href="{%url 'admin_merchant_investlog'%}">放单数据 <span class="new-data admin_merchant_investlog_num"></span></a></li>
                             <li class="home18"><a href="{%url 'admin_margin_query'%}">保证金查询 </a></li>
                             <li class="home19"><a href="{%url 'admin_margin'%}">保证金<span class="new-data admin_margin_num"></span></a></li>

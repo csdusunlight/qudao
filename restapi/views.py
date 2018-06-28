@@ -14,7 +14,7 @@ from restapi.serializers import UserSerializer, InvestLogSerializer,\
     ApplyLogSerializer, WithdrawLogSerializer, UserDetailStatisSerializer,\
     UserAverageStatisSerializer, MarkSerializer, CompanySerializer,\
     BookLogSerializer, DocumentSerializer, MesssageSerializer,\
-    PerformStatisSerializer
+    PerformStatisSerializer, ProjectSerializerForAdmin
 from account.models import MyUser, ApplyLog, Message
 from rest_framework.filters import SearchFilter,OrderingFilter
 from public.permissions import IsOwnerOrStaff, IsSelfOrStaff
@@ -34,7 +34,8 @@ from django.http import JsonResponse
 class BaseViewMixin(object):
     authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
-class ProjectList(generics.ListCreateAPIView):
+class ProjectList(BaseViewMixin, generics.ListCreateAPIView):
+    permission_classes = ()
     def get_queryset(self):
         user = self.request.user
         queryset = Project.objects.all()
@@ -43,11 +44,14 @@ class ProjectList(generics.ListCreateAPIView):
         else:
             return queryset.filter(Q(is_official=True) | Q(user__id=user.id)).filter(state__in=['10','20'], )
         
-    serializer_class = ProjectSerializer
+    def get_serializer_class(self):
+        if self.request.user.is_authenticated() and self.request.user.is_staff:
+            return ProjectSerializerForAdmin
+        return ProjectSerializer
     filter_backends = (SearchFilter, django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
     filter_class = ProjectFilter
 #     filter_fields = ['state','type','is_multisub_allowed','is_official','category']
-    ordering_fields = ('state','pub_date','pinyin')
+    ordering_fields = ('state','pub_date','pinyin','current_state_date')
     search_fields = ('title','company__name')
     pagination_class = MyPageNumberPagination
     def perform_create(self, serializer):
@@ -69,9 +73,9 @@ class UserList(BaseViewMixin, generics.ListCreateAPIView):
 #     filter_fields = ['state',]
     pagination_class = MyPageNumberPagination
 
-from restapi.serializers import ApplyLogForChannelSerializer
-from restapi.Filters  import ApplyLogForChannelFilter
-from account.models import ApplyLogForChannel
+from restapi.serializers import ApplyLogForChannelSerializer,ApplyLogForFangdanSerializer
+from restapi.Filters  import ApplyLogForChannelFilter,ApplyLogForFangdanFilter
+from account.models import ApplyLogForChannel,ApplyLogForFangdan
 class ApplyLogForChannelList(BaseViewMixin, generics.ListCreateAPIView):
     queryset = ApplyLogForChannel.objects.all()
     permission_classes = (IsOwnerOrStaff,)
@@ -88,6 +92,21 @@ class ApplyLogForChannelList(BaseViewMixin, generics.ListCreateAPIView):
         else:
             return ApplyLogForChannel.objects.filter(user=user)
 
+class ApplyLogForFangdanList(BaseViewMixin, generics.ListCreateAPIView):
+    queryset = ApplyLogForFangdan.objects.all()
+    permission_classes = (IsOwnerOrStaff,)
+    serializer_class = ApplyLogForFangdanSerializer
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
+    filter_class = ApplyLogForFangdanFilter
+    ordering_fields = ('submit_time','audit_time')
+    ordering = ('-submit_time')
+    pagination_class = MyPageNumberPagination
+    def get_queryset(self):#如果是查询已拒绝用户，那么用is_channle=0 和审批未通过字段为空
+        user = self.request.user
+        if user.is_staff:
+            return ApplyLogForFangdan.objects.all()
+        else:
+            return ApplyLogForFangdan.objects.filter(user=user)
 
 class UserDetail(BaseViewMixin,generics.RetrieveUpdateDestroyAPIView):
     queryset = MyUser.objects.all()
@@ -197,6 +216,7 @@ class SubscribeShipDetail(BaseViewMixin, generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (IsOwnerOrStaff,)
     
 class AnnouncementList(BaseViewMixin, generics.ListCreateAPIView):
+    permission_classes = ()
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
     ordering_fields = ('state', 'priority')
     queryset = Announcement.objects.all()
@@ -279,6 +299,7 @@ class CompanyList(BaseViewMixin, generics.ListAPIView):
     serializer_class = CompanySerializer
     pagination_class = MyPageNumberPagination
 class CompanyList2(BaseViewMixin, generics.ListAPIView):
+    permission_classes = ()
     queryset = Company.objects.filter(project__state='10',project__is_official=True,
                                       project__is_addedto_repo=True).distinct()
     serializer_class = CompanySerializer

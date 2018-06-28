@@ -7,7 +7,7 @@ Created on 2017年8月23日
 import django_filters
 from wafuli.models import InvestLog, Project, SubscribeShip, TransList,\
     WithdrawLog
-from account.models import MyUser, ApplyLog,Message,ApplyLogForChannel
+from account.models import MyUser, ApplyLog,Message,ApplyLogForChannel,ApplyLogForFangdan
 # class ProjectInvestDateFilter(django_filters.rest_framework.FilterSet):
 #     investtime = django_filters.DateFromToRangeFilter(name="invest_time")
 #     audittime = django_filters.DateTimeFromToRangeFilter(name="audit_time")
@@ -53,20 +53,35 @@ class UserFilter(django_filters.rest_framework.FilterSet):
 class ApplyLogForChannelFilter(django_filters.rest_framework.FilterSet):
     audit_time = django_filters.DateFromToRangeFilter(name="audit_time")
     submit_time = django_filters.DateFromToRangeFilter(name="submit_time")
-    is_channel = django_filters.CharFilter(name="user.is_channel") #处理状态
-    username = django_filters.CharFilter(name="user.username")
-    audit_username = django_filters.CharFilter(name="admin_user.username")
-    audit_mobile = django_filters.CharFilter(name="admin_user.mobile")#审核者手机
-    mobile = django_filters.CharFilter(name="user.mobile")#
-    qq_number = django_filters.CharFilter(name="user.qq_number")#
-    qq_name = django_filters.CharFilter(name="user.qq_name")
-    profile = django_filters.CharFilter(name="user.profile")
-    level = django_filters.CharFilter(name="user.level")
+    is_channel = django_filters.CharFilter(name="user",lookup_expr='is_channel__contains') #处理状态
+    username = django_filters.CharFilter(name="user",lookup_expr='username__contains')
+    audit_username = django_filters.CharFilter(name="admin_user",lookup_expr='username__contains')
+    audit_mobile = django_filters.CharFilter(name="admin_user",lookup_expr='mobile__contains')#审核者手机
+    mobile = django_filters.CharFilter(name="user",lookup_expr='mobile__contains')#
+    qq_number = django_filters.CharFilter(name="user",lookup_expr='qq_number__contains')#
+    qq_name = django_filters.CharFilter(name="user",lookup_expr='qq_name__contains')
+    profile = django_filters.CharFilter(name="user",lookup_expr='profile__contains')
+    level = django_filters.CharFilter(name="user",lookup_expr='level__contains')
     class Meta:
         model = ApplyLogForChannel
-        fields = ['id', 'username', 'qq_number', 'qq_name', 'mobile', 'audit_time', 'submit_time', 'level',
+        fields = '__all__'
 
-         'audit_reason','audit_username','audit_mobile','audit_state']
+
+class ApplyLogForFangdanFilter(django_filters.rest_framework.FilterSet):
+    audit_time = django_filters.DateFromToRangeFilter(name="audit_time")
+    submit_time = django_filters.DateFromToRangeFilter(name="submit_time")
+    is_fangdan = django_filters.CharFilter(name="user",lookup_expr='is_fangdan__contains') #处理状态
+    username = django_filters.CharFilter(name="user",lookup_expr='username__contains')
+    audit_username = django_filters.CharFilter(name="admin_user",lookup_expr='username__contains')
+    audit_mobile = django_filters.CharFilter(name="admin_user",lookup_expr='mobile__contains')#审核者手机
+    mobile = django_filters.CharFilter(name="user",lookup_expr='mobile__contains')#
+    qq_number = django_filters.CharFilter(name="user",lookup_expr='qq_number__contains')#
+    qq_name = django_filters.CharFilter(name="user",lookup_expr='qq_name__contains')
+    profile = django_filters.CharFilter(name="user",lookup_expr='profile__contains')
+    level = django_filters.CharFilter(name="user",lookup_expr='level__contains')
+    class Meta:
+        model = ApplyLogForFangdan
+        fields = '__all__'
         
 class ApplyLogFilter(django_filters.rest_framework.FilterSet):
     submit_date = django_filters.DateFromToRangeFilter(name="submit_time")
@@ -103,9 +118,11 @@ class WithdrawLogFilter(django_filters.rest_framework.FilterSet):
 class ProjectFilter(django_filters.rest_framework.FilterSet):
     user_mobile = django_filters.CharFilter('user', lookup_expr='mobile__contains')
     qq_name = django_filters.CharFilter('user', lookup_expr='qq_name__contains')
+    current_state_date_range = django_filters.DateFromToRangeFilter('current_state_date')
     class Meta:
         model = Project
-        fields = ['state','type','is_multisub_allowed','is_official','category', 'user_mobile', 'qq_name', 'is_addedto_repo']
+        fields = ['state','type','is_multisub_allowed','is_official','category', 'user_mobile', 'qq_name', 'is_addedto_repo',
+                  'current_state_date_range']
 
 class MessageFilter(django_filters.rest_framework.FilterSet):
     title =django_filters.CharFilter(name="title")

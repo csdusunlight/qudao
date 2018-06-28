@@ -1,197 +1,558 @@
-{% extends "base.html" %} {% load staticfiles %} {% block js %}
-<script type="text/javascript" src="{%static 'js/jquery-1.11.2.min.js'%}"></script>
-<script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
-<script>
-    var deliver_coupon_url = "{%url 'deliver_coupon' %}";
-    var parse_file_url = "{%url 'parse_file'%}"
-    $.ajaxSetup({
-        data: {
-            csrfmiddlewaretoken: '{{ csrf_token }}'
-        },
-    });
-    $(function() {
-        $("li.home23").toggleClass("on");
-        
-            $.ajax({
-                url: '/coupon/contracts/?pageSize=999',
-                dataType:"json",
-                type:"get",
-                success:function(ret){
-                    var option_html = '<option value="0">--</option>';
-                    console.log(ret.results);
-                    for ( var i in ret.results) {
-                        option_html += '<option value="'+ ret.results[i].id +'">'+ ret.results[i].name +'</option>'
-                    }
-                    $('#contract').html(option_html);
-                },
-                error:function(){
-                    alert("请检查网络连接");
-                }
-            });
-        
-        $('#selectuser').change(function() {
-            var select_val = $(this).children('option:selected').val();
-            if(select_val === '1') {
-                $("div.part_user").hide();
-            } else {
-                $("div.part_user").css("display", 'block');
-            }
-        });
-        $('#add_plan').click(function(){
-            $(".BackNow").css("display", "block");
-        })
-        $(".none-x").click(function() {
-            $(this).parent().parent().css("display", "none"); 
-        })
-        $(".none-x-s").click(function() {
-            $(this).parent().parent().parent().parent().css("display", "none"); 
-        })
-        $("button#submit").click(function() {
-            var select_user_id = $("select#selectuser").children('option:selected').val();
-            var contract_id = $("select#contract").children('option:selected').val();
-            var data = {
-                'contract': contract_id,
-                'selectuser': select_user_id,
-            };
-            if(select_user_id === '1') {
-                data.user = 'all';
-            } else if(select_user_id === '2') {
-                data.users = $("textarea#users").val();
-            }
-            console.log(data);
-                        $.ajax({
-                            url: deliver_coupon_url,
-                            dataType:"json",
-                            async: false,
-                            type:"POST",
-                            data: data,
-                            success:function(ret){
-                                if(ret.code=='0'){
-                                    console.log(ret);
-                                   alert('成功人数：' + ret.succ_num);
-                                }
-                                else {
-                                    alert(ret.res_msg);
-                                }
-                            },
-                            error:function(){
-                                alert("请检查网络连接");
-                            }
-                        });
-        });
-        $('button.uploadbtn').click(function() {
-            $.ajaxFileUpload({
-                url: parse_file_url,
-                secureuri: false,
-                fileElementId: 'fileupload1', //file标签的id  
-                dataType: 'json', //返回数据的类型  
-                data: {}, //一同上传的数据  
-                success: function(data, status) {
-                    if(data.code == 0) {
-                        var value = ''
-                        userlist = data.list;
-                        for(x in userlist) {
-                            value += String(userlist[x]) + '\n';
-                        }
-                        $("#users").val(value);
-                    } else {
-                        alert(data.res_msg);
-                    }
-                },
-                error: function(data, status, e) {
-                    alert(e);
-                }
-            });
-        });
-        $("#add_coupon_btn").click(function() {
-            var coupon_name = $('#coupon_name').val();
-            var settle_amount = $('#settle_amount').val();
-            var submit_num = $('#submit_num').val();
-            var date_start = $('#date_start').val();
-            var date_end = $('#date_end').val();
-            var coupon_amount = $('#coupon_amount').val();
-            if (!coupon_name || !settle_amount || !submit_num || !date_start || !date_end || !coupon_amount) {
-                alert('填写项不能为空');
-                return;
-            }
-            if (submit_num <= 0 && settle_amount <= 0 ) {
-                alert('结算金额和交单数量必须有一个大于零');
-                return;
-            }
-            if (coupon_amount <= 0 ) {
-                alert('红包金额必须大于零');
-                return;
-            }
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Document</title>
+	<link rel="stylesheet" href="https://unpkg.com/element-ui@2.4.1/lib/theme-chalk/index.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body style="opacity: 0">
+  <div id="app">
+    <el-row :gutter="20">
+      <el-col :span="3">
+        {% include "leftNav.html" %}
+      </el-col>
+      <el-col :span="21">
+        <div class="container">
+          <el-form 
+            :model="ruleForm" 
+            :rules="rules" 
+            ref="ruleForm" 
+            label-width="150px" 
+            class="demo-ruleForm">
+            <el-form-item label="红包方案" prop="hongbao_plan">
+              <el-select 
+                v-model="ruleForm.hongbao_plan" 
+                filterable 
+                multiple 
+                placeholder="请选择"
+                style="width: 500px;">
+                <el-option
+                  v-for="item in hongbaoPlan"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+              <el-button type="primary" @click="addPlan" >增加方案</el-button>
+            </el-form-item>
             
-            $.ajax({
-                url: "/coupon/contracts/",
-                dataType:"json",
-                async: false,
-                type:"POST",
-                data: {
-                    'name': coupon_name,
-                    'settle_amount': settle_amount,
-                    'settle_count': submit_num,
-                    'start_date': date_start,
-                    'end_date': date_end,
-                    'award': coupon_amount,
-                },
-                success:function(ret){
-                    alert('新建方案成功');
-                    location.reload();
-                },
-                error:function(ret){
-                    alert(ret.responseText);
-                }
-            });
-        });
-    });
-</script>
-{% endblock js%} {% block right %}
-<div>
-    <i style="letter-spacing:4.8px;">红包方案：</i>
-    <select class="select" name="selecttype" id="contract">
-    </select>
-    <a id="add_plan">&nbsp;&nbsp;增加方案</a>&nbsp;&nbsp;<a target="_blank" href="{% url 'coupon_plan' %}">查看方案</a>
-</div>
+            <el-form-item label="选择发送用户" prop="send_user">
+              <el-select v-model="ruleForm.send_user" placeholder="选择发送用户">
+                <el-option label="全部用户" value="1"></el-option>
+                <el-option label="指定用户" value="2"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item v-if="ruleForm.send_user == 2" label="选择发送用户" prop="userlist">
+              <el-input 
+                type="textarea" 
+                rows="5" 
+                v-model="ruleForm.userlist"
+                style="width: 300px;"
+                ></el-input>
+            </el-form-item>
+            <el-form-item v-if="ruleForm.send_user == 2">
+              <el-upload
+                class="upload-demo"
+                action="{%url 'parse_file'%}"
+                :on-success="handleUserSuccess"
+                :on-error="handleUserError"
+                >
+                <el-button size="small" type="primary">上传用户名单</el-button>
+                <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
+              </el-upload>
+            </el-form-item>
+            
 
-<div id="cash_coupon">
-    <i style="letter-spacing:4.8px;">选择发送用户：</i>
-    <select name="selectuser" id="selectuser">
-        <option value="1">全部用户</option>
-        <option value="2">指定用户</option>
-    </select>
-    <div class="part_user" style="display:none; margin-top: 20px;">
-        <i style="letter-spacing:4.8px;">发送指定用户：</i>
-        <textarea id="users" name="users" rows="15" cols="20"></textarea>
-        <label for="fileupload1">导入（纯文本文件，每行一个）：</label>
-        <input id="fileupload1" name="file" type="file" />
-        <button class="uploadbtn" id="uploadbtn1">上传</button>
-    </div>
-</div>
-<button id="submit">提交</button> 
-{%endblock%}
-{% block modal %}
-<div class="BackNow">
-    <div class="w570-box">
-        <h3>增加红包方案</h3>
-        <button class="none-x"></button>
-        <form class="Finnow">
-            <div style="margin-bottom: 20px;"><span>红包名称： </span><input style="width: 200px; height: 30px;" id="coupon_name" type="text" /></div>
-            <div style="margin-bottom: 20px;"><span>结算金额： </span><input style="width: 200px; height: 30px;" id="settle_amount" type="number" /></div>
-            <div style="margin-bottom: 20px;"><span>交单数量： </span><input style="width: 200px; height: 30px;" id="submit_num" type="number" /></div>
-            <div style="margin-bottom: 20px;"><span>起止日期： </span><input style="width: 140px; height: 30px;" id="date_start" type="date" />——<input style="width: 140px; height: 30px;" id="date_end" type="date" /></div>
-            <div style="margin-bottom: 20px;"><span>红包金额： </span><input style="width: 200px; height: 30px;" id="coupon_amount" type="number" /></div>
-            <input id="ret_event_id" type="hidden" />
-            <!--<span>添加现金：</span>
-            <input id="add_cash" type="text" />
-            <span>审核说明：</span>
-            <input id="audit_reason" type="text" placeholder="选填" />-->
-            <div class="Finnow-Sub">
-                <input id="add_coupon_btn" type="submit" value="确认" onclick="return false;" />
-                <input type="button" value="取消" class="none-x-s" />
-            </div>
-        </form>
-    </div>
-</div>
-{% endblock modal %}
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('ruleForm')">发送红包</el-button>
+              <el-button @click="resetForm('ruleForm')">重置</el-button>
+            </el-form-item>
+          </el-form>
+          
+          <el-header>红包方案展示</el-header>
+          <el-table
+            :header-cell-style="rowStyle"
+            :row-style="rowStyle"
+            ref="multipleTable"
+            :data="planTableData.results"
+            style="width: 100%"
+            border>
+            <el-table-column
+              label="红包名称">
+              <template slot-scope="scope">${ scope.row.name }</template>
+            </el-table-column>
+            <el-table-column
+              label="开始时间">
+              <template slot-scope="scope">${ scope.row.start_date ? scope.row.start_date : '立即开始' }</template>
+            </el-table-column>
+            <el-table-column
+              label="红包天数">
+              <template slot-scope="scope">${ scope.row.exipire_days }</template>
+            </el-table-column>
+            <el-table-column
+              label="交单天数">
+              <template slot-scope="scope">${ scope.row.continue_days }</template>
+            </el-table-column>
+            <el-table-column
+              label="条件关系">
+              <template slot-scope="scope">${ scope.row.condtype }</template>
+            </el-table-column>
+            <el-table-column
+              label="关联项目">
+              <template slot-scope="scope">${ scope.row.project_des ? scope.row.project_des : '全部项目' }</template>
+            </el-table-column>
+            <el-table-column
+              label="结算单数">
+              <template slot-scope="scope">${ scope.row.settle_count }</template>
+            </el-table-column>
+            <el-table-column
+              label="结算金额">
+              <template slot-scope="scope">${ scope.row.settle_amount }</template>
+            </el-table-column>
+            <el-table-column
+              label="奖励金额">
+              <template slot-scope="scope">${ scope.row.award }</template>
+            </el-table-column>
+            <el-table-column
+              label="操作"
+              width="90">
+              <template slot-scope="scope">
+                <template v-if="scope.row.pay_state == 2 || scope.row.pay_state == 3 || scope.row.pay_state == 4">
+                  <el-button disabled>操作</el-button>
+                </template>
+                <template v-else>
+                  <el-popover trigger="hover" placement="left">
+                    <p>
+                      <el-button type="success" size="mini" icon="el-icon-edit" @click="editPlan(scope.row)">编辑</el-button>
+                      <el-button type="danger" size="mini" icon="el-icon-delete" @click="delPlan(scope.row.id)">删除</el-button>
+                    </p>
+                    <div slot="reference" class="name-wrapper">
+                      <el-button>操作</el-button>
+                    </div>
+                  </el-popover>
+                </template>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div class="pagination-box">
+            <el-pagination
+              background
+              @current-change="handleCurrentChange"
+              :page-size="pageSize"
+              :current-page="currentPage"
+              layout="total, prev, pager, next, jumper"
+              :total="planTableData.recordCount">
+            </el-pagination>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+    
+    <el-dialog 
+      title="新增红包方案" 
+      :visible.sync="dialogPlanVisible"
+      width="700px"
+      >
+      <el-form 
+        :model="hongbaoPlanForm" 
+        label-width="120px"
+        :rules="rules_addplan" 
+        ref="hongbaoPlanForm" 
+        >
+        <el-form-item label="红包名称" prop="name">
+          <el-input v-model="hongbaoPlanForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="红包金额" prop="award">
+          <el-input type="number" v-model="hongbaoPlanForm.award"></el-input>
+        </el-form-item>
+        <el-form-item label="结算金额" prop="settle_amount">
+          <el-input type="number" v-model="hongbaoPlanForm.settle_amount"></el-input>
+        </el-form-item>
+        <el-form-item label="结算单数" prop="settle_count">
+          <el-input type="number" v-model="hongbaoPlanForm.settle_count"></el-input>
+        </el-form-item>
+        <el-form-item label="条件关系">
+          <el-radio v-model="hongbaoPlanForm.condtype" label='and' border>结算金额 且 单数</el-radio>
+          <el-radio v-model="hongbaoPlanForm.condtype" label='or' border>结算金额 或 单数</el-radio>
+        </el-form-item>
+        <el-form-item label="开始日期" prop="start_date">
+          <el-date-picker
+            v-model="hongbaoPlanForm.start_date"
+            type="date"
+            placeholder="选择日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd">
+          </el-date-picker>
+          <span>默认不选择日期则为当天</span>
+        </el-form-item>
+        <el-form-item label="红包有效天数" prop="exipire_days">
+          <el-input type="number" v-model="hongbaoPlanForm.exipire_days"></el-input>
+        </el-form-item>
+        <el-form-item label="交单有效天数" prop="continue_days">
+          <el-input type="number" v-model="hongbaoPlanForm.continue_days"></el-input>
+        </el-form-item>
+        <el-form-item label="项目关联">
+          <el-select 
+            v-model="hongbaoPlanForm.project"
+            filterable
+            placeholder="不选默认为全部项目">
+            <el-option
+              v-for="item in projectList"
+              :key="item.id"
+              :label="item.title"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogPlanVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitHongbaoForm('hongbaoPlanForm')">确 定</el-button>
+      </div>
+    </el-dialog>
+  </div>
+	
+	<script type="text/javascript">
+		var app = new Vue({
+      el: '#app',
+      delimiters: ['${', '}'],
+      data: {
+        activeNav: '6-3',
+        hongbaoPlan:[],
+        ruleForm: {
+          hongbao_plan: [],
+          send_user: '1',
+          userlist: ''
+        },
+        dialogPlanVisible: false,
+        hongbaoPlanForm: {
+          name: '',
+          award: '',
+          settle_amount: '',
+          settle_count: '',
+          condtype: 'and',
+          start_date: '',
+          exipire_days: '',
+          continue_days: '',
+          project: ''
+        },
+        submitFlag: 'add',
+        projectList: [],
+        rules: {
+          hongbao_plan: [
+            { required: true, message: '请选择红包方案', trigger: 'change' }
+          ],
+          send_user: [
+            { required: true, message: '请选择要发送的用户', trigger: 'change' }
+          ]
+        },
+        rules_addplan: {
+          name: [
+            { required: true, message: '请填写红包名称', trigger: 'blur' }
+          ],
+          award: [
+            { required: true, message: '请填写红包金额', trigger: 'blur' }
+          ],
+          settle_amount: [
+            { required: true, message: '请填写结算金额', trigger: 'blur' }
+          ],
+          settle_count: [
+            { required: true, message: '请填写结算单数', trigger: 'blur' }
+          ],
+          exipire_days: [
+            { required: true, message: '请填写红包天数', trigger: 'blur' }
+          ],
+          continue_days: [
+            { required: true, message: '请填写交单天数', trigger: 'blur' }
+          ],
+        },
+        rowStyle: {
+          'text-align': 'center'
+        },
+        planTableData:{},
+        page: 1,
+        pageSize: 10,
+        currentPage: 1,
+      },
+      created: function() {
+        console.log(this.activeNav);
+        this.getAllPlan();
+        this.getAllProject();
+        this.getDataList(this.page, this.pageSize);
+      },
+      mounted: function() {
+        document.body.style.opacity = 1;
+      },
+      methods: {
+        submitForm: function(formName) {
+          var that = this;
+          this.$refs[formName].validate(function(valid) {
+            if (valid) {
+              console.log(app.ruleForm)
+              if(app.ruleForm.send_user == 2 && !app.ruleForm.userlist) {
+                that.$notify.error({
+                  title: '错误',
+                  message: '要发送的用户列表不能为空'
+                });
+                return false;
+              }
+              var data = {
+                'contract': app.ruleForm.hongbao_plan.join(','),
+                'selectuser': app.ruleForm.send_user,
+              };
+              if(app.ruleForm.send_user === '1') {
+                  data.user = 'all';
+              } else if(app.ruleForm.send_user === '2') {
+                  data.users = app.ruleForm.userlist;
+              }
+              console.log('data');
+              $.ajax({
+                  url: "{%url 'deliver_coupon' %}",
+                  dataType:"json",
+                  async: false,
+                  type:"POST",
+                  data: data,
+                  success:function(ret){
+                      if(ret.code=='0'){
+                          console.log(ret);
+                          that.$notify.success({
+                            title: '提示',
+                            message: '发送红包个数：' + ret.succ_num
+                          });
+                      }
+                      else {
+                          alert(ret.res_msg);
+                      }
+                  },
+                  error:function(){
+                      alert("请检查网络连接");
+                  }
+              });
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
+        },
+        submitHongbaoForm: function(formName) {
+          var that = this;
+          this.$refs[formName].validate(function(valid) {
+            if (valid) {
+              console.log(app.hongbaoPlanForm)
+              if (that.submitFlag == 'edit') {
+              	$.ajax({
+                  url: "/coupon/contracts/" + app.hongbaoPlanForm.id,
+                  dataType:"json",
+                  async: false,
+                  type:"put",
+                  data: app.hongbaoPlanForm,
+                  success:function(ret){
+                      that.$notify.success({
+                        title: '提示',
+                        message: '修改方案成功'
+                      });
+                      app.getDataList(1,10);
+                      app.getAllPlan();
+                      that.dialogPlanVisible = false;
+                  },
+                  error:function(ret){
+                      alert(ret.responseText);
+                  }
+                });
+              } else{
+                $.ajax({
+                    url: "/coupon/contracts/",
+                    dataType:"json",
+                    async: false,
+                    type:"POST",
+                    data: app.hongbaoPlanForm,
+                    success:function(ret){
+                        that.$notify.success({
+                          title: '提示',
+                          message: '新建方案成功'
+                        });
+                        app.getDataList(1,10);
+                        app.getAllPlan();
+                        that.dialogPlanVisible = false;
+                    },
+                    error:function(ret){
+                        alert(ret.responseText);
+                    }
+                });
+              }
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
+        },
+        resetForm: function(formName) {
+          this.$refs[formName].resetFields();
+        },
+        handleUserSuccess: function(ret) {
+          var that = this;
+          if(ret.code == 0) {
+              var value = '';
+              for(x in ret.list) {
+                  value += String(ret.list[x]) + '\n';
+              }
+              app.ruleForm.userlist = value
+          } else {
+            that.$notify.error({
+              title: '错误',
+              message: ret.res_msg
+            });
+          }
+        },
+        handleUserError: function(ret) {
+          var that = this;
+          that.$notify.error({
+            title: '错误',
+            message: '请检查网络连接'
+          });
+        },
+        handleCurrentChange: function (val) {
+          app.currentPage = val;
+          app.getDataList(app.currentPage,app.pageSize);
+        },
+        addPlan: function() {
+          var that = this;
+          that.submitFlag = 'add';
+//        that.getAllProject();
+          that.dialogPlanVisible = true;
+//        $.ajax({
+//          url: "/restapi/projects/?page=1&pageSize=999",
+//          dataType: "json",
+//          type: "GET", 
+//          async: false,
+//          success: function(ret) {
+//            if(ret.code == 0) {
+//              app.projectList = ret.results;
+//            } else {
+//              that.$notify.error({
+//                title: '提示',
+//                message: ret.detail
+//              });
+//            }
+//          },
+//          error: function() {
+//            that.$notify.error({
+//              title: '提示',
+//              message: '请检查网络连接'
+//            });
+//          }
+//        });
+        },
+        editPlan: function(row) {
+          var that = this;
+          that.submitFlag = 'edit';
+//        that.getAllProject();
+          that.dialogPlanVisible = true;
+          that.hongbaoPlanForm = row;
+          console.log(row)
+        },
+        delPlan: function(id) {
+          var that = this;
+          this.$confirm('请确认是否删除该条数据？', '温馨提示', {
+            confirmButtonText: '确定',
+            callback: function(action) {
+              if (action == 'confirm') {
+                console.log(id);
+                $.ajax({
+                  url: "/coupon/contracts/" + id + '/',
+                  dataType: "json",
+                  type: "delete", 
+                  async: false,
+                  success: function(ret) {
+                    that.$notify.success({
+                      title: '提示',
+                      message: '操作成功'
+                    });
+                    app.getDataList(1,10);
+                    app.getAllPlan();
+                  },
+                  error: function() {
+                    that.$notify.error({
+                      title: '提示',
+                      message: '请检查网络连接'
+                    });
+                  }
+              });
+              }
+            }
+          });
+        },
+        getDataList: function(page, pageSize) {
+          var that = this;
+          $.ajax({
+              type: "get",
+              url: '/coupon/contracts/?page='+ page + '&pageSize=' + pageSize,
+              async: true,
+              success: function(res) {
+                console.log(res);
+                if(res.code == 0) {
+                  app.planTableData = res;
+                } else {
+                  that.$notify.error({
+                    title: '错误',
+                    message: res.detail
+                  });
+                }
+              }
+          });
+        },
+        getAllPlan: function(page, pageSize) {
+          var that = this;
+          $.ajax({
+              url: '/coupon/contracts/?pageSize=999',
+              dataType:"json",
+              type:"get",
+              success:function(ret){
+                app.hongbaoPlan = ret.results;
+                  console.log(app.hongbaoPlan);
+              },
+              error:function(){
+                that.$notify.error({
+                    title: '错误',
+                    message: '请检查网络连接'
+                });
+              }
+          });
+        },
+        getAllProject: function() {
+          var that = this;
+          $.ajax({
+            url: "/restapi/projects/?page=1&pageSize=999&state=10&is_official=true",
+            dataType: "json",
+            type: "GET", 
+            async: false,
+            success: function(ret) {
+              if(ret.code == 0) {
+                that.projectList = ret.results;
+              } else {
+                that.$notify.error({
+                  title: '提示',
+                  message: ret.detail
+                });
+              }
+            },
+            error: function() {
+              that.$notify.error({
+                title: '提示',
+                message: '请检查网络连接'
+              });
+            }
+          });
+        }
+      }
+    })
+	</script>
+</body>
+</html>

@@ -99,7 +99,14 @@
                             <template slot-scope="scope">${ scope.row.expire }</template>
                         </el-table-column>
                         <el-table-column label="红包状态">
-                            <template slot-scope="scope">${ scope.row.state }</template>
+                            <template slot-scope="scope">
+                                <span v-if='scope.row.state == 0'>
+                                    否
+                                </span>
+                                <span v-else>
+                                    是
+                                </span>
+                            </template>
                         </el-table-column>
                     </el-table>
                     <div class="pagination-box">

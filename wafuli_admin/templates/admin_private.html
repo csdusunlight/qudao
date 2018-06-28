@@ -125,7 +125,7 @@
                     <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"
                         border>
                         <el-table-column label="QQ">
-                            <template slot-scope="scope">${ scope.row.qq_number }</template>
+                            <template slot-scope="scope">${ scope.row.cqq_number }</template>
                         </el-table-column>
                         <el-table-column label="项目名称">
                             <template slot-scope="scope">${ scope.row.project_title }</template>
@@ -143,7 +143,7 @@
                             <template slot-scope="scope">${ scope.row.invest_term }</template>
                         </el-table-column>
                         <el-table-column label="提交时间">
-                            <template slot-scope="scope">${ scope.row.submit_time }</template>
+                            <template slot-scope="scope">${ (scope.row.submit_time).split('T')[0] }</template>
                         </el-table-column>
                         <el-table-column label="返现金额">
                             <template slot-scope="scope">${ scope.row.return_amount }</template>

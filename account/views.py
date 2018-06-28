@@ -42,7 +42,7 @@ from collections import OrderedDict
 from django.core.cache import cache
 from account.signals import register_signal
 from account.models import USER_ORIGIN,USER_EXP_YEAR,USER_CUSTOME_VOLUMN,USER_FUNDS_VOLUMN,USER_INVEST_ORIENTATION
-from account.models import ApplyLogForChannel
+from account.models import ApplyLogForChannel,ApplyLogForFangdan
 import datetime
 @sensitive_post_parameters()
 @csrf_protect
@@ -281,6 +281,7 @@ def apply_for_channel_user(request):
         def para_check_in_model_choice(para,choices):
             return para in [i[0] for i in choices]
         #######################
+
         if all([para_check_in_model_choice(user_origin,USER_ORIGIN), \
                 para_check_in_model_choice(user_exp_year, USER_EXP_YEAR), \
                 para_check_in_model_choice(user_custom_volumn, USER_CUSTOME_VOLUMN), \
@@ -306,6 +307,43 @@ def apply_for_channel_user(request):
             return JsonResponse(result)
     else:
         return render(request,"apply_for_channel_user.html")
+@csrf_exempt
+def apply_for_fangdan_user(request):
+    """如果是公司，那么id_name就是公司名称，id_num就是公司的工商注册号
+       如果是个人,那么id_name就是个人名称,id_num就是个人的身份证号
+    """
+    if request.method == 'GET':
+        template = 'account/apply_for_fangdan_user.html'
+        return render(request, template)
+    elif request.method == 'POST':
+        result = {}
+        current_user = request.user
+        apply_method = request.POST.get('apply_method', None)
+        id_name = request.POST.get('id_name', None)
+        id_num = request.POST.get('id_num', None)
+        apply_pic_url = request.POST.get('apply_pic_url', None)
+        contract_pic_url = request.POST.get('contract_pic_url', None)
+        rebate_pic_url = request.POST.get('rebate_pic_url', None)
+        if apply_method in ["1","2"]:
+            ApplyLogForFangdan.objects.create(user=current_user,
+                                              apply_method=apply_method,
+                                              id_name=id_name,
+                                              id_num=id_num,
+                                              apply_pic_url=apply_pic_url,
+                                              contract_pic_url=contract_pic_url,
+                                              rebate_pic_url=rebate_pic_url,
+                                              audit_state='1')
+            current_user.is_merchant = '-1'
+            current_user.save(update_fields=[
+                                             'is_merchant',
+                                        ])
+            result['code'] ="0"
+        else:
+            result['code']="-1"
+            result['detail']="not pass illegal"
+        return JsonResponse(result)
+    else:
+        return render(request, "apply_for_fangdan_user.html")
 
 
 def verifymobile(request):# not exist  return 0  exist return 1
@@ -1185,6 +1223,7 @@ def submitOrder(request):
     invest_term = request.POST.get('invest_term')
     invest_date = request.POST.get('invest_date')
     zhifubao = request.POST.get('zhifubao', '')
+    zhifubao_name = request.POST.get('zfbname', '')
     qq_number = request.POST.get('qq_number', '')
     expect_amount = request.POST.get('expect_amount', '')
     invest_name = request.POST.get('invest_name', '')
@@ -1215,7 +1254,7 @@ def submitOrder(request):
     
         investlog=InvestLog.objects.create(user=request.user,project_id=project_id, invest_mobile=invest_mobile, invest_date=invest_date,
                                  invest_name=invest_name, remark=remark, qq_number=qq_number, expect_amount=expect_amount,
-                                 zhifubao=zhifubao, invest_amount=invest_amount, submit_type=submit_type,
+                                 zhifubao=zhifubao, zhifubao_name=zhifubao_name, invest_amount=invest_amount, submit_type=submit_type,
                                   invest_term=invest_term, is_official=project.is_official, category=project.category,
                                   submit_way='4', audit_state='1')
     #活动插入

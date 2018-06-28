@@ -304,23 +304,7 @@
             zfbValue: '',
         },
         created: function() {
-          $.ajax({
-              type: "get",
-              url: '/restapi/investlogs/?user={{user.id}}&page='+ 1 + '&pageSize=' + 10 +'&audit_state=0' ,
-              async: true,
-              success: function(res) {
-                console.log(res);
-                if(res.code == 0) {
-                  console.log('created');
-                  console.log(res);
-                  console.log(app.tableData);
-                  app.tableData = res;
-                  console.log(app.tableData)
-                } else {
-                  console.log(res)
-                }
-              }
-          });
+          this.getDataList();
         },
         methods: {
           searchData: function() {
@@ -355,8 +339,8 @@
             this.multipleSelection = val;
           },
           handleCurrentChange: function (val) {
-            console.log(app.searchKeys);
-            console.log(app.stateValue);
+            // console.log(app.searchKeys);
+            // console.log(app.stateValue);
             app.currentPage = val;
             app.getDataList();
           },
@@ -554,14 +538,14 @@
             var that = this;
             $.ajax({
                 type: "get",
-                url: '/restapi/investlogs/?user={{user.id}}&page='+ app.currentPage + '&pageSize=' + app.pageSize +'&audit_state=0' + app.searchKeys ,
+                url: '/restapi/investlogs/?user={{user.id}}&page='+ that.currentPage + '&pageSize=' + that.pageSize +'&audit_state=0&is_official=true' + that.searchKeys ,
                 async: true,
                 success: function(res) {
                   console.log(res);
                   if(res.code == 0) {
-                    console.log(app.tableData);
-                    app.tableData = res;
-                    console.log(app.tableData)
+                    console.log(that.tableData);
+                    that.tableData = res;
+                    console.log(that.tableData)
                   } else {
                     that.$notify.error({
                       title: '错误',
@@ -582,19 +566,20 @@
         },
         computed: {
           searchKeys: function() {
+            var that = this;
             var auditdate_0;
             var auditdate_1;
-            if (app.dateValue == 7) {
-            	auditdate_0 = app.getDate(-7);
-              auditdate_1 = app.getDate(0);
-            } else if (app.dateValue == 30){
-            	auditdate_0 = app.getDate(-30);
-              auditdate_1 = app.getDate(0);
+            if (that.dateValue == 7) {
+            	auditdate_0 = that.getDate(-7);
+              auditdate_1 = that.getDate(0);
+            } else if (that.dateValue == 30){
+            	auditdate_0 = that.getDate(-30);
+              auditdate_1 = that.getDate(0);
             } else {
               auditdate_0 = '';
               auditdate_1 = '';
             }
-            return '&pay_state='+ app.stateValue + '&invest_mobile='+ app.telValue + '&zhifubao='+ app.zfbValue + '&auditdate_0='+ auditdate_0 + '&auditdate_1='+ auditdate_1;
+            return '&pay_state='+ that.stateValue + '&invest_mobile='+ that.telValue + '&zhifubao='+ that.zfbValue + '&auditdate_0='+ auditdate_0 + '&auditdate_1='+ auditdate_1;
           }
         }
       })

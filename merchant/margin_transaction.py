@@ -31,7 +31,7 @@ def charge_margin(user, type, amount, reason, reverse=False, remark='', auditlog
             user.margin_account = F('margin_account') + amount
             user.save(update_fields=['margin_account'])
         elif user.margin_account < amount:
-            raise ChargeValueError(u'账号 ' + user.mobile + u'中的资金余额不足，请先充值！')
+            raise ChargeValueError(u'账号 %s/%s中的资金余额不足，请先充值！' %(user.mobile, user.qq_name))
         else:
             user.margin_account = F('margin_account') - amount
             user.save(update_fields=['margin_account'])

@@ -136,8 +136,12 @@
                     <p class="input-tips">提示内容部分</p>
                 </div>
                 <div class="input-box zfb-box">
-                  <label class="input-title">收款信息&nbsp;&nbsp;</label>
-                  <input type="text" maxlength="64" placeholder="收款帐号 如支付宝、qq等，限64字符" id="zfb">
+                  <label class="input-title">支付宝</label>
+                  <input type="text" placeholder="请填写支付宝账号" id="zfb">
+                </div>
+                <div class="input-box zfb-box">
+                  <label class="input-title">支付宝姓名</label>
+                  <input type="text" placeholder="请填写支付宝姓名" id="zfbname">
                 </div>
                 <div class="mui-input-row isfutou-item input-box">
                     <div class="mui-input-row mui-radio">
@@ -298,6 +302,7 @@
                 invest_term = document.getElementById('term').value,
                 invest_date = document.getElementById('date').value,
                 zhifubao = document.getElementById('zfb').value,
+                zfbname = document.getElementById('zfbname').value,
                 submit_type = mui('input[name="is_futou"]:checked')[0].value,
                 remark = document.getElementById('remark').value;
             console.log('isInputTrue: '+isInputTrue);
@@ -317,6 +322,7 @@
                         'invest_date': invest_date,
                         'submit_type': submit_type,
                         'zhifubao': zhifubao,
+                        'zfbname': zfbname,
                         'remark': remark,
                     },
                     async:false,

@@ -9,6 +9,7 @@ urlpatterns = [
     
     url(r'^users/$', views.UserList.as_view()),
     url(r'^admin_get_apply_user/$', views.ApplyLogForChannelList.as_view()),
+    url(r'^admin_get_apply_user_fangdan/$', views.ApplyLogForFangdanList.as_view()),
     url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view(), kwargs={'partial':True}),
     
     url(r'^investlogs/$', views.InvestlogList.as_view()),

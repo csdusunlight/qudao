@@ -86,7 +86,14 @@
             </el-table-column>
             <el-table-column
               label="变动值">
-              <template slot-scope="scope">${ scope.row.transAmount }</template>
+              <template slot-scope="scope">
+                <span v-if='scope.row.transType == 1'>
+                  -  ${ scope.row.transAmount }
+                </span>
+                <span v-else>
+                  + ${ scope.row.transAmount }
+                </span>
+              </template>
             </el-table-column>
             <el-table-column
               label="余额">

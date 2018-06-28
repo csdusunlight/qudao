@@ -20,7 +20,7 @@ class Command(BaseCommand):
         sevent_days_ago = datetime.datetime.now() - datetime.timedelta(days=7)
         coms = Company.objects.all().update(view_count=0)
         
-        ret =InvestLog.objects.filter(is_official=True, is_osubmit_time__gte=sevent_days_ago, project__state__in=['10','20']).values('project__company_id').\
+        ret =InvestLog.objects.filter(is_official=True, submit_time__gte=sevent_days_ago, project__state__in=['10','20']).values('project__company_id').\
             annotate(count=Count('id')).order_by('project__company_id')
         for item in ret:
             print item
@@ -35,8 +35,8 @@ class Command(BaseCommand):
         #设置项目结束时间，并删除结束三天以上的项目    
         today = datetime.date.today()
         threedaysago = today - datetime.timedelta(days=3)
-        Project.objects.filter(state='20', end_date__isnull=True).update(end_date=today)
-        projects = Project.objects.filter(state='20', end_date__lte=threedaysago)
+        Project.objects.filter(state='20', current_state_date__isnull=True).update(current_state_date=today)
+        projects = Project.objects.filter(state='20', current_state_date__lte=threedaysago)
         for item in projects:
             batch_deletesub(item)
         projects.update(state='30')

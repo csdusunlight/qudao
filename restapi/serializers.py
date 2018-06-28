@@ -7,7 +7,7 @@ Created on 2017年8月10日
 from rest_framework import serializers
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
     Announcement, WithdrawLog, Mark, BookLog
-from account.models import MyUser, ApplyLog, Message,ApplyLogForChannel
+from account.models import MyUser, ApplyLog, Message,ApplyLogForChannel,ApplyLogForFangdan
 from wafuli_admin.models import DayStatis
 from wafuli.models import Company
 from statistic.models import UserDetailStatis, UserAverageStatis,\
@@ -24,7 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = MyUser
         fields = ('id', 'mobile', 'username', 'qq_number', 'qq_name', 'date_joined', 'with_total','accu_income','is_book_email_notice',
                   'level', 'picture', 'profile', 'balance', 'is_active', 'color', 'real_name', 'bank', 'card_number', 'is_autowith',
-                  'submit_bg', 'domain_name', 'cs_qq', 'has_permission100','num_message_sync','margin_account', 'fanshu_domain', 'zhifubao','has_permission200')
+                  'submit_bg', 'domain_name', 'cs_qq', 'is_merchant','num_message_sync','margin_account', 'fanshu_domain', 'zhifubao','has_permission200')
         read_only_fields = ('id', 'mobile', 'balance', 'is_active', 'level', 'margin_account')
 
 class ApplyLogForChannelSerializer(serializers.ModelSerializer):
@@ -42,8 +42,8 @@ class ApplyLogForChannelSerializer(serializers.ModelSerializer):
     user_custom_volumn = serializers.CharField(source='get_user_custom_volumn_display')
     user_funds_volumn = serializers.CharField(source='get_user_funds_volumn_display')
     user_invest_orientation = serializers.CharField(source='get_user_invest_orientation_display')
-
-
+    submit_time = serializers.DateTimeField(format= "%Y-%m-%d %H:%M:%S")
+    audit_time = serializers.DateTimeField(format= "%Y-%m-%d %H:%M:%S")
 
 
     class Meta:
@@ -69,17 +69,48 @@ class ApplyLogForChannelSerializer(serializers.ModelSerializer):
                   'admin_mobile')
         read_only_fields = ('admin_name','username','qq_number','qq_name')
 
+class ApplyLogForFangdanSerializer(serializers.ModelSerializer):
+    username =serializers.CharField(source="user.username",read_only=True)
+    admin_name =serializers.CharField(source="admin_user.username",read_only=True)
+    admin_mobile =serializers.CharField(source="admin_user.mobile",read_only=True)
+
+    mobile = serializers.CharField(source="user.mobile",read_only=True)
+    qq_number = serializers.CharField(source="user.qq_number",read_only=True)
+    qq_name =  serializers.CharField(source="user.qq_name",read_only=True)
+    level =  serializers.CharField(source="user.level",read_only=True)
+    profile =  serializers.CharField(source="user.profile",read_only=True)
+    audit_time = serializers.DateTimeField(format= "%Y-%m-%d ")
+    submit_time= serializers.DateTimeField(format= "%Y-%m-%d ")
+
+    class Meta:
+        model = ApplyLogForFangdan
+        fields= '__all__'
+        # fields = ('id',
+        #           'qq_number',
+        #           'qq_name',
+        #           'username',
+        #           'mobile',
+        #           'audit_time',
+        #           'submit_time',
+        #           'profile',
+        #           'admin_name',
+        #           'level',
+        #           "id_name",
+        #           "id_num",
+        #           "apply_pic_url",
+        #           "contract_pic_url",
+        #           "rebate_pic_url",
+        #           'audit_reason',
+        #           'audit_state',
+        #           'admin_mobile')
+        #read_only_fields = ('admin_name','uname','qq_number','qq_name')
 
 class ProjectSerializer(serializers.ModelSerializer):
 #     subscribers = UserSerializer(many=True)
-    qq_name = serializers.CharField(source='user.qq_name', read_only=True)
-    user_mobile = serializers.CharField(source='user.mobile', read_only=True)
     state_des = serializers.CharField(source='get_state_display', read_only=True)
     logo = serializers.CharField(source='company.logo.url', read_only=True)
     display_price = serializers.SerializerMethodField()
     up_price = serializers.SerializerMethodField()
-    def get_field_names(self, declared_fields, info):
-        return serializers.ModelSerializer.get_field_names(self, declared_fields, info)
     def get_display_price(self, obj):
         user = self.context['request'].user
         if user.is_authenticated():
@@ -95,14 +126,21 @@ class ProjectSerializer(serializers.ModelSerializer):
             return ''
     class Meta:
         model = Project
-        exclude = ('subscribers', 'price01', 'price02', 'price03', 'price04', 'price05')
+        exclude = ('subscribers', 'price01', 'price02', 'price03', 'price04', 'price05', 'broker_rate',
+                   'broker_rate01','broker_rate02','broker_rate03','broker_rate04','broker_rate05')
 #         fields = '__all__'
         read_only_fields = ('user', 'pub_date', 'state', 'is_official', 'category')
-        
+class ProjectSerializerForAdmin(ProjectSerializer):
+#     subscribers = UserSerializer(many=True)
+    qq_name = serializers.CharField(source='user.qq_name', read_only=True)
+    user_mobile = serializers.CharField(source='user.mobile', read_only=True)
+    class Meta(ProjectSerializer.Meta):
+        exclude = ('subscribers', )
 class InvestLogSerializer(serializers.ModelSerializer):
     project_title = serializers.CharField(source='project.title', read_only=True)
     project_channel = serializers.CharField(source='project.channel', read_only=True)
-    qq_number = serializers.CharField(source='user.qq_number', read_only=True)
+    cqq_number = serializers.CharField(source='user.qq_number', read_only=True)
+    mqq_number = serializers.CharField(source='project.user.qq_number', read_only=True)
     qq_name = serializers.CharField(source='user.qq_name', read_only=True)
     user_level = serializers.CharField(source='user.level', read_only=True)
     user_mobile = serializers.CharField(source='user.mobile', read_only=True)
@@ -177,7 +215,7 @@ class AnnouncementSerializer(serializers.ModelSerializer):
         model = Announcement
         fields = '__all__'
         read_only_fields = ('time',)
-        
+    
 class DayStatisSerializer(serializers.ModelSerializer):
     class Meta:
         model = DayStatis

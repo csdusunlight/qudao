@@ -123,26 +123,6 @@
                         }
                     });
                 },
-                search: function () {
-                    var that = this;
-                    that.getDataList();
-                },
-                export_txt: function () {
-                    console.log('export')
-                },
-                agree:function(row){
-                    var that = this;
-                    console.log('同意该条数据的id',row.id)
-                    $.ajax({
-                        url:url,
-                        
-                    })
-                },
-                refuse:function(row){
-                    var that = this;
-                    console.log('拒绝该条数据的id',row.id)
-                }
-            }
         })
     </script>
 </body>

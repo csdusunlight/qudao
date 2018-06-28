@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^$', 'wafuli_admin.views.index', name='admin_index'),
     url(r'^admin_merchant_look/$', 'wafuli_admin.views.admin_merchant_look', name='admin_merchant_look'),
     url(r'^admin_apply/$', 'wafuli_admin.views.admin_apply', name='admin_apply'),
+    url(r'^admin_apply_for_fangdan/$', 'wafuli_admin.views.admin_apply_for_fangdan_permission', name='admin_apply_for_fangdan'),
     url(r'^admin_office/$', 'wafuli_admin.views.admin_invest', name='admin_office'),
     url(r'^admin_private/$', 'wafuli_admin.views.admin_private', name='admin_private'),
 #     url(r'^indexpage/$', 'wafuli_admin.views.get_admin_index_page', name='get_admin_index_page'),
@@ -60,7 +61,7 @@ urlpatterns = [
     
     url(r'^admin_pay/$', 'finance.views.admin_pay'),
     url(r'^admin_autopay/$', 'finance.views.admin_autopay'),
-    url(r'^vuetest/$', 'wafuli_admin.views.vuetest', name='vuetest'),  #jzy
+    url(r'^admin_merchant_apply/$', 'wafuli_admin.views.admin_merchant_apply', name='admin_merchant_apply'),  #jzy
 ]
 
 

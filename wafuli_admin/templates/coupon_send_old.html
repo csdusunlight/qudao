@@ -1,0 +1,197 @@
+{% extends "base.html" %} {% load staticfiles %} {% block js %}
+<script type="text/javascript" src="{%static 'js/jquery-1.11.2.min.js'%}"></script>
+<script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
+<script>
+    var deliver_coupon_url = "{%url 'deliver_coupon' %}";
+    var parse_file_url = "{%url 'parse_file'%}"
+    $.ajaxSetup({
+        data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+    });
+    $(function() {
+        $("li.home23").toggleClass("on");
+        
+            $.ajax({
+                url: '/coupon/contracts/?pageSize=999',
+                dataType:"json",
+                type:"get",
+                success:function(ret){
+                    var option_html = '<option value="0">--</option>';
+                    console.log(ret.results);
+                    for ( var i in ret.results) {
+                        option_html += '<option value="'+ ret.results[i].id +'">'+ ret.results[i].name +'</option>'
+                    }
+                    $('#contract').html(option_html);
+                },
+                error:function(){
+                    alert("请检查网络连接");
+                }
+            });
+        
+        $('#selectuser').change(function() {
+            var select_val = $(this).children('option:selected').val();
+            if(select_val === '1') {
+                $("div.part_user").hide();
+            } else {
+                $("div.part_user").css("display", 'block');
+            }
+        });
+        $('#add_plan').click(function(){
+            $(".BackNow").css("display", "block");
+        })
+        $(".none-x").click(function() {
+            $(this).parent().parent().css("display", "none"); 
+        })
+        $(".none-x-s").click(function() {
+            $(this).parent().parent().parent().parent().css("display", "none"); 
+        })
+        $("button#submit").click(function() {
+            var select_user_id = $("select#selectuser").children('option:selected').val();
+            var contract_id = $("select#contract").children('option:selected').val();
+            var data = {
+                'contract': contract_id,
+                'selectuser': select_user_id,
+            };
+            if(select_user_id === '1') {
+                data.user = 'all';
+            } else if(select_user_id === '2') {
+                data.users = $("textarea#users").val();
+            }
+            console.log(data);
+                        $.ajax({
+                            url: deliver_coupon_url,
+                            dataType:"json",
+                            async: false,
+                            type:"POST",
+                            data: data,
+                            success:function(ret){
+                                if(ret.code=='0'){
+                                    console.log(ret);
+                                   alert('成功人数：' + ret.succ_num);
+                                }
+                                else {
+                                    alert(ret.res_msg);
+                                }
+                            },
+                            error:function(){
+                                alert("请检查网络连接");
+                            }
+                        });
+        });
+        $('button.uploadbtn').click(function() {
+            $.ajaxFileUpload({
+                url: parse_file_url,
+                secureuri: false,
+                fileElementId: 'fileupload1', //file标签的id  
+                dataType: 'json', //返回数据的类型  
+                data: {}, //一同上传的数据  
+                success: function(data, status) {
+                    if(data.code == 0) {
+                        var value = ''
+                        userlist = data.list;
+                        for(x in userlist) {
+                            value += String(userlist[x]) + '\n';
+                        }
+                        $("#users").val(value);
+                    } else {
+                        alert(data.res_msg);
+                    }
+                },
+                error: function(data, status, e) {
+                    alert(e);
+                }
+            });
+        });
+        $("#add_coupon_btn").click(function() {
+            var coupon_name = $('#coupon_name').val();
+            var settle_amount = $('#settle_amount').val();
+            var submit_num = $('#submit_num').val();
+            var date_start = $('#date_start').val();
+            var date_end = $('#date_end').val();
+            var coupon_amount = $('#coupon_amount').val();
+            if (!coupon_name || !settle_amount || !submit_num || !date_start || !date_end || !coupon_amount) {
+                alert('填写项不能为空');
+                return;
+            }
+            if (submit_num <= 0 && settle_amount <= 0 ) {
+                alert('结算金额和交单数量必须有一个大于零');
+                return;
+            }
+            if (coupon_amount <= 0 ) {
+                alert('红包金额必须大于零');
+                return;
+            }
+            
+            $.ajax({
+                url: "/coupon/contracts/",
+                dataType:"json",
+                async: false,
+                type:"POST",
+                data: {
+                    'name': coupon_name,
+                    'settle_amount': settle_amount,
+                    'settle_count': submit_num,
+                    'start_date': date_start,
+                    'end_date': date_end,
+                    'award': coupon_amount,
+                },
+                success:function(ret){
+                    alert('新建方案成功');
+                    location.reload();
+                },
+                error:function(ret){
+                    alert(ret.responseText);
+                }
+            });
+        });
+    });
+</script>
+{% endblock js%} {% block right %}
+<div>
+    <i style="letter-spacing:4.8px;">红包方案：</i>
+    <select class="select" name="selecttype" id="contract">
+    </select>
+    <a id="add_plan">&nbsp;&nbsp;增加方案</a>&nbsp;&nbsp;<a target="_blank" href="{% url 'coupon_plan' %}">查看方案</a>
+</div>
+
+<div id="cash_coupon">
+    <i style="letter-spacing:4.8px;">选择发送用户：</i>
+    <select name="selectuser" id="selectuser">
+        <option value="1">全部用户</option>
+        <option value="2">指定用户</option>
+    </select>
+    <div class="part_user" style="display:none; margin-top: 20px;">
+        <i style="letter-spacing:4.8px;">发送指定用户：</i>
+        <textarea id="users" name="users" rows="15" cols="20"></textarea>
+        <label for="fileupload1">导入（纯文本文件，每行一个）：</label>
+        <input id="fileupload1" name="file" type="file" />
+        <button class="uploadbtn" id="uploadbtn1">上传</button>
+    </div>
+</div>
+<button id="submit">提交</button> 
+{%endblock%}
+{% block modal %}
+<div class="BackNow">
+    <div class="w570-box">
+        <h3>增加红包方案</h3>
+        <button class="none-x"></button>
+        <form class="Finnow">
+            <div style="margin-bottom: 20px;"><span>红包名称： </span><input style="width: 200px; height: 30px;" id="coupon_name" type="text" /></div>
+            <div style="margin-bottom: 20px;"><span>结算金额： </span><input style="width: 200px; height: 30px;" id="settle_amount" type="number" /></div>
+            <div style="margin-bottom: 20px;"><span>交单数量： </span><input style="width: 200px; height: 30px;" id="submit_num" type="number" /></div>
+            <div style="margin-bottom: 20px;"><span>起止日期： </span><input style="width: 140px; height: 30px;" id="date_start" type="date" />——<input style="width: 140px; height: 30px;" id="date_end" type="date" /></div>
+            <div style="margin-bottom: 20px;"><span>红包金额： </span><input style="width: 200px; height: 30px;" id="coupon_amount" type="number" /></div>
+            <input id="ret_event_id" type="hidden" />
+            <!--<span>添加现金：</span>
+            <input id="add_cash" type="text" />
+            <span>审核说明：</span>
+            <input id="audit_reason" type="text" placeholder="选填" />-->
+            <div class="Finnow-Sub">
+                <input id="add_coupon_btn" type="submit" value="确认" onclick="return false;" />
+                <input type="button" value="取消" class="none-x-s" />
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock modal %}

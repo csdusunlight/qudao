@@ -108,7 +108,7 @@
                                     <span style="margin-left: 10px;">我接受<a href="http://51fanshu.com/docs/lMOz8">《注册协议》</a>、<a href="http://51fanshu.com/docs/laSnD">《免责声明》</a></span>
                             </div>
                             <input class="reg_btn" value="注册领取88元红包" type="submit">
-                                
+                            <div class="hideBox"></div>    
                         </div>
                     </form>
                 </div>
@@ -326,7 +326,7 @@
             dataType: 'json',
             type: 'POST',
             data: {
-                'qq_number':phone_number,
+                'qq_number':qq_number,
                 'qq_name':qq_name,
                 'code':auth_code,
                 'mobile':phone_number,
@@ -335,9 +335,10 @@
             },
             success: function(ret) {
               if(ret.code == 0) {
-                // me.holdSubmit(false);
-                alert('注册成功');
-                window.location.href = "/";
+                $('.reg_btn').val('处理中');
+                $('.reg_btn').attr("disabled", false);
+                $('.hideBox').addClass('loading');
+                setTimeout(" window.location.href = '/' ",2000)
               } else {
                 console.log(ret);
                 alert(ret.msg);

@@ -82,7 +82,7 @@ class Project(models.Model):
     is_addedto_repo = models.BooleanField(u"是否加入项目库", default=True)
     is_book = models.BooleanField(u"是否需要预约", default=False)
     state = models.CharField(u"项目状态", max_length=2, choices=Project_STATE, default='10')
-    end_date = models.DateField(u"最近暂停日期", default=None, null=True, blank=True)
+    current_state_date = models.DateField(u"进入当前状态的日期", default=None, null=True, blank=True)
     pic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）", blank=True)
     strategy = models.URLField(u"攻略链接")
     doc = models.ForeignKey(Document, null=True, on_delete=models.SET_NULL, default=None, blank=True)
@@ -102,7 +102,7 @@ class Project(models.Model):
     investrange = models.CharField(u"投资额度区间", max_length=20)
     intrest = models.CharField(u"预期年化", max_length=20)
     necessary_fields = models.CharField(u"必填字段", max_length=50,help_text=u"投资用户名(0)，投资金额(1)，投资标期(2)，投资日期(3)，\
-                支付宝信息(4)，投资手机号(5)，预期返现金额(6)，QQ号(7)，投资截图(8)，字段以英文逗号隔开，如0,1,2,3,4,5", default = '1,2,3,4,5,6')
+                支付宝信息(4)，投资手机号(5)，预期返现金额(6)，QQ号(7)，投资截图(8)，支付宝姓名（9）字段以英文逗号隔开，如0,1,2,3,4,5", default = '1,2,3,4,5,6,9')
     subscribers = models.ManyToManyField(MyUser, through='SubscribeShip')
     points = models.IntegerField(u"参与人数", default=0)
     channel = models.CharField(u"项目来源（上游渠道）", max_length=20, blank=True)
@@ -118,9 +118,20 @@ class Project(models.Model):
     broker_rate05 = models.DecimalField(u"5级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True, blank=True)
     def save(self, force_insert=False, force_update=False, using=None, 
              update_fields=None):
-        pyin = PinYin()
-        pyin.load_word()
-        self.szm, self.pinyin = pyin.hanzi2pinyin_split(self.title)
+        if self.id:
+            old_obj = Project.objects.get(id=self.id)
+            old_state = old_obj.state
+            if self.state != old_state:
+                self.current_state_date = datetime.date.today()
+            if self.title != old_obj.title:
+                pyin = PinYin()
+                pyin.load_word()
+                self.szm, self.pinyin = pyin.hanzi2pinyin_split(self.title)
+        else:
+            self.current_state_date = datetime.date.today()
+            pyin = PinYin()
+            pyin.load_word()
+            self.szm, self.pinyin = pyin.hanzi2pinyin_split(self.title)
         return models.Model.save(self, force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
     def clean(self):
         if not self.company:
@@ -298,6 +309,7 @@ ADMIN_TYPE = (
     ('2', u'更改用户状态'),
     ('3', u'更改用户等级'),
     ('4', u'更改保证金余额'),
+    ('5', u'修改商家权限'),
 )   
 class AdminLog(models.Model):
     admin_user = models.ForeignKey(MyUser, related_name="user_admin_history")

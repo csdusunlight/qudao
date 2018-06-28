@@ -1,0 +1,106 @@
+body, div, span, header, footer, nav, section, aside, article, ul, dl, dt, dd, li, a, p, h1, h2, h3, h4,h5, h6, i, b, textarea, button, input, select, figure, figcaption{
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-style: normal;
+  text-decoration: none;
+  border: none;
+  font-family: "Microsoft Yahei",sans-serif;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-font-smoothing: antialiased;}
+  &:focus{
+      outline: none;}
+.banner{ width: 100%; position: relative; height: 500px; margin: 0 auto;}
+.bannerimg{ position: absolute; width: 100%; height: 500px; background: url(../images/mg_top.png) no-repeat center;}
+.content{width: 1250px; margin: 0 auto; overflow: hidden; padding: 70px 25px;}
+.text_box{text-align: center; color: #222; margin-bottom: 50px;}
+.text_box .title{font-weight: normal; font-size: 18px; margin-bottom: 30px;}
+.text_box .text{font-size: 14px;}
+.concrete .list{width: 400px; float: left; text-align: center;}
+.concrete .list h2{font-size: 15px; font-weight: normal; margin: 20px 0; }
+.concrete .list p{font-size: 14px; line-height: 25px;}
+.broadcast{ width: 100%; position: relative; height: 500px; margin: 0 auto;}
+.broadcast_bgimg{ position: absolute; width: 100%; height: 500px; background: url(../images/mg_middle.png) no-repeat center;}
+.broadcast_title{ margin-bottom: 50px; margin-top: 70px; text-align: center; color: #fff;}
+.broadcast_title .title{font-weight: normal; font-size: 18px; margin-bottom: 30px;}
+.broadcast_title .text{font-size: 14px;}
+.lunbo_box{position: relative; width: 1250px; height: 150px; margin: 0 auto;}
+.icon_left{position: absolute; width: 77px; height: 156px; top: 50%; left: 0; margin-top: -78px; background: url(../images/mg_left.png) no-repeat; cursor: pointer;}
+.icon_right{position: absolute; width: 77px; height: 156px; top: 50%; right: 0;  margin-top: -78px; background: url(../images/mg_right.png) no-repeat; cursor: pointer;}
+.lunbo{ width: 1040px; height: 150px; overflow: hidden; margin: 0 auto;}
+.lunbo .item{width:250px; height: 150px; float: left; text-align: center; padding-top: 30px; box-sizing: border-box; background-color: #fff; font-size: 13px; margin:0 5px;}
+.lunbo .item_logo{margin-bottom: 25px; height: 56px;}
+.process{width: 1250px; margin: 0 auto;text-align: center; padding: 70px 0;}
+.process_title{font-weight: normal; font-size: 18px;}
+.process_item{margin-top: 55px;}
+.process_item .process_img{width: 1250px;}
+.button_box{ width: 1250px; margin: 0 auto;text-align: center; cursor: pointer;}
+.link_subhimt{display: inline-block; width: 300px; height: 55px; line-height: 55px; border-radius: 5px; color: #fff;font-size: 15px; background: #424242;}
+.link_subhimt:hover{background: #656565;}
+.footer_text{ width: 1250px; padding: 55px 0; margin: 0 auto; text-align: center; overflow: hidden;}
+.hide{display: none;}
+.show{display: block;}
+.disappear{ position: fixed; width: 220px; height: 44px; line-height: 44px; text-align: center; background-color: #000000; font-size: 13px; border-radius: 5px; color: #fff; opacity: 0.5; top: 50%; left: 50%; margin-left: -110px; margin-top: -20px;}
+.animation_dlaodit{
+  display: block;
+  -webkit-animation: dlaodit 0.3s ease-out;  
+  -moz-animation: dlaodit 0.3s ease-out;  
+  animation: dlaodit 0.3s ease-out;
+}
+@keyframes dlaodit
+{
+  0% {
+    transform: scale(0.7);
+    opacity: 0.7;
+  }
+  30%  {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  60%  {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@-webkit-keyframes dlaodit
+{
+  0% {
+    transform: scale(0.7);
+    opacity: 0.7;
+  }
+  30%  {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  60%  {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@-moz-keyframes dlaodit
+{
+  0% {
+    transform: scale(0.7);
+    opacity: 0.7;
+  }
+  30%  {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  60%  {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

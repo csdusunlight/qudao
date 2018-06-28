@@ -9,7 +9,7 @@ from django.http.response import JsonResponse, Http404, HttpResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from account.transaction import charge_money
 import logging
-from account.models import MyUser, AdminPermission,Message,ApplyLogForChannel
+from account.models import MyUser, AdminPermission,Message,ApplyLogForChannel,ApplyLogForFangdan
 from django.db.models import Q,F
 from wafuli_admin.models import DayStatis, Invest_Record
 from django.conf import settings
@@ -64,9 +64,11 @@ def admin_merchant_look(request):
     return render(request,"admin_merchant_look.html", {})
 
 
+
 import time
 
 @has_post_permission('052')
+
 def admin_apply(request):
     if request.method == "POST":
         admin_user = request.user
@@ -85,7 +87,7 @@ def admin_apply(request):
             with transaction.atomic():
                 ####################
                 reason = "success"
-                nowtime = time.strftime('%Y-%m-%d %H:%M:%S')
+                nowtime = datetime.datetime.now()
                 Message.objects.create(user=currentuser, title="渠道申请审核反馈", is_read=False,
                                        content=u"尊敬的用户：您申请成为渠道用户成功！")
                 currentuser.is_channel='1'
@@ -102,7 +104,7 @@ def admin_apply(request):
                 ####################
         elif type==2:
             reason = request.POST.get('reason', '')
-            nowtime = time.strftime('%Y-%m-%d %H:%M:%S')
+            nowtime = datetime.datetime.now()
             Message.objects.create(user=currentuser, title="渠道申请审核反馈", is_read=False,
                                    content=u"尊敬的用户：您申请成为渠道用户失败。被拒绝原因如下：" + reason)  # 写入审核原因，加个字段
             currentuser.is_channel = '０'
@@ -120,6 +122,57 @@ def admin_apply(request):
         return JsonResponse(res)
     else:
         return render(request,"admin_apply.html",)
+
+@csrf_exempt
+@has_post_permission('054')
+def admin_apply_for_fangdan_permission(request):
+    if request.method == "POST":
+        admin_user = request.user
+        res = {}
+        apply_id = request.POST.get('id', None)
+        type = request.POST.get('type', None)
+        type = int(type)
+        if not apply_id or type!=1 and type!=2:
+            res['code'] = -2
+            res['res_msg'] = u'传入参数不足，请联系技术人员！'
+            return JsonResponse(res)
+        current_applyforfangdan = ApplyLogForFangdan.objects.get(id=apply_id)
+        currentuser = current_applyforfangdan.user
+        if type==1:
+            with transaction.atomic():
+                reason = "success"
+                nowtime=datetime.datetime.now()
+                Message.objects.create(user=currentuser, title="放单权限申请审核反馈", is_read=False,
+                                       content=u"尊敬的用户：您申请放单权限成功！")
+                currentuser.is_merchant='1'
+                currentuser.save(update_fields=['is_merchant',])
+                current_applyforfangdan.audit_time = nowtime
+                current_applyforfangdan.audit_state = '0'
+                current_applyforfangdan.admin_user = admin_user
+                current_applyforfangdan.save(update_fields=['audit_time', 'audit_state', 'admin_user'])
+                AdminLog.objects.create(admin_user=admin_user, custom_user=currentuser, remark=reason, type='3',
+                                        time=nowtime)
+                sendmsg_bydhst(currentuser.mobile, u"尊敬的用户：您申请放单权限成功！")
+                res['code'] = 0
+                ####################
+        elif type==2:
+            reason = request.POST.get('reason', '')
+            nowtime = datetime.datetime.now()
+            Message.objects.create(user=currentuser, title="放单权限申请审核反馈", is_read=False,
+                                   content=u"尊敬的用户：您申请放单权限失败。被拒绝原因如下：" + reason)  # 写入审核原因，加个字段
+            current_applyforfangdan.audit_time = nowtime
+            current_applyforfangdan.audit_state = '2'
+            current_applyforfangdan.audit_reason = reason
+            current_applyforfangdan.admin_user = admin_user
+            current_applyforfangdan.save(update_fields=['audit_time', 'audit_state', 'admin_user','audit_reason'])
+            AdminLog.objects.create(admin_user=admin_user, custom_user=currentuser, remark=reason, type='3',
+                                    time=nowtime)
+            sendmsg_bydhst(currentuser.mobile, u"尊敬的用户：您申请放单权限失败" + reason)
+            res['code'] = 0
+        res['code'] = 0
+        return JsonResponse(res)
+    else:
+        return render(request,"admin_merchant_apply.html",)
 # def admin_office(request):
 #     return render(request,"admin_office.html",)
 def admin_private(request):
@@ -754,19 +807,18 @@ def admin_user(request):
                 res['code'] = -5
                 res['res_msg'] = u'您没有操作权限！'
                 return JsonResponse(res)
-            try:
-                perm = AdminPermission.objects.get(code='100')
-            except AdminPermission.DoesNotExist:
-                perm = AdminPermission.objects.create(code='100', name="商家权限")
-            obj_user.admin_permissions.add(perm)
+            obj_user.is_merchant = '1'
+            obj_user.save(update_fields=['is_merchant'])
+            adminlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, type='5')
             res['code'] = 0
         elif type == 7:
             if not admin_user.has_admin_perms('054'):
                 res['code'] = -5
                 res['res_msg'] = u'您没有操作权限！'
                 return JsonResponse(res)
-            perm = AdminPermission.objects.get(code='100')
-            obj_user.admin_permissions.remove(perm)
+            obj_user.is_merchant = '0'
+            obj_user.save(update_fields=['is_merchant'])
+            adminlog = AdminLog.objects.create(admin_user=admin_user, custom_user=obj_user, type='5')
             res['code'] = 0
 
         elif type == 8:#添加关于渠道用户被拒绝的操作，返回拒绝的消息和拒绝的原因，消息是固定的，原因是审核者填写的
@@ -1586,8 +1638,8 @@ def coupon_manage(request):    #jzy
     return render(request,"coupon_manage.html",{})
 def coupon_plan(request):    #jzy
     return render(request,"coupon_plan.html",{})
-def vuetest(request):    #jzy
-    return render(request,"vuetest.html",{})
+def admin_merchant_apply(request):    #jzy
+    return render(request,"admin_merchant_apply.html",{})
 def coupon_count(request):
     total = {}
     dic = UserCoupon.objects.filter(type='heyue').aggregate(count_user=Count('user', distinct=True),
@@ -1596,6 +1648,11 @@ def coupon_count(request):
     coupon_total = dic.get('count_coupon') or 0
     coupon_award = dic.get('sum') or 0
     dic = UserCoupon.objects.filter(type='heyue', state='2').aggregate(count_user=Count('user', distinct=True),
+                count_coupon=Count('*'), sum=Sum('award'))
+    coupon_user_total_obtain = dic.get('count_user') or 0
+    coupon_total_obtain = dic.get('count_coupon') or 0
+    coupon_award_obtain = dic.get('sum') or 0
+    dic = UserCoupon.objects.filter(type='heyue', state='1').aggregate(count_user=Count('user', distinct=True),
                 count_coupon=Count('*'), sum=Sum('award'))
     coupon_user_total_unlock = dic.get('count_user') or 0
     coupon_total_unlock = dic.get('count_coupon') or 0
@@ -1606,6 +1663,9 @@ def coupon_count(request):
     total['coupon_user_total_unlock'] = coupon_user_total_unlock
     total['coupon_total_unlock'] = coupon_total_unlock
     total['coupon_award_unlock'] = coupon_award_unlock
+    total['coupon_user_total_obtain'] = coupon_user_total_unlock
+    total['coupon_total_obtain'] = coupon_total_unlock
+    total['coupon_award_obtain'] = coupon_award_unlock
     return render(request,"coupon_count.html",{'total':total})
 
 @csrf_exempt

@@ -4,8 +4,13 @@ Created on 2017年9月11日
 
 @author: lch
 '''
-from django.http.response import HttpResponse
+import itertools
+
+from django.http import HttpResponse
+
 from account.varify import send_multimsg_bydhst
+
+
 def has_post_permission(code):
     def decorator(view):
         def wrapper(request, *args, **kw):
@@ -67,19 +72,21 @@ def str_to_bool(chars):
 def send_mobilemsg_multi(phone_list, content):
     if not content or len(content)==0 or len(phone_list)==0:
         return 0
-    phone_list = list(set(phone_list))
-    length = len(phone_list)
-    times = length/500
+    phone_list = iter(set(phone_list))
+    item = list(itertools.islice(phone_list, 500))
     tnum = 0
-    if length%500 > 0:
-        times += 1
-    for t in range(times):
-        frag_list = phone_list[t*500:t*500+500]
-        phones = ','.join(frag_list)
+    while item:
+        phones = ','.join(item)
+        print(phones)
         reg = send_multimsg_bydhst(phones, content)
         if reg==0:
-            tnum += len(frag_list)
+            tnum += len(item)
+        item = list(itertools.islice(phone_list, 500))
     return tnum
+if __name__ == '__main__':
+    phone_list = map(str,itertools.islice(itertools.count(1, 1), 1001))
+    print(phone_list)
+    send_mobilemsg_multi(phone_list,content='nihao')
 
 from random import Random
 def random_str(randomlength=5):

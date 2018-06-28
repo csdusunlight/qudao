@@ -155,6 +155,7 @@ class InvestLogSerializer(serializers.ModelSerializer):
     project_price = serializers.CharField(source='get_project_price', read_only=True)
     broker_rate = serializers.CharField(source='get_project_broker', read_only=True)
     project_qq_name = serializers.CharField(source='project.user.qq_name', read_only=True)
+    shoukuan_info = serializers.CharField(source='get_shoukuan_info', read_only=True) 
     class Meta:
         model = InvestLog
         fields = '__all__'

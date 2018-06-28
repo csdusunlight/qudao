@@ -153,7 +153,7 @@ def register(request):
                           cs_qq=qq_number, domain_name=qq_number)
             user.set_password(password)
             user.save()
-            id_list_list= list(Project.objects.filter(is_official=True, state='10', is_addedto_repo=True).values_list('id'))
+            id_list_list= list(Project.objects.filter(is_official=True, state__in=['10','20'], is_addedto_repo=True).values_list('id'))
             id_list = []
             if id_list_list:
                 id_list = reduce(lambda x,y: x + y, id_list_list)
@@ -237,7 +237,7 @@ def register_from_gzh(request):
                           cs_qq=qq_number, domain_name=qq_number)
             user.set_password(password)
             user.save()
-            id_list_list= list(Project.objects.filter(is_official=True, state='10', is_addedto_repo=True).values_list('id'))
+            id_list_list= list(Project.objects.filter(is_official=True,state__in=['10','20'], is_addedto_repo=True).values_list('id'))
             id_list = []
             if id_list_list:
                 id_list = reduce(lambda x,y: x + y, id_list_list)

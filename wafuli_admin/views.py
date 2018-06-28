@@ -25,7 +25,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.db import transaction
-from public.tools import has_post_permission, has_permission
+from public.tools import has_post_permission, has_permission, send_mobilemsg_multi
 from decimal import Decimal
 from weixin.tasks import sendWeixinNotify
 from merchant.margin_transaction import charge_margin
@@ -1580,23 +1580,8 @@ def send_multiple_msg(request):
 #         if phone and len(phone)==11:
 #             phone_set.add(phone)
     if len(phone_list)>0:
-        phone_list = list(set(phone_list))
-        length = len(phone_list)
-        times = length/500
-        treg = 0
-        tnum = 0
-        if length%500 > 0:
-            times += 1
-        for t in range(times):
-            frag_list = phone_list[t*500:t*500+500]
-            phones = ','.join(frag_list)
-            logger.info("Sending mobile messages to users:" + phones + "; content:" + content);
-            reg = send_multimsg_bydhst(phones, content)
-            if reg==0:
-                tnum += len(frag_list)
-            else:
-                treg = 1
-        if treg==0:
+        tnum = send_mobilemsg_multi(phone_list)
+        if len(phone_list)==tnum:
             res['code'] = 0
             res['num'] = tnum
         else:

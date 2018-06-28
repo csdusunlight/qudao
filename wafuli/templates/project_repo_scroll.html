@@ -634,7 +634,7 @@
             that.loadFlag = false;
             $.ajax({
               type: "get",
-              url: '/restapi/projects/?state=10&ordering=-current_state_date&is_official=true&is_addedto_repo=true&pageSize=' + that.pageSize + '&page=' + that.page + '&search=' + encodeURI(that.search_ipt),
+              url: '/restapi/projects/?state=10&is_official=true&is_addedto_repo=true&pageSize=' + that.pageSize + '&page=' + that.page + '&search=' + encodeURI(that.search_ipt),
               async: true,
               success: function(res) {
                 if(res.code == 0) {

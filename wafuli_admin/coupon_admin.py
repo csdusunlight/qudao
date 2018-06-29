@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http.response import JsonResponse
 from coupon.models import Contract, UserCoupon
-from account.models import MyUser
+from account.models import MyUser, Message
 import logging
 from account.varify import send_multimsg_bydhst
 from public.tools import send_mobilemsg_multi
@@ -38,7 +38,8 @@ def deliver_coupon(request):
         success_count = 0
         fail_list = []
         select_user = request.POST.get('selectuser')
-        bulk = []
+        bulk_coupons = []
+        bulk_msgs = []
         users = []
         user_set = set()
         if select_user == '1':
@@ -48,6 +49,7 @@ def deliver_coupon(request):
             select_list_str = str(select_list_str)
             select_list = select_list_str.strip().split('\n')
             users = MyUser.objects.filter(mobile__in = select_list)
+        cnum = len(contracts)
         for user in users:
             for contract in contracts:
                 if contract.start_date:
@@ -58,12 +60,17 @@ def deliver_coupon(request):
                 expire = start_date + datetime.timedelta(days=contract.exipire_days)
                 coupon = UserCoupon(user=user, contract=contract, type='heyue', expire=expire,
                                     start_date=start_date, end_date=end_date, award=contract.award)
-                bulk.append(coupon)
+                bulk_coupons.append(coupon)
                 success_count += 1
             user_set.add(user.mobile)
-        if bulk:
-            UserCoupon.objects.bulk_create(bulk)
-        print user_set
+            msg = Message(user=user, title="红包提醒", content=u"您收到了%s个红包，快去个人中心-我的红包页面查看吧~" % str(cnum))
+            user.num_message_sync += 1
+            user.save(update_fields=['num_message_sync'])
+            bulk_msgs.append(msg)
+        if bulk_coupons:
+            UserCoupon.objects.bulk_create(bulk_coupons)
+        if bulk_msgs:
+            Message.objects.bulk_create(bulk_msgs)
         send_mobilemsg_multi(user_set, u"您收到了新的推单红包，快去个人中心领取吧。联盟地址：%s" %  'http://fuliunion.com/account/hongbao/')
 
         result.update({'succ_num':success_count, 'fail_list':fail_list})

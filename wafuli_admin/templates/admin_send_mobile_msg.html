@@ -83,8 +83,6 @@
           send_user: '1',
           userlist: ''
         },
-        submitFlag: 'add',
-        projectList: [],
         rules: {
           send_content: [
             { required: true, message: '请填写要发送的信息内容', trigger: 'blur' }
@@ -92,13 +90,7 @@
           send_user: [
             { required: true, message: '请选择要发送的用户', trigger: 'change' }
           ]
-        },
-        rowStyle: {
-          'text-align': 'center'
         }
-      },
-      created: function() {
-        console.log(this.activeNav);
       },
       mounted: function() {
         document.body.style.opacity = 1;

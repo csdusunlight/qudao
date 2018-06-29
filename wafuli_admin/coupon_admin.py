@@ -64,6 +64,8 @@ def deliver_coupon(request):
                 success_count += 1
             user_set.add(user.mobile)
             msg = Message(user=user, title="红包提醒", content=u"您收到了%s个红包，快去个人中心-我的红包页面查看吧~" % str(cnum))
+            user.num_message_sync += 1
+            user.save(update_fields=['num_message_sync'])
             bulk_msgs.append(msg)
         if bulk_coupons:
             UserCoupon.objects.bulk_create(bulk_coupons)

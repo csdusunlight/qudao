@@ -1475,8 +1475,11 @@ def send_multiple_msg(request):
         res['res_msg'] = u'短信内容不能为空！'
         return JsonResponse(res)
     phones = request.POST.get('phones')
-
-    phone_list = str(phones).split('\n')
+    if phones == 'all':
+        phone_list = list(MyUser.objects.all().values('mobile'))
+        phone_list = [ x['mobile'] for x in phone_list]
+    else:
+        phone_list = str(phones).split('\n')
     if len(phone_list)>0:
         tnum = send_mobilemsg_multi(phone_list)
         if len(phone_list)==tnum:

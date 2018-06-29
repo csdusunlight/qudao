@@ -28,7 +28,12 @@
             label-width="150px" 
             class="demo-ruleForm">
             <el-form-item label="信息内容" prop="send_content">
-              <el-input type="text" v-model="ruleForm.send_content"></el-input>
+              <el-input 
+                type="textarea" 
+                rows="5" 
+                v-model="ruleForm.send_content"
+                style="width: 500px;"
+                ></el-input>
             </el-form-item>
             
             <el-form-item label="选择发送用户" prop="send_user">

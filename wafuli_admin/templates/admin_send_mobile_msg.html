@@ -111,6 +111,7 @@
               var data = {
                 'content': app.ruleForm.send_content,
                 'selectuser': app.ruleForm.send_user,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
               };
               if(app.ruleForm.send_user === '1') {
                   data.phones = 'all';

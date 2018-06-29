@@ -1481,7 +1481,7 @@ def send_multiple_msg(request):
     else:
         phone_list = str(phones).split('\n')
     if len(phone_list)>0:
-        tnum = send_mobilemsg_multi(phone_list)
+        tnum = send_mobilemsg_multi(phone_list, content)
         if len(phone_list)==tnum:
             res['code'] = 0
             res['num'] = tnum

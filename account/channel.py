@@ -72,7 +72,6 @@ def channel(request):
                             raise Exception(u"手机号：'%s'必须是11位，请修改后重新提交。" % cell.value)
                         if mobile in mobile_list:
                             duplic = True
-                            break;
                         else:
                             mobile_list.append(mobile)
                     elif j==4:

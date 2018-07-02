@@ -44,7 +44,7 @@ def channel(request):
         table = data.sheets()[0]
         nrows = table.nrows
         ncols = table.ncols
-        if ncols!=8:
+        if ncols!=9:
             ret['msg'] = u"文件格式与模板不符，请下载最新模板填写！"
             return JsonResponse(ret)
         rtable = []
@@ -53,6 +53,7 @@ def channel(request):
             for i in range(1,nrows):
                 temp = []
                 duplic = False
+                mobile = ''
                 for j in range(ncols):
                     cell = table.cell(i,j)
                     if j==0:
@@ -72,14 +73,21 @@ def channel(request):
                             raise Exception(u"手机号：'%s'必须是11位，请修改后重新提交。" % cell.value)
                         if mobile in mobile_list:
                             duplic = True
-                            break;
-                        else:
-                            mobile_list.append(mobile)
                     elif j==4:
                         try:
                             term = str(int(float(cell.value)))
                         except Exception,e:
                             raise Exception(u"投资标期必须为数字，请修改后重新提交。")
+                        temp.append(term)
+                    elif j==5:
+                        term = cell.value
+                        if term == u"首投":
+                            term = '1'
+                        elif term == u"复投":
+                            term = '2'
+                            duplic = False
+                        else:
+                            raise Exception(u"投资类型必须为首投或复投，请修改后重新提交。")
                         temp.append(term)
                     elif j==3:
                         amount = cell.value
@@ -95,6 +103,7 @@ def channel(request):
                     duplic = False
                 else:
                     rtable.append(temp)
+                    mobile_list.append(mobile)
         except Exception, e:
             logger.info(unicode(e))
 #             traceback.print_exc()
@@ -114,13 +123,14 @@ def channel(request):
             db_mobile_list = map(lambda x: x['invest_mobile'], temp)
             for i in range(len(mobile_list)):
                 mob = mobile_list[i]
-                if mob in db_mobile_list:
+                item = rtable[i]
+                submit_type = item[5]
+                if mob in db_mobile_list and (project.is_multisub_allowed is False or submit_type=='1'):
                     duplicate_mobile_list.append(mob)
                 else:
-                    item = rtable[i]
                     obj = InvestLog(user=request.user, invest_mobile=mob, project=project, is_official=project.is_official, category=project.category,
                                     invest_amount=item[3],invest_term=item[4],invest_date=item[0],invest_name=item[2],submit_way='3',
-                                    audit_state='1',zhifubao=item[5],zhifubao_name=item[6],remark=item[7],submit_type='1')
+                                    audit_state='1',zhifubao=item[6],zhifubao_name=item[7],remark=item[8],submit_type=submit_type)
                     log_list.append(obj)
             InvestLog.objects.bulk_create(log_list)
         succ_num = len(log_list)

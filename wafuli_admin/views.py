@@ -1451,97 +1451,21 @@ def get_admin_charge_page(request):
     return JsonResponse(res)
 
 
-def admin_investrecord(request):
+def admin_send_mobile_msg(request):
     admin_user = request.user
     if request.method == "GET":
         if not ( admin_user.is_authenticated() and admin_user.is_staff):
-            return redirect(reverse('admin:login') + "?next=" + reverse('admin_investrecord'))
-        return render(request,"admin_investrecord.html")
-def get_admin_investrecord_page(request):
-    res={'code':0,}
-    user = request.user
-    if not ( user.is_authenticated() and user.is_staff):
-        res['code'] = -1
-        res['url'] = reverse('admin:login') + "?next=" + reverse('admin_investrecord')
-        return JsonResponse(res)
-    page = request.GET.get("page", None)
-    size = request.GET.get("size", 10)
-    try:
-        size = int(size)
-    except ValueError:
-        size = 10
-
-    if not page or size <= 0:
-        raise Http404
-    item_list = []
-
-    item_list = Invest_Record.objects.all()
-    startTime = request.GET.get("startTime", None)
-    endTime = request.GET.get("endTime", None)
-    if startTime and endTime:
-        s = datetime.datetime.strptime(startTime,'%Y-%m-%d')
-        e = datetime.datetime.strptime(endTime,'%Y-%m-%d')
-        item_list = item_list.filter(invest_date__range=(s,e))
-    amountfrom = request.GET.get("amountfrom", None)
-    amountto = request.GET.get("amountto", None)
-    if amountfrom and amountto:
-        af = request.GET.get("amountfrom", 0)
-        at = request.GET.get("amountto", 0)
-        item_list = item_list.filter(invest_amount__range=(af,at))
-    username = request.GET.get("username", None)
-    if username:
-        item_list = item_list.filter(user_name=username)
-
-    mobile = request.GET.get("mobile", None)
-    if mobile:
-        item_list = item_list.filter(invest_mobile=mobile)
-
-    projectname = request.GET.get("projectname", None)
-    if projectname:
-        item_list = item_list.filter(invest_company__contains=projectname)
-
-    paginator = Paginator(item_list, size)
-    try:
-        contacts = paginator.page(page)
-    except PageNotAnInteger:
-    # If page is not an integer, deliver first page.
-        contacts = paginator.page(1)
-    except EmptyPage:
-    # If page is out of range (e.g. 9999), deliver last page of results.
-        contacts = paginator.page(paginator.num_pages)
-    data = []
-    for con in contacts:
-        card_number = u'无'
-        if con.card_number:
-            card_number = con.card_number
-        i = {
-             "invest_date": con.invest_date.strftime("%Y-%m-%d") if con.invest_date else '',
-             'invest_company':con.invest_company,
-             'qq_number':con.qq_number,
-             "user_name":con.user_name,
-             "card_number":card_number,
-             "invest_mobile":con.invest_mobile,
-             'invest_period':con.invest_period,
-             'invest_amount':con.invest_amount,
-             'return_amount':con.return_amount,
-             'wafuli_account':con.wafuli_account,
-             }
-        data.append(i)
-    if data:
-        res['code'] = 1
-    res["pageCount"] = paginator.num_pages
-    res["recordCount"] = item_list.count()
-    res["data"] = data
-    return JsonResponse(res)
+            return redirect(reverse('admin:login') + "?next=" + reverse('admin_send_mobile_msg'))
+        return render(request,"admin_send_mobile_msg.html")
 
 def send_multiple_msg(request):
     res={'code':0,}
     user = request.user
     if not ( user.is_authenticated() and user.is_staff):
         res['code'] = -1
-        res['url'] = reverse('admin:login') + "?next=" + reverse('admin_investrecord')
+        res['url'] = reverse('admin:login') + "?next=" + reverse('admin_send_mobile_msg')
         return JsonResponse(res)
-    if not user.has_admin_perms('007'):
+    if not user.has_admin_perms('012'):
         res['code'] = -5
         res['res_msg'] = u'您没有操作权限！'
         return JsonResponse(res)
@@ -1551,36 +1475,13 @@ def send_multiple_msg(request):
         res['res_msg'] = u'短信内容不能为空！'
         return JsonResponse(res)
     phones = request.POST.get('phones')
-    phone_list = json.loads(phones)
-#     item_list = Invest_Record.objects.all()
-#     startTime = request.POST.get("startTime", None)
-#     endTime = request.POST.get("endTime", None)
-#     if startTime and endTime:
-#         s = datetime.datetime.strptime(startTime,'%Y-%m-%d')
-#         e = datetime.datetime.strptime(endTime,'%Y-%m-%d')
-#         item_list = item_list.filter(invest_date__range=(s,e))
-#     amountfrom = request.POST.get("amountfrom", None)
-#     amountto = request.POST.get("amountto", None)
-#     if not amountfrom is None and not amountto is None:
-#         item_list = item_list.filter(invest_amount__range=(amountfrom,amountto))
-#     username = request.POST.get("username", None)
-#     if username:
-#         item_list = item_list.filter(user_name=username)
-#
-#     mobile = request.POST.get("mobile", None)
-#     if mobile:
-#         item_list = item_list.filter(invest_mobile=mobile)
-#
-#     projectname = request.POST.get("projectname", None)
-#     if projectname:
-#         item_list = item_list.filter(invest_company__contains=projectname)
-#     phone_set = set(phone_list)
-#     for item in phone_list:
-#         phone = item.invest_mobile
-#         if phone and len(phone)==11:
-#             phone_set.add(phone)
+    if phones == 'all':
+        phone_list = list(MyUser.objects.all().values('mobile'))
+        phone_list = [ x['mobile'] for x in phone_list]
+    else:
+        phone_list = str(phones).split('\n')
     if len(phone_list)>0:
-        tnum = send_mobilemsg_multi(phone_list)
+        tnum = send_mobilemsg_multi(phone_list, content)
         if len(phone_list)==tnum:
             res['code'] = 0
             res['num'] = tnum
@@ -1649,8 +1550,8 @@ def coupon_count(request):
     total['coupon_total_unlock'] = coupon_total_unlock
     total['coupon_award_unlock'] = coupon_award_unlock
     total['coupon_user_total_obtain'] = coupon_user_total_unlock
-    total['coupon_total_obtain'] = coupon_total_unlock
-    total['coupon_award_obtain'] = coupon_award_unlock
+    total['coupon_total_obtain'] = coupon_total_obtain
+    total['coupon_award_obtain'] = coupon_award_obtain
     return render(request,"coupon_count.html",{'total':total})
 
 @csrf_exempt

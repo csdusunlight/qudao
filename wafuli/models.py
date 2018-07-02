@@ -409,8 +409,8 @@ class MAdvert_PC(Base):
         verbose_name = u"PC端广告位（新）"
         verbose_name_plural = u"PC端广告位（新）"
     def clean(self):
-        if self.pic and self.pic.size > 100000:
-                raise ValidationError({'pic': u'图片大小不能超过100k'})
+        if self.pic and self.pic.size > 300000:
+                raise ValidationError({'pic': u'图片大小不能超过300k'})
 
 
 class Announcement(models.Model):

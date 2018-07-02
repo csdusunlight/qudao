@@ -53,6 +53,7 @@ def channel(request):
             for i in range(1,nrows):
                 temp = []
                 duplic = False
+                mobile = ''
                 for j in range(ncols):
                     cell = table.cell(i,j)
                     if j==0:
@@ -72,7 +73,6 @@ def channel(request):
                             raise Exception(u"手机号：'%s'必须是11位，请修改后重新提交。" % cell.value)
                         if mobile in mobile_list:
                             duplic = True
-                        mobile_list.append(mobile)
                     elif j==4:
                         try:
                             term = str(int(float(cell.value)))
@@ -103,6 +103,7 @@ def channel(request):
                     duplic = False
                 else:
                     rtable.append(temp)
+                    mobile_list.append(mobile)
         except Exception, e:
             logger.info(unicode(e))
 #             traceback.print_exc()

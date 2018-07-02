@@ -87,6 +87,7 @@ def channel(request):
                             term = '1'
                         elif term == u"复投":
                             term = '2'
+                            duplic = False
                         else:
                             raise Exception(u"投资类型必须为首投或复投，请修改后重新提交。")
                         temp.append(term)

@@ -44,7 +44,7 @@ def channel(request):
         table = data.sheets()[0]
         nrows = table.nrows
         ncols = table.ncols
-        if ncols!=8:
+        if ncols!=9:
             ret['msg'] = u"文件格式与模板不符，请下载最新模板填写！"
             return JsonResponse(ret)
         rtable = []

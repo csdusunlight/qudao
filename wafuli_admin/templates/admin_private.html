@@ -9,9 +9,9 @@
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <style>
         .grid-content {
             padding: 25px 0;
@@ -27,6 +27,10 @@
 
         .desc_txt {
             color: #909399;
+        }
+
+        .grid-content {
+            padding: 15px 0;
         }
     </style>
 </head>
@@ -202,7 +206,7 @@
                     var that = this;
                     $.ajax({
                         type: "get",
-                        url: '/restapi/investlogs/?page=' + that.page + '&pagesize=' + that.pageSize + '&is_official=false&investtime_0=' + that.s_time0 + '&investtime_1=' + that.e_time0 + '&audittime_0=' + that.s_time1 + '&audittime_1=' + that.e_time1 + '&qq_number=' + that.qq_number + '&user_mobile=' + that.phone_number + '&invest_mobile=' + that.submit_moblie + '&project_title_contains=' + that.project_title + '&user_level=' + that.select,
+                        url: '/restapi/investlogs/?page=' + that.currentPage + '&pagesize=' + that.pageSize + '&is_official=false&investtime_0=' + that.s_time0 + '&investtime_1=' + that.e_time0 + '&audittime_0=' + that.s_time1 + '&audittime_1=' + that.e_time1 + '&qq_number=' + that.qq_number + '&user_mobile=' + that.phone_number + '&invest_mobile=' + that.submit_moblie + '&project_title_contains=' + that.project_title + '&user_level=' + that.select,
                         async: true,
                         success: function (res) {
                             console.log(res);
@@ -223,41 +227,47 @@
                 },
                 export_data: function () { //导出数据
                     var that = this;
-                    var html = '<form action="' + "/admin_export_investlog/" + '" methods="get" target="_self" id="postData">';
-                    var startTime = that.s_time0; //申请开始时间
-                    var endTime = that.e_time0;  //申请结束时间
+                    var html = '<form action="' + "{% url 'admin_export_investlog' %}" + '" method="get" target="_self" id="postData_form">';
+
+                    html += '<input name="is_official" type="hidden" value="false"/>';
+                    var startTime = that.s_time0;
+                    var endTime = that.e_time0;
                     if (startTime && endTime) {
                         html += '<input name="investtime_0" type="hidden" value="' + startTime + '"/>';
                         html += '<input name="investtime_1" type="hidden" value="' + endTime + '"/>';
                     }
-                    var startTime2 = that.s_time1;  //操作开始时间
-                    var endTime2 = that.e_time1;    //操作结束时间
+                    var startTime2 = that.s_time1;
+                    var endTime2 = that.e_time1;
                     if (startTime2 && endTime2) {
                         html += '<input name="audittime_0" type="hidden" value="' + startTime2 + '"/>';
                         html += '<input name="audittime_1" type="hidden" value="' + endTime2 + '"/>';
                     }
-                    var qq = that.qq_number; //QQ号
+                    var qq = that.qq_number;
                     if (qq) {
                         html += '<input name="qq_number" type="hidden" value="' + qq + '"/>';
                     }
-                    var mobile = that.phone_number; //用户手机号
-                    if (mobile) {
-                        html += '<input name="user_mobile" type="hidden" value="' + mobile + '"/>';
+                    var user_mobile = that.phone_number;
+                    if (user_mobile) {
+                        html += '<input name="user_mobile" type="hidden" value="' + user_mobile + '"/>';
                     }
-                    var projectname = that.project_title;
-                    if (projectname) {
-                        html += '<input name="project_title_contains" type="hidden" value="' + projectname + '"/>';
+                    var user_level = that.select;
+                    if (user_level) {
+                        html += '<input name="user_level" type="hidden" value="' + user_level + '"/>';
                     }
-                    var level = that.select;
-                    if (level) {
-                        html += '<input name="user_level" type="hidden" value="' + level + '"/>';
+                    var invest_mobile = that.submit_moblie;
+                    if (invest_mobile) {
+                        html += '<input name="invest_mobile" type="hidden" value="' + invest_mobile + '"/>';
+                    }
+                    var project_title = that.project_title;
+                    if (project_title) {
+                        html += '<input name="project_title_contains" type="hidden" value="' + project_title_contains + '"/>';
                     }
                     html += '</form>';
                     var iframe = document.getElementById('myIFrame');
                     iframe.contentWindow.document.open();
                     iframe.contentWindow.document.write(html);
                     iframe.contentWindow.document.close();
-                    document.getElementById('myIFrame').contentWindow.document.getElementById('postData').submit();
+                    document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
                 }
             }
         })

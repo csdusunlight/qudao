@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
-	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 	<style>
 		.grid-content {
 			padding: 25px 0;
@@ -161,10 +161,9 @@
 					var that = this;
 					$.ajax({
 						type: "get",
-						url: '/restapi/translist/?page=' + that.page + '&pagesize=' + that.pageSize + '&trans_date_0=' + that.s_time0 + '&trans_date_1=' + that.e_time0 + '&user_name=' + that.user_name + '&user_mobile=' + that.user_phone + '&reason_contains=' + that.reason,
+						url: '/restapi/translist/?page=' + that.currentPage + '&pagesize=' + that.pageSize + '&trans_date_0=' + that.s_time0 + '&trans_date_1=' + that.e_time0 + '&user_name=' + that.user_name + '&user_mobile=' + that.user_phone + '&reason_contains=' + that.reason,
 						async: true,
 						success: function (res) {
-							console.log('llc res.results：',res.results);
 							if (res.code == 0) {
 								app.planTableData = res;
 							} else {

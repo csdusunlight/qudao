@@ -1550,8 +1550,8 @@ def coupon_count(request):
     total['coupon_total_unlock'] = coupon_total_unlock
     total['coupon_award_unlock'] = coupon_award_unlock
     total['coupon_user_total_obtain'] = coupon_user_total_unlock
-    total['coupon_total_obtain'] = coupon_total_unlock
-    total['coupon_award_obtain'] = coupon_award_unlock
+    total['coupon_total_obtain'] = coupon_total_obtain
+    total['coupon_award_obtain'] = coupon_award_obtain
     return render(request,"coupon_count.html",{'total':total})
 
 @csrf_exempt

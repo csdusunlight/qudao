@@ -81,6 +81,15 @@ def channel(request):
                         except Exception,e:
                             raise Exception(u"投资标期必须为数字，请修改后重新提交。")
                         temp.append(term)
+                    elif j==5:
+                        term = cell.value
+                        if term == u"首投":
+                            term = '1'
+                        elif term == u"复投":
+                            term = '2'
+                        else:
+                            raise Exception(u"投资类型必须为首投或复投，请修改后重新提交。")
+                        temp.append(term)
                     elif j==3:
                         amount = cell.value
                         try:
@@ -114,13 +123,14 @@ def channel(request):
             db_mobile_list = map(lambda x: x['invest_mobile'], temp)
             for i in range(len(mobile_list)):
                 mob = mobile_list[i]
-                if mob in db_mobile_list:
+                item = rtable[i]
+                submit_type = item[5]
+                if mob in db_mobile_list and (project.is_multisub_allowed is False or submit_type=='1'):
                     duplicate_mobile_list.append(mob)
                 else:
-                    item = rtable[i]
                     obj = InvestLog(user=request.user, invest_mobile=mob, project=project, is_official=project.is_official, category=project.category,
                                     invest_amount=item[3],invest_term=item[4],invest_date=item[0],invest_name=item[2],submit_way='3',
-                                    audit_state='1',zhifubao=item[5],zhifubao_name=item[6],remark=item[7],submit_type='1')
+                                    audit_state='1',zhifubao=item[6],zhifubao_name=item[7],remark=item[8],submit_type=submit_type)
                     log_list.append(obj)
             InvestLog.objects.bulk_create(log_list)
         succ_num = len(log_list)

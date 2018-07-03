@@ -300,7 +300,7 @@ def export_investlog(request):
         invest_amount= con.invest_amount
         term=con.invest_term
         qq_number = con.qq_number
-        zhifubao = "%s（%s）" % (con.zhifubao, con.zhifubao_name)
+        zhifubao = u"%s（%s）" % (con.zhifubao, con.zhifubao_name)
         expect_amount = con.expect_amount
         user_level = con.user.level
         result = ''

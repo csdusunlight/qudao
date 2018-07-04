@@ -48,6 +48,22 @@
     .el-header {
       margin-top: 0;
     }
+
+    .opreate {
+      cursor: pointer;
+    }
+    .el-dialog__header{
+      display: flex;
+      justify-content: center;
+    }
+    .el-form-item{
+      display: flex;
+      justify-content: center;
+    }
+    .el-dialog__footer{
+      display: flex;
+      justify-content: center;
+    }
   </style>
 </head>
 
@@ -94,14 +110,14 @@
           <el-row :gutter="20">
             <el-col :span="6">
               <div class="grid-content bg-purple">
-                  <span class="desc_txt">QQ：</span>
-                  <el-input v-model="qq_number" placeholder="请输入QQ号"></el-input>
+                <span class="desc_txt">QQ：</span>
+                <el-input v-model="qq_number" placeholder="请输入QQ号"></el-input>
               </div>
             </el-col>
             <el-col :span="6">
               <div class="grid-content bg-purple">
-                  <span class="desc_txt">用户手机号：</span>
-                  <el-input v-model="phone_number" placeholder="请输入用户手机号"></el-input>
+                <span class="desc_txt">用户手机号：</span>
+                <el-input v-model="phone_number" placeholder="请输入用户手机号"></el-input>
               </div>
             </el-col>
             <el-col :span="6">
@@ -116,83 +132,105 @@
             </el-col>
             <el-col :span="6">
               <div class="grid-content bg-purple">
-                  <span class="desc_txt">开户行姓名：</span>
-                  <el-input v-model="real_name" placeholder="请输入开户行姓名"></el-input>
+                <span class="desc_txt">开户行姓名：</span>
+                <el-input v-model="real_name" placeholder="请输入开户行姓名"></el-input>
               </div>
             </el-col>
           </el-row>
           <!-- 第四列 -->
           <el-row :gutter="20">
-              <el-col :span="6">
-                <div class="grid-content bg-purple">
-                    <span class="desc_txt">银行卡号：</span>
-                    <el-input v-model="card_number" placeholder="请输入银行卡号"></el-input>
-                </div>
-              </el-col>
-              <el-col :span="6">
-                <div class="grid-content bg-purple">
-                    <span class="desc_txt">用户手机号：</span>
-                    <el-input v-model="phone_number" placeholder="请输入用户手机号"></el-input>
-                </div>
-              </el-col>
-              <el-col :span="6">
-                <div class="grid-content bg-purple">
-                  <span class="desc_txt">渠道等级：</span>
-                  <el-select v-model="user_level" slot="prepend" placeholder="请选择">
-                    <el-option label="打款中" value="2"></el-option>
-                    <el-option label="已打款" value="3"></el-option>
-                    <el-option label="打款失败" value="4"></el-option>
-                  </el-select>
-                </div>
-              </el-col>
-              <el-col :span="6">
-                <div class="grid-content bg-purple">
-                    <span class="desc_txt">开户行姓名：</span>
-                    <el-input v-model="real_name" placeholder="请输入开户行姓名"></el-input>
-                </div>
-              </el-col>
-            </el-row>
+            <el-col :span="6">
+              <div class="grid-content bg-purple">
+                <span class="desc_txt">银行卡号：</span>
+                <el-input v-model="card_number" placeholder="请输入银行卡号"></el-input>
+              </div>
+            </el-col>
+            <el-col :span="6">
+              <div class="grid-content bg-purple">
+                <span class="desc_txt">处理人手机号：</span>
+                <el-input v-model="admin_mobile" placeholder="请输入用户手机号"></el-input>
+              </div>
+            </el-col>
+            <el-col :span="6">
+              <div class="grid-content bg-purple">
+                <span class="desc_txt">处理状态：</span>
+                <el-select v-model="state" @change="changse_state" slot="prepend" placeholder="请选择处理状态">
+                  <el-option label="全部" value=""></el-option>
+                  <el-option label="未审核" value="1"></el-option>
+                  <el-option label="审核通过" value="0"></el-option>
+                  <el-option label="审核拒绝" value="2"></el-option>
+                </el-select>
+              </div>
+            </el-col>
+            <el-col :span="6">
+              <div class="grid-content bg-purple" style="display: flex;">
+                <el-button type="primary" @click='search_data' style="height: 42px;margin-right: 20px;">搜索</el-button>
+                <!-- <el-button type="danger">导入</el-button> -->
+                <el-upload class="avatar-uploader" action="{% url 'import_withdraw_excel'%}" name="file" accept=".xls"
+                  :show-file-list="false" :on-success="handleAvatarSuccess" :on-error="handleAvatarError" :before-upload="beforeAvatarUpload">
+                  <el-button type="primary">导入</el-button>
+                  <div slot="tip" class="el-upload__tip">&nbsp;只能上传xls文件</div>
+                </el-upload>
+                <el-button type="danger" style="height: 40px;" @click='export_data'>导出</el-button>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col>
+              <div class="grid-content bg-purple" style="display: flex;justify-content: flex-end">
+                <el-button type="warning" @click='withdrawal'>一键提现</el-button>
+                <el-button type="info" @click='audit' style="margin-right: 130px;">一键审核（支付宝）</el-button>
+              </div>
+            </el-col>
+          </el-row>
           <!-- tabale -->
           <el-header>数据总览</el-header>
           <el-table ref="multipleTable" :data="planTableData.results" :header-cell-style="rowStyle" :row-style="rowStyle" style="width: 100%"
             @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55">
             </el-table-column>
-            <el-table-column label="项目名称">
-              <template slot-scope="scope">${ scope.row.project_title }</template>
-            </el-table-column>
-            <el-table-column label="用QQ">
+            <el-table-column label="QQ">
               <template slot-scope="scope">${ scope.row.qq_number }</template>
             </el-table-column>
-            <el-table-column label="用户手机号">
-              <template slot-scope="scope">${ scope.row.user_mobile }</template>
+            <el-table-column label="手机号">
+              <template slot-scope="scope">${ scope.row.mobile }</template>
             </el-table-column>
-            <el-table-column label="投资姓名">
-              <template slot-scope="scope">${ scope.row.invest_name }</template>
+            <el-table-column label="开户行">
+              <template slot-scope="scope">${ scope.row.bank }</template>
             </el-table-column>
-            <el-table-column label="投资手机号">
-              <template slot-scope="scope">${ scope.row.invest_mobile }</template>
+            <el-table-column label="开户行姓名">
+              <template slot-scope="scope">${ scope.row.real_name }</template>
             </el-table-column>
-            <el-table-column label="投资日期">
-              <template slot-scope="scope">${ scope.row.invest_date }</template>
+            <el-table-column label="银行卡号">
+              <template slot-scope="scope">${ scope.row.card_number }</template>
             </el-table-column>
-            <el-table-column label="审核时间">
-              <template slot-scope="scope">${ scope.row.audit_time.split('T')[0] }</template>
-            </el-table-column>
-            <el-table-column label="结算金额">
-              <template slot-scope="scope">${ scope.row.settle_amount }</template>
-            </el-table-column>
-            <el-table-column label="返现金额">
-              <template slot-scope="scope">${ scope.row.return_amount }</template>
-            </el-table-column>
-            <el-table-column label="支付宝账号">
+            <el-table-column label="支付宝" :key='Math.random()' v-if="state == '1'">
               <template slot-scope="scope">${ scope.row.zhifubao }</template>
             </el-table-column>
-            <el-table-column label="支付宝姓名">
-              <template slot-scope="scope">${ scope.row.zhifubao_name }</template>
+            <el-table-column label="申请提现金额" :key='Math.random()' v-if="state == '2' || state == '0'">
+              <template slot-scope="scope">${ scope.row.amount }</template>
             </el-table-column>
-            <el-table-column label="打款状态">
-              <template slot-scope="scope">${ scope.row.pay_state_des }</template>
+            <el-table-column label="申请时间">
+              <template slot-scope="scope">${ scope.row.submit_time.split("T")[0] }</template>
+            </el-table-column>
+            <el-table-column label="处理人">
+              <template slot-scope="scope">${ scope.row.admin_mobile }</template>
+            </el-table-column>
+            <el-table-column label="处理时间" :key='Math.random()' v-if='state == "2" || state == "0"'>
+              <template slot-scope="scope">${ scope.row.audit_time }</template>
+            </el-table-column>
+            <el-table-column label="处理" :key='Math.random()' v-if='state == "1"'>
+              <template slot-scope="scope">
+                <a class="opreate" @click='agree(scope.row)'>接受</a>
+                丨
+                <a class="opreate" @click='refuse(scope.row)'>拒绝</a>
+              </template>
+            </el-table-column>
+            <el-table-column label="自动审核失败原因" :key='Math.random()' v-if='state == "1"'>
+              <template slot-scope="scope">${ scope.row.except_info }</template>
+            </el-table-column>
+            <el-table-column label="拒绝原因" :key='Math.random()' v-if='state == "2"'>
+              <template slot-scope="scope">${ scope.row.audit_reason }</template>
             </el-table-column>
           </el-table>
           <div class="pagination-box">
@@ -203,7 +241,41 @@
         </div>
       </el-col>
     </el-row>
+    <el-dialog title="一键审核" :visible.sync="auditShow">
+      <el-form :model="form">
+          <el-form-item>
+            <el-checkbox label="用户可选时间段" @change="is_check"></el-checkbox>
+          </el-form-item>
+          <div class="iptBox" v-show='is_show'>
+            <el-form-item label="开始时间">
+              <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="audit_stime" type="date" placeholder="选择日期">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="结束时间">
+              <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="audit_etime" type="date" placeholder="选择日期">
+              </el-date-picker>
+            </el-form-item>
+          </div>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="auditShow = false">取 消</el-button>
+        <el-button type="primary" @click='send'>确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog
+      title="提示"
+      :visible.sync="refuse_box"
+      width="30%"
+      center>
+      <span>请输入拒绝原因：</span>
+      <el-input v-model="refuse_reason" placeholder="请输入拒绝原因"></el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="refuse_box = false">取 消</el-button>
+        <el-button type="primary" @click="refuse_send">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
+  <iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
 </body>
 <script type="text/javascript">
   var app = new Vue({
@@ -212,16 +284,26 @@
     data: {
       s_time0: '',
       e_time0: '',
-      s_time1:'',
-      e_time1:'',
-      user_level :'',
+      s_time1: '',
+      e_time1: '',
+      user_level: '',
       phone_number: '',
-      zhifubao: '',
-      pay_state: '',
       real_name: '',
-      card_number :'',
-      activeNav: '2-2',
-      // state: '',
+      card_number: '',
+      admin_mobile: '',
+      qq_number: '',
+      state: '',
+      checkIdList:'',
+      audit_stime:'',
+      audit_etime:'',
+      auditShow:false,
+      form:'',
+      refuse_reason:'',
+      refuse_id:'',
+      is_show:false,
+      refuse_box:false,
+      num: 1,
+      activeNav: '2-1',
       rowStyle: {
         'text-align': 'center'
       },
@@ -239,67 +321,435 @@
         app.currentPage = val;
         app.getDataList(app.currentPage, app.pageSize);
       },
-      // getDataList: function () {
-      //   var that = this;
-      //   $.ajax({
-      //     type: "get",
-      //     url: '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&audit_state=0&pay_state=2',
-      //     async: true,
-      //     success: function (res) {
-      //       console.log(res);
-      //       if (res.code == 0) {
-      //         app.planTableData = res;
-      //       } else {
-      //         that.$notify.error({
-      //           title: '错误',
-      //           message: res.detail
-      //         });
-      //       }
-      //     }
-      //   });
-      // },
+      getDataList: function () {
+        var that = this;
+        $.ajax({
+          type: "get",
+          url: '/restapi/withdrawlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + that.url_key,
+          async: true,
+          success: function (res) {
+            console.log(res);
+            if (res.code == 0) {
+              app.planTableData = res;
+            } else {
+              that.$notify.error({
+                title: '错误',
+                message: res.detail
+              });
+            }
+          }
+        });
+      },
+      changse_state: function (val) {
+        var that = this;
+        that.state = val;
+        that.getDataList();
+      },
       //搜索
-      // search_data: function () {
-      //   var that = this;
-      //   console.log('0000000',this.pay_state)
-      //   if (that.pay_state == 2) {
-      //     console.log("new" + that.searchVal)
-      //     $.ajax({
-      //       url: '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&audit_state=0&pay_state=2',
-      //       type: "get",
-      //       async: true,
-      //       success: function (res) {
-      //         console.log(res);
-      //         if (res.code == 0) {
-      //           app.planTableData = res;
-      //         } else {
-      //           that.$notify.error({
-      //             title: '错误',
-      //             message: res.detail
-      //           });
-      //         }
-      //       }
-      //     })
-      //   } else {
-      //     console.log("new_1" + that.searchVal)
-      //     $.ajax({
-      //       url: '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&audit_state=0&pay_state='+that.pay_state,
-      //       type: "get",
-      //       async: true,
-      //       success: function (res) {
-      //         console.log(res);
-      //         if (res.code == 0) {
-      //           app.planTableData = res;
-      //         } else {
-      //           that.$notify.error({
-      //             title: '错误',
-      //             message: res.detail
-      //           });
-      //         }
-      //       }
-      //     })
-      //   }
-      // }
+      search_data: function () {
+        var that = this;
+        that.getDataList();
+      },
+      //check选中事件
+      handleSelectionChange(val) {
+        var that = this;
+        that.checkIdList = '';
+        console.log(val);
+        if (val.length) {
+          for (let i = 0; i < val.length; i++) {
+            app.checkIdList += val[i].id + ','
+          }
+          app.checkIdList = app.checkIdList.slice(0,app.checkIdList.length-1);
+          console.log('checkbox选中：',app.checkIdList);
+        } else {
+          app.checkIdList = '';
+          console.log('chenckbox未选中：',app.checkIdList);
+        }
+        this.multipleSelection = val;
+      },
+      //导出数据
+      export_data:function(){
+        var that = this;
+        var html = '<form action="'+"{% url 'export_withdraw_excel' %}"+'" method="get" target="_self" id="postData_form">';
+        var startTime = that.s_time0;
+        var endTime = that.e_time0;
+        if(startTime && endTime){
+          html += '<input name="submit_date_0" type="hidden" value="'+ startTime + '"/>';
+          html += '<input name="submit_date_1" type="hidden" value="'+ endTime + '"/>';
+        }
+        var startTime2 = that.s_time1;
+        var endTime2 = that.e_time1;
+        if(startTime2 && endTime2){
+          html += '<input name="audit_date_0" type="hidden" value="'+ startTime2 + '"/>';
+          html += '<input name="audit_date_1" type="hidden" value="'+ endTime2 + '"/>';
+        }
+        var qq = that.qq_number;
+        var mobile = that.phone_number;
+        if(qq){
+          html += '<input name="qq_number" type="hidden" value="'+ qq + '"/>';
+        }
+        if(mobile){
+          html += '<input name="user_mobile" type="hidden" value="'+ mobile + '"/>';
+        }
+        var card_number = that.card_number;
+        var real_name = that.real_name;
+        if(card_number){
+          html += '<input name="card_number" type="hidden" value="'+ card_number + '"/>';
+        }
+        if(real_name){
+          html += '<input name="real_name" type="hidden" value="'+ real_name + '"/>';
+        }
+        var adminname = that.admin_mobile;
+        var usertype = that.user_level;
+        var state = that.state;
+        if(adminname){
+          html += '<input name="admin_mobile" type="hidden" value="'+ adminname + '"/>';
+        }
+        if(usertype){
+          html += '<input name="user_level" type="hidden" value="'+ usertype + '"/>';
+        }
+        if(state){
+          html += '<input name="audit_state" type="hidden" value="'+ state + '"/>';
+        }
+        html += '</form>';
+        var iframe = document.getElementById('myIFrame');
+        iframe.contentWindow.document.open();
+        iframe.contentWindow.document.write(html);
+        iframe.contentWindow.document.close();
+        document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();   
+      },
+      //上传文件
+      beforeAvatarUpload: function (file) {
+        console.log(file)
+        this.$message('正在上传...')
+      },
+      handleAvatarSuccess: function (res, file) {
+        var that = this;
+        console.log(res);
+        if (res.code == 0) {
+          that.$notify({
+            title: '上传成功',
+            message: '成功数量：' + res.num + '条',
+            type: 'success'
+          });
+          that.getDataList();
+        } else {
+          that.$notify.error({
+            title: '错误',
+            message: res.msg
+          });
+        }
+      },
+      handleAvatarError: function (res, file) {
+        var that = this;
+        that.$notify.error({
+          title: '错误',
+          message: '上传失败'
+        });
+      },
+      //开始时间和结束时间的显示和隐藏
+      is_check:function(){
+        var that = this;
+        that.num ++;
+        if(that.num % 2 == 0){
+          that.is_show = true;
+        }else{
+          that.is_show = false;
+        }
+
+      },
+      //一键审核
+      audit:function(){
+        var that = this;
+        if(that.checkIdList === ''){
+          that.auditShow = true;
+        }else if(that.checkIdList != ''){
+          console.log('一键审核checkIdList',that.checkIdList)
+          $.ajax({
+            url:'/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list='+that.checkIdList,
+            type:'GET',
+            async:false,
+            dataType:'json',
+            success:function(res){
+              if(res.code == 0){
+                that.$alert('共'+res.count+'笔，'+res.sum+'元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果','温馨提示',{
+                  confirmButtonText:'确定',
+                  callback:function(action){
+                    if(action == 'confirm'){
+                      $.ajax({
+                        url:'/Admin/withdraw_autoaudit/',
+                        dataType:'json',
+                        data:{
+                          sub_from:'',
+                          sub_to:'',
+                          id_list:that.checkIdList
+                        },
+                        success:function(res){
+                          if(res.code == 0){
+                            that.$notify({
+                              title:'提示',
+                              message:'一键审核成功'
+                            })
+                          }else{
+                            that.$notify.error({
+                              title:'提示',
+                              message:res.detail
+                            })
+                          }
+                        },
+                        error:function(){
+                          that.$notify({
+                            title:'提示',
+                            message:'请检查网络连接'
+                          })
+                        }
+                      })
+                    }
+                  }
+                })
+              }else{
+                that.$notify({
+                  title:'提示',
+                  message:'成功数量：'+ res.count+'总数：'+res.sum
+                })
+              }
+            },
+          })
+        }
+      },
+      //一键审核确定
+      send:function(){
+        var that = this;
+        if(that.is_show === true){
+          if(!that.audit_stime){
+            that.$notify({
+              title:'提示',
+              message:'请选择开始时间'
+            })
+            return false;
+          }
+          if(!that.audit_etime){
+            that.$notify({
+              title:'提示',
+              message:'请选择结束时间'
+            })
+            return false;
+          }
+          $.ajax({
+            url:'/Admin/withdraw_autoaudit/?sub_from=' +that.audit_stime+ '&sub_to=' +that.audit_etime+ '&id_list=',
+            type:'GET',
+            dataType:'json',
+            async:false,
+            success:function(res){
+              
+                that.$alert('共'+res.count+'笔，'+res.sum+'元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果','温馨提示',{
+                  confirmButtonText:'确定',
+                  callback:function(action){
+                    console.log(action);
+                    if(action == 'confirm'){
+                      $.ajax({
+                        url:'/Admin/withdraw_autoaudit/',
+                        dataType:'json',
+                        type:"POST",
+                        async:false,
+                        data:{
+                          sub_from:that.audit_stime,
+                          sub_to:that.audit_etime,
+                          id_list:''
+                        },
+                        success:function(res){
+                          if(res.code == 0){
+                            $notify({
+                              title:'提示',
+                              message:'一键审核成功'
+                            })
+                          }else {
+                            that.$notify.error({
+                              title: '错误',
+                              message: res.detail
+                            });
+                          }
+                          that.auditShow = false;
+                        },
+                        error:function(){
+                          $notify({
+                            title:'提示',
+                            message:'请检查网络连接'
+                          })
+                        }
+                      })
+                    }
+                  }
+                })
+             
+            }
+          })
+        }else if(that.is_show === false){
+          $.ajax({
+            url:'/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=',
+            type:"GET",
+            async:true,
+            dataType:'json',
+            success:function(res){
+              console.log('llc',res)
+              that.$alert('共'+res.count+'笔，'+res.sum+'元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果','温馨提示',{
+                confirmButtonText:'确定',
+                callback:function(action){
+                  if(action == 'confirm'){
+                    $.ajax({
+                      url:'/Admin/withdraw_autoaudit/',
+                      dataType:'json',
+                      type:"POST",
+                      async:true,
+                      data:{
+                        sub_from:'',
+                        sub_to:'',
+                        id_list:''
+                      },
+                      success:function(res){
+                        if(res.code == 0){
+                          that.$notify({
+                            title:'提示',
+                            message:'一键提现成功'
+                          })
+                          that.is_show = false;
+                        }else {
+                          that.$notify.error({
+                            title: '错误',
+                            message: res.detail
+                          });
+                        }
+                      }
+                    })
+                  }
+                }
+              })
+            }
+          })
+        }
+        
+      },
+      //一键提现
+      withdrawal:function(){
+        var that = this;
+        that.$confirm('确定是否一键提现?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'info'
+        }).then(() => {
+          $.ajax({
+              url: "{% url 'batch_withdraw' %}",
+              dataType: "json",
+              async: false,
+              type:"get",
+              success: function(ret) {
+                  if(ret.code == 0) {
+                     that.$notify({
+                       title:'提示',
+                       message:'一键提现成功'
+                     })
+                  } else {
+                    that.$notify({
+                       title:'提示',
+                       message:ret.msg
+                     })
+                  }
+              },
+              error: function() {
+                that.$notify({
+                  title:'提示',
+                  message:"截取bug一枚，请联系前端技术人员"
+                })
+              }
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消一键提现'
+          });          
+        });
+      },
+      agree:function(row){
+        var that = this;
+        $.ajax({
+          url:"{%url 'admin_withdraw' %}",
+          dataType:'json',
+          type:"POST",
+          data:{
+            type:1,
+            id:row.id
+          },
+          async:true,
+          success:function(res){
+            if(ret.code==0){
+             that.$notify({
+               title:'提示',
+               message:'审核完成，通过'
+             })
+            }
+            else if(ret.code==-1){
+              alert("该页面已过期，请重新登录！");
+              window.location.href = ret.url;
+            }
+            else {
+              that.$notify({
+               title:'提示',
+               message:ret.res_msg
+             })
+            }
+          }
+        })
+      },
+      refuse:function(row){
+        var that = this;
+        that.refuse_id = row.id;
+        that.refuse_box = true;
+      },
+      refuse_send:function(){
+        var that = this;
+        if(!that.refuse_reason){
+          that.$notify({
+            title:'提示',
+            message:'请填写拒绝原因'
+          })
+          return false;
+        }
+        $.ajax({
+          url:"{%url 'admin_withdraw' %}",
+          dataType:'json',
+          type:"POST",
+          data:{
+            'id':that.refuse_id,
+            'reason':refuse_reason,
+            'type':2,
+          },
+          async:true,
+          success:function(res){
+            if(ret.code==0){
+             that.$notify({
+               title:'提示',
+               message:'审核完成，拒绝'
+             })
+            }
+            else if(ret.code==-1){
+              alert("该页面已过期，请重新登录！");
+              window.location.href = ret.url;
+            }
+            else {
+              that.$notify({
+               title:'提示',
+               message:ret.res_msg
+             })
+            }
+          }
+        })
+      }
+    },
+    computed: {
+      url_key: function () {
+        var that = this;
+        return '&submit_date_0=' + that.s_time0 + '&submit_date_1=' + that.e_time0 + '&audit_date_0=' + that.s_time1 + '&audit_date_1=' + that.e_time1 + '&qq_number=' + that.qq_number + '&user_mobile=' + that.phone_number + '&card_number=' + that.card_number + '&real_name=' + that.real_name + '&admin_mobile=' + that.admin_mobile + '&user_level=' + that.user_level + '&audit_state=' + that.state;
+      }
     }
   })
 </script>

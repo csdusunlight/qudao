@@ -48,6 +48,21 @@
     .el-header {
       margin-top: 0;
     }
+
+    .el-dialog__header {
+      display: flex;
+      justify-content: center;
+    }
+
+    .el-form-item {
+      display: flex;
+      justify-content: center;
+    }
+
+    .el-dialog__footer {
+      display: flex;
+      justify-content: center;
+    }
   </style>
 </head>
 
@@ -95,7 +110,7 @@
             <el-col :span="6">
               <div class="grid-content bg-purple">
                 <span class="desc_txt">打款状态：</span>
-                <el-select v-model="pay_state" slot="prepend" placeholder="请选择">
+                <el-select v-model="pay_state" @change="change_state" slot="prepend" placeholder="请选择">
                   <el-option label="打款中" value="2"></el-option>
                   <el-option label="已打款" value="3"></el-option>
                   <el-option label="打款失败" value="4"></el-option>
@@ -105,7 +120,7 @@
             <el-col :span="6">
               <div class="grid-content bg-purple">
                 <el-button type="primary" @click='search_data'>搜索</el-button>
-                <el-button type="danger">一键打款</el-button>
+                <el-button type="danger" @click='pay_money'>一键打款</el-button>
               </div>
             </el-col>
           </el-row>
@@ -160,6 +175,27 @@
         </div>
       </el-col>
     </el-row>
+    <el-dialog title="一键审核" :visible.sync="auditShow">
+      <el-form :model="form">
+        <el-form-item>
+          <el-checkbox label="用户可选时间段" @change="is_check"></el-checkbox>
+        </el-form-item>
+        <div class="iptBox" v-show='is_show'>
+          <el-form-item label="开始时间">
+            <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="audit_stime" type="date" placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="结束时间">
+            <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="audit_etime" type="date" placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+        </div>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="auditShow = false">取 消</el-button>
+        <el-button type="primary" @click='send'>确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </body>
 <script type="text/javascript">
@@ -172,6 +208,14 @@
       phone_number: '',
       zhifubao: '',
       pay_state: '',
+      checkIdList: '',
+      form: '',
+      audit_stime: '',
+      audit_etime: '',
+      auditShow: false,
+      is_show: false,
+      count: 1,
+      post_data: {},
       activeNav: '2-2',
       // state: '',
       rowStyle: {
@@ -189,7 +233,14 @@
     methods: {
       handleCurrentChange: function (val) {
         app.currentPage = val;
-        app.getDataList(app.currentPage, app.pageSize);
+        var that = this;
+        that.search_data();
+        // app.getDataList(app.currentPage, app.pageSize);
+      },
+      change_state: function (val) {
+        var that = this;
+        that.pay_state = val;
+        that.search_data();
       },
       getDataList: function () {
         var that = this;
@@ -211,13 +262,24 @@
         });
       },
       handleSelectionChange(val) {
+        var that = this;
+        that.checkIdList = '';
+        if (val.length) {
+          for (let i = 0; i < val.length; i++) {
+            app.checkIdList += val[i].id + ','
+          }
+          app.checkIdList = app.checkIdList.slice(0, app.checkIdList.length - 1);
+          console.log('checkbox选中：', app.checkIdList);
+        } else {
+          app.checkIdList = '';
+          console.log('chenckbox未选中：', app.checkIdList);
+        }
         this.multipleSelection = val;
-        console.log(val)
       },
       //搜索
       search_data: function () {
         var that = this;
-        console.log('0000000',this.pay_state)
+        console.log('0000000', this.pay_state)
         if (that.pay_state == 2) {
           console.log("new" + that.searchVal)
           $.ajax({
@@ -239,7 +301,7 @@
         } else {
           console.log("new_1" + that.searchVal)
           $.ajax({
-            url: '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&audit_state=0&pay_state='+that.pay_state,
+            url: '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&audit_state=0&pay_state=' + that.pay_state,
             type: "get",
             async: true,
             success: function (res) {
@@ -255,6 +317,84 @@
             }
           })
         }
+      },
+      pay_money: function () {
+        var that = this;
+        console.log(that.checkIdList)
+        if (that.checkIdList == '') {
+          that.auditShow = true;
+        } else {
+          that.auditShow = false;
+        }
+      },
+      is_check: function () {
+        var that = this;
+        that.count++;
+        if (that.count % 2 == 0) {
+          that.is_show = true;
+        } else {
+          that.is_show = false;
+        }
+      },
+      send: function () {
+        var that = this;
+        if (that.is_show == true) {
+          if (!that.audit_stime) {
+            that.$notify({
+              title: '提示',
+              message: '请选择开始时间'
+            })
+            return false;
+          }
+          if (!that.audit_etime) {
+            that.$notify({
+              title: '提示',
+              message: '请选择结束时间'
+            })
+            return false;
+          }
+          that.post_data = {
+            sub_from: that.audit_stime,
+            sub_to: that.audit_etime,
+            id_list: that.checkIdList
+          }
+        } else {
+          that.post_data = {
+            id_list: that.checkIdList
+          }
+        }
+        console.log('post_data:', that.post_data)
+        $.ajax({
+          type: "get",
+          url: '/Admin/admin_autopay/',
+          data: that.post_data,
+          async: true,
+          success: function (res) {
+            that.$alert('共' + res.count + '笔，' + res.sum + '元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果', '温馨提示', {
+              confirmButtonText: '确定',
+              callback: function (action) {
+                console.log(action);
+                if (action == 'confirm') {
+                  $.ajax({
+                    url: '/Admin/admin_autopay/',
+                    type: 'post',
+                    data: that.post_data,
+                    success: function (res) {
+                      console.log(res)
+                      if (res.code == 0) {
+                        that.$notify({
+                          title: '提示',
+                          message: '打款成功'
+                        })
+                        that.auditShow = false;
+                      }
+                    }
+                  });
+                }
+              }
+            })
+          }
+        });
       }
     },
     computed: {
@@ -264,7 +404,7 @@
         if (that.pay_state == 2) {
           data_url = '&audit_state=0&pay_state=2'
         } else {
-          data_url = '&pay_state='+that.pay_state
+          data_url = '&pay_state=' + that.pay_state
         }
         return data_url;
       }

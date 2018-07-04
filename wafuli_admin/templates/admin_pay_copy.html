@@ -449,63 +449,10 @@
                     sub_to: endTime,
                     id_list:checkVal.join(",")
                 };
-//      Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=' +starTime+ '&sub_to=' +endTime+ '&id_list=')).
-//      then(function (val) { 
-//        var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
-//        if (is_sure == true) {
-//            return $.ajax({
-//              url:'/Admin/withdraw_autoaudit/',
-//              type:'post',
-//              data:{
-//                sub_from:starTime,
-//                sub_to:endTime,
-//                id_list:''
-//              }
-//            });
-//            $(".modal_box").hide();
-//         }
-//         else{
-//      	   throw  new BreakSignal();
-//         }
-//      })
-//      .catch(function(error){
-//          if(error instanceof BreakSignal){
-//            
-//          }
-//          else{
-//            alert(error.statusText);
-//          }
-//      });
       }else{
         postData = {
                       id_list:checkVal.join(",")
                   };
-        // console.log("全部提现")
-//      Promise.resolve($.ajax('/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=')).
-//      then(function (val) { 
-//        var is_sure = confirm(`共${val.count}笔，${val.sum}元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果`);
-//        if (is_sure == true) {
-//            return $.ajax({
-//              url:'/Admin/withdraw_autoaudit/',
-//              type:'post',
-//              sub_from:'',
-//              sub_to:'',
-//              id_list:''
-//            });
-//            $(".modal_box").hide();
-//         }
-//         else{
-//      	   throw  new BreakSignal();
-//         }
-//      })
-//      .catch(function(error){
-//          if(error instanceof BreakSignal){
-//            
-//          }
-//          else{
-//            alert(error.statusText);
-//          }
-//      });
       }
       $.ajax({
           type: "get",

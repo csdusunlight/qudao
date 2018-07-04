@@ -12,7 +12,7 @@ var data = '<table width="100%"><tr><th>渠道等级</th><th>QQ</th><th>QQ昵称
 	'<th width="5%">是否为渠道</th><th width="5%">是否为黑名单</th><th>账户操作</th></tr>[results]<tr><td>{level}</td><td>'+
 	'<a href="{fanshu_domain}" style="color:blue; text-decoration:underline">{qq_number}</a></td><td>{qq_name}</td>'+
 	'<td>{mobile}</td><td>{card_number}</td><td>{bank}</td><td>{zhifubao}</td><td>{date_joined}</td>'+
-	'<td>{balance}</td><td>{margin_account}</td><td>{accu_income}</td><td>是不是</td><td class="black" id="is_black_{id}">{is_active}</td>'+
+	'<td>{balance}</td><td>{margin_account}</td><td>{accu_income}</td><td class="channel" data-channel="{is_channel}"></td><td class="black" id="is_black_{id}">{is_active}</td>'+
 	'<td id="item_{id}"><a class="btn1-x" onclick="addcash({id})">余额</a>│'+
 	'<a class="btn2-x black_btn" data-isblack="{is_active}" id="black_{id}" onclick="addblack({id})">加黑</a>|<a onclick="change_level({id})">级别</a>|'+
 	'<a onclick="change_bail({id})">保证金</a>|<a class="tweeter_btn" id="tweeter_{id}" data-istweeter="{is_merchant}" onclick="change_tweeter({id})">添加商家</a>'+
@@ -50,6 +50,18 @@ function pagecallback() {
             $(this).text("添加打款");
         } else {
             $(this).text("撤销打款");
+        }
+    })
+    //是否是渠道处理
+    $('.channel').each(function(){
+        var channel_state = $(this).attr("data-channel");
+        console.log(channel_state); 
+        if(channel_state == 0){
+            $(this).text('否')
+        }else if(channel_state == 1){
+            $(this).text('否')
+        }else{
+            $(this).text('申请中')
         }
     })
 }
@@ -434,7 +446,7 @@ $(document).ready(function(){
 		}
         var channel = $('.is_channel option:selected').val();
         if(channel){
-            newurl +='&'+ channel;
+            newurl +='&is_channel='+ channel;
         }
 		var newdata = data;
 		$("#page").empty();
@@ -540,9 +552,10 @@ $(document).ready(function(){
                     <td>
                         <i style="letter-spacing:2px;">是否为渠道</i>
                         <select class="is_channel">
-                            <option value=' '>----</option>
+                            <option value=' '>全部</option>
                             <option value='1'>是</option>
-                            <option value='2'>否</option>
+                            <option value='0'>否</option>
+                            <option value='-1'>申请中</option>
                         </select>
                     </td>
                 </tr>

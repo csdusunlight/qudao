@@ -4,6 +4,8 @@ Created on 2017年11月24日
 
 @author: lch
 '''
+import datetime
+
 from wafuli_admin.models import Dict
 from weixin.settings import submit_investlog_notify_templateid,\
     book_invest_notify_templateid, withdraw_success_notify_templateid,\
@@ -120,7 +122,7 @@ def sendWeixinNotify(user_obj_list, type):
                 continue
             amount = str(withdrawlog.amount) + u'元'
             balance = str(user.balance)
-            audittime = withdrawlog.audit_time.strftime('%Y-%m-%d %H:%M')
+            audittime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
             zhifubao = user.zhifubao
             zhifubao_real_name = user.zhifubao_real_name
             openid = wuser.openid

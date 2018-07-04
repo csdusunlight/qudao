@@ -1079,6 +1079,7 @@ def admin_withdraw_autoaudit(request):
         suc_list = []
         for item in sucset:
             suc_list.append((item.user, item))
+            logger.info(item.user.mobile)
         sendWeixinNotify.delay(suc_list, 'withdraw_success_zhifubao')
         return JsonResponse({'suc_num':ret.get('suc_num')})
 def get_admin_with_page(request):

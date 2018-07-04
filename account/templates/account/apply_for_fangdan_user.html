@@ -182,7 +182,7 @@
       function tokenKey(val, dom, objarr) {
         $.ajax({
           type: "get",
-          url: "http://120.79.187.115/get_upload_token/",
+          url: "/public/get_upload_token/",
           async: true,
           success: function(res) {
             if(res.code == 0) {
@@ -216,9 +216,9 @@
               $(dom).children('div.img_update_box').hide();
               $(dom).children('div.img_display').show();
               $(dom).children('div.untext').show();
-              var strhtml = '<div class="iconposition"><img class="clickimg" src="http://img.fuliunion.com/'+ data.key +'"/><i class="iconpng"></i></div>';
+              var strhtml = '<div class="iconposition"><img class="clickimg" src="http://image.fuliunion.com/'+ data.key +'"/><i class="iconpng"></i></div>';
               $(dom).children('div.img_display').append(strhtml);
-              console.log('http://img.fuliunion.com/' + data.key);
+              console.log('http://image.fuliunion.com/' + data.key);
             }
         });
       }

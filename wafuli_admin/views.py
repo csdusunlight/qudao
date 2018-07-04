@@ -1018,7 +1018,7 @@ def admin_withdraw(request):
         
         #发送微信通知
         if type==1:
-            sendWeixinNotify.delay([(withdrawlog.user, withdrawlog),], 'withdraw_success')
+            sendWeixinNotify.delay([(withdrawlog.user, withdrawlog),], 'withdraw_success_yhk')
         elif type==2:
             sendWeixinNotify.delay([(withdrawlog.user, withdrawlog),], 'withdraw_fail')
         #

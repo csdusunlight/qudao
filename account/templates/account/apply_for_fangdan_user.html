@@ -182,7 +182,7 @@
       function tokenKey(val, dom, objarr) {
         $.ajax({
           type: "get",
-          url: "http://120.79.187.115/get_upload_token/",
+          url: "/public/get_upload_token/",
           async: true,
           success: function(res) {
             if(res.code == 0) {

@@ -52,15 +52,18 @@
     .opreate {
       cursor: pointer;
     }
-    .el-dialog__header{
+
+    .el-dialog__header {
       display: flex;
       justify-content: center;
     }
-    .el-form-item{
+
+    .el-form-item {
       display: flex;
       justify-content: center;
     }
-    .el-dialog__footer{
+
+    .el-dialog__footer {
       display: flex;
       justify-content: center;
     }
@@ -166,8 +169,8 @@
               <div class="grid-content bg-purple" style="display: flex;">
                 <el-button type="primary" @click='search_data' style="height: 42px;margin-right: 20px;">搜索</el-button>
                 <!-- <el-button type="danger">导入</el-button> -->
-                <el-upload class="avatar-uploader" action="{% url 'import_withdraw_excel'%}" name="file" accept=".xls"
-                  :show-file-list="false" :on-success="handleAvatarSuccess" :on-error="handleAvatarError" :before-upload="beforeAvatarUpload">
+                <el-upload class="avatar-uploader" action="{% url 'import_withdraw_excel'%}" name="file" accept=".xls" :show-file-list="false"
+                  :on-success="handleAvatarSuccess" :on-error="handleAvatarError" :before-upload="beforeAvatarUpload">
                   <el-button type="primary">导入</el-button>
                   <div slot="tip" class="el-upload__tip">&nbsp;只能上传xls文件</div>
                 </el-upload>
@@ -243,30 +246,26 @@
     </el-row>
     <el-dialog title="一键审核" :visible.sync="auditShow">
       <el-form :model="form">
-          <el-form-item>
-            <el-checkbox label="用户可选时间段" @change="is_check"></el-checkbox>
+        <el-form-item>
+          <el-checkbox label="用户可选时间段" @change="is_check"></el-checkbox>
+        </el-form-item>
+        <div class="iptBox" v-show='is_show'>
+          <el-form-item label="开始时间">
+            <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="audit_stime" type="date" placeholder="选择日期">
+            </el-date-picker>
           </el-form-item>
-          <div class="iptBox" v-show='is_show'>
-            <el-form-item label="开始时间">
-              <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="audit_stime" type="date" placeholder="选择日期">
-              </el-date-picker>
-            </el-form-item>
-            <el-form-item label="结束时间">
-              <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="audit_etime" type="date" placeholder="选择日期">
-              </el-date-picker>
-            </el-form-item>
-          </div>
+          <el-form-item label="结束时间">
+            <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="audit_etime" type="date" placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+        </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="auditShow = false">取 消</el-button>
         <el-button type="primary" @click='send'>确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog
-      title="提示"
-      :visible.sync="refuse_box"
-      width="30%"
-      center>
+    <el-dialog title="提示" :visible.sync="refuse_box" width="30%" center>
       <span>请输入拒绝原因：</span>
       <el-input v-model="refuse_reason" placeholder="请输入拒绝原因"></el-input>
       <span slot="footer" class="dialog-footer">
@@ -293,15 +292,16 @@
       admin_mobile: '',
       qq_number: '',
       state: '',
-      checkIdList:'',
-      audit_stime:'',
-      audit_etime:'',
-      auditShow:false,
-      form:'',
-      refuse_reason:'',
-      refuse_id:'',
-      is_show:false,
-      refuse_box:false,
+      checkIdList: '',
+      audit_stime: '',
+      audit_etime: '',
+      auditShow: false,
+      csrf_token: '{{ csrf_token }}',
+      form: '',
+      refuse_reason: '',
+      refuse_id: '',
+      is_show: false,
+      refuse_box: false,
       num: 1,
       activeNav: '2-1',
       rowStyle: {
@@ -359,64 +359,64 @@
           for (let i = 0; i < val.length; i++) {
             app.checkIdList += val[i].id + ','
           }
-          app.checkIdList = app.checkIdList.slice(0,app.checkIdList.length-1);
-          console.log('checkbox选中：',app.checkIdList);
+          app.checkIdList = app.checkIdList.slice(0, app.checkIdList.length - 1);
+          console.log('checkbox选中：', app.checkIdList);
         } else {
           app.checkIdList = '';
-          console.log('chenckbox未选中：',app.checkIdList);
+          console.log('chenckbox未选中：', app.checkIdList);
         }
         this.multipleSelection = val;
       },
       //导出数据
-      export_data:function(){
+      export_data: function () {
         var that = this;
-        var html = '<form action="'+"{% url 'export_withdraw_excel' %}"+'" method="get" target="_self" id="postData_form">';
+        var html = '<form action="' + "{% url 'export_withdraw_excel' %}" + '" method="get" target="_self" id="postData_form">';
         var startTime = that.s_time0;
         var endTime = that.e_time0;
-        if(startTime && endTime){
-          html += '<input name="submit_date_0" type="hidden" value="'+ startTime + '"/>';
-          html += '<input name="submit_date_1" type="hidden" value="'+ endTime + '"/>';
+        if (startTime && endTime) {
+          html += '<input name="submit_date_0" type="hidden" value="' + startTime + '"/>';
+          html += '<input name="submit_date_1" type="hidden" value="' + endTime + '"/>';
         }
         var startTime2 = that.s_time1;
         var endTime2 = that.e_time1;
-        if(startTime2 && endTime2){
-          html += '<input name="audit_date_0" type="hidden" value="'+ startTime2 + '"/>';
-          html += '<input name="audit_date_1" type="hidden" value="'+ endTime2 + '"/>';
+        if (startTime2 && endTime2) {
+          html += '<input name="audit_date_0" type="hidden" value="' + startTime2 + '"/>';
+          html += '<input name="audit_date_1" type="hidden" value="' + endTime2 + '"/>';
         }
         var qq = that.qq_number;
         var mobile = that.phone_number;
-        if(qq){
-          html += '<input name="qq_number" type="hidden" value="'+ qq + '"/>';
+        if (qq) {
+          html += '<input name="qq_number" type="hidden" value="' + qq + '"/>';
         }
-        if(mobile){
-          html += '<input name="user_mobile" type="hidden" value="'+ mobile + '"/>';
+        if (mobile) {
+          html += '<input name="user_mobile" type="hidden" value="' + mobile + '"/>';
         }
         var card_number = that.card_number;
         var real_name = that.real_name;
-        if(card_number){
-          html += '<input name="card_number" type="hidden" value="'+ card_number + '"/>';
+        if (card_number) {
+          html += '<input name="card_number" type="hidden" value="' + card_number + '"/>';
         }
-        if(real_name){
-          html += '<input name="real_name" type="hidden" value="'+ real_name + '"/>';
+        if (real_name) {
+          html += '<input name="real_name" type="hidden" value="' + real_name + '"/>';
         }
         var adminname = that.admin_mobile;
         var usertype = that.user_level;
         var state = that.state;
-        if(adminname){
-          html += '<input name="admin_mobile" type="hidden" value="'+ adminname + '"/>';
+        if (adminname) {
+          html += '<input name="admin_mobile" type="hidden" value="' + adminname + '"/>';
         }
-        if(usertype){
-          html += '<input name="user_level" type="hidden" value="'+ usertype + '"/>';
+        if (usertype) {
+          html += '<input name="user_level" type="hidden" value="' + usertype + '"/>';
         }
-        if(state){
-          html += '<input name="audit_state" type="hidden" value="'+ state + '"/>';
+        if (state) {
+          html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
         }
         html += '</form>';
         var iframe = document.getElementById('myIFrame');
         iframe.contentWindow.document.open();
         iframe.contentWindow.document.write(html);
         iframe.contentWindow.document.close();
-        document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();   
+        document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
       },
       //上传文件
       beforeAvatarUpload: function (file) {
@@ -448,69 +448,64 @@
         });
       },
       //开始时间和结束时间的显示和隐藏
-      is_check:function(){
+      is_check: function () {
         var that = this;
-        that.num ++;
-        if(that.num % 2 == 0){
+        that.num++;
+        if (that.num % 2 == 0) {
           that.is_show = true;
-        }else{
+        } else {
           that.is_show = false;
         }
 
       },
       //一键审核
-      audit:function(){
+      audit: function () {
         var that = this;
-        if(that.checkIdList === ''){
+        if (that.checkIdList === '') {
           that.auditShow = true;
-        }else if(that.checkIdList != ''){
-          console.log('一键审核checkIdList',that.checkIdList)
+        } else if (that.checkIdList != '') {
+          console.log('一键审核checkIdList', that.checkIdList)
           $.ajax({
-            url:'/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list='+that.checkIdList,
-            type:'GET',
-            async:false,
-            dataType:'json',
-            success:function(res){
-              if(res.code == 0){
-                that.$alert('共'+res.count+'笔，'+res.sum+'元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果','温馨提示',{
-                  confirmButtonText:'确定',
-                  callback:function(action){
-                    if(action == 'confirm'){
+            url: '/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=' + that.checkIdList,
+            type: 'GET',
+            async: false,
+            dataType: 'json',
+            success: function (res) {
+              if (res.code == 0) {
+                that.$alert('共' + res.count + '笔，' + res.sum + '元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果', '温馨提示', {
+                  confirmButtonText: '确定',
+                  callback: function (action) {
+                    if (action == 'confirm') {
                       $.ajax({
-                        url:'/Admin/withdraw_autoaudit/',
-                        dataType:'json',
-                        data:{
-                          sub_from:'',
-                          sub_to:'',
-                          id_list:that.checkIdList
+                        url: '/Admin/withdraw_autoaudit/',
+                        dataType: 'json',
+                        data: {
+                          csrfmiddlewaretoken: that.csrf_token,
+                          sub_from: '',
+                          sub_to: '',
+                          id_list: that.checkIdList
                         },
-                        success:function(res){
-                          if(res.code == 0){
-                            that.$notify({
-                              title:'提示',
-                              message:'一键审核成功'
-                            })
-                          }else{
-                            that.$notify.error({
-                              title:'提示',
-                              message:res.detail
-                            })
-                          }
-                        },
-                        error:function(){
+                        success: function (res) {
                           that.$notify({
-                            title:'提示',
-                            message:'请检查网络连接'
+                            title: '提示',
+                            message: '一键审核成功'
+                          })
+                          that.auditShow = false;
+                        },
+                        error: function () {
+                          that.$notify({
+                            title: '提示',
+                            message: '请检查网络连接'
                           })
                         }
                       })
                     }
                   }
                 })
-              }else{
+              } else {
                 that.$notify({
-                  title:'提示',
-                  message:'成功数量：'+ res.count+'总数：'+res.sum
+                  title: '提示',
+                  message: '成功数量：' + res.count + '总数：' + res.sum
                 })
               }
             },
@@ -518,107 +513,97 @@
         }
       },
       //一键审核确定
-      send:function(){
+      send: function () {
         var that = this;
-        if(that.is_show === true){
-          if(!that.audit_stime){
+        if (that.is_show === true) {
+          if (!that.audit_stime) {
             that.$notify({
-              title:'提示',
-              message:'请选择开始时间'
+              title: '提示',
+              message: '请选择开始时间'
             })
             return false;
           }
-          if(!that.audit_etime){
+          if (!that.audit_etime) {
             that.$notify({
-              title:'提示',
-              message:'请选择结束时间'
+              title: '提示',
+              message: '请选择结束时间'
             })
             return false;
           }
+          console.log('我出现了')
           $.ajax({
-            url:'/Admin/withdraw_autoaudit/?sub_from=' +that.audit_stime+ '&sub_to=' +that.audit_etime+ '&id_list=',
-            type:'GET',
-            dataType:'json',
-            async:false,
-            success:function(res){
-              
-                that.$alert('共'+res.count+'笔，'+res.sum+'元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果','温馨提示',{
-                  confirmButtonText:'确定',
-                  callback:function(action){
-                    console.log(action);
-                    if(action == 'confirm'){
-                      $.ajax({
-                        url:'/Admin/withdraw_autoaudit/',
-                        dataType:'json',
-                        type:"POST",
-                        async:false,
-                        data:{
-                          sub_from:that.audit_stime,
-                          sub_to:that.audit_etime,
-                          id_list:''
-                        },
-                        success:function(res){
-                          if(res.code == 0){
-                            $notify({
-                              title:'提示',
-                              message:'一键审核成功'
-                            })
-                          }else {
-                            that.$notify.error({
-                              title: '错误',
-                              message: res.detail
-                            });
-                          }
-                          that.auditShow = false;
-                        },
-                        error:function(){
-                          $notify({
-                            title:'提示',
-                            message:'请检查网络连接'
-                          })
-                        }
-                      })
-                    }
+            url: '/Admin/withdraw_autoaudit/?sub_from=' + that.audit_stime + '&sub_to=' + that.audit_etime + '&id_list=',
+            type: 'GET',
+            dataType: 'json',
+            async: false,
+            success: function (res) {
+
+              that.$alert('共' + res.count + '笔，' + res.sum + '元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果', '温馨提示', {
+                confirmButtonText: '确定',
+                callback: function (action) {
+                  console.log(action);
+                  if (action == 'confirm') {
+                    $.ajax({
+                      url: '/Admin/withdraw_autoaudit/',
+                      dataType: 'json',
+                      type: "POST",
+                      async: false,
+                      data: {
+                        csrfmiddlewaretoken: that.csrf_token,
+                        sub_from: that.audit_stime,
+                        sub_to: that.audit_etime,
+                        id_list: ''
+                      },
+                      success: function (res) {
+                        $notify({
+                          title: '提示',
+                          message: '一键审核成功'
+                        })
+                        that.auditShow = false;
+                      },
+                      error: function () {
+                        $notify({
+                          title: '提示',
+                          message: '请检查网络连接'
+                        })
+                      }
+                    })
                   }
-                })
-             
+                }
+              })
+
             }
           })
-        }else if(that.is_show === false){
+        } else if (that.is_show === false) {
+          console.log('隐藏')
           $.ajax({
-            url:'/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=',
-            type:"GET",
-            async:true,
-            dataType:'json',
-            success:function(res){
-              console.log('llc',res)
-              that.$alert('共'+res.count+'笔，'+res.sum+'元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果','温馨提示',{
-                confirmButtonText:'确定',
-                callback:function(action){
-                  if(action == 'confirm'){
+            url: '/Admin/withdraw_autoaudit/?sub_from=&sub_to=&id_list=',
+            type: "GET",
+            async: true,
+            dataType: 'json',
+            success: function (res) {
+              console.log('llc', res)
+              that.$alert('共' + res.count + '笔，' + res.sum + '元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果', '温馨提示', {
+                confirmButtonText: '确定',
+                callback: function (action) {
+                  if (action == 'confirm') {
                     $.ajax({
-                      url:'/Admin/withdraw_autoaudit/',
-                      dataType:'json',
-                      type:"POST",
-                      async:true,
-                      data:{
-                        sub_from:'',
-                        sub_to:'',
-                        id_list:''
+                      url: '/Admin/withdraw_autoaudit/',
+                      dataType: 'json',
+                      type: "POST",
+                      async: true,
+                      data: {
+                        csrfmiddlewaretoken: that.csrf_token,
+                        sub_from: '',
+                        sub_to: '',
+                        id_list: ''
                       },
-                      success:function(res){
-                        if(res.code == 0){
-                          that.$notify({
-                            title:'提示',
-                            message:'一键提现成功'
-                          })
-                          that.is_show = false;
-                        }else {
-                          that.$notify.error({
-                            title: '错误',
-                            message: res.detail
-                          });
-                        }
+                      success: function (res) {
+                        that.$notify({
+                          title: '提示',
+                          message: '一键审核成功'
+                        })
+                        that.is_show = false;
                       }
                     })
                   }
@@ -627,10 +612,10 @@
             }
           })
         }
-        
+
       },
       //一键提现
-      withdrawal:function(){
+      withdrawal: function () {
         var that = this;
         that.$confirm('确定是否一键提现?', '提示', {
           confirmButtonText: '确定',
@@ -638,108 +623,119 @@
           type: 'info'
         }).then(() => {
           $.ajax({
-              url: "{% url 'batch_withdraw' %}",
-              dataType: "json",
-              async: false,
-              type:"get",
-              success: function(ret) {
-                  if(ret.code == 0) {
-                     that.$notify({
-                       title:'提示',
-                       message:'一键提现成功'
-                     })
-                  } else {
-                    that.$notify({
-                       title:'提示',
-                       message:ret.msg
-                     })
-                  }
-              },
-              error: function() {
+            url: "{% url 'batch_withdraw' %}",
+            dataType: "json",
+            async: false,
+            type: "get",
+            success: function (ret) {
+              if (ret.code == 0) {
                 that.$notify({
-                  title:'提示',
-                  message:"截取bug一枚，请联系前端技术人员"
+                  title: '提示',
+                  message: '一键提现成功'
+                })
+              } else {
+                that.$notify({
+                  title: '提示',
+                  message: ret.msg
                 })
               }
+            },
+            error: function () {
+              that.$notify({
+                title: '提示',
+                message: "截取bug一枚，请联系前端技术人员"
+              })
+            }
           });
         }).catch(() => {
           this.$message({
             type: 'info',
             message: '已取消一键提现'
-          });          
+          });
         });
       },
-      agree:function(row){
+      agree: function (row) {
         var that = this;
-        $.ajax({
-          url:"{%url 'admin_withdraw' %}",
-          dataType:'json',
-          type:"POST",
-          data:{
-            type:1,
-            id:row.id
-          },
-          async:true,
-          success:function(res){
-            if(ret.code==0){
-             that.$notify({
-               title:'提示',
-               message:'审核完成，通过'
-             })
-            }
-            else if(ret.code==-1){
-              alert("该页面已过期，请重新登录！");
-              window.location.href = ret.url;
-            }
-            else {
-              that.$notify({
-               title:'提示',
-               message:ret.res_msg
-             })
+        console.log(row.id);
+        that.$alert('是否同意审核通过', '提示', {
+          confirmButtonText: '确定',
+          callback: function (action) {
+            if (action == 'confirm') {
+              $.ajax({
+                url: "{%url 'admin_withdraw' %}",
+                dataType: 'json',
+                type: "POST",
+                data: {
+                  csrfmiddlewaretoken: that.csrf_token,
+                  type: 1,
+                  id: row.id
+                },
+                async: true,
+                success: function (res) {
+                  if (ret.code == 0) {
+                    that.$notify({
+                      title: '提示',
+                      message: '审核完成，通过'
+                    })
+                  }
+                  else if (ret.code == -1) {
+                    alert("该页面已过期，请重新登录！");
+                    window.location.href = ret.url;
+                  }
+                  else {
+                    that.$notify({
+                      title: '提示',
+                      message: ret.res_msg
+                    })
+                  }
+                }
+              })
             }
           }
         })
+
       },
-      refuse:function(row){
+      refuse: function (row) {
         var that = this;
         that.refuse_id = row.id;
         that.refuse_box = true;
       },
-      refuse_send:function(){
+      refuse_send: function () {
         var that = this;
-        if(!that.refuse_reason){
+        if (!that.refuse_reason) {
           that.$notify({
-            title:'提示',
-            message:'请填写拒绝原因'
+            title: '提示',
+            message: '请填写拒绝原因'
           })
           return false;
         }
         $.ajax({
-          url:"{%url 'admin_withdraw' %}",
-          dataType:'json',
-          type:"POST",
-          data:{
-            'id':that.refuse_id,
-            'reason':refuse_reason,
-            'type':2,
+          url: "{%url 'admin_withdraw' %}",
+          dataType: 'json',
+          type: "POST",
+          data: {
+            'csrfmiddlewaretoken': that.csrf_token,
+            'id': that.refuse_id,
+            'reason': refuse_reason,
+            'type': 2,
           },
-          async:true,
-          success:function(res){
-            if(ret.code==0){
-             that.$notify({
-               title:'提示',
-               message:'审核完成，拒绝'
-             })
+          async: true,
+          success: function (res) {
+            if (ret.code == 0) {
+              that.$notify({
+                title: '提示',
+                message: '审核完成，拒绝'
+              })
             }
-            else if(ret.code==-1){
+            else if (ret.code == -1) {
               alert("该页面已过期，请重新登录！");
               window.location.href = ret.url;
             }
             else {
               that.$notify({
-               title:'提示',
-               message:ret.res_msg
-             })
+                title: '提示',
+                message: ret.res_msg
+              })
             }
           }
         })

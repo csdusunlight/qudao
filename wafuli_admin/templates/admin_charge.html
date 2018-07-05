@@ -9,9 +9,10 @@
 	<title>Document</title>
 	<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
 	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
-	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+
 	<style>
 		.grid-content {
 			padding: 25px 0;
@@ -181,7 +182,7 @@
 				},
 				export_data: function () { //导出数据
 					var that = this;
-					var html = '<form action="' + "/export_charge_excel/" + '" methods="get" target="_self" id="postData">';
+					var html = '<form action="' + "{% url 'export_charge_excel' %}" + '" methods="get" target="_self" id="postData">';
 					var startTime = that.s_time0; //申请开始时间
 					var endTime = that.e_time0;  //申请结束时间
 					if (startTime && endTime) {

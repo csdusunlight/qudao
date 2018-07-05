@@ -216,6 +216,7 @@
       is_show: false,
       count: 1,
       post_data: {},
+      csrf_token:'{{ csrf_token }}',
       activeNav: '2-2',
       // state: '',
       rowStyle: {
@@ -228,39 +229,21 @@
     },
     created: function () {
       var that = this;
-      that.getDataList(1, 10);
+      that.search_data();
     },
     methods: {
       handleCurrentChange: function (val) {
         app.currentPage = val;
         var that = this;
         that.search_data();
-        // app.getDataList(app.currentPage, app.pageSize);
+        
       },
       change_state: function (val) {
         var that = this;
         that.pay_state = val;
         that.search_data();
       },
-      getDataList: function () {
-        var that = this;
-        $.ajax({
-          type: "get",
-          url: '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&audit_state=0&pay_state=2',
-          async: true,
-          success: function (res) {
-            console.log(res);
-            if (res.code == 0) {
-              app.planTableData = res;
-            } else {
-              that.$notify.error({
-                title: '错误',
-                message: res.detail
-              });
-            }
-          }
-        });
-      },
+      
       handleSelectionChange(val) {
         var that = this;
         that.checkIdList = '';
@@ -283,7 +266,7 @@
         if (that.pay_state == 2) {
           console.log("new" + that.searchVal)
           $.ajax({
-            url: '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&audit_state=0&pay_state=2',
+            url: '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&audit_state=0&pay_state=2'+that.searchVal,
             type: "get",
             async: true,
             success: function (res) {
@@ -301,7 +284,7 @@
         } else {
           console.log("new_1" + that.searchVal)
           $.ajax({
-            url: '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&audit_state=0&pay_state=' + that.pay_state,
+            url: '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&audit_state=0&pay_state=' + that.pay_state +that.searchVal,
             type: "get",
             async: true,
             success: function (res) {
@@ -354,13 +337,15 @@
             return false;
           }
           that.post_data = {
-            sub_from: that.audit_stime,
-            sub_to: that.audit_etime,
-            id_list: that.checkIdList
+            'csrfmiddlewaretoken':that.csrf_token,
+            'sub_from': that.audit_stime,
+            'sub_to': that.audit_etime,
+            'id_list': that.checkIdList
           }
         } else {
           that.post_data = {
-            id_list: that.checkIdList
+            'csrfmiddlewaretoken':that.csrf_token,
+            'id_list': that.checkIdList
           }
         }
         console.log('post_data:', that.post_data)
@@ -380,14 +365,12 @@
                     type: 'post',
                     data: that.post_data,
                     success: function (res) {
-                      console.log(res)
-                      if (res.code == 0) {
-                        that.$notify({
-                          title: '提示',
-                          message: '打款成功'
-                        })
-                        that.auditShow = false;
-                      }
+                      console.log(res.suc_num)
+                      that.$notify({
+                        title: '提示',
+                        message: '打款成功'
+                      })
+                      that.auditShow = false;
                     }
                   });
                 }
@@ -401,10 +384,10 @@
       searchVal: function () {
         var that = this;
         var data_url;
-        if (that.pay_state == 2) {
-          data_url = '&audit_state=0&pay_state=2'
+        if (that.pay_state == 2) {  //&auditdate_0=2018-07-05T00:00&auditdate_1=2018-07-06T00:00&invest_mobile=18570661123&zhifubao=185706616
+          data_url = '&auditdate_0='+that.s_time0+'&auditdate_1='+ that.e_time0 +'&invest_mobile='+that.phone_number+'&zhifubao='+that.zhifubao
         } else {
-          data_url = '&pay_state=' + that.pay_state
+          data_url ='&auditdate_0='+that.s_time0+'&auditdate_1='+ that.e_time0 +'&invest_mobile='+that.phone_number+'&zhifubao='+that.zhifubao
         }
         return data_url;
       }

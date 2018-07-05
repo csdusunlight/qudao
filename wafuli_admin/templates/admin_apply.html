@@ -21,7 +21,10 @@
             width: 55%;
         }
         .oprate{
-            padding: 11px 17px;
+            cursor: pointer;
+        }
+        .desc_txt{
+            color: #909399;
         }
     </style>
 </head>
@@ -38,28 +41,28 @@
                     <el-row :gutter="20">
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>申请开始时间：</span>
+                                <span class="desc_txt">申请开始时间：</span>
                                 <el-date-picker v-model="s_time0" type="date" placeholder="选择日期">
                                 </el-date-picker>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>申请结束时间：</span>
+                                <span class="desc_txt">申请结束时间：</span>
                                 <el-date-picker v-model="e_time0" type="date" placeholder="选择日期">
                                 </el-date-picker>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>操作开始时间：</span>
+                                <span class="desc_txt">操作开始时间：</span>
                                 <el-date-picker v-model="s_time1" type="date" placeholder="选择日期">
                                 </el-date-picker>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>操作结束时间：</span>
+                                <span class="desc_txt">操作结束时间：</span>
                                 <el-date-picker v-model="e_time1" type="date" placeholder="选择日期">
                                 </el-date-picker>
                             </div>
@@ -69,28 +72,28 @@
                     <el-row :gutter="20">
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>用户手机号：</span>
+                                <span class="desc_txt">用户手机号：</span>
                                 <el-input placeholder="请输入内容" v-model="phone_number" clearable>
                                 </el-input>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>QQ：</span>
+                                <span class="desc_txt">QQ：</span>
                                 <el-input placeholder="请输入内容" v-model="qq_number" clearable>
                                 </el-input>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>QQ昵称：</span>
+                                <span class="desc_txt">QQ昵称：</span>
                                 <el-input placeholder="请输入内容" v-model="qq_name" clearable>
                                 </el-input>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>处理人手机号：</span>
+                                <span class="desc_txt">处理人手机号：</span>
                                 <el-input placeholder="请输入内容" v-model="deal_phone_number" clearable>
                                 </el-input>
                             </div>
@@ -100,8 +103,8 @@
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <div class="grid-content bg-purple">
-                                <span>处理状态：</span>
-                                <el-select v-model="select" slot="prepend" placeholder="请选择">
+                                <span class="desc_txt">处理状态：</span>
+                                <el-select v-model="select" @change="change_state" slot="prepend" placeholder="请选择">
                                     <el-option label="未审核" value="1"></el-option>
                                     <el-option label="审核通过" value="0"></el-option>
                                     <el-option label="审核拒绝" value="2"></el-option>
@@ -118,11 +121,8 @@
                     <!-- tabale -->
                     <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"
                         border>
-                        <el-table-column label="QQ">
-                            <template slot-scope="scope">${ scope.row.qq_number }</template>
-                        </el-table-column>
-                        <el-table-column label="QQ昵称">
-                            <template slot-scope="scope">${ scope.row.qq_name }</template>
+                        <el-table-column label="QQ/QQ昵称">
+                            <template slot-scope="scope">${ scope.row.qq_number }/${ scope.row.qq_name }</template>
                         </el-table-column>
                         <el-table-column label="电话号码">
                             <template slot-scope="scope">${ scope.row.mobile }</template>
@@ -130,25 +130,37 @@
                         <el-table-column label="申请时间">
                             <template slot-scope="scope">${ scope.row.submit_time.split('T')[0] }</template>
                         </el-table-column>
-                        <el-table-column label="身份">
+                        <el-table-column label="审核人" :key="Math.random" v-if='select == "2" || select == "0"'>
+                            <template slot-scope="scope">${ scope.row.admin_name }</template>
+                        </el-table-column>
+                        <el-table-column label="审核时间" :key="Math.random" v-if='select == "2" || select == "0"'>
+                            <template slot-scope="scope">${ scope.row.audit_time }</template>
+                        </el-table-column>
+                        <el-table-column label="拒绝理由" :key="Math.random" v-if='select == "2"'>
+                            <template slot-scope="scope">${ scope.row.audit_reason }</template>
+                        </el-table-column>
+                        <el-table-column label="渠道等级" :key="Math.random" v-if='select == "0"'>
+                            <template slot-scope="scope">${ scope.row.level }</template>
+                        </el-table-column>
+                        <el-table-column label="身份" :key="Math.random" v-if='select == "1"'>
                             <template slot-scope="scope">${ scope.row.user_origin }</template>
                         </el-table-column>
-                        <el-table-column label="经验年限">
+                        <el-table-column label="经验年限" :key="Math.random" v-if='select == "1" || select == ""'>
                             <template slot-scope="scope">${ scope.row.user_exp_year }</template>
                         </el-table-column>
-                        <el-table-column label="客户资源">
+                        <el-table-column label="客户资源" :key="Math.random" v-if='select == "1" || select == ""'>
                             <template slot-scope="scope">${ scope.row.user_custom_volumn }</template>
                         </el-table-column>
-                        <el-table-column label="资金量体">
+                        <el-table-column label="资金量体" :key="Math.random" v-if='select == "1" || select == ""'>
                             <template slot-scope="scope">${ scope.row.user_funds_volumn }</template>
                         </el-table-column>
-                        <el-table-column label="推单偏好">
+                        <el-table-column label="推单偏好" :key="Math.random" v-if='select == "1" || select == ""'>
                             <template slot-scope="scope">${ scope.row.user_invest_orientation }</template>
                         </el-table-column>
-                        <el-table-column label="操作">
+                        <el-table-column label="操作" :key="Math.random" v-if='select == "1" || select == ""'>
                             <template slot-scope="scope">
-                                <el-button class="oprate" type="primary" @click='agree(scope.row)'>同意</el-button>
-                                <el-button class="oprate" type="danger" @click='refuse(scope.row)'>拒绝</el-button>
+                                <a class="oprate" @click='agree(scope.row)'>同意</a>|
+                                <a class="oprate" @click='refuse(scope.row)'>拒绝</a>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -199,7 +211,7 @@
                     var that = this;
                     $.ajax({
                         type: "get",
-                        url: '/restapi/applylog/?page=' + that.page + '&pageSize=' + that.pageSize + '&submit_date_0='+ that.s_time0 +'&submit_date_1='+ that.e_time0 +'&audit_date_0='+ that.s_time1 +'&audit_date_1='+ that.e_time1 +'&mobile='+that.phone_number+'&qq_number='+ that.qq_number +'&qq_name='+ that.qq_name +'&admin_user_mobile='+ that.deal_phone_number +'&audit_state='+ that.select,
+                        url: '/restapi/applylog/?page=' + that.currentPage + '&pageSize=' + that.pageSize + that.searchVal,
                         async: true,
                         success: function (res) {
                             console.log(res);
@@ -214,6 +226,12 @@
                         }
                     });
                 },
+                change_state:function(val){
+                    console.log(val)
+                    var that = this;
+                    that.select = val;
+                    that.search();
+                },
                 search: function () {
                     var that = this;
                     that.getDataList();
@@ -224,14 +242,25 @@
                 agree:function(row){
                     var that = this;
                     console.log('同意该条数据的id',row.id)
-                    $.ajax({
-                        url:url,
-                        
+                    that.$alert('是否同意该条数据','提示',{
+                        confirmButtonText: '确定',
+                        callback:function(action){
+                            if(action == 'confirm'){
+                                
+                            }
+                        }
                     })
+                    
                 },
                 refuse:function(row){
                     var that = this;
                     console.log('拒绝该条数据的id',row.id)
+                }
+            },
+            computed: {
+                searchVal:function(){
+                    var that = this;
+                    return '&submit_date_0='+ that.s_time0 +'&submit_date_1='+ that.e_time0 +'&audit_date_0='+ that.s_time1 +'&audit_date_1='+ that.e_time1 +'&mobile='+that.phone_number+'&qq_number='+ that.qq_number +'&qq_name='+ that.qq_name +'&admin_user_mobile='+ that.deal_phone_number +'&audit_state='+ that.select;
                 }
             }
         })

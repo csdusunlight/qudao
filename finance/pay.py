@@ -56,12 +56,13 @@ def batch_transfer_to_zhifubao(account_list, payer='wafuli', payer_name=u"福利
         amount=account.get('amount')
         remark=account.get('remark') or u"账户余额提现"
         alipay = globals().get('alipay_%s' % payer)
+        payer_name_custom = account.get('payer_name') or payer_name
         if not alipay:
             raise Exception(u'不存在的支付宝账号：%s' % payer)
         result = alipay.api_alipay_fund_trans_toaccount_transfer(
             str(int(timestamp * 1000)),
             payee_type="ALIPAY_LOGONID",
-            payer_show_name=payer_name,
+            payer_show_name=payer_name_custom,
             payee_account=payee_account,
             payee_real_name=payee_real_name,
             amount=amount,

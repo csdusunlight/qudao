@@ -1064,7 +1064,8 @@ def admin_withdraw_autoaudit(request):
                 'obj': obj,
                 'payee_account':obj.user.zhifubao,
                 'payee_real_name':obj.user.zhifubao_real_name,
-                'amount':str(obj.amount)
+                'amount':str(obj.amount),
+                'remark':u"账户余额提现"
             })
             init_withlist.append(obj)
         ret = batch_transfer_to_zhifubao(batch_list)

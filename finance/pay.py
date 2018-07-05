@@ -44,7 +44,7 @@ if ospath.exists(app_pri_key_file_wafuli) and ospath.exists(ali_pub_key_file_waf
     except:
         pass
 
-def batch_transfer_to_zhifubao(account_list, payer='wafuli'):
+def batch_transfer_to_zhifubao(account_list, payer='wafuli', payer_name=u"福利联盟"):
     ret_list = []
     suc_num = 0
     objs = []
@@ -54,13 +54,14 @@ def batch_transfer_to_zhifubao(account_list, payer='wafuli'):
         payee_account=account.get('payee_account')
         payee_real_name=account.get('payee_real_name')
         amount=account.get('amount')
-        remark=account.get('remark') or u"福利联盟提现"
+        remark=account.get('remark') or u"账户余额提现"
         alipay = globals().get('alipay_%s' % payer)
         if not alipay:
             raise Exception(u'不存在的支付宝账号：%s' % payer)
         result = alipay.api_alipay_fund_trans_toaccount_transfer(
             str(int(timestamp * 1000)),
             payee_type="ALIPAY_LOGONID",
+            payer_show_name=payer_name,
             payee_account=payee_account,
             payee_real_name=payee_real_name,
             amount=amount,

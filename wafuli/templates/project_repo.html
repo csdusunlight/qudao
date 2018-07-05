@@ -6,6 +6,7 @@
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<meta name="renderer" content="webkit">
 	<title>项目库</title>
 	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 	<link rel="stylesheet" type="text/css" href="/static/css/new-common.css" />
@@ -453,7 +454,10 @@
 		</div>
 		<!-- <div class='back_top'><img src="{% static 'images/back_up.png' %}" /></div> -->
 	</div>
-
+	<!-- 底部 -->
+	<div>
+		{% include "footer.html" %}
+	</div>
 
 	<script type="text/javascript">
 		var app = new Vue({

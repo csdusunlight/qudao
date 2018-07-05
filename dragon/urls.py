@@ -34,6 +34,7 @@ urlpatterns = [
     url('^merchant/', include('merchant.urls', namespace='merchant')),
     url('^coupon/', include('coupon.urls', namespace='coupon')),
     url('^finance/', include('finance.urls', namespace='finance')),
+    url('^public/', include('public.urls', namespace='public')),
 ]
 
 from django.conf.urls.static import static

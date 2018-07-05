@@ -1,0 +1,179 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Document</title>
+  <link rel="stylesheet" href="https://unpkg.com/element-ui@2.4.1/lib/theme-chalk/index.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
+  <!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
+  <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body style="opacity: 0">
+  <div id="app">
+    <el-row :gutter="20">
+      <el-col :span="3">
+        {% include "leftNav.html" %}
+      </el-col>
+      <el-col :span="21">
+        <div class="container">
+          <el-form 
+            :model="ruleForm" 
+            :rules="rules" 
+            ref="ruleForm" 
+            label-width="150px" 
+            class="demo-ruleForm">
+            <el-form-item label="信息内容" prop="send_content">
+              <el-input 
+                type="textarea" 
+                rows="5" 
+                v-model="ruleForm.send_content"
+                style="width: 500px;"
+                ></el-input>
+            </el-form-item>
+            
+            <el-form-item label="选择发送用户" prop="send_user">
+              <el-select v-model="ruleForm.send_user" placeholder="选择发送用户">
+                <el-option label="全部用户" value="1"></el-option>
+                <el-option label="指定用户" value="2"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item v-if="ruleForm.send_user == 2" label="选择发送用户" prop="userlist">
+              <el-input 
+                type="textarea" 
+                rows="5" 
+                v-model="ruleForm.userlist"
+                style="width: 300px;"
+                ></el-input>
+            </el-form-item>
+            <el-form-item v-if="ruleForm.send_user == 2">
+              <el-upload
+                class="upload-demo"
+                action="{%url 'parse_file'%}"
+                :on-success="handleUserSuccess"
+                :on-error="handleUserError"
+                >
+                <el-button size="small" type="primary">上传用户名单</el-button>
+                <!--<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
+              </el-upload>
+            </el-form-item>
+            
+
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('ruleForm')">发送短信</el-button>
+              <el-button @click="resetForm('ruleForm')">重置</el-button>
+            </el-form-item>
+          </el-form>
+      </el-col>
+    </el-row>
+  </div>
+  
+  <script type="text/javascript">
+    var app = new Vue({
+      el: '#app',
+      delimiters: ['${', '}'],
+      data: {
+        activeNav: '1-5',
+        ruleForm: {
+          send_content: '',
+          send_user: '1',
+          userlist: ''
+        },
+        rules: {
+          send_content: [
+            { required: true, message: '请填写要发送的信息内容', trigger: 'blur' }
+          ],
+          send_user: [
+            { required: true, message: '请选择要发送的用户', trigger: 'change' }
+          ]
+        }
+      },
+      mounted: function() {
+        document.body.style.opacity = 1;
+      },
+      methods: {
+        submitForm: function(formName) {
+          var that = this;
+          this.$refs[formName].validate(function(valid) {
+            if (valid) {
+              console.log(app.ruleForm)
+              if(app.ruleForm.send_user == 2 && !app.ruleForm.userlist) {
+                that.$notify.error({
+                  title: '错误',
+                  message: '要发送的用户列表不能为空'
+                });
+                return false;
+              }
+              var data = {
+                'content': app.ruleForm.send_content,
+                'selectuser': app.ruleForm.send_user,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+              };
+              if(app.ruleForm.send_user === '1') {
+                  data.phones = 'all';
+              } else if(app.ruleForm.send_user === '2') {
+                  data.phones = app.ruleForm.userlist;
+              }
+              console.log('data');
+              $.ajax({
+                  url: "/Admin/send_multiple_msg/",
+                  dataType:"json",
+                  async: false,
+                  type:"POST",
+                  data: data,
+                  success:function(ret){
+                      if(ret.code=='0'){
+                          console.log(ret);
+                          that.$notify.success({
+                            title: '提示',
+                            message: '发送信息人数：' + ret.num
+                          });
+                      }
+                      else {
+                          alert(ret.res_msg);
+                      }
+                  },
+                  error:function(){
+                      alert("请检查网络连接");
+                  }
+              });
+            } else {
+              console.log('error submit!!');
+              return false;
+            }
+          });
+        },
+        resetForm: function(formName) {
+          this.$refs[formName].resetFields();
+        },
+        handleUserSuccess: function(ret) {
+          var that = this;
+          if(ret.code == 0) {
+              var value = '';
+              for(x in ret.list) {
+                  value += String(ret.list[x]) + '\n';
+              }
+              app.ruleForm.userlist = value
+          } else {
+            that.$notify.error({
+              title: '错误',
+              message: ret.res_msg
+            });
+          }
+        },
+        handleUserError: function(ret) {
+          var that = this;
+          that.$notify.error({
+            title: '错误',
+            message: '请检查网络连接'
+          });
+        }
+      }
+    })
+  </script>
+</body>
+</html>

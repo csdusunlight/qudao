@@ -17,7 +17,7 @@ if ospath.exists(app_pri_key_file) and ospath.exists(ali_pub_key_file):
     alipay_public_key_string = open(ospath.join(settings.CONFIG_DIR, "ali_pub_key.pem")).read()
     try:
         alipay = AliPay(
-              appid="2018041860005082",
+              appid="2018062660469113",
               app_notify_url=None,  # the default notify path
               app_private_key_string=app_private_key_string, 
               alipay_public_key_string=alipay_public_key_string,  # alipay public key, do not use your public key!

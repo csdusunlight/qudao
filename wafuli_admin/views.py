@@ -1018,7 +1018,7 @@ def admin_withdraw(request):
         
         #发送微信通知
         if type==1:
-            sendWeixinNotify.delay([(withdrawlog.user, withdrawlog),], 'withdraw_success')
+            sendWeixinNotify.delay([(withdrawlog.user, withdrawlog),], 'withdraw_success_yhk')
         elif type==2:
             sendWeixinNotify.delay([(withdrawlog.user, withdrawlog),], 'withdraw_fail')
         #
@@ -1047,6 +1047,7 @@ def admin_withdraw_autoaudit(request):
         return JsonResponse(ret)
     if request.method == "POST":
         batch_list = []
+        init_withlist = []
         withlist = WithdrawLog.objects.filter(audit_state='1', amount__lt=50000).all()
         sub_from = request.POST.get('sub_from')
         sub_to = request.POST.get('sub_to')
@@ -1065,6 +1066,7 @@ def admin_withdraw_autoaudit(request):
                 'payee_real_name':obj.user.zhifubao_real_name,
                 'amount':str(obj.amount)
             })
+            init_withlist.append(obj)
         ret = batch_transfer_to_zhifubao(batch_list)
         print ret
         fail_id_list = []
@@ -1073,13 +1075,14 @@ def admin_withdraw_autoaudit(request):
             fail_id_list.append(obj.id)
             obj.except_info = item['msg']
             obj.save(update_fields=['except_info'])
+
         withlist.exclude(id__in=fail_id_list).update(audit_state='0', audit_time=datetime.datetime.now(),
                                                      admin_user=request.user)
-        sucset = withlist.exclude(id__in=fail_id_list)
+        suc_withlist = filter(lambda x:x.id not in fail_id_list, init_withlist)
         suc_list = []
-        for item in sucset:
+        for item in suc_withlist:
             suc_list.append((item.user, item))
-            logger.info(item.user.mobile)
+        print suc_list
         sendWeixinNotify.delay(suc_list, 'withdraw_success_zhifubao')
         return JsonResponse({'suc_num':ret.get('suc_num')})
 def get_admin_with_page(request):

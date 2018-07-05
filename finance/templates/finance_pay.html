@@ -202,7 +202,7 @@
         </el-table-column>
         <el-table-column
           label="打款成功时间">
-          <template slot-scope="scope">${ scope.row.pay_time ? scope.row.pay_time.substr(5,14) : '未打款' }</template>
+          <template slot-scope="scope">${ scope.row.pay_time ? scope.row.pay_time.substr(5,14) : '无' }</template>
         </el-table-column>
         <el-table-column
           v-if = "stateValue==1 || stateValue==''"

@@ -178,7 +178,7 @@ class Project(models.Model):
         return self.title
     def get_project_price(self, level):
 #         level = self.user.level
-        return getattr(self.project, 'price'+str(level)) or self.project.default_price
+        return getattr(self, 'price'+str(level)) or self.default_price
     
 class SubscribeShip(models.Model):
     user = models.ForeignKey(MyUser)

@@ -251,6 +251,14 @@ def register_from_gzh(request):
                 subbulk.append(sub)
             SubscribeShip.objects.bulk_create(subbulk)
             register_signal.send('register', user=user)
+            try:
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
+                auth_login(request, user)
+                user.last_login = datetime.datetime.now()
+                user.save(update_fields=['last_login'])
+                Userlogin.objects.create(user=user)
+            except:
+                pass
         result['code'] = 0
         return JsonResponse(result)
     else:

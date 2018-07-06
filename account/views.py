@@ -1,6 +1,8 @@
 #coding:utf-8
 from django.shortcuts import render, get_object_or_404
 from django.http.response import Http404
+
+from weixin.models import WeiXinUser
 from .models import MyUser, Userlogin,MobileCode
 from captcha.views import imageV, generateCap
 from account.varify import verifymobilecode, sendmsg_bydhst
@@ -212,8 +214,9 @@ def register_from_gzh(request):
         qq_name = request.POST.get('qq_name', '')
         profile = request.POST.get('profile', '')
         mobile = request.session.get('mobile')
+        openid = request.session.get('openid')
         invite_code = request.POST.get('invite_code', '')
-        if not (mobile and password and qq_number and qq_name):
+        if not (mobile and password and qq_number and qq_name and openid):
             result['code'] = '3'
             result['msg'] = u'传入参数不足！'
             return JsonResponse(result)
@@ -237,6 +240,7 @@ def register_from_gzh(request):
                           cs_qq=qq_number, domain_name=qq_number)
             user.set_password(password)
             user.save()
+            WeiXinUser.objects.filter(openid=openid).update(user=user)
             id_list_list= list(Project.objects.filter(is_official=True,state__in=['10','20'], is_addedto_repo=True).values_list('id'))
             id_list = []
             if id_list_list:
@@ -247,6 +251,14 @@ def register_from_gzh(request):
                 subbulk.append(sub)
             SubscribeShip.objects.bulk_create(subbulk)
             register_signal.send('register', user=user)
+            try:
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
+                auth_login(request, user)
+                user.last_login = datetime.datetime.now()
+                user.save(update_fields=['last_login'])
+                Userlogin.objects.create(user=user)
+            except:
+                pass
         result['code'] = 0
         return JsonResponse(result)
     else:

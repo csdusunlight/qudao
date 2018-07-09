@@ -29,7 +29,7 @@ def checkmobile(request):
         end = start
 
     params = dict(orgCode='huake', beginDate=start + ' 00:00:00', endDate=end + ' 23:59:59')
-    response = requests.get(user_url, params=params)
+    response = requests.get(user_url, params=params, headers=headers)
     logger.info('yirendai'+response.text)
     data = response.json()
     user_data_list = data['data']
@@ -58,7 +58,7 @@ def export(request):
     response = requests.get(order_url, params=params, headers=headers)
     data = response.json()
     order_data_list = data['data']
-    response = requests.get(user_url, params=params)
+    response = requests.get(user_url, params=params, headers=headers)
     data = response.json()
     user_data_list = data['data']
     w = Workbook()  # 创建一个工作簿

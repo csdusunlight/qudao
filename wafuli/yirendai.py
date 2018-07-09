@@ -21,6 +21,7 @@ salt = b'~C):"vdX-SZz'
 
 @csrf_exempt
 def checkmobile(request):
+    logger.inf(request.POST)
     mobile = request.POST.get('mobile')
     start = request.POST.get('start')
     end = request.POST.get('end')
@@ -90,3 +91,4 @@ def export(request):
     response = HttpResponse(sio.getvalue(), content_type='application/vnd.ms-excel')
     response['Content-Disposition'] = 'attachment; filename=yirendai.xls'
     response.write(sio.getvalue())
+    return response

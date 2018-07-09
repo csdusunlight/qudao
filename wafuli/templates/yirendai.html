@@ -1,0 +1,193 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>用户中心</title>
+    <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+    <!--<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
+    <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/page.js' %}?v-2"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
+    <style type="text/css">
+
+    </style>
+    <script type="text/javascript">
+      var data = '<table width="100%"><thead><tr><th height="44">项目</th>' +
+        '<th>金额</th><th>余额</th><th>获取时间</th><th>备注</th></tr></thead><tbody>' +
+        '[results]<tr><td>{reason}</td><td class="shouzhi" data-shouzhi="{transType}">{transAmount}</td>' +
+        '<td>{user_balance}</td><td class="submit-time">{time}</td><td>{remark}</td></tr>[/results]' +
+        '</tbody></table>';
+      var url = "/restapi/translist/" + "?page={page}&pageSize={pageSize}&user_mobile={{user.mobile}}";
+
+      function pagecallback() {
+        $('.shouzhi').each(function() {
+          console.log($(this).data('shouzhi'))
+          if($(this).data('shouzhi') == '0') {
+            $(this).text('+' + $(this).text());
+          } else if($(this).data('shouzhi') == '1') {
+            $(this).text('-' + $(this).text());
+          }
+        })
+        $('.submit-time').each(function() {
+          var submit_time = $(this).text().replace('T', ' ');
+          $(this).text(submit_time);
+        })
+      }
+
+      $(function() {
+        $('.back-a8').toggleClass("on");
+        $(".Close").click(function() {
+          $(".Listpop").css("display", "none") <!--隐藏-->
+        });
+        $("#pagedata").ajaxPage({
+          url: url,
+          pageId: $("#page"),
+          run: true,
+          content: data,
+          complete: pagecallback,
+        });
+
+        $(".RightCont").on("focus", ".date_picker", function() {
+          $(this).date_input();
+        })
+
+        $("#search").click(function() {
+          var trans_date_0 = $("#trans_date_0").val(),
+            trans_date_1 = $("#trans_date_1").val(),
+            transType = $("#transType").val();
+          var newurl = url;
+          if(trans_date_0) {
+            newurl += "&trans_date_0=" + trans_date_0;
+          }
+          if(trans_date_1) {
+            newurl += "&trans_date_1=" + trans_date_1;
+          }
+          if(transType) {
+            newurl += "&transType=" + transType;
+          }
+
+          console.log(newurl);
+          $("#page").empty();
+          $("#pagedata").ajaxPage({
+            url: newurl,
+            pageId: $("#page"),
+            run: true,
+            content: data,
+            complete: pagecallback,
+          });
+        });
+        $("#search_data").click(function() {
+          var search_date_0 = $("#search_date_0").val(),
+            search_date_1 = $("#search_date_1").val(),
+            search_mobile = $("#search_mobile").val();
+          var search_url = "{%url 'account_invite' %}";
+          $.ajax({
+            url: search_url,
+            dataType: "json",
+            type: 'POST',
+            data: {
+              search_date_0: search_date_0,
+              search_date_1: search_date_1,
+              search_mobile: search_mobile,
+            }
+            success: function(ret) {
+              if(ret.code != 0) {
+                alert(ret.res_msg);
+              } else {
+                alert("网络错误！");
+              }
+            },
+            error: function() {
+              alert("请检查网络连接");
+            }
+          });
+        });
+        $("#export").click(function() {
+          var html = '<form action="' + "{% url 'export_investlog' %}" + '" method="get" target="_self" id="postData_form">';
+          var invest_mobile = $("#invest_mobile").val(),
+            invest_date0 = $("#date0").val(),
+            invest_date1 = $("#date1").val();
+          html += '<input name="is_official" type="hidden" value="true"/>';
+          if(proj_name) {
+            html += '<input name="invest_mobile" type="hidden" value="' + invest_mobile + '"/>';
+          }
+          if(invest_date0 && invest_date1) {
+            html += '<input name="investtime_0" type="hidden" value="' + invest_date0 + '"/>';
+            html += '<input name="investtime_1" type="hidden" value="' + invest_date1 + '"/>';
+          }
+          html += '</form>';
+          var iframe = document.getElementById('myIFrame');
+          iframe.contentWindow.document.open();
+          iframe.contentWindow.document.write(html);
+          iframe.contentWindow.document.close();
+          document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    {% include "header.html" %}
+    <div class="Content">
+      <!--头部-->
+      <!--内容-->
+      {% include "account/left.html" %}
+      <div class="RightCont">
+        <div class="table">
+          <h2 class="table__title">宜人贷</h2>
+          <div class="handle clearfix">
+            <div class="search__item">
+              <span class="search__name">获取时间：</span>
+              <div class="time-input-box"><input type="text" class="date_picker time-input" id="search_date_0" /></div> ——
+              <div class="time-input-box"><input type="text" class="date_picker time-input" id="search_date_1" /></div>
+            </div>
+            <div class="search__item">
+              <span class="search__name">投资手机号：</span>
+              <input type="number" name="search_mobile" id="search_mobile" value="" />
+            </div>
+            <div class="handle__out r">
+              <a id="search_data" class="btn m-green m-search">查询</a>
+            </div>
+          </div>
+          <div class="search">
+            <div class="search__item">
+              <span class="search__name">获取时间：</span>
+              <div class="time-input-box"><input type="text" class="date_picker time-input" id="date_0" /></div> ——
+              <div class="time-input-box"><input type="text" class="date_picker time-input" id="date_1" /></div>
+            </div>
+            <div class="search__item">
+              <span class="search__name">投资手机号：</span>
+              <input type="number" name="invest_mobile" id="invest_mobile" value="" />
+              <!--<select name="select_status" id="transType" onchange="$('#search').click()">
+                            <option value="">全部</option>
+                            <option value="0">收入</option>
+                            <option value="1">支出</option>
+                            <!--<option value="3">已删除</option>-->
+              <!--</select>-->-->
+            </div>
+            <a id="export" class="btn m-green m-export">导出</a>
+          </div>
+          <div style="display: none;" id="pagedata">
+
+          </div>
+
+          <div style="display: none;" class="changes-p">
+            <div class="page" id="page">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--底部-->
+      <div style="clear: both;"></div>
+    </div>
+    <iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe> {% include "footer.html" %}
+    <!--浮动窗口-->
+    </div>
+  </body>
+
+</html>

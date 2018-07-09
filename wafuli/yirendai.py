@@ -15,8 +15,8 @@ logger = logging.getLogger('wafuli')
 headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'
 }
-order_url = 'http://tg.yixinonline.com/promotion/notice/financeList'
-user_url = 'http://tg.yixinonline.com/promotion/notice/userList'
+order_url='https://tg.yirendai.com/promotion/notice/financeList'
+user_url='https://tg.yirendai.com/promotion/notice/userList'
 salt = b'~C):"vdX-SZz'
 
 @csrf_exempt

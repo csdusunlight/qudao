@@ -35,7 +35,7 @@ def checkmobile(request):
     user_data_list = data['data']
 
     cyptmobile = bytes(mobile.strip(),encoding='utf-8')
-    cyptmobile = hashlib.md5(salt+mobile)
+    cyptmobile = hashlib.md5(salt+cyptmobile)
     for item in user_data_list:
         if item['mobile'] == cyptmobile:
             return JsonResponse({

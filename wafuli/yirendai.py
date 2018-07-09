@@ -5,9 +5,12 @@ import hashlib
 import StringIO
 import requests
 from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from xlwt import Workbook
 
 from public.tools import is_staff
+import logging
+logger = logging.getLogger('wafuli')
 
 headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'
@@ -15,6 +18,8 @@ headers = {
 order_url = 'http://tg.yixinonline.com/promotion/notice/financeList'
 user_url = 'http://tg.yixinonline.com/promotion/notice/userList'
 salt = b'~C):"vdX-SZz'
+
+@csrf_exempt
 def checkmobile(request):
     mobile = request.POST.get('mobile')
     start = request.POST.get('start')
@@ -25,6 +30,7 @@ def checkmobile(request):
 
     params = dict(orgCode='huake', beginDate=start + ' 00:00:00', endDate=end + '23:59:59')
     response = requests.get(user_url, params=params)
+    logger.info('yirendai'+response.text)
     data = response.json()
     user_data_list = data['data']
 
@@ -40,6 +46,7 @@ def checkmobile(request):
             })
     return JsonResponse({'code':1})
 
+@csrf_exempt
 @is_staff
 def export(request):
     start = request.POST.get('start')

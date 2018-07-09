@@ -1,5 +1,6 @@
 # #coding:utf-8
 from django.shortcuts import render
+
 from wafuli_admin.models import GlobalStatis
 from wafuli.models import MAdvert_PC, Project, Company, InvestLog
 import logging

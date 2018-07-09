@@ -6,7 +6,8 @@ Created on 20160222
 '''
 from django.conf.urls import url,include
 from django.views.generic.base import TemplateView
-from wafuli import views
+from wafuli import views, yirendai
+
 # url_about = [
 #     url(r'^aboutus/$', 'wafuli.views.aboutus', name="about"),
 #     url(r'^report/$', 'wafuli.views.report'),
@@ -26,4 +27,7 @@ urlpatterns = [
     url(r'^cooperate/$',views.cooperate, name='cooperate'), 
     url(r'^helpCenter/$',TemplateView.as_view(template_name='HelpCenter.html'), name='helpCenter'),
     url(r'^fanshu/$',TemplateView.as_view(template_name='fanshu.html'), name='fanshu'),
+    url(r'^yirendai/$',TemplateView.as_view(template_name='yirendai.html')),
+    url(r'^yirendai/check/$',yirendai.checkmobile),
+    url(r'^yirendai/export/$',yirendai.export),
 ]

@@ -40,6 +40,14 @@ def is_merchant(view):
         else:
             return HttpResponse(status=403)
     return wrapper
+def is_staff(view):
+    def wrapper(request, *args, **kw):
+        user = request.user
+        if user.is_staff:
+            return view(request, *args, **kw)
+        else:
+            return HttpResponse(status=403)
+    return wrapper
 def login_required_ajax(function=None,redirect_field_name=None): 
     """
     Just make sure the user is authenticated to access a certain ajax view Otherwise return a HttpResponse 401 

@@ -5,6 +5,7 @@ import hashlib
 import StringIO
 import requests
 from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 from xlwt import Workbook
 
 from public.tools import is_staff
@@ -17,6 +18,8 @@ headers = {
 order_url = 'http://tg.yixinonline.com/promotion/notice/financeList'
 user_url = 'http://tg.yixinonline.com/promotion/notice/userList'
 salt = b'~C):"vdX-SZz'
+
+@csrf_exempt
 def checkmobile(request):
     mobile = request.POST.get('mobile')
     start = request.POST.get('start')
@@ -43,6 +46,7 @@ def checkmobile(request):
             })
     return JsonResponse({'code':1})
 
+@csrf_exempt
 @is_staff
 def export(request):
     start = request.POST.get('start')

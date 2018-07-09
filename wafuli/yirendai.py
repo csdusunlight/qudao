@@ -28,7 +28,7 @@ def checkmobile(request):
         start = str(datetime.date.today())
         end = start
 
-    params = dict(orgCode='huake', beginDate=start + ' 00:00:00', endDate=end + '23:59:59')
+    params = dict(orgCode='huake', beginDate=start + ' 00:00:00', endDate=end + ' 23:59:59')
     response = requests.get(user_url, params=params)
     logger.info('yirendai'+response.text)
     data = response.json()

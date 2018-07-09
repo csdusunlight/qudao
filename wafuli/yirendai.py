@@ -8,6 +8,8 @@ from django.http import JsonResponse, HttpResponse
 from xlwt import Workbook
 
 from public.tools import is_staff
+import logging
+logger = logging.getLogger('wafuli')
 
 headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'
@@ -25,6 +27,7 @@ def checkmobile(request):
 
     params = dict(orgCode='huake', beginDate=start + ' 00:00:00', endDate=end + '23:59:59')
     response = requests.get(user_url, params=params)
+    logger.info('yirendai'+response.text)
     data = response.json()
     user_data_list = data['data']
 

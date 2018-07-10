@@ -96,6 +96,13 @@
           var search_date_0 = $("#search_date_0").val(),
             search_date_1 = $("#search_date_1").val(),
             search_mobile = $("#search_mobile").val();
+          var re=/^1[1,2,3,4,6,5,7,8,9]\d{9}$/;
+          if (search_mobile) {
+              if(!re.test(search_mobile)){
+                  alert("手机号格式不正确，请检查后重新填写！")
+                  return;
+              }
+          }
           var search_url = "/yirendai/check/";
           $.ajax({
             url: search_url,

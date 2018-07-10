@@ -198,6 +198,7 @@
             <p>注册时间：<span class="res_time"></span></p>
             <p>注册来源：<span class="res_source"></span></p>
           </div>
+          {% if user.is_staff%}
           <div style="margin-top: 40px;" class="search">
             <div class="search__item">
               <span class="search__name">获取时间：</span>
@@ -212,8 +213,8 @@
             <div class="handle__out r">
               <a id="export" class="btn m-green m-export">导出</a>
             </div>
-            
           </div>
+          {% endif %}
           <div style="display: none;" id="pagedata">
 
           </div>

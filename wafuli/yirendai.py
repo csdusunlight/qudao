@@ -55,7 +55,7 @@ def export(request):
     if not start or not end:
         start = str(datetime.date.today())
         end = start
-    params = dict(orgCode = 'huake',beginDate=start + ' 00:00:00',endDate= end + '23:59:59')
+    params = dict(orgCode = 'huake',beginDate=start + ' 00:00:00',endDate= end + ' 23:59:59')
     response = requests.get(order_url, params=params, headers=headers)
     data = response.json()
     order_data_list = data['data']

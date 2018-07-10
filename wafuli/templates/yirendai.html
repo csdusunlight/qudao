@@ -72,43 +72,43 @@
         $(".Close").click(function() {
           $(".Listpop").css("display", "none") <!--隐藏-->
         });
-        $("#pagedata").ajaxPage({
-          url: url,
-          pageId: $("#page"),
-          run: true,
-          content: data,
-          complete: pagecallback,
-        });
+//      $("#pagedata").ajaxPage({
+//        url: url,
+//        pageId: $("#page"),
+//        run: true,
+//        content: data,
+//        complete: pagecallback,
+//      });
 
         $(".RightCont").on("focus", ".date_picker", function() {
           $(this).date_input();
         })
 
-        $("#search").click(function() {
-          var trans_date_0 = $("#trans_date_0").val(),
-            trans_date_1 = $("#trans_date_1").val(),
-            transType = $("#transType").val();
-          var newurl = url;
-          if(trans_date_0) {
-            newurl += "&trans_date_0=" + trans_date_0;
-          }
-          if(trans_date_1) {
-            newurl += "&trans_date_1=" + trans_date_1;
-          }
-          if(transType) {
-            newurl += "&transType=" + transType;
-          }
-
-          console.log(newurl);
-          $("#page").empty();
-          $("#pagedata").ajaxPage({
-            url: newurl,
-            pageId: $("#page"),
-            run: true,
-            content: data,
-            complete: pagecallback,
-          });
-        });
+//      $("#search").click(function() {
+//        var trans_date_0 = $("#trans_date_0").val(),
+//          trans_date_1 = $("#trans_date_1").val(),
+//          transType = $("#transType").val();
+//        var newurl = url;
+//        if(trans_date_0) {
+//          newurl += "&trans_date_0=" + trans_date_0;
+//        }
+//        if(trans_date_1) {
+//          newurl += "&trans_date_1=" + trans_date_1;
+//        }
+//        if(transType) {
+//          newurl += "&transType=" + transType;
+//        }
+//
+//        console.log(newurl);
+//        $("#page").empty();
+//        $("#pagedata").ajaxPage({
+//          url: newurl,
+//          pageId: $("#page"),
+//          run: true,
+//          content: data,
+//          complete: pagecallback,
+//        });
+//      });
         $("#search_data").click(function() {
           var search_date_0 = $("#search_date_0").val(),
             search_date_1 = $("#search_date_1").val(),

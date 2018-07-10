@@ -5,13 +5,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>用户中心</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/add-img.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.searchableSelect.css' %}" />
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />-->
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
@@ -144,11 +141,9 @@
 
 <body>
 <!--头部-->
-{% include "header.html" %}
+{% include "channel-header.html" %}
 <!--内容-->
 <div class="Content">
-{% include "account/left.html" %}
-<div class="RightCont">
     <div style="position: relative;margin-bottom: 20px;" class="data-intro">
         <h3>操作说明：</h3>
         <p style="margin-left: 30px;">官方数据的<span class="handle-mark">删除</span>、<span class="handle-mark">编辑</span>、<span class="handle-mark">提交截图</span>等操作位于未审核选项下，<span class="handle-mark">审核</span>位于已通过选项下；</p>
@@ -501,7 +496,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 <iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
 {% include "footer.html" %}
@@ -967,7 +961,7 @@
 //      编辑/删除部分（自建）---end
         
         $(function(){
-            $('.back-a5').toggleClass("on");
+            $('.back-a5').toggleClass("active");
             
             $(".RightCont").on("focus", ".date_picker", function() {
                 $('.date_selector').remove();

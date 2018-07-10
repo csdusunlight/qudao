@@ -5,7 +5,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>用户中心</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account-myproject.css' %}" />
@@ -35,15 +34,6 @@ var data2 = '<table border="1" width="100%" style="border-color:#e4e4e4;"><thead
     ' | <a class="edit" onclick="del(this, {id}, {project})">删除</a></td></tr>[/results]'
     + '</tbody></table>';
 var url = "/restapi/sub/?page={page}&pageSize={pageSize}&ordering=project__state,-is_on";
-//function pop(n){
-//	$("#coupon_id").val(n);
-//	$(".Password-modify").css("display","block");
-//}
-//function emptydisplay(obj){
-//	pic_url = "{%static 'images/picin.png' %}";
-//	obj.html('<div class="Defa-in"><img src="' + pic_url + '">'+
-//			'<h2>咦~~ 您还没有相关记录~~</h2></div>');
-//}
 function pagecallback() {
     $('.price').each(function() {
         if ($(this).text() == "") {
@@ -55,13 +45,6 @@ function pagecallback() {
             $(this).text($(this).data('intrest'));
         }
     })
-//  $('.project_source').each(function() {
-//      if ($(this).text() == "True") {
-//          $(this).text('官方');
-//      }else {
-//          $(this).text('自建');
-//      }
-//  })
     
 }
 function isadd(obj,id) {        //是否主页显示调用函数
@@ -172,14 +155,10 @@ var parent_dom;
 var mark_list;
 function edit(obj, id, project) {     //编辑调用函数
     $('.mark-box2').html($('.mark-box').html());
-//  console.log(project_type);
     project_souse = project;
-//  console.log(project);
     project_id = id;
     parent_dom = $(obj).parent().parent();
     console.log(project_id);
-//  var project_type = $(obj).data('isofficial');
-//  var marks = $(obj).data('marks');
     
     $.ajax({
         url: '/restapi/sub/' + project_id + '/',
@@ -236,10 +215,7 @@ function del(obj, id, project) {
     $('.popup.m-del-proj').addClass('in');
 }
 $(function(){
-	$('.back-a3').toggleClass("on");
-//	$(".None-p button").click(function(){
-//		$(".Password-modify").css("display","none");
-//	});
+	$('.back-a3').toggleClass("active");
     $.ajax({        //获取标签数据
         url: "/restapi/marks/",
         dataType: "json",
@@ -429,19 +405,6 @@ $(function(){
         }
     });
     
-//  $('.create-project').click(function(){      //新建项目调用函数
-//      $('#crt_name').val('');
-//      $('#crt_link').val('');
-//      $('#crt_detail').val('');
-//      $('#crt_price').val('');
-//      $('#crt_term').val('');
-//      $('#crt_range').val('');
-//      $('#crt_intrest').val('');
-//      $('.popup.m-create-proj').addClass('in');
-//      
-//  })
-        
-    
     $('#edit_confirm').click(function(){     //确认修改官方项目
         var edit_detail = $('#edit_detail').val(),
             edit_price = $('#edit_price').val(),
@@ -489,57 +452,54 @@ $(function(){
 
 <body>
     	<!--头部-->
-    	{% include "header.html" %}
+    	{% include "channel-header.html" %}
     	<!--内容-->
     	<div class="Content">
-        	{% include "account/left.html" %}
-            <div class="RightCont">
-                <div class="project-box">
-                    <ul class="myproj-nav-box">
-                    	<li class="navitem on myproj-nav">官方项目</li>
-                    	<li class="navitem myproj-nav">自建项目</li>
-                    </ul>
-                    <div class="edit_marks clearfix">
-                        <h4 class="l">项目标签（限7个）：</h4>
-                        <ul class="mark-box l">
-                        </ul>
-                        <span class="add-mark l">添加标签</span>
-                    </div>
-                    <div>
-                        <div class="table conitem" style="display: block;">
-                            <div class="handle-box clearfix">
-                                <!--<a class="create-project link r">新建项目</a>-->
-                                <div class="search l">
-                                    <input class="search__txt search_office_txt" type="text" />
-                                    <input class="search__submit search_office" value="" type="submit" />
-                                </div>
-                                <a href="{% url 'project_all' %}" target="_blank" class="look-projects link r">查看项目库</a>
-                            </div>
-                            <div id="pagedata">
-                            </div>
-                            <div class="changes-p">
-                                <div class="page" id="page">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="table conitem">
-                            <div class="handle-box clearfix">
-                                <div class="search l">
-                                    <input class="search__txt search_private_txt" type="text" />
-                                    <input class="search__submit search_private" value="" type="submit" />
-                                </div>
-                                <a href="{% url 'create_update_selfproject' %}" target="_blank" class="create-project link r">新建项目</a>
-                            </div>
-                            <div id="pagedata2">
-                            </div>
-                            <div class="changes-p">
-                                <div class="page" id="page2">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+          <div class="project-box">
+              <ul class="myproj-nav-box">
+              	<li class="navitem on myproj-nav">官方项目</li>
+              	<li class="navitem myproj-nav">自建项目</li>
+              </ul>
+              <div class="edit_marks clearfix">
+                  <h4 class="l">项目标签（限7个）：</h4>
+                  <ul class="mark-box l">
+                  </ul>
+                  <span class="add-mark l">添加标签</span>
+              </div>
+              <div>
+                  <div class="table conitem" style="display: block;">
+                      <div class="handle-box clearfix">
+                          <!--<a class="create-project link r">新建项目</a>-->
+                          <div class="search l">
+                              <input class="search__txt search_office_txt" type="text" />
+                              <input class="search__submit search_office" value="" type="submit" />
+                          </div>
+                          <a href="{% url 'project_all' %}" target="_blank" class="look-projects link r">查看项目库</a>
+                      </div>
+                      <div id="pagedata">
+                      </div>
+                      <div class="changes-p">
+                          <div class="page" id="page">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="table conitem">
+                      <div class="handle-box clearfix">
+                          <div class="search l">
+                              <input class="search__txt search_private_txt" type="text" />
+                              <input class="search__submit search_private" value="" type="submit" />
+                          </div>
+                          <a href="{% url 'create_update_selfproject' %}" target="_blank" class="create-project link r">新建项目</a>
+                      </div>
+                      <div id="pagedata2">
+                      </div>
+                      <div class="changes-p">
+                          <div class="page" id="page2">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
 
 <div class="popup m-edit-proj">
     <div class="popup__content" style="width: 600px;">
@@ -561,45 +521,6 @@ $(function(){
         </div>
     </div>
 </div>
-<!--<div class="popup m-edit-proj-02">
-    <div class="popup__content" style="width: 600px;">
-        <div class="popup__top">
-            <h2 class="popup__title">编辑自建项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
-        </div>
-        <div class="popup__detail">
-            <div class="popup__item"><span class="popup__itemname">攻略链接</span><input id="edit_link_02" type="text" /></div>
-            <div class="popup__item"><span class="popup__itemname">项目简介</span><input id="edit_detail_02" type="text" /></div>
-            <div class="popup__item"><span class="popup__itemname">价格</span><input id="edit_price_02" type="text" /></div>
-            <div class="popup__item"><span class="popup__itemname">标期</span><input id="edit_term_02" type="text" /></div>
-            <div class="popup__item"><span class="popup__itemname">投资区间</span><input id="edit_range_02" type="text" /></div>
-            <div class="popup__item"><span class="popup__itemname">预计年化</span><input id="edit_intrest_02" type="text" /></div>
-        </div>
-        <div class="popup__btnbox">
-            <a id="edit_confirm_02" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
-        </div>
-    </div>
-</div>-->
-<!--<div class="popup m-create-proj">
-    <div class="popup__content" style="width: 600px;">
-        <div class="popup__top">
-            <h2 class="popup__title">新建项目</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
-        </div>
-        <div class="popup__detail">
-            <div class="popup__item"><span class="popup__itemname">项目名称</span><input id="crt_name" type="text" /></div>
-            <div class="popup__item"><span class="popup__itemname">攻略链接</span><input id="crt_link" type="text" />
-                <p class="link-tip"><a class="link-btn" target="_blank" href="https://shimo.im/">点击</a>使用石墨创建工具</p>
-            </div>
-            <div class="popup__item"><span class="popup__itemname">项目简介</span><input id="crt_detail" type="text" /></div>
-            <div class="popup__item"><span class="popup__itemname">价格</span><input id="crt_price" type="text" /></div>
-            <div class="popup__item"><span class="popup__itemname">标期</span><input id="crt_term" type="text" /></div>
-            <div class="popup__item"><span class="popup__itemname">投资区间</span><input id="crt_range" type="text" /></div>
-            <div class="popup__item"><span class="popup__itemname">预计年化</span><input id="crt_intrest" type="text" /></div>
-        </div>
-        <div class="popup__btnbox">
-            <a id="crt_confirm" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
-        </div>
-    </div>
-</div>-->
 <div class="popup m-del-mark">
     <div class="popup__content" style="width: 600px;">
         <div class="popup__top">

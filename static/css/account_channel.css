@@ -7,14 +7,6 @@ h5 {
 	margin: 0 auto;
 }
 
-/*.container-box {
-	position: relative;
-	width: 880px;
-	float: right;
-	margin: 0 auto;
-	text-align: left;
-}*/
-
 .channel-header {
 	height: 44px;
 	padding-left: 20px;
@@ -83,6 +75,9 @@ h5 {
 .submit-way li:first-child {
 	border-right: none;
 }
+.submit-way li:last-child {
+  border-left: none;
+}
 
 .submit-way li:hover {
 	background: #91C11D;
@@ -106,49 +101,48 @@ h5 {
 .submit-content {
 	position: relative;
 	box-sizing: content-box;
-	width: 1010px;
+	width: 100%;
 	padding: 10px 0;
 	margin-top: 20px;
-	/*border: 1px dashed #e4e4e4;*/
 }
 
 .item-01 {
-	width: 138px;
+	width: 12%;
 }
 
 .item-02 {
-	width: 90px;
+	width: 10%;
 }
 
 .item-03 {
-	width: 100px;
+	width: 10%;
 }
 
 .item-04 {
-	width: 90px;
+	width: 8%;
 }
 
 .item-05 {
-	width: 90px;
+	width: 8%;
 }
 
 .item-06 {
-	width: 110px;
+	width: 10%;
 }
 .item-07 {
-    width: 90px;
+    width: 8%;
 }.item-08 {
-    width: 90px;
+    width: 14%;
 }
 .item-10 {
-    width: 70px;
+    width: 6%;
 }
 .item-11 {
-  width: 90px;
+  width: 10%;
 }
 .item-09 {
     float: right;
-	width: 35px;
+	width: 4%;
 	line-height: 1;
 }
 
@@ -188,9 +182,6 @@ h5 {
 
 .copy-item,
 .delete-item {
-    /*position: absolute;*/
-	/*float: right;*/
-	/*line-height: 30px;*/
 	padding: 2px 0;
 	display: block;
 	text-align: center;

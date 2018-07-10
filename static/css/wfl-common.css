@@ -1,7 +1,7 @@
 /* reset */
 html,body,h1,h2,h3,h4,h5,h6,div,dl,dt,dd,ul,ol,li,p,blockquote,pre,hr,figure,table,caption,th,td,form,fieldset,legend,input,button,textarea,menu{margin:0;padding:0;}
 html,body,h1,h2,h3,h4,h5,h6,div,dl,dt,dd,ul,ol,li,p,table,th,td,form,input,select,a,span {box-sizing: border-box;}
-body {font:14px/24px Helvetica, "microsoft yahei",arial;background:#f5f5f5; color: #666;}
+body {font:14px/24px "Microsoft Yahei",sans-serif;background:#f5f5f5; color: #666;}
 table{border-collapse:collapse;border-spacing:0;}
 html,body,img {border:0;}
 /*img {max-width: 100%; vertical-align: middle;}*/

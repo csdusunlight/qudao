@@ -17,8 +17,11 @@
       .search__item {
         display: inline-block;
       }
-      input[type="text"], select {
+      input[type="text"],input[type="number"], select {
+        padding-left: 8px;
         width: 200px;
+        height: 30px;
+        border: 1px solid #e4e4e4;
       }
       .time-input-box {
         display: inline-block;
@@ -49,9 +52,23 @@
           $(this).text(submit_time);
         })
       }
-
+      function getNowFormatDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    }
       $(function() {
-        $('.back-a8').toggleClass("on");
+        $('.time-input').val(getNowFormatDate());
         $(".Close").click(function() {
           $(".Listpop").css("display", "none") <!--隐藏-->
         });
@@ -97,30 +114,33 @@
             search_date_1 = $("#search_date_1").val(),
             search_mobile = $("#search_mobile").val();
           var re=/^1[1,2,3,4,6,5,7,8,9]\d{9}$/;
-          if (search_mobile) {
-              if(!re.test(search_mobile)){
-                  alert("手机号格式不正确，请检查后重新填写！")
-                  return;
-              }
-          }
+            if(!re.test(search_mobile) || !search_mobile){
+                alert("手机号格式不正确，请检查后重新填写！")
+                return;
+            }
           var search_url = "/yirendai/check/";
           $.ajax({
             url: search_url,
             dataType: "json",
             type: 'POST',
             data: {
-              mobile: search_date_0,
-              start: search_date_1,
-              end: search_mobile,
+              start: search_date_0,
+              end: search_date_1,
+              mobile: search_mobile,
             },
             success: function(ret) {
-              if(ret.code != 0) {
-                alert(ret.res_msg);
+              if(ret.code == 0) {
+                $('.res_phone').text(res.mobile);
+                $('.res_time').text(res.createTime);
+                $('.res_source').text(res.source);
+                $('.detail-box').show();
               } else {
-                alert("网络错误！");
+                $('.detail-box').hide();
+                alert("未查询到信息！");
               }
             },
             error: function() {
+              $('.detail-box').hide();
               alert("请检查网络连接");
             }
           });
@@ -157,16 +177,21 @@
           <div style="margin-top: 40px;" class="handle clearfix">
             <div class="search__item">
               <span class="search__name">获取时间：</span>
-              <div class="time-input-box"><input type="text" class="date_picker time-input" id="search_date_0" /></div> ——
+              <div class="time-input-box"><input type="text" value="" class="date_picker time-input" id="search_date_0" /></div> ——
               <div class="time-input-box"><input type="text" class="date_picker time-input" id="search_date_1" /></div>
             </div>
             <div class="search__item" style="margin-left: 20px;">
               <span class="search__name">投资手机号：</span>
-              <input type="text" name="search_mobile" id="search_mobile" value="" />
+              <input maxlength="11" type="text" name="search_mobile" id="search_mobile" value="" />
             </div>
             <div class="handle__out r">
               <a id="search_data" class="btn m-green m-search">查询</a>
             </div>
+          </div>
+          <div style="display: none;" class="detail-box">
+            <p>手机号：<span class="res_phone"></span></p>
+            <p>注册时间：<span class="res_time"></span></p>
+            <p>注册来源：<span class="res_source"></span></p>
           </div>
           <div style="margin-top: 40px;" class="search">
             <div class="search__item">

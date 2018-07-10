@@ -35,8 +35,8 @@ def checkmobile(request):
     data = response.json()
     user_data_list = data['data']
 
-    cyptmobile = bytes(mobile.strip(),encoding='utf-8')
-    cyptmobile = hashlib.md5(salt+cyptmobile)
+    cyptmobile = bytes(mobile.strip())
+    cyptmobile = hashlib.md5(salt+cyptmobile).hexdigest()
     for item in user_data_list:
         if item['mobile'] == cyptmobile:
             return JsonResponse({
@@ -55,13 +55,15 @@ def export(request):
     if not start or not end:
         start = str(datetime.date.today())
         end = start
-    params = dict(orgCode = 'huake',beginDate=start + ' 00:00:00',endDate= end + '23:59:59')
+    params = dict(orgCode = 'huake',beginDate=start + ' 00:00:00',endDate= end + ' 23:59:59')
     response = requests.get(order_url, params=params, headers=headers)
     data = response.json()
     order_data_list = data['data']
+    logger.info(order_data_list)
     response = requests.get(user_url, params=params, headers=headers)
     data = response.json()
     user_data_list = data['data']
+    logger.info(user_data_list)
     w = Workbook()  # 创建一个工作簿
     ws = w.add_sheet(u'订单表')  # 创建一个工作表
     order_title_row = [u'是否为首单；1首单 0非首单', u'注册渠道', u'产品名称', u'手机号', u'投资金额', u'投资标期', u'购买时间', u'是否为新手标']

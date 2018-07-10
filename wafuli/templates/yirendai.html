@@ -29,6 +29,9 @@
       .date_selector {
         box-sizing: content-box;
       }
+      .detail-box {
+        display: none;
+      }
     </style>
     <script type="text/javascript">
       var data = '<table width="100%"><thead><tr><th height="44">项目</th>' +
@@ -129,10 +132,12 @@
               mobile: search_mobile,
             },
             success: function(ret) {
+              console.log(ret);
               if(ret.code == 0) {
-                $('.res_phone').text(res.mobile);
-                $('.res_time').text(res.createTime);
-                $('.res_source').text(res.source);
+                console.log('有数据')
+                $('.res_phone').text(ret.mobile);
+                $('.res_time').text(ret.createTime);
+                $('.res_source').text(ret.source);
                 $('.detail-box').show();
               } else {
                 $('.detail-box').hide();
@@ -148,8 +153,8 @@
         $("#export").click(function() {
           var html = '<form action="' + "/yirendai/export/" + '" method="post" target="_self" id="postData_form">';
           var invest_mobile = $("#invest_mobile").val(),
-            invest_date0 = $("#date0").val(),
-            invest_date1 = $("#date1").val();
+            invest_date0 = $("#date_0").val(),
+            invest_date1 = $("#date_1").val();
 //        html += '<input name="is_official" type="hidden" value="true"/>';
 //        if(proj_name) {
 //          html += '<input name="invest_mobile" type="hidden" value="' + invest_mobile + '"/>';
@@ -188,7 +193,7 @@
               <a id="search_data" class="btn m-green m-search">查询</a>
             </div>
           </div>
-          <div style="display: none;" class="detail-box">
+          <div class="detail-box">
             <p>手机号：<span class="res_phone"></span></p>
             <p>注册时间：<span class="res_time"></span></p>
             <p>注册来源：<span class="res_source"></span></p>

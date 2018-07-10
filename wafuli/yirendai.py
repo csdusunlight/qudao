@@ -36,7 +36,7 @@ def checkmobile(request):
     user_data_list = data['data']
 
     cyptmobile = bytes(mobile.strip())
-    cyptmobile = hashlib.md5(salt+cyptmobile)
+    cyptmobile = hashlib.md5(salt+cyptmobile).hexdigest()
     for item in user_data_list:
         if item['mobile'] == cyptmobile:
             return JsonResponse({
@@ -84,7 +84,8 @@ def export(request):
         data = [item['mobile'], item['createTime'], item['source'], item['maskMobile']]
         for j, d in enumerate(data):
             ws.write(i + 1, j, d)
-
+    logger.info(user_title_row)
+    logger.info(user_data_list)
     sio = StringIO.StringIO()
     w.save(sio)
     sio.seek(0)

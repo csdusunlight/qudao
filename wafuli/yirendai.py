@@ -21,7 +21,6 @@ salt = b'~C):"vdX-SZz'
 
 @csrf_exempt
 def checkmobile(request):
-    logger.info(request.POST)
     mobile = request.POST.get('mobile')
     start = request.POST.get('start')
     end = request.POST.get('end')
@@ -31,7 +30,6 @@ def checkmobile(request):
 
     params = dict(orgCode='huake', beginDate=start + ' 00:00:00', endDate=end + ' 23:59:59')
     response = requests.get(user_url, params=params, headers=headers)
-    logger.info('yirendai'+response.text)
     data = response.json()
     user_data_list = data['data']
 
@@ -59,11 +57,9 @@ def export(request):
     response = requests.get(order_url, params=params, headers=headers)
     data = response.json()
     order_data_list = data['data']
-    logger.info(order_data_list)
     response = requests.get(user_url, params=params, headers=headers)
     data = response.json()
     user_data_list = data['data']
-    logger.info(user_data_list)
     w = Workbook()  # 创建一个工作簿
     ws = w.add_sheet(u'订单表')  # 创建一个工作表
     order_title_row = [u'是否为首单；1首单 0非首单', u'注册渠道', u'产品名称', u'手机号', u'投资金额', u'投资标期', u'购买时间', u'是否为新手标']

@@ -21,7 +21,7 @@ salt = b'~C):"vdX-SZz'
 
 @csrf_exempt
 def checkmobile(request):
-    logger.inf(request.POST)
+    logger.info(request.POST)
     mobile = request.POST.get('mobile')
     start = request.POST.get('start')
     end = request.POST.get('end')

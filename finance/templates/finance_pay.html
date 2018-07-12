@@ -35,8 +35,6 @@
      .pay-state {
        font-weight: bold;
        font-family: "宋体";
-       text-decoration: underline;
-       cursor: pointer;
      }
      .pay-state-1 {
        color: #59b9ff;
@@ -49,6 +47,8 @@
      }
      .pay-state-4 {
        color: #ff5656;
+       text-decoration: underline;
+       cursor: pointer;
      }
      .avatar-uploader {
        display: inline-block;
@@ -195,12 +195,13 @@
           width="80"
           label="打款状态">
           <template slot-scope="scope">
-            <el-popover trigger="hover" placement="left">
+            <el-popover v-if="scope.row.pay_state == 4" trigger="hover" placement="left">
               <p>备注：${ scope.row.pay_reason ? scope.row.pay_reason : '无' }</p>
               <div slot="reference" class="name-wrapper">
                 <span :class="'pay-state pay-state-' + scope.row.pay_state">${ scope.row.pay_state_des }</span>
               </div>
             </el-popover>
+            <span v-else :class="'pay-state pay-state-' + scope.row.pay_state">${ scope.row.pay_state_des }</span>
           </template>
         </el-table-column>
         <el-table-column

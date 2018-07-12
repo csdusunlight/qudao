@@ -132,12 +132,12 @@
           </el-upload>
         </el-col>
         <el-col :span="12" style="display: flex;justify-content: flex-end;">
-          <el-button type="success" @click="badgeSelect(1)">标记未打款</el-button>
-          <el-button type="success" @click="badgeSelect(3)">标记已打款</el-button>
-          <el-button type="warning" @click="transferSelect">一键转账</el-button>
+          <el-button type="success" @click="badgeSelect(1)">标记为未打款</el-button>
+          <el-button type="success" @click="badgeSelect(3)">标记为已打款</el-button>
+          <el-button type="warning" @click="transferSelect">批量打款</el-button>
         </el-col>
       </el-row>
-      <p style="margin-right: 153px;text-align: right;">*注：打款中的数据标记无效。</p>
+      <p style="margin-right: 180px;text-align: right;">*注：打款中的数据无法操作。</p>
      </div>
     <div class="line"></div>
     <div class="table-box">
@@ -157,16 +157,16 @@
           <template slot-scope="scope">${ scope.row.project_title }</template>
         </el-table-column>
         <el-table-column
-          label="投资姓名">
-          <template slot-scope="scope">${ scope.row.invest_name }</template>
-        </el-table-column>
-        <el-table-column
           label="投资手机号">
           <template slot-scope="scope">${ scope.row.invest_mobile }</template>
         </el-table-column>
         <el-table-column
           label="投资日期">
           <template slot-scope="scope">${ scope.row.invest_date }</template>
+        </el-table-column>
+        <el-table-column
+          label="投资金额">
+          <template slot-scope="scope">${ scope.row.invest_amount }</template>
         </el-table-column>
         <el-table-column
           label="审核时间">
@@ -201,10 +201,17 @@
           </template>
         </el-table-column>
         <el-table-column
+          label="打款成功时间">
+          <template slot-scope="scope">${ scope.row.pay_time ? scope.row.pay_time.substr(5,14) : '无' }</template>
+        </el-table-column>
+        <el-table-column
+          v-if = "stateValue==1 || stateValue==''"
+          :key="Math.random()"
           label="操作"
           width="90">
           <template slot-scope="scope">
-            <template v-if="scope.row.pay_state == 2 || scope.row.pay_state == 3 || scope.row.pay_state == 4">
+            <el-button type="primary" :disabled="scope.row.pay_state==1 ? false : true" size="mini" icon="el-icon-edit" @click="edit(scope.row)">编辑</el-button>
+            <!--<template v-if="scope.row.pay_state == 2 || scope.row.pay_state == 3 || scope.row.pay_state == 4">
               <el-button disabled>操作</el-button>
             </template>
             <template v-else>
@@ -216,7 +223,7 @@
                   <el-button>操作</el-button>
                 </div>
               </el-popover>
-            </template>
+            </template>-->
             <el-dialog title="编辑打款信息" width="600px" :visible.sync="dialogEditVisible">
               <el-form :model="dialogData">
                 <el-form-item label="转账金额" label-width="90px">

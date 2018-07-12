@@ -180,8 +180,11 @@ def autoreply(request):
                     content += '\n' if content else ''
                     content += pro.title + u'：' + pro.strategy
                     if weixin_user:
-                        userlevel = weixin_user.user.level
-                        price = getattr(pro, 'price' + userlevel)
+                        if weixin_user.user:
+                            userlevel = weixin_user.user.level
+                            price = pro.get_project_price(userlevel)
+                        else:
+                            price = u'绑定后可查看'
                         content += u' 渠道价格：' + price
         elif msg_type == 'event':
             event = xmlData.find('Event').text

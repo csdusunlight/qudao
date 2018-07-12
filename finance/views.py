@@ -117,9 +117,10 @@ def admin_autopay(request):
                 'payee_account':obj.zhifubao,
                 'payee_real_name':obj.zhifubao_name,
                 'amount':str(obj.return_amount),
-                'remark':obj.project.title
+                'remark':obj.project.title,
+                'payer_name':u'%s（%s）' % (obj.user.qq_name, obj.user.qq_number)
             })
-        ret = batch_transfer_to_zhifubao(batch_list)
+        ret = batch_transfer_to_zhifubao(batch_list, 'fulio', u'做单返现')
         fail_id_list = []
         for item in ret['detail']:
             obj = item['obj']

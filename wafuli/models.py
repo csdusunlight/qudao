@@ -139,6 +139,10 @@ class Project(models.Model):
                 raise ValidationError({'pic': u'图片不能为空'})
             elif self.pic.size > 30000:
                 raise ValidationError({'pic': u'图片大小不能超过30k'})
+        if self.is_official and self.category == 'self':
+            raise ValidationError(u'官方项目属性不能为自建')
+        if not self.is_official and not self.category == 'self':
+            raise ValidationError(u'自建项目属性不能为官方或商家')
     class Meta:
         verbose_name = u"理财项目"
         verbose_name_plural = u"理财项目"
@@ -174,7 +178,7 @@ class Project(models.Model):
         return self.title
     def get_project_price(self, level):
 #         level = self.user.level
-        return getattr(self.project, 'price'+str(level)) or self.project.default_price
+        return getattr(self, 'price'+str(level)) or self.default_price
     
 class SubscribeShip(models.Model):
     user = models.ForeignKey(MyUser)

@@ -20,8 +20,8 @@
         .el-input {
             width: 55%;
         }
-        .oprate{
-            padding: 11px 17px;
+        .el-header{
+            margin-top: 0;
         }
     </style>
 </head>
@@ -34,7 +34,6 @@
             </el-col>
             <el-col :span="21">
                 <div class="container">
-                   
                     <!-- tabale -->
                     <el-header>数据总览</el-header>
                     <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"
@@ -108,7 +107,7 @@
                     var that = this;
                     $.ajax({
                         type: "get",
-                        url: "/restapi/daystatis/?page="+that.page+"&pageSize="+that.pageSize,
+                        url: "/restapi/daystatis/?page="+that.currentPage+"&pageSize="+that.pageSize,
                         async: true,
                         success: function (res) {
                             console.log(res);

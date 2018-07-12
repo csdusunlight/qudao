@@ -20,6 +20,12 @@
         .el-input {
             width: 200px;
         }
+        .desc_txt{
+            color: #909399;
+        }
+        .el-header{
+            margin-top: 0;
+        }
     </style>
 </head>
 
@@ -34,21 +40,21 @@
                     <el-row>
                         <el-col :span="8">
                             <div class="grid-content bg-purple">
-                                <span>开始时间：</span>
+                                <span class="desc_txt">开始时间：</span>
                                 <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="s_time" type="date" placeholder="选择日期">
                                 </el-date-picker>
                             </div>
                         </el-col>
                         <el-col :span="8">
                             <div class="grid-content bg-purple-light">
-                                <span>结束时间：</span>
+                                <span class="desc_txt">结束时间：</span>
                                 <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="e_time" type="date" placeholder="选择日期">
                                 </el-date-picker>
                             </div>
                         </el-col>
                         <el-col :span="8">
                             <div class="grid-content bg-purple">
-                                <span>手机号：</span>
+                                <span class="desc_txt">手机号：</span>
                                 <el-input v-model="mobile" placeholder="请输入内容" clearable></el-input>
                             </div>
                         </el-col>
@@ -56,13 +62,13 @@
                     <el-row>
                         <el-col :span="8">
                             <div class="grid-content bg-purple">
-                                <span>红包方案：</span>
+                                <span class="desc_txt">红包方案：</span>
                                 <el-input v-model="hongbao" placeholder="请输入内容" clearable></el-input>
                             </div>
                         </el-col>
                         <el-col :span="8">
                             <div class="grid-content bg-purple-light">
-                                <span>红包状态：</span>
+                                <span class="desc_txt">红包状态：</span>
                                 <el-select v-model="select" slot="prepend" placeholder="请选择">
                                     <el-option label="全部" value=" "></el-option>
                                     <el-option label="未解锁" value="0"></el-option>
@@ -98,7 +104,7 @@
                         <el-table-column label="有效期">
                             <template slot-scope="scope">${ scope.row.expire }</template>
                         </el-table-column>
-                        <el-table-column label="红包状态">
+                        <el-table-column label="是否领取">
                             <template slot-scope="scope">
                                 <span v-if='scope.row.state == 0'>
                                     否
@@ -153,7 +159,7 @@
                     var that = this;
                     $.ajax({
                         type: "get",
-                        url: '/coupon/coupons/?page=' + that.page + '&pageSize=' + that.pageSize + '&create_0=' + that.s_time + '&create_1='+ that.e_time +'&user_mobile='+ that.mobile +'&contract_contains='+ that.hongbao +'&state='+that.select,
+                        url: '/coupon/coupons/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&create_0=' + that.s_time + '&create_1='+ that.e_time +'&user_mobile='+ that.mobile +'&contract_contains='+ that.hongbao +'&state='+that.select,
                         async: true,
                         success: function (res) {
                             console.log(res);
@@ -174,9 +180,7 @@
                     app.currentPage = 1;
                     app.getDataList();
                 }
-
-
-            }
+            },
         })
     </script>
 </body>

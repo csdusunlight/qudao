@@ -24,6 +24,14 @@
         .el-input {
             width: 60%;
         }
+
+        .el-header {
+            margin-top: 20px;
+        }
+
+        .operate {
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -78,7 +86,7 @@
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
                                 <span class="descTitle">处理状态：</span>
-                                <el-select v-model="state" slot="prepend" placeholder="请选择项目状态">
+                                <el-select v-model="state" @change="change_state" slot="prepend" placeholder="请选择项目状态">
                                     <el-option label="全部" value=" "></el-option>
                                     <el-option label="待审核" value="1"></el-option>
                                     <el-option label="审核通过" value="0"></el-option>
@@ -142,8 +150,20 @@
                         <el-table-column label="处理状态">
                             <template slot-scope="scope">${ scope.row.state_des }</template>
                         </el-table-column>
+                        <el-table-column label="处理时间" :key='Math.random()' v-if="state == '2' || state=='0'">
+                            <template slot-scope="scope">${ (scope.row.audit_time).split('T')[0] }</template>
+                        </el-table-column>
+                        <el-table-column label="拒绝原因" :key='Math.random()' v-if="state == '2'">
+                            <template slot-scope="scope">${ scope.row.audit_reason }</template>
+                        </el-table-column>
                         <el-table-column label="备注说明">
                             <template slot-scope="scope">${ scope.row.remark }</template>
+                        </el-table-column>
+                        <el-table-column label="操作" :key='Math.random()' v-if="state == '1'">
+                            <template slot-scope="scope">
+                                <a class="operate" @click="agree(scope.row)">同意</a> |
+                                <a class="operate" @click='refuse(scope.row)'>拒绝</a>
+                            </template>
                         </el-table-column>
                     </el-table>
                     <div class="pagination-box">
@@ -171,12 +191,6 @@
                 title: '',
                 state: '',
                 activeNav: '4-1',
-                hongbaoPlan: [],
-                ruleForm: {
-                    hongbao_plan: [],
-                    send_user: '2',
-                    userlist: ''
-                },
                 dialogPlanVisible: false,
                 rowStyle: {
                     'text-align': 'center'
@@ -199,7 +213,7 @@
                     var that = this;
                     $.ajax({
                         type: "get",
-                        url: '/merchant/apply_projects/?page=' + that.page + '&pageSize=' + that.pageSize + '&submittime_0=' + that.s_apply + '&submittime_1=' + that.e_apply + '&user_mobile=' + that.user_mobile + '&title=' + that.title + '&audit_state=' + that.state,
+                        url: '/merchant/apply_projects/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&submittime_0=' + that.s_apply + '&submittime_1=' + that.e_apply + '&user_mobile=' + that.user_mobile + '&title=' + that.title + '&audit_state=' + that.state,
                         async: true,
                         success: function (res) {
                             console.log(res);
@@ -219,6 +233,87 @@
                     app.currentPage = 1;
                     console.log(that.s_apply)
                     app.getDataList();
+                },
+                change_state: function (val) {
+                    var that = this;
+                    that.state = val;
+                    that.getDataList();
+                },
+                agree: function (row) {
+                    var that = this;
+                    console.log(row.id)
+                    that.$prompt('请输入佣金', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        inputPattern: /^(([0-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/, //正则验证
+                        inputErrorMessage: '请输入正确的金额',
+                    }).then(({ value }) => {
+                        console.log(value)
+                        $.ajax({
+                            url: '/Admin/admin_merchant_project/',
+                            type: "POST",
+                            async: false,
+                            data: {
+                                "type": 1,
+                                "id": row.id,
+                                "broker_rate": value
+                            },
+                            timeout: 5000, //超出时间
+                            dataType: 'json', //返回数据格式Json
+                            success: function (ret) {
+                                if (ret.code == 0) {
+                                    that.$notify({
+                                        title: '提示',
+                                        message: '操作成功，同意'
+                                    })
+                                    that.getDataList();
+                                }
+                            },
+                            error: function (xhr, textStatus) {
+                                console.log('错误:' + xhr.responseText);
+                            }
+                        });
+                    }).catch(() => {
+                        console.log('取消');
+                    });
+                },
+                refuse: function (row) {
+                    console.log(row.id)
+                    var that = this;
+                    that.$prompt('请输入拒绝原因', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        inputPattern: '',
+                        inputErrorMessage: '拒绝原因不能为空',
+                    }).then(({ value }) => {
+                        console.log(value)
+                        $.ajax({
+                            url: '/Admin/admin_merchant_project/',
+                            type: "POST",
+                            async: false,
+                            data: {
+                                "type": 2,
+                                "id": row.id,
+                                "reason": value
+                            },
+                            timeout: 5000, //超出时间
+                            dataType: 'json', //返回数据格式Json
+                            success: function (ret) {
+                                if (ret.code == 0) {
+                                    that.$notify({
+                                        title: '提示',
+                                        message: '操作成功，拒绝'
+                                    })
+                                    that.getDataList();
+                                }
+                            },
+                            error: function (xhr, textStatus) {
+                                console.log('错误:' + xhr.responseText);
+                            }
+                        });
+                    }).catch(() => {
+                        console.log('取消');
+                    });
                 }
             }
         })

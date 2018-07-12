@@ -16,21 +16,24 @@
 <style>
 	.header_row {
 		padding: 10px 10px;
-		background:#e9f8ff;
+		background: #e9f8ff;
 		text-align: center;
 		color: #8eaa84;
 	}
-	.th_row{
+
+	.th_row {
 		padding: 10px 10px;
-		border: 1px solid RGB(235,238,245);
+		border: 1px solid RGB(235, 238, 245);
 		text-align: center;
 		color: #da1c1c;
 		font-size: 14px;
 	}
-	.header_item{
+
+	.header_item {
 		margin-top: 0;
 	}
-	.el-table__header{
+
+	.el-table__header {
 		background: #e9f8ff;
 	}
 </style>
@@ -136,7 +139,6 @@
 				currentPage: 1,
 			},
 			created: function () {
-				// this.getAllPlan();
 				this.getDataList(1, 10);
 			},
 			methods: {
@@ -148,7 +150,7 @@
 					var that = this;
 					$.ajax({
 						type: "get",
-						url: '/restapi/daystatis/?page=' + page + '&pageSize=' + pageSize,
+						url: '/restapi/daystatis/?page=' + that.currentPage + '&pageSize=' + pageSize,
 						async: true,
 						success: function (res) {
 							console.log('---', res);

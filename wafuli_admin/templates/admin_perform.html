@@ -117,7 +117,7 @@
           var that = this;
           $.ajax({
               type: "get",
-              url: '/restapi/perform/?page=' + that.page + '&pageSize=' + that.pageSize +'&search=' +that.searchValue,
+              url: '/restapi/perform/?page=' + that.currentPage + '&pageSize=' + that.pageSize +'&search=' +that.searchValue,
               async: true,
               success: function(res) {
                 console.log(res);
@@ -133,7 +133,6 @@
           });
         },
         searchData:function(){
-          var that = this;
           app.currentPage = 1;
           app.getDataList();
         }

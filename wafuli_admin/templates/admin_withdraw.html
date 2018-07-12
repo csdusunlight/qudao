@@ -127,9 +127,9 @@
               <div class="grid-content bg-purple">
                 <span class="desc_txt">渠道等级：</span>
                 <el-select v-model="user_level" slot="prepend" placeholder="请选择">
-                  <el-option label="打款中" value="2"></el-option>
-                  <el-option label="已打款" value="3"></el-option>
-                  <el-option label="打款失败" value="4"></el-option>
+                  <el-option label="01" value="01"></el-option>
+                  <el-option label="02" value="02"></el-option>
+                  <el-option label="03" value="03"></el-option>
                 </el-select>
               </div>
             </el-col>
@@ -348,6 +348,7 @@
       //搜索
       search_data: function () {
         var that = this;
+        that.currentPage = 1;
         that.getDataList();
       },
       //check选中事件

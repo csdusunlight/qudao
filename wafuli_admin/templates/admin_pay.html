@@ -218,7 +218,6 @@
       post_data: {},
       csrf_token:'{{ csrf_token }}',
       activeNav: '2-2',
-      // state: '',
       rowStyle: {
         'text-align': 'center'
       },
@@ -229,6 +228,7 @@
     },
     created: function () {
       var that = this;
+      that.currentPage
       that.search_data();
     },
     methods: {
@@ -236,14 +236,12 @@
         app.currentPage = val;
         var that = this;
         that.search_data();
-        
       },
       change_state: function (val) {
         var that = this;
         that.pay_state = val;
         that.search_data();
       },
-      
       handleSelectionChange(val) {
         var that = this;
         that.checkIdList = '';
@@ -259,10 +257,10 @@
         }
         this.multipleSelection = val;
       },
+     
       //搜索
       search_data: function () {
         var that = this;
-        console.log('0000000', this.pay_state)
         if (that.pay_state == 2) {
           console.log("new" + that.searchVal)
           $.ajax({
@@ -384,11 +382,11 @@
       searchVal: function () {
         var that = this;
         var data_url;
-        if (that.pay_state == 2) {  //&auditdate_0=2018-07-05T00:00&auditdate_1=2018-07-06T00:00&invest_mobile=18570661123&zhifubao=185706616
-          data_url = '&auditdate_0='+that.s_time0+'&auditdate_1='+ that.e_time0 +'&invest_mobile='+that.phone_number+'&zhifubao='+that.zhifubao
-        } else {
+        // if (that.pay_state == 2) {  //&auditdate_0=2018-07-05T00:00&auditdate_1=2018-07-06T00:00&invest_mobile=18570661123&zhifubao=185706616
+        //   data_url = '&auditdate_0='+that.s_time0+'&auditdate_1='+ that.e_time0 +'&invest_mobile='+that.phone_number+'&zhifubao='+that.zhifubao
+        // } else {
           data_url ='&auditdate_0='+that.s_time0+'&auditdate_1='+ that.e_time0 +'&invest_mobile='+that.phone_number+'&zhifubao='+that.zhifubao
-        }
+        // }
         return data_url;
       }
     }

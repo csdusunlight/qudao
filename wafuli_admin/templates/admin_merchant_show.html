@@ -24,6 +24,9 @@
         .el-input {
             width: 60%;
         }
+        .el-header {
+            margin-top: 20px;
+        }
     </style>
 </head>
 
@@ -44,8 +47,8 @@
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span class="descTitle">项目状态：</span>
-                                <el-select v-model="state" slot="prepend" placeholder="请选择项目状态">
+                                <span class="descTitle" >项目状态：</span>
+                                <el-select @change="change_state" style="width: 70%;" v-model="state" slot="prepend" placeholder="请选择项目状态">
                                     <el-option label="全部" value=" "></el-option>
                                     <el-option label="即将开始" value="00"></el-option>
                                     <el-option label="正在进行" value="10"></el-option>
@@ -156,7 +159,7 @@
                     var that = this;
                     $.ajax({
                         type: "get",   //?page=1&pageSize=10&category=merchant&search=11&state=30&user_mobile=12346457897&qq_name=111
-                        url: '/restapi/projects/?page=' + that.page + '&pageSize=' + that.pageSize + '&category=merchant&search=' + that.search +'&state='+ that.state +'&user_mobile='+ that.user_mobile +'&qq_name='+that.qq_name,
+                        url: '/restapi/projects/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&category=merchant&search=' + that.search +'&state='+ that.state +'&user_mobile='+ that.user_mobile +'&qq_name='+that.qq_name,
                         async: true,
                         success: function (res) {
                             console.log(res);
@@ -175,6 +178,11 @@
                     var that = this;
                     app.currentPage = 1;
                     app.getDataList();
+                },
+                change_state:function(val){
+                    var that = this;
+                    that.state = val;
+                    that.search_data();
                 }
             }
         })

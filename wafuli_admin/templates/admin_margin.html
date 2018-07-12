@@ -22,7 +22,15 @@
         }
 
         .oprate {
-            padding: 10px 10px;
+            cursor: pointer;
+        }
+
+        .desc_txt {
+            color: #909399;
+        }
+
+        .el-header {
+            margin-top: 0;
         }
     </style>
 </head>
@@ -39,28 +47,28 @@
                     <el-row :gutter="20">
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>申请开始时间：</span>
+                                <span class="desc_txt">申请开始时间：</span>
                                 <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="s_time0" type="date" placeholder="选择日期">
                                 </el-date-picker>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>申请结束时间：</span>
+                                <span class="desc_txt">申请结束时间：</span>
                                 <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="e_time0" type="date" placeholder="选择日期">
                                 </el-date-picker>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>操作开始时间：</span>
+                                <span class="desc_txt">操作开始时间：</span>
                                 <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="s_time1" type="date" placeholder="选择日期">
                                 </el-date-picker>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>操作结束时间：</span>
+                                <span class="desc_txt">操作结束时间：</span>
                                 <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="e_time1" type="date" placeholder="选择日期">
                                 </el-date-picker>
                             </div>
@@ -70,28 +78,28 @@
                     <el-row :gutter="20">
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>用户名：</span>
+                                <span class="desc_txt">用户名：</span>
                                 <el-input placeholder="请输入内容" v-model="user" clearable>
                                 </el-input>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>用户手机号：</span>
+                                <span class="desc_txt">用户手机号：</span>
                                 <el-input placeholder="请输入内容" v-model="phone_number" clearable>
                                 </el-input>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>开户行姓名：</span>
+                                <span class="desc_txt">开户行姓名：</span>
                                 <el-input placeholder="请输入内容" v-model="user_bank" clearable>
                                 </el-input>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>银行卡号：</span>
+                                <span class="desc_txt">银行卡号：</span>
                                 <el-input placeholder="请输入内容" v-model="bank_card" clearable>
                                 </el-input>
                             </div>
@@ -101,14 +109,14 @@
                     <el-row :gutter="20">
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>处理人：</span>
+                                <span class="desc_txt">处理人：</span>
                                 <el-input v-model="deal_user" placeholder="请输入"></el-input>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <span>处理状态：</span>
-                                <el-select v-model="select" slot="prepend" placeholder="请选择">
+                                <span class="desc_txt">处理状态：</span>
+                                <el-select v-model="select" @change="change_state" slot="prepend" placeholder="请选择">
                                     <el-option label="未审核" value="1"></el-option>
                                     <el-option label="审核通过" value="0"></el-option>
                                     <el-option label="审核拒绝" value="2"></el-option>
@@ -122,6 +130,7 @@
                         </el-col>
                     </el-row>
                     <!-- tabale -->
+                    <el-header>数据总览</el-header>
                     <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"
                         border>
                         <el-table-column label="用户名">
@@ -146,7 +155,11 @@
                             <template slot-scope="scope">${ scope.row.card_number }</template>
                         </el-table-column>
                         <el-table-column label="变动类型">
-                            <template slot-scope="scope">${ scope.row.type }</template>
+                            <template slot-scope="scope">
+                                <!-- ${ scope.row.type } -->
+                                <span v-if='scope.row.type == 0'>充值</span>
+                                <span v-else>提取</span>
+                            </template>
                         </el-table-column>
                         <el-table-column label="变动金额">
                             <template slot-scope="scope">${ scope.row.amount }</template>
@@ -157,10 +170,10 @@
                         <el-table-column label="处理状态">
                             <template slot-scope="scope">${ scope.row.state_des }</template>
                         </el-table-column>
-                        <el-table-column label="操作">
+                        <el-table-column label="处理" :key='Math.random' v-if='select == "1" || select == ""'>
                             <template slot-scope="scope">
-                                <el-button class="oprate" type="primary" @click='agree(scope.row)'>同意</el-button>
-                                <el-button type="danger" @click="showDiago(scope.row)" class="oprate">拒绝</el-button>
+                                <a class="oprate" @click='agree(scope.row)'>同意</a> |
+                                <a class="oprate" @click="showDiago(scope.row)">拒绝</a>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -173,6 +186,7 @@
             </el-col>
         </el-row>
         <el-dialog title="提示" :visible.sync="dialogFormVisible">
+            <span>拒绝原因：</span>
             <el-input v-model="reason" placeholder="请输入拒绝原因"></el-input>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -197,6 +211,8 @@
                 deal_user: '',
                 select: '',
                 reason: '',
+                csrf_token: '{{ csrf_token }}',
+                Id: '',
                 dialogFormVisible: false,
                 activeNav: '5-1',
                 rowStyle: {
@@ -205,8 +221,7 @@
                 planTableData: {},
                 page: 1,
                 pageSize: 10,
-                currentPage: 1,
-                Id: '',
+                currentPage: 1
             },
             created: function () {
                 var that = this;
@@ -221,7 +236,7 @@
                     var that = this;
                     $.ajax({
                         type: "get",
-                        url: '/merchant/margin_auditlog/?page=' + that.page + '&pageSize=' + that.pageSize + '&submit_date_0=' + that.s_time0 + '&submit_date_1=' + that.e_time0 + '&audit_date_0=' + that.s_time1 + '&audit_date_0=' + that.e_time1 + '&user_name=' + that.user + '&user_mobile=' + that.phone_number + '&real_name=' + that.user_bank + '&card_number=' + that.bank_card + '&admin_user=' + that.deal_user + '&audit_state=' + that.select,
+                        url: '/merchant/margin_auditlog/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&submit_date_0=' + that.s_time0 + '&submit_date_1=' + that.e_time0 + '&audit_date_0=' + that.s_time1 + '&audit_date_0=' + that.e_time1 + '&user_name=' + that.user + '&user_mobile=' + that.phone_number + '&real_name=' + that.user_bank + '&card_number=' + that.bank_card + '&admin_user=' + that.deal_user + '&audit_state=' + that.select,
                         async: true,
                         success: function (res) {
                             console.log(res);
@@ -238,36 +253,53 @@
                 },
                 search_data: function () {
                     var that = this;
+                    that.currentPage = 1;
                     that.getDataList();
+                },
+                change_state: function (val) {
+                    var that = this;
+                    that.select = val;
+                    console.log(that.select)
+                    that.search_data();
                 },
                 //同意该条数据
                 agree: function (row) {
                     var that = this;
                     console.log('同意该条数据的id', row.id)
-                    $.ajax({
-                        url: '/Admin/admin_margin/',
-                        type: 'POST', //Post
-                        async: false,    //或false,是否异步
-                        data: {
-                            'type': 1,
-                            'id': row.id
-                        },
-                        success: function (res) {
-                            if (res.code == 0) {
-                                that.$notify.error({
-                                    title: '提示',
-                                    message: '已同意该条数据'
-                                });
+                    that.$alert('是否同意该条数据？', '温馨提示', {
+                        confirmButtonText: '同意',
+                        callback: function (action) {
+                            if (action == 'confirm') {
+                                console.log('同意id：', row.id)
+                                $.ajax({
+                                    url: '/Admin/admin_margin/',
+                                    type: 'POST',
+                                    async: false,
+                                    data: {
+                                        'csrfmiddlewaretoken': that.csrf_token,
+                                        'type': 1,
+                                        'id': row.id
+                                    },
+                                    success: function (res) {
+                                        if (res.code == 0) {
+                                            that.$notify.error({
+                                                title: '提示',
+                                                message: '已同意该条数据'
+                                            });
+                                            that.getDataList();
+                                        }
+                                    },
+                                    error: function (xhr, textStatus) {
+                                        that.$notify({
+                                            title: '提示',
+                                            message: xhr.responseText
+                                        })
+                                    }
+                                })
                             }
-                        },
-                        error: function (xhr, textStatus) {
-                            that.$notify({
-                                title: '提示',
-                                message: xhr.responseText
-                            })
                         }
-
                     })
+
                 },
                 showDiago: function (row) {
                     this.Id = row.id
@@ -275,7 +307,7 @@
                 },
                 refuse: function () {
                     var that = this;
-                    var refuseId = this.Id
+                    var refuseId = that.Id
                     if (!that.reason) {
                         that.$notify({
                             title: '提示',
@@ -283,21 +315,22 @@
                         })
                         return;
                     }
-                    console.log(refuseId)
-                    console.log('拒绝')
+                    console.log('当前id：', refuseId)
                     console.log(that.reason)
                     $.ajax({
                         url: '/Admin/admin_margin/',
-                        type: 'POST',   //GET
-                        async: false,    //或false,是否异步
+                        type: 'POST',
+                        async: false,
                         dataType: 'json',
                         data: {
+                            'csrfmiddlewaretoken': that.csrf_token,
                             'type': 2,
                             'reason': that.reason,
                             'id': refuseId
                         },
                         success: function (res) {
                             that.dialogFormVisible = false;
+                            that.getDataList();
                             if (res.code == 0) {
                                 that.$notify({
                                     title: '提示',

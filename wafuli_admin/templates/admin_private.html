@@ -32,6 +32,12 @@
         .grid-content {
             padding: 15px 0;
         }
+        .el-header{
+            margin-top: 10px;
+        }
+        .el-input{
+            width: 50%;
+        }
     </style>
 </head>
 
@@ -126,6 +132,7 @@
 
                     </el-row>
                     <!-- tabale -->
+                    <el-header>数据总览</el-header>
                     <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"
                         border>
                         <el-table-column label="QQ">
@@ -223,6 +230,7 @@
                 },
                 search_data: function () {
                     var that = this;
+                    that.currentPage = 1;
                     that.getDataList();
                 },
                 export_data: function () { //导出数据

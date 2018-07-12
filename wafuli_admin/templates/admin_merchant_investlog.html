@@ -368,6 +368,48 @@
                     }
                 });
             },
+            //搜索功能
+            search_data: function () {
+                var that = this;
+                that.currentPage = 1;
+                var newUrl = '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&category=merchant';//'&submittime_0='+ that.s_time0 +'&submittime_1='+ that.e_time0 +'&audittime_0='+ that.s_time1 +'&audittime_1='+ that.e_time1 +'&qq_number='+ that.qq_number +'&user_mobile='+ that.phone_number +'&project_title_contains='+ that.project_title +'&user_level='+ that.user_level +'&admin_user='+ that.admin_user +'&invest_mobile='+ that.submit_moblie +'&submit_type='+that.invest_type;
+                console.log('搜索')
+                if (that.deal_state == -1) {
+                    $.ajax({
+                        type: "get",
+                        url: newUrl + '&audit_state=1&preaudit_state=0' + that.searchValue,
+                        async: true,
+                        success: function (res) {
+                            console.log(res);
+                            if (res.code == 0) {
+                                app.planTableData = res;
+                            } else {
+                                that.$notify.error({
+                                    title: '错误',
+                                    message: res.detail
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        type: "get",
+                        url: newUrl + '&audit_state=' + that.deal_state + that.searchValue,
+                        async: true,
+                        success: function (res) {
+                            console.log(res);
+                            if (res.code == 0) {
+                                app.planTableData = res;
+                            } else {
+                                that.$notify.error({
+                                    title: '错误',
+                                    message: res.detail
+                                });
+                            }
+                        }
+                    });
+                }
+            },
             //预审核状态下同意
             agree_1: function (row) {
                 var that = this;
@@ -611,47 +653,6 @@
                     }
                 });
 
-            },
-            //搜索功能
-            search_data: function () {
-                var that = this;
-                var newUrl = '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&category=merchant';//'&submittime_0='+ that.s_time0 +'&submittime_1='+ that.e_time0 +'&audittime_0='+ that.s_time1 +'&audittime_1='+ that.e_time1 +'&qq_number='+ that.qq_number +'&user_mobile='+ that.phone_number +'&project_title_contains='+ that.project_title +'&user_level='+ that.user_level +'&admin_user='+ that.admin_user +'&invest_mobile='+ that.submit_moblie +'&submit_type='+that.invest_type;
-                console.log('搜索')
-                if (that.deal_state == -1) {
-                    $.ajax({
-                        type: "get",
-                        url: newUrl + '&audit_state=1&preaudit_state=0' + that.searchValue,
-                        async: true,
-                        success: function (res) {
-                            console.log(res);
-                            if (res.code == 0) {
-                                app.planTableData = res;
-                            } else {
-                                that.$notify.error({
-                                    title: '错误',
-                                    message: res.detail
-                                });
-                            }
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        type: "get",
-                        url: newUrl + '&audit_state=' + that.deal_state + that.searchValue,
-                        async: true,
-                        success: function (res) {
-                            console.log(res);
-                            if (res.code == 0) {
-                                app.planTableData = res;
-                            } else {
-                                that.$notify.error({
-                                    title: '错误',
-                                    message: res.detail
-                                });
-                            }
-                        }
-                    });
-                }
             },
             //导出功能
             export_data: function () {

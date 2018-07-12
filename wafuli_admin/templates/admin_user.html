@@ -36,21 +36,9 @@
         .grid-content {
             padding: 15px 0;
         }
-
-        /* .el-dialog__header {
-            display: flex;
-            justify-content: center;
+        .el-header{
+            margin-top: 15px;
         }
-
-        .el-dialog__body {
-            display: flex;
-            justify-content: center;
-        }
-
-        .el-dialog__footer {
-            display: flex;
-            justify-content: center;
-        } */
     </style>
 </head>
 
@@ -127,7 +115,7 @@
                             <div class="grid-content bg-purple">
                                 <span class="desc_txt">是否渠道：</span>
                                 <el-select v-model="is_channel" slot="prepend" placeholder="请选择">
-                                    <el-option label="----" value=" "></el-option>
+                                    <!-- <el-option label="----" value=" "></el-option> -->
                                     <el-option label="是" value='1'></el-option>
                                     <el-option label="否" value='0'></el-option>
                                     <el-option label="申请中" value='-1'></el-option>
@@ -146,6 +134,7 @@
 
                     </el-row>
                     <!-- tabale -->
+                    <el-header>数据总览</el-header>
                     <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"
                         border :default-sort="{prop: 'date', order: 'descending'}">
                         <el-table-column label="渠道等级">
@@ -172,7 +161,7 @@
                         <el-table-column label="加入时间">
                             <template slot-scope="scope">${ scope.row.date_joined.split('T')[0] }</template>
                         </el-table-column>
-                        <el-table-column label="账户余额" sortable='custom'>
+                        <el-table-column label="账户余额" sortable='custom' prop="balance">
                             <template slot-scope="scope">${ scope.row.balance }</template>
                         </el-table-column>
                         <el-table-column label="保证金" sortable='custom'>
@@ -343,8 +332,11 @@
                         }
                     });
                 },
+              
                 search_data: function () {
                     var that = this;
+                    console.log(that.searchVal)
+                    that.currentPage = 1;
                     that.getDataList();
                     // console.log(that.csrf_token)
                 },
@@ -390,6 +382,7 @@
                                     title: '提示',
                                     message: '操作成功'
                                 })
+
                             } else {
                                 that.$notify({
                                     title: '提示',
@@ -397,6 +390,7 @@
                                 })
                             }
                             that.addcashBox = false;
+                            that.getDataList();
                         },
                         error: function () {
                             that.$notify({
@@ -424,7 +418,7 @@
                                     async: false,
                                     data: {
                                         'csrfmiddlewaretoken': that.csrf_token,
-                                        'id': id,
+                                        'id': row.id,
                                         'type': 2,
                                     },
                                     success: function (res) {
@@ -436,10 +430,11 @@
                                         } else {
                                             that.$notify.error({
                                                 title: '错误',
-                                                message: res.detail
+                                                message: res.res_msg
                                             });
                                         }
                                         that.auditShow = false;
+                                        that.getDataList();
                                     },
                                     error: function () {
                                         $notify({
@@ -469,7 +464,7 @@
                                     async: false,
                                     data: {
                                         'csrfmiddlewaretoken': that.csrf_token,
-                                        'id': id,
+                                        'id': row.id,
                                         'type': 3,
                                     },
                                     success: function (res) {
@@ -485,6 +480,7 @@
                                             });
                                         }
                                         that.auditShow = false;
+                                        that.getDataList();
                                     },
                                     error: function () {
                                         $notify({
@@ -532,6 +528,7 @@
                                     message: '操作成功'
                                 })
                                 that.changeLevel = false;
+                                that.getDataList();
                             } else {
                                 that.$notify({
                                     title: '提示',
@@ -623,6 +620,7 @@
                                                 message: ret.res_msg
                                             })
                                         }
+                                        that.getDataList();
                                     },
                                     error: function () {
                                         that.$notify({
@@ -637,6 +635,7 @@
                 },
                 //取消商家
                 remove_tweeter: function (row) {
+                    var that = this;
                     console.log(row.id);
                     that.$alert('是否取消商家权限？', '提示', {
                         confirmButtonText: '确定',
@@ -664,6 +663,7 @@
                                                 message: ret.res_msg
                                             })
                                         }
+                                        that.getDataList();
                                     },
                                     error: function () {
                                         that.$notify({
@@ -706,6 +706,7 @@
                                                 message: ret.res_msg
                                             })
                                         }
+                                        that.getDataList();
                                     },
                                     error: function () {
                                         alert("请检查网络连接");
@@ -719,7 +720,7 @@
                 remove_permission: function (row) {
                     var that = this;
                     console.log('取消打款id', row.id)
-                    that.$alert('是否添加打款权限？', '提示', {
+                    that.$alert('是否取消打款权限？', '温馨提示', {
                         confirmButtonText: '确定',
                         callback: function (action) {
                             if (action == 'confirm') {
@@ -745,6 +746,7 @@
                                                 message: ret.res_msg
                                             })
                                         }
+                                        that.getDataList();
                                     },
                                     error: function () {
                                         alert("请检查网络连接");
@@ -758,7 +760,7 @@
             computed: {
                 searchVal: function () {
                     var that = this;
-                    return '&join_date_0=' + that.s_time0 + '&join_date_1=' + that.e_time0 + '&mobile=' + that.mobile + '&qq_number=' + that.qq_number + '&qq_name=' + that.qq_name + '&level=' + that.select + '&is_active=' + that.blackList;
+                    return '&is_channel='+ that.is_channel +'&join_date_0=' + that.s_time0 + '&join_date_1=' + that.e_time0 + '&mobile=' + that.mobile + '&qq_number=' + that.qq_number + '&qq_name=' + that.qq_name + '&level=' + that.select + '&is_active=' + that.blackList;
                 }
             }
         })

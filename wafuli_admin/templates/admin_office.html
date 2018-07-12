@@ -48,6 +48,10 @@
         .el-header {
             margin-top: 0;
         }
+
+        .operate {
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -253,20 +257,20 @@
                         </el-table-column>
                         <el-table-column label="补差" :key='Math.random()' v-if="deal_state === '0'">
                             <template slot-scope="scope">
-                                <a>补差</a>
+                                <a class="operate" @click='balance'>补差</a>
                             </template>
                         </el-table-column>
                         <el-table-column label="操作" :key='Math.random()' v-if="deal_state === '1'">
                             <template slot-scope="scope">
-                                <a @click='back_amount(scope.row)'>返现</a>|
-                                <a>拒绝</a>|
-                                <a>异常</a>
+                                <a class="operate" @click='back_amount(scope.row)'>同意</a>|
+                                <a class="operate" @click='refuse(scope.row)'>拒绝</a>|
+                                <a class="operate" @click='unusual(scope.row)'>异常</a>
                             </template>
                         </el-table-column>
                         <el-table-column label="操作" :key='Math.random()' v-if="deal_state === '3'">
                             <template slot-scope="scope">
-                                <a>返现</a>|
-                                <a>拒绝</a>
+                                <a class="operate" @click='back_amount(scope.row)'>返现</a>|
+                                <a class="operate" @click='refuse(scope.row)'>拒绝</a>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -280,16 +284,55 @@
             </el-col>
         </el-row>
         <iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
+        <!-- 返现 -->
         <el-dialog title="返现提示" :visible.sync="back_amountBox">
-            <el-form-item label="添加现金">
-                <el-input v-model="addAmount" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="审核说明">
-                <el-input v-model="auditReason" auto-complete="off"></el-input>
-            </el-form-item>
+            <el-form :model="form">
+                <el-form-item label="添加现金">
+                    <el-input v-model="form.addAmount" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="审核说明">
+                    <el-input v-model="form.auditReason" placeholder="选填" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="back_amountBox = false">取 消</el-button>
                 <el-button type="primary" @click="back_amountSend">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 拒绝 -->
+        <el-dialog title="拒绝提示" :visible.sync="refuse_box">
+            <el-form :model="form">
+                <el-form-item label="请输入拒绝原因">
+                    <el-input v-model="form.refuseReason" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="refuse_box = false">取 消</el-button>
+                <el-button type="primary" @click="refuse_Send">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 异常 -->
+        <el-dialog title="异常提示" :visible.sync="unusual_box">
+            <el-form :model="form">
+                <el-form-item label="请输入异常原因">
+                    <el-input v-model="form.unusualReason" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="unusual_box = false">取 消</el-button>
+                <el-button type="primary" @click="unusual_Send">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 补差价 -->
+        <el-dialog title="补差价" :visible.sync="balance_box">
+            <el-form :model="form">
+                <el-form-item label="请填写补差价金额">
+                    <el-input v-model="form.balance_amount" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="balance_box = false">取 消</el-button>
+                <el-button type="primary" @click="balance_Send">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -311,9 +354,18 @@
             submit_moblie: '',
             deal_state: '',
             invest_type: '',
-            auditReason: '',
-            addAmount: '',
+            form: {
+                unusualReason: '',
+                balance_amount: '',
+                refuseReason: '',
+                addAmount: '',
+                auditReason: '',
+            },
+            dataId: '',
             back_amountBox: false,
+            unusual_box: false,
+            refuse_box: false,
+            balance_box: false,
             activeNav: '3-1',
             // state: '',
             rowStyle: {
@@ -337,7 +389,7 @@
                 var that = this;
                 $.ajax({
                     type: "get",
-                    url: '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&is_official=true&category=official',
+                    url: '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&is_official=true&category=official' + that.searchVal,
                     async: true,
                     success: function (res) {
                         console.log(res);
@@ -356,24 +408,25 @@
             search_data: function () {
                 var that = this;
                 console.log(that.searchVal)
-                var newUrl = '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&is_official=true&category=official' + that.searchVal
+                that.currentPage = 1;
+                that.getDataList();
                 console.log('搜索')
-                $.ajax({
-                    type: "get",
-                    url: newUrl,
-                    async: true,
-                    success: function (res) {
-                        console.log(res);
-                        if (res.code == 0) {
-                            app.planTableData = res;
-                        } else {
-                            that.$notify.error({
-                                title: '错误',
-                                message: res.detail
-                            });
-                        }
-                    }
-                });
+                // $.ajax({
+                //     type: "get",
+                //     url: newUrl,
+                //     async: true,
+                //     success: function (res) {
+                //         console.log(res);
+                //         if (res.code == 0) {
+                //             app.planTableData = res;
+                //         } else {
+                //             that.$notify.error({
+                //                 title: '错误',
+                //                 message: res.detail
+                //             });
+                //         }
+                //     }
+                // });
             },
             category: function (val) {
                 var that = this;
@@ -490,11 +543,190 @@
                 });
             },
             //返现 
-            back_amount: function (row) {  
-                console.log('show')
+            back_amount: function (row) {
+                var that = this;
+                that.dataId = row.id;
+                that.back_amountBox = true;
             },
-            back_amountSend:function(){
+            back_amountSend: function () {
+                var that = this;
                 console.log('send Ajax')
+                if (!that.form.addAmount) {
+                    that.$notify({
+                        title: '提示',
+                        message: '添加现金不能为空'
+                    })
+                    return false;
+                }
+                $.ajax({
+                    url: "{%url 'admin_invest' %}",
+                    dataType: "json",
+                    type: "POST",
+                    async: false,
+                    data: {
+                        'id': row.id,
+                        'cash': that.form.addAmount,
+                        'reason': that.form.auditReason,
+                        'type': 1,
+                    },
+                    success: function (ret) {
+                        that.back_amountBox = false;
+                        that.getDataList();
+                        if (ret.code == 0) {
+                            that.$notify({
+                                title: '提示',
+                                message: '审核完成，通过'
+                            })
+                        } else if (ret.code == -1) {
+                            that.$notify({
+                                title: '提示',
+                                message: '该页面已过期，请重新登录！'
+                            })
+                            window.location.href = ret.url;
+                        } else {
+                            that.$notify({
+                                title: '提示',
+                                message: ret.res_msg
+                            })
+                        }
+                    },
+                    error: function () {
+                        alert("请检查网络连接");
+                    }
+                });
+            },
+            refuse: function (row) {
+                var that = this;
+                that.dataId = row.id;
+                that.refuse_box = true;
+            },
+            refuse_Send: function () {
+                if (!that.form.refuseReason) {
+                    that.$notify({
+                        title: '提示',
+                        message: '请输入拒绝原因'
+                    })
+                    return false;
+                }
+                $.ajax({
+                    url: "{%url 'admin_invest' %}",
+                    dataType: "json",
+                    type: "POST",
+                    async: false,
+                    data: {
+                        'id': that.dataId,
+                        'reason': that.form.refuseReason,
+                        'type': 2,
+                    },
+                    success: function (ret) {
+                        that.refuse_box = false;
+                        that.getDataList();
+                        if (ret.code == 0) {
+                            that.$notify({
+                                title: '提示',
+                                message: '审核完成，拒绝'
+                            })
+                        } else if (ret.code == -1) {
+                            alert("该页面已过期，请重新登录！");
+                            window.location.href = ret.url;
+                        } else {
+                            that.$notify({
+                                title: '提示',
+                                message: ret.res_msg
+                            })
+                        }
+                    },
+                    error: function () {
+                        alert("请检查网络连接");
+                    }
+                });
+            },
+            //未审核异常
+            unusual: function (row) {
+                var that = this;
+                that.dataId = row.id;
+                that.unusual_box = true;
+            },
+            unusual_Send: function () {
+                var that = this;
+                if (!that.form.unusualReason) {
+                    that.$notify({
+                        title: '提示',
+                        message: '异常理由不能为空'
+                    });
+                    return false;
+                }
+                $.ajax({
+                    url: "{%url 'admin_invest' %}",
+                    dataType: "json",
+                    type: "POST",
+                    async: false,
+                    data: {
+                        'id': that.dataId,
+                        'reason': that.form.unusualReason,
+                        'type': 3,
+                    },
+                    success: function (ret) {
+                        that.unusual_box = false;
+                        that.getDataList();
+                        if (ret.code == 0) {
+                            that.$notify({
+                                title: '提示',
+                                message: '审核完成，异常'
+                            });
+                        } else if (ret.code == -1) {
+                            alert("该页面已过期，请重新登录！");
+                            window.location.href = ret.url;
+                        } else {
+                            alert(ret.res_msg);
+                        }
+                    },
+                    error: function () {
+                        alert("请检查网络连接");
+                    }
+                });
+            },
+            //补差
+            balance: function (row) {
+                var that = this;
+                that.id = row.id;
+                that.balance_box = true;
+            },
+            balance_Send: function () {
+                var that = this;
+                if (!that.form.balance_amount) {
+                    that.$notify({
+                        title: '提示',
+                        message: '补差价金额不能为空'
+                    })
+                    return false;
+                }
+                $.ajax({
+                    url: "{%url 'admin_invest' %}",
+                    dataType: "json",
+                    type: "POST",
+                    async: false,
+                    data: {
+                        'id': that.id,
+                        'cash': that.form.balance_amount,
+                        'type': 4,
+                    },
+                    success: function (ret) {
+                        that.getDataList();
+                        that.balance_box = false;
+                        if (ret.code == 0) {
+                            that.$notify({
+                                title: '提示',
+                                message: '操作成功'
+                            })
+                        } else {
+                            alert(ret.res_msg);
+                        }
+                    },
+                    error: function () {
+                        alert("请检查网络连接");
+                    }
+                });
             }
         },
         computed: {

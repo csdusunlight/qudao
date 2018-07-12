@@ -311,8 +311,6 @@
             <div class="popup__detail">
                 <div class="popup__item">
                     <span class="popup__itemname">项目名称</span>
-                    <!--<select disabled="disabled" class="project" placeholder="选择项目">
-                    </select>-->
                     <input disabled="disabled" type="text" class="project" />
                 </div>
                 <div class="popup__item">
@@ -379,8 +377,6 @@
             <div class="popup__detail">
                 <div class="popup__item">
                     <span class="popup__itemname">项目名称</span>
-                    <!--<select disabled="disabled" class="project_02" placeholder="选择项目">
-                    </select>-->
                     <input disabled="disabled" type="text" class="project_02" />
                 </div>
                 <div class="popup__item">
@@ -963,7 +959,7 @@
         $(function(){
             $('.back-a5').toggleClass("active");
             
-            $(".RightCont").on("focus", ".date_picker", function() {
+            $(".Content").on("focus", ".date_picker", function() {
                 $('.date_selector').remove();
                 $(this).date_input();
             })
@@ -977,40 +973,6 @@
             } else {
             	
             }
-//          $.ajax({
-//              url:"/restapi/projects/?is_official=true&pageSize=999",
-//              type:"get",
-//              dataType: "json",
-//              success: function(ret) {
-//                  console.log(ret.results);
-//                  var option_html = '';
-//                  for (var i = 0; i < ret.results.length; i++) {
-//                      option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
-//                  }
-//                  $('.project').html(option_html);
-//              },
-//              error: function(jqXHR, textStatus, errorThrown) {
-//                  console.log(jqXHR.responseText);
-//                  console.log("数据错误is_official=true");
-//              }
-//          });
-//          $.ajax({
-//              url:"/restapi/projects/?is_official=false&pageSize=999",
-//              type:"get",
-//              dataType: "json",
-//              success: function(ret) {
-//                  console.log(ret.results);
-//                  var option_html = '';
-//                  for (var i = 0; i < ret.results.length; i++) {
-//                      option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
-//                  }
-//                  $('.project_02').html(option_html);
-//              },
-//              error: function(jqXHR, textStatus, errorThrown) {
-//                  console.log(jqXHR.responseText);
-//                  console.log("数据错误is_official=false");
-//              }
-//          });
             
 //          官方数据
             var state_1 = '';

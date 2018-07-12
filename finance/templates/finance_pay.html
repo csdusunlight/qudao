@@ -451,8 +451,8 @@
                           success: function(res) {
                             if(res.code == 0) {
                               that.$notify({
-                                title: '操作成功',
-                                message: '成功数量：' + res.suc_num + '，失败数量：' + res.fail_num,
+                                title: '打款中，请于1分钟后刷新查看转账状态',
+                                message: '提交成功数量：' + res.suc_num + '，不合法数量：' + res.fail_num,
                                 type: 'success'
                               });
                               app.getDataList();

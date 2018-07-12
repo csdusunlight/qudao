@@ -1,5 +1,8 @@
 #coding:utf-8
+from django.core.cache import cache
 from django.shortcuts import render
+
+from finance.tasks import async_batch_transfer_task
 from public.tools import has_permission, has_post_permission
 from wafuli.models import InvestLog
 from django.http.response import JsonResponse, HttpResponse
@@ -57,21 +60,26 @@ def submit_transfer(request):
     id_list = choices.split(',')
     investlogs = InvestLog.objects.filter(id__in=id_list)
     statis = investlogs.aggregate(total=Sum('return_amount'))
-    if statis['total'] > user.balance:
-        return JsonResponse({'code':2, 'detail':u'您的账户余额不足（申请打款：%s元，您的余额：%s元）'\
-                 % (str(statis['total']), str(user.balance))})
-    suc_num = 0
-    fail_num = 0
-    for investlog in investlogs:
-        if investlog.return_amount > 0 and investlog.audit_state == '0' and \
-               investlog.zhifubao and investlog.zhifubao_name and investlog.pay_state == '1':
-            with transaction.atomic():
-                charge_money(user, '1', investlog.return_amount, reason=u'给客户打款', auditlog=investlog)
-                investlog.pay_state = '2'
-                investlog.save(update_fields=['pay_state'])
-            suc_num += 1
-        else:
-            fail_num += 1
+    sub_suc_list = []
+    with cache.lock('submit_transfer_%s' % user.mobile, timeout=5):
+        user.refresh_from_db()
+        if statis['total'] > user.balance:
+            return JsonResponse({'code':2, 'detail':u'您的账户余额不足（申请打款：%s元，您的余额：%s元）'\
+                     % (str(statis['total']), str(user.balance))})
+        suc_num = 0
+        fail_num = 0
+        for investlog in investlogs:
+            if investlog.return_amount > 0 and investlog.audit_state == '0' and \
+                   investlog.zhifubao and investlog.zhifubao_name and investlog.pay_state == '1':
+                with transaction.atomic():
+                    charge_money(user, '1', investlog.return_amount, reason=u'给客户打款', auditlog=investlog)
+                    investlog.pay_state = '2'
+                    investlog.save(update_fields=['pay_state'])
+                suc_num += 1
+                sub_suc_list.append(investlog)
+            else:
+                fail_num += 1
+    async_batch_transfer_task.delay(sub_suc_list)
     ret = {'code':0, 'suc_num':suc_num, 'fail_num':fail_num}
     return JsonResponse(ret)
 

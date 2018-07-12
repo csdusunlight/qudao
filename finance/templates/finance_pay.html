@@ -6,8 +6,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <meta name="renderer" content="webkit"> 
-    <title>Document</title>
+    <meta name="renderer" content="webkit">
+    <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+    <title>打款中心</title>
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" type="text/css" href="/static/css/new-common.css"/>
     <!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
@@ -453,8 +454,8 @@
                           success: function(res) {
                             if(res.code == 0) {
                               that.$notify({
-                                title: '操作成功',
-                                message: '成功数量：' + res.suc_num + '，失败数量：' + res.fail_num,
+                                title: '打款中，请于1分钟后刷新查看转账状态',
+                                message: '提交成功数量：' + res.suc_num + '，不合法数量：' + res.fail_num,
                                 type: 'success'
                               });
                               app.getDataList();

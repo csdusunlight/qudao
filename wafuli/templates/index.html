@@ -119,7 +119,7 @@
                         <!--{% for adv in ad_list %}
                             <li onclick="location='{{adv.url}}'" style="background:url({{adv.pic.url}}) 50% 0 no-repeat;cursor:pointer;"></li>
                         {%endfor%}-->
-                        <li style="background:url('/static/images/bg-big-1.jpg') center center no-repeat;cursor:pointer;"></li>
+                        <li style="background:url('/static/images/bg-big-1.jpg') center center fixed no-repeat;cursor:pointer;"></li>
                     </ul>
                 </div>
             </div>
@@ -152,56 +152,83 @@
             在福利联盟稳赚的推广用户
           </p>
         	<ul class="intro__detail">
-        		<li class="intro__detail-item">
+        		<!--<li class="intro__detail-item">
         		  <p class="intro__detail-h">社群推广</p>
         		  <p class="intro__detail-t">拥有QQ、微信群的社群领袖</p>
+        		</li>-->
+        		<li class="intro__detail-item">
+        		  <a>
+                <div class="intro__detail-content">
+                  <p class="intro__detail-h">社群推广</p>
+                  <p class="intro__detail-t">拥有QQ、微信群的社群领袖</p>
+                  <div class="overlay-bottom"></div>
+                  <div class="overlay-left"></div>
+                  <div class="overlay-top"></div>
+                  <div class="overlay-right"></div>
+                </div>
+              </a>
         		</li>
         		<li class="intro__detail-item">
-              <p class="intro__detail-h">媒体机构</p>
-              <p class="intro__detail-t">门户网站、流量站、自媒体、垂直平台等</p>
+              <a>
+                <div class="intro__detail-content">
+                  <p class="intro__detail-h">媒体机构</p>
+                  <p class="intro__detail-t">门户网站、流量站、自媒体、垂直平台</p>
+                  <div class="overlay-bottom"></div>
+                  <div class="overlay-left"></div>
+                  <div class="overlay-top"></div>
+                  <div class="overlay-right"></div>
+                </div>
+              </a>
             </li>
             <li class="intro__detail-item">
-              <p class="intro__detail-h">线下推广</p>
-              <p class="intro__detail-t">线下推荐理财投资的理财师</p>
+              <a>
+                <div class="intro__detail-content">
+                  <p class="intro__detail-h">线下推广</p>
+                  <p class="intro__detail-t">线下推荐理财投资的理财师</p>
+                  <div class="overlay-bottom"></div>
+                  <div class="overlay-left"></div>
+                  <div class="overlay-top"></div>
+                  <div class="overlay-right"></div>
+                </div>
+              </a>
             </li>
         	</ul>
         </div>
         <!--main-->
         <div class="goodness-box">
-          <h2 class="goodness__title">平台三大核心优势</h2>
-          <ul class="wfl-wrap goodness">
-          	<li class="goodness__item">
-          	  <div class="goodness__item-content">
-          	    <h4 class="goodness__item-title">价格优势</h4>
-          	    <p class="goodness__item-txt">一手资源，优势价格</p>
-          	  </div>
-          	</li>
-          	<li class="goodness__item">
-              <div class="goodness__item-content">
-                <h4 class="goodness__item-title">品牌优势</h4>
-                <p class="goodness__item-txt">三年深耕，行业领先</p>
-              </div>
-            </li>
-            <li class="goodness__item">
-              <div class="goodness__item-content">
-                <h4 class="goodness__item-title">风控优势</h4>
-                <p class="goodness__item-txt">多维度审核，重重把关</p>
-              </div>
-            </li>
-          </ul>
+          <div class="bg-mask">
+            <h2 class="goodness__title">平台三大核心优势</h2>
+            <ul class="wfl-wrap goodness">
+            	<li class="goodness__item">
+            	    <h4 class="goodness__item-title">价格优势</h4>
+            	    <p class="goodness__item-txt">一手资源，优势价格</p>
+            	</li>
+            	<li class="goodness__item">
+                  <h4 class="goodness__item-title">品牌优势</h4>
+                  <p class="goodness__item-txt">三年深耕，行业领先</p>
+              </li>
+              <li class="goodness__item">
+                  <h4 class="goodness__item-title">风控优势</h4>
+                  <p class="goodness__item-txt">多维度审核，重重把关</p>
+              </li>
+            </ul>
+          </div>
         </div>
         <!--main---end-->
         
         <!--商家展示-->
         <div class="wfl-wrap">
             <div class="wflbox">
-                <h2 class="tool__title">优质合作平台</h1>
+                <h2 class="tool__title">创新、高效、实用的配套产品</h1>
                 <div class="tool-box">
                     <ul class="tool">
                       <li class="tool__item">
                         <span class="tool__icon"></span>
                         <h4 class="tool__name">番薯主页</h4>
                         <p class="tool__txt">快速搭建个人网站<br />免费打造专属品牌</p>
+                        <div class="bg-mask">
+                          查看更多
+                        </div>
                       </li>
                       <li class="tool__item">
                         <span class="tool__icon"></span>
@@ -225,7 +252,7 @@
         <!--商家展示---end-->
         <!--文案-->
         <div class="wenan-box">
-          <div class="wenan-mask">
+          <div class="bg-mask">
             <p class="wenan">一个人走，可以走的很快，和我们一起走，会走的更远！</p>
           </div>
         </div>

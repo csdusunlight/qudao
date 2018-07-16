@@ -1,8 +1,36 @@
 h1,h2,h3,h4,h5,h6 {line-height: 1;}
+.flexslider {
+  height: 538px;
+}
+.slides li {
+  height: 538px;
+}
+.wfl-wrap {
+  margin-top: 0;
+}
+.headermain-box {
+  position: absolute;
+  width: 100%;
+  z-index: 100;
+  background-color: transparent;
+  border-bottom: none;
+}
+.headermain {
+  background-color: transparent;
+}
+.nav__item.active,
+.nav__item:hover {
+  background-color: transparent;
+  border-bottom: 2px solid #fff;
+}
+.nav__item {
+  border-radius: 0;
+  color: #fff;
+}
 /*banner-container*/
 .banner-container {
-    position: relative;
-	height: 400px;
+  position: relative;
+	height: 538px;
 }
 
 .banner {
@@ -12,44 +40,70 @@ h1,h2,h3,h4,h5,h6 {line-height: 1;}
 }
 .banner-mask {
     position: absolute;
-    top: 60px;
-    left: 325px;
-    padding-top: 100px;
-    width: 600px;
-    height: 260px;
-    background-color: rgba(0,0,0,0.3);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.5);
     font-size: 18px;
     color: #fff;
     text-align: center;
     z-index: 10;
 }
-
+.banner-txt {
+  margin-top: 220px;
+}
+.banner__nav-container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+.banner__navbox {
+  margin: 0 auto;
+  font-size: 0;
+}
+.banner__nav {
+  display: inline-block;
+}
+.banner__nav-txt {
+  display: block;
+  margin: 0 1px;
+  width: 175px;
+  height: 53px;
+  line-height: 53px;
+  font-size: 16px;
+  color: #fff;
+  background-color: rgba(0,0,0,0.3);
+  border-radius: 10px 10px 0 0;
+}
 /*banner-container--end*/
 
 .intro {
-    margin-top: 0;
-    height: 150px;
-    background-color: #fff;
-    font-size: 0;
+  /*display: flex;
+  justify-content: space-between;*/
+  margin-top: 0;
+  /*height: 150px;*/
+  background-color: #fff;
+  font-size: 0;
 }
 .intro__item {
     display: inline-block;
-    padding-left: 150px;
+    width: 120px;
+    /*padding-left: 150px;*/
+    margin-right: 256px;
     padding-top: 44px;
-    margin-right: 110px;
-    width: 230px;
     height: 100%;
     font-size: 16px;
-    line-height: 32px;
-    color: #91C11D;
-    background-position: 16px center;
+    line-height: 50px;
+    text-align: center;
+    /*background-position: 16px center;
     background-size: 120px 120px;
-    background-repeat: no-repeat;
+    background-repeat: no-repeat;*/
 }
 .intro__item:last-child {
     margin-right: 0;
 }
-.intro__item.m-01 {
+/*..intro__item.m-01 {
     background-image: url(../images/index-icon-1.png);
 }
 .intro__item.m-02 {
@@ -60,80 +114,159 @@ h1,h2,h3,h4,h5,h6 {line-height: 1;}
 }
 .intro__item.m-04 {
     background-image: url(../images/index-icon-4.png);
+}*/
+.intro-num {
+  font-size: 30px;
+  color: #fb8200;
 }
-
-
-/*main*/
-.wflbox.m-total {
-    position: relative;
-    width: 285px;
+.intro-unit {
+  font-size: 20px;
+  color: #fb8200;
 }
-.wflbox.m-total:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 2px;
-    height: 100%;
-    background: linear-gradient(#fff 20%,  #91c11d 60%,#fff);
+.intro__txt {
+  margin-top: 50px;
+  line-height: 50px;
+  text-align: center;
+  font-size: 18px;
 }
-.wflbox.m-today {
-    width: 965px;
+.intro__txt-s {
+  font-size: 30px;
+  color: #222;
 }
-.total__item {
-    margin-left: 22px;
-    font-size: 16px;
-    line-height: 40px;
+.intro__detail {
+  font-size: 0;
 }
-.total__item-num {
-    display: inline-block;
-    width: 100px;
-    text-align: right;
+.intro__detail-item {
+  width: 357px;
+  height: 148px;
+  font-size: 18px;
+  display: inline-block;
 }
-.wflbox.m-today {
-    height: 204px;
+/*goodness*/
+.goodness-box {
+  width: 100%;
+  height: 484px;
+  background: rgba(0,0,0,0.3);
+  font-size: 0;
 }
-.today {
-    margin-top: 12px;
-    font-size: 0;
+.goodness__title {
+  font-size: 30px;
+  line-height: 176px;
+  color: #fff;
+  text-align: center;
 }
-.today__item {
-    display: inline-block;
-    width: 33.33%;
+.goodness {
+  margin-top: 20px;
 }
-.today__img {
-    float: left;
-    margin: 0 12px 0 24px;
-    width: 120px;
-    height: 50px;
-    /*border: 1px solid #d4d4d4;*/
-    border-top: 40px solid transparent;
-    border-bottom: 40px solid transparent;
+.goodness__item {
+  position: relative;
+  display: inline-block;
+  width: 312px;
+  height: 192px;
+  margin-right: 157px;
+  border: 1px solid rgba(255,255,255,0.7);
+  border-radius: 20px;
+  text-align: center;
+  color: #fff;
+  transition: all 0.4s ease;
 }
-.today__title {
-    margin: 30px 0 22px;
+.goodness__item:last-child {
+  margin-right: 0;
 }
-/*main---end*/
+.goodness__item:hover {
+  border: 1px solid rgba(255,255,255,1);
+}
+.goodness__item:before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 0;
+  width: 45px;
+  height: 5px;
+  opacity: 0;
+  background-color: #fff;
+  transition: all 0.4s ease;
+}
+.goodness__item:after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  opacity: 0;
+  width: 45px;
+  height: 5px;
+  background-color: #fff;
+  transition: all 0.4s ease;
+}
+.goodness__item:hover:before {
+  left: 45px;
+  opacity: 1;
+}
+.goodness__item:hover:after {
+  left: 45px;
+  opacity: 1;
+}
+.goodness__item-title {
+  color: #fff;
+  font-size: 18px;
+  line-height: 110px;
+}
+/*goodness---end*/
 
 /*商家展示*/
-.wflbox__title.m-business {
-    font-size: 20px;
-    line-height: 64px;
+.tool__title {
+  font-size: 30px;
+  line-height: 250px;
+  text-align: center;
 }
-.business {
-    font-size: 0;
+.tool {
+  font-size: 0;
+  text-align: center;
 }
-.business__item {
-    display: inline-block;
-    margin-top: 24px;
-    margin-left: 76px;
-    width: 120px;
-    height: 50px;
+.tool__item {
+  display: inline-block;
+  margin-right: 42px;
+  width: 280px;
+  height: 370px;
+  border-radius: 20px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.2);
 }
-.business__img {
-    display: block;
-    width: 100%;
-    height: 100%;
+.tool__item:last-child {
+  margin-right: 0;
+}
+.tool__icon {
+  display: block;
+  margin: 140px auto 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: red;
+}
+.tool__name {
+  font-size: 18px;
+  color: #222;
 }
 /*商家展示---end*/
-
+.wenan-box {
+  position: relative;
+  height: 400px;
+  background: url(../images/bg-big-3.jpg) center center fixed no-repeat;
+}
+.wenan-mask {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0,0,0,0.5);
+}
+.wenan {
+  margin: 0 auto;
+  width: 1250px;
+  height: 400px;
+  font-size: 30px;
+  color: #fff;
+  line-height: 400px;
+  text-align: center;
+  background: url(../images/bg-wenan.png) 850px 280px no-repeat;
+}

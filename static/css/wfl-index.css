@@ -10,10 +10,24 @@ h6 {
   line-height: 1;
 }
 
+@font-face {
+ font-family: 'numfont';
+ src: url('../fonts/DIN Medium.ttf') format('truetype');
+}  
+.bg-mask {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+}
 .flexslider {
   height: 538px;
 }
-
+.flex-direction-nav {
+  display: none;
+}
 .slides li {
   height: 538px;
 }
@@ -21,12 +35,27 @@ h6 {
 .wfl-wrap {
   margin-top: 0;
 }
+.header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 100;
+}
+.bgc-333 {
+  background-color: rgba(0,0,0,0.6);
+}
+.headertop {
+  background-color: transparent;
+}
 
+.headermain-box {
+  background-color: rgba(0,0,0,0.7);
+}
 .headermain-box {
   position: absolute;
   width: 100%;
   z-index: 100;
-  background-color: transparent;
+  /*background-color: transparent;*/
   border-bottom: none;
 }
 
@@ -107,17 +136,18 @@ h6 {
   color: #fff;
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 10px 10px 0 0;
+  transition: all 0.4s ease;
 }
-
+.banner__nav-txt:hover {
+  background: linear-gradient(rgba(255,255,255,0.6),#fff);
+  color: #fb8200;
+}
 
 /*banner-container--end*/
 
 .intro {
-  /*display: flex;
-  justify-content: space-between;*/
   margin-top: 0;
   padding-bottom: 70px;
-  /*height: 150px;*/
   background-color: #fff;
   font-size: 0;
 }
@@ -127,16 +157,12 @@ h6 {
 .intro__item {
   display: inline-block;
   width: 120px;
-  /*padding-left: 150px;*/
   margin-right: 256px;
   padding-top: 44px;
   height: 100%;
   font-size: 16px;
   line-height: 50px;
   text-align: center;
-  /*background-position: 16px center;
-    background-size: 120px 120px;
-    background-repeat: no-repeat;*/
 }
 
 .intro__item:last-child {
@@ -162,22 +188,10 @@ h6 {
   font-size: 16px;
 }
 
-/*..intro__item.m-01 {
-    background-image: url(../images/index-icon-1.png);
-}
-.intro__item.m-02 {
-    background-image: url(../images/index-icon-2.png);
-}
-.intro__item.m-03 {
-    background-image: url(../images/index-icon-3.png);
-}
-.intro__item.m-04 {
-    background-image: url(../images/index-icon-4.png);
-}*/
-
 .intro-num {
-  font-size: 30px;
+  font-size: 34px;
   color: #fb8200;
+  font-family: numfont;
 }
 
 .intro-unit {
@@ -215,7 +229,6 @@ h6 {
   margin-right: 0;
 }
 
-
 /*goodness*/
 
 .goodness-box {
@@ -224,15 +237,6 @@ h6 {
   height: 484px;
   background: url(../images/bg-big-2.jpg) center center fixed no-repeat;
   font-size: 0;
-}
-
-.bg-mask {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .goodness__title {
@@ -252,6 +256,7 @@ h6 {
   width: 312px;
   height: 192px;
   margin-right: 157px;
+  padding-left: 40px;
   border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: 20px;
   text-align: center;
@@ -259,6 +264,7 @@ h6 {
   transition: all 0.4s ease;
   background-position: 20px center;
   background-repeat: no-repeat;
+  cursor: pointer;
 }
 .goodness__item:nth-child(1) {
   background-image: url(../images/icon-goodness-1.png);
@@ -312,14 +318,12 @@ h6 {
 }
 
 .goodness__item-title {
+  margin: 50px 0 40px;
   color: #fff;
   font-size: 18px;
-  line-height: 110px;
 }
 
-
 /*goodness---end*/
-
 
 /*商家展示*/
 
@@ -412,15 +416,6 @@ h6 {
   position: relative;
   height: 400px;
   background: url(../images/bg-big-3.jpg) center center fixed no-repeat;
-}
-
-.bg-mask {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .wenan {

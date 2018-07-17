@@ -43,8 +43,14 @@ h6 {
 .nav__item {
   border-radius: 0;
   color: #fff;
+  width: 72px;
+  padding: 0;
+  margin-left: 30px;
+  text-align: center;
 }
-
+.toggle_box {
+  left: 24px;
+}
 
 /*banner-container*/
 
@@ -180,7 +186,7 @@ h6 {
 }
 
 .intro__txt {
-  margin-top: 50px;
+  margin-top: 90px;
   line-height: 50px;
   text-align: center;
   font-size: 18px;
@@ -427,8 +433,25 @@ h6 {
   text-align: center;
   background: url(../images/bg-wenan.png) 850px 280px no-repeat;
 }
-
-
+/*cooperate*/
+.cooperate__title {
+  margin: 90px 0 64px;
+  font-size: 30px;
+  color: #222;
+  text-align: center;
+}
+.cooperate__logo-box {
+  padding: 0 13px;
+  font-size: 0;
+}
+.cooperate__logo {
+  display: inline-block;
+  margin: 0 10px 33px;
+  width: 184px;
+  height: 64px;
+  border: 1px solid #c9c9c9;
+}
+/*cooperate-----end*/
 /*动画部分*/
 .intro__detail-content {
   position: relative;

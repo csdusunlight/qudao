@@ -288,6 +288,10 @@ input[type="text"],select {
 	opacity: 1;
 	visibility: visible;
 }
+.toggle_box:hover + .nav__item {
+  color: #fff;
+  background-color: #91c11d;
+}
 .toggle_box_top{
 	width: 14px;
 	height: 14px;

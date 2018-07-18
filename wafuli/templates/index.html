@@ -91,7 +91,6 @@
                             <a class="nav__item" href="{% url 'fanshu' %}">番薯</a>
                         </li>
                 <li class="nav__itembox subnav-show d-ib box" style="position: relative;">
-                  <a class="nav__item">帮助</a>
                   <ul class="toggle_box" id="toggle_box">
                     <div class="toggle_box_top"></div>
                     <li>
@@ -101,6 +100,7 @@
                       <a href="{% url 'helpCenter' %}">常见问题</a>
                     </li>
                   </ul>
+                  <a class="nav__item">帮助</a>
                 </li>
                 <li class="nav__itembox d-ib">
                   <a class="nav__item" href="{% url 'cooperate' %}">合作共赢</a>
@@ -248,7 +248,7 @@
                         <h4 class="tool__name">开放平台</h4>
                         <p class="tool__txt">免费提供API技术对接<br />实现快速开发</p>
                         <div class="bg-mask">
-                          <a href="#">了解更多</a>
+                          <a>敬请期待</a>
                         </div>
                       </li>
                     </ul>
@@ -267,18 +267,9 @@
         <div class="wfl-wrap cooperate wow fadeInDown">
           <h2 class="cooperate__title">优质合作平台</h2>
           <ul class="cooperate__logo-box">
-          	<li class="cooperate__logo"><img class="cooperate__logo-img" src=""/></li>
-          	<li class="cooperate__logo"><img class="cooperate__logo-img" src=""/></li>
-          	<li class="cooperate__logo"><img class="cooperate__logo-img" src=""/></li>
-          	<li class="cooperate__logo"><img class="cooperate__logo-img" src=""/></li>
-          	<li class="cooperate__logo"><img class="cooperate__logo-img" src=""/></li>
-          	<li class="cooperate__logo"><img class="cooperate__logo-img" src=""/></li>
-          	<li class="cooperate__logo"><img class="cooperate__logo-img" src=""/></li>
-          	<li class="cooperate__logo"><img class="cooperate__logo-img" src=""/></li>
-          	<li class="cooperate__logo"><img class="cooperate__logo-img" src=""/></li>
-          	<li class="cooperate__logo"><img class="cooperate__logo-img" src=""/></li>
-          	<li class="cooperate__logo"><img class="cooperate__logo-img" src=""/></li>
-          	<li class="cooperate__logo"><img class="cooperate__logo-img" src=""/></li>
+            {% for item in platforms %}
+                <li class="cooperate__logo"><img class="cooperate__logo-img" src="{{item.logo.url}}"/></li>
+            {%endfor%}
           </ul>
         </div>
         <!--cooperate---end-->

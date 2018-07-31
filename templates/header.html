@@ -5,7 +5,6 @@
 	<div class="headermain-box bgc-fff">
 		<div class="headermain clearfix">
 			<a href="{% url 'index' %}"><img src="{% static 'images/qudao-logo.png' %}" alt="福利联盟logo" class="logo l" /></a>
-			<a href="https://fuliunion.mikecrm.com/bd4sR5a" target="_blank"><img style="margin-top: 5px;margin-left: 10px;" src="{% static 'images/act-enter.gif' %}" alt="活动入口图片" class="l" /></a>
 			<ul class="nav nav-layout l fs-0">
 				<li class="nav__itembox d-ib">
 					<a class="nav__item" href="/">首页</a>
@@ -14,22 +13,22 @@
 					<a class="nav__item" href="{% url 'project_all' %}">项目库</a>
 				</li>
 				<li class="nav__itembox subnav-show d-ib">
-                    <a class="nav__item" href="{% url 'fanshu' %}">番薯</a>
-                </li>
-				<li class="nav__itembox subnav-show d-ib box" style="position: relative;">
+            <a class="nav__item" href="{% url 'helpCenter' %}">帮助中心</a>
+        </li>
+				<!--<li class="nav__itembox subnav-show d-ib box" style="position: relative;">
 					<a class="nav__item">帮助</a>
 					<ul class="toggle_box" id="toggle_box">
 						<div class="toggle_box_top"></div>
 						<li>
-							<a href="{% url 'user_guide'  %}">新人指南</a>
+							<a href="">新人指南</a>
 						</li>
 						<li>
-							<a href="{% url 'helpCenter' %}">常见问题</a>
+							<a href="">常见问题</a>
 						</li>
 					</ul>
-				</li>
+				</li>-->
 				<li class="nav__itembox d-ib">
-					<a class="nav__item" href="{% url 'cooperate' %}">合作共赢</a>
+					<a class="nav__item" href="{% url 'intro_about_us' %}">关于我们</a>
 				</li>
 				<li class="nav__itembox d-ib">
 					<a class="nav__item" href="{% url 'account_index' %}">个人中心</a>

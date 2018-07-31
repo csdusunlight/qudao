@@ -1,0 +1,106 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>福利联盟-行业领先的P2P渠道分发机构</title>
+        <meta name="keywords" content="福利联盟，p2p理财平台，p2p投资理财，p2p投资理财平台，小额投资理财，个人投资理财，互联网理财产品，互联网理财平台，互联网金融平台，互联网金融产品，网络理财产品，网赚" />
+        <meta name="description" content="福利联盟是行业领先的P2P渠道分发机构。" />
+        <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/wfl-common.css?v-3"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/common-intro.css"/>
+        <style>
+          .settle-tool-top {
+            text-align: center;
+          }
+          .st-top-title {
+            margin: 75px 0 110px;
+            font-size: 30px;
+          }
+          .st-box {
+            font-size: 0;
+          }
+          .st-item {
+            display: inline-block;
+          }
+          .st-item:nth-child(2) {
+            margin: 0 209px;
+          }
+          .st-item-txt {
+            line-height: 70px;
+          }
+        </style>
+    </head>
+    <body>
+        <!-- 头部 -->
+        {% include "header-new.html" %}
+        <!--banner-container-->
+        <div class="top-bg-img m-settle-tool">
+          <div class="bg-mask">
+            <div class="banner__content">
+              <div class="banner__title">结算工具：一键批量实时转帐</div>
+              <p class="banner__txt">批量导入，实时打款，效率翻10倍</p>
+              <ul class="banner__btn-box">
+                <li class="banner__btn"><a class="banner__btn-txt" href="">立即使用</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!--banner-container--end-->
+        <div class="settle-tool-top wfl-wrap">
+          <h2 class="st-top-title">传统推广结算的问题</h2>
+          <ul class="st-box">
+          	<li class="st-item">
+          	  <img class="st-item-img" src="/static/images/img-settle-tool-top-1.png" alt="" />
+          	  <p class="st-item-txt">手动转账易出错</p>
+          	</li>
+          	<li class="st-item">
+              <img class="st-item-img" src="/static/images/img-settle-tool-top-2.png" alt="" />
+              <p class="st-item-txt">数据多，统计麻烦</p>
+            </li>
+            <li class="st-item">
+              <img class="st-item-img" src="/static/images/img-settle-tool-top-3.png" alt="" />
+              <p class="st-item-txt">交单五分钟，统计一小时</p>
+            </li>
+          </ul>
+        </div>
+        <div class="guide-box wfl-wrap">
+          <h2 class="guide__title">高效结算，一键搞定</h2>
+          <div class="guide__item clearfix">
+            <img class="r" src="/static/images/img-settle-tool-1.png">
+            <div class="guide__detail l">
+                <h1 class="guide__itemtitle">交单记录同步更新</h1>
+                <p class="guide__txt">线上直接打款，更精准<br />交单记录智能筛选，更便捷</p>
+            </div>
+          </div>
+          <div class="guide__item clearfix">
+            <img class="l" src="/static/images/img-settle-tool-2.png">
+            <div class="guide__detail r">
+                <h1 class="guide__itemtitle">批量处理效率高</h1>
+                <p class="guide__txt">站外数据一键导入，批量转账<br />数据加密传输，安全有保障</p>
+            </div>
+          </div>
+          <div class="guide__item clearfix">
+            <img class="r" src="/static/images/img-settle-tool-3.png">
+            <div class="guide__detail l">
+                <h1 class="guide__itemtitle">一键打款，实时到帐</h1>
+                <p class="guide__txt">结算实时到帐，提升用户体验<br />让推广更有竞争力</p>
+            </div>
+          </div>
+          </div>
+          <div class="guide__bottom">
+            <h3 class="guide__bottom-title">在福利联盟，用1%的精力，完成100%的工作</h3>
+          </div>
+        </div>
+        {% include "footer.html" %}
+        {% include "outline.html" %}
+
+        <script src="/static/js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+            
+            });
+        </script>
+
+    </body>
+</html>

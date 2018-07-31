@@ -7,10 +7,11 @@
         <meta name="keywords" content="福利联盟，p2p理财平台，p2p投资理财，p2p投资理财平台，小额投资理财，个人投资理财，互联网理财产品，互联网理财平台，互联网金融平台，互联网金融产品，网络理财产品，网赚" />
         <meta name="description" content="福利联盟是行业领先的P2P渠道分发机构。" />
         <link href="/static/images/favicon.ico" rel="shortcut icon"/>
-        <link rel="stylesheet" type="text/css" href="/static/css/wfl-common.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/wfl-common.css?v-3"/>
         <link rel="stylesheet" type="text/css" href="/static/css/wfl-flesslider.css"/>
         <link rel="stylesheet" type="text/css" href="/static/css/wfl-index.css"/>
         <link rel="stylesheet" type="text/css" href="/static/css/animate.css"/>
+        <script src="/static/js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
         <style>
             .modal_hangbao_box{
                 width: 100%;
@@ -60,6 +61,15 @@
                 cursor: pointer;
             }
         </style>
+        <script>
+          var textarray=[];
+          function getText(n) {
+             if (textarray[n-1])
+               return textarray[n-1];
+             else
+               return n;
+          }
+        </script>
     </head>
     <body>
         <!-- 底部红包模态框 -->
@@ -74,57 +84,23 @@
         </div>
         {% endif %}-->
         <!-- 头部 -->
-        <div class="header">
-          {% include "pre-header.html" %}
-          <div class="headermain-box bgc-fff">
-            <div class="headermain clearfix">
-              <a href="{% url 'index' %}"><img src="{% static 'images/logo-new.png' %}" alt="福利联盟logo" class="logo l" /></a>
-              <!--<a href="https://fuliunion.mikecrm.com/bd4sR5a" target="_blank"><img style="margin-top: 5px;margin-left: 10px;" src="{% static 'images/act-enter.gif' %}" alt="活动入口图片" class="l" /></a>-->
-              <ul class="nav nav-layout l fs-0">
-                <li class="nav__itembox d-ib">
-                  <a class="nav__item" href="/">首页</a>
-                </li>
-                <li class="nav__itembox subnav-show d-ib">
-                  <a class="nav__item" href="{% url 'project_all' %}">项目库</a>
-                </li>
-                <li class="nav__itembox subnav-show d-ib">
-                            <a class="nav__item" href="{% url 'fanshu' %}">番薯</a>
-                        </li>
-                <li class="nav__itembox subnav-show d-ib box" style="position: relative;">
-                  <ul class="toggle_box" id="toggle_box">
-                    <div class="toggle_box_top"></div>
-                    <li>
-                      <a href="{% url 'user_guide'  %}">新人指南</a>
-                    </li>
-                    <li>
-                      <a href="{% url 'helpCenter' %}">常见问题</a>
-                    </li>
-                  </ul>
-                  <a class="nav__item">帮助</a>
-                </li>
-                <li class="nav__itembox d-ib">
-                  <a class="nav__item" href="{% url 'cooperate' %}">合作共赢</a>
-                </li>
-                <li class="nav__itembox d-ib">
-                  <a class="nav__item" href="{% url 'account_index' %}">个人中心</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        {% include "header-new.html" %}
+        
         <!--banner-container-->
         <div class="banner-container clearfix">
             <div class="banner l">
                 <div class="flexslider">
                     <ul class="slides">
-                        <!--{% for adv in ad_list %}
+                        {% for adv in ad_list %}
                             <li onclick="location='{{adv.url}}'" style="background:url({{adv.pic.url}}) 50% 0 no-repeat;cursor:pointer;"></li>
-                        {%endfor%}-->
-                        <li style="background:url('/static/images/bg-big-1.jpg') center center fixed no-repeat;cursor:pointer;"></li>
+                            <script>textarray.push("{{adv}}");</script>
+                        {%endfor%}
+                        <!--<li style="background:url('/static/images/bg-big-1.jpg') center center fixed no-repeat;cursor:pointer;"></li>-->
+                        <!--<li style="background:url('/static/images/bg-big-1.jpg') center center fixed no-repeat;cursor:pointer;"></li>-->
                     </ul>
                 </div>
             </div>
-            <div class="banner-mask">
+            <div style="display: none;" class="banner-mask">
               <div class="banner-txt">
                 <div style="font-size: 40px;">创新、变革引领理财推广2.0时代</div>
                 <p style="font-size: 35px; margin-top: 63px;">一站式服务体验</p>
@@ -132,8 +108,8 @@
               <div class="banner__nav-container">
                 <ul class="banner__navbox">
                 	<li class="banner__nav"><a class="banner__nav-txt" href="#">新手福利</a></li>
-                	<li class="banner__nav"><a class="banner__nav-txt" href="#">招商入住</a></li>
-                	<li class="banner__nav"><a class="banner__nav-txt" href="#">关于我们</a></li>
+                	<li class="banner__nav"><a class="banner__nav-txt" href="/intro_merchant/">招商入住</a></li>
+                	<li class="banner__nav"><a class="banner__nav-txt" href="/intro_about_us/">关于我们</a></li>
                 	<li class="banner__nav"><a class="banner__nav-txt" href="#">福利活动</a></li>
                 	<li class="banner__nav"><a class="banner__nav-txt" href="/account/register/">新手注册</a></li>
                 </ul>
@@ -224,7 +200,7 @@
                         <h4 class="tool__name">番薯主页</h4>
                         <p class="tool__txt">快速搭建个人网站<br />免费打造专属品牌</p>
                         <div class="bg-mask">
-                          <a href="#">了解更多</a>
+                          <a class="tool-bg-txt" target="_blank" href="/intro_fanshu_home/">了解更多>></a>
                         </div>
                       </li>
                       <li class="tool__item">
@@ -232,7 +208,7 @@
                         <h4 class="tool__name">结算工具</h4>
                         <p class="tool__txt">首创高效结算工具<br />一键批量实时转账</p>
                         <div class="bg-mask">
-                          <a href="#">了解更多</a>
+                          <a class="tool-bg-txt" target="_blank" href="/intro_settle_tool/">了解更多>></a>
                         </div>
                       </li>
                       <li class="tool__item">
@@ -240,7 +216,7 @@
                         <h4 class="tool__name">番薯文档</h4>
                         <p class="tool__txt">专为CPS打造的云文档<br />免费、便捷、更安全</p>
                         <div class="bg-mask">
-                          <a href="#">了解更多</a>
+                          <a class="tool-bg-txt" target="_blank" href="/intro_fanshu_doc/">了解更多>></a>
                         </div>
                       </li>
                       <li class="tool__item">
@@ -248,7 +224,7 @@
                         <h4 class="tool__name">开放平台</h4>
                         <p class="tool__txt">免费提供API技术对接<br />实现快速开发</p>
                         <div class="bg-mask">
-                          <a>敬请期待</a>
+                          <a class="tool-bg-txt">敬请期待...</a>
                         </div>
                       </li>
                     </ul>
@@ -274,9 +250,7 @@
         </div>
         <!--cooperate---end-->
         {% include "footer.html" %}
-        {% include "outline.html" %}
-
-        <script src="/static/js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+        
         <script src="/static/js/wfl-flexslider-min.js" type="text/javascript" charset="utf-8"></script>
         <script src="/static/js/wow.min.js" type="text/javascript" charset="utf-8"></script>
         <!--<script src="/static/js/wfl-common.js" type="text/javascript" charset="utf-8"></script>-->
@@ -285,6 +259,7 @@
         <script type="text/javascript" src="/static/js/countUp.min.js"></script>
         <script type="text/javascript">
             $(document).ready(function(){
+              console.log(textarray)
                 //跳转到红包页面
     //            $(".hongbao_box").click(function(){
     //                window.location.href="{% url 'account_hongbao' %}";
@@ -301,8 +276,17 @@
 //              轮播部分
                 $('.flexslider').flexslider({
                     directionNav: true,
-                    pauseOnAction: false 
+                    pauseOnAction: true,
+                    slideshow: true,
+                    animationLoop: true,
+                    pauseOnHover: true,
+                    slideshowSpeed: 5000
                 });
+                for (var i=0;i<3;i++) {
+                  if($('.flex-control-nav li a')[i]) {
+                    $('.flex-control-nav li a')[i].innerText = textarray[i];
+                  }
+                }
 //              轮播部分---end
                 
                 var wow = new WOW({     // 添加动效

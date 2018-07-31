@@ -1,0 +1,319 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>福利联盟-行业领先的P2P渠道分发机构</title>
+        <meta name="keywords" content="福利联盟，p2p理财平台，p2p投资理财，p2p投资理财平台，小额投资理财，个人投资理财，互联网理财产品，互联网理财平台，互联网金融平台，互联网金融产品，网络理财产品，网赚" />
+        <meta name="description" content="福利联盟是行业领先的P2P渠道分发机构。" />
+        <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/wfl-common.css?v-3"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/common-intro.css"/>
+        <style>
+          body {
+            background-color: #fff;
+          }
+          .top-bg-img.m-settle-tool {
+              background: url(/static/images/bg-merchant-banner.jpg) 100% center fixed no-repeat;
+          }
+          .top-intro {
+            margin-bottom: 150px;
+            text-align: center;
+          }
+          .ti-title {
+            margin: 75px 0 110px;
+            font-size: 30px;
+          }
+          .ti-box {
+            font-size: 0;
+          }
+          .ti-item {
+            display: inline-block;
+          }
+          .ti-item:nth-child(2) {
+            margin: 0 209px;
+          }
+          .ti-item-title {
+            font-size: 16px;
+            color: #222;
+            margin: 20px 0 15px;
+          }
+          .ti-item-txt {
+            line-height: 24px;
+          }
+          
+          .system-box {
+            position: relative;
+            width: 100%;
+            height: 590px;
+            background: url(/static/images/bg-system.jpg) center center fixed no-repeat;
+          }
+          .system__title {
+            margin-top: 20px;
+            font-size: 30px;
+            color: #fff;
+            text-align: center;
+            line-height: 120px;
+          }
+          .system__content {
+            width: 900px;
+            margin: 0 auto;
+            font-size: 0;
+          }
+          .system__item {
+            display: inline-block;
+            vertical-align: top;
+            width: 300px;
+            height: 190px;
+          }
+          .system__item.m-intro {
+            text-align: center;
+            background-color: rgba(0,0,0,0.5);
+            color: #fff;
+          }
+          .system__item .si-title{
+            margin: 45px 0 20px;
+            font-size: 18px;
+            color: #fff;
+          }
+          .system__item .si-txt{
+            line-height: 28px;
+          }
+          
+          .hot {
+            position: relative;
+            width: 1160px;
+            margin: 0 auto 160px;
+            background-color: #fff;
+          }
+          .list_box {
+              position: relative;
+              width: 1160px;
+              height: 180px;
+              overflow: hidden;
+          }
+          .scroll_list {
+              position: absolute;
+              width: 10000px;
+              
+          }
+          .hot_prev,
+          .hot_next {
+              position: absolute;
+              top: 124px;
+              width: 40px;
+              height: 156px;
+              background-color: rgba(0,0,0,0.2);
+              cursor: pointer;
+              z-index: 10;
+          }
+          .hot_prev {
+              left: -50px;
+          }
+          .hot_next {
+              right: -50px;
+          }
+          .hot_prev:after,
+          .hot_next:after {
+              content: '';
+              position: absolute;
+              top: 64px;
+              width: 20px;
+              height: 20px;
+              border-top: 2px solid #fff;
+              border-right: 2px solid #fff;
+          }
+          .hot_prev:after {
+              left: 14px;
+              transform: rotate(-135deg);
+          }
+          .hot_next:after {
+              right: 14px;
+              transform: rotate(45deg);
+          }
+          .hot__title {
+            margin: 120px 0 90px;
+              font-size: 30px;
+              color: #222;
+              text-align: center;
+          }
+          .hot__box {
+              overflow: hidden;
+              font-size: 0;
+              background-color: #fff;
+          }
+          .hot__itembox {
+              display: inline-block;
+              margin: 10px;
+              width: 270px;
+              height: 156px;
+              vertical-align: top;
+              transition: transform 0.4s ease;
+              cursor: pointer;
+              border-radius: 8px;
+              box-shadow: 0 0 14px rgba(0,0,0,0.2);
+          }
+          .hot__itembox:hover {
+              color: #91C11D;
+          }
+          .hot__img {
+              margin: 40px auto 30px;
+              display: block;
+          }
+          .hot__info {
+              text-align: center;
+          }
+        </style>
+    </head>
+    <body>
+        <!-- 头部 -->
+        {% include "header-new.html" %}
+        <!--banner-container-->
+        <div class="top-bg-img m-settle-tool">
+          <div class="bg-mask">
+            <div class="banner__content">
+              <div class="banner__title">招商入驻&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;互利共赢</div>
+              <p class="banner__txt">0元拥有百万流量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;24小时持续引流</p>
+              <ul class="banner__btn-box">
+                <li class="banner__btn"><a class="banner__btn-txt" href="">立即使用</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!--banner-container--end-->
+        <div class="top-intro wfl-wrap">
+          <h2 class="ti-title">我们的优势</h2>
+          <ul class="ti-box">
+          	<li class="ti-item">
+          	  <img class="ti-item-img" src="/static/images/img-im-top-1.png" alt="" />
+          	  <h5 class="ti-item-title">量级大</h5>
+          	  <p class="ti-item-txt">月均引流数十万用户<br />引入资金5亿以上</p>
+          	</li>
+          	<li class="ti-item">
+              <img class="ti-item-img" src="/static/images/img-im-top-2.png" alt="" />
+              <h5 class="ti-item-title">渠道多</h5>
+              <p class="ti-item-txt">拥有数千站长、金融行业大V<br />和理财师资源</p>
+            </li>
+            <li class="ti-item">
+              <img class="ti-item-img" src="/static/images/img-im-top-3.png" alt="" />
+              <h5 class="ti-item-title">更专业</h5>
+              <p class="ti-item-txt">前微博、搜狐、华夏银行员工打造的<br />金融分成系统</p>
+            </li>
+          </ul>
+        </div>
+        <div class="system-box">
+          <div class="bg-mask">
+            <div class="wfl-wrap">
+              <h2 class="system__title">操作系统简介</h2>
+              <ul class="system__content">
+                <li class="system__item">
+                  <img class="si-img" src="/static/images/img-system-1.png" alt="" />
+                </li>
+                <li class="system__item m-intro">
+                  <h4 class="si-title">资金管理，账目清晰</h4>
+                  <p class="si-txt">资金明细记录，笔笔可查<br />支付宝充值，体现更便捷</p>
+                </li>
+                <li class="system__item">
+                  <img class="si-img" src="/static/images/img-system-2.png" alt="" />
+                </li>
+                <li class="system__item m-intro">
+                  <h4 class="si-title">项目管理，轻松立项</h4>
+                  <p class="si-txt">快速创建推广项目<br />人工审核，严格把关</p>
+                </li>
+                <li class="system__item">
+                  <img class="si-img" src="/static/images/img-system-3.png" alt="" />
+                </li>
+                <li class="system__item m-intro">
+                  <h4 class="si-title">数据分析， 一目了然</h4>
+                  <p class="si-txt">项目数据实时更新<br />项目动态及时掌握</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="hot">
+            <h2 class="hot__title">入驻案例</h2>
+            <div class="scroll_box">
+                <span class="hot_prev"></span>
+                <div class="list_box">
+                    <ul class="hot__box scroll_list">
+                      <li class="hot__itembox">
+                          <img class="hot__img" src="{% static 'images/wyjrlogo.png' %}"/>
+                        <p class="hot__info">累计引入2.06亿</p>
+                      </li>
+                      <li class="hot__itembox">
+                          <img class="hot__img" src="{% static 'images/365logo.png' %}"/>
+                        <p class="hot__info">累计引入0.68亿</p>
+                      </li>
+                      <li class="hot__itembox">
+                          <img class="hot__img" src="{% static 'images/yhwlogo.png' %}"/>
+                        <p class="hot__info">累计引入0.9亿</p>
+                      </li>
+                      <li class="hot__itembox">
+                          <img class="hot__img" src="{% static 'images/qbjrlogo.png' %}"/>
+                        <p class="hot__info">累计引入2.1亿</p>
+                      </li>
+                      <li class="hot__itembox">
+                          <img class="hot__img" src="{% static 'images/jmhz_logo.png' %}"/>
+                        <p class="hot__info">累计引入0.92亿</p>
+                      </li>
+                    </ul>
+                </div>
+                <span class="hot_next"></span>
+            </div>
+        </div>
+        {% include "footer.html" %}
+        {% include "outline.html" %}
+
+        <script src="/static/js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                //  横向滚动部分
+                var page= 1; 
+                var i = 4;//每版四个图片
+                //向右滚动 
+                $(".hot_next ").click(function(){ //点击事件 
+                    console.log('next');
+                    var v_wrap = $(this).parents(".scroll_box "); // 根据当前点击的元素获取到父元素 
+                    var v_show = v_wrap.find(".scroll_list "); //找到视频展示的区域 
+                    var v_cont = v_wrap.find(".list_box "); //找到视频展示区域的外围区域 
+                    var v_width = v_cont.width(); 
+                    var len = v_show.find("li ").length; //我的视频图片个数 
+                    var page_count = Math.ceil(len/i); //只要不是整数，就往大的方向取最小的整数 
+                    if(!v_show.is(":animated ")){ 
+                        if(page == page_count){ 
+                            v_show.animate({left:'0px'},"slow "); 
+                            page =1;    
+                        }else{ 
+                            v_show.animate({left:'-='+v_width},"slow "); 
+                            page++; 
+                        } 
+                    } 
+                }); 
+                
+                //向左滚动 
+                $(".hot_prev ").click(function(){ //点击事件 
+                    console.log('prev');
+                    var v_wrap = $(this).parents(".scroll_box "); // 根据当前点击的元素获取到父元素 
+                    var v_show = v_wrap.find(".scroll_list "); //找到视频展示的区域 
+                    var v_cont = v_wrap.find(".list_box "); //找到视频展示区域的外围区域 
+                    var v_width = v_cont.width(); 
+                    var len = v_show.find("li ").length; //我的视频图片个数 
+                    var page_count = Math.ceil(len/i); //只要不是整数，就往大的方向取最小的整数 
+                    if(!v_show.is(":animated ")){ 
+                        if(page == 1){ 
+                            v_show.animate({left:'-='+ v_width*(page_count-1)},"slow "); 
+                            page =page_count; 
+                        }else{ 
+                            v_show.animate({left:'+='+ v_width},"slow "); 
+                            page--; 
+                        } 
+                    } 
+                }); 
+            //  横向滚动部分---end
+            });
+        </script>
+
+    </body>
+</html>

@@ -25,8 +25,33 @@ h6 {
 .flexslider {
   height: 538px;
 }
-.flex-direction-nav {
-  display: none;
+.flex-control-nav {
+  height: 53px;
+  bottom: 0;
+  font-size: 0;
+}
+.flex-control-nav li {
+  display: inline-block;
+  width: 175px;
+  height: 53px;
+}
+
+.flex-control-nav li a {
+  display: block;
+  margin: 0 1px;
+  width: 175px;
+  height: 53px;
+  line-height: 53px;
+  font-size: 16px;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px 10px 0 0;
+  transition: all 0.4s ease;
+}
+.flex-control-nav li a:hover,
+.flex-control-nav li .flex-active {
+  background: linear-gradient(rgba(255,255,255,0.7),#fff);
+  color: #fb8200;
 }
 .slides li {
   height: 538px;
@@ -35,10 +60,19 @@ h6 {
 .wfl-wrap {
   margin-top: 0;
 }
+.header .bgc-333 {
+  background-color: transparent;
+}
+.logo {
+    width: 180px;
+    height: auto; 
+    padding: 10px 0 6px;
+}
 .header {
   position: absolute;
   width: 100%;
   z-index: 100;
+  border: 1px solid rgba(255,255,255,0.6);
 }
 .bgc-333 {
   background-color: rgba(0,0,0,0.6);
@@ -48,7 +82,7 @@ h6 {
 }
 
 .headermain-box {
-  background-color: rgba(0,0,0,0.7);
+  background-color: transparent;
 }
 .headermain-box {
 
@@ -59,14 +93,17 @@ h6 {
   background-color: transparent;
 }
 
+.flex-direction-nav {
+  top: 50%;
+}
 .nav__item.active,
 .nav__item:hover {
   background-color: transparent;
-  border-bottom: 2px solid #fff;
+  border-bottom: 3px solid #fff;
 }
 .toggle_box:hover + .nav__item {
   background-color: transparent;
-  border-bottom: 2px solid #fff;
+  border-bottom: 3px solid #fff;
 }
 
 .nav__item {
@@ -76,6 +113,8 @@ h6 {
   padding: 0;
   margin-left: 30px;
   text-align: center;
+  transition: all 0.4s ease;
+  border-bottom: 3px solid transparent;
 }
 .toggle_box {
   left: 24px;
@@ -138,11 +177,6 @@ h6 {
   border-radius: 10px 10px 0 0;
   transition: all 0.4s ease;
 }
-.banner__nav-txt:hover {
-  background: linear-gradient(rgba(255,255,255,0.6),#fff);
-  color: #fb8200;
-}
-
 /*banner-container--end*/
 
 .intro {
@@ -409,7 +443,9 @@ h6 {
   margin-top: 30px;
   line-height: 22px;
 }
-
+.tool-bg-txt {
+  font-size: 18px;
+}
 /*商家展示---end*/
 
 .wenan-box {

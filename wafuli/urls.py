@@ -30,4 +30,9 @@ urlpatterns = [
     url(r'^yirendai/$',TemplateView.as_view(template_name='yirendai.html')),
     url(r'^yirendai/check/$',yirendai.checkmobile),
     url(r'^yirendai/export/$',yirendai.export),
+    url(r'^intro_fanshu_home/$', 'wafuli.views.intro_fanshu_home', name='intro_fanshu_home'),    #jzy
+    url(r'^intro_settle_tool/$', 'wafuli.views.intro_settle_tool', name='intro_settle_tool'),    #jzy
+    url(r'^intro_fanshu_doc/$', 'wafuli.views.intro_fanshu_doc', name='intro_fanshu_doc'),    #jzy
+    url(r'^intro_merchant/$', 'wafuli.views.intro_merchant', name='intro_merchant'),    #jzy
+    url(r'^intro_about_us/$', 'wafuli.views.intro_about_us', name='intro_about_us'),    #jzy
 ]

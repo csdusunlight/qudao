@@ -1,0 +1,167 @@
+.bg-mask {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.wfl-wrap {
+  margin-top: 0;
+}
+.header .bgc-333 {
+  background-color: transparent;
+}
+.logo {
+    width: 180px;
+    height: auto; 
+    padding: 10px 0 6px;
+}
+.header {
+  position: absolute;
+  width: 100%;
+  z-index: 100;
+  border: 1px solid rgba(255,255,255,0.6);
+}
+.bgc-333 {
+  background-color: rgba(0,0,0,0.6);
+}
+.headertop {
+  background-color: transparent;
+}
+.headermain-box {
+  background-color: transparent;
+}
+.headermain-box {
+  border-bottom: none;
+}
+.headermain {
+  background-color: transparent;
+}
+.nav__item.active,
+.nav__item:hover {
+  background-color: transparent;
+  border-bottom: 3px solid #fff;
+}
+.toggle_box:hover + .nav__item {
+  background-color: transparent;
+  border-bottom: 3px solid #fff;
+}
+
+.nav__item {
+  border-radius: 0;
+  color: #fff;
+  width: 72px;
+  padding: 0;
+  margin-left: 30px;
+  text-align: center;
+  transition: all 0.4s ease;
+  border-bottom: 3px solid transparent;
+}
+.toggle_box {
+  left: 24px;
+}
+/*.........*/
+.top-bg-img {
+  position: relative;
+  width: 100%;
+  height: 572px;
+  background: url(../images/bg-fanshu-home-banner.jpg) 100% center fixed no-repeat;
+}
+.top-bg-img.m-doc {
+  background: url(../images/bg-fanshu-doc-banner.jpg) 100% center fixed no-repeat;
+}
+.top-bg-img.m-settle-tool {
+  background: url(../images/bg-settle-tool-banner.jpg) 100% center fixed no-repeat;
+}
+.banner__content {
+  padding-top: 245px;
+  width: 1250px;
+  margin: 0 auto;
+  color: #fff;
+  text-align: center;
+}
+.banner__title {
+  font-size: 40px;
+}
+.banner__txt {
+  margin: 52px auto;
+  font-size: 18px;
+}
+.banner__btn-box {
+  font-size: 0;
+}
+.banner__btn {
+  display: inline-block;
+  width: 232px;
+  height: 60px;
+  border: 1px solid #fff;
+  border-radius: 8px;
+}
+.banner__btn:nth-child(2) {
+  margin: 0 277px;
+}
+.banner__btn-txt {
+  display: block;
+  line-height: 60px;
+}
+.banner__btn:hover .head__ewm {
+  visibility: visible;
+  opacity: 1;
+}
+.head__ewm {
+  position: absolute;
+  left: -30px;
+  top: 80px;
+  width: 300px;
+  height: 300px;
+  border-radius: 10px;
+  border: 1px solid #e4e4e4;
+  visibility: hidden;
+  opacity: 0;
+  background: url(../images/ewm-fanshu.png) center center/auto auto no-repeat #fff;
+  transition: all 0.4s ease-in;
+}
+.head__ewm:before {
+  content: '';
+  display: block;
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  top: -7px;
+  left: 140px;
+  transform: rotate(45deg);
+  background: white;
+  border-top: 1px solid #e4e4e4;
+  border-left: 1px solid #e4e4e4;
+}
+.guide__title {
+  margin-top: 70px;
+  font-size: 30px;
+  color: #222222;
+  text-align: center;
+}
+.guide__item {
+  margin: 110px 0;
+}
+.guide__detail {
+  width: 330px;
+  text-align: center;
+}
+.guide__itemtitle {
+  margin: 124px 0 60px;
+  font-size: 30px;
+  color: #222;
+}
+.guide__txt {
+  font-size: 16px;
+  line-height: 32px;
+}
+.guide__bottom {
+  text-align: center;
+}
+.guide__bottom-title {
+  margin-top: 30px;
+  font-size: 30px;
+  color: #222;
+}

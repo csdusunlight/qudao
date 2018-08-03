@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>用户中心</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}?v-3" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account_setting.css' %}" />
 <link rel="stylesheet" href="{% static 'css/cropbox.css' %}" type="text/css" />
@@ -16,7 +16,7 @@
 
 
 $(function(){
-    $('.back-a2').toggleClass("on");
+    $('.back-a2').toggleClass("active");
     $(window).load(function() {
         
     });
@@ -25,11 +25,10 @@ $(function(){
 </head>
 
 <body>
-	{% include "header.html" %}
+	{% include "channel-header.html" %}
 	<!--内容-->
 	<div class="Content">
-    	{% include "account/left.html" %}
-    	<div class="RightCont">
+    	<!--<div class="RightCont">
     	    <div class="right-top clearfix">
     	        <h2 class="top-title l">主页资料</h2>
     	        <a class="btn m-yellow m-exp r" href="http://{{user.domain_name}}.91fanshu.com" target="_blank">进入主页</a>
@@ -37,13 +36,6 @@ $(function(){
     	    <div class="user-info-box">
         	    <div class="item">
         	        <span class="item__name">头像</span>
-        	        <!--<div class="img-up">
-                        <input type="file" name="picfile" id="choose" accept="image/jpeg,image/png">
-                        <ul id="img_list" class="img-list">
-                            <li id="userimg" class="userimg"></li>
-                        </ul>
-                        <a id="upload">更换头像</a>
-                    </div>-->
                     <div class="uploadimg-container">
                           <div class="imageBox">
                             <div class="thumbBox"></div>
@@ -64,9 +56,6 @@ $(function(){
                                 <input style="width: 160px;" type="button" id="btnCrop"  class="Btnsty_peyton" value="确定">
                             </div>
                           </div>
-                          <!--<div class="cropped">
-                              <span style="display: inline-block;margin-bottom: 84px;">*请先上传后进行裁切</span>
-                          </div>-->
                     </div>
         	    </div>
         	    <div class="item">
@@ -97,17 +86,8 @@ $(function(){
                 <div class="item">
                     <span class="item__name m-need">用户名</span>
                     <input class="username item__txt" type="text" maxlength="8" value="{{user.username}}" />
-                    <!--<span>用于显示在个人主页，限8个字符</span>-->
                     <p style="margin-left: 206px;">用于显示在个人主页，限8个字符</p>
                 </div>
-                <!--<div class="item">
-                    <span class="item__name m-need">QQ昵称</span>
-                    <input class="qqname item__txt" type="text" value="{{user.qq_name}}" />
-                </div>
-                <div class="item">
-                    <span class="item__name m-need">注册QQ</span>
-                    <input class="qq item__txt" type="text" value="{{user.qq_number}}" onkeyup="this.value=this.value.replace(/\D/g,'')" />
-                </div>-->
                 <div class="item">
                     <span class="item__name m-need">主页域名</span>
                     <input class="url-name item__txt" type="text" value="{{user.domain_name}}" maxlength="20" />
@@ -117,7 +97,6 @@ $(function(){
                 <div class="item">
                     <span class="item__name">主页客服QQ</span>
                     <input class="qq-link item__txt" type="text" value="{{user.cs_qq}}" onkeyup="this.value=this.value.replace(/\D/g,'')" />
-                    <!--<span>显示在个人主页，用于交单用户联系您</span>-->
                     <p style="margin-left: 206px;">显示在个人主页，用于交单用户联系您</p>
                 </div>
                 <div class="item">
@@ -130,8 +109,90 @@ $(function(){
                 </div>
     	    </div>
             
-        </div>
+        </div>-->
+    <div class="right-top clearfix">
+        <h2 class="top-title l">主页资料</h2>
+        <a class="btn m-yellow m-exp r" href="http://{{user.domain_name}}.51fanshu.com" target="_blank">进入主页</a>
     </div>
+    <div class="user-info-box">
+  	    <div class="item">
+  	        <span class="item__name">头像</span>
+              <div class="uploadimg-container">
+                    <div class="imageBox">
+                      <div class="thumbBox"></div>
+                      <div class="spinner" style="display: none">Loading...</div>
+                    </div>
+                    <div class="action">
+                      <div class="new-contentarea tc">
+                          <a href="javascript:void(0)" class="upload-img">
+                              <label for="upload-file">上传图像</label>
+                        </a>
+                        <input type="file" class="" name="upload-file" id="upload-file" />
+                      </div>
+                      <div style="padding-left:10px;margin: 15px 0 25px;">
+                          <input type="button" id="btnZoomIn" class="Btnsty_peyton" value="+"  >
+                          <input type="button" id="btnZoomOut" class="Btnsty_peyton" value="-" >
+                      </div>
+                      <div>
+                          <input style="width: 160px;" type="button" id="btnCrop"  class="Btnsty_peyton" value="确定">
+                      </div>
+                    </div>
+              </div>
+  	    </div>
+  	    <div class="item">
+              <span class="item__name">皮肤</span>
+              <ul class="skin">
+              	<li class="skin__item m-01">皮肤1</li>
+              	<li class="skin__item m-02">皮肤2</li>
+              	<li class="skin__item m-03 on">皮肤3</li>
+              	<li class="skin__item m-04">皮肤4</li>
+              	<li class="skin__item m-05">皮肤5</li>
+              	<li class="skin__item m-06">皮肤6</li>
+              </ul>
+          </div>
+          <div class="item clearfix">
+              <span class="item__name l">背景</span>
+              <ul class="submit_bg l">
+                  <li class="submit_bg__item m-01 on">背景1</li>
+                  <li class="submit_bg__item m-02">背景2</li>
+                  <li class="submit_bg__item m-03">背景3</li>
+                  <li class="submit_bg__item m-04">背景4</li>
+                  <li class="submit_bg__item m-05">背景5</li>
+                  <li class="submit_bg__item m-06">背景6</li>
+                  <li class="submit_bg__item m-07">背景7</li>
+                  <li class="submit_bg__item m-08">背景8</li>
+                  <li class="submit_bg__item m-09">背景9</li>
+              </ul>
+          </div>
+          <div class="item">
+              <span class="item__name m-need">用户名</span>
+              <input class="username item__txt" type="text" maxlength="8" value="{{user.username}}" />
+              <!--<span>用于显示在个人主页，限8个字符</span>-->
+              <p style="margin-left: 206px;">用于显示在个人主页，限8个字符</p>
+          </div>
+          <div class="item">
+              <span class="item__name m-need">主页域名</span>
+              <input class="url-name item__txt" type="text" value="{{user.domain_name}}" maxlength="20" />
+              <span style="color: red;" class="url-tips"></span>
+              <p style="margin-left: 206px;">如填写abc，则主页域名为abc.51fanshu.com</p>
+          </div>
+          <div class="item">
+              <span class="item__name">主页客服QQ</span>
+              <input class="qq-link item__txt" type="text" value="{{user.cs_qq}}" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+              <!--<span>显示在个人主页，用于交单用户联系您</span>-->
+              <p style="margin-left: 206px;">显示在个人主页，用于交单用户联系您</p>
+          </div>
+          <div class="item">
+              <span class="item__name">个人签名</span>
+              <input class="tosign item__txt" type="text" value="{{user.profile}}" maxlength="30" placeholder="限30个字符" />
+          </div>
+          
+          <div class="btnbox">
+              <a style="margin-left: -160px;" class="save btn m-green">保存</a>
+          </div>
+    </div>
+      
+  </div>
 	{% include "footer.html" %}
 	<script src="{% static 'js/wfl-common.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
@@ -183,8 +244,6 @@ $(function(){
             img2 = cropper.getDataURL();
             console.log(img2);
             $('.cropped').html('<span style="display: inline-block;margin-bottom: 84px;">*请先上传后进行裁切</span>');
-//          $('.cropped').append('<img src="'+img2+'" align="absmiddle" style="width:64px;margin-top:4px;border-radius:64px;box-shadow:0px 0px 12px #7E7E7E;" ><p>64px*64px</p>');
-//          $('.cropped').append('<img src="'+img2+'" align="absmiddle" style="width:128px;margin-top:4px;border-radius:128px;box-shadow:0px 0px 12px #7E7E7E;"><p>128px*128px</p>');
             $('.cropped').append('<img src="'+img2+'" align="absmiddle" style="width:180px;margin-top:4px;border-radius:180px;box-shadow:0px 0px 12px #7E7E7E;"><p>180px*180px</p>');
             
             var result = img2;

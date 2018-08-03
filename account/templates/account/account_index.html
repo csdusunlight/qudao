@@ -6,11 +6,160 @@
 <title>用户中心</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
 <!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}?v-3" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}?v-3" />
 <!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<style type="text/css">
+	/*个人中心*/
+	body {
+	  background-color: #fff;
+	}
+  .notice-index {
+      padding-top: 10px;
+      background-color: #fff;
+      vertical-align: middle;
+      
+  }
+  .notice__title {    
+      margin: 0 20px 0 30px;
+      width: 20px;
+      display: inline-block;
+      font-size: 16px;
+      color: #91C11D;
+      vertical-align: middle;
+  }
+  .notice__box {
+      display: inline-block;
+      padding: 10px 0 10px 10px;
+      width: 915px;
+      /*height: 102px;*/
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3) inset;
+      /*overflow: hidden;*/
+      vertical-align: middle;
+  }
+  .notice__txt {
+      display: block;
+      /*height: 34px;*/
+      line-height: 34px;
+      overflow: hidden;
+      text-indent: 15px;
+  }
+  .choose_item-icon {
+      display: inline-block;
+      margin: 10px 10px 10px 38px;
+      width: 26px;
+      height: 26px;
+      border-radius: 4px;
+      border: 1px solid #e4e4e4;
+      vertical-align: middle;
+      cursor: pointer;
+  }
+  .need-icon.m-left {
+      margin-left: 0;
+  }
+  .choose_item {
+      opacity: 0;
+      position: absolute;
+  }
+  .choose_item:checked + .choose_item-icon {
+      background: url(../images/bg-checked.png) center center no-repeat;
+  }
+  
+  .copy-link {
+      padding: 36px 0 26px;
+  }
+  .link-box {
+      display: inline-block;
+      margin-left: 110px;
+      font-size: 16px;
+  }
+  .target-link {
+      text-decoration: underline;
+  }
+  .btn.m-link {
+      margin-left: 368px;
+  }
+  .benefit {
+      /*margin-top: 20px;*/
+      padding: 20px;
+      border: 1px solid #c9c9c9;
+  }
+  .benefit__item {
+      display: inline-block;
+      width: 320px;
+      line-height: 36px;
+      text-align: center;
+  }
+  .benefit__item-txt {
+      font-size: 18px;
+      color: #f95353;
+  }
+  .benefit__withdraw {
+      display: inline-block;
+      margin-left: 100px;
+      margin-top: 18px;
+      vertical-align: top;
+  }
+  .chart-box {
+    margin-top: 20px;
+    border: 1px solid #c9c9c9;
+  }
+  .chart {
+      margin-top: 60px;
+      margin-left: 200px;
+  }
+  .recommend {
+      padding: 0 29px 0;
+      margin-top: 20px;
+      border: 1px solid #c9c9c9;
+  }
+  .recommend__titlebox {
+      line-height: 68px;
+  }
+  .recommend__title {
+      color: #91C11D;
+  }
+  .recommend__itembox {
+      font-size: 0;
+  }
+  .recommend__item {
+      display: inline-block;
+      width: 228px;
+      margin-right: 20px;
+  }
+  .recommend__item:hover .recommend__name {
+      color: #91C11D;
+  }
+  .recommend__item:last-child {
+      margin-right: 0;
+  }
+  .recommend__img {
+      display: block;
+      margin: 10px auto 0;
+      width: 120px;
+      height: 50px;
+  }
+  .recommend__img:hover {
+      box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+  }
+  .recommend__name {
+      margin: 20px 0 10px 0;
+  }
+  .btn-box.m-account {
+      margin: 20px 0;
+      text-align: center;
+  }
+  .w-remark {
+      width: 160px;
+  }
+  .w-zfb {
+      width: 160px;
+  }
+  /*个人中心---end*/
+</style>
 </head>
 
 <body>
@@ -21,34 +170,26 @@
    	<!--<div class="w1100">-->
 			{% include "account/left.html" %}
             <div class="RightCont">
-                <div class="notice-index">
+                <div style="display: none;" class="notice-index">
                     <h3 class="notice__title">通知栏</h3>
                     <div id="noticeBox" class="notice__box">
                         <ul id="con1">
-                            <!--{%for notice in announce_list%}
-                                <li><a class="notice__txt oneline">{{forloop.counter}}、{{notice.content}}</a></li>
-                            {%endfor%}-->
-                            <!--<li><a class="notice__txt oneline">1、这里是通知11111111111111111111这里是通知11111111111111111111这里是通知11111111111111111111这里是通知11111111111111111111这里是通知11111111111111111111这里是通知11111111111111111111</a></li>
-                            <li><a class="notice__txt oneline">2、这里是通知22222222222222222222这里是通知222222222222222222这里是通知2222222222222222222</a></li>
-                            <li><a class="notice__txt oneline">3、这里是通知33333333333333333这里是通知33333333333333333333333这里是通知33333333333333333</a></li>
-                            <li><a class="notice__txt oneline">4、这里是通知4444444444444444这里是通知4444444444444444444444444这里是通知4444</a></li>-->
                         </ul>
-                        <!--<ul id="con2">
-                        </ul>-->
-                    </div>
-                    <div class="copy-link">
-                        <p class="link-box">我的主页：<a href="http://{{user.domain_name}}.91fanshu.com" target="_blank" class="target-link">http://{{user.domain_name}}.91fanshu.com</a></p>
-                        <a id="copy" class="btn m-green m-link">复制链接</a><a style="margin-left: 244px;" href="{% url 'account_setting' %}" class="btn m-green m-link">设置</a>
                     </div>
                 </div>
                 
                 <ul class="benefit">
                     <li class="benefit__item">累计收益（元）<br /><span class="benefit__item-txt">{{user.accu_income}}</span></li>
-                    <!--<li class="benefit__item">昨日收益（元）<br /><span class="benefit__item-txt">19999</span></li>-->
                     <li class="benefit__item">账户余额（元）<br /><span class="benefit__item-txt">{{user.balance}}</span></li>
-                    <li class="benefit__withdraw"><a href="{% url 'account_withdraw' %}" class="btn m-green">提现</a></li>
-                    <div id="main" class="chart" style="width: 600px;height:400px;"></div>
+                    <li class="benefit__withdraw"><a href="{% url 'account_withdraw' %}" class="btn m-red">提现</a></li>
+                    <div class="copy-link">
+                        <p class="link-box">我的主页：<a href="http://{{user.domain_name}}.51fanshu.com" target="_blank" class="target-link">http://{{user.domain_name}}.51fanshu.com</a></p>
+                        <a id="copy" class="btn m-red m-link">一键分享</a><!--<a style="margin-left: 244px;" href="{% url 'account_setting' %}" class="btn m-green m-link">设置</a>-->
+                    </div>
                 </ul>
+                <div class="chart-box">
+                  <div id="main" class="chart" style="width: 600px;height:400px;"></div>
+                </div>
                 <div class="recommend">
                     <div class="recommend__titlebox clearfix">
                         <h2 class="recommend__title l">热门推荐</h2>
@@ -91,6 +232,7 @@
 <script type="text/javascript" src="{% static 'js/clipboard.min.js' %}"></script>
 <script type="text/javascript">
 $(function(){
+    $('.nav__item:eq(4)').addClass('active');
     $('.back-a1').toggleClass("on");
     var notice_flag = 0;
     var notice_top = '';
@@ -134,9 +276,19 @@ $(function(){
         date.setTime(date.getTime() - 1000);
         setCookie("first_time", date.getTime(), date.toUTCString(), "", "", "");
     }
-
-
     
+//  引导部分
+    console.log(getCookie('guide_flag'),'jjjjjjzzzzzyyyyy');
+    if(getCookie('guide_flag') === 'yes') {
+      console.log('guide true')
+    } else {
+      console.log('guide false')
+    }
+    $('.account-leftnav-top-img').click(function() {
+      setCookie("guide_flag", 'yes', "date.toUTCString()", "", "", "");
+      console.log('set cookie guide_flag')
+    })
+//  引导部分    
     var con1 = document.getElementById('con1');
     var notice_txt = '';
     $.ajax({

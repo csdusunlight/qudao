@@ -1,21 +1,38 @@
 {% load staticfiles %}
 <div class="leftnav">
-	<ul>
-	    <li class="account-nav-head m-homepage">主页管理</li>
-	   	<!--<li><a href="{% url 'account_index' %}" class="back-a1 account-nav">用户中心</a></li>-->
-	   	<li class="back-a2 account-navbox"><a href="{% url 'account_setting' %}" class="account-nav">主页设置</a></li>
-	   	<li class="back-a10 account-navbox"><a href="{% url 'account_notice' %}" class="account-nav">编辑公告</a></li>
-	   	<li class="back-a3 account-navbox"><a href="{% url 'project_manage' %}" class="account-nav">我的项目</a></li>
-	   	<li class="account-nav-head m-num">数据管理</li>
-	   	<li class="back-a4 account-navbox"><a href="{% url 'account_submit' %}" class="account-nav">自助交单</a></li>
-	   	<li class="back-a5 account-navbox"><a href="{% url 'account_audited' %}" class="account-nav">数据审核</a></li>
-	   	<li class="back-a11 account-navbox"><a href="{% url 'account_yuyue' %}" class="account-nav">预约管理</a></li>
+  <div class="account-leftnav-top">
+    <img class="account-leftnav-top-img" src="{{user.picture_url}}"/>
+    <p class="account-leftnav-top-mobile">{{user.mobile}}</p>
+    <div class="account-leftnav-icon-box">
+      {%if user.is_merchant == '1' %}
+      <img class="account-leftnav-icon-item" src="/static/images/icon-merchant-true.png"/>
+      {% else %}
+      <img class="account-leftnav-icon-item" src="/static/images/icon-merchant-false.png"/>
+      {% endif %}
+      
+      {%if user.is_channel == '1' %}
+      <img class="account-leftnav-icon-item" src="/static/images/icon-qudao-true.png"/>
+      {% else %}
+      <img class="account-leftnav-icon-item" src="/static/images/icon-qudao-false.png"/>
+      {% endif %}
+    </div>
+  </div>
+	<ul class="account-nav-box">
+	    <!--<li class="account-nav-head m-homepage">主页管理</li>-->
+	   	<li class="back-a1 account-navbox"><a href="{% url 'account_index' %}" class="account-nav">账户总览</a></li>
+	   	<!--<li class="back-a2 account-navbox"><a href="{% url 'account_setting' %}" class="account-nav">主页设置</a></li>-->
+	   	<!--<li class="back-a10 account-navbox"><a href="{% url 'account_notice' %}" class="account-nav">编辑公告</a></li>-->
+	   	<!--<li class="back-a3 account-navbox"><a href="{% url 'project_manage' %}" class="account-nav">我的项目</a></li>-->
+	   	<!--<li class="account-nav-head m-num">数据管理</li>-->
+	   	<!--<li class="back-a4 account-navbox"><a href="{% url 'account_submit' %}" class="account-nav">自助交单</a></li>-->
+	   	<!--<li class="back-a5 account-navbox"><a href="{% url 'account_audited' %}" class="account-nav">数据审核</a></li>-->
+	   	<!--<li class="back-a11 account-navbox"><a href="{% url 'account_yuyue' %}" class="account-nav">预约管理</a></li>-->
+	   	<li class="back-a13 account-navbox"><a href="{% url 'doc_list' %}" class="account-nav">番薯文档</a></li>
 	   	<li class="back-a14 account-navbox"><a href="{% url 'account_hongbao' %}" class="account-nav">我的红包<span class="coupon_num left_tip_num" style="display: none"></span></a></li>
-	   	<li class="account-nav-head m-doc">番薯文档</li>
-      <li class="back-a13 account-navbox"><a href="{% url 'doc_list' %}" class="account-nav">文档管理</a></li>
-	   	<li class="account-nav-head m-account">账号管理</li>
+	   	<!--<li class="account-nav-head m-doc">番薯文档</li>-->
+	   	<!--<li class="account-nav-head m-account">账号管理</li>-->
 	   	<!--<li class="back-a6 account-navbox"><a href="{% url 'account_security' %}" class="account-nav">安全中心</a></li>-->
-	   	<li class="back-a6 account-navbox"><a href="/account/message/" class="account-nav">消息中心{%if user.num_message_sync != 0 %}<span class="left_tip_num">{{user.num_message_sync}}</span>{% endif %}</a></li>
+	   	<li class="back-a6 account-navbox"><a href="/account/message/" class="account-nav">我的消息{%if user.num_message_sync != 0 %}<span class="left_tip_num">{{user.num_message_sync}}</span>{% endif %}</a></li>
 	   	<li class="back-a8 account-navbox"><a href="{% url 'account_money' %}" class="account-nav">收支详情</a></li>
 	   	<li class="back-a9 account-navbox"><a href="{% url 'account_withdraw' %}" class="account-nav">提现</a></li>
 	   </ul>

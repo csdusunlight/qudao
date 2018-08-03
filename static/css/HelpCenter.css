@@ -34,7 +34,8 @@
 .regestor{
 	width: 100%;
 	height: 25px;
-	position: absolute;top: 35px;
+	position: absolute;
+	top: 22px;
 }
 .regestor a{
 	position: absolute;left: 60px;top: 5px;

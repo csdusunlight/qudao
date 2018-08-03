@@ -90,3 +90,22 @@ def cooperate(request):
     template = 'm_cooperation.html' if request.mobile else 'cooperation.html'
     return render(request, template)
 
+def intro_fanshu_home(request):     #jzy
+    template = 'intro_fanshu_home.html'
+    return render(request, template)
+
+def intro_settle_tool(request):     #jzy
+    template = 'intro_settle_tool.html'
+    return render(request, template)
+
+def intro_fanshu_doc(request):     #jzy
+    template = 'intro_fanshu_doc.html'
+    return render(request, template)
+
+def intro_merchant(request):     #jzy
+    template = 'intro_merchant.html'
+    return render(request, template)
+
+def intro_about_us(request):     #jzy
+    template = 'intro_about_us.html'
+    return render(request, template)

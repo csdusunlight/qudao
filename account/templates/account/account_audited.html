@@ -5,13 +5,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>用户中心</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}?v-3" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/add-img.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.searchableSelect.css' %}" />
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />-->
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
@@ -144,11 +141,9 @@
 
 <body>
 <!--头部-->
-{% include "header.html" %}
+{% include "channel-header.html" %}
 <!--内容-->
 <div class="Content">
-{% include "account/left.html" %}
-<div class="RightCont">
     <div style="position: relative;margin-bottom: 20px;" class="data-intro">
         <h3>操作说明：</h3>
         <p style="margin-left: 30px;">官方数据的<span class="handle-mark">删除</span>、<span class="handle-mark">编辑</span>、<span class="handle-mark">提交截图</span>等操作位于未审核选项下，<span class="handle-mark">审核</span>位于已通过选项下；</p>
@@ -316,8 +311,6 @@
             <div class="popup__detail">
                 <div class="popup__item">
                     <span class="popup__itemname">项目名称</span>
-                    <!--<select disabled="disabled" class="project" placeholder="选择项目">
-                    </select>-->
                     <input disabled="disabled" type="text" class="project" />
                 </div>
                 <div class="popup__item">
@@ -384,8 +377,6 @@
             <div class="popup__detail">
                 <div class="popup__item">
                     <span class="popup__itemname">项目名称</span>
-                    <!--<select disabled="disabled" class="project_02" placeholder="选择项目">
-                    </select>-->
                     <input disabled="disabled" type="text" class="project_02" />
                 </div>
                 <div class="popup__item">
@@ -501,7 +492,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 <iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
 {% include "footer.html" %}
@@ -967,9 +957,9 @@
 //      编辑/删除部分（自建）---end
         
         $(function(){
-            $('.back-a5').toggleClass("on");
+            $('.back-a5').toggleClass("active");
             
-            $(".RightCont").on("focus", ".date_picker", function() {
+            $(".Content").on("focus", ".date_picker", function() {
                 $('.date_selector').remove();
                 $(this).date_input();
             })
@@ -983,40 +973,6 @@
             } else {
             	
             }
-//          $.ajax({
-//              url:"/restapi/projects/?is_official=true&pageSize=999",
-//              type:"get",
-//              dataType: "json",
-//              success: function(ret) {
-//                  console.log(ret.results);
-//                  var option_html = '';
-//                  for (var i = 0; i < ret.results.length; i++) {
-//                      option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
-//                  }
-//                  $('.project').html(option_html);
-//              },
-//              error: function(jqXHR, textStatus, errorThrown) {
-//                  console.log(jqXHR.responseText);
-//                  console.log("数据错误is_official=true");
-//              }
-//          });
-//          $.ajax({
-//              url:"/restapi/projects/?is_official=false&pageSize=999",
-//              type:"get",
-//              dataType: "json",
-//              success: function(ret) {
-//                  console.log(ret.results);
-//                  var option_html = '';
-//                  for (var i = 0; i < ret.results.length; i++) {
-//                      option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
-//                  }
-//                  $('.project_02').html(option_html);
-//              },
-//              error: function(jqXHR, textStatus, errorThrown) {
-//                  console.log(jqXHR.responseText);
-//                  console.log("数据错误is_official=false");
-//              }
-//          });
             
 //          官方数据
             var state_1 = '';

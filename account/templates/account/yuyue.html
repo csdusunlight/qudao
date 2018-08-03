@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>用户中心</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}?v-3" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
@@ -53,25 +53,7 @@
         position: absolute;
         top: 14px;
         right: 50px;
-    } 
-    /*.need-icon {
-        display: inline-block;
-        margin: 10px 10px 10px 38px;
-        width: 26px;
-        height: 26px;
-        border-radius: 4px;
-        border: 1px solid #e4e4e4;
-        vertical-align: middle;
-        cursor: pointer;
     }
-    .is_auto {
-        opacity: 0;
-        position: absolute;
-    }
-    
-    .is_auto:checked + .need-icon {
-        background: url(/static/images/bg-checked-choose.png) center center no-repeat;
-    }*/
     .change-status {
         color: #91C11D;
         text-decoration: underline;
@@ -185,7 +167,7 @@ function isadd(obj) {        //是否自动发送邮件
 }
 
 $(function(){
-	$('.back-a11').toggleClass("on");
+	$('.back-a11').toggleClass("active");
     $(".Close").click(function(){
     	$(".Listpop").css("display","none")<!--隐藏-->
     });
@@ -197,7 +179,7 @@ $(function(){
 	    complete:pagecallback,
 	});
 	
-	$(".RightCont").on("focus", ".date_picker", function() {
+	$(".Content").on("focus", ".date_picker", function() {
         $(this).date_input();
     })
 	
@@ -249,89 +231,19 @@ $(function(){
             }
         });
     })
-//  var is_auto_val = "{{user.is_book_email_notice}}";
-//  if(is_auto_val == 'True') {
-//      var is_auto_dom = '.is_auto[value="true"]';
-//  } else {
-//      var is_auto_dom = '.is_auto[value="false"]';
-//  }
-//  $(is_auto_dom).prop('checked', true);
-//  $('.is_auto[name="is_auto"]').click(function(){
-//      var that = this;
-//      if ($(this).val() == 'true') {
-//          var is_auto = true;
-//      } else {
-//          var is_auto = false;
-//      }
-//      console.log(is_auto);
-//      $.ajax({
-//          url: '/restapi/users/' + {{user.id}} + '/',
-//          dataType: "json",
-//          type:"put",
-//          data: {
-//              "is_book_email_notice": is_auto
-//          },
-//          success: function(ret) {
-//              alert("操作成功");
-//              $(this).prop('checked', true);
-//          },
-//          error: function(jqXHR, textStatus, errorThrown) {
-//              console.log(jqXHR.responseText);
-//              $(that).prop('checked', false);
-//              alert("数据错误");
-//          }
-//      });
-//  })
-
-    // 审核拒绝原因弹窗
-//	$('.Content').on('click','.state_2',function(){
-//		  var reason = $(this).attr('reason');
-//	      alert(reason);
-//	  });
 });
 </script>
 </head>
 
 <body>
-    {% include "header.html" %}
+    {% include "channel-header.html" %}
 	<div class="Content">
-    	<!--头部-->
-    	<!--内容-->
-    	{% include "account/left.html" %}
-    	<div class="RightCont">
-        	<!--<div class="fubi-box">
-            	<span class="fubi-item">预约提示</span>
-            	<input type="" name="" id="" value="" />
-                <a class="tixian btn m-yellow r">修改</a>
-            </div>-->
             <div class="table" style="position: relative;">
                 <h2 class="table__title">预约数据</h2>
                 <div class="isauto-box">
                     <span class="switch__name">开启QQ邮件通知&nbsp;&nbsp;</span>
                     <span data-isadd="{{user.is_book_email_notice}}" class="home switch {{user.is_book_email_notice}}" onclick="isadd(this)"></span>
-                    <!--<label><input class="is_auto" type="radio" value="true" name="is_auto" /><i class="need-icon"></i>是</label>
-                    <label><input class="is_auto" type="radio" checked="checked" value="false" name="is_auto" /><i class="need-icon"></i>否</label>-->
                 </div>
-                <!--<div class="search">
-                    <div class="search__item">
-                        <span class="search__name">获取时间：</span>
-                        <div class="time-input-box"><input type="text" class="date_picker time-input" id="trans_date_0" onchange="$('#search').click()" /></div> ——
-                        <div class="time-input-box"><input type="text" class="date_picker time-input" id="trans_date_1" onchange="$('#search').click()" /></div>
-                    </div>
-                    <div class="search__item">
-                        <span class="search__name">收支类型：</span>
-                        <select name="select_status" id="transType" onchange="$('#search').click()">
-                            <option value="">全部</option>
-                            <option value="0">收入</option>
-                            <option value="1">支出</option>
-                        </select>
-                    </div>
-                </div>-->
-                <!--<div style="display: none;" class="handle clearfix">
-                    <div class="handle__out r">
-                        <a id="search" class="btn m-green m-search">搜索</a>
-                    </div>
-                </div>-->
                 <div id="pagedata">
 
                 </div>
@@ -365,7 +277,6 @@ $(function(){
                     </div>
                 </div>
             </div>
-        </div>
     	<!--底部-->
   <div style="clear: both;"></div>
   </div>

@@ -1,0 +1,201 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>福利联盟-行业领先的P2P渠道分发机构</title>
+        <meta name="keywords" content="福利联盟，p2p理财平台，p2p投资理财，p2p投资理财平台，小额投资理财，个人投资理财，互联网理财产品，互联网理财平台，互联网金融平台，互联网金融产品，网络理财产品，网赚" />
+        <meta name="description" content="福利联盟是行业领先的P2P渠道分发机构。" />
+        <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/wfl-common.css?v-3"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/common-intro.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/animate.css"/>
+        <style>
+          .top-bg-img.m-about-us {
+            background: url(/static/images/bg-about-us-banner.jpg) 100% center fixed no-repeat;
+          }
+          .intro {
+            height: 1500px;
+            position: relative;
+            background: url(/static/images/bg-about-us.jpg) center bottom/auto 100% no-repeat;
+          }
+          .bg-mask.m-intro {
+            background-color: rgba(255,255,255,0.5);
+          }
+          .intro__content {
+            padding: 0 70px;
+          }
+          .intro__title {
+            margin: 70px 0 120px;
+            font-size: 30px;
+            color: #222;
+            text-align: center;
+          }
+          .intro__item-box {
+            font-size: 0;
+          }
+          .intro__item {
+            display: inline-block;
+            text-align: center;
+          }
+          .intro__item-txt {
+            margin: 30px 0 10px;
+            font-size: 18px;
+            color: #222;
+          }
+          .intro__line {
+            display: block;
+            margin: 0 auto;
+          }
+          .ic-center {
+            padding-top: 80px;
+          }
+          .intro-center-mark {
+            position: absolute;
+            font-size: 16px;
+          }
+          .intro-center-mark.m-01 {
+            top: 50px;
+            left: -160px;
+          }
+          .intro-center-mark.m-02 {
+            top: -40px;
+            left: 6px;
+          }
+          .intro-center-mark.m-03 {
+            top: -20px;
+            right: 6px;
+          }
+          .intro-center-mark.m-04 {
+            top: 50px;
+            right: -160px;
+          }
+          .cooperate {
+            padding: 100px;
+          }
+          .cooperate__title {
+            margin: 20px auto 130px;
+            font-size: 30px;
+            color: #222;
+            text-align: center;
+          }
+          .cooperate__item {
+            width: 350px;
+            height: 435px;
+            border-radius: 8px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+            text-align: center;
+          }
+          .cooperate__item-title {
+            margin-top: 70px;
+            font-size: 18px;
+          }
+          .cooperate__img {
+            display: block;
+            margin: 42px auto;
+          }
+          .cooperate__detail {
+            line-height: 44px;
+          }
+        </style>
+    </head>
+    <body>
+        <!-- 头部 -->
+        {% include "header.html" %}
+        <!--banner-container-->
+        <div class="top-bg-img m-about-us">
+          <div class="bg-mask">
+            <div class="banner__content">
+              <div class="banner__title">行业领先的互联网渠道分发机构</div>
+              <p style="line-height: 56px;" class="banner__txt">三年深耕，从0到1<br />创新、变革、突破、我们一直在路上</p>
+            </div>
+          </div>
+        </div>
+        <!--banner-container--end-->
+        <div class="intro">
+          <div class="bg-mask m-intro">
+            <div class="wfl-wrap">
+              <h2 class="intro__title">引领理财CPS2.0时代</h2>
+              <div class="intro__content">
+                <div class="ic-top intro__item-box clearfix wow fadeInDown">
+                  <div class="intro__item l">
+                    <img class="intro__item-img" src="/static/images/img-about-us-1.png"/>
+                    <p class="intro__item-txt">互联网金融平台</p>
+                  </div>
+                  <div class="intro__item r">
+                    <img class="intro__item-img" src="/static/images/img-about-us-2.png"/>
+                    <p class="intro__item-txt">优质资源广告主</p>
+                  </div>
+                </div>
+                  <img class="intro__line intro__line-1" src="/static/images/bg-intro-line-1.png"/>
+                <div class="ic-center intro__item-box">
+                  <div class="intro__item" style="margin-left: 410px;position: relative;">
+                    <img class="intro__item-img" src="/static/images/img-about-us-3.png"/>
+                    <p class="intro__item-txt">福利联盟</p>
+                    <span class="intro-center-mark m-01 wow wobble">精选平台</span>
+                    <span class="intro-center-mark m-02 wow wobble">严格审核</span>
+                    <span class="intro-center-mark m-03 wow wobble">经验足</span>
+                    <span class="intro-center-mark m-04 wow wobble">流量稳定</span>
+                  </div>
+                </div>
+                <img class="intro__line intro__line-2" src="/static/images/bg-intro-line-2.png"/>
+                <div class="ic-bottom intro__item-box clearfix wow fadeInUp">
+                  <div class="intro__item l">
+                    <img class="intro__item-img" src="/static/images/img-about-us-4.png"/>
+                    <p class="intro__item-txt">社群推广</p>
+                  </div>
+                  <div style="margin-left: 270px;" class="intro__item l">
+                    <img class="intro__item-img" src="/static/images/img-about-us-5.png"/>
+                    <p class="intro__item-txt">媒体机构</p>
+                  </div>
+                  <div class="intro__item r">
+                    <img class="intro__item-img" src="/static/images/img-about-us-6.png"/>
+                    <p class="intro__item-txt">线下推广</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="cooperate wfl-wrap"> 
+          <h2 class="cooperate__title">商务合作</h2>
+          <div class="cooperate-box clearfix wow fadeInDown">
+            <div class="cooperate__item l">
+              <p class="cooperate__item-title">金融产品提供方</p>
+              <img class="cooperate__img" src="/static/images/img-cooperate-1.png"/>
+              <p class="cooperate__detail">专注于互联网金融CPA/CPS合作</p>
+              <p class="cooperate__detail">商务QQ：378715862</p>
+            </div>
+            <div class="cooperate__item r">
+              <p class="cooperate__item-title">高净值用户渠道方</p>
+              <img class="cooperate__img" src="/static/images/img-cooperate-2.png"/>
+              <p class="cooperate__detail">项目资源丰富、推广工具免费</p>
+              <p class="cooperate__detail">商务QQ：406051223</p>
+            </div>
+          </div>
+        </div>
+        {% include "footer.html" %}
+        {% include "outline.html" %}
+
+        <script src="/static/js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/wow.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+              $('.nav__item:eq(3)').addClass('active');
+              var wow = new WOW({     // 添加动效
+                  boxClass:     'wow',
+                  animateClass: 'animated',
+                  offset:       0,
+                  mobile:       true,
+                  live:         true,
+                  callback:     function(box) {
+                  },
+                  scrollContainer: null
+              });
+              wow.init(); 
+            });
+        </script>
+
+    </body>
+</html>

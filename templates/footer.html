@@ -1,8 +1,8 @@
 {% load staticfiles %}
 <!--footer部分-->
 <div class="footer clearfix">
-	<div class="wfl-wrap m-footer clearfix" style="margin-top: 25px; position: relative;" >
-		<div class="footer-btm">
+	<div class="wfl-wrap m-footer">
+		<!--<div class="footer-btm">
 			<p class="footer-left l"><a href="http://www.miitbeian.gov.cn">Copyright © 2016-2026 福利联盟 版权所有 备案号：湘ICP备16014503号-1</a></p>
 		</div>
 		<div class="footer-btm" style="margin-left: 40px;">
@@ -25,15 +25,44 @@
 		<div class="QrBox">
             <img src="{% static 'images/QrCode.jpg' %}" />
             <p style="width:100%; text-align: center;">福利联盟官微</p>
+        </div>-->
+    <div class="footer-topbox clearfix">
+      <div class="footer__left l">
+        <ul class="footer__cloum">
+          <li class="footer__item m-title">福利联盟</li>
+          <li class="footer__item"><a href="#">关于我们</a></li>
+          <li class="footer__item"><a href="#">商务合作</a></li>
+        </ul>
+        <ul class="footer__cloum">
+          <li class="footer__item m-title">产品服务</li>
+          <li class="footer__item"><a href="#">番薯主页</a></li>
+          <li class="footer__item"><a href="#">番薯文档</a></li>
+          <li class="footer__item"><a href="#">结算工具</a></li>
+        </ul>
+        <ul class="footer__cloum">
+          <li class="footer__item m-title">帮助中心</li>
+          <li class="footer__item"><a href="#">新手引导</a></li>
+          <li class="footer__item"><a href="#">常见问题</a></li>
+        </ul>
+      </div>
+      <div class="footer__right r">
+        <div class="ewm-box" style="margin-right: 80px;">
+          <img style="border-radius: 10px;" src="{% static 'images/weixin_kefu.jpg' %}" />
+          <p style="width:100%; text-align: center;">客服微信</p>
         </div>
+        <div class="ewm-box">
+            <img src="{% static 'images/QrCode.jpg' %}" />
+            <p style="width:100%; text-align: center;">福利联盟官微</p>
+        </div>
+      </div>
+    </div>
+    <p class="footer_bottom">
+      <a href="http://www.miitbeian.gov.cn">Copyright © 2016-2026 福利联盟 版权所有 备案号：湘ICP备16014503号-1</a>
+      <span>联系电话：0731-85586375</span>
+    </p>
 	</div>
 </div>
-
-<!--
-	作者：763008201@qq.com
-	时间：2017-12-12
-	描述：SEO优化代码
--->
+{% include "outline.html" %}
 <script>
 	var _hmt = _hmt || [];
 	(function() {

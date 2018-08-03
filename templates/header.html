@@ -1,58 +1,11 @@
 <!--header-->
 {% load staticfiles %}
-</style>
 <div class="header">
-	<div class="bgc-333">
-		<div class="headertop color-fff clearfix">
-			<p class="headertop__welcome l">欢迎来到福利联盟！客服热线：0731-85586375&nbsp;&nbsp;</p>
-			<ul class="r fs-0">
-
-				{% if not user.is_authenticated %}
-				<!-- <li class="d-ib"><a class="headertop__navitem link" href="{% url 'login' %}">登录</a></li> -->
-				<li class="d-ib">
-					<a id="login" class="headertop__navitem link">登录</a>
-				</li>
-				<script>
-					window.onload = function() {
-						document.getElementById('login').onclick = function() {
-							window.location.href = '/account/login/?next=/account/';
-						}
-
-					}
-				</script>
-				<li class="d-ib">
-					<a class="headertop__navitem link" href="{% url 'register' %}">注册</a>
-				</li>
-				{% else %}
-				<li class="d-ib">
-					<font><span>您好,</span><a class="headertop__navitem link" href="{% url 'account_index' %}">{{user.mobile}}</a>
-					  <a class="link headertop__navitem a_location" href="/account/message/"><img class="infoimg" src="{% static 'images/small_bell.png' %}"/>{%if user.num_message_sync != 0 %}<span class="infonum">{{user.num_message_sync}}</span>{% endif %}</a>
-						{%if user.is_merchant == '1' %}
-						<a class="link headertop__navitem" href="{% url 'merchant:merchant_index' %}">放单中心</a>
-            {% else %}
-            <a class="link headertop__navitem" href="{% url 'merchant:merchant_guide' %}">招商入驻</a>
-            {% endif %}
-            
-            {%if user.is_channel != '1' %}
-            <a class="channelapply link headertop__navitem" href="/account/apply_for_channel_user/">渠道申请</a>
-            {% endif %}
-					</font>
-				</li>
-				<!--{%if user.level > 0 %}
-                     （VIP{{user.level}}）
-                    {%endif%}-->
-				<li class="d-ib">
-					<a class="headertop__navitem link" href="{%url 'logout' %}">退出</a>
-				</li>
-				{% endif %}
-
-			</ul>
-		</div>
-	</div>
+	{% include "pre-header.html" %}
 	<div class="headermain-box bgc-fff">
-		<div class="headermain clearfix">
-			<a href="{% url 'index' %}"><img src="{% static 'images/qudao-logo.png' %}" alt="福利联盟logo" class="logo l" /></a>
-			<ul class="nav nav-layout l fs-0">
+		<div style="height: 75px;" class="headermain clearfix">
+			<a class="l" href="{% url 'index' %}"><img src="{% static 'images/logo-new.png' %}" alt="福利联盟logo" class="logo l" /></a>
+			<ul class="nav nav-layout r fs-0">
 				<li class="nav__itembox d-ib">
 					<a class="nav__item" href="/">首页</a>
 				</li>
@@ -60,22 +13,22 @@
 					<a class="nav__item" href="{% url 'project_all' %}">项目库</a>
 				</li>
 				<li class="nav__itembox subnav-show d-ib">
-                    <a class="nav__item" href="{% url 'fanshu' %}">番薯</a>
-                </li>
-				<li class="nav__itembox subnav-show d-ib box" style="position: relative;">
+            <a class="nav__item" href="{% url 'helpCenter' %}">帮助中心</a>
+        </li>
+				<!--<li class="nav__itembox subnav-show d-ib box" style="position: relative;">
 					<a class="nav__item">帮助</a>
 					<ul class="toggle_box" id="toggle_box">
 						<div class="toggle_box_top"></div>
 						<li>
-							<a href="{% url 'user_guide'  %}">新人指南</a>
+							<a href="">新人指南</a>
 						</li>
 						<li>
-							<a href="{% url 'helpCenter' %}">常见问题</a>
+							<a href="">常见问题</a>
 						</li>
 					</ul>
-				</li>
+				</li>-->
 				<li class="nav__itembox d-ib">
-					<a class="nav__item" href="{% url 'cooperate' %}">合作共赢</a>
+					<a class="nav__item" href="{% url 'intro_about_us' %}">关于我们</a>
 				</li>
 				<li class="nav__itembox d-ib">
 					<a class="nav__item" href="{% url 'account_index' %}">个人中心</a>

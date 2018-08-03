@@ -6,7 +6,7 @@
 <title>用户中心</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
 <!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}?v-3" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account_message.css' %}" />
 <!--<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
@@ -33,6 +33,7 @@ $(function(){
     $('.box_img').show();
     $('.RightCont').addClass('minheight');
   }
+  $('.nav__item:eq(4)').addClass('active');
 	$('.back-a6').toggleClass("on");
 	$("#pagedata").ajaxPage({
 	    url:'/restapi/msgs/?page={page}&pageSize={pageSize}',

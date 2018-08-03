@@ -6,7 +6,7 @@
 <title>用户中心</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}?v-3" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}?v-3" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
 <script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
@@ -60,6 +60,7 @@ function pagecallback(){
 }
 
 $(function(){
+  $('.nav__item:eq(4)').addClass('active');
 	$('.back-a8').toggleClass("on");
     $(".Close").click(function(){
     	$(".Listpop").css("display","none")<!--隐藏-->

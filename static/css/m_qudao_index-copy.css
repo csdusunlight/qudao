@@ -7,20 +7,19 @@ ul,li,p {
 }
 
 body {
-    background-color: #f5f5f5;
+    background-color: #fff;
 }
 .mui-content {
     padding-bottom: 60px;
-    background-color: #f5f5f5;
 }
 .top {
     position: relative;
 }
 .top__img {
     width: 100%;
-    height: auto;
+    height: 4rem;
 }
-/*.top__mask {
+.top__mask {
     position: absolute;
     top: 0.8rem;
     left: 10%;
@@ -38,41 +37,14 @@ body {
     font-size: 0.3rem;
     line-height: 0.5rem;
     color: #fff;
-}*/
+}
 .data-box {
-    /*position: relative;*/
-    margin: 14px 4%;
-    padding: 20px 0;
-    text-align: center;
+    position: relative;
+    padding: 10px 4% 0;
     background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 .total__box {
     font-size: 0;
-    margin: 0 auto;
-}
-.total__item {
-  display: inline-block;
-  font-size: 10px;
-  line-height: 32px;
-  width: 25%;
-}
-.total__item-num {
-  font-size: 14px;
-  color: #222;
-}
-.goodness__titlle,
-.tool__titlle,
-.business__title {
-  font-size: 14px;
-  color: #222;
-  text-align: center;
-  line-height: 50px;
-}
-.goodness__img {
-  display: block;
-  width: 100%;
 }
 /*.data-box:after {
     content: "";
@@ -83,12 +55,55 @@ body {
     height: 2px;
     background: linear-gradient(to right, #fff, #91C11D 50%,#fff);
 }*/
+.data-title {
+    margin: 0.1rem 0;
+    font-size: 0.4rem;
+    margin-bottom: 0.3rem;
+    color: #91C11D;
+}
+.today-box {
+    margin-top: 10px;
+    padding: 10px 4% 0;
+    background-color: #fff;
+}
+.total__item {
+    display: inline-block;
+    width: 50%;
+    margin-bottom: 0.2rem;
+    font-size: 0.3rem;
+    color: #333;
+}
+.total__item-num {
+    color: #FFBE00;
+    font-size: 0.4rem;
+}
+.today__item { 
+    list-style: none;
+    display: inline-block;
+    width: 2.4rem;
+}
+.today__item:nth-child(2){
+	margin-left: 0.6rem;
+}
+.today__item:nth-child(3){
+	margin-left: 0.7rem;
+}
+.today__img {
+    display: inline-block;
+    /*margin: 0 1rem;*/
+   margin: 0 0.3rem;
+    width: 2.4rem;
+    height: 1rem;
+    vertical-align: middle;
+}
+.today__go {
+    display: inline-block;
+    font-size: 0.4rem;
+}
 .business-box {
     margin-top: 10px;
-    margin: 20px 2%;
+    padding: 10px 4% 0;
     background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 .business {
     font-size: 0;

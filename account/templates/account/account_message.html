@@ -33,6 +33,7 @@ $(function(){
     $('.box_img').show();
     $('.RightCont').addClass('minheight');
   }
+  $('.nav__item:eq(4)').addClass('active');
 	$('.back-a6').toggleClass("on");
 	$("#pagedata").ajaxPage({
 	    url:'/restapi/msgs/?page={page}&pageSize={pageSize}',

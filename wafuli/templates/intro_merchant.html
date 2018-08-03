@@ -9,6 +9,7 @@
         <link href="/static/images/favicon.ico" rel="shortcut icon"/>
         <link rel="stylesheet" type="text/css" href="/static/css/wfl-common.css?v-3"/>
         <link rel="stylesheet" type="text/css" href="/static/css/common-intro.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/animate.css"/>
         <style>
           body {
             background-color: #fff;
@@ -167,7 +168,7 @@
     </head>
     <body>
         <!-- 头部 -->
-        {% include "header-new.html" %}
+        {% include "header.html" %}
         <!--banner-container-->
         <div class="top-bg-img m-settle-tool">
           <div class="bg-mask">
@@ -175,13 +176,13 @@
               <div class="banner__title">招商入驻&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;互利共赢</div>
               <p class="banner__txt">0元拥有百万流量&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;24小时持续引流</p>
               <ul class="banner__btn-box">
-                <li class="banner__btn"><a class="banner__btn-txt" href="">立即使用</a></li>
+                <li class="banner__btn"><a class="banner__btn-txt" href="/merchant/index/">立即使用</a></li>
               </ul>
             </div>
           </div>
         </div>
         <!--banner-container--end-->
-        <div class="top-intro wfl-wrap">
+        <div class="top-intro wfl-wrap wow fadeInDown">
           <h2 class="ti-title">我们的优势</h2>
           <ul class="ti-box">
           	<li class="ti-item">
@@ -204,8 +205,8 @@
         <div class="system-box">
           <div class="bg-mask">
             <div class="wfl-wrap">
-              <h2 class="system__title">操作系统简介</h2>
-              <ul class="system__content">
+              <h2 class="system__title wow fadeInDown">操作系统简介</h2>
+              <ul class="system__content wow fadeInDown">
                 <li class="system__item">
                   <img class="si-img" src="/static/images/img-system-1.png" alt="" />
                 </li>
@@ -232,7 +233,7 @@
           </div>
         </div>
         
-        <div class="hot">
+        <div class="hot wow fadeInDown">
             <h2 class="hot__title">入驻案例</h2>
             <div class="scroll_box">
                 <span class="hot_prev"></span>
@@ -267,6 +268,7 @@
         {% include "outline.html" %}
 
         <script src="/static/js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/wow.min.js" type="text/javascript" charset="utf-8"></script>
         <script type="text/javascript">
             $(document).ready(function(){
                 //  横向滚动部分
@@ -312,6 +314,17 @@
                     } 
                 }); 
             //  横向滚动部分---end
+              var wow = new WOW({     // 添加动效
+                  boxClass:     'wow',
+                  animateClass: 'animated',
+                  offset:       0,
+                  mobile:       true,
+                  live:         true,
+                  callback:     function(box) {
+                  },
+                  scrollContainer: null
+              });
+              wow.init(); 
             });
         </script>
 

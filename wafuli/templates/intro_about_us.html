@@ -101,7 +101,7 @@
     </head>
     <body>
         <!-- 头部 -->
-        {% include "header-new.html" %}
+        {% include "header.html" %}
         <!--banner-container-->
         <div class="top-bg-img m-about-us">
           <div class="bg-mask">
@@ -182,6 +182,7 @@
         <script src="/static/js/wow.min.js" type="text/javascript" charset="utf-8"></script>
         <script type="text/javascript">
             $(document).ready(function(){
+              $('.nav__item:eq(3)').addClass('active');
               var wow = new WOW({     // 添加动效
                   boxClass:     'wow',
                   animateClass: 'animated',

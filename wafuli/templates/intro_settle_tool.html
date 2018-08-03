@@ -9,6 +9,7 @@
         <link href="/static/images/favicon.ico" rel="shortcut icon"/>
         <link rel="stylesheet" type="text/css" href="/static/css/wfl-common.css?v-3"/>
         <link rel="stylesheet" type="text/css" href="/static/css/common-intro.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/animate.css"/>
         <style>
           .settle-tool-top {
             text-align: center;
@@ -33,7 +34,7 @@
     </head>
     <body>
         <!-- 头部 -->
-        {% include "header-new.html" %}
+        {% include "header.html" %}
         <!--banner-container-->
         <div class="top-bg-img m-settle-tool">
           <div class="bg-mask">
@@ -41,13 +42,13 @@
               <div class="banner__title">结算工具：一键批量实时转帐</div>
               <p class="banner__txt">批量导入，实时打款，效率翻10倍</p>
               <ul class="banner__btn-box">
-                <li class="banner__btn"><a class="banner__btn-txt" href="">立即使用</a></li>
+                <li class="banner__btn"><a class="banner__btn-txt" href="/finance/">立即使用</a></li>
               </ul>
             </div>
           </div>
         </div>
         <!--banner-container--end-->
-        <div class="settle-tool-top wfl-wrap">
+        <div class="settle-tool-top wfl-wrap wow fadeInDown">
           <h2 class="st-top-title">传统推广结算的问题</h2>
           <ul class="st-box">
           	<li class="st-item">
@@ -65,22 +66,22 @@
           </ul>
         </div>
         <div class="guide-box wfl-wrap">
-          <h2 class="guide__title">高效结算，一键搞定</h2>
-          <div class="guide__item clearfix">
+          <h2 class="guide__title wow fadeInDown">高效结算，一键搞定</h2>
+          <div class="guide__item clearfix wow fadeInDown">
             <img class="r" src="/static/images/img-settle-tool-1.png">
             <div class="guide__detail l">
                 <h1 class="guide__itemtitle">交单记录同步更新</h1>
                 <p class="guide__txt">线上直接打款，更精准<br />交单记录智能筛选，更便捷</p>
             </div>
           </div>
-          <div class="guide__item clearfix">
+          <div class="guide__item clearfix wow fadeInDown">
             <img class="l" src="/static/images/img-settle-tool-2.png">
             <div class="guide__detail r">
                 <h1 class="guide__itemtitle">批量处理效率高</h1>
                 <p class="guide__txt">站外数据一键导入，批量转账<br />数据加密传输，安全有保障</p>
             </div>
           </div>
-          <div class="guide__item clearfix">
+          <div class="guide__item clearfix wow fadeInDown">
             <img class="r" src="/static/images/img-settle-tool-3.png">
             <div class="guide__detail l">
                 <h1 class="guide__itemtitle">一键打款，实时到帐</h1>
@@ -88,7 +89,7 @@
             </div>
           </div>
           </div>
-          <div class="guide__bottom">
+          <div class="guide__bottom wow fadeInDown">
             <h3 class="guide__bottom-title">在福利联盟，用1%的精力，完成100%的工作</h3>
           </div>
         </div>
@@ -96,9 +97,20 @@
         {% include "outline.html" %}
 
         <script src="/static/js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/wow.min.js" type="text/javascript" charset="utf-8"></script>
         <script type="text/javascript">
             $(document).ready(function(){
-            
+              var wow = new WOW({     // 添加动效
+                  boxClass:     'wow',
+                  animateClass: 'animated',
+                  offset:       0,
+                  mobile:       true,
+                  live:         true,
+                  callback:     function(box) {
+                  },
+                  scrollContainer: null
+              });
+              wow.init(); 
             });
         </script>
 

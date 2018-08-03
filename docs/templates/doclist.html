@@ -8,7 +8,7 @@
 		<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
 		<!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
 		<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
-		<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}?v-3" />
 		<link rel="stylesheet" type="text/css" href="{% static 'css/doclist.css' %}" />
 		<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
 
@@ -192,6 +192,7 @@
             });
 			var parent_dom; //全局，所有父元素
 			var doc_id; //全局，每次请求的文档ID
+			$('.nav__item:eq(4)').addClass('active');
 			$('.back-a13').toggleClass("on");
 
 			$('.doc__box').on('click', '.doc__set', function() {

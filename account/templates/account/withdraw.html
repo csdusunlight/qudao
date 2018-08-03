@@ -8,7 +8,7 @@
     <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}?v-3" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}?v-3" />
     <!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
     <link rel="stylesheet" type="text/css" href="{% static 'css/dialog.css' %}" />
@@ -443,13 +443,14 @@
         }
 
         $(function () {
+          $('.nav__item:eq(4)').addClass('active');
+          $('.back-a9').toggleClass("on");
 
             zhifubao = $(".topBox").data("zhifubao");
             cardNum = $(".topBox").data("card");
             console.log("支付宝", zhifubao);
             console.log("银行卡号码", cardNum)
             var amount;
-            $('.back-a9').toggleClass("on");
             $("#submit").click(function () {
                 amount = $("#withdraw_amount").val();
                 amount = parseFloat(amount, 0);

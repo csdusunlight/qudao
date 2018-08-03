@@ -130,7 +130,12 @@ input[type="text"],select {
 .btn.m-yellow:active {
     background-color: #cf9a00;
 }
-
+.btn.m-red {
+    background-color: #f95353;
+}
+.btn.m-red:active {
+    background-color: #cb4444;
+}
 .txtbox {
     position: relative;
     overflow: hidden;
@@ -227,7 +232,7 @@ input[type="text"],select {
 }
 /*板块样式*/
 /*header*/
-.headertop {
+/*.headertop {
     margin: 0 auto;
     width: 1250px;
     color: #fff;
@@ -382,7 +387,72 @@ input[type="text"],select {
     left: 23px; 
     font-size: 10px;
     border-radius: 100%;
+}*/
+.header {
+  height: 105px;
+  background: url(../images/bg-header.png) center center no-repeat;
+  border-bottom: 1px solid rgba(255,255,255,1);
 }
+.headertop {
+    margin: 0 auto;
+    width: 1250px;
+    color: #fff;
+    background-color: transparent;
+}
+.headertop a {
+  color: #fff;
+}
+.headertop__welcome {
+    line-height: 30px;
+}
+.headertop__navitem {
+    display: inline-block;
+    line-height: 30px;
+    padding: 0 15px;
+    vertical-align: top;
+}
+.headermain-box {
+    border-bottom: none;
+    background-color: transparent;
+}
+.headermain {
+    margin: 0 auto;
+    width: 1250px;
+    background-color: transparent;
+}
+.logo {
+    width: 156px;
+    height: auto;
+    padding: 4px 0;
+}
+.nav-layout {
+    float: right;
+    margin-top: 16px;
+    position: relative;
+}
+.nav__itembox {
+    margin-right: 8px;
+}
+.nav__item {
+    display: block;
+    line-height: 36px;
+    font-size: 14px;
+    color: #fff;
+    width: 72px;
+    margin-left: 30px;
+    text-align: center;
+    transition: all 0.4s ease;
+    border-bottom: 3px solid transparent;
+    vertical-align: top;
+    line-height: 55px;
+}
+
+.nav__item.active,
+.nav__item:hover {
+  background-color: transparent;
+  border-bottom: 3px solid #fff;
+}
+
 /*header---end*/
 /*footer部分*/
 .footer {

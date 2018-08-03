@@ -60,38 +60,18 @@ h6 {
 .wfl-wrap {
   margin-top: 0;
 }
-.header .bgc-333 {
-  background-color: transparent;
-}
-.logo {
-    width: 180px;
-    height: auto; 
-    padding: 10px 0 6px;
-}
+
 .header {
   position: absolute;
   width: 100%;
   z-index: 100;
-  border: 1px solid rgba(255,255,255,0.6);
+  /*border: 1px solid rgba(255,255,255,1);*/
+  background: none;
 }
-.bgc-333 {
-  background-color: rgba(0,0,0,0.6);
-}
-.headertop {
-  background-color: transparent;
+.nav__item {
+  line-height: 55px;
 }
 
-.headermain-box {
-  background-color: transparent;
-}
-.headermain-box {
-
-  border-bottom: none;
-}
-
-.headermain {
-  background-color: transparent;
-}
 
 .flex-direction-nav {
   top: 50%;

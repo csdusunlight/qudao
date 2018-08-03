@@ -1,13 +1,12 @@
-<!--pre-header-->
 {% load staticfiles %}
-<div class="bgc-333">
-  <div class="headertop color-fff clearfix">
-    <p class="headertop__welcome l">欢迎来到福利联盟！客服热线：0731-85586375&nbsp;&nbsp;</p>
-    <ul class="r fs-0">
+<div class="clearfix">
+  <div class="headertop color-fff">
+    <!--<p class="headertop__welcome l">欢迎来到福利联盟！客服热线：0731-85586375&nbsp;&nbsp;</p>-->
+    <ul style="height: 30px;" class="r fs-0">
 
       {% if not user.is_authenticated %}
       <!-- <li class="d-ib"><a class="headertop__navitem link" href="{% url 'login' %}">登录</a></li> -->
-      <li class="d-ib">
+      <li class="d-ib" style="vertical-align: top;">
         <a id="login" href="{% url 'login' %}" class="headertop__navitem link">登录</a>
       </li>
       <script>
@@ -18,13 +17,13 @@
 
         }
       </script>
-      <li class="d-ib">
+      <li class="d-ib" style="vertical-align: top;">
         <a class="headertop__navitem link" href="{% url 'register' %}">注册</a>
       </li>
       {% else %}
       <li class="d-ib">
-        <font><span>您好,</span><a class="headertop__navitem link" href="{% url 'account_index' %}">{{user.mobile}}</a>
-          <a class="link headertop__navitem a_location" href="/account/message/"><img class="infoimg" src="{% static 'images/small_bell.png' %}"/>{%if user.num_message_sync != 0 %}<span class="infonum">{{user.num_message_sync}}</span>{% endif %}</a>
+        <p style="font-size: 0;"><span style="padding: 0; font-size: 14px;" class="headertop__navitem">您好，</span><a style="padding-left: 0;" class="headertop__navitem link" href="{% url 'account_index' %}">{{user.mobile}}</a>
+          <a class="link headertop__navitem a_location" href="/account/message/"><img style="margin-top: 5px;" class="infoimg" src="{% static 'images/small_bell.png' %}"/>{%if user.num_message_sync != 0 %}<span class="infonum">{{user.num_message_sync}}</span>{% endif %}</a>
           {%if user.is_merchant == '1' %}
           <a class="link headertop__navitem" href="{% url 'merchant:merchant_index' %}">放单中心</a>
           {% else %}
@@ -36,12 +35,9 @@
           {% else %}
           <a class="channelapply link headertop__navitem" href="/account/apply_for_channel_user/">渠道申请</a>
           {% endif %}
-        </font>
+        </p>
       </li>
-      <!--{%if user.level > 0 %}
-                   （VIP{{user.level}}）
-                  {%endif%}-->
-      <li class="d-ib">
+      <li class="d-ib" style="vertical-align: top;">
         <a class="headertop__navitem link" href="{%url 'logout' %}">退出</a>
       </li>
       {% endif %}
@@ -49,4 +45,3 @@
     </ul>
   </div>
 </div>
-<!--pre-header---end-->

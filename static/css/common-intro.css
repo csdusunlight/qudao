@@ -9,7 +9,18 @@
 .wfl-wrap {
   margin-top: 0;
 }
-.header .bgc-333 {
+.header {
+  position: absolute;
+  width: 100%;
+  z-index: 100;
+  /*border: 1px solid rgba(255,255,255,1);*/
+  background: none;
+}
+.nav__item {
+  line-height: 55px;
+}
+
+/*.header .bgc-333 {
   background-color: transparent;
 }
 .logo {
@@ -22,9 +33,6 @@
   width: 100%;
   z-index: 100;
   border: 1px solid rgba(255,255,255,0.6);
-}
-.bgc-333 {
-  background-color: rgba(0,0,0,0.6);
 }
 .headertop {
   background-color: transparent;
@@ -60,7 +68,7 @@
 }
 .toggle_box {
   left: 24px;
-}
+}*/
 /*.........*/
 .top-bg-img {
   position: relative;

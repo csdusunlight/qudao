@@ -5,13 +5,13 @@
     <p class="account-leftnav-top-mobile">{{user.mobile}}</p>
     <div class="account-leftnav-icon-box">
       {%if user.is_merchant == '1' %}
-      <img class="account-leftnav-icon-item" src="/static/images/icon-merchant-true.png"/>
+      <a href="/merchant/index/"><img class="account-leftnav-icon-item" src="/static/images/icon-merchant-true.png"/></a>
       {% else %}
       <img class="account-leftnav-icon-item" src="/static/images/icon-merchant-false.png"/>
       {% endif %}
       
       {%if user.is_channel == '1' %}
-      <img class="account-leftnav-icon-item" src="/static/images/icon-qudao-true.png"/>
+      <a href="/account/project/"><img class="account-leftnav-icon-item" src="/static/images/icon-qudao-true.png"/></a>
       {% else %}
       <img class="account-leftnav-icon-item" src="/static/images/icon-qudao-false.png"/>
       {% endif %}

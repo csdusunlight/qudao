@@ -69,6 +69,7 @@
   }
   
   .copy-link {
+    position: relative;
       padding: 36px 0 26px;
   }
   .link-box {
@@ -80,7 +81,9 @@
       text-decoration: underline;
   }
   .btn.m-link {
-      margin-left: 368px;
+      position: absolute;
+      top: 30px;
+      right: 130px;
   }
   .benefit {
       /*margin-top: 20px;*/
@@ -188,11 +191,14 @@
                     </div>
                 </ul>
                 <div class="chart-box">
+                  <div class="recommend__titlebox">
+                    <h2 style="padding-left: 30px; color: #222;" class="recommend__title">结算金额统计</h2>
+                  </div>
                   <div id="main" class="chart" style="width: 600px;height:400px;"></div>
                 </div>
                 <div class="recommend">
                     <div class="recommend__titlebox clearfix">
-                        <h2 class="recommend__title l">热门推荐</h2>
+                        <h2 style="color: #222;" class="recommend__title l">热门推荐</h2>
                         <a class="recommend__more r" href="{% url 'project_all' %}" target="_blank">查看更多>></a>
                     </div>
                     <ul class="recommend__itembox">

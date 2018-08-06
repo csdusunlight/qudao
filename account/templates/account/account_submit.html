@@ -4,7 +4,8 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>渠道数据提交</title>
+		<title>推广中心-自助交单</title>
+		<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
 		<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}?v-3" />
 		<link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
 		<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
@@ -242,7 +243,7 @@
 			{% include "outline.html" %}
 
 			<script type="text/javascript">
-			    $('.back-a4').toggleClass("active");
+			    $('.back-a2').toggleClass("active");
 				var data = '<table width="100%"><tr><th width="12%">项目名称</th><th>投资日期</th><th>提交手机号</th>' +
 					'<th>投资姓名</th><th>投资金额</th><th>投资标期</th><th class="w-zfb">收款信息</th><th class="w-remark">备注及其他</th>' +
 					'</tr>[results]<tr><td>{project_title}</td><td>{invest_date}</td><td>{invest_mobile}</td>' +

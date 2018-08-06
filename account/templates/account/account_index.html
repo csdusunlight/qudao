@@ -162,10 +162,87 @@
       width: 160px;
   }
   /*个人中心---end*/
+/*引导遮罩*/
+  body {
+    width: 100%;
+  }
+ .guide-mask-box {
+   display: none;
+   position: fixed;
+   top: 0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   background-color: rgba(0,0,0,0.7);
+   z-index: 10000;
+ }
+ .guide-mask {
+   position: relative;
+   width: 1250px;
+   margin: 0 auto;
+ }
+ .channel-guide {
+   display: none;
+   position: absolute;
+   right: -40px;
+ }
+ .merchant-guide {
+   position: absolute;
+   right: 76px;
+ }
+ .mask-guide-location {
+   display: block;
+   width: 80px;
+   height: 30px;
+   line-height: 30px;
+   background-color: #fff;
+   border-radius: 4px;
+   color: #222;
+   text-align: center;
+ }
+ .mask-guide-img {
+   display: block;
+   margin: 20px 0 20px -16px;
+ }
+ .mask-guide-txt {
+   margin-left: -180px;
+   font-size: 18px;
+   color: #fff;
+ }
+ .mask-guide-btn {
+   display: block;
+   width: 150px;
+   height: 50px;
+   margin-top: 40px;
+   margin-left: -80px;
+   line-height: 50px;
+   border: 2px solid #fff;
+   color: #fff;
+   border-radius: 8px;
+   text-align: center;
+ }
 </style>
 </head>
 
 <body>
+  <!--引导遮罩-->
+  <div class="guide-mask-box">
+    <div class="guide-mask">
+      <div class="merchant-guide">
+        <span class="mask-guide-location">易推宝</span>
+        <img class="mask-guide-img" src="/static/images/bg-guide-arror.png"/>
+        <p class="mask-guide-txt">【放单系统】升级了，更名【易推宝】！</p>
+        <a id="merchantGuideBtn" class="mask-guide-btn">下一步</a>
+      </div>
+      <div class="channel-guide">
+        <span class="mask-guide-location">推广中心</span>
+        <img class="mask-guide-img" src="/static/images/bg-guide-arror.png"/>
+        <p class="mask-guide-txt">在【推广中心】交单，查看数据和设置主页！</p>
+        <a id="channelGuideBtn" class="mask-guide-btn">朕知道了</a>
+      </div>
+    </div>
+  </div>
+  <!--引导遮罩---end-->
     	<!--头部-->
 {% include "header.html" %}
    	<!--内容-->
@@ -284,17 +361,23 @@ $(function(){
     }
     
 //  引导部分
-    console.log(getCookie('guide_flag'),'jjjjjjzzzzzyyyyy');
-    if(getCookie('guide_flag') === 'yes') {
-      console.log('guide true')
-    } else {
-      console.log('guide false')
-    }
-    $('.account-leftnav-top-img').click(function() {
-      setCookie("guide_flag", 'yes', "date.toUTCString()", "", "", "");
-      console.log('set cookie guide_flag')
+    $('#merchantGuideBtn').click(function() {
+      $('.merchant-guide').hide();
+      $('.channel-guide').show();
     })
-//  引导部分    
+    $('#channelGuideBtn').click(function() {
+      $('.guide-mask-box').hide();
+      $('body').css('position','static');
+      setCookie("guide_flag", 'yes', "date.toUTCString()", "", "", "");
+    })
+    if(getCookie('guide_flag') === 'yes') {
+      console.log('guide not first')
+    } else {
+      console.log('guide is fist')
+      $('.guide-mask-box').show();
+      $('body').css('position','fixed');
+    }
+//  引导部分----end
     var con1 = document.getElementById('con1');
     var notice_txt = '';
     $.ajax({

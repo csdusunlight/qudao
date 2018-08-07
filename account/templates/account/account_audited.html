@@ -1055,7 +1055,9 @@
         
         $('#financeGuideBtn').click(function() {
           $('.guide-mask-box').hide();
-          setCookie("guide_finance_flag", 'yes', "date.toUTCString()", "", "", "");
+          var date_guide = new Date();
+          date_guide.setTime(date_guide.getTime() + 360 * (24 * 60 * 60 * 1000));
+          setCookie("guide_finance_flag", 'yes', date_guide.toUTCString(), "", "", "");
           $('body').css('position','static');
         })
         if(getCookie('guide_finance_flag') === 'yes') {

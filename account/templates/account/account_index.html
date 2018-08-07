@@ -368,7 +368,9 @@ $(function(){
     $('#channelGuideBtn').click(function() {
       $('.guide-mask-box').hide();
       $('body').css('position','static');
-      setCookie("guide_flag", 'yes', "date.toUTCString()", "", "", "");
+      var date_guide = new Date();
+      date_guide.setTime(date_guide.getTime() + 360 * (24 * 60 * 60 * 1000));
+      setCookie("guide_flag", 'yes', date_guide.toUTCString(), "", "", "");
     })
     if(getCookie('guide_flag') === 'yes') {
       console.log('guide not first')

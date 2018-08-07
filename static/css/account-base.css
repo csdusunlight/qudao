@@ -7,7 +7,7 @@
 .leftnav {
     float: left;
     width: 200px;
-    border: 1px solid #c9c9c9;
+    /*border: 1px solid #c9c9c9;*/
     background-color: #fff;
 }
 .account-leftnav-top {
@@ -76,7 +76,7 @@
 .account-navbox.on .account-nav {
     color: #f95353;
 }
-.account-navbox.on:after {
+/*.account-navbox.on:after {
     content: "";
     position: absolute;
     top: 24px;
@@ -91,7 +91,7 @@
     -ms-transform: rotate(45deg);
     -o-transform: rotate(45deg);
     transform: rotate(45deg);
-}
+}*/
 /*.account-nav.on {
     color: #91C11D;
 }

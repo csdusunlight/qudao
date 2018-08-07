@@ -215,7 +215,7 @@ h6 {
 
 .intro__txt {
   margin-top: 90px;
-  line-height: 50px;
+  line-height: 70px;
   text-align: center;
   font-size: 18px;
 }
@@ -461,6 +461,12 @@ h6 {
   width: 184px;
   height: 64px;
   border: 1px solid #c9c9c9;
+}
+.cooperate__logo-img {
+  display: block;
+  width: 120px;
+  height: 50px;
+  margin: 6px auto 0;
 }
 /*cooperate-----end*/
 /*动画部分*/

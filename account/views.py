@@ -319,6 +319,7 @@ def apply_for_channel_user(request):
             return JsonResponse(result)
     else:
         return render(request,"apply_for_channel_user.html")
+@login_required
 @csrf_exempt
 def apply_for_fangdan_user(request):
     """如果是公司，那么id_name就是公司名称，id_num就是公司的工商注册号

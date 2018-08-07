@@ -178,9 +178,13 @@
               <ul class="banner__btn-box">
                 <li class="banner__btn">
                   {% if not user.is_authenticated %}
-                  <a class="banner__btn-txt" href="/account/apply_for_fangdan_user/">立即使用</a>
+                    <a class="banner__btn-txt" href="/account/login/?next=/intro_merchant/">登录后使用</a>
                   {% else %}
-                  <a class="banner__btn-txt" href="/merchant/index/">立即使用</a>
+                    {% if user.is_merchant == '1' %}
+                    <a class="banner__btn-txt" href="/merchant/index/">立即使用</a>
+                    {% else %}
+                    <a class="banner__btn-txt" href="/account/apply_for_fangdan_user/">立即使用</a>
+                    {% endif %}
                   {% endif %}
                 </li>
               </ul>

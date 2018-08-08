@@ -109,7 +109,8 @@ input[type="button"]{
 .time{
     font-size: 12px;
     color: white;
-    margin: 0 17px;
+    margin: 0 auto;
+    text-align: center;
 }
 /* .btm_desc{
     width: 120px;

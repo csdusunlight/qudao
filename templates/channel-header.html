@@ -6,7 +6,7 @@
   <div class="headermain-box bgc-fff">
     <div class="headermain clearfix">
       <a href="{% url 'index' %}"><img src="{% static 'images/logo-new.png' %}" alt="福利联盟logo" class="logo l" /></a>
-      {%if user.is_merchant == '0' %}
+      {%if user.is_channel == '0' %}
       <a style="margin-top:26px;margin-left:10px;display:inline-block;color: #fff; text-decoration: underline;" href="/account/apply_for_channel_user/">申请渠道等级></a>
       {% endif %}
       <ul class="nav nav-layout l fs-0">

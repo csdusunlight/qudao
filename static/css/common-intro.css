@@ -74,13 +74,13 @@
   position: relative;
   width: 100%;
   height: 572px;
-  background: url(../images/bg-fanshu-home-banner.jpg) 100% center fixed no-repeat;
+  background: url(http://image.fuliunion.com/bg-fanshu-home-banner.jpg) 100% center fixed no-repeat;
 }
 .top-bg-img.m-doc {
-  background: url(../images/bg-fanshu-doc-banner.jpg) 100% center fixed no-repeat;
+  background: url(http://image.fuliunion.com/bg-fanshu-doc-banner.jpg) 100% center fixed no-repeat;
 }
 .top-bg-img.m-settle-tool {
-  background: url(../images/bg-settle-tool-banner.jpg) 100% center fixed no-repeat;
+  background: url(http://image.fuliunion.com/bg-settle-tool-banner.jpg) 100% center fixed no-repeat;
 }
 .banner__content {
   padding-top: 245px;

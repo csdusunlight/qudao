@@ -251,7 +251,7 @@ h6 {
   position: relative;
   width: 100%;
   height: 484px;
-  background: url(../images/bg-big-2.jpg) center center fixed no-repeat;
+  background: url(http://image.fuliunion.com/bg-big-2.jpg) center center fixed no-repeat;
   font-size: 0;
 }
 
@@ -433,7 +433,7 @@ h6 {
 .wenan-box {
   position: relative;
   height: 400px;
-  background: url(../images/bg-big-3.jpg) center center fixed no-repeat;
+  background: url(http://image.fuliunion.com/bg-big-3.jpg) center center fixed no-repeat;
 }
 
 .wenan {

@@ -1,0 +1,43 @@
+{% load staticfiles %}
+<div class="clearfix">
+  <div class="headertop color-fff">
+    <!--<p class="headertop__welcome l">欢迎来到福利联盟！客服热线：0731-85586375&nbsp;&nbsp;</p>-->
+    <ul style="height: 30px;" class="r fs-0">
+
+      {% if not user.is_authenticated %}
+      <!-- <li class="d-ib"><a class="headertop__navitem link" href="{% url 'login' %}">登录</a></li> -->
+      <li class="d-ib" style="vertical-align: top;">
+        <a id="login" href="{% url 'login' %}" class="headertop__navitem link">登录</a>
+      </li>
+      <script>
+        window.onload = function() {
+          document.getElementById('login').onclick = function() {
+            window.location.href = '/account/login/?next=/account/';
+          }
+
+        }
+      </script>
+      <li class="d-ib" style="vertical-align: top;">
+        <a class="headertop__navitem link" href="{% url 'register' %}">注册</a>
+      </li>
+      {% else %}
+      <li class="d-ib">
+        <p style="font-size: 0;"><span style="padding: 0; font-size: 14px;" class="headertop__navitem">您好，</span><a style="padding-left: 0;" class="headertop__navitem link" href="{% url 'account_index' %}">{{user.mobile}}</a>
+          <a class="link headertop__navitem a_location" href="/account/message/"><img style="margin-top: 5px;" class="infoimg" src="{% static 'images/small_bell.png' %}"/>{%if user.num_message_sync != 0 %}<span class="infonum">{{user.num_message_sync}}</span>{% endif %}</a>
+          {%if user.is_merchant == '1' %}
+          <a class="link headertop__navitem" href="{% url 'merchant:merchant_index' %}">易推宝</a>
+          {% else %}
+          <!--<a class="link headertop__navitem" href="{% url 'merchant:merchant_guide' %}">招商入驻</a>-->
+          <a class="link headertop__navitem" href="/intro_merchant/">招商入驻</a>
+          {% endif %}
+          <a class="link headertop__navitem" href="/account/account_audited/">推广中心</a>
+        </p>
+      </li>
+      <li class="d-ib" style="vertical-align: top;">
+        <a class="headertop__navitem link" href="{%url 'logout' %}">退出</a>
+      </li>
+      {% endif %}
+
+    </ul>
+  </div>
+</div>

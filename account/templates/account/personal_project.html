@@ -3,9 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>创建修改项目</title>
+<title>推广中心-创建修改项目</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}?v-3" />
 <link rel="stylesheet" href="{% static 'css/cropbox.css' %}" type="text/css" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account_add_project.css' %}" />
@@ -30,8 +30,7 @@ $(function(){
 	{% include "header.html" %}
 	<!--内容-->
 	<div class="Content">
-    	{% include "account/left.html" %}
-    	<div class="RightCont">
+    	<!--<div class="RightCont">-->
     	    <div class="right-top clearfix">
     	        <h2 class="top-title add-title l">新建项目</h2>
     	    </div>
@@ -130,7 +129,7 @@ $(function(){
                     <a style="margin-left: -160px;" class="save btn m-green">保存</a>
                 </div>
 
-        </div>
+        <!--</div>-->
     </div>
 	{% include "footer.html" %}
 	<script src="{% static 'js/wfl-common.js' %}" type="text/javascript"></script>

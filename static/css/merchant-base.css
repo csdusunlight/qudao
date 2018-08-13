@@ -381,7 +381,7 @@ html, body, h1, h2, h3, h4, h5, h6, div, dl, dt, dd, ul, ol, li, p, blockquote, 
     width: 1300px;
 }
 body {
-    background: url(../images/bg_starSky.jpg) top center/cover fixed no-repeat;
+    background: url(http://image.fuliunion.com/bg_starSky.jpg) top center/cover fixed no-repeat;
 }
 .nodata-box {
     height: 100%;

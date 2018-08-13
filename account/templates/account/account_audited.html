@@ -3,15 +3,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>用户中心</title>
+<title>推广中心-数据审核</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/User.css' %}" />-->
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}?v-3" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/add-img.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.searchableSelect.css' %}" />
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />-->
-<!--<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />-->
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/wfl-page.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
@@ -133,27 +130,94 @@
         font-size: 12px;
         width: 18px;
         height: 18px;
-        line-height: 20px;
+        line-height: 18px;
         border-radius: 50%;
         background-color: #ff5a00;
         /*font-weight: bold;*/
     }
+    
+    /*引导遮罩*/
+    body {
+      width: 100%;
+    }
+   .guide-mask-box {
+     display: none;
+     position: fixed;
+     top: 0;
+     bottom: 0;
+     left: 0;
+     right: 0;
+     background-color: rgba(0,0,0,0.7);
+     z-index: 10000;
+   }
+   .guide-mask {
+     position: relative;
+     width: 1250px;
+     margin: 0 auto;
+   }
+   .finance-guide {
+     position: absolute;
+     top: 60px;
+     left: 726px;
+   }
+   .mask-guide-location {
+     display: block;
+     width: 80px;
+     height: 30px;
+     line-height: 30px;
+     background-color: #fff;
+     border-radius: 4px;
+     color: #222;
+     text-align: center;
+   }
+   .mask-guide-img {
+     display: block;
+     margin: 20px 0 20px -16px;
+   }
+   .mask-guide-txt {
+     margin-left: -180px;
+     font-size: 18px;
+     color: #fff;
+   }
+   .mask-guide-btn {
+     display: block;
+     width: 150px;
+     height: 50px;
+     margin-top: 40px;
+     margin-left: -80px;
+     line-height: 50px;
+     border: 2px solid #fff;
+     color: #fff;
+     border-radius: 8px;
+     text-align: center;
+   }
+   /*引导遮罩---end*/
 </style>
 
 </head>
 
 <body>
+   <!--引导遮罩-->
+    <div class="guide-mask-box">
+      <div class="guide-mask">
+        <div class="finance-guide">
+          <span class="mask-guide-location">自助打款</span>
+          <img class="mask-guide-img" src="/static/images/bg-guide-arror.png"/>
+          <p class="mask-guide-txt">新增【自助打款】功能，实现一键批量实时转账！</p>
+          <a id="financeGuideBtn" class="mask-guide-btn">朕知道了</a>
+        </div>
+      </div>
+    </div>
+    <!--引导遮罩---end-->
 <!--头部-->
-{% include "header.html" %}
+{% include "channel-header.html" %}
 <!--内容-->
 <div class="Content">
-{% include "account/left.html" %}
-<div class="RightCont">
     <div style="position: relative;margin-bottom: 20px;" class="data-intro">
         <h3>操作说明：</h3>
         <p style="margin-left: 30px;">官方数据的<span class="handle-mark">删除</span>、<span class="handle-mark">编辑</span>、<span class="handle-mark">提交截图</span>等操作位于未审核选项下，<span class="handle-mark">审核</span>位于已通过选项下；</p>
         <p style="margin-left: 30px;">自建数据的<span class="handle-mark">删除</span>、<span class="handle-mark">编辑</span>、<span class="handle-mark">审核</span>、<span class="handle-mark">拒绝</span>、<span class="handle-mark">提交截图</span>等操作位于未审核选项下；</p>
-          <a target="_blank" class="btn m-yellow" style="position: absolute;right: 20px;top: 10px;width: 110px;color: #fff; font-size: 16px;" href="/finance">前往打款页面</a>
+          <!--<a target="_blank" class="btn m-yellow" style="position: absolute;right: 20px;top: 10px;width: 110px;color: #fff; font-size: 16px;" href="/finance/">前往打款页面</a>-->
     </div>
     <div class="table" style="position: relative;">
         <h2 class="table__title">官方数据</h2>
@@ -316,8 +380,6 @@
             <div class="popup__detail">
                 <div class="popup__item">
                     <span class="popup__itemname">项目名称</span>
-                    <!--<select disabled="disabled" class="project" placeholder="选择项目">
-                    </select>-->
                     <input disabled="disabled" type="text" class="project" />
                 </div>
                 <div class="popup__item">
@@ -384,8 +446,6 @@
             <div class="popup__detail">
                 <div class="popup__item">
                     <span class="popup__itemname">项目名称</span>
-                    <!--<select disabled="disabled" class="project_02" placeholder="选择项目">
-                    </select>-->
                     <input disabled="disabled" type="text" class="project_02" />
                 </div>
                 <div class="popup__item">
@@ -501,7 +561,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 <iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
 {% include "footer.html" %}
@@ -967,9 +1026,51 @@
 //      编辑/删除部分（自建）---end
         
         $(function(){
-            $('.back-a5').toggleClass("on");
+          
+//        引导遮罩
+        function setCookie(name, value, expires, path, domain, secure) {
+            document.cookie = name + "=" + encodeURI(value) +
+                ((expires) ? "; expires=" + expires : "") +
+                ((path) ? "; path=" + path : "") +
+                ((domain) ? "; domain=" + domain : "") +
+                ((secure) ? "; secure=" + secure : "");
+        }
+    
+        function getCookie(cName) {
+            var cookieString = decodeURI(document.cookie);
+            var cookieArray = cookieString.split("; ");
+            console.log(cookieArray.length);
+            for(var i = 0; i < cookieArray.length; i++) {
+                var cookieNum = cookieArray[i].split("=");
+                console.log(cookieNum.toString());
+                var cookieName = cookieNum[0];
+                var cookieValue = cookieNum[1];
+    
+                if(cookieName == cName) {
+                    return cookieValue;
+                }
+            }
+            return false;
+        }
+        
+        $('#financeGuideBtn').click(function() {
+          $('.guide-mask-box').hide();
+          var date_guide = new Date();
+          date_guide.setTime(date_guide.getTime() + 360 * (24 * 60 * 60 * 1000));
+          setCookie("guide_finance_flag", 'yes', date_guide.toUTCString(), "", "", "");
+          $('body').css('position','static');
+        })
+        if(getCookie('guide_finance_flag') === 'yes') {
+          console.log('guide_finance not first')
+        } else {
+          console.log('guide_finance is fist')
+          $('.guide-mask-box').show();
+          $('body').css('position','fixed');
+        }
+    //        引导遮罩--end
+            $('.back-a1').toggleClass("active");
             
-            $(".RightCont").on("focus", ".date_picker", function() {
+            $(".Content").on("focus", ".date_picker", function() {
                 $('.date_selector').remove();
                 $(this).date_input();
             })
@@ -983,40 +1084,6 @@
             } else {
             	
             }
-//          $.ajax({
-//              url:"/restapi/projects/?is_official=true&pageSize=999",
-//              type:"get",
-//              dataType: "json",
-//              success: function(ret) {
-//                  console.log(ret.results);
-//                  var option_html = '';
-//                  for (var i = 0; i < ret.results.length; i++) {
-//                      option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
-//                  }
-//                  $('.project').html(option_html);
-//              },
-//              error: function(jqXHR, textStatus, errorThrown) {
-//                  console.log(jqXHR.responseText);
-//                  console.log("数据错误is_official=true");
-//              }
-//          });
-//          $.ajax({
-//              url:"/restapi/projects/?is_official=false&pageSize=999",
-//              type:"get",
-//              dataType: "json",
-//              success: function(ret) {
-//                  console.log(ret.results);
-//                  var option_html = '';
-//                  for (var i = 0; i < ret.results.length; i++) {
-//                      option_html += '<option value="' + ret.results[i].id + '">' + ret.results[i].title + '</option>';
-//                  }
-//                  $('.project_02').html(option_html);
-//              },
-//              error: function(jqXHR, textStatus, errorThrown) {
-//                  console.log(jqXHR.responseText);
-//                  console.log("数据错误is_official=false");
-//              }
-//          });
             
 //          官方数据
             var state_1 = '';

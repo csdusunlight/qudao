@@ -8,14 +8,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <meta name="renderer" content="webkit">
     <link href="/static/images/favicon.ico" rel="shortcut icon"/>
-    <title>打款中心</title>
+    <title>推广中心-打款中心</title>
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/new-common.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/new-common.css"?v-3/>
     <!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
     <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
     <!--<script src="./header.js" type="text/javascript" charset="utf-8"></script>-->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <style type="text/css">
       #app {
         min-width: 1210px;
@@ -66,7 +66,7 @@
   </head>
 
   <body>
-{% include "header.html" %}
+{% include "channel-header.html" %}
     
     <div id="app">
      <div class="search__box">
@@ -318,6 +318,7 @@
         },
         created: function() {
           this.getDataList();
+          $('.back-a3').toggleClass("active");
         },
         methods: {
           searchData: function() {

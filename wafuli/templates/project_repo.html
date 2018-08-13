@@ -8,12 +8,14 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 	<meta name="renderer" content="webkit">
 	<title>项目库</title>
+	<meta name="keywords" content="福利联盟、理财返利、网贷返利、理财师、理财超市、番薯文档、番薯主页" />
+  <meta name="description" content="福利联盟项目库为投资者提供理财投资攻略，主要为理财返利平台、网贷返利平台投资攻略，是您身边的理财超市、专业的理财师。" />
 	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-	<link rel="stylesheet" type="text/css" href="/static/css/new-common.css" />
+	<link rel="stylesheet" type="text/css" href="/static/css/new-common.css?v-3" />
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<!--<script src="./header.js" type="text/javascript" charset="utf-8"></script>-->
 	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
-	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 	<style type="text/css">
 		#app {
 			min-width: 1310px;
@@ -449,9 +451,9 @@
 				<!--pagination-->
 			</div>
 		</div>
-		<div class='back_top' v-show='is_goTop'>
+		<!--<div class='back_top' v-show='is_goTop'>
 			<div class="pic_box" @click='backTop'></div>
-		</div>
+		</div>-->
 		<!-- <div class='back_top'><img src="{% static 'images/back_up.png' %}" /></div> -->
 	</div>
 	<!-- 底部 -->
@@ -468,7 +470,7 @@
 				endProject: [],
 				noticeProject: [],
 				is_show: false,
-				is_goTop:false,
+//				is_goTop:false,
 				all_project: '',
 				scroll: '',
 				search_ipt: '',
@@ -488,20 +490,16 @@
 				console.log('是否登录：', '{{user.is_authenticated}}')
 				var that = this;
 				//滑动到一定高度图标显示
-				$(window).scroll(function () {
-					var scrollTop = $(this).scrollTop();
-					var scrollHeight = $(document).height();
-					var windowHeight = $(this).height();
-					if(scrollTop >= 650){
-						that.is_goTop = true;
-					}else if(scrollTop == 0){
-						that.is_goTop = false;
-					}
-					// if (scrollHeight - scrollTop - windowHeight < 30) {
-					// 	console.log('out',that.loadFlag);
-					// 	that.getDataList();
-					// }
-				})
+//				$(window).scroll(function () {
+//					var scrollTop = $(this).scrollTop();
+//					var scrollHeight = $(document).height();
+//					var windowHeight = $(this).height();
+//					if(scrollTop >= 650){
+//						that.is_goTop = true;
+//					}else if(scrollTop == 0){
+//						that.is_goTop = false;
+//					}
+//				})
 				//ajax请求数据
 				that.getDataList();
 				//				$.ajax({
@@ -779,10 +777,10 @@
 					that.search_data();
 				},
 				//回到顶部
-				backTop: function () {
-					console.log('goTop');
-					$("html,body").animate({ scrollTop: 0 }, 500);
-				},
+//				backTop: function () {
+//					console.log('goTop');
+//					$("html,body").animate({ scrollTop: 0 }, 500);
+//				},
 				getDate: function (AddDayCount) {
 					var dd = new Date();
 					dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期    

@@ -3,9 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>用户中心</title>
+<title>推广中心-编辑公告</title>
 <link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
-<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-common.css' %}?v-3" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account-base.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/account_setting.css' %}" />
 <link rel="stylesheet" href="{% static 'css/cropbox.css' %}" type="text/css" />
@@ -16,7 +16,7 @@
 
 
 $(function(){
-    $('.back-a10').toggleClass("on");
+    $('.back-a6').toggleClass("active");
     $(window).load(function() {
         
     });
@@ -25,42 +25,39 @@ $(function(){
 </head>
 
 <body>
-	{% include "header.html" %}
+	{% include "channel-header.html" %}
 	<!--内容-->
 	<div class="Content">
-    	{% include "account/left.html" %}
-    	<div class="RightCont">
-            <div class="notice-info-box" style="margin-top: 0;">
-                <h2 class="notice-title">主页公告</h2>
-                <div class="item">
-                    <span class="item__name"></span>
-                    <div class="notice-box">
-                        <div class="input-box">
-                            <input class="item__txt notice" maxlength="100" type="text" /><a class="notice-add">添加</a>
-                            <span>最多可添加十条公告</span>
-                        </div>
-                    </div>
-                    <p class="notice-exist-title">已有公告:</p>
-                    <ul class="notice-exist">
-                    </ul>
-                </div>
-                
-                <div class="popup m-notice-change">
-                    <div class="popup__content" style="width: 600px;">
-                        <div class="popup__top">
-                            <h2 class="popup__title">修改公告</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
-                        </div>
-                        <div class="popup__detail">
-                            <div class="popup__item"><span class="popup__itemname">公告内容</span><input id="notice_detail" type="text" /></div>
-                        </div>
-                        <div class="popup__btnbox">
-                            <a id="notice_change" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+      <div class="notice-info-box" style="margin-top: 0;">
+          <h2 class="notice-title">主页公告</h2>
+          <div class="item">
+              <span class="item__name"></span>
+              <div class="notice-box">
+                  <div class="input-box">
+                      <input class="item__txt notice" maxlength="100" type="text" /><a class="notice-add">添加</a>
+                      <span>最多可添加十条公告</span>
+                  </div>
+              </div>
+              <p class="notice-exist-title">已有公告:</p>
+              <ul class="notice-exist">
+              </ul>
+          </div>
+          
+          <div class="popup m-notice-change">
+              <div class="popup__content" style="width: 600px;">
+                  <div class="popup__top">
+                      <h2 class="popup__title">修改公告</h2><button type="button" class="popup__close popup__close-btn" onclick="canclePopup(this)">×</button>
+                  </div>
+                  <div class="popup__detail">
+                      <div class="popup__item"><span class="popup__itemname">公告内容</span><input id="notice_detail" type="text" /></div>
+                  </div>
+                  <div class="popup__btnbox">
+                      <a id="notice_change" class="btn m-green m-popup popup-confirm popup__close-btn">确认</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
 	{% include "footer.html" %}
 	<script src="{% static 'js/wfl-common.js' %}" type="text/javascript"></script>
     <script type="text/javascript">

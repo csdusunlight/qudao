@@ -1,40 +1,29 @@
 {% load staticfiles %}
 <!--contact部分-->
-<!--<ul class="contact">
-  <li class="contact__itembox">
-      <a class="contact__qq contact__item" target="_blank" href="javascript:;"><span class="contact__item-txt">QQ<br/>客服</span></a>
-      <div class="contact__show m-qq">
-          <a  class="contact__show-item" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2339019773&site=qq&menu=yes">
-              <img class="contact__show-img" border="0" src="http://wpa.qq.com/pa?p=2:2339019773:52" alt="免费福利客服" />
-              <span class="contact__show-name">免费福利客服</span>
-          </a>
-          <a class="contact__show-item" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=3327058376&site=qq&menu=yes">
-              <img class="contact__show-img" border="0" src="http://wpa.qq.com/pa?p=2:3327058376:52" alt="体验福利客服" />
-              <span class="contact__show-name">体验福利客服</span>
-          </a>
-          <a class="contact__show-item" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2468016671&site=qq&menu=yes">
-              <img class="contact__show-img" border="0" src="http://wpa.qq.com/pa?p=2:2468016671:52" alt="理财福利客服" />
-              <span class="contact__show-name">理财福利客服</span>
-          </a>
-      </div>
+<ul class="contact__box">
+  <li class="contact">
+    <a class="contact__txt" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=406051223&site=qq&menu=yes">在线<br />客服</a>
   </li>
-  <li class="contact__itembox">
-      <a class="contact__weixin contact__item" target="_blank" href="javascript:;"><span class="contact__item-txt">加入<br/>QQ群</span></a>
-      <div class="contact__show m-group">
-          <a class="contact__show-item" target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=ede716c292b3169b840ddd58778f17bc124efce83022365731f7c29ce2d22e7f">
-              <img class="contact__show-img" border="0" src="http://wpa.qq.com/pa?p=2:2339019773:52" alt="点击这里加入QQ群" title="点击这里加入QQ群" />
-              <span class="contact__show-name">免费福利群</span>
-          </a>
-          <a class="contact__show-item" target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=3835251b8bc58f6277bcdfce3a12538586542df8a432cf799ed7c67bd56fdc9f">
-              <img class="contact__show-img" border="0" src="http://wpa.qq.com/pa?p=2:2339019773:52" alt="点击这里加入QQ群" title="点击这里加入QQ群" />
-              <span class="contact__show-name">体验福利群</span>
-          </a>
-          <a class="contact__show-item" target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=bb1d17133b125893edd6e1467ef1ff9dd5edd0355ad6b525f208ebbe48fffce5">
-              <img class="contact__show-img" border="0" src="http://wpa.qq.com/pa?p=2:2339019773:52" alt="点击这里加入QQ群" title="点击这里加入QQ群" />
-              <span class="contact__show-name">理财福利群</span>
-          </a>
-      </div>
+  <li class="contact">
+    <a class="contact__txt" target="_blank" href="http://shang.qq.com/wpa/qunwpa?idkey=e13d23cb6afcfd4ae334ce53cab7d0ff67480084c02367b9a035182f7e1c4d10">加入<br />QQ群</a>
   </li>
-  <li class="contact__top contact__item"><a class="contact__totop" href="javascript:;" onclick="$('body,html').animate({scrollTop:0},600);"><!-- <img src="{% static 'images/top.png' %}" alt="top"/><span class="contact__item-txt">回到<br/>顶部</span></a></li>
-</ul>-->
+  <li class="contact">
+    <a class="contact__txt" href="/helpCenter/">帮助<br />中心</a>
+  </li>
+  <li class="contact m-hide backTop" onclick="$('html,body').animate({ scrollTop: 0 }, 500);">
+     <a class="contact__txt">回到<br />顶部</a>
+  </li>
+</ul>
+<script type="text/javascript">
+  window.onload = function () {
+  	$(document).scroll(function(){
+      var distance = $(document).scrollTop();
+      if(distance >= 500) {
+        $('.backTop').removeClass('m-hide')
+      } else {
+        $('.backTop').addClass('m-hide')
+      }
+    })
+  }
+</script>
 <!--contact部分---end-->

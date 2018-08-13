@@ -593,6 +593,7 @@ def import_investlog(request):
             duplic = False
             for j in range(ncols):
                 cell = table.cell(i,j)
+                logger.info(cell.value)
                 if j==0:
                     id = int(cell.value)
                     temp.append(id)

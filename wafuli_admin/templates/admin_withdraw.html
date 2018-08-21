@@ -158,7 +158,7 @@
               <div class="grid-content bg-purple">
                 <span class="desc_txt">处理状态：</span>
                 <el-select v-model="state" @change="changse_state" slot="prepend" placeholder="请选择处理状态">
-                  <el-option label="全部" value=""></el-option>
+                  <!--<el-option label="全部" value=""></el-option>-->
                   <el-option label="未审核" value="1"></el-option>
                   <el-option label="审核通过" value="0"></el-option>
                   <el-option label="审核拒绝" value="2"></el-option>
@@ -251,11 +251,11 @@
         </el-form-item>
         <div class="iptBox" v-show='is_show'>
           <el-form-item label="开始时间">
-            <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="audit_stime" type="date" placeholder="选择日期">
+            <el-date-picker format="yyyy-MM-ddTHH:mm" value-format="yyyy-MM-ddTHH:mm" v-model="audit_stime" type="datetime" placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
           <el-form-item label="结束时间">
-            <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="audit_etime" type="date" placeholder="选择日期">
+            <el-date-picker format="yyyy-MM-ddTHH:mm" value-format="yyyy-MM-ddTHH:mm" v-model="audit_etime" type="datetime" placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
         </div>
@@ -291,7 +291,7 @@
       card_number: '',
       admin_mobile: '',
       qq_number: '',
-      state: '',
+      state: '1',
       checkIdList: '',
       audit_stime: '',
       audit_etime: '',
@@ -472,8 +472,8 @@
             async: false,
             dataType: 'json',
             success: function (res) {
-              if (res.code == 0) {
-                that.$alert('共' + res.count + '笔，' + res.sum + '元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果', '温馨提示', {
+//            if (res.code == 0) {
+                that.$confirm('共' + res.count + '笔，' + res.sum + '元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果', '温馨提示', {
                   confirmButtonText: '确定',
                   callback: function (action) {
                     if (action == 'confirm') {
@@ -503,12 +503,12 @@
                     }
                   }
                 })
-              } else {
-                that.$notify({
-                  title: '提示',
-                  message: '成功数量：' + res.count + '总数：' + res.sum
-                })
-              }
+//            } else {
+//              that.$notify({
+//                title: '提示',
+//                message: '成功数量：' + res.count + '总数：' + res.sum
+//              })
+//            }
             },
           })
         }
@@ -539,11 +539,12 @@
             async: false,
             success: function (res) {
 
-              that.$alert('共' + res.count + '笔，' + res.sum + '元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果', '温馨提示', {
+              that.$confirm('共' + res.count + '笔，' + res.sum + '元，确定通过支付宝转账？提交可能需要一分钟的时间，请稍后刷新查看结果', '温馨提示', {
                 confirmButtonText: '确定',
                 callback: function (action) {
                   console.log(action);
                   if (action == 'confirm') {
+                    console.log('conform')
                     $.ajax({
                       url: '/Admin/withdraw_autoaudit/',
                       dataType: 'json',
@@ -556,14 +557,14 @@
                         id_list: ''
                       },
                       success: function (res) {
-                        $notify({
+                        that.$notify({
                           title: '提示',
                           message: '一键审核成功'
                         })
                         that.auditShow = false;
                       },
                       error: function () {
-                        $notify({
+                        that.$notify({
                           title: '提示',
                           message: '请检查网络连接'
                         })
@@ -621,39 +622,49 @@
         that.$confirm('确定是否一键提现?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'info'
-        }).then(() => {
-          $.ajax({
-            url: "{% url 'batch_withdraw' %}",
-            dataType: "json",
-            async: false,
-            type: "get",
-            success: function (ret) {
-              if (ret.code == 0) {
-                that.$notify({
-                  title: '提示',
-                  message: '一键提现成功'
-                })
-              } else {
-                that.$notify({
-                  title: '提示',
-                  message: ret.msg
-                })
-              }
-            },
-            error: function () {
-              that.$notify({
-                title: '提示',
-                message: "截取bug一枚，请联系前端技术人员"
-              })
+          type: 'info',
+          callback: function(action, instance) {
+            console.log(action)
+            console.log(instance)
+            if (action == 'confirm') {
+  	          $.ajax({
+                url: "{% url 'batch_withdraw' %}",
+                dataType: "json",
+                async: false,
+                type: "get",
+                success: function (res) {
+                  if (res.code == 0) {
+                    that.$notify({
+                      title: '提示',
+                      type: 'success',
+                      message: '一键提现成功'
+                    })
+                  } else {
+                    that.$notify({
+                      title: '提示',
+                      type: 'error',
+                      message: res.msg
+                    })
+                  }
+                },
+                error: function () {
+                  that.$notify({
+                    title: '提示',
+                    message: "截取bug一枚，请联系前端技术人员"
+                  })
+                }
+              });
             }
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消一键提现'
-          });
-        });
+          }
+        })
+//      .then(() => {
+
+//      }).catch(() => {
+//        this.$message({
+//          type: 'info',
+//          message: '已取消一键提现'
+//        });
+//      });
       },
       agree: function (row) {
         var that = this;
@@ -673,20 +684,21 @@
                 },
                 async: true,
                 success: function (res) {
-                  if (ret.code == 0) {
+                  if (res.code == 0) {
                     that.$notify({
                       title: '提示',
                       message: '审核完成，通过'
-                    })
+                    });
+                    that.getDataList();
                   }
-                  else if (ret.code == -1) {
+                  else if (res.code == -1) {
                     alert("该页面已过期，请重新登录！");
-                    window.location.href = ret.url;
+                    window.location.href = res.url;
                   }
                   else {
                     that.$notify({
                       title: '提示',
-                      message: ret.res_msg
+                      message: res.res_msg
                     })
                   }
                 }
@@ -717,25 +729,27 @@
           data: {
             'csrfmiddlewaretoken': that.csrf_token,
             'id': that.refuse_id,
-            'reason': refuse_reason,
+            'reason': that.refuse_reason,
             'type': 2,
           },
           async: true,
           success: function (res) {
-            if (ret.code == 0) {
+            if (res.code == 0) {
               that.$notify({
                 title: '提示',
                 message: '审核完成，拒绝'
-              })
+              });
+              that.getDataList();
+              that.refuse_box = false;
             }
-            else if (ret.code == -1) {
+            else if (res.code == -1) {
               alert("该页面已过期，请重新登录！");
-              window.location.href = ret.url;
+              window.location.href = res.url;
             }
             else {
               that.$notify({
                 title: '提示',
-                message: ret.res_msg
+                message: res.res_msg
               })
             }
           }

@@ -162,7 +162,8 @@
 					var that = this;
 					$.ajax({
 						type: "get",
-						url: '/restapi/translist/?page=' + that.currentPage + '&pagesize=' + that.pageSize + '&trans_date_0=' + that.s_time0 + '&trans_date_1=' + that.e_time0 + '&user_name=' + that.user_name + '&user_mobile=' + that.user_phone + '&reason_contains=' + that.reason,
+						url: '/restapi/translist/?page=' + that.currentPage + '&pagesize=' + that.pageSize + '&trans_date_0=' + (that.s_time0?that.s_time0:'') + 
+						'&trans_date_1=' + (that.e_time0?that.e_time0:'') + '&user_name=' + that.user_name + '&user_mobile=' + that.user_phone + '&reason_contains=' + that.reason,
 						async: true,
 						success: function (res) {
 							if (res.code == 0) {

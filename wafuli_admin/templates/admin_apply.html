@@ -51,28 +51,28 @@
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
                                 <span class="desc_txt">申请开始时间：</span>
-                                <el-date-picker v-model="s_time0" type="date" placeholder="选择日期">
+                                <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="s_time0" type="date" placeholder="选择日期">
                                 </el-date-picker>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
                                 <span class="desc_txt">申请结束时间：</span>
-                                <el-date-picker v-model="e_time0" type="date" placeholder="选择日期">
+                                <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="e_time0" type="date" placeholder="选择日期">
                                 </el-date-picker>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
                                 <span class="desc_txt">操作开始时间：</span>
-                                <el-date-picker v-model="s_time1" type="date" placeholder="选择日期">
+                                <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="s_time1" type="date" placeholder="选择日期">
                                 </el-date-picker>
                             </div>
                         </el-col>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
                                 <span class="desc_txt">操作结束时间：</span>
-                                <el-date-picker v-model="e_time1" type="date" placeholder="选择日期">
+                                <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="e_time1" type="date" placeholder="选择日期">
                                 </el-date-picker>
                             </div>
                         </el-col>
@@ -208,7 +208,7 @@
             </span>
         </el-dialog>
     </div>
-
+    <iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
     <script type="text/javascript">
         var app = new Vue({
             el: '#app',
@@ -223,7 +223,7 @@
                 qq_number: '',
                 qq_name: '',
                 deal_phone_number: '',
-                select: '',
+                select: '1',
                 dataId: '',
                 dialogVisible: false,
                 csrf_token: '{{ csrf_token }}',
@@ -278,9 +278,50 @@
                     var that = this;
                     that.currentPage = 1;
                     that.getDataList();
+                    console.log(that.searchVal);
                 },
                 export_txt: function () {
-                    console.log('export')
+                    var that = this;
+                    console.log('export');
+                    var html = '<form action="' + "" + '" method="get" target="_self" id="postData_form">';
+                    var startTime = that.s_time0?that.s_time0:'';
+                    var endTime = that.e_time0?that.e_time0:'';
+                    if(startTime && endTime) {
+                      html += '<input name="submit_time_0" type="hidden" value="' + startTime + '"/>';
+                      html += '<input name="submit_time_1" type="hidden" value="' + endTime + '"/>';
+                    }
+                    var startTime2 = that.s_time1?that.s_time1:'';
+                    var endTime2 = that.e_time1?that.e_time1:'';
+                    if(startTime2 && endTime2) {
+                      html += '<input name="audit_time_0" type="hidden" value="' + startTime2 + '"/>';
+                      html += '<input name="audit_time_1" type="hidden" value="' + endTime2 + '"/>';
+                    }
+                    var mobile = that.phone_number;
+                    if(mobile) {
+                      html += '<input name="mobile" type="hidden" value="' + mobile + '"/>';
+                    }
+                    var qq = that.qq_number;
+                    if(qq) {
+                      html += '<input name="qq_number" type="hidden" value="' + qq + '"/>';
+                    }
+                    var qqname = that.qq_name;
+                    if(qqname) {
+                      html += '<input name="qq_name" type="hidden" value="' + qqname + '"/>';
+                    }
+                    var adminname = that.deal_phone_number;
+                     if(adminname) {
+                       html += '<input name="audit_mobile" type="hidden" value="' + adminname + '"/>';
+                     }
+                     var state = that.select;
+                    if(state) {
+                      html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
+                    }
+                    html += '</form>';
+                    var iframe = document.getElementById('myIFrame');
+                    iframe.contentWindow.document.open();
+                    iframe.contentWindow.document.write(html);
+                    iframe.contentWindow.document.close();
+                    document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
                 },
                 //同意
                 agree: function (row) {
@@ -321,10 +362,10 @@
                                                 message: '审核完成，通过'
                                             })
                                             that.agreeBox = false;
+                                            that.getDataList();
                                         } else {
                                             console.log(ret.code)
                                         }
-                                        that.getDataList();
                                     },
                                     error: function () {
                                         that.$notify({
@@ -375,10 +416,10 @@
                                                 message: '审核完成，拒绝'
                                             })
                                             that.agreeBox = false;
+                                            that.getDataList();
                                         } else {
                                             console.log(ret.code)
                                         }
-                                        that.getDataList();
                                     },
                                     error: function () {
                                         that.$notify({
@@ -395,7 +436,8 @@
             computed: {
                 searchVal: function () {
                     var that = this;
-                    return '&submit_date_0=' + that.s_time0 + '&submit_date_1=' + that.e_time0 + '&audit_date_0=' + that.s_time1 + '&audit_date_1=' + that.e_time1 + '&mobile=' + that.phone_number + '&qq_number=' + that.qq_number + '&qq_name=' + that.qq_name + '&admin_user_mobile=' + that.deal_phone_number + '&audit_state=' + that.select;
+                    return '&submit_time_0=' + (that.s_time0?that.s_time0:'') + '&submit_time_1=' + (that.e_time0?that.e_time0:'') + '&audit_time_0=' + (that.s_time1?that.s_time1:'') + 
+                    '&audit_time_1=' + (that.e_time1?that.e_time1:'') + '&mobile=' + that.phone_number + '&qq_number=' + that.qq_number + '&qq_name=' + that.qq_name + '&audit_mobile=' + that.deal_phone_number + '&audit_state=' + that.select;
                 }
             }
         })

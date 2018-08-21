@@ -82,14 +82,14 @@
           <el-row :gutter="20">
             <el-col :span="6">
               <div class="grid-content bg-purple">
-                <span class="desc_txt">审核开始时间：</span>
+                <span class="desc_txt">申请开始时间：</span>
                 <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="s_time0" type="date" placeholder="选择日期">
                 </el-date-picker>
               </div>
             </el-col>
             <el-col :span="6">
               <div class="grid-content bg-purple">
-                <span class="desc_txt">审核结束时间：</span>
+                <span class="desc_txt">申请结束时间：</span>
                 <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="e_time0" type="date" placeholder="选择日期">
                 </el-date-picker>
               </div>
@@ -372,14 +372,14 @@
       export_data: function () {
         var that = this;
         var html = '<form action="' + "{% url 'export_withdraw_excel' %}" + '" method="get" target="_self" id="postData_form">';
-        var startTime = that.s_time0;
-        var endTime = that.e_time0;
+        var startTime = that.s_time0?that.s_time0:'';
+        var endTime = that.e_time0?that.e_time0:'';
         if (startTime && endTime) {
           html += '<input name="submit_date_0" type="hidden" value="' + startTime + '"/>';
           html += '<input name="submit_date_1" type="hidden" value="' + endTime + '"/>';
         }
-        var startTime2 = that.s_time1;
-        var endTime2 = that.e_time1;
+        var startTime2 = that.s_time1?that.s_time1:'';
+        var endTime2 = that.e_time1?that.e_time1:'';
         if (startTime2 && endTime2) {
           html += '<input name="audit_date_0" type="hidden" value="' + startTime2 + '"/>';
           html += '<input name="audit_date_1" type="hidden" value="' + endTime2 + '"/>';
@@ -745,7 +745,8 @@
     computed: {
       url_key: function () {
         var that = this;
-        return '&submit_date_0=' + that.s_time0 + '&submit_date_1=' + that.e_time0 + '&audit_date_0=' + that.s_time1 + '&audit_date_1=' + that.e_time1 + '&qq_number=' + that.qq_number + '&user_mobile=' + that.phone_number + '&card_number=' + that.card_number + '&real_name=' + that.real_name + '&admin_mobile=' + that.admin_mobile + '&user_level=' + that.user_level + '&audit_state=' + that.state;
+        return '&submit_date_0=' + (that.s_time0?that.s_time0:'') + '&submit_date_1=' + (that.e_time0?that.e_time0:'') + '&audit_date_0=' + (that.s_time1?that.s_time1:'') + '&audit_date_1=' + (that.e_time1?that.e_time1:'') + 
+        '&qq_number=' + that.qq_number + '&user_mobile=' + that.phone_number + '&card_number=' + that.card_number + '&real_name=' + that.real_name + '&admin_mobile=' + that.admin_mobile + '&user_level=' + that.user_level + '&audit_state=' + that.state;
       }
     }
   })

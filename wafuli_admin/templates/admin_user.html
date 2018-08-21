@@ -85,7 +85,7 @@
                             <div class="grid-content bg-purple">
                                 <span class="desc_txt">渠道等级：</span>
                                 <el-select v-model="select" slot="prepend" placeholder="请选择">
-                                    <el-option label="----" value=" "></el-option>
+                                    <el-option label="----" value=""></el-option>
                                     <el-option label="01" value="01"></el-option>
                                     <el-option label="02" value="02"></el-option>
                                     <el-option label="03" value="03"></el-option>
@@ -98,7 +98,7 @@
                             <div class="grid-content bg-purple">
                                 <span class="desc_txt">黑名单：</span>
                                 <el-select v-model="blackList" slot="prepend" placeholder="请选择">
-                                    <el-option label="全部" value=" "></el-option>
+                                    <el-option label="全部" value=""></el-option>
                                     <el-option label="是" value='true'></el-option>
                                     <el-option label="否" value='false'></el-option>
                                 </el-select>
@@ -111,17 +111,16 @@
                                 </el-input>
                             </div>
                         </el-col>
-                        <el-col :span="6">
+                        <!--<el-col :span="6">
                             <div class="grid-content bg-purple">
                                 <span class="desc_txt">是否渠道：</span>
                                 <el-select v-model="is_channel" slot="prepend" placeholder="请选择">
-                                    <!-- <el-option label="----" value=" "></el-option> -->
                                     <el-option label="是" value='1'></el-option>
                                     <el-option label="否" value='0'></el-option>
                                     <el-option label="申请中" value='-1'></el-option>
                                 </el-select>
                             </div>
-                        </el-col>
+                        </el-col>-->
                     </el-row>
                     <!-- 第三列 -->
                     <el-row :gutter="20" style="display: flex;justify-content: flex-end;">
@@ -136,7 +135,7 @@
                     <!-- tabale -->
                     <el-header>数据总览</el-header>
                     <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"
-                        border :default-sort="{prop: 'date', order: 'descending'}">
+                        border @sort-change="sortChange">
                         <el-table-column label="渠道等级">
                             <template slot-scope="scope">${ scope.row.level }</template>
                         </el-table-column>
@@ -164,21 +163,21 @@
                         <el-table-column label="账户余额" sortable='custom' prop="balance">
                             <template slot-scope="scope">${ scope.row.balance }</template>
                         </el-table-column>
-                        <el-table-column label="保证金" sortable='custom'>
+                        <el-table-column label="保证金" sortable='custom' prop="margin_account">
                             <template slot-scope="scope">${ scope.row.margin_account }</template>
                         </el-table-column>
-                        <el-table-column label="积累收入" sortable='custom'>
+                        <el-table-column label="积累收入" sortable='custom' prop="accu_income">
                             <template slot-scope="scope">${ scope.row.accu_income }</template>
                         </el-table-column>
-                        <el-table-column label="是否为渠道">
+                        <!--<el-table-column label="是否为渠道">
                             <template slot-scope="scope">
                                 <span v-if="scope.row.is_channel == 1">是</span>
                                 <span v-if="scope.row.is_channel == 0">否</span>
                                 <span v-if="scope.row.is_channel == -1">申请中</span>
                             </template>
-                        </el-table-column>
+                        </el-table-column>-->
                         <el-table-column label="是否是黑名单">
-                            <template slot-scope="scope">${ scope.row.is_active === true? '是' : '否' }</template>
+                            <template slot-scope="scope">${ scope.row.is_active === true? '否' : '是' }</template>
                         </el-table-column>
                         <el-table-column label="用户操作">
                             <template slot-scope="scope">
@@ -280,7 +279,7 @@
                 select: '',
                 mobile: '',
                 blackList: '',
-                is_channel: '',
+//              is_channel: '',
                 form: {
                     pcash: '',
                     mcash: '',
@@ -303,6 +302,7 @@
                 page: 1,
                 pageSize: 10,
                 currentPage: 1,
+                orderKey: ''
             },
             created: function () {
                 var that = this;
@@ -335,7 +335,9 @@
               
                 search_data: function () {
                     var that = this;
-                    console.log(that.searchVal)
+//                  that.orderKey = '';
+//                  console.log(that.$refs.multipleTable.order);
+                    console.log(that.searchVal);
                     that.currentPage = 1;
                     that.getDataList();
                     // console.log(that.csrf_token)
@@ -382,6 +384,7 @@
                                     title: '提示',
                                     message: '操作成功'
                                 })
+                                that.getDataList();
 
                             } else {
                                 that.$notify({
@@ -389,8 +392,7 @@
                                     message: ret.res_msg
                                 })
                             }
-                            that.addcashBox = false;
-                            that.getDataList();
+                            that.cash_box = false;
                         },
                         error: function () {
                             that.$notify({
@@ -423,7 +425,7 @@
                                     },
                                     success: function (res) {
                                         if (res.code == 0) {
-                                            $notify({
+                                            that.$notify({
                                                 title: '提示',
                                                 message: '操作成功'
                                             })
@@ -437,7 +439,7 @@
                                         that.getDataList();
                                     },
                                     error: function () {
-                                        $notify({
+                                        that.$notify({
                                             title: '提示',
                                             message: '请检查网络连接'
                                         })
@@ -469,7 +471,7 @@
                                     },
                                     success: function (res) {
                                         if (res.code == 0) {
-                                            $notify({
+                                            that.$notify({
                                                 title: '提示',
                                                 message: '操作成功'
                                             })
@@ -483,7 +485,7 @@
                                         that.getDataList();
                                     },
                                     error: function () {
-                                        $notify({
+                                        that.$notify({
                                             title: '提示',
                                             message: '请检查网络连接'
                                         })
@@ -755,12 +757,26 @@
                             }
                         }
                     })
+                },
+//              排序
+                sortChange: function(detail) {
+                  var that = this;
+                  if (detail.order == 'ascending') {
+                    that.orderKey = detail.prop;
+                  } else if (detail.order == 'descending') {
+                    that.orderKey = '-' + detail.prop;
+                  } else {
+                    that.orderKey = '';
+                  }
+                  console.log('that.orderKey');
+                  that.getDataList();
                 }
             },
             computed: {
                 searchVal: function () {
                     var that = this;
-                    return '&is_channel='+ that.is_channel +'&join_date_0=' + that.s_time0 + '&join_date_1=' + that.e_time0 + '&mobile=' + that.mobile + '&qq_number=' + that.qq_number + '&qq_name=' + that.qq_name + '&level=' + that.select + '&is_active=' + that.blackList;
+                    return '&join_date_0=' + (that.s_time0?that.s_time0:'') + '&join_date_1=' + (that.e_time0?that.e_time0:'') + '&mobile=' + that.mobile + 
+                            '&qq_number=' + that.qq_number + '&qq_name=' + that.qq_name + '&level=' + that.select + '&is_active=' + that.blackList + '&ordering=' + that.orderKey;
                 }
             }
         })

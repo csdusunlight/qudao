@@ -13,6 +13,9 @@
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <style>
+        body {
+          opacity: 0;
+        }
         .grid-content {
             padding: 25px 0;
         }
@@ -56,8 +59,8 @@
 </head>
 
 <body>
-    <div id="app">
-        <el-row :gutter="20">
+    <div style="width: 100%;" id="app">
+        <el-row :gutter="20" style="width: 100%;">
             <el-col :span="3">
                 {% include "leftNav.html" %}
             </el-col>
@@ -257,7 +260,8 @@
                         </el-table-column>
                         <el-table-column label="补差" :key='Math.random()' v-if="deal_state === '0'">
                             <template slot-scope="scope">
-                                <a class="operate" @click='balance'>补差</a>
+                                <a v-if="scope.row.delta_amount > 0">${ scope.row.delta_amount }</a>
+                                <a v-else class="operate" @click='balance(scope.row)'>补差</a>
                             </template>
                         </el-table-column>
                         <el-table-column label="操作" :key='Math.random()' v-if="deal_state === '1'">
@@ -352,7 +356,7 @@
             admin_user: '',
             project_title: '',
             submit_moblie: '',
-            deal_state: '',
+            deal_state: '1',
             invest_type: '',
             form: {
                 unusualReason: '',
@@ -375,10 +379,14 @@
             page: 1,
             pageSize: 10,
             currentPage: 1,
+            csrf_token: '{{ csrf_token }}',
         },
         created: function () {
             var that = this;
             that.getDataList(1, 10);
+        },
+        mounted: function() {
+          document.body.style.opacity = 1;
         },
         methods: {
             handleCurrentChange: function (val) {
@@ -410,23 +418,7 @@
                 console.log(that.searchVal)
                 that.currentPage = 1;
                 that.getDataList();
-                console.log('搜索')
-                // $.ajax({
-                //     type: "get",
-                //     url: newUrl,
-                //     async: true,
-                //     success: function (res) {
-                //         console.log(res);
-                //         if (res.code == 0) {
-                //             app.planTableData = res;
-                //         } else {
-                //             that.$notify.error({
-                //                 title: '错误',
-                //                 message: res.detail
-                //             });
-                //         }
-                //     }
-                // });
+                console.log('搜索');
             },
             category: function (val) {
                 var that = this;
@@ -438,14 +430,14 @@
                 console.log('导出')
                 var that = this;
                 var html = '<form action="' + "{% url 'admin_export_investlog' %}" + '" method="get" target="_self" id="postData_form">';
-                var startTime = that.s_time0;
-                var endTime = that.e_time0;
+                var startTime = that.s_time0?that.s_time0:'';
+                var endTime = that.e_time0?that.e_time0:'';
                 if (startTime && endTime) {
                     html += '<input name="submittime_0" type="hidden" value="' + startTime + '"/>';
                     html += '<input name="submittime_1" type="hidden" value="' + endTime + '"/>';
                 }
-                var startTime2 = that.s_time1;
-                var endTime2 = that.e_time1;
+                var startTime2 = that.s_time1?that.s_time1:'';
+                var endTime2 = that.e_time1?that.e_time1:'';
                 if (startTime2 && endTime2) {
                     html += '<input name="audittime_0" type="hidden" value="' + startTime2 + '"/>';
                     html += '<input name="audittime_1" type="hidden" value="' + endTime2 + '"/>';
@@ -545,6 +537,7 @@
             //返现 
             back_amount: function (row) {
                 var that = this;
+                console.log(row.id);
                 that.dataId = row.id;
                 that.back_amountBox = true;
             },
@@ -564,15 +557,16 @@
                     type: "POST",
                     async: false,
                     data: {
-                        'id': row.id,
+                        'csrfmiddlewaretoken': that.csrf_token,
+                        'id': that.dataId,
                         'cash': that.form.addAmount,
                         'reason': that.form.auditReason,
                         'type': 1,
                     },
                     success: function (ret) {
                         that.back_amountBox = false;
-                        that.getDataList();
                         if (ret.code == 0) {
+                          that.getDataList();
                             that.$notify({
                                 title: '提示',
                                 message: '审核完成，通过'
@@ -597,10 +591,12 @@
             },
             refuse: function (row) {
                 var that = this;
+                console.log(row.id);
                 that.dataId = row.id;
                 that.refuse_box = true;
             },
             refuse_Send: function () {
+                var that = this;
                 if (!that.form.refuseReason) {
                     that.$notify({
                         title: '提示',
@@ -614,14 +610,15 @@
                     type: "POST",
                     async: false,
                     data: {
+                        'csrfmiddlewaretoken': that.csrf_token,
                         'id': that.dataId,
                         'reason': that.form.refuseReason,
                         'type': 2,
                     },
                     success: function (ret) {
                         that.refuse_box = false;
-                        that.getDataList();
                         if (ret.code == 0) {
+                          that.getDataList();
                             that.$notify({
                                 title: '提示',
                                 message: '审核完成，拒绝'
@@ -644,6 +641,7 @@
             //未审核异常
             unusual: function (row) {
                 var that = this;
+                console.log(row.id);
                 that.dataId = row.id;
                 that.unusual_box = true;
             },
@@ -662,14 +660,15 @@
                     type: "POST",
                     async: false,
                     data: {
+                        'csrfmiddlewaretoken': that.csrf_token,
                         'id': that.dataId,
                         'reason': that.form.unusualReason,
                         'type': 3,
                     },
                     success: function (ret) {
                         that.unusual_box = false;
-                        that.getDataList();
                         if (ret.code == 0) {
+                          that.getDataList();
                             that.$notify({
                                 title: '提示',
                                 message: '审核完成，异常'
@@ -689,7 +688,9 @@
             //补差
             balance: function (row) {
                 var that = this;
-                that.id = row.id;
+                console.log(row);
+                console.log(row.id);
+                that.dataId = row.id;
                 that.balance_box = true;
             },
             balance_Send: function () {
@@ -707,14 +708,15 @@
                     type: "POST",
                     async: false,
                     data: {
-                        'id': that.id,
+                        'csrfmiddlewaretoken': that.csrf_token,
+                        'id': that.dataId,
                         'cash': that.form.balance_amount,
                         'type': 4,
                     },
                     success: function (ret) {
-                        that.getDataList();
                         that.balance_box = false;
                         if (ret.code == 0) {
+                          that.getDataList();
                             that.$notify({
                                 title: '提示',
                                 message: '操作成功'
@@ -732,7 +734,7 @@
         computed: {
             searchVal: function () {
                 var that = this;
-                return '&submittime_0=' + that.s_time0 + '&submittime_1=' + that.e_time0 + '&audittime_0=' + that.s_time1 + '&audittime_1=' + that.e_time1 + '&qq_number=' + that.qq_number + '&user_mobile=' + that.phone_number + '&project_title_contains=' + that.project_title + '&user_level=' + that.user_level + '&admin_user=' + that.admin_user + '&invest_mobile=' + that.submit_moblie + '&submit_type=' + that.invest_type + '&audit_state=' + that.deal_state;
+                return '&submittime_0=' + (that.s_time0?that.s_time0:'') + '&submittime_1=' + (that.e_time0?that.e_time0:'') + '&audittime_0=' + (that.s_time1?that.s_time1:'') + '&audittime_1=' + (that.e_time1?that.e_time1:'') + '&qq_number=' + that.qq_number + '&user_mobile=' + that.phone_number + '&project_title_contains=' + that.project_title + '&user_level=' + that.user_level + '&admin_user=' + that.admin_user + '&invest_mobile=' + that.submit_moblie + '&submit_type=' + that.invest_type + '&audit_state=' + that.deal_state;
             }
         }
     })

@@ -13,6 +13,9 @@
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <style>
+        body {
+          opacity: 0;
+        }
         .grid-content {
             padding: 25px 0;
         }
@@ -57,7 +60,7 @@
 
 <body>
     <div id="app">
-        <el-row :gutter="20">
+        <el-row :gutter="20" style="width: 100%;">
             <el-col :span="3">
                 {% include "leftNav.html" %}
             </el-col>
@@ -148,7 +151,7 @@
                             <div class="grid-content bg-purple">
                                 <span class="desc_txt">处理状态：</span>
                                 <el-select @change="changeState" v-model="deal_state" slot="prepend" placeholder="请选择">
-                                    <el-option label="全部" value=" "></el-option>
+                                    <el-option label="全部" value=""></el-option>
                                     <el-option label="预审核通过" value="-1"></el-option>
                                     <el-option label="未审核" value="1"></el-option>
                                     <el-option label="异常" value="3"></el-option>
@@ -248,12 +251,13 @@
                         <el-table-column label="操作" :key='Math.random()' v-if="deal_state === '0'">
                             <template slot-scope="scope">
                                 <a @click='complaint(scope.row)' class="operate">申诉</a>|
-                                <a @click='bucha_oprate(scope.row)' class="operate">补差</a>
+                                <a v-if="scope.row.delta_amount > 0">补${scope.row.delta_amount}元</a>
+                                <a v-else @click='bucha_oprate(scope.row)' class="operate">补差</a>
                             </template>
                         </el-table-column>
                         <el-table-column label="操作" :key='Math.random()' v-if="deal_state === '2'">
                             <template slot-scope="scope">
-                                <a @click='refuseshowDiago(scope.row)' class="operate">申诉</template>
+                                <a @click='complaint(scope.row)' class="operate">申诉</template>
                         </el-table-column>
                     </el-table>
 
@@ -287,18 +291,18 @@
         <el-dialog title="补差" :visible.sync="bucha">
             <el-input v-model="balance_amount" placeholder="请输入补差金额"></el-input>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="shensu = false">取 消</el-button>
+                <el-button @click="bucha = false">取 消</el-button>
                 <el-button type="primary" @click="bucha_submit">确 定</el-button>
             </div>
         </el-dialog>
         <!-- 拒绝弹窗 -->
-        <el-dialog title="申诉数据" :visible.sync="refuseBox">
+        <!--<el-dialog title="申诉数据" :visible.sync="refuseBox">
             <el-input v-model="f_reason" placeholder="请输入申诉原因"></el-input>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="refuseBox = false">取 消</el-button>
                 <el-button type="primary" @click="refuse_submit">确 定</el-button>
             </div>
-        </el-dialog>
+        </el-dialog>-->
     </div>
 </body>
 <script type="text/javascript">
@@ -339,10 +343,14 @@
             page: 1,
             pageSize: 10,
             currentPage: 1,
+            csrf_token: '{{ csrf_token }}',
         },
         created: function () {
             var that = this;
             that.getDataList(1, 10);
+        },
+        mounted: function() {
+          document.body.style.opacity = 1;
         },
         methods: {
             handleCurrentChange: function (val) {
@@ -351,9 +359,14 @@
             },
             getDataList: function () {
                 var that = this;
+                if (that.deal_state == -1) {
+                  var newUrl = '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&audit_state=1&preaudit_state=0&category=merchant'+ that.searchValue;
+                } else {
+                  var newUrl = '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&audit_state=' + that.deal_state + '&category=merchant'+ that.searchValue;
+                }
                 $.ajax({
                     type: "get",
-                    url: '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&category=merchant' + that.searchValue,//+'&submittime_0='+ that.s_time0 +'&submittime_1='+ that.e_time0 +'&audittime_0='+ that.s_time1 +'&audittime_1='+ that.e_time1 +'&qq_number='+ qq_number +'&user_mobile='+ that.phone_number +'&project_title_contains='+ that.project_title +'&user_level='+ that.user_level +'&admin_user='+ that.admin_user +'&invest_mobile='+ that.submit_moblie +'&submit_type='+that.invest_type,
+                    url: newUrl,
                     async: true,
                     success: function (res) {
                         console.log(res);
@@ -372,84 +385,57 @@
             search_data: function () {
                 var that = this;
                 that.currentPage = 1;
-                var newUrl = '/restapi/investlogs/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&category=merchant';//'&submittime_0='+ that.s_time0 +'&submittime_1='+ that.e_time0 +'&audittime_0='+ that.s_time1 +'&audittime_1='+ that.e_time1 +'&qq_number='+ that.qq_number +'&user_mobile='+ that.phone_number +'&project_title_contains='+ that.project_title +'&user_level='+ that.user_level +'&admin_user='+ that.admin_user +'&invest_mobile='+ that.submit_moblie +'&submit_type='+that.invest_type;
-                console.log('搜索')
-                if (that.deal_state == -1) {
-                    $.ajax({
-                        type: "get",
-                        url: newUrl + '&audit_state=1&preaudit_state=0' + that.searchValue,
-                        async: true,
-                        success: function (res) {
-                            console.log(res);
-                            if (res.code == 0) {
-                                app.planTableData = res;
-                            } else {
-                                that.$notify.error({
-                                    title: '错误',
-                                    message: res.detail
-                                });
-                            }
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        type: "get",
-                        url: newUrl + '&audit_state=' + that.deal_state + that.searchValue,
-                        async: true,
-                        success: function (res) {
-                            console.log(res);
-                            if (res.code == 0) {
-                                app.planTableData = res;
-                            } else {
-                                that.$notify.error({
-                                    title: '错误',
-                                    message: res.detail
-                                });
-                            }
-                        }
-                    });
-                }
+                that.getDataList();
             },
             //预审核状态下同意
             agree_1: function (row) {
                 var that = this;
                 var id = row.id;
                 console.log(id)
-                $.ajax({
-                    url: "{%url 'admin_merchant_investlog' %}",
-                    dataType: "json",
-                    type: "POST",
-                    async: false,
-                    data: {
-                        'id': id,
-                        'type': 1,
-                    },
-                    success: function (res) {
-                        if (res.code == 0) {
-                            that.$notify({
-                                title: '提示',
-                                message: '审核完成，通过'
-                            });
-                        } else if (res.code == -1) {
-                            that.$notify({
-                                title: '提示',
-                                message: '该页面已过期，请重新登录！'
-                            });
-                            window.location.href = ret.url;
-                        } else {
-                            that.$notify({
-                                title: '提示',
-                                message: res.res_msg
-                            });
-                        }
-                    },
-                    error: function () {
-                        that.$notify({
-                            title: '提示',
-                            message: '请检查网络连接'
+                that.$confirm('是否通过预审核', '温馨提示', {
+                  confirmButtonText: '确定',
+                  callback: function (action) {
+                      if (action == 'confirm') {
+                        $.ajax({
+                          url: "{%url 'admin_merchant_investlog' %}",
+                          dataType: "json",
+                          type: "POST",
+                          async: false,
+                          data: {
+                            'csrfmiddlewaretoken': that.csrf_token,
+                              'id': id,
+                              'type': 1,
+                          },
+                          success: function (res) {
+                              if (res.code == 0) {
+                                  that.$notify({
+                                      title: '提示',
+                                      message: '审核完成，通过'
+                                  });
+                                  that.getDataList();
+                              } else if (res.code == -1) {
+                                  that.$notify({
+                                      title: '提示',
+                                      message: '该页面已过期，请重新登录！'
+                                  });
+                                  window.location.href = ret.url;
+                              } else {
+                                  that.$notify({
+                                      title: '提示',
+                                      message: res.res_msg
+                                  });
+                              }
+                          },
+                          error: function () {
+                              that.$notify({
+                                  title: '提示',
+                                  message: '请检查网络连接'
+                              })
+                          }
                         })
-                    }
-                })
+                      }
+                  }
+              })
             },
             //预审核状态下驳回
             showDiago: function (row) {
@@ -472,16 +458,19 @@
                     type: "POST",
                     async: false,
                     data: {
+                      'csrfmiddlewaretoken': that.csrf_token,
                         'id': that.Id,
                         'reason': that.reason,
                         'type': 2,
                     },
                     success: function (ret) {
                         if (ret.code == 0) {
-                            that.$notify({
-                                title: '提示',
-                                message: '审核完成，拒绝'
-                            })
+                          that.getDataList();
+                          that.dialogFormVisible = false;
+                          that.$notify({
+                              title: '提示',
+                              message: '审核完成，拒绝'
+                          })
                         } else if (ret.code == -1) {
                             that.$notify({
                                 title: '提示',
@@ -525,12 +514,15 @@
                     type: "POST",
                     async: false,
                     data: {
+                      'csrfmiddlewaretoken': that.csrf_token,
                         'id': that.s_Id,
                         'reason': that.s_reason,
                         'type': 3,
                     },
                     success: function (ret) {
                         if (ret.code == 0) {
+                          that.shensu = false;
+                          that.getDataList();
                             that.$notify({
                                 title: '提示',
                                 message: '审核完成，申诉'
@@ -580,12 +572,15 @@
                     type: "POST",
                     async: false,
                     data: {
+                      'csrfmiddlewaretoken': that.csrf_token,
                         'id': that.buchaId,
                         'cash': that.balance_amount,
                         'type': 4,
                     },
                     success: function(ret) {
                         if(ret.code == 0) {
+                          that.getDataList();
+                          that.bucha = false;
                             that.$notify({
                                 title:'提示',
                                 message:'补：'+balance_amount
@@ -605,68 +600,71 @@
                     }
                 });
             },
-            //审核拒绝
-            refuseshowDiago:function(row){
-                var that = this;
-                that.refuseId = row.id;
-                that.refuseBox = true;
-            },
-            refuse_submit:function(){
-                var that = this;
-                console.log(that.f_reason);
-                console.log(that.refuseId);
-                if(!that.f_reason){
-                    that.$notify({
-                        title:'提示',
-                        message:'申诉理由不能为空！'
-                    })
-                    return;
-                }
-                $.ajax({
-                    url: "{%url 'admin_invest' %}",
-                    dataType: "json",
-                    type: "POST",
-                    async: false,
-                    data: {
-                        'id': that.refuseId,
-                        'cash': that.f_reason,
-                        'type': 3,
-                    },
-                    success: function(ret) {
-                        if(ret.code == 0) {
-                            that.$notify({
-                                title:'提示',
-                                message:that.f_reason
-                            })
-                        } else {
-                            that.$notify({
-                                title:'提示',
-                                message:ret.res_msg
-                            })
-                        }
-                    },
-                    error: function (xhr, textStatus) {
-                        that.$notify({
-                            title: '错误',
-                            message: xhr.responseText
-                        })
-                    }
-                });
-
-            },
+//          //审核拒绝
+//          refuseshowDiago:function(row){
+//              var that = this;
+//              that.refuseId = row.id;
+//              that.refuseBox = true;
+//          },
+//          refuse_submit:function(){
+//              var that = this;
+//              console.log(that.f_reason);
+//              console.log(that.refuseId);
+//              if(!that.f_reason){
+//                  that.$notify({
+//                      title:'提示',
+//                      message:'申诉理由不能为空！'
+//                  })
+//                  return;
+//              }
+//              $.ajax({
+//                  url: "{%url 'admin_invest' %}",
+//                  dataType: "json",
+//                  type: "POST",
+//                  async: false,
+//                  data: {
+//                    'csrfmiddlewaretoken': that.csrf_token,
+//                      'id': that.refuseId,
+//                      'cash': that.f_reason,
+//                      'type': 3,
+//                  },
+//                  success: function(ret) {
+//                      if(ret.code == 0) {
+//                        that.refuseBox = false;
+//                        that.getDataList();
+//                          that.$notify({
+//                              title:'提示',
+//                              message:'审核完成，申诉'
+//                          })
+//                      } else {
+//                          that.$notify({
+//                              title:'提示',
+//                              message:ret.res_msg
+//                          })
+//                      }
+//                  },
+//                  error: function (xhr, textStatus) {
+//                      that.$notify({
+//                          title: '错误',
+//                          message: xhr.responseText
+//                      })
+//                  }
+//              });
+//
+//          },
             //导出功能
             export_data: function () {
                 console.log('导出')
                 var that = this;
                 var html = '<form action="' + "{% url 'admin_export_merchant_investlog' %}" + '" method="get" target="_self" id="postData_form">';
-                var startTime = that.s_time0;
-                var endTime = that.e_time0;
+                var startTime = that.s_time0?that.s_time0:'';
+                var endTime = that.e_time0?that.e_time0:'';
                 if (startTime && endTime) {
                     html += '<input name="submittime_0" type="hidden" value="' + startTime + '"/>';
                     html += '<input name="submittime_1" type="hidden" value="' + endTime + '"/>';
                 }
-                var startTime2 = that.s_time1;
-                var endTime2 = that.e_time1;
+                var startTime2 = that.s_time1?that.s_time1:'';
+                var endTime2 = that.e_time1?that.e_time1:'';
                 if (startTime2 && endTime2) {
                     html += '<input name="audittime_0" type="hidden" value="' + startTime2 + '"/>';
                     html += '<input name="audittime_1" type="hidden" value="' + endTime2 + '"/>';
@@ -775,7 +773,8 @@
         computed: {
             searchValue: function () {
                 var that = this;
-                return '&submittime_0=' + that.s_time0 + '&submittime_1=' + that.e_time0 + '&audittime_0=' + that.s_time1 + '&audittime_1=' + that.e_time1 + '&qq_number=' + that.qq_number + '&user_mobile=' + that.phone_number + '&project_title_contains=' + that.project_title + '&user_level=' + that.user_level + '&admin_user=' + that.admin_user + '&invest_mobile=' + that.submit_moblie + '&submit_type=' + that.invest_type;
+                return '&submittime_0=' + (that.s_time0?that.s_time0:'') + '&submittime_1=' + (that.e_time0?that.e_time0:'') + '&audittime_0=' + (that.s_time1?that.s_time1:'') + '&audittime_1=' + (that.e_time1?that.e_time1:'') + 
+                '&qq_number=' + that.qq_number + '&user_mobile=' + that.phone_number + '&project_title_contains=' + that.project_title + '&user_level=' + that.user_level + '&admin_user=' + that.admin_user + '&invest_mobile=' + that.submit_moblie + '&submit_type=' + that.invest_type;
             }
         }
     })

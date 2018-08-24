@@ -13,6 +13,9 @@
   <script src="https://unpkg.com/element-ui/lib/index.js"></script>
   <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
   <style>
+    body {
+      opacity: 0;
+    }
     .desc_txt {
       color: #909399;
     }
@@ -29,7 +32,7 @@
 
 <body>
   <div id="app">
-    <el-row :gutter="20">
+    <el-row :gutter="20" style="width: 100%;">
       <el-col :span="3">
         {% include "leftNav.html" %}
       </el-col>
@@ -159,6 +162,9 @@
       created: function () {
         // this.getAllPlan();
         this.getDataList(1, 10);
+      },
+      mounted: function() {
+        document.body.style.opacity = 1;
       },
       methods: {
         handleCurrentChange: function (val) {

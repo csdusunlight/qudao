@@ -219,7 +219,7 @@
                     var that = this;
                     $.ajax({
                         type: "get",
-                        url: '/merchant/apply_projects/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&submittime_0=' + that.s_apply + '&submittime_1=' + that.e_apply + '&user_mobile=' + that.user_mobile + '&title=' + that.title + '&audit_state=' + that.state,
+                        url: '/merchant/apply_projects/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&submittime_0=' + (that.s_apply?that.s_apply:'') + '&submittime_1=' + (that.e_apply?that.e_apply:'') + '&user_mobile=' + that.user_mobile + '&title=' + that.title + '&audit_state=' + that.state,
                         async: true,
                         success: function (res) {
                             console.log(res);

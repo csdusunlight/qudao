@@ -165,7 +165,8 @@
                     var that = this;
                     $.ajax({
                         type: "get",
-                        url: '/coupon/coupons/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&create_0=' + that.s_time + '&create_1='+ that.e_time +'&user_mobile='+ that.mobile +'&contract_contains='+ that.hongbao +'&state='+that.select,
+                        url: '/coupon/coupons/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&create_0=' + (that.s_time?that.s_time:'') + '&create_1='+ (that.e_time?that.e_time:'') +
+                        '&user_mobile='+ that.mobile +'&contract_contains='+ that.hongbao +'&state='+that.select,
                         async: true,
                         success: function (res) {
                             console.log(res);

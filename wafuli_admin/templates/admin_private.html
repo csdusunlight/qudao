@@ -219,7 +219,8 @@
                     var that = this;
                     $.ajax({
                         type: "get",
-                        url: '/restapi/investlogs/?page=' + that.currentPage + '&pagesize=' + that.pageSize + '&is_official=false&investtime_0=' + that.s_time0 + '&investtime_1=' + that.e_time0 + '&audittime_0=' + that.s_time1 + '&audittime_1=' + that.e_time1 + '&qq_number=' + that.qq_number + '&user_mobile=' + that.phone_number + '&invest_mobile=' + that.submit_moblie + '&project_title_contains=' + that.project_title + '&user_level=' + that.select,
+                        url: '/restapi/investlogs/?page=' + that.currentPage + '&pagesize=' + that.pageSize + '&is_official=false&investtime_0=' + (that.s_time0?that.s_time0:'') + '&investtime_1=' + (that.e_time0?that.e_time0:'') + '&audittime_0=' + (that.s_time1?that.s_time1:'') + '&audittime_1=' + (that.e_time1?that.e_time1:'') + 
+                        '&qq_number=' + that.qq_number + '&user_mobile=' + that.phone_number + '&invest_mobile=' + that.submit_moblie + '&project_title_contains=' + that.project_title + '&user_level=' + that.select,
                         async: true,
                         success: function (res) {
                             console.log(res);
@@ -244,14 +245,14 @@
                     var html = '<form action="' + "{% url 'admin_export_investlog' %}" + '" method="get" target="_self" id="postData_form">';
 
                     html += '<input name="is_official" type="hidden" value="false"/>';
-                    var startTime = that.s_time0;
-                    var endTime = that.e_time0;
+                    var startTime = that.s_time0?that.s_time0:'';
+                    var endTime = that.e_time0?that.e_time0:'';
                     if (startTime && endTime) {
                         html += '<input name="investtime_0" type="hidden" value="' + startTime + '"/>';
                         html += '<input name="investtime_1" type="hidden" value="' + endTime + '"/>';
                     }
-                    var startTime2 = that.s_time1;
-                    var endTime2 = that.e_time1;
+                    var startTime2 = that.s_time1?that.s_time1:'';
+                    var endTime2 = that.e_time1?that.e_time1:'';
                     if (startTime2 && endTime2) {
                         html += '<input name="audittime_0" type="hidden" value="' + startTime2 + '"/>';
                         html += '<input name="audittime_1" type="hidden" value="' + endTime2 + '"/>';

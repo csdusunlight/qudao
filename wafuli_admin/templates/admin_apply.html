@@ -13,6 +13,9 @@
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <style>
+      body {
+          opacity: 0;
+        }
         .grid-content {
             padding: 25px 0;
         }
@@ -243,6 +246,9 @@
             created: function () {
                 var that = this;
                 this.getDataList(1, 10);
+            },
+            mounted: function() {
+              document.body.style.opacity = 1;
             },
             methods: {
                 handleCurrentChange: function (val) {

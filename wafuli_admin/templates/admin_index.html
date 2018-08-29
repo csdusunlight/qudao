@@ -14,6 +14,9 @@
 	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 </head>
 <style>
+  body {
+          opacity: 0;
+        }
 	.header_row {
 		padding: 10px 10px;
 		background:#e9f8ff;
@@ -37,7 +40,7 @@
 
 <body>
 	<div id="app">
-		<el-row :gutter="20">
+		<el-row :gutter="20" style="width: 100%;">
 			<el-col :span="3">
 				{% include "leftNav.html" %}
 			</el-col>
@@ -151,6 +154,9 @@
 				// this.getAllPlan();
 				this.getDataList(1, 10);
 			},
+			mounted: function() {
+        document.body.style.opacity = 1;
+      },
 			methods: {
 				handleCurrentChange: function (val) {
 					app.currentPage = val;

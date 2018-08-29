@@ -12,6 +12,9 @@
   <script src="https://unpkg.com/element-ui/lib/index.js"></script>
   <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
   <style>
+    body {
+          opacity: 0;
+        }
     .grid-content{
       padding: 25px 0;
     }
@@ -19,7 +22,7 @@
 </head>
 <body>
   <div id="app">
-    <el-row :gutter="20">
+    <el-row :gutter="20" style="width: 100%;">
       <el-col :span="3">
         {% include "leftNav.html" %}
       </el-col>
@@ -107,6 +110,9 @@
       created: function() {
         var that = this;
         this.getDataList(1,10);
+      },
+      mounted: function() {
+        document.body.style.opacity = 1;
       },
       methods: {
         handleCurrentChange: function (val) {

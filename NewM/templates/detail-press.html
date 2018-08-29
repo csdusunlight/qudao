@@ -1,0 +1,47 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{{press.seo_title}}</title>
+<meta name="keywords" content="{{press.seo_keywords}}" />
+<meta name="description" content="{{press.seo_description}}" />
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/press.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" /> 
+
+</head>
+
+<body>
+	<div class="Max">
+    	<!--头部-->
+    	{% include "header.html" %}
+    	<!--内容-->
+    	<div class="Content">
+        	<div class="w1100">
+                	<div class="binding" style="padding-bottom:0;">
+                        <div class="Bindin-info">
+                        	<div class="Bindin-Title">
+                            	<h1>{{press.title}}</h1>
+                                <span>发布时间：{{press.pub_date|date:"Y-m-d"}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                	  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;来自：{{press.get_type_display}}</span>
+                            </div>
+                            <div class="Bindin-bot">
+                            	{{press.content|safe}}
+                        </div>
+                        
+                    </div>
+                    
+            </div>
+        </div>
+       </div>
+    	<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->  
+  {% include "outline.html" %}
+    
+
+</body>
+</html>

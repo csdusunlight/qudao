@@ -1,0 +1,99 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>福利联盟-行业领先的P2P渠道分发机构</title>
+        <meta name="keywords" content="福利联盟，p2p理财平台，p2p投资理财，p2p投资理财平台，小额投资理财，个人投资理财，互联网理财产品，互联网理财平台，互联网金融平台，互联网金融产品，网络理财产品，网赚" />
+        <meta name="description" content="福利联盟是行业领先的P2P渠道分发机构。" />
+        <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/wfl-common.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/common-intro.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/animate.css"/>
+        <style>
+        </style>
+    </head>
+    <body>
+        <!-- 头部 -->
+        <div class="header">
+          {% include "header.html" %}
+        </div>
+        <!--banner-container-->
+        <div class="top-bg-img">
+          <div class="bg-mask">
+            <div class="banner__content">
+              <div class="banner__title">番薯主页：快速搭建个人网站</div>
+              <p class="banner__txt">拥有专属域名，免费打造个人品牌</p>
+              <ul class="banner__btn-box">
+                {% if not user.is_authenticated %}
+                <li class="banner__btn"><a class="banner__btn-txt" href="/account/login/?next=/intro_fanshu_home/">我的主页</a></li>
+                {% else %}
+                <li class="banner__btn"><a class="banner__btn-txt" href="http://{{user.domain_name}}.91fanshu.com">我的主页</a></li>
+                {% endif %}
+                <li class="banner__btn"><a class="banner__btn-txt" href="http://17607341710.91fanshu.com/">电脑端预览</a></li>
+                <li class="banner__btn" style="position: relative;">
+                  <a class="banner__btn-txt" href="">手机端预览</a>
+                  <div class="head__ewm"></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!--banner-container--end-->
+        <div class="guide-box wfl-wrap">
+          <div class="guide__item clearfix wow fadeInDown">
+            <img class="r" src="/static/images/img-fanshu-1.png">
+            <div class="guide__detail l">
+                <h1 class="guide__itemtitle">免费打造个人品牌</h1>
+                <p class="guide__txt">域名免费设置，个性化装饰<br />轻松搭建个人网站</p>
+            </div>
+          </div>
+          <div class="guide__item clearfix wow fadeInDown">
+            <img class="l" src="/static/images/img-fanshu-2.png">
+            <div class="guide__detail r">
+                <h1 class="guide__itemtitle">功能齐全更专业</h1>
+                <p class="guide__txt">清单、攻略、交单、查单功能，一网打尽<br />更新实时生效，数据云端同步</p>
+            </div>
+          </div>
+          <div class="guide__item clearfix wow fadeInDown">
+            <img class="r" src="/static/images/img-fanshu-3.png">
+            <div class="guide__detail l">
+                <h1 class="guide__itemtitle">配套的运营工具</h1>
+                <p class="guide__txt">公告通知，热门推荐，项目标签<br />运营细节用心打造，用户体验至上</p>
+            </div>
+          </div>
+          <div class="guide__item clearfix wow fadeInDown">
+            <img class="l" src="/static/images/img-fanshu-4.png">
+            <div class="guide__detail r">
+                <h1 class="guide__itemtitle">一键分享，轻松获取流量</h1>
+                <p class="guide__txt">个人主页便捷分享<br />轻松推广，人脉变流量</p>
+            </div>
+          </div>
+          <div class="guide__bottom wow fadeInDown">
+            <p>我们承诺：您使用的主页，我们不做任何品牌透出，不触及您名下客户，数据高级保密</p>
+            <h3 class="guide__bottom-title">在福利联盟，用1%的精力，完成100%的工作</h3>
+          </div>
+        </div>
+        {% include "footer.html" %}
+        {% include "outline.html" %}
+
+        <script src="/static/js/jquery-1.11.2.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/wow.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+              var wow = new WOW({     // 添加动效
+                  boxClass:     'wow',
+                  animateClass: 'animated',
+                  offset:       0,
+                  mobile:       true,
+                  live:         true,
+                  callback:     function(box) {
+                  },
+                  scrollContainer: null
+              });
+              wow.init(); 
+            });
+        </script>
+
+    </body>
+</html>

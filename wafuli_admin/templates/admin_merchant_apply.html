@@ -443,32 +443,39 @@
         },
         yesAgree(row) {
           var that = this
-          console.log(row)
-          var data = {
-            'id': row.id,
-            'type': 1
-          }
-          $.ajax({
-            url: '/Admin/admin_apply_for_fangdan/',
-            dataType: "json",
-            type: "post",
-            async: false,
-            data: data,
-            success: function (res) {
-              if (res.code === 0) {
-                that.$message({
-                  message: '审核通过成功',
-                  type: 'success'
-                });
-                that.getListData()
-              } else {
-                that.$message('操作失败')
-              }
-            },
-            error: function (err) {
-              that.$message.error('操作失败。请联系管理员！');
+          that.$alert('是否同意该放单用户申请？', '温馨提示', {
+            confirmButtonText: '确定',
+            callback: function (action) {
+                if (action == 'confirm') {
+                  var data = {
+                    'id': row.id,
+                    'type': 1
+                  }
+                  $.ajax({
+                    url: '/Admin/admin_apply_for_fangdan/',
+                    dataType: "json",
+                    type: "post",
+                    async: false,
+                    data: data,
+                    success: function (res) {
+                      if (res.code === 0) {
+                        that.$message({
+                          message: '审核通过成功',
+                          type: 'success'
+                        });
+                        that.getListData()
+                      } else {
+                        that.$message('操作失败')
+                      }
+                    },
+                    error: function (err) {
+                      that.$message.error('操作失败。请联系管理员！');
+                    }
+                  });
+                }
             }
-          });
+        })
+          
         },
         noRefuse(row) {
           this.postId = row.id
@@ -476,33 +483,40 @@
         },
         textareasub() {
           var that = this;
-          var data = {
-            'id': this.postId,
-            'type': 2,
-            'reason': this.textarea
-          }
-          $.ajax({
-            url: '/Admin/admin_apply_for_fangdan/',
-            dataType: "json",
-            type: "post",
-            async: false,
-            data: data,
-            success: function (res) {
-              if (res.code === 0) {
-                that.$message({
-                  message: '审核拒绝成功',
-                  type: 'success'
-                });
-                that.textareadialog = false;
-                that.getListData()
-              } else {
-                that.$message('操作失败')
-              }
-            },
-            error: function (err) {
-              that.$message.error('操作失败。请联系管理员！');
+          if(!this.textarea) {
+            that.$notify({
+                title: '提示',
+                message: '输入框不能为空'
+            })
+          } else {
+            var data = {
+              'id': this.postId,
+              'type': 2,
+              'reason': this.textarea
             }
-          });
+            $.ajax({
+              url: '/Admin/admin_apply_for_fangdan/',
+              dataType: "json",
+              type: "post",
+              async: false,
+              data: data,
+              success: function (res) {
+                if (res.code === 0) {
+                  that.$message({
+                    message: '审核拒绝成功',
+                    type: 'success'
+                  });
+                  that.textareadialog = false;
+                  that.getListData()
+                } else {
+                  that.$message('操作失败')
+                }
+              },
+              error: function (err) {
+                that.$message.error('操作失败。请联系管理员！');
+              }
+            });
+          }
         }
       },
       created() {

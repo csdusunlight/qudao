@@ -248,40 +248,42 @@
                 agree: function (row) {
                     var that = this;
                     console.log(row.id)
-                    that.$prompt('请输入佣金', '提示', {
+                    that.$prompt('请输入佣金比例（纯数字）', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         inputPattern: /^(([0-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/, //正则验证
-                        inputErrorMessage: '请输入正确的金额',
-                    }).then(({ value }) => {
-                        console.log(value)
-                        $.ajax({
-                            url: '/Admin/admin_merchant_project/',
-                            type: "POST",
-                            async: false,
-                            data: {
-                                "type": 1,
-                                "id": row.id,
-                                "broker_rate": value
-                            },
-                            timeout: 5000, //超出时间
-                            dataType: 'json', //返回数据格式Json
-                            success: function (ret) {
-                                if (ret.code == 0) {
-                                    that.$notify({
-                                        title: '提示',
-                                        message: '操作成功，同意'
-                                    })
-                                    that.getDataList();
+                        inputErrorMessage: '请输入正确的佣金比例（纯数字格式）',
+                        callback: function(action, value) {
+                          if (action == 'confirm') {
+                            console.log(action);
+                            console.log(value.inputValue)
+                            $.ajax({
+                                url: '/Admin/admin_merchant_project/',
+                                type: "POST",
+                                async: false,
+                                data: {
+                                    "type": 1,
+                                    "id": row.id,
+                                    "broker_rate": value.inputValue
+                                },
+                                timeout: 5000, //超出时间
+                                dataType: 'json', //返回数据格式Json
+                                success: function (ret) {
+                                    if (ret.code == 0) {
+                                        that.$notify({
+                                            title: '提示',
+                                            message: '操作成功，同意'
+                                        })
+                                        that.getDataList();
+                                    }
+                                },
+                                error: function (xhr, textStatus) {
+                                    console.log('错误:' + xhr.responseText);
                                 }
-                            },
-                            error: function (xhr, textStatus) {
-                                console.log('错误:' + xhr.responseText);
-                            }
-                        });
-                    }).catch(() => {
-                        console.log('取消');
-                    });
+                            });
+                          }
+                        }
+                    })
                 },
                 refuse: function (row) {
                     console.log(row.id)
@@ -289,37 +291,39 @@
                     that.$prompt('请输入拒绝原因', '提示', {
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
-                        inputPattern: '',
+                        inputPattern: /\S/,
                         inputErrorMessage: '拒绝原因不能为空',
-                    }).then(({ value }) => {
-                        console.log(value)
-                        $.ajax({
-                            url: '/Admin/admin_merchant_project/',
-                            type: "POST",
-                            async: false,
-                            data: {
-                                "type": 2,
-                                "id": row.id,
-                                "reason": value
-                            },
-                            timeout: 5000, //超出时间
-                            dataType: 'json', //返回数据格式Json
-                            success: function (ret) {
-                                if (ret.code == 0) {
-                                    that.$notify({
-                                        title: '提示',
-                                        message: '操作成功，拒绝'
-                                    })
-                                    that.getDataList();
+                        callback: function(action, value) {
+                          if (action == 'confirm') {
+                            console.log(action);
+                            console.log(value.inputValue)
+                            $.ajax({
+                                url: '/Admin/admin_merchant_project/',
+                                type: "POST",
+                                async: false,
+                                data: {
+                                    "type": 2,
+                                    "id": row.id,
+                                    "reason": value.inputValue
+                                },
+                                timeout: 5000, //超出时间
+                                dataType: 'json', //返回数据格式Json
+                                success: function (ret) {
+                                    if (ret.code == 0) {
+                                        that.$notify({
+                                            title: '提示',
+                                            message: '操作成功，拒绝'
+                                        })
+                                        that.getDataList();
+                                    }
+                                },
+                                error: function (xhr, textStatus) {
+                                    console.log('错误:' + xhr.responseText);
                                 }
-                            },
-                            error: function (xhr, textStatus) {
-                                console.log('错误:' + xhr.responseText);
-                            }
-                        });
-                    }).catch(() => {
-                        console.log('取消');
-                    });
+                            });
+                          }
+                        }
+                    })
                 }
             }
         })

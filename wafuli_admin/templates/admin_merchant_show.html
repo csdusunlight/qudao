@@ -13,6 +13,9 @@
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <style>
+        body {
+          opacity: 0;
+        }
         .grid-content {
             padding: 25px 0;
         }
@@ -32,7 +35,7 @@
 
 <body>
     <div id="app">
-        <el-row :gutter="20">
+        <el-row :gutter="20" style="width: 100%;">
             <el-col :span="3">
                 {% include "leftNav.html" %}
             </el-col>
@@ -49,7 +52,7 @@
                             <div class="grid-content bg-purple">
                                 <span class="descTitle" >项目状态：</span>
                                 <el-select @change="change_state" style="width: 70%;" v-model="state" slot="prepend" placeholder="请选择项目状态">
-                                    <el-option label="全部" value=" "></el-option>
+                                    <el-option label="全部" value=""></el-option>
                                     <el-option label="即将开始" value="00"></el-option>
                                     <el-option label="正在进行" value="10"></el-option>
                                     <el-option label="已结束" value="20"></el-option>
@@ -149,6 +152,9 @@
             created: function () {
                 var that = this;
                 this.getDataList(1, 10);
+            },
+            mounted: function() {
+              document.body.style.opacity = 1;
             },
             methods: {
                 handleCurrentChange: function (val) {

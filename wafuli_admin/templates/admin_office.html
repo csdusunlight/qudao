@@ -189,6 +189,13 @@
                             </div>
                         </el-col>
                     </el-row>
+                    <div>
+                      <p class="unhandle-box">还存在未审核数据（今天之前提交的）的项目有：
+                      {% for item in unaudited_pronames %}
+                      <el-tag>{{item}}</el-tag>
+                      {%endfor%}
+                      </p>
+                    </div>
                     <!-- tabale -->
                     <el-header>数据总览</el-header>
                     <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"

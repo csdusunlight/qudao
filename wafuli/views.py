@@ -109,3 +109,11 @@ def intro_merchant(request):     #jzy
 def intro_about_us(request):     #jzy
     template = 'intro_about_us.html'
     return render(request, template)
+
+def information(request):     #jzy
+    template = 'information.html'
+    return render(request, template)
+
+def information_detail(request):     #jzy
+    template = 'information_detail.html'
+    return render(request, template)

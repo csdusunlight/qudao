@@ -1,0 +1,95 @@
+﻿{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{{news.seo_title}}</title>
+<meta name="keywords" content="{{news.seo_keywords}}" />
+<meta name="description" content="{{news.seo_description}}" />
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/default.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/component.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/welfare.css' %}" />
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript">
+	$.ajaxSetup({
+	    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+	});
+	var this_url = window.location.href;
+	var id = '{{news.id}}'
+	var type = '{{type}}'
+</script>
+	{% block jsblock %}
+
+	{% endblock %}
+</head>
+<body>
+ {% include "header.html" %}
+<div id="content">
+  <p>当前位置：<span><a href="{% url 'index' %}">挖福利</a> > <a href="{{news.get_type_url}}">{{news.get_type}}</a>
+   > <a href="">{{news.title}}</a></span></p>
+	{% block expblock %}
+
+	{% endblock %}
+  <div class="td-msgs">
+  	<div class="msg-ti"><img src="{% static 'images/task-04.png' %}" class="ms-pd"/><span class="mag-pp">体验步骤</span></div>
+    <div class="detail-html">{{news.strategy|safe}}</div>
+  </div>
+  <div class="td-msgs others">
+      <div class="msg-ti"><span class="mag-pp">其他福利</span></div>
+      {%for wel in other_wel_list%}
+      <a href="{{wel.url}}" class="hy-p">{{wel.title}}</a>
+      {%endfor%}
+
+  </div>
+  {% block hintblock %}
+  <div class="td-msgs">
+  	<div class="msg-ti"><img src="{% static 'images/task-05.png' %}" class="ms-pd"/><span class="mag-pp">温馨提示</span></div>
+    <p class="hy-p">1、为了让您畅快的享受福利，请您在领取免费福利之前务必先详细阅读以上详情内容，并根据体验步骤进行操作；</p>
+    <p class="hy-p">2、挖福利网站免费福利信息来源于网络以及合作商家，用户可以进行免费领取使用；</p>
+    <p class="hy-p">3、免费福利信息最终解释权归相应商家所有，若有疑问或发生纠纷，我们将配合用户解决问题，但不承担由此产生的法律责任。</p>
+    <p class="hy-p">如有疑问请联系<span><a href="#" style="color:#F08618;">在线客服</a></span>或拨打 <span style="color:#F08618;">服务热线：0731-85586375</span></p>
+  </div>
+  {% endblock %}
+
+  <div style="clear:both"></div>
+ <!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+
+	{% block dialogblock %}
+  <!--//体验-->
+      <div class="modal fade" id="myReModal">
+          <div class="modal-dialog modal-mg">
+            <div class="modal-content">
+            <div>
+                <p style="color:#F08619;font-size:16px;margin:2em 0px 0em 0px;">用手机扫描二维码进行体验</p>
+                <img id='erweima' src="#" style="margin:2em 0px 3em 0px;"/>
+            </div>
+                </div>
+              </div>
+        </div>
+
+      <div class="modal fade" id="myModal">
+          <div class="modal-dialog modal-mg">
+            <div class="modal-content">
+             <div class="md-content">
+				<div>
+					<p style="color:#04B3FF;font-size:25px;">温馨提示</p>
+					<p style="padding: 0px 0px 30px 0px;">内容提交后不可更改,提交别人的信息会冻结账户,请谨慎确认</p>
+                    <a id="confirm" class="submit_mores">确认</a>
+                    <a id="cancel" class="submit_mores" class="close" data-dismiss="modal" aria-label="Close">取消</a>
+				</div>
+			</div>
+				</div><!-- modal-body-->
+
+                </div>
+       </div>
+	{% endblock %}
+</body>
+</html>

@@ -1,0 +1,134 @@
+{% extends "detail-base.html" %}
+{% load staticfiles %}
+{% block jsblock %}
+<script type="text/javascript">
+{%if news.isonMobile %}
+var ismobile = true;
+{%else%}
+var ismobile = false;
+{%endif%}
+$(function(){
+	var ahref = $("a.login").attr("href");
+	ahref += "?next="+this_url;
+	$("a.login").attr("href",ahref);
+	$("button.te-mo").click(function(){
+		$.ajax({
+			url:"{%url 'exp_welfare_youhuiquan' %}?id=" + id,
+			dataType:"json",
+			success:function(ret){
+				if(ret.code==0){
+					alert("请先登录！")
+					window.location.href = ret.url;
+				}
+				else if(ret.code==1){
+					$('#myModal1').modal();
+				}
+				else if(ret.code==2){
+					$('#myModal2').modal();
+				}
+				else if(ret.code==3){
+					$('#myModal3').modal();
+				}
+				else if(ret.code==4){
+					$('#myModal4').modal();
+				}
+			},
+			error:function(){
+				alert("请检查网络连接");
+			}
+		});
+	});
+	$("a#confirm").click(function(){
+		$('.modal').modal("hide");
+	});
+});
+</script>
+{% endblock %}
+
+ {% block expblock %}
+  <div class="td-ti">
+  	<div style="max-width:500px;max-height:175px;float:left;overflow:hidden"><img src="{{news.pic.url}}" style="padding:10px"></img></div>
+    <div class="td-inimg">
+    	<p class="tli-title td-tij">{{news.title}}</p>
+        <p class="td-p">
+        {% if not user.is_authenticated %}
+        	<span><a href="{%url 'register' %}"  style="color:#0090D7;">注册</a></span>&nbsp;或&nbsp;<span>
+        	<a class="login" href="{%url 'login' %}"  style="color:#0090D7;">登陆</a>&nbsp;</span>
+			挖福利体验,完成后请刷新本页,查看最新状态
+		{% else %}
+        	请认真阅读下面的奖励规则和体验步骤后再点击“立即领取”
+        {% endif %}
+        </p>
+        {% if not news.is_expired %}
+        <button class="md-trigger te-mo">立即领取</button>
+        <span>剩余张数：<number>{{news.left_count}}</number></span>
+        {% else %}
+        <button class="te-moe">已结束</button>
+        {% endif %}
+    </div>
+  </div>
+  {%endblock%}
+	{%block dialogblock%}
+  <!--//体验-->
+       <div class="modal fade" id="myModal1">
+          <div class="modal-dialog modal-mg">
+            <div class="modal-content">
+             <div class="md-content">
+				<div>
+					<p style="color:#04B3FF;font-size:25px;">温馨提示</p>
+					<p style="padding: 0px 0px 30px 0px;">抱歉，该优惠券已被领取完了</p>
+                    <a id="confirm" class="submit_mores">确认</a>
+                    <a id="cancel" class="submit_mores" class="close" data-dismiss="modal" aria-label="Close">取消</a>
+				</div>
+			</div>
+				</div><!-- modal-body-->
+
+                </div>
+       </div>
+       <div class="modal fade" id="myModal2">
+          <div class="modal-dialog modal-mg">
+            <div class="modal-content">
+             <div class="md-content">
+				<div>
+					<p style="color:#04B3FF;font-size:25px;">温馨提示</p>
+					<p style="padding: 0px 0px 30px 0px;">已超过最大领取次数</p>
+                    <a id="confirm" class="submit_mores">确认</a>
+                    <a id="cancel" class="submit_mores" class="close" data-dismiss="modal" aria-label="Close">取消</a>
+				</div>
+			</div>
+				</div><!-- modal-body-->
+
+                </div>
+       </div>
+       <div class="modal fade" id="myModal3">
+          <div class="modal-dialog modal-mg">
+            <div class="modal-content">
+             <div class="md-content">
+				<div>
+					<p style="color:#04B3FF;font-size:25px;">温馨提示</p>
+					<p style="padding: 0px 0px 30px 0px;">领取成功，请在 用户中心-我的优惠券 中查看并使用！</p>
+                    <a id="confirm" class="submit_mores">确认</a>
+                    <a id="cancel" class="submit_mores" class="close" data-dismiss="modal" aria-label="Close">取消</a>
+				</div>
+			</div>
+				</div><!-- modal-body-->
+
+                </div>
+       </div>
+       <div class="modal fade" id="myModal4">
+          <div class="modal-dialog modal-mg">
+            <div class="modal-content">
+             <div class="md-content">
+				<div>
+					<p style="color:#04B3FF;font-size:25px;">温馨提示</p>
+					<p style="padding: 0px 0px 30px 0px;">该项目已结束！</p>
+                    <a id="confirm" class="submit_mores">确认</a>
+                    <a id="cancel" class="submit_mores" class="close" data-dismiss="modal" aria-label="Close">取消</a>
+				</div>
+			</div>
+				</div><!-- modal-body-->
+
+                </div>
+       </div>
+
+      {%endblock%}

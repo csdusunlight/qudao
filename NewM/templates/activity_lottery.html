@@ -1,0 +1,258 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>积分抽奖</title>
+<meta name="keywords" content="积分抽奖" />
+<meta name="description" content="积分抽奖" />
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{%static 'css/common.css'%}" />
+<link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}" />
+<link rel="stylesheet" type="text/css" href="{%static 'css/lottery.css'%}" />
+<link rel="stylesheet" type="text/css" href="{%static 'css/dialog.css'%}" />
+<script type="text/javascript" src="{%static 'js/jquery-1.11.2.min.js'%}"></script>
+<script src="{%static 'js/awardrotate.js'%}"></script>
+<script src="{%static 'js/rotate.js'%}"></script>
+<script type="text/javascript" src="{% static "js/MSClass.js" %}"></script>
+<script>
+    var get_lottery_url = "{%url 'get_lottery'%}"
+   	$.ajaxSetup({
+   	    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+   	});
+</script>
+<!--[if IE 6]>
+<script src="js/DD_belatedPNG.js"></script>
+<script>
+    DD_belatedPNG.fix('.ie6Png,.ie6Png img,*');
+</script>
+<![endif]-->
+</head>
+<body>
+  {% include "header.html" %}
+<div id="content">
+  <div><a href="{{adv.url}}"><img src="{{adv.pic.url}}"  class="co-imgp"/></a></div>
+  <div class="w1100s">
+  	  <div class="rule_cont">
+      	  <div class="rule_tite">
+          	<i style="background:url({%static 'images/contpic1.png'%}) no-repeat center;"></i>
+          	<span>抽奖规则</span>
+          </div>
+          <div class="rule_box">
+          	<img src="{%static 'images/box1.png'%}" />
+          	<img src="{%static 'images/box2.png'%}" />
+          </div>
+      </div>
+  	  <div class="rule_cont">
+      	  <div class="rule_tite">
+          	<i style="background:url({%static 'images/contpic2.png'%}) no-repeat center;"></i>
+          	<span>抽奖中心</span>
+          </div>
+          <div class="center">
+          	<div class="c1">
+            	<div class="c2">
+                	<!--转盘-->
+                	<div class="dial">
+                    	 <div class="turntable-bg">
+
+        <!--<div class="mask"><img src="{%static 'images/award_01.png'%}"/></div>-->
+
+        <div class="pointer"><img src="{%static 'images/pointer.png'%}" alt="pointer"/></div>
+
+        <div class="rotate" ><img id="rotate" src="{%static 'images/turntable.png'%}" alt="turntable"/></div>
+
+    </div>	
+                    
+                    </div>
+                    <!--end-->
+                    <div class="table_box">
+                    	<script>
+                        	$(document).ready(function() {
+                               $(".table_tit span:last-child").css("margin","0") 
+                             //  $(".table_list li:last-child").css("border","0") 
+                            });
+                        </script>
+                    	<div class="table_tit">
+                        	<span>用户名</span>
+                        	<span>时间</span>
+                        	<span>中奖奖品</span>
+                        </div>
+                        <div id="lscroll">
+	                        <ul class="table_list" id="lulscroll">
+	                        {%for r in record%}
+	                        	<li>
+	                            	<table width="100%">
+	                                	<tr>
+	                                    	<td>{{r.user}}</td>
+	                                    	<td>{{r.date}}</td>
+	                                    	<td>{{r.award}}</td>
+	                                    </tr>
+	                                </table>
+	                            </li>
+	                        {%endfor%}
+	                        </ul>
+	                     </div>
+                    </div>
+	                <script type="text/javascript">
+				    	new Marquee(["lscroll","lulscroll"],0,1,340,346,20,0,0);
+				    </script>
+                </div>
+            </div>
+          </div>
+      </div>
+  	  <div class="rule_cont">
+      	  <div class="rule_tite">
+          	<i style="background:url({%static 'images/contpic1.png'%}) no-repeat center;"></i>
+          	<span>本期大奖</span>
+          </div>
+          <div class="i_box1">
+          	<div class="i_box2">
+            	<div class="i_prcont">
+                	<img src="{%static 'images/iphone.png'%}" />
+                </div>
+                <div class="i_prinfo">
+                	<h5>Apple iphone 6s  plus 64G</h5>
+                    <p>价值：<font>6288</font>元 <span>1台</span></p>
+                </div>
+            </div>
+          </div>
+          <div class="i_box3">
+          	<div class="i_box4">
+            	<div class="i_box_info">
+                	<p>① 奖品在5个工作日内发出；</p>
+                    <p>② 实物中奖用户，请填写真实有效联系方式，挖福利客服会尽快与您取得联系，核实信息；</p>
+                    <p>③ 积分和现金奖励自动充入您的账户，稍后可以在账户中心查看；</p>
+                    <p>④ 如系统抽奖当天出现意外情况，则当天活动停止，进行系统维护活动期限延期一天；</p>
+                    <p>⑤ 其他情况由用户小窗客服联系相关部门解决；</p>	
+                    <p>⑥ 本活动解释权归挖福利所有！</p>
+                </div>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+        <!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->  
+  {% include "outline.html" %}
+  
+  <!--弹窗-->
+  
+  <!--中奖提示-->
+  <div class="popup1" style="display:none;">
+  	<div class="w698_box">
+    	<div class="pop_left">
+        	<h2>中奖提示</h2>
+            <p>恭喜您中奖！奖品为<font>0.8元现金</font>，稍后可在账户中心查收！</p>
+            <div class="btn_cont">
+            	<button>确  定</button>
+                <button class="confirm_lottery">继续抽奖</button>
+            </div>
+        </div>
+        <div class="btn_x"><button></button></div>
+    </div>
+  </div>
+  <!--中奖提示2-->
+  <div class="popup2" style="display:none;">
+  	<div class="w698_box">
+    	<div class="pop_left">
+        	<h2>中奖提示</h2>
+            <p>恭喜您中奖！奖品为iphone 6s，请填写收货地址！我们会尽快联系您哦~！</p>
+            <div class="btn_cont2">
+                <button>填写收货地址</button>
+            </div>
+        </div>
+        <div class="btn_x"><button></button></div>
+    </div>
+  </div>
+  <!--信息填写-->
+  <div class="popup3" style="display:none;">
+  	<div class="w698_box">
+    	<div class="pop_left">
+        	<h2>信息填写</h2>
+            <form>
+            	<div class="text_in">
+                	<span>姓 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 名：</span>
+                    <input type="text" />
+                </div>    
+            	<div class="text_in">
+                	<span>电 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 话：</span>
+                    <input type="text" />
+                </div>   
+            	<div class="text_in">
+                	<span>收货地址：</span>
+                    <input type="text" />
+                </div>   
+            	<div class="text_in">
+                	<span>邮 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 编：</span>
+                    <input type="text" />
+                </div>   
+                <p>注：请填写真实有效信息，如因填写信息错误导致无法收货，责任由用户承担。</p>
+            </form>
+            <div class="btn_cont">
+                <button>确  定</button>
+            </div>
+        </div>
+        <div class="btn_x"><button></button></div>
+    </div>
+  </div>
+  <!--温馨提示-->
+  <div class="popup4" style="display:none;">
+  	<div class="w698_box">
+    	<div class="pop_left">
+        	<h2>温馨提示</h2>
+            <p>本次抽奖将消耗您<font>10积分</font>！</p>
+            <div class="btn_cont">
+            	<button class="confirm_lottery">确  定</button>
+            </div>
+        </div>
+        <div class="btn_x"><button></button></div>
+    </div>
+  </div>
+  <!--温馨提示2-->
+  <div class="popup7" style="display:none;">
+  	<div class="w698_box">
+    	<div class="pop_left">
+        	<h2>温馨提示</h2>
+            <p>您的积分不足进行下一次抽奖~！</p>
+            <div class="btn_cont">
+            	<button>确  定</button>
+            	<button id="but_width">如何获得积分</button>
+            </div>
+        </div>
+        <div class="btn_x"><button></button></div>
+    </div>
+  </div>
+  <!--温馨提示3-->
+  <div class="popup5" style="display:none;">
+  	<div class="w698_box">
+    	<div class="pop_left">
+        	<h2>温馨提示</h2>
+            <p>信息提交成功！请保持电话通畅，挖福利会尽快与您取得联系！</p>
+            <div class="btn_cont">
+            	<button>确  定</button>
+            	<button class="confirm_lottery">继续抽奖</button>
+            </div>
+        </div>
+        <div class="btn_x"><button></button></div>
+    </div>
+  </div>
+  <!--谢谢参与-->
+  <div class="popup6" style="display:none;">
+  	<div class="w698_box">
+    	<div class="pop_left">
+        	<h2>温馨提示</h2>
+            <p>您知道吗？平均每三次抽奖，就能中奖一次哦~</p>
+            <div class="btn_cont">
+            	<button>确  定</button>
+            	<button class="confirm_lottery">继续抽奖</button>
+            </div>
+        </div>
+        <div class="btn_x"><button></button></div>
+    </div>
+  </div>
+  
+  <!--end-->
+  
+</body>
+</html>

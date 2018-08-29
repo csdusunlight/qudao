@@ -7,6 +7,7 @@ from docs.models import Document
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db.models.deletion import SET_NULL
+from DjangoUeditor.models import UEditorField
 
 # Create your models here.
 TRANS_TYPE = (
@@ -106,3 +107,46 @@ class ZhifubaoTransaction(models.Model):
         unique_together = (('amount', 'remark'),)
     def __unicode__(self):
         return self.remark
+
+class Article4(models.Model):
+    #Atag = models.ManyToManyField(Tag2, verbose_name='分类标签')
+    Atitle = models.CharField('标题', max_length=256)
+    Aslug = models.CharField('网址', max_length=256, db_index=True)
+
+    Acontent = models.TextField('内容', default='', blank=True)
+    Apub_date = models.DateTimeField('发表时间', auto_now_add=True, editable=True)
+    Aupdate_time = models.DateTimeField('更新时间', auto_now=True, null=True)
+    Acontent1 = UEditorField('内容1', height=40, width=200,default=u'test', blank=True, imagePath="uploads/images/",\
+        toolbars='besttome')
+
+    #Apublished = models.BooleanField('正式发布', default=True)
+
+
+    def __str__(self):
+        return self.Atitle
+
+    class Meta:
+        verbose_name = '教程1'
+        verbose_name_plural = '教程1'
+
+
+class Article5(models.Model):
+    #Atag = models.ManyToManyField(Tag2, verbose_name='分类标签')
+    Atitle = models.CharField('标题', max_length=256)
+    Aslug = models.CharField('网址', max_length=256, db_index=True)
+
+    Acontent = models.TextField('内容', default='', blank=True)
+    Apub_date = models.DateTimeField('发表时间', auto_now_add=True, editable=True)
+    Aupdate_time = models.DateTimeField('更新时间', auto_now=True, null=True)
+    Acontent1 = UEditorField('内容1', height=40, width=200,default=u'test', blank=True, imagePath="uploads/images/",\
+        toolbars='besttome')
+
+    #Apublished = models.BooleanField('正式发布', default=True)
+
+
+    def __str__(self):
+        return self.Atitle
+
+    class Meta:
+        verbose_name = '教程'
+        verbose_name_plural = '教程'

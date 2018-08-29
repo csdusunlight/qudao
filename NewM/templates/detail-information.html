@@ -1,0 +1,46 @@
+{% load staticfiles %}
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>{{info.seo_title}}</title>
+<meta name="keywords" content="{{info.seo_keywords}}" />
+<meta name="description" content="{{info.seo_description}}" />
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link href="{% static 'css/style.css'%}" type="text/css" rel="stylesheet">
+<link href="{% static 'css/common.css'%}" type="text/css" rel="stylesheet">
+<link href="{% static 'css/zixun-style.css'%}" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+</head>
+<body>
+ {% include "header.html" %}
+<div class="search">
+    <div>当前位置：<a href="{% url 'index' %}">挖福利</a> > <a href="{% url 'information_list' %}">福利资讯</a> > 
+    <a href="{% url 'information_list' type=info.type %}">{{info.get_type_display}}</a> >
+    <a href="">{{info.title}}</a>
+    </div>
+</div>
+<!-- 内容 -->
+<div class="content">
+  <div class="main">
+      <h2>{{info.title}}</h2>
+      <h5>发稿时间：{{info.pub_date|date:"Y-m-d H:i"}} &nbsp;&nbsp; 来源：{{info.source}}</h5>
+      <div>{{info.content|safe}}</div>
+  </div>
+
+  <div class="sidebar">
+      <h2>大家都在看</h2>
+      {%for info in hot_info_list%}
+      <div class="box">
+        <a href="{{info.url}}"><img src="{{info.pic.url}}" alt="{{info.title}}"></a>
+        <div>
+            <a href="{{info.url}}"><h3>{{info.title}}</h3></a>
+            <p>来源：{{info.source}}</p>
+        </div>
+      </div>
+      {%endfor%}
+  </div>
+</div>
+ <!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->  
+  {% include "outline.html" %}
+</body></html>

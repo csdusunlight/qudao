@@ -30,3 +30,9 @@ body {
 .el-popover {
   min-width: 60px !important;
 }
+.new-data {
+  position: absolute;
+  margin-left: 6px;
+  font-size: 14px;
+  color: yellow;
+}

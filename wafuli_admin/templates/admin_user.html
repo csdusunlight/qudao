@@ -54,7 +54,7 @@
             <el-col :span="21">
                 <div class="container">
                     <!-- 第一列 -->
-                    <el-row :gutter="20">
+                    <el-row>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
                                 <span class="desc_txt">加入开始时间：</span>
@@ -83,7 +83,7 @@
                         </el-col>
                     </el-row>
                     <!-- 第二列 -->
-                    <el-row :gutter="20">
+                    <el-row>
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
                                 <span class="desc_txt">渠道等级：</span>
@@ -126,10 +126,10 @@
                         </el-col>-->
                     </el-row>
                     <!-- 第三列 -->
-                    <el-row :gutter="20" style="display: flex;justify-content: flex-end;">
+                    <el-row style="display: flex;justify-content: flex-end;">
                         <el-col :span="6">
                             <div class="grid-content bg-purple">
-                                <el-button @click='search_data' type="primary">搜索</el-button>
+                                <el-button @click='search_data' type="primary" icon="el-icon-search">搜索</el-button>
                                 <!-- <el-button @click='export_data' type="danger">导出</el-button> -->
                             </div>
                         </el-col>

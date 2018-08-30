@@ -39,7 +39,7 @@ class Article(models.Model):
     agroup = models.ForeignKey(Agroup,verbose_name="分类分组")
     atag = models.ManyToManyField(Tag, verbose_name='分类标签')
     apic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）",blank=False)
-    atitle = models.CharField('标题',unique=True, max_length=256)
+    atitle = models.CharField('标题',unique=True, max_length=200)
     aslug = models.CharField('网址', max_length=256, db_index=True)
     aseo_title = models.CharField(max_length=200, verbose_name=u"SEO标题", blank=True)
     aseo_keywords = models.CharField(max_length=200, verbose_name=u"SEO关键词", blank=True)

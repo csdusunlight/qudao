@@ -86,54 +86,56 @@
   </el-submenu>
 </el-menu>
 <script type="text/javascript">
-	$.ajax({
-    type:"get",
-    url:"/Admin/check_new/",
-    async:true,
-    success: function (ret) {
-        console.log(ret);
-        if (ret.admin_apply == 0) {
-            $('.admin_apply_num').hide();
-        } else {
-            $('.admin_apply_num').show().text(ret.admin_apply);
-        }
-        
-        if (ret.admin_margin == 0) {
-                $('.admin_margin_num').hide();
-            } else {
-                $('.admin_margin_num').show().text(ret.admin_margin);
-            }
-            
-            if (ret.admin_merchant_investlog == 0) {
-                $('.admin_merchant_investlog_num').hide();
-            } else {
-                $('.admin_merchant_investlog_num').show().text(ret.admin_merchant_investlog);
-            }
-            
-            if (ret.admin_merchant_project == 0) {
-                $('.admin_merchant_project_num').hide();
-            } else {
-                $('.admin_merchant_project_num').show().text(ret.admin_merchant_project);
-            }
-            
-            if (ret.admin_office == 0) {
-                $('.admin_office_num').hide();
-            } else {
-                $('.admin_office_num').show().text(ret.admin_office);
-            }
-            if (ret.admin_withdraw == 0) {
-                $('.admin_withdraw_num').hide();
-            } else {
-                $('.admin_withdraw_num').show().text(ret.admin_withdraw);
-            }
-            if (ret.admin_pay == 0) {
-                $('.admin_pay_num').hide();
-            } else {
-                $('.admin_pay_num').show().text(ret.admin_pay);
-            }
-    },
-    error: function (ret){
-        console.log(ret.msg);
-    }
-  });
+  $(function() {
+  	$.ajax({
+      type:"get",
+      url:"/Admin/check_new/",
+      async:true,
+      success: function (ret) {
+          console.log(ret);
+          if (ret.admin_apply == 0) {
+              $('.admin_apply_num').hide();
+          } else {
+              $('.admin_apply_num').show().text(ret.admin_apply);
+          }
+          
+          if (ret.admin_margin == 0) {
+                  $('.admin_margin_num').hide();
+              } else {
+                  $('.admin_margin_num').show().text(ret.admin_margin);
+              }
+              
+              if (ret.admin_merchant_investlog == 0) {
+                  $('.admin_merchant_investlog_num').hide();
+              } else {
+                  $('.admin_merchant_investlog_num').show().text(ret.admin_merchant_investlog);
+              }
+              
+              if (ret.admin_merchant_project == 0) {
+                  $('.admin_merchant_project_num').hide();
+              } else {
+                  $('.admin_merchant_project_num').show().text(ret.admin_merchant_project);
+              }
+              
+              if (ret.admin_office == 0) {
+                  $('.admin_office_num').hide();
+              } else {
+                  $('.admin_office_num').show().text(ret.admin_office);
+              }
+              if (ret.admin_withdraw == 0) {
+                  $('.admin_withdraw_num').hide();
+              } else {
+                  $('.admin_withdraw_num').show().text(ret.admin_withdraw);
+              }
+              if (ret.admin_pay == 0) {
+                  $('.admin_pay_num').hide();
+              } else {
+                  $('.admin_pay_num').show().text(ret.admin_pay);
+              }
+      },
+      error: function (ret){
+          console.log(ret.msg);
+      }
+    });
+  })
 </script>

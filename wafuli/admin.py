@@ -28,13 +28,8 @@ class ProjectAdmin(admin.ModelAdmin):
 class CompanyAdmin(admin.ModelAdmin):
     search_fields = ['name',]
 
-
-class Article1Admin(admin.ModelAdmin):
-    list_display = ('Atitle',)
-
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Company, CompanyAdmin)
-admin.site.register(Article1, Article1Admin)
 admin.site.register(MAdvert_PC)
 admin.site.register(Announcement)
 admin.site.register(SubscribeShip)

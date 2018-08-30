@@ -21,6 +21,15 @@ class TagSet(viewsets.ModelViewSet):
     pagination_class = MyPageNumberPagination
 
 
+def get_article_detail(request):
+    if request.method == 'GET':
+        template = 'account/get_article_detail.html'
+        return render(request, template)
+
+def get_article_list(request):
+    if request.method == 'GET':
+        template = 'account/get_article_list.html'
+        return render(request, template)
 
 
 class ArticleSet(viewsets.ModelViewSet):
@@ -34,6 +43,17 @@ class ArticleSet(viewsets.ModelViewSet):
         aimtag = Article.objects.filter(id=pk)[0]
         tags=aimtag.atag.values_list()
         aimarticle=Article.objects.filter(atag__tname__in=[tags[i][1] for i in range(0,len(tags))]).order_by('-apub_date')
+        self.__class__.queryset = aimarticle
+        page = self.paginate_queryset(aimarticle)
+        returndata = ArticleSerializer(instance=page, many=True)
+        return self.get_paginated_response(returndata.data)
+
+    @detail_route(methods=['LIST'],url_path='lookup_by_group')
+    def lookup_by_agroup(self,request,**dict):
+        para1 = request.GET.get('groupid')
+        aimgroup = Agroup.objects.filter(id=para1)[0]
+        aimgroupitem =aimgroup.agname
+        aimarticle=Article.objects.filter(agroup__agname__exact=aimgroupitem).order_by('-apub_date')
         self.__class__.queryset = aimarticle
         page = self.paginate_queryset(aimarticle)
         returndata = ArticleSerializer(instance=page, many=True)

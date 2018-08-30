@@ -10,6 +10,10 @@ IS_HOT = (
     ('0', u'热门'),
     ('1', u'不热门'),
 )
+IS_CAOGAO = (
+    ('0', u'草稿'),
+    ('1', u'非草稿'),
+)
 
 @python_2_unicode_compatible
 class Tag(models.Model):
@@ -46,6 +50,7 @@ class Article(models.Model):
     aseo_description = models.CharField(max_length=200, verbose_name=u"SEO描述", blank=True)
     apub_date = models.DateTimeField('发表时间',default=timezone.now)
     aupdate_time = models.DateTimeField('更新时间', auto_now=True,null=True)
+    ais_published = models.CharField('是否草稿',choices=IS_CAOGAO,null=True,max_length=2)
     ais_hot = models.CharField('是否热门文章',choices=IS_HOT,null=True,max_length=2)
     acontent =UEditorField(u"文章内容", width=900, height=300,
                      imagePath="photos/%(year)s/%(month)s/%(day)s/",
@@ -60,3 +65,11 @@ class Article(models.Model):
     class Meta:
         verbose_name = '资讯'
         verbose_name_plural = '资讯'
+
+
+class Url(models.Model):
+    uname=models.CharField('链接名称', max_length=256)   #分组和文章是一对多
+    url=models.CharField('链接具体', max_length=256)   #分组和文章是一对多
+    class Meta:
+        verbose_name = '链接'
+        verbose_name_plural = '链接'

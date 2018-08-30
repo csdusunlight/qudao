@@ -20,6 +20,11 @@ urlpatterns = [
     url(r'^article/(?P<pk>[0-9]+)/lookup_by_tag/$', views.ArticleSet.as_view({
                                                  'get': 'lookup_by_tag'
     })),
+    url(r'^articles/lookup_by_agroup/$', views.ArticleSet.as_view({
+                                                 'get': 'lookup_by_agroup'
+    })),
+    url(r'^get_article_detail/$','newsm.views.get_article_detail',name='get_article_detail'),
+    url(r'^get_article_list/$','newsm.views.get_article_list',name='get_article_list'),
     url(r'^agroups/$', views.AgroupSet.as_view({'get': 'list'})),
     url(r'^agroup/(?P<pk>[0-9]+)/$', views.AgroupSet.as_view({'get':'retrieve' }))
 ]

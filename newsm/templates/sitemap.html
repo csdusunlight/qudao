@@ -1,0 +1,63 @@
+{% load staticfiles %}
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>一个提供免费福利的网络理财平台，挖福利</title>
+<meta content="免费福利，理财红包，理财活动，购物红包，体验红包" name="keywords">
+<meta content="挖福利免费为您提供互联网优惠券和免费福利领取活动信息！" name="description">
+<link href="{% static 'images/favicon.ico' %}" rel="shortcut icon">
+<link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet">
+<link href="{% static 'css/common.css' %}" type="text/css" rel="stylesheet">
+<!-- <link href="{% static 'css/page.css' %}" type="text/css" rel="stylesheet"> -->
+<link href="{% static 'css/sitemap.css' %}" type="text/css" rel="stylesheet">
+</head>
+<body>
+{% include "header.html" %}
+
+<!-- 内容 -->
+<div class="content">
+  <div class="head"><a href="/">首页</a>&nbsp;>&nbsp;<a href="/sitemap/">网站地图</a></div>
+  <div class="list">
+    <h3><a href="/welfare/">免费福利</a></h3>
+    <ul>
+      <li><a href="/welfare/yhq/">优惠券</a></li>
+      <li><a href="/welfare/hb/">红包</a></li>
+      <li><a href="/welfare/by/">9.9包邮</a></li>
+    </ul>
+  </div>
+  <div class="list">
+    <h3><a href="/task/">体验福利</a></h3>
+  </div>
+  <div class="list">
+    <h3><a href="/finance/">理财福利</a></h3>
+  </div>
+  <div class="list">
+    <h3><a href="/information/">福利咨询</a></h3>
+    <ul>
+      <li><a href="/information/washuju/">挖数据</a></li>
+      <li><a href="/information/wahangqing/">挖行情</a></li>
+      <li><a href="/information/wahuodong/">挖活动</a></li>
+      <li><a href="/information/wagushi/">挖故事</a></li>
+    </ul>
+  </div>
+  <div class="list">
+    <h3><a href="/mall/">积分商城</a></h3>
+  </div>
+  <div class="list">
+    <h3><a href="/business/">商家大全</a></h3>
+  </div>
+  <div class="list">
+  <h3><a href="/aboutus/">关于我们</a></h3>
+  <ul>
+    <li><a href="/aboutus/#cont=announcement">公告列表</a></li>
+    <li><a href="/aboutus/#cont=strategy">福利攻略</a></li>
+    <li><a href="/aboutus/#cont=exchange_help">兑换帮助</a></li>
+    <li><a href="/aboutus/#cont=news">新闻动态</a></li>
+  </ul>
+</div>
+</div>
+<div style="clear:both"></div>
+<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+</body></html>

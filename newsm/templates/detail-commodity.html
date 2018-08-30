@@ -1,0 +1,234 @@
+﻿{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>奖品详情</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/default.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/component.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/welfare.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/commodity.css' %}" />
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script>
+var this_url = window.location.href;
+var good_id = "{{com.id}}";
+$(function(){
+	var ahref = $("a.login").attr("href");
+	ahref += "?next="+this_url;
+	$("a.login").attr("href",ahref);
+	$("#submit").click(function(){
+		name = $("#rec_name").val();
+		tel = $("#rec_tel").val();
+		addr = $("#rec_addr").val();
+		remark = $("#rec_remark").val();
+		if (!name || !tel || !addr){
+			return;
+		}
+		$('#myReModal').modal('hide');
+		var post_url = "{%url 'submit_order' %}";
+		$.ajax({
+			url: post_url,
+			dataType:"json",
+			type:'GET',
+			data : {
+				'name': name,
+				'tel': tel,
+				'addr': addr,
+				'remark': remark,
+				'id':good_id,
+			},
+			success:function(ret){
+				if(ret.code==-1){
+					alert("请重新登录！")
+					window.location.href = ret.url;
+				}
+				else if(ret.code==1){
+					alert("提交失败！");
+				}
+				else if(ret.code==0){
+					$('#myModal').modal();
+				}
+			},
+			error:function(){
+				alert("请检查网络连接");
+			}
+		});
+	});
+});
+</script>
+</head>
+<body>
+ {% include "header.html" %}
+<div id="content">
+   <div><a href="{{com.advert.url}}"><img src="{{com.advert.pic.url}}"  class="co-imgp"/></a></div>
+    <div class="conte" text-align="center">
+         <div class="ews-right">
+        	<div class="lk-oh">
+            	<div class="er-h2"><span>{{com.get_category_display}}一{{com.name}}</span></div>
+                <div class="pl-d">
+                	<img src="{{com.pic.url}}" class="pl-img"/>
+                </div>
+                <div class="pl-r">
+                <p class="lo-ol">{{com.name}}</p>
+                <p class="po-dou lp-up">兑换该奖品需：<span class="lo-sp">{{com.price}}</span><img src="{% static 'images/doudou.png' %}" class="dou-dou"/></p>
+                {% if not user.is_authenticated %}
+					<p class="lk-po">
+                    <button class="md-trigger te-mo lo-apf" >请先登录</button>
+                    </p>
+                    <p class="pol-p">对不起，你尚未登陆，请&nbsp;<span>
+                    <a class="login" href="{%url 'login' %}" style="color:#91C11D;">点此登陆</a></span>
+                    </p>
+
+
+                 {% elif user.scores < com.price %}
+                    <p class="po-dou lp-up" >账户剩余积分：<span class="lo-sp">{{user.scores}}</span><img src="{% static 'images/doudou.png' %}" class="dou-dou"/>
+                    <p class="lk-po">
+                    <button class="md-trigger te-mo lo-apf">积分不足</button>
+                    </p>
+                    <p class="pol-p">快去&nbsp;<span>
+                    <a href="{%url 'task' %}" style="color:#91C11D;">体验福利</a>&nbsp;和&nbsp;<a href="{%url 'finance' %}" style="color:#91C11D;">理财福利</a>&nbsp;赚取积分</span>
+                    </span>
+                    </p>
+
+                  {% else %}
+                    <p class="po-dou lp-up" >账户剩余积分：<span class="lo-sp">{{user.scores}}</span><img src="{% static 'images/doudou.png' %}" class="dou-dou"/></p>
+                    <p class="lk-po">
+                    <button class="md-trigger te-mo lo-apft" href="#myReModal" data-toggle="modal" data-target="#myReModal" style="outline:none">立即兑换</button>
+                    </p>
+
+                    {% endif %}
+
+                    </div>
+
+               <!--代码部分begin-->
+            <div id="menus">
+            <!--tag标题-->
+                <ul id="navs" class="navt">
+                    <li><a class="selected">奖品介绍</a></li>
+                    <li><a class="">兑换流程</a></li>
+                </ul>
+            <!--二级菜单-->
+                <div id="menu_con">
+                    <div class="tag" style="display:block">
+                        {{com.rules|safe}}
+                     </div>
+                    <div class="tag" style="display:none">
+                        {{com.strategy|safe}}
+                     </div>
+            </div>
+            </div>
+
+        </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div style="clear:both"></div>
+ <!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+
+
+   <!--//体验-->
+      <div class="modal fade" id="myReModal">
+          <div class="modal-dialog modal-mg">
+            <div class="modal-content">
+            <div>
+					<p style="color:#04B3FF;font-size:25px;margin: 1em 0em;">请填写收件人信息</p>
+					<div class="md-idv">收件人姓名:<input id='rec_name' type="text" class="md-input"/></div>
+                    <div class="md-idv">收件人手机号:<input id='rec_tel' type="text" class="md-input"/></div>
+                    <div class="md-idv">收件人地址:<input id='rec_addr' type="text" class="md-input"/></div>
+                    <div class="md-idv">备注:<input id='rec_remark' type="text" class="md-input"/></div>
+                    <div style="margin: 2em 0px 2em 2em;"><span style="color: rgb(191, 191, 191);">我们将对您的信息严格保密!</span>
+                    <button id="submit" class="md-trigger iu-btn">提交</button></div>
+					<button class="close lk-cloe" data-dismiss="modal" aria-label="Close">×</button>
+
+            </div>
+
+
+
+
+
+                </div>
+              </div>
+        </div>
+
+      <div class="modal fade" id="myModal">
+          <div class="modal-dialog modal-mg">
+            <div class="modal-content">
+             <div class="md-content">
+				<div>
+					<p style="color:#04B3FF;font-size:25px;">温馨提示</p>
+					<p style="padding: 0px 0px 30px 0px;">信息提交后,工作人员会尽快审核并安排发货.如果需要修改信息,请&nbsp;<a href="#" style="color:#00B4FE;">联系客服</a></p>
+
+                    <a href="#" class="submit_mores" class="close" data-dismiss="modal" aria-label="Close">确认</a>
+				</div>
+			</div>
+				</div><!-- modal-body-->
+
+                </div>
+              </div>
+        </div>
+
+
+<script>
+var tabs=function(){
+    function tag(name,elem){
+        return (elem||document).getElementsByTagName(name);
+    }
+    //获得相应ID的元素
+    function id(name){
+        return document.getElementById(name);
+    }
+    function first(elem){
+        elem=elem.firstChild;
+        return elem&&elem.nodeType==1? elem:next(elem);
+    }
+    function next(elem){
+        do{
+            elem=elem.nextSibling;
+        }while(
+            elem&&elem.nodeType!=1
+        )
+        return elem;
+    }
+    return {
+        set:function(elemId,tabId){
+            var elem=tag("li",id(elemId));
+            var tabs=tag("div",id(tabId));
+            var listNum=elem.length;
+            var tabNum=tabs.length;
+            for(var i=0;i<listNum;i++){
+                    elem[i].onclick=(function(i){
+                        return function(){
+                            for(var j=0;j<tabNum;j++){
+                                if(i==j){
+                                    tabs[j].style.display="block";
+                                    //alert(elem[j].firstChild);
+                                    elem[j].firstChild.className="selected";
+                                }
+                                else{
+                                    tabs[j].style.display="none";
+                                    elem[j].firstChild.className="";
+                                }
+                            }
+                        }
+                    })(i)
+            }
+        }
+    }
+}();
+tabs.set("navs","menu_con");//执行
+</script>
+<!--代码部分end-->
+
+</body>
+</html>

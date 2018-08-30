@@ -116,6 +116,10 @@ class Project(models.Model):
     broker_rate03 = models.DecimalField(u"3级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True, blank=True)
     broker_rate04 = models.DecimalField(u"4级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True, blank=True)
     broker_rate05 = models.DecimalField(u"5级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True, blank=True)
+    content=UEditorField(u"内容", width=900, height=300, toolbars="full",
+                     imagePath="photos/%(year)s/%(month)s/%(day)s/",
+                     filePath="photos/%(year)s/%(month)s/%(day)s/",
+                     upload_settings={"imageMaxSize":120000},settings={},command=None,blank=True)
     def save(self, force_insert=False, force_update=False, using=None, 
              update_fields=None):
         if self.id:
@@ -220,6 +224,21 @@ SUB_WAY = (
     ('4', u'移动端自助提交'),
     ('5', u'表格提交(不区分项目)'),
 )
+
+# class Article1(models.Model):
+#     Atitle = models.CharField('标题', max_length=256)
+#     Aslug = models.CharField('网址', max_length=256, db_index=True)
+#     Apub_date = models.DateTimeField('发表时间', auto_now_add=True, editable=True)
+#     Aupdate_time = models.DateTimeField('更新时间', auto_now=True, null=True)
+#     content1=UEditorField(u"内容", width=900, height=300, toolbars="full",
+#                      imagePath="photos/%(year)s/%(month)s/%(day)s/",
+#                      filePath="photos/%(year)s/%(month)s/%(day)s/",
+#                      upload_settings={"imageMaxSize":120000},settings={},command=None,blank=True)
+#     class Meta:
+#         verbose_name = 'jck'
+#         verbose_name_plural = 'jck'
+
+
 class InvestLog(models.Model):
     PAY_STATE = (
         ('1', u'未打款'),

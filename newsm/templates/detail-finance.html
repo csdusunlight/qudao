@@ -1,0 +1,601 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{{news.seo_title}}</title>
+<meta name="keywords" content="{{news.seo_keywords}}" />
+<meta name="description" content="{{news.seo_description}}" />
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/default.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/component.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/welfare.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/wfl-detail-finance.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />
+<script type="text/javascript" src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
+<script type="text/javascript">
+	$.ajaxSetup({
+	    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+	});
+	var this_url = window.location.href;
+	var id = '{{news.id}}'
+	var type = '{{type}}'
+	{%if news.isonMobile %}
+	var ismobile = true;
+	{%else%}
+	var ismobile = false;
+	var url_openwindow = "{% url 'exp_welfare_openwindow' %}";
+	{%endif%}
+	$(function(){
+		var ahref = $("a.login").attr("href");
+		ahref += "?next="+this_url;
+		$("a.login").attr("href",ahref);
+		$("button.te-mo").click(function(){
+			if(ismobile){
+				$.ajax({
+					url:"{%url 'exp_welfare_erweima' %}?id=" + id + "&type=" + type,
+					dataType:"json",
+					success:function(ret){
+						if(ret.code==0){
+							alert("请先登录！")
+							window.location.href = ret.url;
+						}
+						else if(ret.code==1){
+							$('img#erweima').attr('src',ret.url);
+							$('#myReModal').modal();
+						}
+					},
+					error:function(){
+						alert("请检查网络连接");
+					}
+				});
+			}
+			else {
+				window.open(url_openwindow + "?id=" + id + "&type=" + type);
+			}
+		});
+		// $("button.td-tj").click(function(){
+		// 	var telnum = $('input#telnum').val();
+		// 	// telnum = telnum.replace(/(^\s*)|(\s*$)/g, "");
+		// 	// $('input#telnum').val(telnum);
+		// 	var remark = $('input#remark').val();
+		// 	var re=/^1[1,2,3,4,6,5,7,8,9]\d{9}$/;
+		// 	if(!re.test(telnum)){
+		// 		alert("手机号格式不正确！")
+		// 		return;
+		// 	}
+		// 	// var amount = parseFloat($('input#amount').val());
+  //     var amount = $('input#amount').val();
+  //     var re_amount=/^\d+(\.\d+)?$/;
+		// 	if(!re_amount.test(amount)){
+		// 		alert("投资金额不能为空且必须为纯数字格式！")
+		// 		return;
+		// 	}
+		// 	var term = $('input#term').val();
+		// 	if(!re_amount.test(term)){
+		// 		alert("投资标期不能为空且必须为纯数字格式！")
+		// 		return;
+		// 	}
+		// 	// $('#myModal').modal();
+
+  //     $.ajax({
+  //       url:"{%url 'expsubmit_finance' %}",
+  //       type:'post',
+  //       async:false,
+  //       data:{
+  //         type:type,
+  //         id:id,
+  //         term:term,
+  //         telnum:telnum,
+  //         remark:remark,
+  //         amount: amount
+  //       },
+  //       dataType:"json",
+  //       success:function(ret){
+  //         if(ret.code==0){
+  //           alert("请先登录！")
+  //           window.location.href = ret.url;
+  //         }
+  //         else {
+  //           alert(ret.msg);
+  //         }
+  //       },
+  //       error:function(){
+  //         alert("请检查网络连接");
+  //       }
+  //     });
+  //     popupHide();
+  //   });
+		// $("a#confirm").click(function(){
+		// 	var telnum = $('input#telnum').val();
+		// 	var remark = $('input#remark').val();
+		// 	var amount = parseFloat($('input#amount').val());
+		// 	var term = $('input#term').val();
+		// 	$('#myModal').modal("hide");
+		// 	$.ajax({
+		// 		url:"{%url 'expsubmit_finance' %}",
+		// 		type:'post',
+		// 		async:false,
+		// 		data:{
+		// 			type:type,
+		// 			id:id,
+		// 			term:term,
+		// 			telnum:telnum,
+		// 			remark:remark,
+		// 			amount: amount
+		// 		},
+		// 		dataType:"json",
+		// 		success:function(ret){
+		// 			if(ret.code==0){
+		// 				alert("请先登录！")
+		// 				window.location.href = ret.url;
+		// 			}
+		// 			else {
+		// 				alert(ret.msg);
+		// 			}
+		// 		},
+		// 		error:function(){
+		// 			alert("请检查网络连接");
+		// 		}
+		// 	});
+		// });
+
+    // 理财介绍超出隐藏
+    var text_box = document.getElementById("text_box"),
+        intro = document.getElementById("intro");
+    var box_height = text_box.offsetHeight - intro.offsetHeight;
+    if(box_height<0){
+        var oTitle = null;
+        var sTitle = null;
+
+        text_box.setAttribute("class","text-box toolong");
+
+        intro.onmouseover = function(ev) {
+          this.title = this.innerHTML;
+          sTitle = this.title;
+          this.title = '';
+          oTitle = document.createElement('div');
+          oTitle.className = 'titleShow';
+          oTitle.innerHTML = sTitle;
+          document.body.appendChild(oTitle);
+        };
+        intro.onmousemove = function(ev) {
+          var ev = ev || window.event;
+          oTitle.style.left = ev.clientX + 10 + 'px'; //获取鼠标所在x座标并增加10个像素,下同
+          oTitle.style.top = ev.clientY + 10 + 'px';
+        }
+        intro.onmouseout = function() {
+          document.body.removeChild(oTitle);
+        }
+    }
+
+	});
+
+    // 理财信息登记部分
+  var popupShow = function() {
+      $(".popup-box").addClass("in");
+  }
+  var popupHide = function(){
+    $(".popup-box").removeClass("in");
+  }
+</script>
+</head>
+<body>
+ {% include "header.html" %}
+<div id="content">
+  <p>当前位置：<span><a href="{% url 'index' %}">挖福利</a> > <a href="{{news.get_type_url}}">{{news.get_type}}</a>
+   > <a href="">{{news.title}}</a></span></p>
+  <div class="finance-top">
+    <div class="finance-info">
+        <img src="{{news.pic.url}}" />
+        <p class="finance-mark">
+          <b>{{news.title}}</b>
+         {% for mark in news.marks.all|slice:":3" %}
+          	<span>{{mark.name}}</span>
+         {% endfor %}
+        </p>
+        <div id="text_box" class="text-box">
+          <p id="intro" class="introduction">{{news.introduction}}</p>
+        </div>
+        <div class="taste-btn">
+          {% if not news.is_expired %}
+          <button class="md-trigger te-mo">立即投资</button>
+          {% else %}
+          <button class="te-moe">已结束</button>
+          {% endif %}
+          <button id="infor_register">信息登记</button>
+        </div>
+    </div>
+    <div class="finance-bg">
+    	<p><span>平台背景</span><span>{{news.background}}</span></p>
+		<p><span>注册资本</span><span>{{news.regcap}}</span></p>
+		<p><span>上线时间</span><span>{{news.onlinedate}}</span></p>
+		<p><span>银行存管机构</span><span>{{news.depository}}</span></p>
+		<p><span>ICP号</span><span>{{news.ICP}}</span></p>
+    </div>
+  </div>
+
+  <!-- 理财登记部分 -->
+  <div class="submit-content by-item" id="submit_content">
+    <img id="add_data_btn" class="add-data-btn" src="{% static 'images/add-data-btn.png' %}" />
+    <div id="submit_data_container" class="submit-data-container">
+      <ul class="submit-head">
+        <li class="item-01">项目名称</li>
+        <li class="item-02">投资日期</li>
+        <li class="item-03">注册手机号</li>
+        <li class="item-04">投资金额（元）</li>
+        <li class="item-05">投资标期（天）</li>
+        <li class="item-06">备注</li>
+      </ul>
+      <ul class="submit-item-box">
+        <li class="submit-item item-01">
+          <select id="project_select" class="project_select height-add01" placeholder="选择项目">
+            <option value="{{news.id}}">{{news.title}}</option>
+          </select>
+        </li>
+        <li class="submit-item item-02"><input type="text" class="height-add02 time date_picker" id="date_picker" placeholder="选择日期">
+        </li>
+        <li class="submit-item item-03"><input type="text" maxlength=11 class="telnum" id="telnum" placeholder="填写正确的手机号">
+        </li>
+        <li class="submit-item item-04"><input type="text" class="amount" id="amount" placeholder="仅限纯数字">
+        </li>
+        <li class="submit-item item-05"><input type="text" class="term" id="term" placeholder="仅限纯数字">
+        </li>
+        <li class="submit-item item-06"><input type="text" class="remark" id="remark" placeholder="选填">
+        </li>
+        <li class="delete-item item-07">删除</li>
+      </ul>
+    </div>
+
+    <a id="upload_byitem" class="upload-byitem">提交数据</a>
+    <div class="attention">
+      <h6>注意事项：</h6>
+      <p>1、投资金额、投资标期只能为纯数字<br /> 2、点击右边的“+”号，可连续添加多条数据，再一并提交
+        <br /> 3、删除按钮可删除该条数据
+      </p>
+    </div>
+    <div class="popup-box popup-box-01">
+      <div class="popup-content">
+        <h3>删除提示</h3>
+        <p id="hint_delete">确定删除该条数据？</p>
+        <a id="cancel" class="cancel confirm" onclick="popupOutInfo()">取&nbsp;&nbsp;&nbsp;&nbsp;消</a>
+        <a id="confirm_delete" class="confirm">确认删除</a>
+      </div>
+    </div>
+    <div class="popup-box popup-box-03">
+      <div class="popup-content">
+        <h3>温馨提示</h3>
+        <p class="hint-msg"></p>
+        <a id="cancel" class="cancel confirm" onclick="popupOutError()">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+      </div>
+    </div>
+    <div class="popup-box popup-box-04">
+      <div class="popup-content">
+        <h3>数据提交反馈</h3>
+        <p>本次提交数据：<span class="data-item-submit"></span>项</p>
+        <p class="repeat-phonenumber">重复数据：<span class="data-item-repeat-phone"></span></p>
+        <!-- <p>已存在的数据：<span class="data-item-exist"></span>项</p> -->
+        <p class="exist-phonenumber">无效数据：<span class="data-item-exist-phone"></span></p>
+        <p style="color: #ff6767;">有效提交：<span class="data-item-valid"></span>项</p>
+        <p style="text-align: left;padding-left: 38px;">注：<br/> 重复数据：本次提交中的重复数据
+          <br />无效数据：挖福利数据库中已存在，其他用户或自己之前提交过的数据
+        </p>
+        <a id="upload_again" class="upload-again table-btn" onclick="popupOutItem()">确&nbsp;&nbsp;&nbsp;&nbsp;定</a>
+      </div>
+    </div>
+  </div>
+  <!-- submit-content________end -->
+  <!-- 理财登记部分---end   -->
+
+  <div class="td-msgs finance-table">
+      <div class="table-head">
+          <span>投资金额</span><span>投资期限</span><span>挖福利返现</span><span>预计年化收益</span>
+      </div>
+      {%for row in table %}
+      <div class="table-list">
+	      {%for column in row %}<span>{{column}}</span>{%endfor%}
+      </div>
+      {%endfor%}
+  </div>
+  <div class="popup-box popup-box-02">
+    <div class="td-msg popup-content finance-popup">
+      <div class="ma-div">注册手机号：<input type="text" placeholder="输入您的手机号，若有多个请分别提交" class="ms-input" id="telnum"></div>
+      <div class="ma-div">投资金额：<input type="text" placeholder="输入您的投资金额（仅限数字）" class="ms-input" id="amount"><span style="position: absolute;line-height: 40px;margin-left: 10px;">元</span></div>
+      <div class="ma-div">投资标期：<input type="text" placeholder="输入您的投资标期（仅限数字）" class="ms-input" id="term"><span style="position: absolute;line-height: 40px;margin-left: 10px;">天</span></div>
+      <div class="ma-div3">备注：<input type="text" placeholder="可选填自己的QQ号码、投资日期等其他信息" class="ms-input" id="remark"></div>
+      <p class="td-yy"><button class="finance-cancel" onclick="popupHide()">取消</button><button class="md-trigger td-tj">提交</button></p>
+      <div class="clearboth"></div>
+    </div>
+  </div>
+
+   <div class="td-msgs">
+  	<div class="msg-ti"><img src="{% static 'images/task-04.png' %}" class="ms-pd"/><span class="mag-pp">投资流程</span></div>
+    <div class="detail-html">{{news.strategy|safe}}</div>
+  </div>
+
+  <div class="td-msgs">
+     <div class="msg-ti"><img src="{% static 'images/task-03.png' %}" class="ms-pd"/><span class="mag-pp">注意事项</span></div>
+     <div class="detail-html">{{news.rules|safe}}</div>
+  </div>
+
+  <div class="td-msgs others">
+      <div class="msg-ti"><span class="mag-pp">其他福利</span></div>
+      {%for wel in other_wel_list%}
+      <a href="{{wel.url}}" class="hy-p">{{wel.title}}</a>
+      {%endfor%}
+  </div>
+
+  <div class="td-msgs">
+  <div class="msg-ti"><img src="{% static 'images/task-05.png' %}" class="ms-pd"/><span class="mag-pp">温馨提示</span></div>
+      <p class="hy-p">1、请您务必按照“投资流程”操作，并在完成后返回本页面提交相关数据，以便进行审核与发放相应福利；</p>
+      <p class="hy-p">2、福币可在个人中心以100：1的比例兑换成现金并提现至绑定的银行卡；</p>
+      <p class="hy-p">3、挖福利尽最大可能的提供最优质的理财渠道、筛选有诚信的合作平台，但是挖福利不对合作平台提供任何的风险担保；</p>
+      <p class="hy-p">如有疑问请联系在线客服或拨打服务热线：0731-85586375</p>
+</div>
+
+  <div style="clear:both"></div>
+ <!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+
+
+  <!--//体验-->
+      <div class="modal fade" id="myReModal">
+          <div class="modal-dialog modal-mg">
+            <div class="modal-content">
+            <div>
+                <p style="color:#F08619;font-size:16px;margin:2em 0px 0em 0px;">本项目仅限手机端体验，请用手机扫描二维码进行体验</p>
+                <img id='erweima' src="#" style="margin:2em 0px 3em 0px;"/>
+            </div>
+                </div>
+              </div>
+        </div>
+
+      <div class="modal fade" id="myModal">
+          <div class="modal-dialog modal-mg">
+            <div class="modal-content">
+             <div class="md-content">
+				<div>
+					<p style="color:#04B3FF;font-size:25px;">温馨提示</p>
+					<p style="padding: 0px 0px 30px 0px;">内容提交后不可更改,提交别人的信息会冻结账户,请谨慎确认</p>
+                    <a id="confirm" class="submit_mores">确认</a>
+                    <a id="cancel" class="submit_mores" class="close" data-dismiss="modal" aria-label="Close">取消</a>
+				</div>
+			</div>
+				</div><!-- modal-body-->
+
+                </div>
+       </div>
+
+
+<script>
+    $('#infor_register').click(function() {
+      $('.submit-content').show();
+    });
+  // $(function() {
+        // 单项提交部分-------start
+    $(".submit-content").on("focus", ".date_picker", function() {
+      $('.date_picker').date_input();
+    })
+
+    var add_data_btn = document.getElementById('add_data_btn');
+    var remove_data_btn = document.getElementById('remove_data_btn');
+    var submit_data_container = document.getElementById('submit_data_container');
+    var that;
+    add_data_btn.onclick = function() {
+      addData();
+    }
+    $(".submit-content").on("click", ".delete-item", function() {
+      that = this;
+      popupInInfo();
+      return that;
+    })
+    $("#confirm_delete").click(function() {
+      that.parentNode.parentNode.removeChild(that.parentNode);
+      popupOutInfo();
+    })
+
+    function addData() {
+      var ul = document.createElement('ul');
+      ul.className = 'submit-item-box';
+      ul.innerHTML = '<li class="submit-item item-01"><select class="project_select height-add01">' +
+        $('#project_select').html() +
+        '</select></li>' +
+        '<li class="submit-item item-02"><input type="text" class="height-add02 time date_picker"></li>' +
+        '<li class="submit-item item-03"><input type="text" maxlength=11 class="telnum"></li>' +
+        '<li class="submit-item item-04"><input type="text" class="amount"></li>' +
+        '<li class="submit-item item-05"><input type="text" class="term"></li>' +
+        '<li class="submit-item item-06"><input type="text" class="remark"></li>' +
+        '<li class="delete-item item-07">删除</li>';
+      submit_data_container.appendChild(ul);
+    }
+    // 删除提示信息弹窗调用函数
+    function popupInInfo() {
+      $(".popup-box-01").addClass("in");
+    }
+    // 取消删除信息弹窗点击确定调用函数（已写入html）
+    function popupOutInfo() {
+      $(".popup-box-01, .popup-box-05").removeClass("in");
+    }
+
+    function popupInError() {
+      $(".popup-box-03").addClass("in");
+    }
+    // 再次提交调用函数
+    function popupOutError() {
+      console.log('sdf');
+      $(".popup-box-03").removeClass("in");
+    }
+    //      点击提交按钮
+    var Data = new Array;
+    var Data2 = new Array;
+    var promptNumber = 0;
+    var promptStr = "温馨提示：";
+    var re_num = 0; //重复提交条数
+    var repeat_num = 0; //存储重复提交条数
+    var re_phone = ""; //重复手机号
+    var repeat_phone = ""; //存储重复手机号
+    var need_refresh = false;
+    $("#upload_byitem").on("click", function() {
+      $(".submit-item-box").each(function(index, domEle) {
+        var project_select01 = $(this).find(".project_select"),
+          time01 = $(this).find(".time"),
+          telnum01 = $(this).find(".telnum"),
+          amount01 = $(this).find(".amount"),
+          term01 = $(this).find(".term"),
+          remark01 = $(this).find(".remark");
+
+        var project_select = $(this).find(".project_select option:selected").val(),
+          time = time01.val(),
+          telnum = telnum01.val(),
+          amount = amount01.val(),
+          term = term01.val(),
+          remark = remark01.val(),
+          data_list = [project_select, time, telnum, amount, term, remark];
+
+        var re = /^1[1,2,3,4,6,5,7,8,9]\d{9}$/, //验证手机号
+          re_amount = /^\d+(\.\d+)?$/; //验证数字格式
+
+        var is_repeat = 0; //是否重复参数
+
+        if(project_select == "0") {
+          promptNumber++;
+          project_select01.css("border", "2px solid #ff6767");
+        } else {
+          project_select01.css("border", "1px solid #c1c1c1");
+        }
+        if(time == "") {
+          promptNumber++;
+          time01.css("border", "2px solid #ff6767");
+        } else {
+          time01.css("border", "1px solid #c1c1c1");
+        }
+        if(!re.test(telnum)) {
+          promptNumber++;
+          telnum01.css("border", "2px solid #ff6767");
+        } else {
+          telnum01.css("border", "1px solid #c1c1c1");
+        }
+        if(!re_amount.test(amount)) {
+          promptNumber++;
+          amount01.css("border", "2px solid #ff6767");
+        } else {
+          amount01.css("border", "1px solid #c1c1c1");
+        }
+        if(!re_amount.test(term)) {
+          promptNumber++;
+          term01.css("border", "2px solid #ff6767");
+        } else {
+          term01.css("border", "1px solid #c1c1c1");
+        }
+        //    数据去重
+        if(Data.length > 0) {
+          for(var i = 0; i < Data.length; i++) {
+            if((Data[i][0] == data_list[0]) && (Data[i][2] == data_list[2])) {
+              is_repeat = 1;
+            }
+          }
+        }
+        if(!is_repeat) {
+          Data.push(data_list);
+        } else {
+          re_num++;
+          re_phone = re_phone + String(data_list[2]) + ", ";
+        }
+        //    数据去重-----------end
+        // Data.push(data_list.join('|'));
+      })
+      if(promptNumber == 0) {
+        //   console.log(Data);
+        // var data = Data.join('$');
+        console.log(re_num);
+        console.log(Data);
+        Data2 = [];
+        for(var i = 0; i < Data.length; i++) {
+          Data2.push(Data[i].join('|'));
+        }
+        repeat_num = re_num;
+        repeat_phone = re_phone;
+        var data = Data2.join('$');
+        console.log(data);
+        $.ajax({
+          url:"{%url 'expsubmit_finance' %}",
+          dataType: "json",
+          type: "POST",
+          async: false,
+          data: {
+            'data': data
+          },
+          success: function(ret) {
+        	  console.log(ret);
+            if(ret.code == 0) {
+              $(".data-item-submit").text(repeat_num + ret.exist_num + ret.suc_num);
+              // $(".data-item-repeat").text(repeat_num);
+              // console.log(repeat_num);
+              // console.log(ret.exist_num);
+              if (ret && ret.exist_num==0){
+					need_refresh = true;
+				}
+				else{
+					need_refresh = false;
+				}
+              if(!repeat_num) {
+                $(".repeat-phonenumber").hide();
+              } else {
+                $(".repeat-phonenumber").show();
+              }
+              $(".data-item-repeat-phone").text(repeat_phone);
+              // $(".data-item-exist").text(ret.exist_num);
+              if(!ret.exist_num) {
+                $(".exist-phonenumber").hide();
+              } else {
+                $(".exist-phonenumber").show();
+              }
+              $(".data-item-exist-phone").text(ret.exist_phone);
+              $(".data-item-valid").text(ret.suc_num);
+              popupInItem();
+            }
+            else if(ret.code==-1){
+            	location.href = ret.url;
+            }
+            else {
+              $(".hint-msg").text(ret.msg);
+              popupInError();
+            }
+          },
+          error: function() {
+            alert("请检查网络连接");
+          }
+        });
+        Data = [];
+        re_num = 0;
+        re_phone = "";
+      } else {
+        Data = [];
+        $(".hint-msg").html('共有<span class="error-num">' + promptNumber + '</span>项填写格式不正确，请检查后按照规范重新填写后提交！');
+        promptNumber = 0;
+        popupInError();
+      }
+    });
+    // 单项提交部分----end
+    function popupInItem() {
+      $(".popup-box-04").addClass("in");
+    }
+    // 再次提交调用函数
+    function popupOutItem() {
+      $(".popup-box-04").removeClass("in");
+      	if (need_refresh){
+			location.reload();
+		}
+    }
+  // })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>项目库</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="{% static 'css/mui.min.css' %}">
+		<link rel="stylesheet" href="{% static 'css/m_project_all.css' %}">
+		<script type="text/javascript" src="{% static  'js/rem.js'%}"></script>
+		<style>
+			.state20{
+				background: url(../../static/images/over.png) center center no-repeat;
+			}
+			.opa20{
+				opacity: 0.4;
+            }
+		</style>
+	</head>
+
+	<body>
+            <div class="mui-content">
+            	
+                <div id="search" class="searchBox">
+                	<input id="search_input" type="text" placeholder="点此进入搜索" />
+                	<span id="search_btn" class="search-icon mui-icon mui-icon-search"></span>
+                </div>
+                <div class="mui-table-view project-all-box">
+                    <ul id="mui-table-view-left" class="mui-table-view-left">
+                        <li class="item_line m-head">
+                            <div class="column_1 column m-head">项目名称</div>
+                        </li>
+                        <ul id="left_box" class="left_ul">
+                        	
+                        </ul>
+                    </ul>
+                    <ul id="mui-table-view-right" class="mui-table-view-right">
+                        <li class="item_line m-head m-right">
+                            <div class="column_3 column m-head">结算价格</div>
+                            <div class="column_2 column m-head">推广标期</div>
+                            <div class="column_4 column m-head">投资档位</div>
+                            <!--<div class="column_5 column m-head">客户指导价</div>-->
+                            <div class="column_6 column m-head">备注说明</div>
+                            <!-- <div class="column_7 column m-head">操作</div> -->
+                        </li>
+                        <ul id="right_box" class="right_ul">
+                            
+                        </ul>
+                    </ul>
+                </ul>
+            </div>
+            <footer>
+                <ul>
+                    <li class="footer__item">
+                        <a href="{%url 'index'%}">
+                            <i class="mui-icon mui-icon-home"></i>
+                            <span class="footer__txt">首页</span>
+                        </a>
+                    </li>
+                    <li class="footer__item on">
+                        <a href="{%url 'project_all'%}">
+                        <i class="mui-icon mui-icon-more"></i>
+                        <span class="footer__txt">项目库</span>
+                        </a>
+                    </li>
+                    <li class="footer__item">
+                        <a href="{%url 'account_index'%}">
+                            <i class="mui-icon mui-icon-person"></i>
+                            <span class="footer__txt">个人中心</span>
+                        </a>
+                    </li>
+                </ul>
+            </footer>
+            {% include "m_footer.html" %}
+		<script src="{% static 'js/mui.min.js' %}"></script>
+		<script type="text/javascript" charset="utf-8">
+            mui.init();
+            var user_level = '{{user.level}}';
+            console.log(user_level);
+            var get_proj_url = "/restapi/projects/?state=10&is_official=true&is_addedto_repo=true";
+            get_list(get_proj_url);
+            document.getElementById('search_btn').addEventListener('tap', function () {
+                var search_txt = document.getElementById('search_input').value;
+                var table = document.body.querySelector('.project-all-box');
+                console.log(table);
+                get_proj_url = "/restapi/projects/?state=10&is_official=true&is_addedto_repo=true&search=" + search_txt;
+                document.getElementById('left_box').innerHTML = '';
+                document.getElementById('right_box').innerHTML = '';
+                get_list(get_proj_url);
+            })
+            function get_list(url){
+                mui.ajax(url,{
+                    data:{
+                        'page':1,
+                        'pageSize': 999,
+                    },
+                    dataType:'json',//服务器返回json格式数据
+                    type:'get',//HTTP请求类型
+                    timeout:10000,//超时时间设置为10秒；
+                    success:function(data){
+                        console.log(data.results);
+                        if (data.results.length != 0){
+                            console.log('hasdata');
+                            for(var i in data.results) {
+                                var li_left = document.createElement('li');
+                                var li_right = document.createElement('li');
+                                li_left.className = 'item_line state'+data.results[i].state+' ';
+                                li_right.className = 'item_line m-right';
+                                var left_html = '<div class="column_1 column"><span class="item opa'+data.results[i].state+' "><a href="' + data.results[i].strategy + '">' + data.results[i].title + '</a></span></div>';
+
+                                var right_html = '<div class="column_2 column"><span class="item"><a href="/account/login/">登陆后查看</a></span></div>' +                     // + data.results[i].display_price +
+                                    // '<div class="column_3 column"><span class="item">' + data.results[i].project_price + '</span></div>' +
+                                    '<div class="column_4 column"><span class="item">';
+                                right_html += data.results[i].term ; // 
+                                    right_html += '</span></div>' +
+                                    '<div class="column_5 column"><span class="item" >' + data.results[i].investrange + '</span></div>' + //
+                                    '<div class="column_6 column"><span class="item">'+data.results[i].remark+'</div>';
+                                    // '<div class="column_7 column"><span data-isadd="'+ data.results[i].is_on +'" data-id="'+ data.results[i].id +
+                                    // '" class="item add-project '+ data.results[i].is_on +'">'+ (data.results[i].is_on?'取消添加':'添加至主页') +'</span>' +
+                                    // '<a '+ (data.results[i].is_on?'':'style="display:none"') +' class="item go_homepage" href="http://{{user.domain_name}}.91fanshu.com/detail/project/'+ data.results[i].project+'/">进入推广主页</a></div>';
+                                li_left.innerHTML = left_html;
+                                li_right.innerHTML = right_html;
+                                document.getElementById('left_box').appendChild(li_left);
+                                document.getElementById('right_box').appendChild(li_right);
+                            }
+                        } else {
+                            document.getElementById('right_box').innerHTML = '<p style="margin:40px;">未搜索到相关数据</p>';
+                            console.log('nodata');
+                        }
+    
+                    },
+                    error:function(xhr,type,errorThrown){
+                        mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+                        console.log(xhr.responseText);
+                    }
+                });
+            }
+            
+            // mui(".mui-table-view-right").on('tap', '.add-project', function() {
+            //     var that = this;
+            //     var dataId = this.getAttribute('data-id'); //获取当前span标签的data-id
+            //     var flag = this.getAttribute('data-isadd');
+            //     console.log(flag)
+            //     console.log(typeof(flag))
+            //     if(flag == 'true') {
+            //         var btnArry = ['否', '是'];
+            //         mui.confirm("是否取消添加项目到个人主页", "提示", btnArry, function(e) {
+            //             if(e.index == 1) {
+    
+            //                 mui.ajax("/restapi/sub/" + dataId + "/", {
+            //                     dataType: 'json', //服务器返回json格式数据
+            //                     type: 'put', //HTTP请求类型
+            //                     timeout: 10000, //超时时间设置为10秒；
+            //                     data: {
+            //                         'is_on': false
+            //                     },
+            //                     success: function(ret) {
+            //                         console.log('关闭');
+            //                         that.setAttribute('data-isadd', 'false');
+            //                         that.innerText = "添加至主页";
+            //                         that.className = 'item add-project false';
+            //                         that.nextSibling.style.display = 'none';
+            //                     },
+            //                     error: function(xhr, type, errorThrown) {
+            //                         console.log(xhr.resoponseText);
+            //                     }
+            //                 });
+    
+            //             }
+            //         });
+    
+            //     } else {
+            //         var btnArry = ['否', '是'];
+            //         mui.confirm("是否添加项目到个人主页", "提示", btnArry, function(e) {
+            //             if(e.index == 1) {
+    
+            //                 mui.ajax("/restapi/sub/" + dataId + "/", {
+            //                     dataType: 'json', //服务器返回json格式数据
+            //                     type: 'put', //HTTP请求类型
+            //                     timeout: 10000, //超时时间设置为10秒；
+            //                     data: {
+            //                         'is_on': true
+            //                     },
+            //                     success: function(ret) {
+            //                         console.log('关闭');
+            //                         that.setAttribute('data-isadd', 'true');
+            //                         that.innerText = "取消添加";
+            //                         that.className = 'item add-project true';
+            //                         that.nextSibling.style.display = 'inline-block';
+            //                     },
+            //                     error: function(xhr, type, errorThrown) {
+            //                         console.log(xhr.resoponseText);
+            //                     }
+            //                 });
+            //             }
+            //         });
+    
+            //     }
+                
+            // });
+            
+            // mui('#right_box').on('tap', '.go_homepage', function() {
+            //     var href = this.getAttribute('href'); 
+            //     mui.openWindow({
+            //         url: href,
+            //         styles: {
+            //             top: 0,
+            //             bottom: 0
+            //         },
+            //         show: {
+            //             aniShow: 'slide-in-right',
+            //         },
+            //         waiting: {
+            //             autoShow: false, //自动显示等待框
+            //             title: '正在加载...', //等待对话框上显示的提示内容
+            //         }
+            //     });
+            // });
+    
+        </script>
+
+	</body>
+
+</html>

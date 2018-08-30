@@ -20,6 +20,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^', include('wafuli.urls',)),
     url(r'^restapi/', include('restapi.urls')),
+    url(r'^newsm/', include('newsm.urls')),
     url(r'^account/', include('account.urls')),
     url(r'^Admin/', include('wafuli_admin.urls')),
     url(r'^ueditor/',  include('DjangoUeditor.urls' )),

@@ -7,6 +7,7 @@ from docs.models import Document
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db.models.deletion import SET_NULL
+from DjangoUeditor.models import UEditorField
 
 # Create your models here.
 TRANS_TYPE = (
@@ -106,3 +107,4 @@ class ZhifubaoTransaction(models.Model):
         unique_together = (('amount', 'remark'),)
     def __unicode__(self):
         return self.remark
+

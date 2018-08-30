@@ -26,7 +26,8 @@ class ProjectAdmin(admin.ModelAdmin):
             obj.doc.is_on = True
             obj.doc.save(update_fields=['is_on',])
 class CompanyAdmin(admin.ModelAdmin):
-    search_fields = ['name',]            
+    search_fields = ['name',]
+
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(MAdvert_PC)

@@ -1,0 +1,82 @@
+{% load staticfiles %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>新手奖励</title>
+<link href="{% static 'images/favicon.ico'%}" rel="shortcut icon"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/freshman.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style-i.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+
+
+<script src="{%static 'js/jquery-1.11.2.min.js'%}" type="text/javascript"></script>
+</head>
+
+<body>
+	<div class="Max">
+    	<!--头部-->
+    	{% include "header.html" %}
+    	<!--内容-->
+    	<div class="Cont-Max" style="background-image:url({%static 'images/topimg1.jpg'%})">
+        	<div class="w1100">
+            	<!--1-->
+            	<div class="box-list">
+                	<!--Title-->
+                	<div class="Lin-ons"><img src="{%static 'images/newtitle1.png'%}" /></div>
+                    <div class="Info-new">
+                    	<img src="{%static 'images/newico1.png'%}" />
+                        注册成功后
+                        <img src="{%static 'images/newico2.png'%}" />
+                        马上到账，满<b>10</b>元即可提现
+                    </div>
+                </div>
+            	<!--2-->
+            	<div id="invited" class="box-list">
+                	<!--Title-->
+                	<div class="Lin-ons"><img src="{%static 'images/newtitle2.png'%}" /></div>
+                    <div class="Lin-info">
+                        	<img src="{%static 'images/newico1.png'%}" />
+                        =
+                        	<img src="{%static 'images/newico3.png'%}" />
+                        +
+                        	<img src="{%static 'images/newico4.png'%}" />
+                        x 1%
+                    </div>
+                    <div class="Infobot">
+                    	<strong>每邀请一人</strong>
+                        <span>奖励10积分</span>
+                        <span>好友每笔提现金额的1%</span>
+                    </div>
+                    <div class="Botinfo">
+                    	<img src="{%static 'images/newimg1.png'%}" />
+                        =
+                        <img src="{%static 'images/newimg2.png'%}" class="ml30" />
+                        <img src="{%static 'images/newimg3.png'%}" style="margin-left:100px;" />
+                    </div>
+                    <div class="Infobot2">
+                    	<strong>邀请N个人</strong>
+                        <span>N份10积分 + N笔提现返现</span>
+                    </div>
+                </div>
+                <!--活动总则-->
+                <div class="New-binfo">
+                	<h3>活动总则</h3>
+                    <p>1、本活动自2016年05月01日开始实行；</p>
+                    <p>2、邀请的积分奖励在好友完成提现操作后会实时到账，当月邀请的现金奖励将在下个月10号前转入到账户余额；</p>
+                    <p>3、如发现恶意采用特殊手段获取利益，扰乱活动秩序，挖福利有权取消活动资格；</p>
+                    <p>4、以上活动最终解释权归挖福利所有；</p>
+                    <p>5、如有问题，请联系挖福利客服，热线电话：0734-8344414</p>
+                </div>
+            </div>
+        </div>
+    	<!--底部-->
+  {% include "footer.html" %}
+  <!--浮动窗口-->
+  {% include "outline.html" %}
+    </div>
+
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/common.css' %}" />
+		<link rel="stylesheet" type="text/css" href="{% static 'css/download_app.css' %}" />
+	</head>
+	<body>
+		<!--头部-->
+  	{% include "header.html" %}
+		<div class="container-box">
+			<div class="content-box">
+				<div class="left-phone">
+					<img src="{% static 'images/app-download-phone.png' %}" />
+				</div>
+				<div class="right-download">
+					<img class="download-head" src="{% static 'images/app-download-head.png' %}" />
+					<div class="download-box">
+						<img class="download-text" src="{% static 'images/app-download-ios.png' %}" />
+						<a href="http://m.wafuli.cn/static/download/wafuli.apk" id="apk_btn" class="apk-btn"></a>
+					</div>
+					<img class="download-erweima" src="{% static 'images/app-download-erweima.png' %}" />
+				</div>
+			</div>
+		</div>
+		<div id="apk_box" class="apk-box">
+			<div id="apk_download" class="apk-download">
+				<p>扫码下载挖福利安卓apk</p>
+			</div>
+		</div>
+  <!--浮动窗口-->
+		<script src="{% static 'js/jquery-1.11.2.min.js' %}"></script>
+	</body>
+
+</html>

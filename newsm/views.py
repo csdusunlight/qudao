@@ -36,6 +36,15 @@ class ArticleSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()
     serializer_class =ArticleSerializer
     filter_class = ArticleFilter
+    filter_backends = (SearchFilter, django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
+    pagination_class = MyPageNumberPagination
+    ordering_fields = ('ais_hot',
+                       'agroup',
+                       'atitle',
+                       'apub_date',
+                       'aupdate_time'
+                       )
+    ordering=('ais_hot')
     @detail_route(methods=['RETRIEVE'],url_path='lookup_by_tag')
     def lookup_by_tag(self,request,pk=None):
 
@@ -50,10 +59,8 @@ class ArticleSet(viewsets.ModelViewSet):
 
     @detail_route(methods=['LIST'],url_path='lookup_by_group')
     def lookup_by_agroup(self,request,**dict):
-        para1 = request.GET.get('groupid')
-        aimgroup = Agroup.objects.filter(id=para1)[0]
-        aimgroupitem =aimgroup.agname
-        aimarticle=Article.objects.filter(agroup__agname__exact=aimgroupitem).order_by('-apub_date')
+        para1 = request.GET.get('groupname')
+        aimarticle=Article.objects.filter(agroup__agname__exact=para1).order_by('-apub_date')
         self.__class__.queryset = aimarticle
         page = self.paginate_queryset(aimarticle)
         returndata = ArticleSerializer(instance=page, many=True)

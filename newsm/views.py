@@ -72,3 +72,19 @@ class AgroupSet(viewsets.ModelViewSet):
     serializer_class =AgroupSerializer
     filter_class = AgroupFilter
 
+from wafuli.models import Project,InvestLog,Company
+from django.db.models import Count
+from django.http import JsonResponse
+def get_project_investlog_company(request):
+    aimres=InvestLog.objects.values('project__company_id')\
+                     .annotate(itemnum=Count('*'))\
+                     .values('project__company__name','itemnum','project__company__id')\
+                     .order_by('itemnum')
+    print(aimres.query)
+    aimres = sorted(aimres,key=lambda x:x['itemnum'],reverse=True)[:20]
+
+    #Company.objects.filter(id__in=aimres)
+    res={}
+    res['code']=0
+    res['res']=aimres
+    return JsonResponse(res)

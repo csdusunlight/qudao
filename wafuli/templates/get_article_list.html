@@ -67,7 +67,7 @@
       <div class="container_left">
         <div class="tab">
           <ul>
-            <li @click="tabClickLink(0, '网贷资讯')" class="tablist active">网贷资讯</li>
+            <li @click="tabClickLink(0, '网贷资讯')" class="tablist">网贷资讯</li>
             <li @click="tabClickLink(1, '平台曝光')" class="tablist">平台曝光</li>
             <li @click="tabClickLink(2, '理财攻略')" class="tablist">理财攻略</li>
             <li @click="tabClickLink(3, 'P2P平台')" class="tablist">P2P平台</li>
@@ -205,7 +205,6 @@
         hotInfo: []
 			},
 			created: function () {
-			  this.getZiXunList()
 			  this.getNewProject()
 			  this.hotInformation()
 			  this.getUrlGroup()
@@ -215,7 +214,7 @@
       },
 			methods: {
 			  getUrlGroup () {
-          var url = window.location.href;
+          var url = decodeURI(window.location.href);
           if (url.indexOf("?") != -1) {
             var query = url.split("?")[1];
             var queryArr = query.split("&");
@@ -223,7 +222,21 @@
           } else {
             this.groupName = '网贷资讯'
           }
-          console.log(this.groupName)
+          var index = 0;
+          if (this.groupName === '平台曝光') {
+            index = 1
+          }
+          if (this.groupName === '理财攻略') {
+            index = 2
+          }
+          if (this.groupName === 'P2P平台') {
+            index = 3
+          }
+          if (this.groupName === '网贷返利') {
+            index = 4
+          }
+          $('.tablist').eq(index).addClass('active').siblings().removeClass('active');
+          this.getZiXunList();
 			  },
 			  handleCurrentChange (val) {
           this.currentPage = val
@@ -282,6 +295,7 @@
             data: {},
             async: true,
             success: function(res) {
+              console.log(res.results,66666)
               app.hotInfo = res.results
             }
           });

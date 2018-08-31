@@ -73,6 +73,7 @@ class AgroupSet(viewsets.ModelViewSet):
     filter_class = AgroupFilter
 
 from wafuli.models import Project,InvestLog,Company
+from restapi.serializers import CompanySerializer
 from django.db.models import Count
 from django.http import JsonResponse
 def get_project_investlog_company(request):

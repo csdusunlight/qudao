@@ -50,10 +50,8 @@ class ArticleSet(viewsets.ModelViewSet):
 
     @detail_route(methods=['LIST'],url_path='lookup_by_group')
     def lookup_by_agroup(self,request,**dict):
-        para1 = request.GET.get('groupid')
-        aimgroup = Agroup.objects.filter(id=para1)[0]
-        aimgroupitem =aimgroup.agname
-        aimarticle=Article.objects.filter(agroup__agname__exact=aimgroupitem).order_by('-apub_date')
+        para1 = request.GET.get('groupname')
+        aimarticle=Article.objects.filter(agroup__agname__exact=para1).order_by('-apub_date')
         self.__class__.queryset = aimarticle
         page = self.paginate_queryset(aimarticle)
         returndata = ArticleSerializer(instance=page, many=True)

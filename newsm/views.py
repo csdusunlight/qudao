@@ -38,6 +38,12 @@ class ArticleSet(viewsets.ModelViewSet):
     filter_class = ArticleFilter
     filter_backends = (SearchFilter, django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
     pagination_class = MyPageNumberPagination
+    ordering_fields = ('ais_hot',
+                       'agroup',
+                       'atitle',
+                       'apub_date',
+                       'aupdate_time'
+                       )
     ordering=('ais_hot')
     @detail_route(methods=['RETRIEVE'],url_path='lookup_by_tag')
     def lookup_by_tag(self,request,pk=None):

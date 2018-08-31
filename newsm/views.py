@@ -23,12 +23,12 @@ class TagSet(viewsets.ModelViewSet):
 
 def get_article_detail(request):
     if request.method == 'GET':
-        template = 'account/get_article_detail.html'
+        template = 'get_article_detail.html'
         return render(request, template)
 
 def get_article_list(request):
     if request.method == 'GET':
-        template = 'account/get_article_list.html'
+        template = 'get_article_list.html'
         return render(request, template)
 
 

@@ -1,0 +1,246 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta name="renderer" content="webkit">
+  <title>资讯详情页</title>
+  <meta name="keywords" content="福利联盟、理财返利、网贷返利、理财师、理财超市、番薯文档、番薯主页" />
+  <meta name="description" content="福利联盟项目库为投资者提供理财投资攻略，主要为理财返利平台、网贷返利平台投资攻略，是您身边的理财超市、专业的理财师。" />
+  <link rel="stylesheet" type="text/css" href="/static/css/new-common.css?v-3" />
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+  <style type="text/css">
+    body{background: #fff;}
+    #app{overflow: hidden;}
+    .container{width: 1250px; margin: 0 auto;}
+    .address{font-size: 14px; color: #222; margin:20px 0 30px 0;}
+    .container_left{width: 820px; float: left;}
+    .article_text .title{font-size: 18px; color: #222;}
+    
+    .container_right{width: 340px; float: right; margin-top: 5px;}
+    .hot_infor{padding: 9px 20px 9px 0; overflow: hidden; background: #F9F9F9;}
+    .hot_infor .hot_infor_list{ width: 300px; padding-left: 20px; height: 33px; line-height: 33px; font-size: 14px; color: #666; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+    .titleh2{font-size: 16px; color: #222; height: 26px; line-height: 26px; border-left: 4px solid #fb8200; padding-left: 16px;}
+    .hot_infor ul{padding: 8px 0; overflow: hidden;}
+    .platform{padding: 10px 20px 10px 0; overflow: hidden; background: #F9F9F9; margin-top: 30px;}
+    .platform ul{padding: 8px 0; overflow: hidden;}
+    .platform .platform_list{overflow: hidden; padding:10px 0 10px 20px;}
+    .link_img{width: 120px; height: 50px; float: left;}
+    .link_img a{display: inline-block; width: 120px; height: 50px; }
+    .link_img img{width: 120px; height: 50px;}
+    .platform_list_text p{ width: 180px; height: 24px; line-height: 24px; padding-left: 20px; float: right; font-size: 13px; color: #666; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+    .friendship_bg{background: #f5f5f5;}
+    .friendship_box{width: 1250px; margin: 0 auto; padding: 20px 0;}
+    .friendship_link{font-size: 14px; color: #666;}
+    .friendship_box .links{ margin-top: 15px;}
+    .friendship_box .links a{ display: inline-block; overflow: hidden; margin-right:30px; color: #666;}
+    .footer{margin-top: 0;}
+  </style>
+</head>
+
+<body style="opacity: 0;">
+  {% include "header.html" %}
+
+  <div id="app">
+    <div class="container">
+      <div class="address">您的位置：<a href="/">首页</a> > <a href="/newsm/get_article_list/">理财资讯</a> > ${groupName} > 涨完房租又遇中介,这届年轻人真惨</div>
+      <div class="container_left">
+        <div class="article_text">
+          <h1 class="title">${infoText.atitle}</h1>
+          <div class="timers">${infoText.apub_date}</div>
+          <div class="text" v-html="infoText.acontent"></div>
+        </div>
+      </div>
+      <div class="container_right">
+        <div class="hot_infor">
+          <h2 class="titleh2">热门资讯</h2>
+          <ul>
+            <li class="hot_infor_list" v-for="(item, index) in hotInfo"><a :href="'/newsm/get_article_detail/?pageId='+ item.id +'?group='+item.agroup" target="_blank">${index + 1}、 ${item.aseo_description}</a></li>
+          </ul>
+        </div>
+        <div class="recommend_platform platform">
+          <h2 class="titleh2">推荐平台</h2>
+          <ul>
+            <li class="platform_list" v-for="item in newProject">
+              <div class="link_img"><a :href="item.strategy" target="_blank"><img :src="item.logo"/></a></div>
+              <div class="platform_list_text">
+                <p>平台名称：${item.title}</p>
+                <p>平台年化：${item.intrest}%</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="hot_platform platform">
+          <h2 class="titleh2">热门平台</h2>
+          <ul>
+            <li class="platform_list">
+              <div class="link_img"><a href=""></a></div>
+              <div class="platform_list_text">
+                <p>平台名称：投哪网</p>
+                <p>平台年化：12%</p>
+              </div>
+            </li>
+            <li class="platform_list">
+              <div class="link_img"><a href=""></a></div>
+              <div class="platform_list_text">
+                <p>平台名称：投哪网</p>
+                <p>平台年华：12%</p>
+              </div>
+            </li>
+            <li class="platform_list">
+              <div class="link_img"><a href=""></a></div>
+              <div class="platform_list_text">
+                <p>平台名称：投哪网</p>
+                <p>平台年华：12%</p>
+              </div>
+            </li>
+            <li class="platform_list">
+              <div class="link_img"><a href=""></a></div>
+              <div class="platform_list_text">
+                <p>平台名称：投哪网</p>
+                <p>平台年华：12%</p>
+              </div>
+            </li>
+            <li class="platform_list">
+              <div class="link_img"><a href=""></a></div>
+              <div class="platform_list_text">
+                <p>平台名称：投哪网</p>
+                <p>平台年华：12%</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="friendship_bg">
+    <div class="friendship_box">
+      <div class="friendship_link">友情链接 | QQ：3469318256</div>
+      <div class="links">
+        <span><a href="" target="_blank">理财返利</a></span>
+        <span><a href="" target="_blank">翼龙贷</a></span>
+        <span><a href="" target="_blank">返利平台排名</a></span>
+        <span><a href="" target="_blank">宜人贷</a></span>
+        <span><a href="" target="_blank">投哪网</a></span>
+        <span><a href="" target="_blank">才米公社返利</a></span>
+        <span><a href="" target="_blank">万盈金融</a></span>
+        <span><a href="" target="_blank">P2P返利</a></span>
+        <span><a href="" target="_blank">理财平台</a></span>
+        <span><a href="" target="_blank">P2P理财平台</a></span>
+        <span><a href="" target="_blank">理财返利</a></span>
+        <span><a href="" target="_blank">翼龙贷</a></span>
+        <span><a href="" target="_blank">返利平台排名</a></span>
+        <span><a href="" target="_blank">宜人贷</a></span>
+        <span><a href="" target="_blank">投哪网</a></span>
+        <span><a href="" target="_blank">才米公社返利</a></span>
+        <span><a href="" target="_blank">万盈金融</a></span>
+        <span><a href="" target="_blank">P2P返利</a></span>
+        <span><a href="" target="_blank">理财平台</a></span>
+        <span><a href="" target="_blank">P2P理财平台</a></span>
+      </div>
+    </div>
+  </div>
+  <!-- 底部 -->
+  <div>
+    {% include "footer.html" %}1
+  </div>
+
+  <script type="text/javascript">
+    var app = new Vue({
+      delimiters: ['${', '}'],
+      el: '#app',
+      data: {
+        newProject: [],
+        hotInfo: [],
+        infoText: '',
+        title: '',
+        pageId: '',
+        groupId: ''
+      },
+      created: function () {
+        this.getNewProject()
+        this.hotInformation()
+        this.getPageInfo()
+      },
+      mounted: function () {
+        document.body.style.opacity = '1';
+      },
+      methods: {
+        getInfoText () {
+          $.ajax({
+            type: "get",
+            url: '/newsm/articles/?ais_hot=0&page=1&pageSize=10',
+            data: {},
+            async: true,
+            success: function(res) {
+              app.hotInfo = res.results
+            }
+          });
+        },
+        getNewProject () {
+          //新上项目数据加载
+          $.ajax({
+            url: '/restapi/projects/?state=10&ordering=-current_state_date&is_official=true&is_addedto_repo=true&page=1&pageSize=5',
+            type: 'get',
+            async: true,
+            dataType: 'json',
+            success: function (res) {
+              if (res.code == 0) {
+                app.newProject = res.results
+              } else {
+                that.$notify.error({
+                  title: '错误',
+                  message: res.detail
+                });
+              }
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          })
+        },
+        //热门资讯
+        hotInformation () {
+          $.ajax({
+            type: "get",
+            url: '/newsm/articles/?ais_hot=0&page=1&pageSize=10',
+            data: {},
+            async: true,
+            success: function(res) {
+              app.hotInfo = res.results
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          });
+        },
+        getPageInfo () {
+          var url = window.location.href;
+          var query = url.split("?")[1];
+          var queryArr = query.split("&");
+          this.pageId = queryArr[0].split('=')[1];
+          this.groupName = queryArr[1].split('=')[1];
+          $.ajax({
+            type: "get",
+            url: '/newsm/article/'+ this.pageId +'/',
+            data: {},
+            async: true,
+            success: function(res) {
+              console.log(res)
+              app.infoText = res
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          });
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

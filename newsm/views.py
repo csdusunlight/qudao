@@ -50,21 +50,29 @@ class ArticleSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         befid=instance.id-1
-        if befid==0:
-            befid=1
         aftid=instance.id+1
-        instancebef=Article.objects.get(id=befid)
-        try:
-            instanceaft=Article.objects.get(id=aftid)
-        except Exception as a:
-            instanceaft=instance
-        serializer = self.get_serializer(instance)
-        serializerbef = self.get_serializer(instancebef)
-        serializeraft = self.get_serializer(instanceaft)
+        lenarticle = len(Article.objects.all())
+        print(lenarticle)
         res={}
+        if befid!=0 and aftid<=lenarticle:
+            instancebef=Article.objects.get(id=befid)
+            instanceaft=Article.objects.get(id=aftid)
+            res['aft']=serializeraft.data
+            res['bef']=serializerbef.data
+        elif befid==0 and aftid<=lenarticle:
+            res['bef']={}
+            instanceaft=Article.objects.get(id=aftid)
+            serializeraft = self.get_serializer(instanceaft)
+            res['aft']=serializeraft.data
+        elif aftid>lenarticle and befid!=0:
+            res['aft']={}
+            instancebef=Article.objects.get(id=befid)
+            serializerbef = self.get_serializer(instancebef)
+            res['bef']=serializerbef.data
+
+
+        serializer = self.get_serializer(instance)
         res['current']=serializer.data
-        res['bef']=serializerbef.data
-        res['aft']=serializeraft.data
         return Response(res)
 
 
@@ -74,7 +82,10 @@ class ArticleSet(viewsets.ModelViewSet):
         #输入是一个article,根据article查出tag,根据tag查出对应的article
         aimtag = Article.objects.filter(id=pk)[0]
         tags=aimtag.atag.values_list()
-        aimarticle=Article.objects.filter(atag__tname__in=[tags[i][1] for i in range(0,len(tags))]).order_by('-apub_date')
+        aimgroupid = aimtag.agroup.id
+        aimarticle=Article.objects.filter(atag__tname__in=[tags[i][1] for i in range(0,len(tags))])\
+                                  .filter(agroup__id__exact=aimgroupid)\
+                                  .order_by('-apub_date')
         self.__class__.queryset = aimarticle
         page = self.paginate_queryset(aimarticle)
         returndata = ArticleSerializer(instance=page, many=True)

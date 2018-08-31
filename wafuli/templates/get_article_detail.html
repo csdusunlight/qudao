@@ -182,6 +182,7 @@
         title: '',
         pageId: '',
         groupId: '',
+        groupName: '',
         tagsText: ''
       },
       created: function () {
@@ -236,7 +237,7 @@
           var query = url.split("?")[1];
           var queryArr = query.split("&");
           this.pageId = queryArr[0].split('=')[1];
-          this.groupName = queryArr[1].split('=')[1];
+          this.groupId = queryArr[1].split('=')[1];
           //文章ajax
           $.ajax({
             type: "get",
@@ -244,8 +245,9 @@
             data: {},
             async: true,
             success: function(res) {
-              console.log(res)
-              app.infoText = res
+              console.log(res, 111111)
+              app.infoText = res.current
+              app.groupName = res.current.groupname
             },
             error: function () {
               console.log('出错了');

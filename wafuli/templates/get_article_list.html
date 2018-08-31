@@ -19,7 +19,7 @@
 	  body{background: #fff;}
 	  #app{overflow: hidden;}
 	  .container{width: 1250px; margin: 0 auto;}
-	  .address{font-size: 14px; color: #222; margin:20px 0 30px 0;}
+	  .address{font-size: 14px; color: #222; margin:25px 0 30px 0;}
 	  .container_left{width: 820px; float: left;}
 	  .tab{overflow: hidden; height: 52px;}
 	  .tab ul{display: flex; justify-content: space-between;}
@@ -33,7 +33,7 @@
 	  .info_item_right .title a{ display: inline-block; width: 100%; height: 40px; line-height: 40px; font-size: 18px; color: #222; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-bottom: 5px;}
 	  .info_item_right .texts{height: 48px; overflow: hidden; font-size: 14px; color: #666;}
 	  .label_times{ width: 100%; height: 26px; line-height: 26px; position: absolute; left: 0; bottom: 0;}
-	  .label_times span.labels{ display: inline-block; height: 26px; line-height: 25px; padding: 0 10px; border: 1px solid #89baf7; margin-right: 15px; border-radius: 20px; font-size: 12px; color: #89baf7;}
+  	 .label_times span.labels{ display: inline-block; height: 24px; line-height: 23px; padding: 0 10px; border: 1px solid #89baf7; margin-right: 15px; border-radius: 20px; font-size: 12px; color: #89baf7;}
 	  .label_times i.times{float: right; font-size: 14px; color: #999; margin-right: 6px;}
 	  .pagination{margin: 50px 0 90px;}
 	  .container_right{width: 340px; float: right; margin-top: 5px;}
@@ -208,11 +208,23 @@
 			  this.getZiXunList()
 			  this.getNewProject()
 			  this.hotInformation()
+			  this.getUrlGroup()
 			},
 			mounted: function () {
         document.body.style.opacity = '1';
       },
 			methods: {
+			  getUrlGroup () {
+          var url = window.location.href;
+          if (url.indexOf("?") != -1) {
+            var query = url.split("?")[1];
+            var queryArr = query.split("&");
+            this.groupName = queryArr[0].split('=')[1];
+          } else {
+            this.groupName = '网贷资讯'
+          }
+          console.log(this.groupName)
+			  },
 			  handleCurrentChange (val) {
           this.currentPage = val
           this.getZiXunList()

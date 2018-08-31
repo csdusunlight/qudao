@@ -17,10 +17,22 @@
     body{background: #fff;}
     #app{overflow: hidden;}
     .container{width: 1250px; margin: 0 auto;}
-    .address{font-size: 14px; color: #222; margin:20px 0 30px 0;}
+    .address{font-size: 14px; color: #222; margin:25px 0 30px 0;}
     .container_left{width: 820px; float: left;}
-    .article_text .title{font-size: 18px; color: #222;}
-    
+    .article_text{padding-bottom: 25px; border-bottom: 1px solid #f5f6f5;}
+    .article_text .title{font-size: 18px; color: #222; text-align: center; margin: 20px 0 25px 0;}
+    .article_text .timers{text-align: center; font-size: 14px; color: #999999; margin-bottom: 10px;}
+    .article_text .text{font-size: 16px; color: #222; margin-top: 15px; padding: 0 2px;}
+    .article_text .text p{ margin-top: 20px; line-height: 24px; font-size: 16px; color: #222;}
+    .tags{font-size: 14px; color: #666; margin-top: 20px;}
+    .tags span.labels{ display: inline-block; height: 24px; line-height: 23px; padding: 0 10px; border: 1px solid #89baf7; margin-right: 15px; border-radius: 20px; font-size: 12px; color: #89baf7;}
+    .lastone{margin-top: 29px;}
+    .nextpage{margin-top: 8px;}
+    .piece{font-size: 14px; color: #666;}
+    .searchtags{ margin-top: 24px;}
+    .searchtags h2.tagstitle{font-size: 16px; color: #222; font-weight: normal; margin-bottom: 12px;}
+    .searchtags ul .tagslist{ width: 50%; height: 40px; line-height: 40px; float: left; box-sizing: border-box; color: #666; font-size: 14px; padding-right:30px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+    .searchtags ul .tagslist a{display: inline-block;}
     .container_right{width: 340px; float: right; margin-top: 5px;}
     .hot_infor{padding: 9px 20px 9px 0; overflow: hidden; background: #F9F9F9;}
     .hot_infor .hot_infor_list{ width: 300px; padding-left: 20px; height: 33px; line-height: 33px; font-size: 14px; color: #666; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
@@ -53,6 +65,16 @@
           <h1 class="title">${infoText.atitle}</h1>
           <div class="timers">${infoText.apub_date}</div>
           <div class="text" v-html="infoText.acontent"></div>
+          <div class="tags">文章标签：<span class="labels" v-for="item in infoText.atag">${item.tname}</span></div>
+          <div class="source"></div>
+          <div class="lastone piece">上一篇：</div>
+          <div class="nextpage piece">下一篇：</div>
+        </div>
+        <div class="searchtags">
+          <h2 class="tagstitle">更多【${groupName}】相关文章</h2>
+          <ul>
+            <li class="tagslist" v-for="taglist in tagsText"><a :href="'/newsm/get_article_detail/?pageId='+ taglist.id +'&group='+taglist.agroup" :title="taglist.atitle">${taglist.atitle}</a></li>
+          </ul>
         </div>
       </div>
       <div class="container_right">
@@ -159,7 +181,8 @@
         infoText: '',
         title: '',
         pageId: '',
-        groupId: ''
+        groupId: '',
+        tagsText: ''
       },
       created: function () {
         this.getNewProject()
@@ -170,17 +193,6 @@
         document.body.style.opacity = '1';
       },
       methods: {
-        getInfoText () {
-          $.ajax({
-            type: "get",
-            url: '/newsm/articles/?ais_hot=0&page=1&pageSize=10',
-            data: {},
-            async: true,
-            success: function(res) {
-              app.hotInfo = res.results
-            }
-          });
-        },
         getNewProject () {
           //新上项目数据加载
           $.ajax({
@@ -218,12 +230,14 @@
             }
           });
         },
+        //获取文章内容
         getPageInfo () {
           var url = window.location.href;
           var query = url.split("?")[1];
           var queryArr = query.split("&");
           this.pageId = queryArr[0].split('=')[1];
           this.groupName = queryArr[1].split('=')[1];
+          //文章ajax
           $.ajax({
             type: "get",
             url: '/newsm/article/'+ this.pageId +'/',
@@ -232,6 +246,23 @@
             success: function(res) {
               console.log(res)
               app.infoText = res
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          });
+          this.getTagsList(this.pageId)
+        },
+        //根据标签获取更多文章
+        getTagsList (id) {
+          $.ajax({
+            type: "get",
+            url: '/newsm/article/'+ id +'/lookup_by_tag/',
+            data: {},
+            async: true,
+            success: function(res) {
+              console.log(res)
+              app.tagsText = res.results
             },
             error: function () {
               console.log('出错了');

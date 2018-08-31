@@ -36,6 +36,9 @@ class ArticleSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()
     serializer_class =ArticleSerializer
     filter_class = ArticleFilter
+    filter_backends = (SearchFilter, django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
+    pagination_class = MyPageNumberPagination
+    ordering=('ais_hot')
     @detail_route(methods=['RETRIEVE'],url_path='lookup_by_tag')
     def lookup_by_tag(self,request,pk=None):
 

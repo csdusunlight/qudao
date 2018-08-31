@@ -44,7 +44,7 @@
 	  .platform{padding: 10px 20px 10px 0; overflow: hidden; background: #F9F9F9; margin-top: 30px;}
 	  .platform ul{padding: 8px 0; overflow: hidden;}
 	  .platform .platform_list{overflow: hidden; padding:10px 0 10px 20px;}
-	  .link_img{width: 120px; height: 50px; background: #000; float: left;}
+	  .link_img{width: 120px; height: 50px; float: left;}
 	  .link_img a{display: inline-block; width: 120px; height: 50px; }
 	  .link_img img{width: 120px; height: 50px;}
 	  .platform_list_text p{ width: 180px; height: 24px; line-height: 24px; padding-left: 20px; float: right; font-size: 13px; color: #666; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
@@ -66,11 +66,11 @@
       <div class="container_left">
         <div class="tab">
           <ul>
-            <li @click="tabClickLink(1)" class="tablist active">网贷资讯</li>
-            <li @click="tabClickLink(2)" class="tablist tab_center">平台曝光</li>
-            <li @click="tabClickLink(3)" class="tablist tab_center">理财攻略</li>
-            <li @click="tabClickLink(4)" class="tablist tab_center">P2P平台</li>
-            <li @click="tabClickLink(5)" class="tablist tab_right">网贷返利</li>
+            <li @click="tabClickLink(0)" class="tablist active">网贷资讯</li>
+            <li @click="tabClickLink(1)" class="tablist">平台曝光</li>
+            <li @click="tabClickLink(2)" class="tablist">理财攻略</li>
+            <li @click="tabClickLink(3)" class="tablist">P2P平台</li>
+            <li @click="tabClickLink(4)" class="tablist">网贷返利</li>
           </ul>
         </div>
         <div class="informations">
@@ -205,39 +205,11 @@
         <div class="recommend_platform platform">
           <h2 class="titleh2">推荐平台</h2>
           <ul>
-            <li class="platform_list">
-              <div class="link_img"><a href=""></a></div>
+            <li class="platform_list" v-for="item in newProject">
+              <div class="link_img"><a :href="item.strategy" target="_blank"><img :src="item.logo"/></a></div>
               <div class="platform_list_text">
-                <p>平台名称：投哪网</p>
-                <p>平台年华：12%</p>
-              </div>
-            </li>
-            <li class="platform_list">
-              <div class="link_img"><a href=""></a></div>
-              <div class="platform_list_text">
-                <p>平台名称：投哪网</p>
-                <p>平台年华：12%</p>
-              </div>
-            </li>
-            <li class="platform_list">
-              <div class="link_img"><a href=""></a></div>
-              <div class="platform_list_text">
-                <p>平台名称：投哪网</p>
-                <p>平台年华：12%</p>
-              </div>
-            </li>
-            <li class="platform_list">
-              <div class="link_img"><a href=""></a></div>
-              <div class="platform_list_text">
-                <p>平台名称：投哪网</p>
-                <p>平台年华：12%</p>
-              </div>
-            </li>
-            <li class="platform_list">
-              <div class="link_img"><a href=""></a></div>
-              <div class="platform_list_text">
-                <p>平台名称：投哪网</p>
-                <p>平台年华：12%</p>
+                <p>平台名称：${item.title}</p>
+                <p>平台年化：${item.intrest}%</p>
               </div>
             </li>
           </ul>
@@ -249,7 +221,7 @@
               <div class="link_img"><a href=""></a></div>
               <div class="platform_list_text">
                 <p>平台名称：投哪网</p>
-                <p>平台年华：12%</p>
+                <p>平台年化：12%</p>
               </div>
             </li>
             <li class="platform_list">
@@ -322,34 +294,60 @@
 			delimiters: ['${', '}'],
 			el: '#app',
 			data: {
-			  tabNavList: [],
-				tableData: {},
+				tableData: [],
 				pageSize: 10,
-        currentPage: 0
+        currentPage: 0,
+        newProject: []
 			},
 			created: function () {
 			  this.getNavList()
+			  this.getNewProject()
 			},
 			mounted: function () {
         document.body.style.opacity = '1';
       },
 			methods: {
 			  handleCurrentChange () {},
-			  tabClickLink (num) {
-			    var index = num - 1;
+			  tabClickLink (index) {
+			    console.log(index)
 			    $('.tablist').removeClass('active');
 			    $('.tablist').eq(index).addClass('active');
 			  },
         getNavList () {
           $.ajax({
             type: "get",
-            url: '/newsm/agroups/',
+            url: '/newsm/articles/?page=1&pageSize=10',
             data: {},
             async: true,
             success: function(res) {
-              console.log(res)
+              app.tableData = res.results
+              console.log(app.tableData)
             }
           });
+        },
+        getNewProject () {
+          //新上项目数据加载
+          $.ajax({
+            url: '/restapi/projects/?state=10&ordering=-current_state_date&is_official=true&is_addedto_repo=true&page=1&pageSize=5',
+            type: 'get',
+            async: true,
+            dataType: 'json',
+            success: function (res) {
+              if (res.code == 0) {
+                console.log(res)
+                app.newProject = res.results
+                console.log(app.newProject)
+              } else {
+                that.$notify.error({
+                  title: '错误',
+                  message: res.detail
+                });
+              }
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          })
         }
 			}
 		})

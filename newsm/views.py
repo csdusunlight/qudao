@@ -57,6 +57,8 @@ class ArticleSet(viewsets.ModelViewSet):
         if befid!=0 and aftid<=lenarticle:
             instancebef=Article.objects.get(id=befid)
             instanceaft=Article.objects.get(id=aftid)
+            serializeraft = self.get_serializer(instanceaft)
+            serializerbef = self.get_serializer(instancebef)
             res['aft']=serializeraft.data
             res['bef']=serializerbef.data
         elif befid==0 and aftid<=lenarticle:

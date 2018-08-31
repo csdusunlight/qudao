@@ -49,30 +49,31 @@ class ArticleSet(viewsets.ModelViewSet):
     @detail_route(methods=['RETRIEVE'])
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        befid=instance.id-1
-        aftid=instance.id+1
+        aim_article_query=Article.objects.all()
         lenarticle = len(Article.objects.all())
-        print(lenarticle)
+        lowoffset=Article.objects.filter(id__lt=instance.id).count()
+        highoffset=Article.objects.filter(id__gt=instance.id).count()
         res={}
-        if befid!=0 and aftid<=lenarticle:
-            instancebef=Article.objects.get(id=befid)
-            instanceaft=Article.objects.get(id=aftid)
+        if lowoffset!=0 and highoffset!=0:
+            instancebef=aim_article_query[lowoffset-1]
+            instanceaft=aim_article_query[lenarticle-highoffset]
             serializeraft = self.get_serializer(instanceaft)
             serializerbef = self.get_serializer(instancebef)
             res['aft']=serializeraft.data
             res['bef']=serializerbef.data
-        elif befid==0 and aftid<=lenarticle:
+        elif lowoffset==0 and highoffset!=0:
             res['bef']={}
-            instanceaft=Article.objects.get(id=aftid)
+            instanceaft=aim_article_query[lenarticle-highoffset]
             serializeraft = self.get_serializer(instanceaft)
             res['aft']=serializeraft.data
-        elif aftid>lenarticle and befid!=0:
+        elif lowoffset!=0 and highoffset==0:
             res['aft']={}
-            instancebef=Article.objects.get(id=befid)
+            instancebef=aim_article_query[lowoffset-1]
             serializerbef = self.get_serializer(instancebef)
             res['bef']=serializerbef.data
-
-
+        elif lowoffset==0 and highoffset==0:
+            res['aft']={}
+            res['bef']={}
         serializer = self.get_serializer(instance)
         res['current']=serializer.data
         return Response(res)

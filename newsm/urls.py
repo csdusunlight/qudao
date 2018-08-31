@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^tag/(?P<pk>[0-9]+)/$', views.TagSet.as_view({'get': 'retrieve'})),
 
     url(r'^articles/$', views.ArticleSet.as_view({'get': 'list'})),
+    url(r'^get_most_hot_platform/$', 'newsm.views.get_project_investlog_company'),
 
     url(r'^article/(?P<pk>[0-9]+)/$', views.ArticleSet.as_view({
                                                   'get':'retrieve',

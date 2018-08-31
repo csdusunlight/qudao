@@ -45,6 +45,29 @@ class ArticleSet(viewsets.ModelViewSet):
                        'aupdate_time'
                        )
     ordering=('ais_hot')
+
+    @detail_route(methods=['RETRIEVE'])
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        befid=instance.id-1
+        if befid==0:
+            befid=1
+        aftid=instance.id+1
+        instancebef=Article.objects.get(id=befid)
+        try:
+            instanceaft=Article.objects.get(id=aftid)
+        except Exception as a:
+            instanceaft=instance
+        serializer = self.get_serializer(instance)
+        serializerbef = self.get_serializer(instancebef)
+        serializeraft = self.get_serializer(instanceaft)
+        res={}
+        res['current']=serializer.data
+        res['bef']=serializerbef.data
+        res['aft']=serializeraft.data
+        return Response(res)
+
+
     @detail_route(methods=['RETRIEVE'],url_path='lookup_by_tag')
     def lookup_by_tag(self,request,pk=None):
 

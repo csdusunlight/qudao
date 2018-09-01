@@ -58,8 +58,8 @@ class Article(models.Model):
                      upload_settings={"imageMaxSize":120000},settings={},command=None,blank=True)
 
 
-    def get_absolute_url(self):
-        return reverse('article')
+    #def get_absolute_url(self):
+    #    return reverse('article',args=(self.aslug,))
 
 
     class Meta:

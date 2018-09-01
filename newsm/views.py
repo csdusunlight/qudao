@@ -52,6 +52,8 @@ class ArticleSet(viewsets.ModelViewSet):
                        'aupdate_time'
                        )
     ordering=('ais_hot')
+    def get_queryset(self):
+        return Article.objects.all()
 
     @detail_route(methods=['RETRIEVE'])
     def retrieve(self, request, *args, **kwargs):

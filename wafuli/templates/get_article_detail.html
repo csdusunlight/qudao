@@ -81,7 +81,7 @@
         <div class="hot_infor">
           <h2 class="titleh2">热门资讯</h2>
           <ul>
-            <li class="hot_infor_list" v-for="(item, index) in hotInfo"><a :href="'/newsm/get_article_detail/?pageId='+ item.id +'?group='+item.agroup" target="_blank">${index + 1}、 ${item.aseo_description}</a></li>
+            <li class="hot_infor_list" v-for="(item, index) in hotInfo"><a :href="'/newsm/get_article_detail/?pageId='+ item.id +'?group='+item.agroup">${index + 1}、 ${item.aseo_description}</a></li>
           </ul>
         </div>
         <div class="recommend_platform platform">

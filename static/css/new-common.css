@@ -185,9 +185,12 @@ a {text-decoration:none;font-size: 14px; color: inherit;}
 }
 .footer__cloum {
   display: inline-block;
-  margin: 0 75px;
+  margin-right: 150px;
   width: 80px;
   vertical-align: top;
+}
+.footer__cloum:last-child{
+  margin-right: 0;
 }
 .footer__item.m-title {
   margin-bottom: 25px;

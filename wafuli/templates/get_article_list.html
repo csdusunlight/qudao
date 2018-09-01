@@ -18,7 +18,7 @@
 	<style type="text/css">
 	  body{background: #fff;}
 	  #app{overflow: hidden;}
-	  .container{width: 1250px; margin: 0 auto;}
+	  .container{width: 1250px; margin: 0 auto; overflow: hidden;}
 	  .address{font-size: 14px; color: #222; margin:25px 0 30px 0;}
 	  .container_left{width: 820px; float: left;}
 	  .tab{overflow: hidden; height: 52px;}
@@ -49,7 +49,7 @@
 	  .link_img a{display: inline-block; width: 120px; height: 50px; }
 	  .link_img img{width: 120px; height: 50px;}
 	  .platform_list_text p{ width: 180px; height: 24px; line-height: 24px; padding-left: 20px; float: right; font-size: 13px; color: #666; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-	  .friendship_bg{background: #f5f5f5;}
+	  .friendship_bg{background: #f5f5f5; overflow: hidden;}
 	  .friendship_box{width: 1250px; margin: 0 auto; padding: 20px 0;}
 	  .friendship_link{font-size: 14px; color: #666;}
 	  .friendship_box .links{ margin-top: 15px;}
@@ -158,34 +158,15 @@
         </div>
       </div>
     </div>
-	</div>
-  <div class="friendship_bg">
-    <div class="friendship_box">
-      <div class="friendship_link">友情链接 | QQ：3469318256</div>
-      <div class="links">
-        <span><a href="" target="_blank">理财返利</a></span>
-        <span><a href="" target="_blank">翼龙贷</a></span>
-        <span><a href="" target="_blank">返利平台排名</a></span>
-        <span><a href="" target="_blank">宜人贷</a></span>
-        <span><a href="" target="_blank">投哪网</a></span>
-        <span><a href="" target="_blank">才米公社返利</a></span>
-        <span><a href="" target="_blank">万盈金融</a></span>
-        <span><a href="" target="_blank">P2P返利</a></span>
-        <span><a href="" target="_blank">理财平台</a></span>
-        <span><a href="" target="_blank">P2P理财平台</a></span>
-        <span><a href="" target="_blank">理财返利</a></span>
-        <span><a href="" target="_blank">翼龙贷</a></span>
-        <span><a href="" target="_blank">返利平台排名</a></span>
-        <span><a href="" target="_blank">宜人贷</a></span>
-        <span><a href="" target="_blank">投哪网</a></span>
-        <span><a href="" target="_blank">才米公社返利</a></span>
-        <span><a href="" target="_blank">万盈金融</a></span>
-        <span><a href="" target="_blank">P2P返利</a></span>
-        <span><a href="" target="_blank">理财平台</a></span>
-        <span><a href="" target="_blank">P2P理财平台</a></span>
+    <div class="friendship_bg">
+      <div class="friendship_box">
+        <div class="friendship_link">友情链接 | QQ：3469318256</div>
+        <div class="links">
+          <span v-for="links in friendLink"><a :href="links.url">${links.uname}</a></span>
+        </div>
       </div>
     </div>
-  </div>
+	</div>
 	<!-- 底部 -->
 	<div>
 		{% include "footer.html" %}
@@ -202,12 +183,14 @@
         currentPage: 1,
         groupName: '网贷资讯',
         newProject: [],
-        hotInfo: []
+        hotInfo: [],
+        friendLink: []
 			},
 			created: function () {
 			  this.getNewProject()
 			  this.hotInformation()
 			  this.getUrlGroup()
+			  this.getFriendLink()
 			},
 			mounted: function () {
         document.body.style.opacity = '1';
@@ -297,8 +280,27 @@
             success: function(res) {
               console.log(res.results,66666)
               app.hotInfo = res.results
+            },
+            error: function () {
+              console.log('出错了');
             }
-          });
+          })
+        },
+        //友情链接
+        getFriendLink () {
+          $.ajax({
+            type: "get",
+            url: '/newsm/urls/',
+            data: {},
+            async: true,
+            success: function(res) {
+              app.friendLink = res.results
+              console.log(app.friendLink, 'link')
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          })
         }
 			}
 		})

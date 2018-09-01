@@ -59,9 +59,9 @@ class ArticleSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         aim_article_query=Article.objects.all()
-        lenarticle = len(Article.objects.all())
-        lowoffset=Article.objects.filter(id__lt=instance.id).count()
-        highoffset=Article.objects.filter(id__gt=instance.id).count()
+        lenarticle = len(aim_article_query)
+        lowoffset=aim_article_query.filter(id__lt=instance.id).count()
+        highoffset=aim_article_query.filter(id__gt=instance.id).count()
         res={}
         if lowoffset!=0 and highoffset!=0:
             instancebef=aim_article_query[lowoffset-1]
@@ -90,7 +90,6 @@ class ArticleSet(viewsets.ModelViewSet):
 
     @detail_route(methods=['RETRIEVE'],url_path='lookup_by_tag')
     def lookup_by_tag(self,request,pk=None):
-
         #输入是一个article,根据article查出tag,根据tag查出对应的article
         aimtag = Article.objects.filter(id=pk)[0]
         tags=aimtag.atag.values_list()

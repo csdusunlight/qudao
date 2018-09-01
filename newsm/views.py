@@ -98,7 +98,6 @@ class ArticleSet(viewsets.ModelViewSet):
         aimarticle=Article.objects.filter(atag__tname__in=[tags[i][1] for i in range(0,len(tags))])\
                                   .filter(agroup__id__exact=aimgroupid)\
                                   .order_by('-apub_date')
-        self.__class__.queryset = aimarticle
         page = self.paginate_queryset(aimarticle)
         returndata = ArticleSerializer(instance=page, many=True)
         return self.get_paginated_response(returndata.data)
@@ -107,7 +106,6 @@ class ArticleSet(viewsets.ModelViewSet):
     def lookup_by_agroup(self,request,**dict):
         para1 = request.GET.get('groupname')
         aimarticle=Article.objects.filter(agroup__agname__exact=para1).order_by('-apub_date')
-        self.__class__.queryset = aimarticle
         page = self.paginate_queryset(aimarticle)
         returndata = ArticleSerializer(instance=page, many=True)
         return self.get_paginated_response(returndata.data)

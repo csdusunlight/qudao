@@ -10,6 +10,8 @@ from newsm import views
 
 urlpatterns = [
     url(r'^tags/$', views.TagSet.as_view({'get': 'list'})),
+    url(r'^urls/$', views.UrlSet.as_view({'get': 'list'})),
+    url(r'^url/(?P<pk>[0-9]+)/$', views.UrlSet.as_view({'get': 'retrieve'})),
     url(r'^tag/(?P<pk>[0-9]+)/$', views.TagSet.as_view({'get': 'retrieve'})),
 
     url(r'^articles/$', views.ArticleSet.as_view({'get': 'list'})),

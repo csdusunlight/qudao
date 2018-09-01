@@ -26,6 +26,7 @@ class UrlSet(viewsets.ModelViewSet):
     filter_backends = (SearchFilter, django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
     filter_class = UrlFilter
     pagination_class = MyPageNumberPagination
+    ordering=('-upub_date')
 
 def get_article_detail(request):
     if request.method == 'GET':

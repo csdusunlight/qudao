@@ -10,7 +10,7 @@ class GroupAdmin(admin.ModelAdmin):
     list_display = ( 'agname',)
 
 class UrlAdmin(admin.ModelAdmin):
-    list_display = ( 'uname','url')
+    list_display = ( 'uname','url','upub_date')
 
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ('acontent','ais_published','ais_hot')

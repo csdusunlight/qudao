@@ -70,6 +70,7 @@ class Article(models.Model):
 class Url(models.Model):
     uname=models.CharField('链接名称', max_length=256)   #分组和文章是一对多
     url=models.CharField('链接具体', max_length=256)   #分组和文章是一对多
+    upub_date = models.DateTimeField('发表时间',default=timezone.now)
     class Meta:
         verbose_name = '链接'
         verbose_name_plural = '链接'

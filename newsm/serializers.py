@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Tag,Article,Agroup
+from .models import Tag,Article,Agroup,Url
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,4 +24,10 @@ class AgroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Agroup
+        fields = '__all__'
+
+class UrlSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Url
         fields = '__all__'

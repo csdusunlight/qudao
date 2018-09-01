@@ -1,5 +1,5 @@
 import django_filters
-from .models import Tag,Article,Agroup
+from .models import Tag,Article,Agroup,Url
 
 class TagFilter(django_filters.rest_framework.FilterSet):
     class Meta:
@@ -20,3 +20,8 @@ class AgroupFilter(django_filters.rest_framework.FilterSet):
         model = Agroup
         field=['aname',]
         exclude=[]
+
+class UrlFilter(django_filters.rest_framework.FilterSet):
+    class Meta:
+        model = Url
+        field=['uname']

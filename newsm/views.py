@@ -4,11 +4,11 @@ import django_filters
 from public.Paginations import MyPageNumberPagination
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Tag, Article,Agroup
+from .models import Tag, Article,Agroup,Url
 from rest_framework import viewsets
-from .serializers import TagSerializer,ArticleSerializer,AgroupSerializer
+from .serializers import TagSerializer,ArticleSerializer,AgroupSerializer,UrlSerializer
 from rest_framework.filters import SearchFilter, OrderingFilter
-from .Filters import TagFilter,ArticleFilter,AgroupFilter
+from .Filters import TagFilter,ArticleFilter,AgroupFilter,UrlFilter
 from rest_framework.decorators import detail_route,list_route
 from rest_framework.response import Response
 from django.db.models import Q
@@ -20,6 +20,12 @@ class TagSet(viewsets.ModelViewSet):
     filter_class = TagFilter
     pagination_class = MyPageNumberPagination
 
+class UrlSet(viewsets.ModelViewSet):
+    queryset = Url.objects.all()
+    serializer_class = UrlSerializer
+    filter_backends = (SearchFilter, django_filters.rest_framework.DjangoFilterBackend, OrderingFilter)
+    filter_class = UrlFilter
+    pagination_class = MyPageNumberPagination
 
 def get_article_detail(request):
     if request.method == 'GET':

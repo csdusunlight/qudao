@@ -9,6 +9,7 @@ class TagSerializer(serializers.ModelSerializer):
 class ArticleSerializer(serializers.ModelSerializer):
     atag = serializers.SerializerMethodField()
     groupname= serializers.CharField(source="agroup.agname",read_only=True)
+    apub_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S",read_only=True)
     class Meta:
         model = Article
         fields = '__all__'

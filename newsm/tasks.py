@@ -12,7 +12,7 @@ logger = logging.getLogger('wafuli')
 from celery import  shared_task
 
 @shared_task
-def async_1hour_article_state(self):
+def async_1hour_article_state():
     current_time=timezone.now()
     aimobj=Article.objects.filter(apub_date__lte=current_time)
     for i in aimobj:

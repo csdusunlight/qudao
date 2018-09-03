@@ -119,39 +119,11 @@
         <div class="hot_platform platform">
           <h2 class="titleh2">热门平台</h2>
           <ul>
-            <li class="platform_list">
-              <div class="link_img"><a href=""></a></div>
+            <li class="platform_list" v-for="item in hotProject">
+              <div class="link_img"><a :href="item.strategy"><img :src="item.logo" /></a></div>
               <div class="platform_list_text">
-                <p>平台名称：投哪网</p>
-                <p>平台年化：12%</p>
-              </div>
-            </li>
-            <li class="platform_list">
-              <div class="link_img"><a href=""></a></div>
-              <div class="platform_list_text">
-                <p>平台名称：投哪网</p>
-                <p>平台年华：12%</p>
-              </div>
-            </li>
-            <li class="platform_list">
-              <div class="link_img"><a href=""></a></div>
-              <div class="platform_list_text">
-                <p>平台名称：投哪网</p>
-                <p>平台年华：12%</p>
-              </div>
-            </li>
-            <li class="platform_list">
-              <div class="link_img"><a href=""></a></div>
-              <div class="platform_list_text">
-                <p>平台名称：投哪网</p>
-                <p>平台年华：12%</p>
-              </div>
-            </li>
-            <li class="platform_list">
-              <div class="link_img"><a href=""></a></div>
-              <div class="platform_list_text">
-                <p>平台名称：投哪网</p>
-                <p>平台年华：12%</p>
+                <p>平台名称：${item.title}</p>
+                <p>平台年化：${item.intrest}%</p>
               </div>
             </li>
           </ul>
@@ -184,13 +156,15 @@
         groupName: '网贷资讯',
         newProject: [],
         hotInfo: [],
-        friendLink: []
+        friendLink: [],
+        hotProject: []
 			},
 			created: function () {
 			  this.getNewProject()
 			  this.hotInformation()
 			  this.getUrlGroup()
 			  this.getFriendLink()
+			  this.getHotProject()
 			},
 			mounted: function () {
         document.body.style.opacity = '1';
@@ -296,6 +270,28 @@
             success: function(res) {
               app.friendLink = res.results
               console.log(app.friendLink, 'link')
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          })
+        },
+        //热门平台
+        getHotProject () {
+          $.ajax({
+            url: '/restapi/projects/?state=10&ordering=-current_state_date&is_official=true&is_addedto_repo=true&ordering=points&page=1&pageSize=5',
+            type: 'get',
+            async: true,
+            dataType: 'json',
+            success: function (res) {
+              if (res.code == 0) {
+                app.hotProject = res.results
+              } else {
+                that.$notify.error({
+                  title: '错误',
+                  message: res.detail
+                });
+              }
             },
             error: function () {
               console.log('出错了');

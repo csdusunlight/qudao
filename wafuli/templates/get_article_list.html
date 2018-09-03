@@ -1,0 +1,314 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<meta name="renderer" content="webkit">
+	<title>资讯页</title>
+	<meta name="keywords" content="福利联盟、理财返利、网贷返利、理财师、理财超市、番薯文档、番薯主页" />
+  <meta name="description" content="福利联盟项目库为投资者提供理财投资攻略，主要为理财返利平台、网贷返利平台投资攻略，是您身边的理财超市、专业的理财师。" />
+  <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/new-common.css?v-3" />
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	<script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<style type="text/css">
+	  body{background: #fff;}
+	  #app{overflow: hidden;}
+	  .container{width: 1250px; margin: 0 auto; overflow: hidden;}
+	  .address{font-size: 14px; color: #222; margin:25px 0 30px 0;}
+	  .container_left{width: 820px; float: left;}
+	  .tab{overflow: hidden; height: 52px;}
+	  .tab ul{display: flex; justify-content: space-between;}
+	  .tab ul .tablist{width: 95px; height: 50px; text-align: center; line-height: 50px;  font-size: 18px; color: #222; cursor: pointer;}
+	  .tab ul .active{border-bottom: 2px solid #fb8200;}
+	  .informations{overflow: hidden; margin-top: 20px;}
+	  .info_item{padding-bottom: 35px; overflow: hidden; border-bottom: 1px solid #ededed; margin-top: 30px;}
+	  .info_item_left{width: 210px; height: 145px; float: left;}
+	  .info_item_left img{width: 210px; height: 145px;}
+	  .info_item_right{width: 545px; height: 145px; float: right;; position: relative;}
+	  .info_item_right .title{ display: inline-block; width: 100%; height: 40px; line-height: 40px; font-size: 18px; color: #222; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-bottom: 5px;}
+    .info_item_right:hover .title{color: #409EFF;}
+	  .info_item_right .texts{height: 48px; overflow: hidden; font-size: 14px; color: #666;}
+	  .label_times{ width: 100%; height: 26px; line-height: 26px; position: absolute; left: 0; bottom: 0;}
+  	 .label_times span.labels{ display: inline-block; height: 24px; line-height: 23px; padding: 0 10px; border: 1px solid #89baf7; margin-right: 15px; border-radius: 20px; font-size: 12px; color: #89baf7;}
+	  .label_times i.times{float: right; font-size: 14px; color: #999; margin-right: 6px;}
+	  .pagination{margin: 50px 0 90px;}
+	  .container_right{width: 340px; float: right; margin-top: 5px;}
+	  .hot_infor{padding: 9px 20px 9px 0; overflow: hidden; background: #F9F9F9;}
+	  .hot_infor .hot_infor_list{ width: 300px; padding-left: 20px; height: 33px; line-height: 33px; font-size: 14px; color: #666; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+	  .hot_infor .hot_infor_list a{display: inline-block; width: 100%;}
+	  .titleh2{font-size: 16px; color: #222; height: 26px; line-height: 26px; border-left: 4px solid #fb8200; padding-left: 16px;}
+	  .hot_infor ul{padding: 8px 0; overflow: hidden;}
+	  .platform{padding: 10px 20px 10px 0; overflow: hidden; background: #F9F9F9; margin-top: 30px;}
+	  .platform ul{padding: 8px 0; overflow: hidden;}
+	  .platform .platform_list{overflow: hidden; padding:10px 0 10px 20px;}
+	  .link_img{width: 120px; height: 50px; float: left;}
+	  .link_img a{display: inline-block; width: 120px; height: 50px; }
+	  .link_img img{width: 120px; height: 50px;}
+	  .platform_list_text p{ width: 180px; height: 24px; line-height: 24px; padding-left: 20px; float: right; font-size: 13px; color: #666; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+	  .friendship_bg{background: #f5f5f5; overflow: hidden;}
+	  .friendship_box{width: 1250px; margin: 0 auto; padding: 20px 0;}
+	  .friendship_link{font-size: 14px; color: #666;}
+	  .friendship_box .links{ margin-top: 15px;}
+	  .friendship_box .links a{ display: inline-block; overflow: hidden; margin-right:30px; color: #666;}
+	  .footer{margin-top: 0;}
+	</style>
+</head>
+
+<body style="opacity: 0;">
+	{% include "header.html" %}
+
+	<div id="app">
+    <div class="container">
+      <div class="address">您的位置：<a href="/">首页</a> > 理财资讯</div>
+      <div class="container_left">
+        <div class="tab">
+          <ul>
+            <li @click="tabClickLink(0, '网贷资讯')" class="tablist">网贷资讯</li>
+            <li @click="tabClickLink(1, '平台曝光')" class="tablist">平台曝光</li>
+            <li @click="tabClickLink(2, '理财攻略')" class="tablist">理财攻略</li>
+            <li @click="tabClickLink(3, 'P2P平台')" class="tablist">P2P平台</li>
+            <li @click="tabClickLink(4, '网贷返利')" class="tablist">网贷返利</li>
+          </ul>
+        </div>
+        <div class="informations">
+          <div class="info_item" v-for="itemlist in tableData">
+            <a :href="'/newsm/get_article_detail/?pageId='+ itemlist.id +'&group='+itemlist.agroup" target="_blank">
+              <div class="info_item_left">
+                <img :src="itemlist.apic"/>
+              </div>
+              <div class="info_item_right">
+                <h1 class="title" :title="itemlist.atitle">${itemlist.atitle}</h1>
+                <div class="texts" v-html="itemlist.aseo_description"></div>
+                <div class="label_times"><span class="labels" v-for="tag in itemlist.atag">${tag.tname}</span><i class="times">${itemlist.apub_date}</i></div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="pagination" style="display: flex;justify-content: flex-end;">
+          <el-pagination
+            background
+            @current-change="handleCurrentChange"
+            :page-size="10"
+            :current-page="this.currentPage"
+            layout="total, prev, pager, next, jumper"
+            :total="this.tablePage">
+          </el-pagination>
+        </div>
+      </div>
+      <div class="container_right">
+        <div class="hot_infor">
+          <h2 class="titleh2">热门资讯</h2>
+          <ul>
+            <li class="hot_infor_list" v-for="(item, index) in hotInfo"><a :href="'/newsm/get_article_detail/?pageId='+ item.id +'&group='+item.agroup" target="_blank">${index + 1}、 ${item.aseo_description}</a></li>
+          </ul>
+        </div>
+        <div class="recommend_platform platform">
+          <h2 class="titleh2">推荐平台</h2>
+          <ul>
+            <li class="platform_list" v-for="item in newProject">
+              <a :href="item.strategy" target="_blank">
+                <div class="link_img"><img :src="item.logo"/></div>
+                <div class="platform_list_text">
+                  <p>平台名称：${item.title}</p>
+                  <p>平台年化：${item.intrest}%</p>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="hot_platform platform">
+          <h2 class="titleh2">热门平台</h2>
+          <ul>
+            <li class="platform_list" v-for="item in hotProject">
+              <a :href="item.strategy">
+                <div class="link_img"><img :src="item.logo" /></div>
+                <div class="platform_list_text">
+                  <p>平台名称：${item.title}</p>
+                  <p>平台年化：${item.intrest}%</p>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="friendship_bg">
+      <div class="friendship_box">
+        <div class="friendship_link">友情链接 | QQ：3469318256</div>
+        <div class="links">
+          <span v-for="links in friendLink"><a :href="links.url">${links.uname}</a></span>
+        </div>
+      </div>
+    </div>
+	</div>
+	<!-- 底部 -->
+	<div>
+		{% include "footer.html" %}
+	</div>
+
+	<script type="text/javascript">
+		var app = new Vue({
+			delimiters: ['${', '}'],
+			el: '#app',
+			data: {
+				tableData: [],
+				tablePage: 1,
+				pageSize: 10,
+        currentPage: 1,
+        groupName: '网贷资讯',
+        newProject: [],
+        hotInfo: [],
+        friendLink: [],
+        hotProject: []
+			},
+			created: function () {
+			  this.getNewProject()
+			  this.hotInformation()
+			  this.getUrlGroup()
+			  this.getFriendLink()
+			  this.getHotProject()
+			},
+			mounted: function () {
+        document.body.style.opacity = '1';
+      },
+			methods: {
+			  getUrlGroup () {
+          var url = decodeURI(window.location.href);
+          if (url.indexOf("?") != -1) {
+            var query = url.split("?")[1];
+            var queryArr = query.split("&");
+            this.groupName = queryArr[0].split('=')[1];
+          } else {
+            this.groupName = '网贷资讯'
+          }
+          var index = 0;
+          if (this.groupName === '平台曝光') {
+            index = 1
+          }
+          if (this.groupName === '理财攻略') {
+            index = 2
+          }
+          if (this.groupName === 'P2P平台') {
+            index = 3
+          }
+          if (this.groupName === '网贷返利') {
+            index = 4
+          }
+          $('.tablist').eq(index).addClass('active').siblings().removeClass('active');
+          this.getZiXunList();
+			  },
+			  handleCurrentChange (val) {
+          this.currentPage = val
+          this.getZiXunList()
+			  },
+			  tabClickLink (index, name) {
+			    $('.tablist').removeClass('active');
+			    $('.tablist').eq(index).addClass('active');
+			    this.currentPage = 1
+			    this.groupName = name
+			    this.getZiXunList()
+			  },
+			  //资讯列表
+			  getZiXunList () {
+			    var that = this
+          $.ajax({
+            type: "get",
+            url: '/newsm/articles/lookup_by_agroup/?groupname='+ that.groupName +'&page='+ that.currentPage +'&pageSize=10',
+            data: {},
+            async: true,
+            success: function(res) {
+              console.log(res)
+              app.tablePage = res.recordCount
+              app.tableData = res.results
+              console.log(app.tableData)
+            }
+          });
+			  },
+        getNewProject () {
+          //推荐平台
+          $.ajax({
+            url: '/restapi/projects/?state=10&ordering=-current_state_date&is_official=true&is_addedto_repo=true&page=1&pageSize=5',
+            type: 'get',
+            async: true,
+            dataType: 'json',
+            success: function (res) {
+              if (res.code == 0) {
+                app.newProject = res.results
+              } else {
+                that.$notify.error({
+                  title: '错误',
+                  message: res.detail
+                });
+              }
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          })
+        },
+        //热门资讯
+        hotInformation () {
+          $.ajax({
+            type: "get",
+            url: '/newsm/articles/?ais_hot=0&page=1&pageSize=10',
+            data: {},
+            async: true,
+            success: function(res) {
+              console.log(res.results,66666)
+              app.hotInfo = res.results
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          })
+        },
+        //友情链接
+        getFriendLink () {
+          $.ajax({
+            type: "get",
+            url: '/newsm/urls/',
+            data: {},
+            async: true,
+            success: function(res) {
+              app.friendLink = res.results
+              console.log(app.friendLink, 'link')
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          })
+        },
+        //热门平台
+        getHotProject () {
+          $.ajax({
+            url: '/restapi/projects/?state=10&ordering=-current_state_date&is_official=true&is_addedto_repo=true&ordering=points&page=1&pageSize=5',
+            type: 'get',
+            async: true,
+            dataType: 'json',
+            success: function (res) {
+              if (res.code == 0) {
+                app.hotProject = res.results
+              } else {
+                that.$notify.error({
+                  title: '错误',
+                  message: res.detail
+                });
+              }
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          })
+        }
+			}
+		})
+	</script>
+</body>
+
+</html>

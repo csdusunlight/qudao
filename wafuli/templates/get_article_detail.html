@@ -72,7 +72,7 @@
           <div class="nextpage piece">下一篇：<span v-html="aftTitle"></span></div>
         </div>
         <div class="searchtags">
-          <h2 class="tagstitle">更多【${groupName}】相关文章</h2>
+          <h2 class="tagstitle">更多<a :href="'/newsm/get_article_list/?group='+groupName+''">【${groupName}】</a>相关文章</h2>
           <ul>
             <li class="tagslist" v-for="taglist in tagsText"><a :href="'/newsm/get_article_detail/?pageId='+ taglist.id +'&group='+taglist.agroup" :title="taglist.atitle">${taglist.atitle}</a></li>
           </ul>
@@ -82,7 +82,7 @@
         <div class="hot_infor">
           <h2 class="titleh2">热门资讯</h2>
           <ul>
-            <li class="hot_infor_list" v-for="(item, index) in hotInfo"><a :href="'/newsm/get_article_detail/?pageId='+ item.id +'?group='+item.agroup">${index + 1}、 ${item.aseo_description}</a></li>
+            <li class="hot_infor_list" v-for="(item, index) in hotInfo"><a :href="'/newsm/get_article_detail/?pageId='+ item.id +'&group='+item.agroup">${index + 1}、 ${item.aseo_description}</a></li>
           </ul>
         </div>
         <div class="recommend_platform platform">
@@ -119,7 +119,7 @@
       <div class="friendship_box">
         <div class="friendship_link">友情链接 | QQ：3469318256</div>
         <div class="links">
-          <span v-for="links in friendLink"><a :href="links.url">${links.uname}</a></span>
+          <span v-for="links in friendLink"><a :href="links.url" target="_blank">${links.uname}</a></span>
         </div>
       </div>
     </div>

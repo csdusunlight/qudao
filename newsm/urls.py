@@ -17,9 +17,12 @@ urlpatterns = [
     url(r'^articles/$', views.ArticleSet.as_view({'get': 'list'})),
     url(r'^get_most_hot_platform/$', 'newsm.views.get_project_investlog_company'),
 
-    url(r'^article/(?P<pk>[0-9]+)/$', views.ArticleSet.as_view({
-                                                  'get':'retrieve',
+    url(r'^article/(?P<pk>[0-9]+)/retrieve_by_published/$', views.ArticleSet.as_view({
+                                                  'get':'retrieve_by_published',
                                                   })),
+    url(r'^article/(?P<pk>[0-9]+)/$', views.ArticleSet.as_view({
+        'get':'retrieve',
+    })),
     url(r'^article/(?P<pk>[0-9]+)/lookup_by_tag/$', views.ArticleSet.as_view({
                                                  'get': 'lookup_by_tag'
     })),

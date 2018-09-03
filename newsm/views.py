@@ -56,13 +56,13 @@ class ArticleSet(viewsets.ModelViewSet):
         return Article.objects.all()
 
     @detail_route(methods=['RETRIEVE'])
-    def retrieve(self, request, *args, **kwargs):
+    def retrieve_by_published(self, request, *args, **kwargs):
         instance = self.get_object()
-        aim_article_query=Article.objects.all()
+        aim_article_query=Article.objects.filter(ais_published='1').all()
         #获取某个分组中的前一条和后一条，只需要添加filter(groupid=xxx)
         lenarticle = len(aim_article_query)
-        lowoffset=aim_article_query.filter(id__lt=instance.id).count()
-        highoffset=aim_article_query.filter(id__gt=instance.id).count()
+        lowoffset=aim_article_query.filter(id__lt=instance.id).filter(ais_published='1').count()
+        highoffset=aim_article_query.filter(id__gt=instance.id).filter(ais_published='1').count()
         res={}
 
         # import ipdb
@@ -100,10 +100,11 @@ class ArticleSet(viewsets.ModelViewSet):
     @detail_route(methods=['RETRIEVE'],url_path='lookup_by_tag')
     def lookup_by_tag(self,request,pk=None):
         #输入是一个article,根据article查出tag,根据tag查出对应的article
-        aimtag = Article.objects.filter(id=pk)[0]
+        aimtag = Article.objects.filter(ais_published='1').filter(id=pk)[0]
         tags=aimtag.atag.values_list()
         aimgroupid = aimtag.agroup.id
-        aimarticle=Article.objects.filter(atag__tname__in=[tags[i][1] for i in range(0,len(tags))])\
+        aimarticle=Article.objects.filter(ais_published='1')\
+                                  .filter(atag__tname__in=[tags[i][1] for i in range(0,len(tags))])\
                                   .filter(agroup__id__exact=aimgroupid)\
                                   .order_by('-apub_date')
         page = self.paginate_queryset(aimarticle)
@@ -113,7 +114,7 @@ class ArticleSet(viewsets.ModelViewSet):
     @detail_route(methods=['LIST'],url_path='lookup_by_group')
     def lookup_by_agroup(self,request,**dict):
         para1 = request.GET.get('groupname')
-        aimarticle=Article.objects.filter(agroup__agname__exact=para1).order_by('-apub_date')
+        aimarticle=Article.objects.filter(ais_published='1').filter(agroup__agname__exact=para1).order_by('-apub_date')
         page = self.paginate_queryset(aimarticle)
         returndata = ArticleSerializer(instance=page, many=True)
         return self.get_paginated_response(returndata.data)

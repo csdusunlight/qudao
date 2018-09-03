@@ -59,10 +59,19 @@ class ArticleSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         aim_article_query=Article.objects.all()
+        #获取某个分组中的前一条和后一条，只需要添加filter(groupid=xxx)
         lenarticle = len(aim_article_query)
         lowoffset=aim_article_query.filter(id__lt=instance.id).count()
         highoffset=aim_article_query.filter(id__gt=instance.id).count()
         res={}
+
+        # import ipdb
+        # ipdb.set_trace()
+        # for i in [lowoffset,highoffset]:
+        #     if i==0:
+        #         res[dict[i]]=={}
+        #     else:
+        #         res[dict[i]]==serializer[dict].data
         if lowoffset!=0 and highoffset!=0:
             instancebef=aim_article_query[lowoffset-1]
             instanceaft=aim_article_query[lenarticle-highoffset]

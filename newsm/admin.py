@@ -13,8 +13,8 @@ class UrlAdmin(admin.ModelAdmin):
     list_display = ( 'uname','url','upub_date')
 
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ('acontent','ais_published','ais_hot')
-    list_filter = ['ais_published', 'ais_hot',]
+    list_display = ('id','atitle','ais_published','ais_hot','aupdate_time')
+    list_filter = ['id','atitle','ais_published', 'ais_hot','aupdate_time','acontent']
     filter_horizontal = ('atag',)
     readonly_fields = ('aupdate_time',)
     #filter_overrides=('apic',)

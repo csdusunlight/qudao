@@ -184,7 +184,7 @@
         hotInformation () {
           $.ajax({
             type: "get",
-            url: '/newsm/articles/?ais_hot=0&page=1&pageSize=10',
+            url: '/newsm/articles/?ais_published=1&ais_hot=0&page=1&pageSize=10',
             data: {},
             async: true,
             success: function(res) {

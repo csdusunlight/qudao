@@ -17,6 +17,7 @@ class ArticleAdmin(admin.ModelAdmin):
     list_filter = ['id','atitle','ais_published', 'ais_hot','apub_date','acontent','agroup']
     filter_horizontal = ('atag',)
     readonly_fields = ('aupdate_time',)
+    ordering = ('-apub_date',)
     def get_agname(self, obj):
         return obj.agroup.agname
     #filter_overrides=('apic',)

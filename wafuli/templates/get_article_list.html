@@ -219,7 +219,7 @@
 			    var that = this
           $.ajax({
             type: "get",
-            url: '/newsm/articles/lookup_by_agroup/?groupname='+ that.groupName +'&page='+ that.currentPage +'&pageSize=10',
+            url: '/newsm/articles/lookup_by_agroup/?ais_published=1&groupname='+ that.groupName +'&page='+ that.currentPage +'&pageSize=10',
             data: {},
             async: true,
             success: function(res) {
@@ -256,7 +256,7 @@
         hotInformation () {
           $.ajax({
             type: "get",
-            url: '/newsm/articles/?ais_hot=0&page=1&pageSize=10',
+            url: '/newsm/articles/?ais_published=1&ais_hot=0&page=1&pageSize=10',
             data: {},
             async: true,
             success: function(res) {

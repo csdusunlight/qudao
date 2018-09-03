@@ -126,7 +126,7 @@
           <h2 class="titleh2">热门平台</h2>
           <ul>
             <li class="platform_list" v-for="item in hotProject">
-              <a :href="item.strategy">
+              <a :href="item.strategy" target="_blank">
                 <div class="link_img"><img :src="item.logo" /></div>
                 <div class="platform_list_text">
                   <p>平台名称：${item.title}</p>
@@ -260,6 +260,7 @@
             data: {},
             async: true,
             success: function(res) {
+              
               app.hotInfo = res.results
             },
             error: function () {

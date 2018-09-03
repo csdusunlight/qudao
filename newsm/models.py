@@ -37,12 +37,14 @@ class Agroup(models.Model):
     class Meta:
         verbose_name = '分组'
         verbose_name_plural = '分组'
+    def __unicode__(self):
+        return self.agname
 
 
 class Article(models.Model):
     agroup = models.ForeignKey(Agroup,verbose_name="分类分组")
     atag = models.ManyToManyField(Tag, verbose_name='分类标签')
-    apic = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）",blank=False)
+    apic = models.ImageField(upload_to='uploads/%Y/%m/%d', verbose_name=u"标志图片上传（最大不超过30k，越小越好）",blank=False)
     atitle = models.CharField('标题',unique=True, max_length=200)
     aseo_title = models.CharField(max_length=200, verbose_name=u"SEO标题", blank=True)
     aseo_keywords = models.CharField(max_length=200, verbose_name=u"SEO关键词", blank=True)
@@ -52,8 +54,8 @@ class Article(models.Model):
     ais_published = models.CharField('是否草稿',choices=IS_CAOGAO,null=True,max_length=2)
     ais_hot = models.CharField('是否热门文章',choices=IS_HOT,null=True,max_length=2)
     acontent =UEditorField(u"文章内容", width=900, height=300,
-                     imagePath="photos/%(year)s/%(month)s/%(day)s/",
-                     filePath="photos/%(year)s/%(month)s/%(day)s/",
+                     imagePath="photos/",
+                     filePath="photos/",
                      upload_settings={"imageMaxSize":120000},settings={},command=None,blank=True)
 
 

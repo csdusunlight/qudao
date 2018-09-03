@@ -88,11 +88,13 @@
           <h2 class="titleh2">推荐平台</h2>
           <ul>
             <li class="platform_list" v-for="item in newProject">
-              <div class="link_img"><a :href="item.strategy" target="_blank"><img :src="item.logo"/></a></div>
-              <div class="platform_list_text">
-                <p>平台名称：${item.title}</p>
-                <p>平台年化：${item.intrest}%</p>
-              </div>
+              <a :href="item.strategy" target="_blank">
+                <div class="link_img"><img :src="item.logo"/></div>
+                <div class="platform_list_text">
+                  <p>平台名称：${item.title}</p>
+                  <p>平台年化：${item.intrest}%</p>
+                </div>
+              </a>
             </li>
           </ul>
         </div>
@@ -100,11 +102,13 @@
           <h2 class="titleh2">热门平台</h2>
           <ul>
             <li class="platform_list" v-for="item in hotProject">
-              <div class="link_img"><a :href="item.strategy"><img :src="item.logo" /></a></div>
-              <div class="platform_list_text">
-                <p>平台名称：${item.title}</p>
-                <p>平台年化：${item.intrest}%</p>
-              </div>
+              <a :href="item.strategy">
+                <div class="link_img"><img :src="item.logo" /></div>
+                <div class="platform_list_text">
+                  <p>平台名称：${item.title}</p>
+                  <p>平台年化：${item.intrest}%</p>
+                </div>
+              </a>  
             </li>
           </ul>
         </div>

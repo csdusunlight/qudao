@@ -76,14 +76,16 @@
         </div>
         <div class="informations">
           <div class="info_item" v-for="itemlist in tableData">
-            <div class="info_item_left">
-              <img :src="itemlist.apic"/>
-            </div>
-            <div class="info_item_right">
-              <h1 class="title" :title="itemlist.atitle"><a :href="'/newsm/get_article_detail/?pageId='+ itemlist.id +'&group='+itemlist.agroup" target="_blank">${itemlist.atitle}</a></h1>
-              <div class="texts" v-html="itemlist.aseo_description"></div>
-              <div class="label_times"><span class="labels" v-for="tag in itemlist.atag">${tag.tname}</span><i class="times">${itemlist.apub_date}</i></div>
-            </div>
+            <a :href="'/newsm/get_article_detail/?pageId='+ itemlist.id +'&group='+itemlist.agroup" target="_blank">
+              <div class="info_item_left">
+                <img :src="itemlist.apic"/>
+              </div>
+              <div class="info_item_right">
+                <h1 class="title" :title="itemlist.atitle">${itemlist.atitle}</h1>
+                <div class="texts" v-html="itemlist.aseo_description"></div>
+                <div class="label_times"><span class="labels" v-for="tag in itemlist.atag">${tag.tname}</span><i class="times">${itemlist.apub_date}</i></div>
+              </div>
+            </a>
           </div>
         </div>
         <div class="pagination" style="display: flex;justify-content: flex-end;">
@@ -108,11 +110,13 @@
           <h2 class="titleh2">推荐平台</h2>
           <ul>
             <li class="platform_list" v-for="item in newProject">
-              <div class="link_img"><a :href="item.strategy" target="_blank"><img :src="item.logo"/></a></div>
-              <div class="platform_list_text">
-                <p>平台名称：${item.title}</p>
-                <p>平台年化：${item.intrest}%</p>
-              </div>
+              <a :href="item.strategy" target="_blank">
+                <div class="link_img"><img :src="item.logo"/></div>
+                <div class="platform_list_text">
+                  <p>平台名称：${item.title}</p>
+                  <p>平台年化：${item.intrest}%</p>
+                </div>
+              </a>
             </li>
           </ul>
         </div>
@@ -120,11 +124,13 @@
           <h2 class="titleh2">热门平台</h2>
           <ul>
             <li class="platform_list" v-for="item in hotProject">
-              <div class="link_img"><a :href="item.strategy"><img :src="item.logo" /></a></div>
-              <div class="platform_list_text">
-                <p>平台名称：${item.title}</p>
-                <p>平台年化：${item.intrest}%</p>
-              </div>
+              <a :href="item.strategy">
+                <div class="link_img"><img :src="item.logo" /></div>
+                <div class="platform_list_text">
+                  <p>平台名称：${item.title}</p>
+                  <p>平台年化：${item.intrest}%</p>
+                </div>
+              </a>
             </li>
           </ul>
         </div>

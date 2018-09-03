@@ -142,7 +142,7 @@
       <div class="friendship_box">
         <div class="friendship_link">友情链接 | QQ：3469318256</div>
         <div class="links">
-          <span v-for="links in friendLink"><a :href="links.url">${links.uname}</a></span>
+          <span v-for="links in friendLink"><a :href="links.url" target="_blank">${links.uname}</a></span>
         </div>
       </div>
     </div>
@@ -260,7 +260,6 @@
             data: {},
             async: true,
             success: function(res) {
-              console.log(res.results,66666)
               app.hotInfo = res.results
             },
             error: function () {

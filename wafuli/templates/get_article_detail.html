@@ -82,7 +82,7 @@
         <div class="hot_infor">
           <h2 class="titleh2">热门资讯</h2>
           <ul>
-            <li class="hot_infor_list" v-for="(item, index) in hotInfo"><a :href="'/newsm/get_article_detail/?pageId='+ item.id +'&group='+item.agroup">${index + 1}、 ${item.aseo_description}</a></li>
+            <li class="hot_infor_list" v-for="(item, index) in hotInfo"><a :href="'/newsm/get_article_detail/?pageId='+ item.id +'&group='+item.agroup">${index + 1}、 ${item.atitle}</a></li>
           </ul>
         </div>
         <div class="recommend_platform platform">
@@ -205,11 +205,10 @@
           //文章ajax
           $.ajax({
             type: "get",
-            url: '/newsm/article/'+ this.pageId +'/',
+            url: '/newsm/article/'+ this.pageId +'/retrieve_by_published/',
             data: {},
             async: true,
             success: function(res) {
-              console.log(res, 111111)
               app.infoText = res.current
               app.groupName = res.current.groupname
               app.title = res.current.atitle
@@ -255,7 +254,6 @@
             async: true,
             success: function(res) {
               app.friendLink = res.results
-              console.log(app.friendLink, 'link')
             },
             error: function () {
               console.log('出错了');

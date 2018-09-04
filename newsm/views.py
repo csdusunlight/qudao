@@ -92,13 +92,19 @@ class ArticleSet(viewsets.ModelViewSet):
     @detail_route(methods=['RETRIEVE'],url_path='lookup_by_tag')
     def lookup_by_tag(self,request,pk=None):
         #输入是一个article,根据article查出tag,根据tag查出对应的article
+        #去重
         aimtag = Article.objects.filter(ais_published='1').filter(id=pk)[0]
         tags=aimtag.atag.values_list()
         aimgroupid = aimtag.agroup.id
         aimarticle=Article.objects.filter(ais_published='1')\
                                   .filter(atag__tname__in=[tags[i][1] for i in range(0,len(tags))])\
-                                  .filter(agroup__id__exact=aimgroupid)\
-                                  .order_by('-apub_date')
+                                  .filter(agroup__id__exact=aimgroupid) \
+                                  .filter(~Q(id=pk))\
+                                  .order_by('-apub_date') \
+                                  .distinct()
+                                  #.values('id')\
+                                  #.distinct()
+                                 # .order_by('-apub_date')
         page = self.paginate_queryset(aimarticle)
         returndata = ArticleSerializer(instance=page, many=True)
         return self.get_paginated_response(returndata.data)

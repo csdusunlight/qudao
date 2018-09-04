@@ -233,7 +233,7 @@
         getTagsList (id) {
           $.ajax({
             type: "get",
-            url: '/newsm/article/'+ id +'/lookup_by_tag/',
+            url: '/newsm/article/'+ id +'/lookup_by_tag/?page=1&pageSize=10',
             data: {},
             async: true,
             success: function(res) {

@@ -93,21 +93,24 @@ class ArticleSet(viewsets.ModelViewSet):
     def lookup_by_tag(self,request,pk=None):
         #输入是一个article,根据article查出tag,根据tag查出对应的article
         #去重
-        aimtag = Article.objects.filter(ais_published='1').filter(id=pk)[0]
-        tags=aimtag.atag.values_list()
-        aimgroupid = aimtag.agroup.id
-        aimarticle=Article.objects.filter(ais_published='1')\
-                                  .filter(atag__tname__in=[tags[i][1] for i in range(0,len(tags))])\
-                                  .filter(agroup__id__exact=aimgroupid) \
-                                  .filter(~Q(id=pk))\
-                                  .order_by('-apub_date') \
-                                  .distinct()
-                                  #.values('id')\
-                                  #.distinct()
-                                 # .order_by('-apub_date')
+        aimtag = Article.objects.filter(ais_published='1').filter(id=pk)
+        if not aimtag:
+            aimarticle=Article.objects.none()
+        else:
+            aimtag=aimtag[0]
+            tags=aimtag.atag.values_list()
+            aimgroupid = aimtag.agroup.id
+            aimarticle=Article.objects.filter(ais_published='1') \
+                .filter(atag__tname__in=[tags[i][1] for i in range(0,len(tags))]) \
+                .filter(agroup__id__exact=aimgroupid) \
+                .filter(~Q(id=pk)) \
+                .order_by('-apub_date') \
+                .distinct()
         page = self.paginate_queryset(aimarticle)
         returndata = ArticleSerializer(instance=page, many=True)
         return self.get_paginated_response(returndata.data)
+
+
 
     @detail_route(methods=['LIST'],url_path='lookup_by_group')
     def lookup_by_agroup(self,request,**dict):

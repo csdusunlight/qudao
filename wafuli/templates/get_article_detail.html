@@ -249,7 +249,7 @@
         getFriendLink () {
           $.ajax({
             type: "get",
-            url: '/newsm/urls/',
+            url: '/newsm/urls/?page=1&pageSize=999',
             data: {},
             async: true,
             success: function(res) {

@@ -129,7 +129,7 @@
                         </el-table-column>
                         <el-table-column label="攻略链接">
                             <template slot-scope="scope">
-                                <a href="scope.row.strategy_url">${ scope.row.strategy_url }</a>
+                                <a :href="scope.row.strategy_url">${ scope.row.strategy_url }</a>
                             </template>
                         </el-table-column>
                         <el-table-column label="推广标期">

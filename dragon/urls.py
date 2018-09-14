@@ -36,6 +36,7 @@ urlpatterns = [
     url('^coupon/', include('coupon.urls', namespace='coupon')),
     url('^finance/', include('finance.urls', namespace='finance')),
     url('^public/', include('public.urls', namespace='public')),
+    url('^tbkapi/', include('tbkapi.urls', namespace='tbkapi')),
 ]
 
 from django.conf.urls.static import static

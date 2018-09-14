@@ -35,6 +35,6 @@ urlpatterns = [
     url(r'^intro_fanshu_doc/$', 'wafuli.views.intro_fanshu_doc', name='intro_fanshu_doc'),    #jzy
     url(r'^intro_merchant/$', 'wafuli.views.intro_merchant', name='intro_merchant'),    #jzy
     url(r'^intro_about_us/$', 'wafuli.views.intro_about_us', name='intro_about_us'),    #jzy
-    url(r'^information/$', 'wafuli.views.information', name='information'),    #jzy
-    url(r'^information_detail/$', 'wafuli.views.information_detail', name='information_detail'),    #jzy
+#     url(r'^information/$', 'wafuli.views.information', name='information'),    #jzy
+#     url(r'^information_detail/$', 'wafuli.views.information_detail', name='information_detail'),    #jzy
 ]

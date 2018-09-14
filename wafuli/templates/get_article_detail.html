@@ -1,0 +1,291 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta name="renderer" content="webkit">
+  <title>资讯详情页</title>
+  <meta name="keywords" content="福利联盟、理财返利、网贷返利、理财师、理财超市、番薯文档、番薯主页" />
+  <meta name="description" content="福利联盟项目库为投资者提供理财投资攻略，主要为理财返利平台、网贷返利平台投资攻略，是您身边的理财超市、专业的理财师。" />
+  <link href="/static/images/favicon.ico" rel="shortcut icon"/>
+  <link rel="stylesheet" type="text/css" href="/static/css/new-common.css?v-3" />
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+  <style type="text/css">
+    body{background: #fff;}
+    #app{overflow: hidden;}
+    .container{width: 1250px; margin: 0 auto; overflow: hidden;}
+    .address{font-size: 14px; color: #222; margin:25px 0 30px 0;}
+    .container_left{width: 820px; float: left;}
+    .article_text{padding-bottom: 25px; border-bottom: 1px solid #b9bbb9;}
+    .article_text .title{font-size: 26px; color: #222; text-align: center; margin: 20px 0 25px 0;}
+    .article_text .timers{text-align: center; font-size: 14px; color: #999999; margin-bottom: 10px;}
+    .article_text .text{font-size: 16px; color: #222; margin-top: 15px; padding: 0 2px;}
+    .article_text .text img{max-width: 100%;}
+    .article_text .text p{ margin-top: 20px; line-height: 24px; font-size: 16px; color: #222;}
+    .tags{font-size: 14px; color: #666; margin-top: 20px;}
+    .tags span.labels{ display: inline-block; height: 24px; line-height: 23px; padding: 0 10px; border: 1px solid #89baf7; margin-right: 15px; border-radius: 20px; font-size: 12px; color: #89baf7;}
+    .lastone{margin-top: 29px;}
+    .nextpage{margin-top: 8px;}
+    .piece{font-size: 14px; color: #666;}
+    .searchtags{ margin-top: 24px;}
+    .searchtags h2.tagstitle{font-size: 16px; color: #222; font-weight: normal; margin-bottom: 12px;}
+    .searchtags ul .tagslist{ width: 50%; height: 40px; line-height: 40px; float: left; box-sizing: border-box; color: #666; font-size: 14px; padding-right:30px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+    .searchtags ul .tagslist a{display: inline-block;}
+    .container_right{width: 340px; float: right; margin-top: 5px;}
+    .hot_infor{padding: 9px 20px 9px 0; overflow: hidden; background: #F9F9F9;}
+    .hot_infor .hot_infor_list{ width: 300px; padding-left: 20px; height: 33px; line-height: 33px; font-size: 14px; color: #666; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+    .titleh2{font-size: 16px; color: #222; height: 26px; line-height: 26px; border-left: 4px solid #fb8200; padding-left: 16px;}
+    .hot_infor ul{padding: 8px 0; overflow: hidden;}
+    .platform{padding: 10px 20px 10px 0; overflow: hidden; background: #F9F9F9; margin-top: 30px;}
+    .platform ul{padding: 8px 0; overflow: hidden;}
+    .platform .platform_list{overflow: hidden; padding:10px 0 10px 20px;}
+    .link_img{width: 120px; height: 50px; float: left;}
+    .link_img a{display: inline-block; width: 120px; height: 50px; }
+    .link_img img{width: 120px; height: 50px;}
+    .platform_list_text p{ width: 180px; height: 24px; line-height: 24px; padding-left: 20px; float: right; font-size: 13px; color: #666; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+    .friendship_bg{background: #f5f5f5;}
+    .friendship_box{width: 1250px; margin: 0 auto; padding: 20px 0;}
+    .friendship_link{font-size: 14px; color: #666;}
+    .friendship_box .links{ margin-top: 15px;}
+    .friendship_box .links a{ display: inline-block; overflow: hidden; margin-right:30px; color: #666;}
+    .footer{margin-top: 0;}
+  </style>
+</head>
+
+<body style="opacity: 0;">
+  {% include "header.html" %}
+
+  <div id="app">
+    <div class="container">
+      <div class="address">您的位置：<a href="/">首页</a> > <a href="/newsm/get_article_list/">理财资讯</a> > <a :href="'/newsm/get_article_list/?group='+groupName+''">${groupName}</a> > ${title}</div>
+      <div class="container_left">
+        <div class="article_text">
+          <h1 class="title">${infoText.atitle}</h1>
+          <div class="timers">${infoText.apub_date}</div>
+          <div class="text" v-html="infoText.acontent"></div>
+          <div class="tags">文章标签：<span class="labels" v-for="item in infoText.atag">${item.tname}</span></div>
+          <div class="source"></div>
+          <div class="lastone piece">上一篇：<span v-html="befTitle"></span></div>
+          <div class="nextpage piece">下一篇：<span v-html="aftTitle"></span></div>
+        </div>
+        <div class="searchtags">
+          <h2 class="tagstitle">更多<a :href="'/newsm/get_article_list/?group='+groupName+''">【${groupName}】</a>相关文章</h2>
+          <ul>
+            <li class="tagslist" v-for="taglist in tagsText"><a :href="'/newsm/get_article_detail/?pageId='+ taglist.id +'&group='+taglist.agroup" :title="taglist.atitle">${taglist.atitle}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="container_right">
+        <div class="hot_infor">
+          <h2 class="titleh2">热门资讯</h2>
+          <ul>
+            <li class="hot_infor_list" v-for="(item, index) in hotInfo"><a :href="'/newsm/get_article_detail/?pageId='+ item.id +'&group='+item.agroup">${index + 1}、 ${item.atitle}</a></li>
+          </ul>
+        </div>
+        <div class="recommend_platform platform">
+          <h2 class="titleh2">推荐平台</h2>
+          <ul>
+            <li class="platform_list" v-for="item in newProject">
+              <a :href="item.strategy" target="_blank">
+                <div class="link_img"><img :src="item.logo"/></div>
+                <div class="platform_list_text">
+                  <p>平台名称：${item.title}</p>
+                  <p>平台年化：${item.intrest}%</p>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="hot_platform platform">
+          <h2 class="titleh2">热门平台</h2>
+          <ul>
+            <li class="platform_list" v-for="item in hotProject">
+              <a :href="item.strategy" target="_blank">
+                <div class="link_img"><img :src="item.logo" /></div>
+                <div class="platform_list_text">
+                  <p>平台名称：${item.title}</p>
+                  <p>平台年化：${item.intrest}%</p>
+                </div>
+              </a>  
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="friendship_bg">
+      <div class="friendship_box">
+        <div class="friendship_link">友情链接 | QQ：3469318256</div>
+        <div class="links">
+          <span v-for="links in friendLink"><a :href="links.url" target="_blank">${links.uname}</a></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 底部 -->
+  <div>
+    {% include "footer.html" %}1
+  </div>
+
+  <script type="text/javascript">
+    var app = new Vue({
+      delimiters: ['${', '}'],
+      el: '#app',
+      data: {
+        newProject: [],
+        hotInfo: [],
+        infoText: '',
+        title: '',
+        pageId: '',
+        groupId: '',
+        groupName: '',
+        tagsText: '',
+        aftTitle: '',
+        befTitle: '',
+        friendLink:'',
+        hotProject: []
+      },
+      created: function () {
+        this.getNewProject()
+        this.hotInformation()
+        this.getPageInfo()
+        this.getFriendLink()
+        this.getHotProject()
+      },
+      mounted: function () {
+        document.body.style.opacity = '1';
+      },
+      methods: {
+        getNewProject () {
+          //新上项目数据加载
+          $.ajax({
+            url: '/restapi/projects/?state=10&ordering=-current_state_date&is_official=true&is_addedto_repo=true&page=1&pageSize=5',
+            type: 'get',
+            async: true,
+            dataType: 'json',
+            success: function (res) {
+              if (res.code == 0) {
+                app.newProject = res.results
+              } else {
+                that.$notify.error({
+                  title: '错误',
+                  message: res.detail
+                });
+              }
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          })
+        },
+        //热门资讯
+        hotInformation () {
+          $.ajax({
+            type: "get",
+            url: '/newsm/articles/?ais_published=1&ais_hot=0&page=1&pageSize=10',
+            data: {},
+            async: true,
+            success: function(res) {
+              app.hotInfo = res.results
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          });
+        },
+        //获取文章内容
+        getPageInfo () {
+          var url = window.location.href;
+          var query = url.split("?")[1];
+          var queryArr = query.split("&");
+          this.pageId = queryArr[0].split('=')[1];
+          this.groupId = queryArr[1].split('=')[1];
+          //文章ajax
+          $.ajax({
+            type: "get",
+            url: '/newsm/article/'+ this.pageId +'/retrieve_by_published/',
+            data: {},
+            async: true,
+            success: function(res) {
+              app.infoText = res.current
+              app.groupName = res.current.groupname
+              app.title = res.current.atitle
+              if (JSON.stringify(res.bef) == "{}") {
+                app.befTitle = '没有了'
+              } else {
+                app.befTitle = '<a href=/newsm/get_article_detail/?pageId=' + res.bef.id +'&group='+res.bef.agroup+'>' +res.bef.atitle+ '</a>';
+              }
+              if (JSON.stringify(res.aft) == "{}") {
+                app.aftTitle = '没有了'
+              } else {
+                app.aftTitle = '<a href=/newsm/get_article_detail/?pageId=' + res.aft.id +'&group='+res.aft.agroup+'>' +res.aft.atitle+ '</a>';
+              }
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          });
+          this.getTagsList(this.pageId)
+        },
+        //根据标签获取更多文章
+        getTagsList (id) {
+          $.ajax({
+            type: "get",
+            url: '/newsm/article/'+ id +'/lookup_by_tag/?page=1&pageSize=10',
+            data: {},
+            async: true,
+            success: function(res) {
+              console.log(res)
+              app.tagsText = res.results
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          });
+        },
+        //友情链接
+        getFriendLink () {
+          $.ajax({
+            type: "get",
+            url: '/newsm/urls/?page=1&pageSize=999',
+            data: {},
+            async: true,
+            success: function(res) {
+              app.friendLink = res.results
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          })
+        },
+        //热门平台
+        getHotProject () {
+          $.ajax({
+            url: '/restapi/projects/?state=10&ordering=-current_state_date&is_official=true&is_addedto_repo=true&ordering=points&page=1&pageSize=5',
+            type: 'get',
+            async: true,
+            dataType: 'json',
+            success: function (res) {
+              if (res.code == 0) {
+                app.hotProject = res.results
+              } else {
+                that.$notify.error({
+                  title: '错误',
+                  message: res.detail
+                });
+              }
+            },
+            error: function () {
+              console.log('出错了');
+            }
+          })
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

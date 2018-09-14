@@ -17,9 +17,15 @@ def get_path_format_vars():
         "rnd":random.randrange(100,999)
     }
 
+def ensure_dir(file_path):
+    directory = os.path.dirname(file_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
 #保存上传的文件
 def save_upload_file(PostFile,FilePath):
     try:
+        ensure_dir(FilePath)
         f = open(FilePath, 'wb')
         for chunk in PostFile.chunks():
             f.write(chunk)

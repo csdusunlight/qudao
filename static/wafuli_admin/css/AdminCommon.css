@@ -1,3 +1,6 @@
+body {
+  margin: 0;
+}
 .container {
   padding: 20px 0;
 }
@@ -26,4 +29,10 @@
 }
 .el-popover {
   min-width: 60px !important;
+}
+.new-data {
+  position: absolute;
+  margin-left: 6px;
+  font-size: 14px;
+  color: yellow;
 }

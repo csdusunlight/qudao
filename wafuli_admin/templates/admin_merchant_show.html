@@ -1,110 +1,198 @@
-{% extends "base.html" %} {% load staticfiles %} {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/admin_margin_query.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />{% endblock css %} {% block js %}
-<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
-<script type="text/javascript">
-    $(function () {
-        $("li.home24").toggleClass("on");
-        //数据
-        var data = '<table width="100%"><tr><th>项目名称</th><th>标期</th><th>攻略链接</th><th>投资档位</th><th>结算价格</th><th>渠道价格</th><th>佣金</th><th>放单人手机号</th><th>放单人QQ</th><th>进行程度</th>' +
-            '[results]<tr><td>{title}</td><td>{term}</td><td><a href="{strategy}" target="_blank">{strategy}</a></td><td>{investrange}</td><td>{up_price}</td><td>{default_price}</td><td>{broker_rate}</td><td>{user_mobile}</td>' +
-            '<td>{qq_name}</td><td>{state_des}</td></tr>[/results]</table>';
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
 
-        //回调函数
-        function pagecallback() {
-            console.log("回调函数");
-            //时间分割展示
-//          $('.time').each(function () {
-//              var time = $(this).text().split('T');//分割字符串 获取年月日
-//              console.log(time);
-//              var time_1 = time[1].split('.');//分割字符串 获取时分秒
-//              $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
-//          });
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <style>
+        body {
+          opacity: 0;
         }
-        var base_url = '/restapi/projects/?page={page}&pageSize={pageSize}&category=merchant';
-        $("#pagedata").ajaxPage({
-            url: base_url,
-            pageId: $("#page"),
-            pageSize: 10,
-            run: true,
-            content: data,
-            complete: pagecallback,
-        });
-        //搜过功能
-        $('.search').click(function () {
-            var project_name = $('.project_name').val();
-            var project_state = $('.project_state').val();
-            var creater_phone = $('.creater_phone').val();
-            var creater_qq = $('.creater_qq').val();
-            var newUrl = base_url;
-            if (project_name) {
-                newUrl += '&search=' + project_name;
-            }
-            if (project_state) {
-                newUrl += '&state=' + project_state;
-            }
-            if (creater_phone) {
-                newUrl += '&user_mobile=' + creater_phone;
-            }
-            if (creater_qq) {
-                newUrl += '&qq_name=' + creater_qq;
-            }
-            console.log(newUrl);
+        .grid-content {
+            padding: 25px 0;
+        }
 
-            $("#pagedata").ajaxPage({
-                url: newUrl,
-                pageId: $("#page"),
+        .descTitle {
+            color: #909399;
+        }
+
+        .el-input {
+            width: 60%;
+        }
+        .el-header {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <el-row :gutter="20" style="width: 100%;">
+            <el-col :span="3">
+                {% include "leftNav.html" %}
+            </el-col>
+            <el-col :span="21">
+                <div class="container">
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="descTitle">项目名称：</span>
+                                <el-input v-model="search" placeholder="请输入内容"></el-input>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="descTitle" >项目状态：</span>
+                                <el-select @change="change_state" style="width: 70%;" v-model="state" slot="prepend" placeholder="请选择项目状态">
+                                    <el-option label="全部" value=""></el-option>
+                                    <el-option label="即将开始" value="00"></el-option>
+                                    <el-option label="正在进行" value="10"></el-option>
+                                    <el-option label="已结束" value="20"></el-option>
+                                    <el-option label="已删除" value="30"></el-option>
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="descTitle">创建人手机号：</span>
+                                <el-input v-model="user_mobile" placeholder="请输入内容"></el-input>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="descTitle">创建人QQ：</span>
+                                <el-input v-model="qq_name" placeholder="请输入内容"></el-input>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24" style="display: flex;justify-content: flex-end;">
+                            <el-button type="primary" @click='search_data' style="margin-right: 65px;">搜索</el-button>
+                        </el-col>
+                    </el-row>
+
+                    <el-header>数据总览</el-header>
+                    <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"
+                        border>
+                        <el-table-column label="项目名称">
+                            <template slot-scope="scope">${ scope.row.title }</template>
+                        </el-table-column>
+                        <el-table-column label="标期">
+                            <template slot-scope="scope">${ scope.row.term }</template>
+                        </el-table-column>
+                        <el-table-column label="攻略链接">
+                            <template slot-scope="scope"><a :href="scope.row.strategy">${ scope.row.strategy }</a></template>
+                        </el-table-column>
+                        <el-table-column label="投资档位">
+                            <template slot-scope="scope">${ scope.row.investrange }</template>
+                        </el-table-column>
+                        <el-table-column label="结算价格">
+                            <template slot-scope="scope">${ scope.row.up_price }</template>
+                        </el-table-column>
+                        <el-table-column label="渠道价格">
+                            <template slot-scope="scope">${ scope.row.default_price }</template>
+                        </el-table-column>
+                        <el-table-column label="佣金">
+                            <template slot-scope="scope">${ scope.row.broker_rate }</template>
+                        </el-table-column>
+                        <el-table-column label="放单人手机号">
+                            <template slot-scope="scope">${ scope.row.user_mobile }</template>
+                        </el-table-column>
+                        <el-table-column label="放单人QQ">
+                            <template slot-scope="scope">${ scope.row.qq_name }</template>
+                        </el-table-column>
+                        <el-table-column label="进行程度">
+                            <template slot-scope="scope">${ scope.row.state_des }</template>
+                        </el-table-column>
+                    </el-table>
+                    <div class="pagination-box">
+                        <el-pagination background @current-change="handleCurrentChange" :page-size="pageSize" :current-page="currentPage" layout="total, prev, pager, next, jumper"
+                            :total="planTableData.recordCount">
+                        </el-pagination>
+                    </div>
+                </div>
+            </el-col>
+        </el-row>
+
+    </div>
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#app',
+            delimiters: ['${', '}'],
+            data: {
+                search: '',
+                state: '',
+                user_mobile: '',
+                qq_name: '',
+                activeNav: '4-2',
+                hongbaoPlan: [],
+                ruleForm: {
+                    hongbao_plan: [],
+                    send_user: '2',
+                    userlist: ''
+                },
+                dialogPlanVisible: false,
+                rowStyle: {
+                    'text-align': 'center'
+                },
+                planTableData: {},
+                page: 1,
                 pageSize: 10,
-                run: true,
-                content: data,
-                complete: pagecallback,
-            });
-        });
-        
-    });
-</script> {% endblock js %} {% block right %}
-<div class="wrapper">
-    <div class="searchTop">
-        <span>搜索条件</span>
-    </div>
-    <div class="tab">
-        <table>
-            <tr>
-                <td>项目名称：
-                    <input type="text" class="project_name">
-                </td>
-                <td>项目状态：
-                    <select name="state" class="project_state select" style="width: 60%;">
-                    	<option value="">-----全部----</option>
-                        <option value="00">即将开始</option>
-                        <option value="10">正在进行</option>
-                        <option value="20">已结束</option>
-                        <option value="30">已删除</option>
-                    </select>
-                    <!--<input type="datetime-local" class="project_state">-->
-                </td>
-            </tr>
-            <tr>
-                <td>创建人手机号：
-                    <input type="text" class="creater_phone">
-                </td>
-                <td>创建人QQ：
-                    <input type="text" class="creater_qq">
-                </td>
-            </tr>
-        </table>
-        <div class="operateBox">
-            <input type="button" value="搜索" class="search">
-        </div>
-    </div>
-    <div class="Tin-table">
-        <div id="pagedata">
-        </div>
-        <div class="Page-in-admin">
-            <div class="page" id="page">
-            </div>
-        </div>
-    </div>
-</div>
-<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
-{% endblock %}
+                currentPage: 1,
+            },
+            created: function () {
+                var that = this;
+                this.getDataList(1, 10);
+            },
+            mounted: function() {
+              document.body.style.opacity = 1;
+            },
+            methods: {
+                handleCurrentChange: function (val) {
+                    app.currentPage = val;
+                    app.getDataList(app.currentPage, app.pageSize);
+                },
+                getDataList: function (page, pageSize) {
+                    var that = this;
+                    $.ajax({
+                        type: "get",   //?page=1&pageSize=10&category=merchant&search=11&state=30&user_mobile=12346457897&qq_name=111
+                        url: '/restapi/projects/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&category=merchant&search=' + that.search +'&state='+ that.state +'&user_mobile='+ that.user_mobile +'&qq_name='+that.qq_name,
+                        async: true,
+                        success: function (res) {
+                            console.log(res);
+                            if (res.code == 0) {
+                                app.planTableData = res;
+                            } else {
+                                that.$notify.error({
+                                    title: '错误',
+                                    message: res.detail
+                                });
+                            }
+                        }
+                    });
+                },
+                search_data: function () {
+                    var that = this;
+                    app.currentPage = 1;
+                    app.getDataList();
+                },
+                change_state:function(val){
+                    var that = this;
+                    that.state = val;
+                    that.search_data();
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

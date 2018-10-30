@@ -1,150 +1,224 @@
-{% extends "base.html" %} {% block js %}
-<script type="text/javascript">
-	$.ajaxSetup({
-		data: {
-			csrfmiddlewaretoken: '{{ csrf_token }}'
-		},
-	});
-	var data = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>时间</th><th>初始余额</th>' +
-		'<th>变动值</th><th>变动原因</th><th>备注</th>' +
-		'</tr>[results]<tr><td>{username}</td><td>{mobile}</td><td>{time}</td>' +
-		'<td>{initAmount}</td><td class="shouzhi" data-shouzhi="{transType}">{transAmount}</td><td>{reason}</td>' +
-		'<td>{remark}</td></tr>[/results]</table>';
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
 
-	var url = "/restapi/translist/" + "?page={page}&size={pageSize}";
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 
-	function pagecallback(){
-	    $('.shouzhi').each(function(){
-	        console.log($(this).data('shouzhi'))
-	        if($(this).data('shouzhi') == '0') {
-	            $(this).text('+' + $(this).text());
-	        } else if($(this).data('shouzhi') == '1') {
-	            $(this).text('-' + $(this).text());
-	        }
-	    })
-	}
-	$(document).ready(function() {
-		$("li.home11").toggleClass("on");
-		$(".Tin-table tr:even").css("background-color", "#fcfcfc");
-		$("#pagedata").ajaxPage({
-			url: url,
-			pageId: $("#page"),
-			pageSize: 10,
-			run: true,
-			content: data,
-			complete:pagecallback,
-		});
+	<style>
+	  body {
+          opacity: 0;
+        }
+		.grid-content {
+			padding: 25px 0;
+		}
 
-		$("#search").click(function() {
-			var startTime = $("#startTime").val();
-			var endTime = $("#endTime").val();
-			var newurl = url;
-			if(startTime && endTime) {
-				newurl += "&trans_date_0=" + startTime;
-				newurl += "&trans_date_1=" + endTime;
-			}
-			var username = $("#username").val();
-			var mobile = $("#mobile").val();
-			if(username) {
-				newurl += "&user_name=" + username;
-			}
-			if(mobile) {
-				newurl += "&user_mobile=" + mobile;
-			}
+		.el-input {
+			width: 55%;
+		}
 
-			var charge_reason = $("#charge_reason").val();
-			if(charge_reason) {
-				newurl += "&reason_contains=" + charge_reason;
-			}
-			$("#page").empty();
-			$("#pagedata").ajaxPage({
-				url: newurl,
-				pageId: $("#page"),
-				pageSize: 10,
-				run: true,
-				content: data,
-				complete:pagecallback,
-			});
-		});
-		
-		$("#export").click(function() {
-			var html = '<form action="' + "{% url 'export_charge_excel' %}" + '" method="get" target="_self" id="postData_form">';
-			var startTime = $("#startTime").val();
-			var endTime = $("#endTime").val();
-			if(startTime && endTime) {
-				html += '<input name="trans_date_0" type="hidden" value="' + startTime + '"/>';
-				html += '<input name="trans_date_1" type="hidden" value="' + endTime + '"/>';
-			}
-			var username = $("#username").val();
-			var mobile = $("#mobile").val();
-			if(username) {
-				html += '<input name="user_name" type="hidden" value="' + username + '"/>';
-			}
-			if(mobile) {
-				html += '<input name="user_mobile" type="hidden" value="' + mobile + '"/>';
-			}
-			
-			var charge_reason = $("#charge_reason").val();
-			if(charge_reason) {
-				html += '<input name="reason_contains" type="hidden" value="' + charge_reason + '"/>';
-			}
-			html += '</form>';
-			var iframe = document.getElementById('myIFrame');
-			iframe.contentWindow.document.open();
-			iframe.contentWindow.document.write(html);
-			iframe.contentWindow.document.close();
-			document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
-		});
-	});
-</script>
-{% endblock js %} {% block right %}
-<div class="Criteria">
-	<span>搜索条件</span>
-	<div class="Crite-box">
-		<form>
-			<table width="100%">
-				<tr>
-					<td>
-						<i>开始时间：</i>
-						<input id="startTime" type="datetime-local" />
-					</td>
-					<td>
-						<i>结束时间：</i>
-						<input id="endTime" type="datetime-local" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<i>用&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</i>
-						<input id="username" type="text" />
-					</td>
-					<td>
-						<i style="letter-spacing:2px;">用户手机号：</i>
-						<input id="mobile" type="text" />
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<i>变动原因：</i>
-						<input id="charge_reason" type="text" />
-					</td>
-				</tr>
-			</table>
-			<div class="Submit-in">
-				<input id="export" type="button" value="导出" />
-				<input id="search" type="button" value="搜索" />
-			</div>
-		</form>
-	</div>
-</div>
+		.oprate {
+			padding: 10px 10px;
+		}
 
-<div class="Tin-table">
-	<div id="pagedata">
-	</div>
-	<div class="Page-in-admin">
-		<div class="page" id="page">
+		.desc_txt {
+			color: #909399;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<el-row :gutter="20" style="width: 100%;">
+			<el-col :span="3">
+				{% include "leftNav.html" %}
+			</el-col>
+			<el-col :span="21">
+				<div class="container">
+					<!-- 第一列 -->
+					<el-row :gutter="20">
+						<el-col :span="6">
+							<div class="grid-content bg-purple">
+								<span class="desc_txt">申请开始时间：</span>
+								<el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="s_time0" type="date" placeholder="选择日期">
+								</el-date-picker>
+							</div>
+						</el-col>
+						<el-col :span="6">
+							<div class="grid-content bg-purple">
+								<span class="desc_txt">申请结束时间：</span>
+								<el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="e_time0" type="date" placeholder="选择日期">
+								</el-date-picker>
+							</div>
+						</el-col>
+						<el-col :span="6">
+							<div class="grid-content bg-purple">
+								<span class="desc_txt">用户名：</span>
+								<el-input v-model="user_name" placeholder="请输入用户名"></el-input>
+							</div>
+						</el-col>
+						<el-col :span="6">
+							<div class="grid-content bg-purple">
+								<span class="desc_txt">用户手机号：</span>
+								<el-input v-model="user_phone" placeholder="请输入用户手机号"></el-input>
+							</div>
+						</el-col>
+					</el-row>
+					<!-- 第二列 -->
+					<el-row :gutter="20">
+						<el-col :span="6">
+							<div class="grid-content bg-purple">
+								<span class="desc_txt">变动原因：</span>
+								<el-input placeholder="请输入内容" v-model="reason" clearable>
+								</el-input>
+							</div>
+						</el-col>
+						<el-col :span="6">
+							<div class="grid-content bg-purple">
+								<el-button @click='search_data' type="primary">搜索</el-button>
+								<el-button @click='export_data' type="danger">导出</el-button>
+							</div>
+						</el-col>
+
+					</el-row>
+		</el-row>
+		<!-- tabale -->
+		<el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"
+		 border>
+			<el-table-column label="用户名">
+				<template slot-scope="scope">${ scope.row.username }</template>
+			</el-table-column>
+			<el-table-column label="手机号">
+				<template slot-scope="scope">${ scope.row.mobile }</template>
+			</el-table-column>
+			<el-table-column label="时间">
+				<template slot-scope="scope">${ (scope.row.time).split('T')[0] }</template>
+			</el-table-column>
+			<el-table-column label="初始余额">
+				<template slot-scope="scope">${ scope.row.initAmount }</template>
+			</el-table-column>
+			<el-table-column label="变动值">
+				<template slot-scope="scope">
+					<span v-if='scope.row.transType == 0'>
+						+ ${ scope.row.transAmount }
+					</span>
+					<span v-else>
+						- ${ scope.row.transAmount }
+					</span>
+				</template>
+			</el-table-column>
+			<el-table-column label="变动原因">
+				<template slot-scope="scope">${ scope.row.reason }</template>
+			</el-table-column>
+			<el-table-column label="备注">
+				<template slot-scope="scope">${ scope.row.remark }</template>
+			</el-table-column>
+		</el-table>
+		<div class="pagination-box">
+			<el-pagination background @current-change="handleCurrentChange" :page-size="pageSize" :current-page="currentPage" layout="total, prev, pager, next, jumper"
+			 :total="planTableData.recordCount">
+			</el-pagination>
 		</div>
+		</div>
+		</el-col>
+		</el-row>
+		<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
 	</div>
-</div>
-<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
-{%endblock%}
+
+	<script type="text/javascript">
+		var app = new Vue({
+			el: '#app',
+			delimiters: ['${', '}'],
+			data: {
+				s_time0: '',
+				e_time0: '',
+				user_name: '',
+				user_phone: '',
+				reason: '',
+				activeNav: '2-3',
+				rowStyle: {
+					'text-align': 'center'
+				},
+				planTableData: {},
+				page: 1,
+				pageSize: 10,
+				currentPage: 1,
+			},
+			created: function () {
+				var that = this;
+				that.getDataList(1, 10);
+			},
+			mounted: function() {
+        document.body.style.opacity = 1;
+      },
+			methods: {
+				handleCurrentChange: function (val) {
+					app.currentPage = val;
+					app.getDataList(app.currentPage, app.pageSize);
+				},
+				getDataList: function (page, pageSize) {
+					var that = this;
+					$.ajax({
+						type: "get",
+						url: '/restapi/translist/?page=' + that.currentPage + '&pagesize=' + that.pageSize + '&trans_date_0=' + (that.s_time0?that.s_time0:'') + 
+						'&trans_date_1=' + (that.e_time0?that.e_time0:'') + '&user_name=' + that.user_name + '&user_mobile=' + that.user_phone + '&reason_contains=' + that.reason,
+						async: true,
+						success: function (res) {
+							if (res.code == 0) {
+								app.planTableData = res;
+							} else {
+								that.$notify.error({
+									title: '错误',
+									message: res.detail
+								});
+							}
+						}
+					});
+				},
+				search_data: function () {  //搜索数据
+					var that = this;
+					that.currentPage = 1;
+					that.getDataList();
+				},
+				export_data: function () { //导出数据
+					var that = this;
+					var html = '<form action="' + "{% url 'export_charge_excel' %}" + '" methods="get" target="_self" id="postData">';
+					var startTime = that.s_time0; //申请开始时间
+					var endTime = that.e_time0;  //申请结束时间
+					if (startTime && endTime) {
+						html += '<input name="trans_date_0" type="hidden" value="' + startTime + '"/>';
+						html += '<input name="trans_date_1" type="hidden" value="' + endTime + '"/>';
+					}
+					var mobile = that.phone_number;
+					if (mobile) {
+						html += '<input name="user_mobile" type="hidden" value="' + mobile + '"/>';
+					}
+					var username = that.user_name;
+					if (username) {
+						html += '<input name="user_name" type="hidden" value="' + username + '"/>';
+					}
+					var charge_reason = that.reason;
+					if (charge_reason) {
+						html += '<input name="reason_contains" type="hidden" value="' + charge_reason + '"/>';
+					}
+					html += '</form>';
+					var iframe = document.getElementById('myIFrame');
+					iframe.contentWindow.document.open();
+					iframe.contentWindow.document.write(html);
+					iframe.contentWindow.document.close();
+					document.getElementById('myIFrame').contentWindow.document.getElementById('postData').submit();
+				}
+			}
+		})
+	</script>
+</body>
+
+</html>

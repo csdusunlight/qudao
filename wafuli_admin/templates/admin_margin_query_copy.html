@@ -1,0 +1,138 @@
+{% extends "base.html" %} {% load staticfiles %} {% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/admin_margin_query.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />>{% endblock css %} {% block js %}
+<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
+
+<script type="text/javascript">
+    $(function () {
+        //左边tab切换
+            $("li.home18").toggleClass("on");
+        //数据
+        var data = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>时间</th><th>初始余额</th><th>变动值</th><th>余额</th><th>变动原因</th>' +
+            '<th>备注</th>' +
+            '[results]<tr><td>{username}</td><td>{mobile}</td><td class="time">{time}</td><td class="initAmount">{initAmount}</td><td class="changeNum" data-type="{transType}">{transAmount}</td>' +
+            '<td class="balance" data-type="{transType}" data-initAmount="{initAmount}" data-transAmount="{transAmount}"></td><td>{reason}</td><td>{remark}</td></tr>[/results]</table>';
+                
+        //回调函数
+        function pagecallback() {
+            console.log("回调函数");
+            //时间分割展示
+            $('.time').each(function () {
+                var time = $(this).text().split('T');//分割字符串 获取年月日
+                console.log(time);
+                var time_1 = time[1].split('.');//分割字符串 获取时分秒
+                $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
+            });
+            //根据状态来渲染 - +号
+            $(".changeNum").each(function () { 
+                let type = $(this).attr("data-type");
+                let amountText = $(this).text();
+                if (type == 1) {
+                    $(this).text(`- ${amountText}`);
+                } else {
+                    $(this).text(`+ ${amountText}`)
+                }
+             })
+             //渲染出余额
+            $(".balance").each(function () { 
+                var type = $(this).attr("data-type");
+                var initAmount = parseFloat($(this).attr("data-initAmount"));
+                var transAmount =parseFloat($(this).attr("data-transAmount")); 
+                if (type == 1) {
+                    balance = ((initAmount) - (transAmount)).toFixed(2);
+                    $(this).text(balance);
+                } else {
+                    balance = (parseFloat(initAmount) + parseFloat(transAmount)).toFixed(2);
+                    $(this).text(balance);
+                }
+             })
+        }
+        $("#pagedata").ajaxPage({
+            url: '/merchant/margin_translog/?page={page}&pageSize={pageSize}',
+            pageId: $("#page"),
+            pageSize: 6,
+            run: true,
+            content: data,
+            complete: pagecallback,
+        });
+        //搜过功能
+        $('.search').click(function () {
+            var sTime = $('.startTime').val();
+            var eTime = $('.endTime').val();
+            var user = $('.user').val();
+            var phoneNum = $('.phoneNum').val();
+            var reason = $('.reason').val();
+            var newUrl = '/merchant/margin_translog/?page={page}&pageSize={pageSize}';
+            if (sTime) {
+                newUrl += '&trans_date_0=' + sTime;
+            }
+            if (eTime) {
+                newUrl += '&trans_date_1=' + eTime;
+            }
+            if (user) {
+                newUrl += '&user_name=' + user;
+            }
+            if (phoneNum) {
+                newUrl += '&user_mobile=' + phoneNum;
+            }
+            if (reason) {
+                newUrl += '&reason_contains=' + reason;
+            }
+            console.log(newUrl);
+
+            $("#pagedata").ajaxPage({
+                url: newUrl,
+                pageId: $("#page"),
+                pageSize: 6,
+                run: true,
+                content: data,
+                complete: pagecallback,
+            });
+        });
+        
+    });
+</script> {% endblock js %} {% block right %}
+<div class="wrapper">
+    <div class="searchTop">
+        <span>搜索条件</span>
+    </div>
+    <div class="tab">
+        <table>
+            <tr>
+                <td>开始时间：
+                    <input type="datetime-local" class="startTime">
+                </td>
+                <td>结束时间：
+                    <input type="datetime-local" class="endTime">
+                </td>
+            </tr>
+            <tr>
+                <td>用户名：
+                    <input type="text" class="user">
+                </td>
+                <td>手机号：
+                    <input type="text" class="phoneNum">
+                </td>
+            </tr>
+            <tr>
+                <td>变动原因：
+                    <input type="text" class="reason">
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        <div class="operateBox">
+            <input type="button" value="搜索" class="search">
+        </div>
+    </div>
+    <div class="Tin-table">
+        <div id="pagedata">
+        </div>
+        <div class="Page-in-admin">
+            <div class="page" id="page">
+            </div>
+        </div>
+    </div>
+</div>
+<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
+{% endblock %}

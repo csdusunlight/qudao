@@ -1,0 +1,395 @@
+{% extends "base.html" %} {% load staticfiles %} {% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/admin_margin.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" /> {% endblock css %} {% block js %}
+<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
+<script type="text/javascript"> 
+    //添加token
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+    $(function () {
+        $(".home19").toggleClass("on");
+        //未审核数据
+        var aduitData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>QQ号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
+            '<th>变动类型</th><th>变动金额</th><th>申请时间</th><th>处理状态</th><th>处理</th>' +
+            '[results]<tr><td>{username}</td><td>{mobile}</td><td>{qq_number}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td class="change" data-cType="{type}"></td><td class="amount" data-type="{type}">{amount}</td>' +
+            '<td class="time">{submit_time}</td><td>{state_des}</td><td class="opBox{id}" data-id="{id}"><a class="sure">同意</a>|<a class="rSendefuse">拒绝<a></td></tr>[/results]</table>';
+        //已通过数据
+        var passData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>QQ号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
+            '<th>变动类型</th><th>变动金额</th><th>申请时间</th><th>处理状态</th><th>处理人</th>' +
+            '[results]<tr><td>{username}</td><td>{mobile}</td><td>{qq_number}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td class="change" data-cType="{type}"></td><td class="amount" data-type="{type}">{amount}</td></td>' +
+            '<td class="time">{submit_time}</td><td>{state_des}</td><td>{admin_mobile}</td></tr>[/results]</table>';
+        //已拒绝数据
+        var rSendefuseData = '<table width="100%"><tr><th>用户名</th><th>手机号</th><th>QQ号</th><th>账户余额</th><th>开户行</th><th >开户行姓名</th><th>银行卡号</th>' +
+            '<th>变动类型</th><th>变动金额</th><th>申请时间</th><th>处理状态</th>' +
+            '[results]<tr><td>{username}</td><td>{mobile}</td><td>{qq_number}</td><td>{margin_account}</td><td>{bank}</td><td>{real_name}</td><td>{card_number}</td><td class="change" data-cType="{type}"></td><td class="amount" data-type="{type}">{amount}</td></td>' +
+            '<td class="time">{submit_time}</td><td>{state_des}</td></tr>[/results]</table>';
+
+        //回调函数
+        function pagecallback() {
+            console.log("回调函数");
+            $('.time').each(function () {
+                var time = $(this).text().split('T');//分割字符串 获取年月日
+                console.log(time);
+                var time_1 = time[1].split('.');//分割字符串 获取时分秒
+                $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
+            });
+            
+            //变动类型根据type的值来渲染
+            $('.change').each(function(){
+                var type = $(this).attr('data-cType');
+               if (type == 0) {
+                    $(this).text('充值');
+               } else {
+                   $(this).text('提现');
+               }
+            })
+            //根据type值来渲染‘+’‘-’
+            $('.amount').each(function(){
+                var type = $(this).attr('data-type');
+                var amountText = $(this).text();
+                if (type == 0) {
+                    $(this).text(`+ ${amountText}`);
+                } else {
+                    $(this).text(`- ${amountText}`);
+                }
+            });
+            
+        }
+        $("#pagedata").ajaxPage({
+            url: '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}&audit_state=1',
+            pageId: $("#page"),
+            pageSize: 6,
+            run: true,
+            content:aduitData,
+            complete: pagecallback,
+        });
+
+        //搜索功能
+        $('#search').click(function () {
+            var newUrl = '/merchant/margin_auditlog/?page={page}&pageSize={pageSize}';
+            var submit_date_0 = $('.submit_date_0').val(),
+                submit_date_1 = $('.submit_date_1').val(),
+                audit_date_0 = $('.audit_date_0').val(),
+                audit_date_1 = $('.audit_date_1').val(),
+                user_name = $('.user_name').val(),
+                user_mobile = $('.user_mobile').val(),
+                real_name = $('.real_name').val(),
+                card_number = $('.card_number').val(),
+                admin_user = $('.admin_user').val(),
+                audit_state = $('.selet option:checked').val();
+
+            if (submit_date_0) {
+                newUrl += '&submit_date_0=' + submit_date_0;
+            }
+            if (submit_date_1) {
+                newUrl += '&submit_date_1=' + submit_date_1;
+            }
+            if (audit_date_0) {
+                newUrl += '&audit_date_0=' + audit_date_0;
+            }
+            if (audit_date_1) {
+                newUrl += '&audit_date_1=' + audit_date_1;
+            }
+            if (user_name) {
+                newUrl += '&user_name=' + user_name;
+            }
+            if (user_mobile) {
+                newUrl += '&user_mobile=' + user_mobile;
+            }
+            if (real_name) {
+                newUrl += '&real_name=' + real_name;
+            }
+            if (card_number) {
+                newUrl += '&card_number=' + card_number;
+            }
+            if (admin_user) {
+                newUrl += '&admin_user=' + admin_user;
+            }
+
+            var pdata;
+            if(audit_state == 0) {            //已通过
+                pdata = passData;
+                newUrl += '&audit_state=0';
+            } else if (audit_state == 1) {    //待审核
+                pdata = aduitData;
+                newUrl += '&audit_state=1';
+            } else if (audit_state == 2) {    //已拒绝
+                pdata = rSendefuseData;
+                newUrl += '&audit_state=2';
+            }
+
+            $("#pagedata").ajaxPage({
+                url: newUrl,
+                pageId: $("#page"),
+                pageSize: 6,
+                run: true,
+                content: pdata,
+                complete: pagecallback,
+            });
+        });
+        //获取td的data-id值
+        var agreeId;
+        //操作 同意模态框
+        $('#pagedata').on('click', '.sure', function () {
+            //获取
+            agreeId = $(this).parent().attr('data-id');
+            console.log(agreeId);
+            $('.agreeBox').show();
+        });
+        $('.cancel1').click(function () {
+            $('.agreeBox').hide();
+        });
+        //同意ajax
+        $('.agree').click(function () {
+            console.log(agreeId);
+            $('.opBox').each(function(){
+                $(this).text('已同意');
+                console.log($(this));
+            });
+
+            $.ajax({
+                url: '/Admin/admin_margin/',
+                type: 'POST', //GET
+                async: false,    //或false,是否异步
+                data: {
+                    'type': 1,
+                    'id':agreeId
+                },
+                timeout: 5000,    //超时时间
+                dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                success: function (ret) {
+                    if (ret.code == 0) {
+                        alert("已同意");
+                        $('.agreeBox').hide();
+                    }
+                    $('.opBox' + agreeId).text('已同意');
+                },
+                error: function (xhr, textStatus) {
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+        //拒绝模态框
+        var refuseId;//获取父级td的data-id的值
+        $('#pagedata').on('click', '.rSendefuse', function () {
+            refuseId = $(this).parent().attr('data-id');
+            console.log('------'+refuseId);
+            $('.rSendefuseBox').show();
+        });
+        $('.cancel2').click(function () {
+            $('.rSendefuseBox').hide();
+        });
+        //拒绝ajax
+        $('.refuseSend').click(function () {
+            var reason = $('.reason').val();
+            console.log('----refuse----'+refuseId);
+            $('.opBox' + refuseId).text('已拒绝');
+            $.ajax({
+                url: '/Admin/admin_margin/',
+                type: 'POST',   //GET
+                async: false,    //或false,是否异步
+                data: {
+                    'type': 2,
+                    'reason':reason,
+                    'id':refuseId
+                },
+                timeout: 5000,    //超时时间
+                dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                success: function (ret) {
+                    if (ret.code == 0) {
+                        alert("已拒绝");
+                        $('.rSendefuseBox').hide();
+                    }
+                    $('.opBox' + refuseId).text('已拒绝');
+                },
+                error: function (xhr, textStatus) {
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+
+
+        //导入
+        $('#input_clone').click(function(){
+            $('#fileupload1').click();
+        }); 
+        // $('#import').click(function(){
+        //     if (!$('#fileupload1').val()) {
+        //         alert("请选择要导入的文件");
+        //     }
+        //     var upFile = "fileupload1";
+        //     $.ajaxFileUpload({
+		// 		url: '/Admin/import_investlog_settle/',
+		// 		secureuri: false,
+		// 		fileElementId: upFile, //file标签的id
+		// 		dataType: 'json', //返回数据的类型
+		// 		data: {}, //一同上传的数据
+		// 		success: function(data, status) {
+		// 			if(data.code == 0) {
+		// 				alert("导入成功！ 数量：" + data.num);
+		// 			} else {
+		// 				alert(data.msg + " 成功数量：" + data.num);
+		// 			}
+		// 		},
+		// 		error: function(data, status, e) {
+		// 			alert(e);
+		// 		}
+		// 	});
+        // });
+        
+        //导出
+        $('#export').click(function(){
+            var html = '<form action="' + "" + '" method="get" target="_self" id="postData_form">';
+            var submit_date_0 = $('.submit_date_0').val(),
+                submit_date_1 = $('.submit_date_1').val(),
+                audit_date_0 = $('.audit_date_0').val(),
+                audit_date_1 = $('.audit_date_1').val(),
+                user_name = $('.user_name').val(),
+                user_mobile = $('.user_mobile').val(),
+                real_name = $('.real_name').val(),
+                card_number = $('.card_number').val(),
+                admin_user = $('.admin_user').val(),
+                audit_state = $('.selet option:checked').val();
+
+            if (submit_date_0&&submit_date_1) {
+               html += '<input name="submit_date_0" type="hidden" value="' + submit_date_0 + '"/>';
+               html += '<input name="submit_date_1" type="hidden" value="' + submit_date_1 + '"/>';
+            }
+            if (audit_date_0&&audit_date_1) {
+                html += '<input name="audit_date_0" type="hidden" value="' + audit_date_0 + '"/>';
+                html += '<input name="audit_date_1" type="hidden" value="' + audit_date_1 + '"/>';
+            }
+            if (user_name) {
+                html += '<input name="user_name" type="hidden" value="' + user_name + '"/>';
+            }
+            if (user_mobile) {
+                html +='<input name="user_mobile" type="hidden" value="'+ user_mobile +'">';
+            }
+            if (card_number) {
+                html += '<input name="card_number" type="hidden" value="'+ card_number +'" >';
+            }
+            if (real_name) {
+                html += '<input name="real_name" type="hidden" value="'+ real_name +'">';
+            }
+            if (admin_user) {
+                html += '<input name="admin_user" type="hidden" value="'+ admin_user +'">';
+            }
+            if (audit_state) {
+                html += '<input name="audit_state" type="hidden" value="'+ audit_state +'">';
+            }
+            html +='</html>';
+            var iframe = document.getElementById('myIFrame');
+            iframe.contentWindow.document.open();
+            iframe.contentWindow.document.write(html);
+            iframe.contentWindow.document.close();
+            document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+
+        });
+
+    });
+</script> {% endblock js %} {% block right %}
+<div class="wrapper">
+    <div class="top">
+        <span>搜索条件</span>
+    </div>
+    <table>
+        <tr>
+            <td class="td1">
+                <span>申请开始时间：</span>
+                <input type="datetime-local" class="submit_date_0">
+            </td>
+            <td class="td1">
+                <span>申请结束时间：</span>
+                <input type="datetime-local" class="submit_date_1">
+            </td>
+            <td class="td1">
+                <span>操作开始时间：</span>
+                <input type="datetime-local" class="audit_date_0">
+            </td>
+            <td class="td1">
+                <span>操作开始时间：</span>
+                <input type="datetime-local" class="audit_date_1">
+            </td>
+        </tr>
+        <tr>
+            <td class="td1">
+                <span>用户名：</span>
+                <input type="text" class="user_name">
+            </td>
+            <td class="td1">
+                <span>用户手机号：</span>
+                <input type="text" class="user_mobile">
+            </td>
+            <td class="td1">
+                <span>开户行姓名：</span>
+                <input type="text" class="real_name">
+            </td>
+            <td class="td1">
+                <span>银行卡号：</span>
+                <input type="text" class="card_number">
+            </td>
+        </tr>
+        <tr>
+
+            <td class="td1">
+                <span>处理人：</span>
+                <input type="text" class="admin_user">
+            </td>
+            <td class="td1">
+                <span>处理状态：</span>
+                <select class="selet">
+                    <option value="1">未审核</option>
+                    <option value="0">已通过</option>
+                    <option value="2">已拒绝</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <div class="operateBox">
+        <div class="operateTop">
+            <input type="button" id="search" value="搜索">
+            <input type="button" id="export" value="导出">
+        </div>
+        <div class="operateBtm">
+            <input id="fileupload1" name="file" type="file" onchange="hint.innerHTML = this.files[0].name;">
+            <a id="input_clone" class="input-clone">选择文件</a>
+            <p class="hint-box">已选择表格：
+                <b id="hint" class="hint">无</b>
+            </p>
+            <input id="import" type="button" value="导入">
+        </div>
+    </div>
+    <div class="Tin-table">
+        <div id="pagedata">
+        </div>
+        <div class="Page-in-admin">
+            <div class="page" id="page">
+            </div>
+        </div>
+    </div>
+    <!-- 同意操作模态框 -->
+    <div class="agreeBox">
+        <div class="operate1">
+            <span class="tip1">提示</span>
+            <p class="msg1">是否同意该条数据？</p>
+            <input type="button" class="btn agree" value="确定" />
+            <input type="button" class="btn cancel1" value="取消" />
+        </div>
+    </div>
+    <!-- 拒绝操作模态框 -->
+    <div class="rSendefuseBox">
+        <div class="operate2">
+            <span class="tip2">提示</span>
+            <p class="msg2">是否拒绝该条数据？</p>
+            <span style="font-size: 18px;margin-left: 60px;margin-top: 30px;display: inline-block;">拒绝理由:</span>
+            <input type="text" class="reason" placeholder="请输入拒绝理由">
+            <br>
+            <input type="button" class="btn refuseSend" value="确定" />
+            <input type="button" class="btn cancel2" value="取消" />
+        </div>
+    </div>
+
+</div>
+<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
+{% endblock %}

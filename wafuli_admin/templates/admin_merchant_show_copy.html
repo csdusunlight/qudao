@@ -1,0 +1,110 @@
+{% extends "base.html" %} {% load staticfiles %} {% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/admin_margin_query.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />{% endblock css %} {% block js %}
+<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
+<script type="text/javascript">
+    $(function () {
+        $("li.home24").toggleClass("on");
+        //数据
+        var data = '<table width="100%"><tr><th>项目名称</th><th>标期</th><th>攻略链接</th><th>投资档位</th><th>结算价格</th><th>渠道价格</th><th>佣金</th><th>放单人手机号</th><th>放单人QQ</th><th>进行程度</th>' +
+            '[results]<tr><td>{title}</td><td>{term}</td><td><a href="{strategy}" target="_blank">{strategy}</a></td><td>{investrange}</td><td>{up_price}</td><td>{default_price}</td><td>{broker_rate}</td><td>{user_mobile}</td>' +
+            '<td>{qq_name}</td><td>{state_des}</td></tr>[/results]</table>';
+
+        //回调函数
+        function pagecallback() {
+            console.log("回调函数");
+            //时间分割展示
+//          $('.time').each(function () {
+//              var time = $(this).text().split('T');//分割字符串 获取年月日
+//              console.log(time);
+//              var time_1 = time[1].split('.');//分割字符串 获取时分秒
+//              $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
+//          });
+        }
+        var base_url = '/restapi/projects/?page={page}&pageSize={pageSize}&category=merchant';
+        $("#pagedata").ajaxPage({
+            url: base_url,
+            pageId: $("#page"),
+            pageSize: 10,
+            run: true,
+            content: data,
+            complete: pagecallback,
+        });
+        //搜过功能
+        $('.search').click(function () {
+            var project_name = $('.project_name').val();
+            var project_state = $('.project_state').val();
+            var creater_phone = $('.creater_phone').val();
+            var creater_qq = $('.creater_qq').val();
+            var newUrl = base_url;
+            if (project_name) {
+                newUrl += '&search=' + project_name;
+            }
+            if (project_state) {
+                newUrl += '&state=' + project_state;
+            }
+            if (creater_phone) {
+                newUrl += '&user_mobile=' + creater_phone;
+            }
+            if (creater_qq) {
+                newUrl += '&qq_name=' + creater_qq;
+            }
+            console.log(newUrl);
+
+            $("#pagedata").ajaxPage({
+                url: newUrl,
+                pageId: $("#page"),
+                pageSize: 10,
+                run: true,
+                content: data,
+                complete: pagecallback,
+            });
+        });
+        
+    });
+</script> {% endblock js %} {% block right %}
+<div class="wrapper">
+    <div class="searchTop">
+        <span>搜索条件</span>
+    </div>
+    <div class="tab">
+        <table>
+            <tr>
+                <td>项目名称：
+                    <input type="text" class="project_name">
+                </td>
+                <td>项目状态：
+                    <select name="state" class="project_state select" style="width: 60%;">
+                    	<option value="">-----全部----</option>
+                        <option value="00">即将开始</option>
+                        <option value="10">正在进行</option>
+                        <option value="20">已结束</option>
+                        <option value="30">已删除</option>
+                    </select>
+                    <!--<input type="datetime-local" class="project_state">-->
+                </td>
+            </tr>
+            <tr>
+                <td>创建人手机号：
+                    <input type="text" class="creater_phone">
+                </td>
+                <td>创建人QQ：
+                    <input type="text" class="creater_qq">
+                </td>
+            </tr>
+        </table>
+        <div class="operateBox">
+            <input type="button" value="搜索" class="search">
+        </div>
+    </div>
+    <div class="Tin-table">
+        <div id="pagedata">
+        </div>
+        <div class="Page-in-admin">
+            <div class="page" id="page">
+            </div>
+        </div>
+    </div>
+</div>
+<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block js %}
+<script type="text/javascript"> 
+var data = '<table width="100%"><tr><th>日期</th><th>新申请用户数</th><th>审核拒绝人数</th><th>审核通过人数</th>'+
+	'<th>成功提现金额</th><th>成功提现用户数</th><th>返现金额</th><th>管理员添加金额</th><th>红包激活金额</th>'+
+	'[results]<tr><td>{date}</td><td>{apply_num}</td><td>{refuse_num}</td>'+
+	'<td>{new_reg_num}</td><td>{with_amount}</td><td>{with_num}</td><td>{ret_amount}</td>'+
+	'<td>{admin_amount}</td><td>{coupon_amount}</td>'+
+	'</tr>[/results]</table>';
+var url = "/restapi/daystatis/" + "?page={page}&pageSize={pageSize}";
+$(document).ready(function(){
+	$(".ListTable tr:even").css("background-color","#fcfcfc");
+	$("li.home1").toggleClass("on");
+	$("#pagedata").ajaxPage({
+	    url:url, 
+	    pageId:$("#page"),
+	    pageSize:10,
+	    run:true,
+	    content:data,
+	});
+//	$("#search").click(function(){
+//		startTime = $("#startTime").val();
+//		endTime = $("#endTime").val();
+//		newurl = url;
+//		if(startTime && endTime){
+//			newurl += "&startTime="+startTime;
+//			newurl += "&endTime="+endTime;
+//		}
+//		var newdata = data;
+//		$("#page").empty();
+//		$("#pagedata").ajaxPage({
+//		    url:newurl, 
+//		    pageId:$("#page"),
+//		    pageSize:10,
+//		    run:true,
+//		    content:newdata,
+//		});
+//	});
+});
+</script>
+{% endblock js %}
+{% block right %}
+<div class="Need-T">
+                       <span>待办事项</span>
+                       <div class="Need-Cont">
+                            	<!--<p>今日新增提现<font>{{num_today.2}}</font>笔，您总共还有<font>{{num.2}}</font>笔未处理，<a href="{%url 'admin_withdraw'%}">立即处理 >></a></p>-->
+                                <!--<p>今日新增返现<font>{{num_today.1}}</font>笔，您总共还有<font>{{num.1}}</font>笔未处理，<a href="">立即处理 >></a></p>-->
+                            </div>
+                        </div>
+                        <div class="Table-in">
+                        	<table width="100%">
+                            	<tr>
+                                	<th>总申请人数</th>
+                                	<th>申请同意人数</th>
+                                	<th>现金余额</th>
+                                	<th>总提现金额</th>
+                                	<th>提现成功人数</th>
+                                	<th>总返现金额</th>
+                                	<th>返现处理人数</th>
+                                </tr>
+                                <tr>
+                                	<td>{{total.apply_num}}</td>
+                                	<td>{{total.user_num}}</td>
+                                	<td>{{total.balance}}</td>
+                                	<td>{{total.with_total}}</td>
+                                	<td>{{total.with_count}}</td>
+                                	<td>{{total.ret_total}}</td>
+                                	<td>{{total.ret_count}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="Dateover">
+                        	<span>数据总览</span>
+                            <div class="Date-box">
+                            	<div class="Date-Form">
+                                	<form>
+                                    	<!--时间：&nbsp;
+                                        <input id="startTime" type="date" />
+                                        &nbsp; 至 &nbsp;
+                                        <input id="endTime" type="date" />-->
+                                        <!--<input id="search" type="button" value="搜索" />-->
+                                        <!--<input id="export" type="button" value="导出" />-->
+                                    </form>
+                                </div>
+                                <div class="ListTable">
+									<div id="pagedata">
+									</div>
+                                </div>
+                                 
+                            </div>
+                            
+                        </div>
+                        <div class="Page-in-admin">
+				                    	<div class="page"  id="page">
+				                        </div>
+				            </div>
+{% endblock %}

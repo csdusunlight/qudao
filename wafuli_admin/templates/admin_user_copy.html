@@ -1,0 +1,737 @@
+{% extends "base.html" %}
+{% block js %}
+<script type="text/javascript">
+$.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
+var data = '<table width="100%"><tr><th>渠道等级</th><th>QQ</th><th>QQ昵称</th><th>手机号</th>'+
+	'<th>银行卡号</th><th>持卡人姓名</th><th>支付宝</th><th>加入时间</th>'+
+	'<th class="table__filter">账户余额<span data-ordering="balance" class="table__filter-item top">^</span><span data-ordering="-balance" class="table__filter-item bottom">^</span></th>'+
+	'<th class="table__filter">保证金<span data-ordering="margin_account" class="table__filter-item top">^</span><span data-ordering="-margin_account" class="table__filter-item bottom">^</span></th>'+
+	'<th class="table__filter">累计收入<span data-ordering="accu_income" class="table__filter-item top">^</span><span data-ordering="-accu_income" class="table__filter-item bottom">^</span></th>'+
+	'<th width="5%">是否为渠道</th><th width="5%">是否为黑名单</th><th>账户操作</th></tr>[results]<tr><td>{level}</td><td>'+
+	'<a href="{fanshu_domain}" style="color:blue; text-decoration:underline">{qq_number}</a></td><td>{qq_name}</td>'+
+	'<td>{mobile}</td><td>{card_number}</td><td>{bank}</td><td>{zhifubao}</td><td>{date_joined}</td>'+
+	'<td>{balance}</td><td>{margin_account}</td><td>{accu_income}</td><td class="channel" data-channel="{is_channel}"></td><td class="black" id="is_black_{id}">{is_active}</td>'+
+	'<td id="item_{id}"><a class="btn1-x" onclick="addcash({id})">余额</a>│'+
+	'<a class="btn2-x black_btn" data-isblack="{is_active}" id="black_{id}" onclick="addblack({id})">加黑</a>|<a onclick="change_level({id})">级别</a>|'+
+	'<a onclick="change_bail({id})">保证金</a>|<a class="tweeter_btn" id="tweeter_{id}" data-istweeter="{is_merchant}" onclick="change_tweeter({id})">添加商家</a>'+
+	'|<a class="dakuan_btn" id="dakuan_{id}" data-dakuan="{has_permission200}" onclick="change_dakuan({id})">添加打款</a></td></tr>[/results]</table>';
+var url = "/restapi/users/" + "?page={page}&pageSize={pageSize}";
+var selected_id = 0;
+function pagecallback() {
+    $('.black').each(function() {
+        if ($(this).text() == "false") {
+            $(this).text("是");
+        } else {
+           $(this).text("否"); 
+        }
+    })
+    $('.black_btn').each(function() {
+        if ($(this).data('isblack') == false) {
+            $(this).text("去黑");
+        } else {
+            $(this).text("加黑");
+        }
+    })
+    $('.tweeter_btn').each(function() {
+    	var flag = $(this).data('istweeter');
+        if (flag == 0) {
+            $(this).text("添加商家");
+        } else if(flag == 1) {
+            $(this).text("取消商家");
+        }
+        else if(flag == -1) {
+            $(this).text("审核中");
+        }
+    })
+    $('.dakuan_btn').each(function() {
+        if ($(this).data('dakuan') == false) {
+            $(this).text("添加打款");
+        } else {
+            $(this).text("撤销打款");
+        }
+    })
+    //是否是渠道处理
+    $('.channel').each(function(){
+        var channel_state = $(this).attr("data-channel");
+        console.log(channel_state); 
+        if(channel_state == 0){
+            $(this).text('否')
+        }else if(channel_state == 1){
+            $(this).text('否')
+        }else{
+            $(this).text('申请中')
+        }
+    })
+}
+
+function addcash(id){
+	$(".Balance").css("display","block");
+	selected_id = id;
+}
+function change_bail(id){
+    $(".popup.m-bail").css("display","block");
+    selected_id = id;
+}
+function change_level(id){
+    $(".Change-level").css("display","block");
+    selected_id = id;
+}
+function addblack(id){
+	selected_id = id;
+	var opertype=$("a#black_"+id).html();
+	if(opertype == "加黑"){
+		$(".Blacklist").css("display","block");
+	}
+	else {
+		$(".Blacklist-none").css("display","block");
+	}
+}
+function change_tweeter(id){
+    selected_id = id;
+    var opertype=$("a#tweeter_"+id).html();
+    if(opertype == "添加商家"){
+        $(".m-tweeter").css("display","block");
+    }
+    else {
+        $(".m-tweeter-none").css("display","block");
+    }
+}
+function change_dakuan(id){
+    selected_id = id;
+    var opertype=$("a#dakuan_"+id).html();
+    if(opertype == "添加打款"){
+        $(".m-dakuan").css("display","block");
+    }
+    else {
+        $(".m-dakuan-none").css("display","block");
+    }
+}
+
+$(document).ready(function(){
+  var newurl = url;
+	$("li.home2").toggleClass("on");
+	$(".Tin-table-box tr:even").css("background-color","#fcfcfc");
+	$("#pagedata").ajaxPage({
+	    url:url+"&state=0",
+	    pageId:$("#page"),
+	    pageSize:10,
+	    run:true,
+	    content:data,
+	    complete:pagecallback,
+	});
+	$('#pagedata').on('click', '.table__filter-item',function(){
+	  console.log(newurl + '&ordering=' + $(this).data('ordering'));
+	  $("#pagedata").ajaxPage({
+        url:newurl + '&ordering=' + $(this).data('ordering'),
+        pageId:$("#page"),
+        pageSize:10,
+        run:true,
+        content:data,
+        complete:pagecallback,
+    });
+	})
+	$(".none-x").click(function(){
+		$(this).parent().parent().css("display","none");<!--隐藏-->
+	})
+	$(".none-x-s").click(function(){
+		$(this).parent().parent().parent().parent().css("display","none");<!--隐藏-->
+	})
+	$('.Balance input[type="submit"]').click(function(){
+		var id = selected_id;
+		var pcash = $("input#plus_balance").val();
+		var mcash = $("input#minus_balance").val();
+		var reason = $("#balance_reason").val();
+		if (!id || !pcash && !mcash ||!reason){
+			return;
+		}
+		if (pcash && mcash){
+			alert("不能同时添加和扣减余额");
+			return;
+		}
+		$.ajax({
+			url:"{%url 'admin_user' %}",
+			dataType:"json",
+			async: false,
+			type:"POST",
+			data:{
+				'id':id,
+				'pcash':pcash,
+				'mcash':mcash,
+				'reason':reason,
+				'type':1,
+			},
+			success:function(ret){
+				if(ret.code==0){
+					alert("操作成功！");
+				} else {
+					alert(ret.res_msg);
+				}
+			},
+			error:function(){
+				alert("请检查网络连接");
+			}
+		});
+		$(".Balance").css("display","none");
+	});
+	$('.m-bail input[type="submit"]').click(function(){
+        var id = selected_id;
+        var pcash = $("input#plus_bail").val();
+        var mcash = $("input#minus_bail").val();
+        var reason = $("#bail_reason").val();
+        if (!id || !pcash && !mcash ||!reason){
+            return;
+        }
+        if (pcash && mcash){
+            alert("不能同时添加和扣减保证金");
+            return;
+        }
+        $.ajax({
+            url:"{%url 'admin_user' %}",
+            dataType:"json",
+            async: false,
+            type:"POST",
+            data:{
+                'id':id,
+                'pcash':pcash,
+                'mcash':mcash,
+                'reason':reason,
+                'type':5,
+            },
+            success:function(ret){
+                if(ret.code==0){
+                    alert("操作成功！");
+                } else {
+                    alert(ret.res_msg);
+                }
+            },
+            error:function(){
+                alert("请检查网络连接");
+            }
+        });
+        $(".popup.m-bail").css("display","none");
+    });
+	$('.change-level-btn').click(function(){
+        id = selected_id;
+        level = $("#level_choose").val();
+        if (!id || !level){
+            return;
+        }
+        $.ajax({
+            url:"{%url 'admin_user' %}",
+            dataType:"json",
+            async: false,
+            type:"POST",
+            data:{
+                'id':id,
+                'level':level,
+                'type':4,
+            },
+            success:function(ret){
+                if(ret.code==0){
+                    alert("操作成功！");
+                } else {
+                    alert(ret.res_msg);
+                }
+            },
+            error:function(){
+                alert("请检查网络连接");
+            }
+        });
+        $(".Change-level").css("display","none");
+    });
+	$('.Blacklist input[type="submit"]').click(function(){
+		id = selected_id;
+		if (!id){
+			return;
+		}
+		$.ajax({
+			url:"{%url 'admin_user' %}",
+			dataType:"json",
+			async: false,
+			type:"POST",
+			data:{
+				'id':id,
+				'type': 2,
+			},
+			success:function(ret){
+				if(ret.code==0){
+					alert("操作成功！");
+				} else {
+					alert(ret.res_msg);
+				}
+			},
+			error:function(){
+				alert("请检查网络连接");
+			}
+		});
+		$("a#black_"+selected_id).html("去黑");
+		$("td#is_black_"+selected_id).html("是");
+		$(".Blacklist").css("display","none");
+	});
+	$('.Blacklist-none input[type="submit"]').click(function(){
+		id = selected_id;
+		if (!id){
+			return;
+		}
+		$.ajax({
+			url:"{%url 'admin_user' %}",
+			dataType:"json",
+			async: false,
+			type:"POST",
+			data:{
+				'id':id,
+				'type':3,
+			},
+			success:function(ret){
+				if(ret.code==0){
+					alert("操作成功！");
+				} else {
+					alert(ret.res_msg);
+				}
+			},
+			error:function(){
+				alert("请检查网络连接");
+			}
+		});
+		$("a#black_"+selected_id).html("加黑");
+		$("td#is_black_"+selected_id).html("否");
+		$(".Blacklist-none").css("display","none");
+	});
+	$('.m-tweeter input[type="submit"]').click(function(){
+        var id = selected_id;
+        if (!id){
+            return;
+        }
+        $.ajax({
+            url:"{%url 'admin_user' %}",
+            dataType:"json",
+            async: false,
+            type:"POST",
+            data:{
+                'id':id,
+                'type': 6,
+            },
+            success:function(ret){
+                if(ret.code==0){
+                    alert("操作成功！");
+                } else {
+                    alert(ret.res_msg);
+                }
+            },
+            error:function(){
+                alert("请检查网络连接");
+            }
+        });
+        $("a#tweeter_"+selected_id).html("取消商家");
+//      $("td#is_black_"+selected_id).html("是");
+        $(".m-tweeter").css("display","none");
+    });
+    $('.m-tweeter-none input[type="submit"]').click(function(){
+        var id = selected_id;
+        if (!id){
+            return;
+        }
+        $.ajax({
+            url:"{%url 'admin_user' %}",
+            dataType:"json",
+            async: false,
+            type:"POST",
+            data:{
+                'id':id,
+                'type':7,
+            },
+            success:function(ret){
+                if(ret.code==0){
+                    alert("操作成功！");
+                } else {
+                    alert(ret.res_msg);
+                }
+            },
+            error:function(){
+                alert("请检查网络连接");
+            }
+        });
+        $("a#tweeter_"+selected_id).html("添加商家");
+//      $("td#is_black_"+selected_id).html("否");
+        $(".m-tweeter-none").css("display","none");
+    });
+    $('.m-dakuan input[type="submit"]').click(function(){
+        var id = selected_id;
+        if (!id){
+            return;
+        }
+        $.ajax({
+            url:"{%url 'admin_user' %}",
+            dataType:"json",
+            async: false,
+            type:"POST",
+            data:{
+                'id':id,
+                'type': 10,
+            },
+            success:function(ret){
+                if(ret.code==0){
+                    alert("操作成功！");
+                } else {
+                    alert(ret.res_msg);
+                }
+            },
+            error:function(){
+                alert("请检查网络连接");
+            }
+        });
+        $("a#dakuan_"+selected_id).html("撤消打款");
+//      $("td#is_black_"+selected_id).html("是");
+        $(".m-dakuan").css("display","none");
+    });
+    $('.m-dakuan-none input[type="submit"]').click(function(){
+        var id = selected_id;
+        if (!id){
+            return;
+        }
+        $.ajax({
+            url:"{%url 'admin_user' %}",
+            dataType:"json",
+            async: false,
+            type:"POST",
+            data:{
+                'id':id,
+                'type':11,
+            },
+            success:function(ret){
+                if(ret.code==0){
+                    alert("操作成功！");
+                } else {
+                    alert(ret.res_msg);
+                }
+            },
+            error:function(){
+                alert("请检查网络连接");
+            }
+        });
+        $("a#dakuan_"+selected_id).html("添加打款");
+//      $("td#is_black_"+selected_id).html("否");
+        $(".m-dakuan-none").css("display","none");
+    });
+
+	$("#search").click(function(){
+	  newurl = url;
+		var startTime = $("#startTime").val();
+		var endTime = $("#endTime").val();
+		if(startTime && endTime){
+			newurl += "&join_date_0="+startTime;
+			newurl += "&join_date_1="+endTime;
+		}
+		var qq = $("#qq").val();
+		var qqname = $("#qqname").val();
+		var mobile = $("#mobile").val();
+		if(mobile){
+            newurl += "&mobile="+mobile;
+        }
+		if(qq){
+			newurl += "&qq_number="+qq;
+		}
+		if(qqname){
+			newurl += "&qq_name="+qqname;
+		}
+		var level = $("#level").val();
+		if(level){
+			newurl += "&level="+level;
+		}
+		var state = $("#state").val();
+		if(state){
+			newurl += "&is_active="+state;
+		}
+        var channel = $('.is_channel option:selected').val();
+        if(channel){
+            newurl +='&is_channel='+ channel;
+        }
+		var newdata = data;
+		$("#page").empty();
+		$("#pagedata").ajaxPage({
+		    url:newurl,
+		    pageId:$("#page"),
+		    pageSize:10,
+		    run:true,
+		    content:newdata,
+		    complete:pagecallback,
+		});
+	});
+	$("#export").click(function() {
+        var html = '<form action="' + "" + '" method="get" target="_self" id="postData_form">';
+        var startTime = $("#startTime").val(),
+            endTime = $("#endTime").val(),
+            qq = $("#qq").val(),
+            qqname = $("#qqname").val(),
+            level = $("#level").val(),
+            state = $("#state").val(),
+            mobile = $("#mobile").val();
+            
+        if(startTime && endTime) {
+            html += '<input name="join_date_0" type="hidden" value="' + startTime + '"/>';
+            html += '<input name="join_date_1" type="hidden" value="' + endTime + '"/>';
+        }
+        if(mobile) {
+            html += '<input name="mobile" type="hidden" value="' + mobile + '"/>';
+        }
+        if(qq) {
+            html += '<input name="qq_number" type="hidden" value="' + qq + '"/>';
+        }
+        if(qqname) {
+            html += '<input name="qq_name" type="hidden" value="' + qqname + '"/>';
+        }
+        if(level) {
+            html += '<input name="level" type="hidden" value="' + level + '"/>';
+        }
+        if(state) {
+            html += '<input name="is_active" type="hidden" value="' + state + '"/>';
+        }
+        
+        html += '</form>';
+        var iframe = document.getElementById('myIFrame');
+        iframe.contentWindow.document.open();
+        iframe.contentWindow.document.write(html);
+        iframe.contentWindow.document.close();
+        document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+    });
+});
+</script>
+{% endblock js %}
+
+{% block right %}
+<div class="Criteria">
+	<span>搜索条件</span>
+    <div class="Crite-box">
+    	<form>
+        	<table width="100%">
+            	<tr>
+                	<td>
+                    	<i>加入开始时间：</i>
+                        <input id="startTime" type="datetime-local" />
+                    </td>
+                	<td>
+                    	<i>加入结束时间：</i>
+                        <input id="endTime" type="datetime-local" />
+                    </td>
+                	
+                	<td>
+                    	<i>QQ：</i>
+                        <input id="qq" type="text" />
+                    </td>
+                	<td>
+                    	<i style="letter-spacing:2px;">QQ昵称：</i>
+                        <input id="qqname" type="text" />
+                    </td>
+                </tr>
+            	<tr>
+                	<td>
+                    	<i>渠道等级：</i>
+                        <select name="selectAge" id="level">
+                            <option value="">--</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                        </select>
+                    </td>
+                	<td>
+                    	<i>黑&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;单：</i>
+                        <select name="selectAge" id="state">
+					        <option value="">全部</option>
+					        <option value="false">是</option>
+					        <option value="true">否</option>
+					    </select>
+                    </td>
+                    <td>
+                        <i style="letter-spacing:2px;">用户手机号：</i>
+                        <input id="mobile" type="text" />
+                    </td>
+                    <td>
+                        <i style="letter-spacing:2px;">是否为渠道</i>
+                        <select class="is_channel">
+                            <option value=' '>全部</option>
+                            <option value='1'>是</option>
+                            <option value='0'>否</option>
+                            <option value='-1'>申请中</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                	<td>
+                    	<div class="Submit-box">
+                            <input id="search" type="button" value="搜索" />
+                			<input id="export" type="button" value="导出" />
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+        </form>
+    </div>
+</div>
+<div class="Tin-table">
+	<div id="pagedata">
+	</div>
+    <div class="Page-in-admin">
+    	<div class="page"  id="page">
+        </div>
+    </div>
+</div>
+<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
+{%endblock%}
+{% block modal %}
+<!--余额操作-->
+    <div class="Balance">
+    	<div class="w570-box">
+        	<h3>余额操作</h3>
+            <button class="none-x"></button>
+            <form class="Finnow">
+            	<span>添加余额：</span>
+                <input id="plus_balance" type="text" />
+                <span>消减余额：</span>
+                <input id="minus_balance" type="text" />
+                <div class="Balance-in">
+                    <span>原因备注：</span>
+                    <textarea id="balance_reason"></textarea>
+                </div>
+                <div class="Finnow-Sub">
+                <input type="submit" value="确认" onclick="return false;"/>
+                <input type="button" value="取消" class="none-x-s" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--保证金操作-->
+    <div class="m-bail popup">
+        <div class="w570-box">
+            <h3>保证金操作</h3>
+            <button class="none-x"></button>
+            <form class="Finnow">
+                <span>添加保证金：</span>
+                <input id="plus_bail" type="text" />
+                <span>消减保证金：</span>
+                <input id="minus_bail" type="text" />
+                <div class="Balance-in">
+                    <span>原因备注：</span>
+                    <textarea id="bail_reason"></textarea>
+                </div>
+                <div class="Finnow-Sub">
+                <input type="submit" value="确认" onclick="return false;"/>
+                <input type="button" value="取消" class="none-x-s" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--修改等级-->
+    <div class="Change-level">
+        <div class="w570-box">
+            <h3>修改渠道等级</h3>
+            <button class="none-x"></button>
+            <form class="Finnow">
+                <span>渠道等级：</span>
+                <select id="level_choose" name="level">
+                	<option value="01">01</option>
+                	<option value="02">02</option>
+                	<option value="03">03</option>
+                	<option value="04">04</option>
+                    <option value="05">05</option>
+                	 
+                </select>
+                <div class="Finnow-Sub">
+                <input class="change-level-btn" type="submit" value="确认" onclick="return false;"/>
+                <input type="button" value="取消" class="none-x-s" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--确认加黑-->
+    <div class="Blacklist">
+    	<div class="w570-box">
+        	<h3>黑名单操作</h3>
+            <button class="none-x"></button>
+            <h5 style="font-size: 20px"> 确认加黑？</h5>
+            <form class="Audit-in">
+                <div class="Finnow-Sub" style="margin-top:0">
+                <input type="submit" value="确认" onclick="return false;"/>
+                <input type="button" value="取消" class="none-x-s" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--取消确认加黑-->
+    <div class="Blacklist-none">
+    	<div class="w570-box">
+        	<h3>黑名单操作</h3>
+            <button class="none-x"></button>
+            <h5> 确认取消加黑？</h5>
+            <form class="Audit-in">
+                <div class="Finnow-Sub" style="margin-top:0">
+                <input type="submit" value="确认" onclick="return false;"/>
+                <input type="button" value="取消" class="none-x-s" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--确认添加商家权限-->
+    <div class="popup m-tweeter">
+        <div class="w570-box">
+            <h3>商家权限操作</h3>
+            <button class="none-x"></button>
+            <h5 style="font-size: 20px"> 确认添加商家权限？</h5>
+            <form class="Audit-in">
+                <div class="Finnow-Sub" style="margin-top:0">
+                <input type="submit" value="确认" onclick="return false;"/>
+                <input type="button" value="取消" class="none-x-s" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--取消商家权限-->
+    <div class="popup m-tweeter-none">
+        <div class="w570-box">
+            <h3>商家权限操作</h3>
+            <button class="none-x"></button>
+            <h5> 确认撤销商家权限？</h5>
+            <form class="Audit-in">
+                <div class="Finnow-Sub" style="margin-top:0">
+                <input type="submit" value="确认" onclick="return false;"/>
+                <input type="button" value="取消" class="none-x-s" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--确认添加商家权限-->
+    <div class="popup m-dakuan">
+        <div class="w570-box">
+            <h3>打款权限操作</h3>
+            <button class="none-x"></button>
+            <h5 style="font-size: 20px"> 确认添加打款权限？</h5>
+            <form class="Audit-in">
+                <div class="Finnow-Sub" style="margin-top:0">
+                <input type="submit" value="确认" onclick="return false;"/>
+                <input type="button" value="取消" class="none-x-s" />
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--取消商家权限-->
+    <div class="popup m-dakuan-none">
+        <div class="w570-box">
+            <h3>打款权限操作</h3>
+            <button class="none-x"></button>
+            <h5> 确认撤销打款权限？</h5>
+            <form class="Audit-in">
+                <div class="Finnow-Sub" style="margin-top:0">
+                <input type="submit" value="确认" onclick="return false;"/>
+                <input type="button" value="取消" class="none-x-s" />
+                </div>
+            </form>
+        </div>
+    </div>
+  {%endblock%}

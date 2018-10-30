@@ -14,7 +14,7 @@ class UrlAdmin(admin.ModelAdmin):
 
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ('id','atitle','ais_published','ais_hot','apub_date','get_agname')
-    list_filter = ['id','atitle','ais_published', 'ais_hot','apub_date','acontent','agroup']
+#     list_filter = ['id','atitle','ais_published', 'ais_hot','apub_date','acontent','agroup']
     filter_horizontal = ('atag',)
     readonly_fields = ('aupdate_time',)
     ordering = ('-apub_date',)

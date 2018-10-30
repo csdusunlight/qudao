@@ -116,7 +116,8 @@ class Project(models.Model):
     broker_rate03 = models.DecimalField(u"3级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True, blank=True)
     broker_rate04 = models.DecimalField(u"4级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True, blank=True)
     broker_rate05 = models.DecimalField(u"5级佣金比例，百分数", max_digits=10, decimal_places=2, default=None, null=True, blank=True)
-    def save(self, force_insert=False, force_update=False, using=None,
+
+    def save(self, force_insert=False, force_update=False, using=None, 
              update_fields=None):
         if self.id:
             old_obj = Project.objects.get(id=self.id)

@@ -195,7 +195,9 @@
                     <div>
                       <p class="unhandle-box">还存在未审核数据（今天之前提交的）的项目有：
                       {% for item in unaudited_pronames %}
-                      <el-tag size="mini">{{item}}</el-tag>
+                      <a @click="searchItem('{{item}}')">
+                        <el-tag size="mini">{{item}}</el-tag>
+                      </a>
                       {%endfor%}
                       </p>
                     </div>
@@ -393,6 +395,12 @@
                 var that = this;
                 that.currentPage = 1;
                 that.getDataList();
+            },
+            searchItem: function(item) {
+              var that = this;
+              that.project_title = item;
+              that.currentPage = 1;
+              that.getDataList();
             },
             //预审核状态下同意
             agree_1: function (row) {

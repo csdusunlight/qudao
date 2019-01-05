@@ -1028,7 +1028,7 @@ def admin_withdraw(request):
 @has_post_permission('004')
 def admin_withdraw_autoaudit(request):
     admin_user = request.user
-    with cache.lock("autowithdraw_lock"):
+    with cache.lock("autowithdraw_lock", blocking_timeout=60):
         if request.method == "GET":
             ret = {}
             withlist = WithdrawLog.objects.filter(audit_state='1', amount__lt=50000).all()
@@ -1070,7 +1070,6 @@ def admin_withdraw_autoaudit(request):
                 })
                 init_withlist.append(obj)
             ret = batch_transfer_to_zhifubao(batch_list)
-            print ret
             fail_id_list = []
             for item in ret['detail']:
                 obj = item['obj']
@@ -1084,7 +1083,6 @@ def admin_withdraw_autoaudit(request):
             suc_list = []
             for item in suc_withlist:
                 suc_list.append((item.user, item))
-            print suc_list
             sendWeixinNotify.delay(suc_list, 'withdraw_success_zhifubao')
             return JsonResponse({'suc_num':ret.get('suc_num')})
 def get_admin_with_page(request):

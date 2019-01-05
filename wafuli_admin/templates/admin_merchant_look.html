@@ -1,38 +1,136 @@
-{% extends "base.html" %} {% block js %}
-<script type="text/javascript">
-    var data = '<table width="100%"><tr><th>日期</th><th>开通人数</th><th>放单人数</th><th>项目在线数量</th>' +
-        '<th>交单数量</th><th>审核通过数量</th><th>保证金充值</th><th>保证金消耗</th><th>佣金</th><th>返现金额</th>' +
-        '[results]<tr><td>{date}</td><td>{merchant_people}</td><td>{merchant_people_active}</td>' +
-        '<td>{merchant_projects}</td><td>{merchant_investlogs_submit}</td><td>{merchant_investlogs_audit}</td><td>{merchant_charge}</td>' +
-        '<td>{merchant_consume}</td><td>{merchant_broker}</td><td>{merchant_settle}</td>' +
-        '</tr>[/results]</table>';
-    var url = "/restapi/daystatis/" + "?page={page}&pageSize={pageSize}";
-    $(document).ready(function() {
-        $(".ListTable tr:even").css("background-color", "#fcfcfc");
-        $("li.home20").toggleClass("on");
-        $("#pagedata").ajaxPage({
-            url: url,
-            pageId: $("#page"),
-            pageSize: 10,
-            run: true,
-            content: data,
-        });
-    });
-</script>
-{% endblock js %} {% block right %}
-<div class="Dateover">
-    <span>放单分析</span>
-    <div class="Date-box">
-        <div class="ListTable">
-            <div id="pagedata">
-            </div>
-        </div>
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <style>
+      body {
+          opacity: 0;
+        }
+        .grid-content {
+            padding: 25px 0;
+        }
+
+        .el-input {
+            width: 55%;
+        }
+        .el-header{
+            margin-top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <el-row :gutter="20" style="width: 100%;">
+            <el-col :span="3">
+                {% include "leftNav.html" %}
+            </el-col>
+            <el-col :span="21">
+                <div class="container">
+                    <!-- tabale -->
+                    <el-header>数据总览</el-header>
+                    <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"
+                        border>
+                        <el-table-column label="日期">
+                            <template slot-scope="scope">${ scope.row.date }</template>
+                        </el-table-column>
+                        <el-table-column label="开通人数">
+                            <template slot-scope="scope">${ scope.row.merchant_people }</template>
+                        </el-table-column>
+                        <el-table-column label="放单人数">
+                            <template slot-scope="scope">${ scope.row.merchant_people_active }</template>
+                        </el-table-column>
+                        <el-table-column label="项目在线人数">
+                            <template slot-scope="scope">${ scope.row.merchant_projects }</template>
+                        </el-table-column>
+                        <el-table-column label="交单数量">
+                            <template slot-scope="scope">${ scope.row.merchant_investlogs_submit }</template>
+                        </el-table-column>
+                        <el-table-column label="审核通过数量">
+                            <template slot-scope="scope">${ scope.row.merchant_investlogs_audit }</template>
+                        </el-table-column>
+                        <el-table-column label="保证金充值">
+                            <template slot-scope="scope">${ scope.row.merchant_charge }</template>
+                        </el-table-column>
+                        <el-table-column label="保证金消耗">
+                            <template slot-scope="scope">${ scope.row.merchant_consume }</template>
+                        </el-table-column>
+                        <el-table-column label="佣金">
+                            <template slot-scope="scope">${ scope.row.merchant_broker }</template>
+                        </el-table-column>
+                        <el-table-column label=返现金额>
+                            <template slot-scope="scope">${ scope.row.merchant_settle }</template>
+                        </el-table-column>
+                    </el-table>
+                    <div class="pagination-box">
+                        <el-pagination background @current-change="handleCurrentChange" :page-size="pageSize" :current-page="currentPage" layout="total, prev, pager, next, jumper"
+                            :total="planTableData.recordCount">
+                        </el-pagination>
+                    </div>
+                </div>
+            </el-col>
+        </el-row>
 
     </div>
 
-</div>
-<div class="Page-in-admin">
-    <div class="page" id="page">
-    </div>
-</div>
-{% endblock %}
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#app',
+            delimiters: ['${', '}'],
+            data: {
+                activeNav: '4-3',
+                rowStyle: {
+                    'text-align': 'center'
+                },
+                planTableData: {},
+                page: 1,
+                pageSize: 10,
+                currentPage: 1,
+            },
+            created: function () {
+                var that = this;
+                this.getDataList(1, 10);
+            },
+            mounted: function() {
+              document.body.style.opacity = 1;
+            },
+            methods: {
+                handleCurrentChange: function (val) {
+                    app.currentPage = val;
+                    app.getDataList(app.currentPage, app.pageSize);
+                },
+                getDataList: function (page, pageSize) {
+                    var that = this;
+                    $.ajax({
+                        type: "get",
+                        url: "/restapi/daystatis/?page="+that.currentPage+"&pageSize="+that.pageSize,
+                        async: true,
+                        success: function (res) {
+                            console.log(res);
+                            if (res.code == 0) {
+                                app.planTableData = res;
+                            } else {
+                                that.$notify.error({
+                                    title: '错误',
+                                    message: res.detail
+                                });
+                            }
+                        }
+                    });
+                },
+            }    
+        })
+    </script>
+</body>
+
+</html>

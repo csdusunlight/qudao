@@ -1,0 +1,310 @@
+{% extends "base.html" %} {% load staticfiles %} {% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/merchant_proj.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" /> {% endblock css %} {% block js %}
+<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
+<script type="text/javascript"> 
+    //全部数据
+    var allData = '<table width="100%"><tr><th>QQ</th><th>项目状态</th><th>手机号</th><th>项目名称</th><th>佣金</th><th width="12%">攻略链接</th>' +
+        '<th>推广标期</th><th>投资档位</th><th>推广价格</th><th>结算价格</th><th>数据结算周期</th><th width="10%">提交时间</th><th>处理状态</th><th width="10%">备注说明</th>' +
+        '[results]<tr><td>{qq_name}/{qq_number}</td><td>{project_state_des}</td><td>{user_mobile}</td><td>{title}</td><td>{broker_rate}</td><td><a href="{strategy_url}">{strategy_url}</a></td>' +
+        '<td>{invest_term}</td><td>{invest_amount}</td><td>{promotion_price}</td><td>{price}</td><td>{settle_period}</td><td class="subtime">{submit_time}</td><td>{state_des}</td><td>{remark}</td>' +
+        '</tr>[/results]</table>';
+    //待审核数据
+    var auditData = '<table width="100%"><tr><th>QQ</th><th>项目状态</th><th>手机号</th><th>项目名称</th><th>佣金</th><th width="12%">攻略链接</th>' +
+        '<th>推广标期</th><th>投资档位</th><th>推广价格</th><th>结算价格</th><th>数据结算周期</th><th width="10%">提交时间</th><th>处理状态</th><th width="10%">备注说明</th><th>操作</th>' +
+        '[results]<tr><td>{qq_name}/{qq_number}</td><td>{project_state_des}</td><td>{user_mobile}</td><td>{title}</td><td>{broker_rate}</td><td><a href="{strategy_url}">{strategy_url}</a></td>' +
+        '<td>{invest_term}</td><td>{invest_amount}</td><td>{promotion_price}</td><td>{price}</td><td>{settle_period}</td><td class="subtime">{submit_time}</td><td>{state_des}</td><td>{remark}</td>' +
+        '<td class="opTd{id}" data-id="{id}"><a class="pass">同意</a>|<a class="refuse">拒绝</a></td></tr>[/results]</table>';
+    //审核通过数据
+    var passData = '<table width="100%"><tr><th>QQ</th><th>项目状态</th><th>手机号</th><th>项目名称</th><th>佣金</th><th width="12%">攻略链接</th>' +
+        '<th>推广标期</th><th>投资档位</th><th>渠道价格</th><th>结算价格</th><th>数据结算周期</th><th width="10%">提交时间</th><th>处理状态</th><th>处理时间</th><th width="10%">备注说明</th>' +
+        '[results]<tr><td>{qq_name}/{qq_number}</td><td>{project_state_des}</td><td>{user_mobile}</td><td>{title}</td><td>{broker_rate}</td><td><a href="{strategy_url}">{strategy_url}</a></td>' +
+        '<td>{invest_term}</td><td>{invest_amount}</td><td>{promotion_price}</td><td>{price}</td><td>{settle_period}</td><td class="subtime">{submit_time}</td><td>{project_state_des}</td><td class="adt_time">{audit_time}</td><td>{remark}</td>' +
+        '</tr>[/results]</table>';
+    //审核未通过数据
+    var refuseData = '<table width="100%"><tr><th>QQ</th><th>项目状态</th><th>手机号</th><th>项目名称</th><th width="">佣金</th><th>攻略链接</th>' +
+        '<th>推广标期</th><th>投资档位</th><th>推广价格</th><th>结算价格</th><th>数据结算周期</th><th>提交时间</th><th>处理状态</th><th>处理时间</th><th>拒绝原因</th><th>备注说明</th>' +
+        '[results]<tr><td>{qq_name}/{qq_number}</td><td>{project_state_des}</td><td>{user_mobile}</td><td>{title}</td><td>{broker_rate}</td><td><a href="{strategy_url}">{strategy_url}</a></td>' +
+        '<td>{invest_term}</td><td>{invest_amount}</td><td>{promotion_price}</td><td>{price}</td><td>{settle_period}</td><td class="subtime">{submit_time}</td><td>{state_des}</td><td class="adt_time">{audit_time}</td><td>{audit_reason}</td><td>{remark}</td>' +
+        '</tr>[/results]</table>';
+    var url = "/merchant/apply_projects/?page={page}&pageSize={pageSize}";
+    $(document).ready(function () {
+        $("li.home16").toggleClass("on");
+        //回调函数
+        function pagecallback() {
+            console.log("回调函数");
+            //获取提交时间
+            $(".subtime").each(function () {
+                var sub_time = $(this).text().split("T");//分割字符串获取年月日
+                var time_1 = sub_time[1].split('.');//分割字符串获取时分秒
+                $(this).text(sub_time[0] + " " + time_1[0]);
+            });
+            //获取操作时间
+            $(".adt_time").each(function () {
+                var adt_time = $(this).text().split("T");//分割字符串获取年月日
+                var adt_time_1 = adt_time[1].split('.');//分割字符串获取时分秒
+                $(this).text(adt_time[0] + " " + adt_time_1[0]);
+            });
+        }
+        $("#pagedata").ajaxPage({
+            url: '/merchant/apply_projects/?page={page}&pageSize={pageSize}',
+            pageId: $("#page"),
+            pageSize: 10,
+            run: true,
+            content: allData,
+            complete: pagecallback,
+        });
+        //点击搜索功能
+        $(".search").click(function () {
+            //获取申请开始与申请结束时间
+            var apply_0 = $(".apply_time0").val();
+            var apply_1 = $(".apply_time1").val();
+            //获取操作开始与操作结束时间
+            var operate_0 = $(".operate_date0").val();
+            var operate_1 = $(".operate_date1").val();
+            //获取手机号、QQ号、QQ昵称、处理状态
+            var phone = $(".phoneNum").val();
+            var qq_number = $(".qqNum").val();
+            var project_title = $(".project_title").val();
+            var state = $(".seltBox option:selected").val();
+
+            var newUrl = url;
+            if (apply_0) {
+                newUrl += '&submittime_0=' + apply_0;
+            }
+            if (apply_1) {
+                newUrl += '&submittime_1=' + apply_1;
+            }
+            if (operate_0) {
+                newUrl += '&auditdate_0=' + operate_0;
+            }
+            if (operate_1) {
+                newUrl += '&auditdate_1=' + operate_1;
+            }
+            if (phone) {
+                newUrl += '&user_mobile=' + phone;
+            }
+            if (project_title) {
+                newUrl += '&title=' + project_title;
+            }
+            if (qq_number) {
+                newUrl += '&qq_number=' + qq_number;
+            }
+            if (state) {
+                newUrl += '&audit_state=' + state;
+            }
+            console.log("筛选的newUrl：", newUrl);
+
+            var pdata;
+            if (state == 0) {
+                pdata = allData;        //审核通过
+            } else if (state == 1) {
+                pdata = auditData;       //待审核
+            } else if (state == 2) {
+                pdata = refuseData;      //审核未通过
+            }
+
+            $("#pagedata").ajaxPage({
+                url: newUrl,
+                pageId: $("#page"),
+                pageSize: 6,
+                run: true,
+                content: pdata,
+                complete: pagecallback,
+            });
+        });
+
+        //同意 模态框出现
+        var passId;
+        $("#pagedata").on('click', '.pass', function () {
+            passId = $(this).parent().attr("data-id");
+            console.log(passId);
+            $(".mask").show();
+        });
+        //取消 模块图消失
+        $(".cancel").click(function () {
+            $(".mask").hide();
+            $('.cash').val('');
+        });
+       
+        $(".sure").click(function () {
+            console.log(passId);
+            var cash = $(".cash").val();
+            //正则
+            var regx =/^(([0-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
+            if (!cash) {
+                alert("佣金不能为空！");
+                return;
+            } else if(!regx.test(cash)){
+                alert("请输入正确的金额");
+                return;
+            }
+            // 同意ajax
+            $.ajax({
+                url: '/Admin/admin_merchant_project/',
+                type: "POST", 
+                async: false,
+                data: {
+                    "type": 1,
+                    "id":passId,
+                    "broker_rate": cash
+                },
+                timeout: 5000, //超出时间
+                dataType: 'json', //返回数据格式Json
+                success: function (ret) {
+                    if (ret.code == 0) {
+                        alert("已同意");
+                        $(".mask").hide();
+                    }
+                    $('.opTd' + passId).text('已同意');
+                    $('.reson').val('');
+                },
+                error: function (xhr, textStatus) {
+                    console.log('错误:' + xhr.responseText);
+                }
+            });
+        });
+        //拒绝 模态框出现
+        var refuseId;
+        $("#pagedata").on('click', '.refuse', function () {
+            refuseId = $(this).parent().attr("data-id");
+            $(".msk").show();
+        });
+        //拒绝 模态框消失
+        $(".cCancel").click(function () {
+            $('.msk').hide();
+            $('.reson').val('');
+        });
+        //拒绝弹窗的确定ajax
+        $('.cSure').click(function () {
+            //获取当前id
+            var id = $('.pass').parent().attr("data-id");
+            console.log(id);
+            var reason = $(".reson").val();
+
+            $.ajax({
+                url: '/Admin/admin_merchant_project/',
+                type: "post", //提交方式post
+                async: false, //是否同步
+                data: {
+                    "type": 2,
+                    "id": refuseId,
+                    "reason": reason
+                },
+                timeout: 5000, //超出时间
+                dataType: 'json', //返回数据格式Json
+                success: function (ret) {
+                    if (ret.code == 0) {
+                        alert("已拒绝");
+                        $(".msk").hide();
+                    }
+                    $('.opTd' + refuseId).text('已拒绝');
+                    $('.reson').val('');
+                },
+                error: function (xhr, textStatus) {
+                    console.log('错误:' + xhr.responseText);
+                }
+            });
+
+        });
+
+    });
+</script> {% endblock js %} {% block right %}
+<div class="wrapper">
+    <div style="width: 100%;height: 600px;">
+        <div class="searchTop">
+            <span>搜索条件</span>
+        </div>
+        <div class="tabBox">
+            <table width="100%">
+                <tr>
+                    <td style="text-align: center;">
+                        <label>申请开始时间：</label>
+                        <input type="date" class="apply_time0" />
+                    </td>
+                    <td style="text-align: center;height: 50px;">
+                        <label></label>申请结束时间：</label>
+                        <input type="date" class="apply_time1" />
+                    </td>
+                    <td style="text-align: center;height: 50px;">
+                        <label></label>操作开始时间：</label>
+                        <input type="datetime-local" class="operate_date0" />
+                    </td>
+                    <td style="text-align: center;height: 50px;">
+                        <label></label>结束开始时间：</label>
+                        <input type="datetime-local" class="operate_date0" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;height: 50px;">
+                        <label>用户手机号：</label>
+                        <input type="text" class="phoneNum" />
+                    </td>
+                    <td style="text-align: center;height: 50px;">
+                        <label>QQ号码：</label>
+                        <input type="text" class="qqNum" />
+                    </td>
+                    <td style="text-align: center;height: 50px;">
+                        <label>项目名称：</label>
+                        <input type="text" class="project_title" />
+                    </td>
+                    <td style="text-align: center;height: 50px;">
+                        <label>处理状态：</label>
+                        <select style="width: 180px;" class="seltBox">
+                            <option value="">全部</option>
+                            <option value="1">待审核</option>
+                            <option value="0">审核通过</option>
+                            <option value="2">审核未通过</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="searchBtn">
+            <button class="search">搜索</button>
+        </div>
+
+        <div class="Tin-table">
+            <div id="pagedata">
+            </div>
+            <div class="Page-in-admin">
+                <div class="page" id="page">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 
+     ---@llc
+     ---审核同意弹出的模态框  
+     -->
+    <div class="mask">
+        <div class="passBox">
+            <span class="tips">提示</span>
+            <p>同意该条数据并输入佣金</p>
+            <div class="cashBox">
+                <span>请输入佣金:</span>
+                <input type="text" class="cash" placeholder="请输入百分比，仅限数字" />
+                <label style="font-size: 24px;position: absolute;top: 135px;right: 130px;">%</label>
+            </div>
+            <input type="button" value="确定" class="btn sure">
+            <input type="button" value="取消" class="btn cancel">
+        </div>
+    </div>
+    <!-- 
+     ---@llc
+     ---拒绝审核弹出的模态框  
+     -->
+    <div class="msk">
+        <div class="refuseBox">
+            <span class="tips">提示</span>
+            <p>是否拒绝该条数据？</p>
+            <div class="resonBox">
+                <input type="text" class="reson" placeholder="请输入拒绝原因">
+            </div>
+            <input type="button" value="确定" class="btn cSure">
+            <input type="button" value="取消" class="btn cCancel">
+        </div>
+    </div>
+</div>
+
+{% endblock %}

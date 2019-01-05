@@ -1,363 +1,453 @@
-{% extends "base.html" %} {%load staticfiles%} {% block js %}
-<style>
-    .btn-box {
-        margin-top: 20px;
-        overflow: hidden;
-    }
-    .Submit-in {
-        width: 500px;
-        padding: 0;
-        float: right;
-    }
-    .leading-in {
-        float: left;
-    }
-    .unhandle-box {
-        margin-top: 50px;
-    }
-    .unhandle {
-        display: inline-block;
-        padding: 4px 10px;
-        color: #fff;
-        background-color: #91c11d;
-        border-radius: 4px;
-    }
-</style>
-<script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
-<script type="text/javascript">
-$.ajaxSetup({
-    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
-});
-//<a target="_blank" href="{% url 'qualification' %}?id={id}"><span class="img-up"><img src="/static/images/task-suoluetu.jpg" alt="截图上传图片" /></span></a>
-var data1 = '<table width="100%"><tr><th>QQ/昵称</th><th>电话号码</th><th>申请时间</th><th>身份</th>'+
-	'<th>经验年限</th><th>客户资源</th><th>资金体量</th><th>推单偏好</th><th>操作</th>'+
-	'</tr>[results]<tr><td>{qq_number}/{qq_name}</td><td>{mobile}</td><td>{submit_time}</td>'+
-  '<td>{user_origin}</td><td>{user_exp_year}</td><td>{user_custom_volumn}</td><td>{user_funds_volumn}</td><td>{user_invest_orientation}</td>'+
-	'<td id="item_{id}"><a class="fyin" onclick="pass({id})">同意'+
-	'</a> │ <a class="jion-s" onclick="refuse({id})">拒绝</a></td></tr>[/results]</table>';
-var data0 = '<table width="100%"><tr><th>QQ/QQ昵称</th><th>电话号码</th>'+
-    '<th>申请时间</th><th>渠道等级</th><th>审核人</th><th>审核时间</th>'+
-    '</tr>[results]<tr><td>{qq_number}/{qq_name}</td><td>{mobile}</td>'+
-    '<td>{submit_time}</td><td>{level}</td><td>{admin_name}</td>'+
-    '<td>{audit_time}</td></tr>[/results]</table>';
-var data2 = '<table width="100%"><tr><th>QQ/QQ昵称</th><th>电话号码</th><th>申请时间</th>'+
-    '<th>审核人</th><th>审核时间</th><th>拒绝理由</th>'+
-    '</tr>[results]<tr><td>{qq_number}/{qq_name}</td><td>{mobile}</td>'+
-    '<td>{submit_time}</td>'+
-    '<td>{admin_name}</td><td>{audit_time}</td><td>{audit_reason}</td></tr>[/results]</table>';
-var url = '/restapi/applylog/?page={page}&size={pageSize}';
-function pagecallback(){
-    $(".ret-money").each(function(index, el) {
-        if ($(this).text() == 'null') {
-            $(this).text('无');
-        } else {
-            $(this).text(parseInt($(this).text()/100));
-        }
-    });
-    $(".ret-score").each(function(index, el) {
-        if ($(this).text() == 'null') {
-            $(this).text('无');
-        }
-    });
-}
-function pass(id){
-	$(".BackNow").css("display","block");
-	$("input#ret_event_id").val(id);
-}
-function refuse(id){
-	$(".Audit").css("display","block");
-	$("input#refuse_event_id").val(id);
-}
-$(document).ready(function(){
-	$("li.home15").toggleClass("on");
-	$(".Tin-table tr:even").css("background-color","#fcfcfc");
-	$("#pagedata").ajaxPage({
-	    url:url+"&audit_state=1",
-	    pageId:$("#page"),
-	    pageSize:10,
-	    run:true,
-	    content:data1,
-        complete:pagecallback,
-	});
-	$(".none-x").click(function(){
-		$(this).parent().parent().css("display","none");
-	})
-  $(".none-x-s").click(function(){
-    $(this).parent().parent().parent().parent().css("display","none");
-  })
-	$('.Finnow input[type="submit"]').click(function(){
-		var id = $("input#ret_event_id").val();
-		var add_level = $("#add_level").val();
-//		score = $("input#add_score").val();
-		if (!id || !add_level){
-			return;
-		}
-		console.log(id +', '+ add_level );
-		$.ajax({
-			url:"{%url 'admin_apply' %}",
-			dataType:"json",
-			async: false,
-			type:"POST",
-			data:{
-				'id':id,
-				'level':add_level,
-				'type':1,
-			},
-			success:function(ret){
-				if(ret.code==0){
-				    alert('操作成功，通过');
-					$("#item_"+id).html("审核完成，通过");
-				}else {
-				    console.log(ret.code);
-				}
-			},
-			error:function(){
-				alert("请检查网络连接");
-			}
-		});
-		$(".BackNow").css("display","none");
-	});
-	$('.Audit-in input[type="submit"]').click(function(){
-		var id = $("input#refuse_event_id").val();
-		reason = $("#refuse_reason").val();
-		if (!id || !reason){
-			return;
-		}
-		$.ajax({
-			url:"{%url 'admin_apply' %}",
-			dataType:"json",
-			async: false,
-			type:"POST",
-			data:{
-				'id':id,
-				'reason':reason,
-				'type':2,
-			},
-			success:function(ret){
-                if(ret.code==0){
-                    alert('操作成功,拒绝');
-                    $("#item_"+id).html("审核完成，拒绝");
-                }else {
-                    console.log(ret.code);
-                }
-			},
-			error:function(){
-				alert("请检查网络连接");
-			}
-		});
-		$(".Audit").css("display","none");
-	});
-	$("#search").click(function(){
-		var startTime = $("#startTime").val();
-		var endTime = $("#endTime").val();
-		var newurl = url;
-		if(startTime && endTime){
-			newurl += "&submit_date_0="+startTime;
-			newurl += "&submit_date_1="+endTime;
-		}
-		var startTime2 = $("#startTime2").val();
-		var endTime2 = $("#endTime2").val();
-		if(startTime2 && endTime2){
-			newurl += "&audit_date_0="+startTime2;
-			newurl += "&audit_date_1="+endTime2;
-		}
-		var mobile = $("#mobile").val();
-		var qq = $("#qq").val();
-		if(mobile){
-			newurl += "&mobile="+mobile;
-		}
-		if(qq){
-			newurl += "&qq_number="+qq;
-		}
-		var qqname = $("#qqname").val();
-		if(qqname){
-			newurl += "&qq_name="+qqname;
-		}
-		var adminname = $("#adminname").val();
-       if(adminname){
-         newurl += "&admin_user_mobile="+adminname;
-       }
-		var state = $("#state").val();
-		if(state){
-			newurl += "&audit_state="+state;
-		}
-		var newdata = data1;
-		if(state=='0'){
-			newdata = data0;
-		}
-        if(state=='2'){
-            newdata = data2;
-        }
-		$("#page").empty();
-		$("#pagedata").ajaxPage({
-		    url:newurl,
-		    pageId:$("#page"),
-		    pageSize:10,
-		    run:true,
-		    content:newdata,
-            complete:pagecallback,
-		});
-	});
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
 
-  $("#export").click(function() {
-    var html = '<form action="' + "" + '" method="get" target="_self" id="postData_form">';
-    var startTime = $("#startTime").val();
-    var endTime = $("#endTime").val();
-    if(startTime && endTime) {
-      html += '<input name="submit_date_0" type="hidden" value="' + startTime + '"/>';
-      html += '<input name="submit_date_1" type="hidden" value="' + endTime + '"/>';
-    }
-    var startTime2 = $("#startTime2").val();
-    var endTime2 = $("#endTime2").val();
-    if(startTime2 && endTime2) {
-      html += '<input name="audit_date_0" type="hidden" value="' + startTime2 + '"/>';
-      html += '<input name="audit_date_1" type="hidden" value="' + endTime2 + '"/>';
-    }
-    var mobile = $("#mobile").val();
-    var qq = $("#qq").val();
-    if(mobile) {
-      html += '<input name="mobile" type="hidden" value="' + mobile + '"/>';
-    }
-    if(qq) {
-      html += '<input name="qq_number" type="hidden" value="' + qq + '"/>';
-    }
-    var qqname = $("#qqname").val();
-    if(qqname) {
-      html += '<input name="qq_name" type="hidden" value="' + qqname + '"/>';
-    }
-       adminname = $("#adminname").val();
-    var state = $("#state").val();
-       if(adminname) {
-         html += '<input name="admin_user_mobile" type="hidden" value="' + adminname + '"/>';
-       }
-    if(state) {
-      html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
-    }
-    html += '</form>';
-    var iframe = document.getElementById('myIFrame');
-    iframe.contentWindow.document.open();
-    iframe.contentWindow.document.write(html);
-    iframe.contentWindow.document.close();
-    document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
-  });
-  
-});
-</script>
-{% endblock js %}
-{% block right %}
-<div class="Criteria">
-                        	<span>搜索条件</span>
-                            <div class="Crite-box">
-                            	<form>
-                                	<table width="100%">
-                                    	<tr>
-                                        	<td>
-                                            	<i>申请开始时间：</i>
-                                                <input id="startTime" type="date" />
-                                            </td>
-                                        	<td>
-                                            	<i>申请结束时间：</i>
-                                                <input id="endTime" type="date" />
-                                            </td>
-                                        	<td>
-                                            	<i>操作开始时间：</i>
-                                                <input id="startTime2" type="date" />
-                                            </td>
-                                        	<td>
-                                            	<i>操作结束时间：</i>
-                                                <input id="endTime2" type="date" />
-                                            </td>
-                                        </tr>
-                                    	<tr>
-                                        	<td>
-                                            	<i>用户手机号：</i>
-                                                <input id="mobile" type="text" />
-                                            </td>
-                                        	<td>
-                                            	<i style="letter-spacing:2px;">QQ：</i>
-                                                <input id="qq" type="text" />
-                                            </td>
-                                        	<td>
-                                            	<i style="letter-spacing:4.8px;">QQ昵称：</i>
-                                                <input id="qqname" type="text" />
-                                            </td>
-                                            <td>
-                                                <i>处理人手机号：</i>
-                                                <input id="adminname" type="text" />
-                                            </td>
-                                        </tr>
-                                         <tr>
-                                             <td>
-                                                <i style="letter-spacing:4.8px;">处理状态：</i>
-                                                  <select name="selectAge" id="state">
-                                                      <option value="1">未审核</option>
-                                                      <option value="0">审核通过</option>
-                                                      <option value="2">审核拒绝</option>
-                                                  </select>
-                                              </td>
-                                        </tr> 
-                                    </table>
-                                    <div class="btn-box">
-                                        <div class="Submit-in">
-                                        	<input id="search" type="button" value="搜索" />
-                                            <input id="export" type="button" value="导出" />
-                                        </div>
-                                    </div>
-                                </form>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <style>
+      body {
+          opacity: 0;
+        }
+        .grid-content {
+            padding: 25px 0;
+        }
+
+        .el-input {
+            width: 55%;
+        }
+
+        .oprate {
+            cursor: pointer;
+        }
+
+        .desc_txt {
+            color: #909399;
+        }
+
+        .el-form-item__label {
+            margin-left: 340px;
+        }
+        .el-dialog__body {
+            padding: 0 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <el-row :gutter="20" style="width: 100%;">
+            <el-col :span="3">
+                {% include "leftNav.html" %}
+            </el-col>
+            <el-col :span="21">
+                <div class="container">
+                    <!-- 第一列 -->
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">申请开始时间：</span>
+                                <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="s_time0" type="date" placeholder="选择日期">
+                                </el-date-picker>
                             </div>
-                        </div>
-
-                        <div class="Tin-table">
-                        	<div id="pagedata">
-							</div>
-		                    <div class="Page-in-admin">
-		                    	<div class="page"  id="page">
-		                        </div>
-		                    </div>
-                        </div>
-{%endblock%}
-
-	{% block modal %}
-    <div class="BackNow">
-    	<div class="w570-box">
-        	<h3>添加渠道等级</h3>
-            <button class="none-x"></button>
-            <form class="Finnow">
-            	<input id="ret_event_id" type="hidden" />
-            	<span>渠道等级：</span>
-                <!--<input id="add_cash" type="text" />-->
-                <select name="channel" id="add_level">
-                	<option value="01">01</option>
-                	<option value="02">02</option>
-                	<option value="03">03</option>
-                	<option value="04">04</option>
-                	<option value="05">05</option>
-                </select>
-                <!--<span>添加积分：</span>
-                <input id="add_score" type="text" />-->
-                <div class="Finnow-Sub">
-                <input type="submit" value="确认" onclick="return false;"/>
-                <input type="button" value="取消" class="none-x-s" />
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">申请结束时间：</span>
+                                <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="e_time0" type="date" placeholder="选择日期">
+                                </el-date-picker>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">操作开始时间：</span>
+                                <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="s_time1" type="date" placeholder="选择日期">
+                                </el-date-picker>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">操作结束时间：</span>
+                                <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="e_time1" type="date" placeholder="选择日期">
+                                </el-date-picker>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <!-- 第二列 -->
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">用户手机号：</span>
+                                <el-input placeholder="请输入内容" v-model="phone_number" clearable>
+                                </el-input>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">QQ：</span>
+                                <el-input placeholder="请输入内容" v-model="qq_number" clearable>
+                                </el-input>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">QQ昵称：</span>
+                                <el-input placeholder="请输入内容" v-model="qq_name" clearable>
+                                </el-input>
+                            </div>
+                        </el-col>
+                        <el-col :span="6">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">处理人手机号：</span>
+                                <el-input placeholder="请输入内容" v-model="deal_phone_number" clearable>
+                                </el-input>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <!-- 第三列 -->
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">处理状态：</span>
+                                <el-select v-model="select" @change="change_state" slot="prepend" placeholder="请选择">
+                                    <el-option label="未审核" value="1"></el-option>
+                                    <el-option label="审核通过" value="0"></el-option>
+                                    <el-option label="审核拒绝" value="2"></el-option>
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :span="12" style="display: flex;justify-content: flex-end;">
+                            <div class="grid-content bg-purple">
+                                <el-button type="primary" @click='search'>搜索</el-button>
+                                <el-button type="info" @click="export_txt" style="margin-right: 60px;">导出</el-button>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <!-- tabale -->
+                    <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"
+                        border>
+                        <el-table-column label="QQ/QQ昵称">
+                            <template slot-scope="scope">${ scope.row.qq_number }/${ scope.row.qq_name }</template>
+                        </el-table-column>
+                        <el-table-column label="电话号码">
+                            <template slot-scope="scope">${ scope.row.mobile }</template>
+                        </el-table-column>
+                        <el-table-column label="申请时间">
+                            <template slot-scope="scope">${ scope.row.submit_time.split('T')[0] }</template>
+                        </el-table-column>
+                        <el-table-column label="审核人" :key="Math.random" v-if='select == "2" || select == "0"'>
+                            <template slot-scope="scope">${ scope.row.admin_name }</template>
+                        </el-table-column>
+                        <el-table-column label="审核时间" :key="Math.random" v-if='select == "2" || select == "0"'>
+                            <template slot-scope="scope">${ scope.row.audit_time }</template>
+                        </el-table-column>
+                        <el-table-column label="拒绝理由" :key="Math.random" v-if='select == "2"'>
+                            <template slot-scope="scope">${ scope.row.audit_reason }</template>
+                        </el-table-column>
+                        <el-table-column label="渠道等级" :key="Math.random" v-if='select == "0"'>
+                            <template slot-scope="scope">${ scope.row.level }</template>
+                        </el-table-column>
+                        <el-table-column label="身份" :key="Math.random" v-if='select == "1"'>
+                            <template slot-scope="scope">${ scope.row.user_origin }</template>
+                        </el-table-column>
+                        <el-table-column label="经验年限" :key="Math.random" v-if='select == "1" || select == ""'>
+                            <template slot-scope="scope">${ scope.row.user_exp_year }</template>
+                        </el-table-column>
+                        <el-table-column label="客户资源" :key="Math.random" v-if='select == "1" || select == ""'>
+                            <template slot-scope="scope">${ scope.row.user_custom_volumn }</template>
+                        </el-table-column>
+                        <el-table-column label="资金量体" :key="Math.random" v-if='select == "1" || select == ""'>
+                            <template slot-scope="scope">${ scope.row.user_funds_volumn }</template>
+                        </el-table-column>
+                        <el-table-column label="推单偏好" :key="Math.random" v-if='select == "1" || select == ""'>
+                            <template slot-scope="scope">${ scope.row.user_invest_orientation }</template>
+                        </el-table-column>
+                        <el-table-column label="操作" :key="Math.random" v-if='select == "1" || select == ""'>
+                            <template slot-scope="scope">
+                                <a class="oprate" @click='agree(scope.row)'>同意</a> |
+                                <a class="oprate" @click='refuse(scope.row)'>拒绝</a>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <div class="pagination-box">
+                        <el-pagination background @current-change="handleCurrentChange" :page-size="pageSize" :current-page="currentPage" layout="total, prev, pager, next, jumper"
+                            :total="planTableData.recordCount">
+                        </el-pagination>
+                    </div>
                 </div>
-            </form>
-        </div>
-    </div>
-    <!--审核拒绝-->
-    <div class="Audit">
-    	<div class="w570-box">
-        	<h3>审核拒绝</h3>
-            <button class="none-x"></button>
-            <form class="Audit-in">
-            	<span>填写拒绝原因：</span>
-            	<input id="refuse_event_id" type="hidden" />
-                <textarea id="refuse_reason"></textarea>
-                <div class="Finnow-Sub">
-                <input type="submit" value="确认" class="Deny-box" onclick="return false;"/>
-                <input type="button" value="取消" class="none-x-s" />
-                </div>
-            </form>
-        </div>
+            </el-col>
+        </el-row>
+        <el-dialog title="添加渠道等级" :visible.sync="agreeBox" center>
+            <el-form :model="form">
+                <el-form-item label="请选择渠道等级">
+                    <el-select v-model="form.level" placeholder="请选择渠道等级" style="width: 30%;">
+                        <el-option label="01" value="01"></el-option>
+                        <el-option label="02" value="02"></el-option>
+                        <el-option label="03" value="03"></el-option>
+                        <el-option label="04" value="04"></el-option>
+                        <el-option label="05" value="05"></el-option>
+                    </el-select>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="agreeBox = false">取 消</el-button>
+                <el-button type="primary" @click="agree_send">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 拒绝 -->
+        <el-dialog title="审核拒绝" :visible.sync="dialogVisible" width="30%">
+            <p style="font-size: 18px;margin-bottom: 20px;">拒绝原因：</p>
+            <el-input type="textarea" v-model="reason" placeholder="请输入拒绝原因"></el-input>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="refuse_send">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
     <iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
-    <!--end-->
-	{% endblock modal %}
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#app',
+            delimiters: ['${', '}'],
+            data: {
+                s_time0: '',
+                s_time1: '',
+                e_time0: '',
+                e_time1: '',
+                reason: '',
+                phone_number: '',
+                qq_number: '',
+                qq_name: '',
+                deal_phone_number: '',
+                select: '1',
+                dataId: '',
+                dialogVisible: false,
+                csrf_token: '{{ csrf_token }}',
+                agreeBox: false,
+                form: {
+                    level: ''
+                },
+                activeNav: '1-3',
+                rowStyle: {
+                    'text-align': 'center'
+                },
+                planTableData: {},
+                page: 1,
+                pageSize: 10,
+                currentPage: 1,
+            },
+            created: function () {
+                var that = this;
+                this.getDataList(1, 10);
+            },
+            mounted: function() {
+              document.body.style.opacity = 1;
+            },
+            methods: {
+                handleCurrentChange: function (val) {
+                    app.currentPage = val;
+                    app.getDataList(app.currentPage, app.pageSize);
+                },
+                getDataList: function (page, pageSize) {
+                    var that = this;
+                    $.ajax({
+                        type: "get",
+                        url: '/restapi/applylog/?page=' + that.currentPage + '&pageSize=' + that.pageSize + that.searchVal,
+                        async: true,
+                        success: function (res) {
+                            console.log(res);
+                            if (res.code == 0) {
+                                app.planTableData = res;
+                            } else {
+                                that.$notify.error({
+                                    title: '错误',
+                                    message: res.detail
+                                });
+                            }
+                        }
+                    });
+                },
+                change_state: function (val) {
+                    console.log(val)
+                    var that = this;
+                    that.select = val;
+                    that.search();
+                },
+                search: function () {
+                    var that = this;
+                    that.currentPage = 1;
+                    that.getDataList();
+                    console.log(that.searchVal);
+                },
+                export_txt: function () {
+                    var that = this;
+                    console.log('export');
+                    var html = '<form action="' + "" + '" method="get" target="_self" id="postData_form">';
+                    var startTime = that.s_time0?that.s_time0:'';
+                    var endTime = that.e_time0?that.e_time0:'';
+                    if(startTime && endTime) {
+                      html += '<input name="submit_time_0" type="hidden" value="' + startTime + '"/>';
+                      html += '<input name="submit_time_1" type="hidden" value="' + endTime + '"/>';
+                    }
+                    var startTime2 = that.s_time1?that.s_time1:'';
+                    var endTime2 = that.e_time1?that.e_time1:'';
+                    if(startTime2 && endTime2) {
+                      html += '<input name="audit_time_0" type="hidden" value="' + startTime2 + '"/>';
+                      html += '<input name="audit_time_1" type="hidden" value="' + endTime2 + '"/>';
+                    }
+                    var mobile = that.phone_number;
+                    if(mobile) {
+                      html += '<input name="mobile" type="hidden" value="' + mobile + '"/>';
+                    }
+                    var qq = that.qq_number;
+                    if(qq) {
+                      html += '<input name="qq_number" type="hidden" value="' + qq + '"/>';
+                    }
+                    var qqname = that.qq_name;
+                    if(qqname) {
+                      html += '<input name="qq_name" type="hidden" value="' + qqname + '"/>';
+                    }
+                    var adminname = that.deal_phone_number;
+                     if(adminname) {
+                       html += '<input name="audit_mobile" type="hidden" value="' + adminname + '"/>';
+                     }
+                     var state = that.select;
+                    if(state) {
+                      html += '<input name="audit_state" type="hidden" value="' + state + '"/>';
+                    }
+                    html += '</form>';
+                    var iframe = document.getElementById('myIFrame');
+                    iframe.contentWindow.document.open();
+                    iframe.contentWindow.document.write(html);
+                    iframe.contentWindow.document.close();
+                    document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+                },
+                //同意
+                agree: function (row) {
+                    var that = this;
+                    console.log('同意该条数据的id', row.id)
+                    that.dataId = row.id;
+                    that.agreeBox = true;
+                },
+                agree_send: function () {
+                    var that = this;
+                    console.log(that.form.level)
+                    if(!that.form.level){
+                        that.$notify({
+                            title:'提示',
+                            message:'请选择渠道等级'
+                        })
+                        return false;
+                    }
+                    that.$alert('是否同意该条数据', '提示', {
+                        confirmButtonText: '确定',
+                        callback: function (action) {
+                            if (action == 'confirm') {
+                                $.ajax({
+                                    url: "{%url 'admin_apply' %}",
+                                    dataType: "json",
+                                    async: false,
+                                    type: "POST",
+                                    data: {
+                                        'csrfmiddlewaretoken': that.csrf_token,
+                                        'id': that.dataId,
+                                        'level': that.form.level,
+                                        'type': 1,
+                                    },
+                                    success: function (ret) {
+                                        if (ret.code == 0) {
+                                            that.$notify({
+                                                title: '提示',
+                                                message: '审核完成，通过'
+                                            })
+                                            that.agreeBox = false;
+                                            that.getDataList();
+                                        } else {
+                                            console.log(ret.code)
+                                        }
+                                    },
+                                    error: function () {
+                                        that.$notify({
+                                            title: '提示',
+                                            message: "请检查网路连接"
+                                        })
+                                    }
+                                });
+                            }
+                        }
+                    })
+                },
+                //拒绝
+                refuse: function (row) {
+                    var that = this;
+                    console.log('拒绝该条数据的id', row.id)
+                    that.dialogVisible = true;
+                    that.dataId = row.id;
+                },
+                refuse_send: function () {
+                    var that = this;
+                    if(!that.reason){
+                        that.$notify({
+                            title:'提示',
+                            message:'请输入拒绝原因'
+                        })
+                        return false;
+                    }
+                    that.$alert('是否拒绝该条数据', '提示', {
+                        confirmButtonText: '确定',
+                        callback: function (action) {
+                            if (action == 'confirm') {
+                                $.ajax({
+                                    url: "{%url 'admin_apply' %}",
+                                    dataType: "json",
+                                    async: false,
+                                    type: "POST",
+                                    data: {
+                                        'csrfmiddlewaretoken': that.csrf_token,
+                                        'id': that.dataId,
+                                        'reason':that.reason,
+                                        'type': 2,
+                                    },
+                                    success: function (ret) {
+                                        if (ret.code == 0) {
+                                            that.$notify({
+                                                title: '提示',
+                                                message: '审核完成，拒绝'
+                                            })
+                                            that.agreeBox = false;
+                                            that.getDataList();
+                                        } else {
+                                            console.log(ret.code)
+                                        }
+                                    },
+                                    error: function () {
+                                        that.$notify({
+                                            title: '提示',
+                                            message: "请检查网路连接"
+                                        })
+                                    }
+                                });
+                            }
+                        }
+                    })
+                }
+            },
+            computed: {
+                searchVal: function () {
+                    var that = this;
+                    return '&submit_time_0=' + (that.s_time0?that.s_time0:'') + '&submit_time_1=' + (that.e_time0?that.e_time0:'') + '&audit_time_0=' + (that.s_time1?that.s_time1:'') + 
+                    '&audit_time_1=' + (that.e_time1?that.e_time1:'') + '&mobile=' + that.phone_number + '&qq_number=' + that.qq_number + '&qq_name=' + that.qq_name + '&audit_mobile=' + that.deal_phone_number + '&audit_state=' + that.select;
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

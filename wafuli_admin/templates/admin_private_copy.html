@@ -1,0 +1,332 @@
+{% extends "base.html" %} {%load staticfiles%} {% block js %}
+<style>
+    .btn-box {
+        margin-top: 20px;
+        overflow: hidden;
+    }
+    .Submit-in {
+        width: 500px;
+        padding: 0;
+        float: right;
+    }
+    .leading-in {
+        float: left;
+    }
+    .unhandle-box {
+        margin-top: 50px;
+    }
+    .unhandle {
+        display: inline-block;
+        padding: 4px 10px;
+        margin-bottom: 4px;
+        color: #fff;
+        background-color: #91c11d;
+        border-radius: 4px;
+    }
+</style>
+<script type="text/javascript" src="{%static 'js/ajaxfileupload.js'%}"></script>
+<script type="text/javascript">
+    $.ajaxSetup({
+        data: {
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+    });
+
+    var data = '<table width="100%"><tr><th>QQ</th><th>项目名称</th>' +
+        '<th>投资时间</th><th>投资手机号</th><th>投资金额</th><th>投资标期</th><th>提交时间</th><th>返现金额</th><th>结算金额</th>' +
+        '<th>备注</th></tr>[results]<tr><td>{qq_number}</td><td>{project_title}</td>' +
+        '<td>{invest_date}</td><td>{invest_mobile}</td><td>{invest_amount}</td><td>{invest_term}</td><td>{submit_time}</td>' +
+        '</td><td>{return_amount}</td><td>{settle_amount}</td><td>{remark}</td></tr>[/results]</table>';
+
+    var url = "/restapi/investlogs/" + "?page={page}&size={pageSize}&is_official=false";
+
+    function pass(id) {
+        $(".BackNow").css("display", "block");
+        $("input#ret_event_id").val(id);
+    }
+
+    function refuse(id) {
+        $(".Audit").css("display", "block");
+        $("input#refuse_event_id").val(id);
+    }
+    $(document).ready(function() {
+        $("li.home5").toggleClass("on");
+        $(".Tin-table tr:even").css("background-color", "#fcfcfc");
+        $("#pagedata").ajaxPage({
+            url: url,
+            pageId: $("#page"),
+            pageSize: 10,
+            run: true,
+            content: data,
+        });
+        $(".none-x").click(function() {
+            $(this).parent().parent().css("display", "none"); //<!--隐藏-->
+        })
+        $('.Finnow input[type="submit"]').click(function() {
+            id = $("input#ret_event_id").val();
+            cash = $("input#add_cash").val();
+            score = $("input#add_score").val();
+            if(!id || !cash || !score) {
+                return;
+            }
+            $.ajax({
+                url: "/restapi/projects/",
+                dataType: "json",
+                type: "POST", 
+                async: false,
+                data: {
+                    'id': id,
+                    'cash': cash,
+                    'score': score,
+                    'type': 1,
+                },
+                success: function(ret) {
+                    if(ret.code == 0) {
+                        $("#item_" + id).html("审核完成，通过");
+                    } else if(ret.code == -1) {
+                        alert("该页面已过期，请重新登录！");
+                        window.location.href = ret.url;
+                    } else {
+                        alert(ret.res_msg);
+                    }
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
+            $(".BackNow").css("display", "none");
+        });
+        $('.Audit-in input[type="submit"]').click(function() {
+            id = $("input#refuse_event_id").val();
+            reason = $("#refuse_reason").val();
+            if(!id || !reason) {
+                return;
+            }
+            $.ajax({
+                url: "/restapi/projects/",
+                dataType: "json",
+                type: "POST", 
+                async: false,
+                data: {
+                    'id': id,
+                    'reason': reason,
+                    'type': 2,
+                },
+                success: function(ret) {
+                    if(ret.code == 0) {
+                        $("#item_" + id).html("审核完成，拒绝");
+                    } else if(ret.code == -1) {
+                        alert("该页面已过期，请重新登录！");
+                        window.location.href = ret.url;
+                    } else {
+                        alert(ret.res_msg);
+                    }
+                },
+                error: function() {
+                    alert("请检查网络连接");
+                }
+            });
+            $(".Audit").css("display", "none");
+        });
+        $("#search").click(function() {
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();
+            var newurl = url;
+            if(startTime && endTime) {
+                newurl += "&investtime_0=" + startTime;
+                newurl += "&investtime_1=" + endTime;
+            }
+            var startTime2 = $("#startTime2").val();
+            var endTime2 = $("#endTime2").val();
+            if(startTime2 && endTime2) {
+                newurl += "&audittime_0=" + startTime2;
+                newurl += "&audittime_1=" + endTime2;
+            }
+            var qq = $("#qq").val();
+            var mobile = $("#mobile").val();
+            var mobile_sub = $("#mobile_sub").val();
+
+            if(qq) {
+                newurl += "&qq_number=" + qq;
+            }
+            if(mobile) {
+                newurl += "&user_mobile=" + mobile;
+            }
+            if(mobile_sub) {
+                newurl += "&invest_mobile=" + mobile_sub;
+            }
+            var projectname = $("#projectname").val();
+            if(projectname) {
+                newurl += "&project_title_contains=" + projectname;
+            }
+            var level = $("#level").val();
+            if(level) {
+                newurl += "&user_level=" + level;
+            }
+            var newdata = data;
+            $("#page").empty();
+            $("#pagedata").ajaxPage({
+                url: newurl,
+                pageId: $("#page"),
+                pageSize: 10,
+                run: true,
+                content: newdata,
+            });
+        });
+        $("#export").click(function() {
+            var html = '<form action="' + "{% url 'admin_export_investlog' %}" + '" method="get" target="_self" id="postData_form">';
+            
+            html += '<input name="is_official" type="hidden" value="false"/>';
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();
+            if(startTime && endTime) {
+                html += '<input name="investtime_0" type="hidden" value="' + startTime + '"/>';
+                html += '<input name="investtime_1" type="hidden" value="' + endTime + '"/>';
+            }
+            var startTime2 = $("#startTime2").val();
+            var endTime2 = $("#endTime2").val();
+            if(startTime2 && endTime2) {
+                html += '<input name="audittime_0" type="hidden" value="' + startTime2 + '"/>';
+                html += '<input name="audittime_1" type="hidden" value="' + endTime2 + '"/>';
+            }
+            var qq = $("#qq").val();
+            var mobile = $("#mobile").val();
+            if(qq) {
+                html += '<input name="qq_number" type="hidden" value="' + qq + '"/>';
+            }
+            if(mobile) {
+                html += '<input name="user_mobile" type="hidden" value="' + mobile + '"/>';
+            }
+            var projectname = $("#projectname").val();
+            if(projectname) {
+                html += '<input name="project_title_contains" type="hidden" value="' + projectname + '"/>';
+            }
+            var level = $("#level").val();
+            if(level) {
+                html += '<input name="user_level" type="hidden" value="' + level + '"/>';
+            }
+            html += '</form>';
+            var iframe = document.getElementById('myIFrame');
+            iframe.contentWindow.document.open();
+            iframe.contentWindow.document.write(html);
+            iframe.contentWindow.document.close();
+            document.getElementById('myIFrame').contentWindow.document.getElementById('postData_form').submit();
+        });
+        
+
+    });
+</script>
+{% endblock js %} {% block right %}
+<div class="Criteria">
+    <span>搜索条件</span>
+    <div class="Crite-box">
+        <form>
+            <table width="100%">
+                <tr>
+                    <td>
+                        <i>申请开始时间：</i>
+                        <input id="startTime" type="datetime-local" />
+                    </td>
+                    <td>
+                        <i>申请结束时间：</i>
+                        <input id="endTime" type="datetime-local" />
+                    </td>
+                    <td>
+                        <i>操作开始时间：</i>
+                        <input id="startTime2" type="datetime-local" />
+                    </td>
+                    <td>
+                        <i>操作结束时间：</i>
+                        <input id="endTime2" type="datetime-local" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i>QQ：</i>
+                        <input id="qq" type="text" />
+                    </td>
+                    <td>
+                        <i style="letter-spacing:2px;">用户手机号：</i>
+                        <input id="mobile" type="text" />
+                    </td>
+                    <td>
+                        <i style="letter-spacing:4.8px;">渠道等级</i>
+                        <select name="selectAge" id="level">
+                            <option value="">--</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                        </select>
+                    </td>
+                    <td>
+                        <i style="letter-spacing:4.8px;">提交手机号</i>
+                        <input id="mobile_sub" type="text" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <i style="letter-spacing:4.8px;">项目名称：</i>
+                        <input id="projectname" type="text" />
+                    </td>
+                </tr>
+            </table>
+
+            <div class="btn-box">
+                    <div class="Submit-in">
+                        <input id="search" type="button" value="搜索" />
+                        <input id="export" type="button" value="导出" />
+                    </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+<div>
+
+    <div style="clear: both;"></div>
+</div>
+<div class="Tin-table">
+    <div id="pagedata">
+    </div>
+    <div class="Page-in-admin">
+        <div class="page" id="page">
+        </div>
+    </div>
+</div>
+{%endblock%} {% block modal %}
+<div class="BackNow">
+    <div class="w570-box">
+        <h3>返现操作</h3>
+        <button class="none-x"></button>
+        <form class="Finnow">
+            <input id="ret_event_id" type="hidden" />
+            <span>添加现金：</span>
+            <input id="add_cash" type="text" />
+            <span>添加积分：</span>
+            <input id="add_score" type="text" />
+            <div class="Finnow-Sub">
+                <input type="submit" value="确认" onclick="return false;" />
+                <input type="button" value="取消" class="none-x-s" />
+            </div>
+        </form>
+    </div>
+</div>
+<!--审核拒绝-->
+<div class="Audit">
+    <div class="w570-box">
+        <h3>审核拒绝</h3>
+        <button class="none-x"></button>
+        <form class="Audit-in">
+            <span>填写拒绝原因：</span>
+            <input id="refuse_event_id" type="hidden" />
+            <textarea id="refuse_reason"></textarea>
+            <div class="Finnow-Sub">
+                <input type="submit" value="确认" class="Deny-box" onclick="return false;" />
+                <input type="button" value="取消" class="none-x-s" />
+            </div>
+        </form>
+    </div>
+</div>
+<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
+<!--end-->
+{% endblock modal %}

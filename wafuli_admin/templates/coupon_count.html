@@ -1,71 +1,179 @@
-{% extends "base.html" %}
-{% block js %}
-<script type="text/javascript"> 
-var data = '<table width="100%"><tr><th>日期</th><th>红包发放个数</th><th>红包发放用户数</th><th>红包发放总额</th>'+
-	'<th>激活红包人数</th><th>激活红包数量</th><th>激活红包总额</th>'+
-	'[results]<tr><td>{date}</td><td>{coupon_total}</td><td>{coupon_user_total}</td>'+
-	'<td>{coupon_award}</td><td>{coupon_user_total_unlock}</td><td>{coupon_total_unlock}</td><td>{coupon_award_unlock}</td>'+
-	'</tr>[/results]</table>';
-var url = "/restapi/daystatis/" + "?page={page}&pageSize={pageSize}";
-$(document).ready(function(){
-	$(".ListTable tr:even").css("background-color","#fcfcfc");
-	$("li.home21").toggleClass("on");
-	$("#pagedata").ajaxPage({
-	    url:url, 
-	    pageId:$("#page"),
-	    pageSize:10,
-	    run:true,
-	    content:data,
-	});
-});
-</script>
-{% endblock js %}
-{% block right %}
-<div class="Need-T">
-                       <span>红包统计</span>
-                        </div>
-                        <div class="Table-in">
-                        	<table width="100%">
-                            	<tr>
-                                	<th>总发放红包个数</th>
-                                	<th>总发放红包用户数</th>
-                                	<th>总发放红包金额</th>
-                                	<th>激活未领取红包人数</th>
-                                	<th>激活未领取红包数量</th>
-                                	<th>激活未领取红包金额</th>
-                                	<th>领取红包人数</th>
-                                	<th>领取红包数量</th>
-                                	<th>领取红包金额</th>
-                                </tr>
-                                <tr>
-                                	<td>{{total.coupon_total}}</td>
-                                	<td>{{total.coupon_user_total}}</td>
-                                	<td>{{total.coupon_award}}</td>
-                                	<td>{{total.coupon_user_total_unlock}}</td>
-                                	<td>{{total.coupon_total_unlock}}</td>
-                                	<td>{{total.coupon_award_unlock}}</td>
-                                	<td>{{total.coupon_user_total_obtain}}</td>
-                                	<td>{{total.coupon_total_obtain}}</td>
-                                	<td>{{total.coupon_award_obtain}}</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="Dateover">
-                        	<span>数据总览</span>
-                            <div class="Date-box">
-                            	<div class="Date-Form">
-                                </div>
-                                <p>此表格包括新注册用户红包及老用户红包</p>
-                                <div class="ListTable">
-									<div id="pagedata">
-									</div>
-                                </div>
-                                 
-                            </div>
-                            
-                        </div>
-                        <div class="Page-in-admin">
-				                    	<div class="page"  id="page">
-				                        </div>
-				            </div>
-{% endblock %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>首页</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+</head>
+<style>
+  body {
+    opacity: 0;
+  }
+	.header_row {
+		padding: 10px 10px;
+		background: #e9f8ff;
+		text-align: center;
+		color: #8eaa84;
+	}
+
+	.th_row {
+		padding: 10px 10px;
+		border: 1px solid RGB(235, 238, 245);
+		text-align: center;
+		color: #da1c1c;
+		font-size: 14px;
+	}
+
+	.header_item {
+		margin-top: 0;
+	}
+
+	.el-table__header {
+		background: #e9f8ff;
+	}
+</style>
+
+<body>
+	<div id="app">
+		<el-row :gutter="20" style="width: 100%;">
+			<el-col :span="3">
+				{% include "leftNav.html" %}
+			</el-col>
+			<el-col :span="21">
+				<div class="container">
+					<el-header class="header_item">红包统计</el-header>
+					<el-row class="header_row">
+						<el-col :span="4">
+							<div class="grid-content bg-purple">总发放红包个数</div>
+						</el-col>
+						<el-col :span="4">
+							<div class="grid-content bg-purple-light">总发放红包用户数</div>
+						</el-col>
+						<el-col :span="4">
+							<div class="grid-content bg-purple">总发放红包金额</div>
+						</el-col>
+						<el-col :span="4">
+							<div class="grid-content bg-purple-light">总激活红包人数</div>
+						</el-col>
+						<el-col :span="4">
+							<div class="grid-content bg-purple">总激活红包数量</div>
+						</el-col>
+						<el-col :span="4">
+							<div class="grid-content bg-purple-light">总激活红包金额</div>
+						</el-col>
+					</el-row>
+					<el-row class="th_row">
+						<el-col :span="4">
+							<div class="grid-content bg-purple">{{total.coupon_total}}</div>
+						</el-col>
+						<el-col :span="4">
+							<div class="grid-content bg-purple-light">{{total.coupon_user_total}}</div>
+						</el-col>
+						<el-col :span="4">
+							<div class="grid-content bg-purple">{{total.coupon_award}}</div>
+						</el-col>
+						<el-col :span="4">
+							<div class="grid-content bg-purple-light">{{total.coupon_user_total_unlock}}</div>
+						</el-col>
+						<el-col :span="4">
+							<div class="grid-content bg-purple">{{total.coupon_total_unlock}}</div>
+						</el-col>
+						<el-col :span="4">
+							<div class="grid-content bg-purple-light">{{total.coupon_award_unlock}}</div>
+						</el-col>
+					</el-row>
+
+					<el-header>数据总览</el-header>
+					<el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%;"
+					 border>
+						<el-table-column label="日期">
+							<template slot-scope="scope">${ scope.row.date }</template>
+						</el-table-column>
+						<el-table-column label="红包发放个数">
+							<template slot-scope="scope">${ scope.row.coupon_total }</template>
+						</el-table-column>
+						<el-table-column label="红包发放用户数">
+							<template slot-scope="scope">${ scope.row.coupon_user_total }</template>
+						</el-table-column>
+						<el-table-column label="红包发放总额">
+							<template slot-scope="scope">${ scope.row.coupon_award }</template>
+						</el-table-column>
+						<el-table-column label="激活红包人数">
+							<template slot-scope="scope">${ scope.row.coupon_user_total_unlock }</template>
+						</el-table-column>
+						<el-table-column label="激活红包数量">
+							<template slot-scope="scope">${ scope.row.coupon_total_unlock }</template>
+						</el-table-column>
+						<el-table-column label="激活红包总额">
+							<template slot-scope="scope">${ scope.row.ret_amount }</template>
+						</el-table-column>
+					</el-table>
+					<div class="pagination-box">
+						<el-pagination background @current-change="handleCurrentChange" :page-size="pageSize" :current-page="currentPage" layout="total, prev, pager, next, jumper"
+						 :total="planTableData.recordCount">
+						</el-pagination>
+					</div>
+				</div>
+			</el-col>
+		</el-row>
+
+	</div>
+
+	<script type="text/javascript">
+		var app = new Vue({
+			el: '#app',
+			delimiters: ['${', '}'],
+			data: {
+				activeNav: '6-1',
+				rowStyle: {
+					'text-align': 'center'
+				},
+				planTableData: {},
+				page: 1,
+				pageSize: 10,
+				currentPage: 1,
+			},
+			created: function () {
+				this.getDataList(1, 10);
+			},
+			mounted: function() {
+        document.body.style.opacity = 1;
+      },
+			methods: {
+				handleCurrentChange: function (val) {
+					app.currentPage = val;
+					app.getDataList(app.currentPage, app.pageSize);
+				},
+				getDataList: function (page, pageSize) {
+					var that = this;
+					$.ajax({
+						type: "get",
+						url: '/restapi/daystatis/?page=' + that.currentPage + '&pageSize=' + pageSize,
+						async: true,
+						success: function (res) {
+							console.log('---', res);
+							if (res.code == 0) {
+								app.planTableData = res;
+							} else {
+								that.$notify.error({
+									title: '错误',
+									message: res.detail
+								});
+							}
+						}
+					});
+				}
+			}
+		})
+	</script>
+</body>
+
+</html>

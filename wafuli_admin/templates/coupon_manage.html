@@ -1,120 +1,195 @@
-{% extends "base.html" %} {% load staticfiles %} {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/admin_margin_query.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" />{% endblock css %} {% block js %}
-<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
 
-<script type="text/javascript">
-    $(function () {
-        $("li.home22").toggleClass("on");
-        //数据
-        var data = '<table width="100%"><tr><th>发放日期</th><th>红包方案</th><th>QQ昵称</th><th>手机号</th><th>红包金额</th><th>有效期</th><th>红包状态</th><th>是否领取</th>' +
-            '[results]<tr><td>{create_date}</td><td>{contract_name}</td><td>{qq_name}</td><td>{mobile}</td><td>{award}</td>' +
-            '<td>{expire}</td><td>{state_des}</td><td class="is_get" data-state="{state}">否</td></tr>[/results]</table>';
-
-        //回调函数
-        function pagecallback() {
-            console.log("回调函数");
-            $('.is_get').each(function(){
-                if ($(this).data('state') == 2) {
-                	$(this).text('是');
-                }
-            })
-            //时间分割展示
-//          $('.time').each(function () {
-//              var time = $(this).text().split('T');//分割字符串 获取年月日
-//              console.log(time);
-//              var time_1 = time[1].split('.');//分割字符串 获取时分秒
-//              $(this).text(`${time[0]} ${time_1[0]}`); //字符串拼接展示
-//          });
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <style>
+        body {
+          opacity: 0;
         }
-        $("#pagedata").ajaxPage({
-            url: '/coupon/coupons/?page={page}&pageSize={pageSize}',
-            pageId: $("#page"),
-            pageSize: 10,
-            run: true,
-            content: data,
-            complete: pagecallback,
-        });
-        //搜过功能
-        $('.search').click(function () {
-            var sTime = $('.startTime').val();
-            var eTime = $('.endTime').val();
-            var phone = $('.phone').val();
-            var coupon_plan = $('.coupon_plan').val();
-            var state = $('.state').val();
-            var newUrl = '/coupon/coupons/?page={page}&pageSize={pageSize}';
-            if (sTime) {
-                newUrl += '&create_0=' + sTime;
-            }
-            if (eTime) {
-                newUrl += '&create_1=' + eTime;
-            }
-            if (phone) {
-                newUrl += '&user_mobile=' + phone;
-            }
-            if (coupon_plan) {
-                newUrl += '&contract_contains=' + coupon_plan;
-            }
-            if (state) {
-                newUrl += '&state=' + state;
-            }
-            console.log(newUrl);
+        .grid-content {
+            padding: 25px 0;
+        }
 
-            $("#pagedata").ajaxPage({
-                url: newUrl,
-                pageId: $("#page"),
-                pageSize: 6,
-                run: true,
-                content: data,
-                complete: pagecallback,
-            });
-        });
-        
-    });
-</script> {% endblock js %} {% block right %}
-<div class="wrapper">
-    <div class="searchTop">
-        <span>搜索条件</span>
+        .el-input {
+            width: 200px;
+        }
+        .desc_txt{
+            color: #909399;
+        }
+        .el-header{
+            margin-top: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <el-row :gutter="20" style="width: 100%;">
+            <el-col :span="3">
+                {% include "leftNav.html" %}
+            </el-col>
+            <el-col :span="21">
+                <div class="container">
+                    <el-row>
+                        <el-col :span="8">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">开始时间：</span>
+                                <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="s_time" type="date" placeholder="选择日期">
+                                </el-date-picker>
+                            </div>
+                        </el-col>
+                        <el-col :span="8">
+                            <div class="grid-content bg-purple-light">
+                                <span class="desc_txt">结束时间：</span>
+                                <el-date-picker format="yyyy-MM-dd" value-format="yyyy-MM-dd" v-model="e_time" type="date" placeholder="选择日期">
+                                </el-date-picker>
+                            </div>
+                        </el-col>
+                        <el-col :span="8">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">手机号：</span>
+                                <el-input v-model="mobile" placeholder="请输入内容" clearable></el-input>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <div class="grid-content bg-purple">
+                                <span class="desc_txt">红包方案：</span>
+                                <el-input v-model="hongbao" placeholder="请输入内容" clearable></el-input>
+                            </div>
+                        </el-col>
+                        <el-col :span="8">
+                            <div class="grid-content bg-purple-light">
+                                <span class="desc_txt">红包状态：</span>
+                                <el-select v-model="select" slot="prepend" placeholder="请选择">
+                                    <el-option label="全部" value=" "></el-option>
+                                    <el-option label="未解锁" value="0"></el-option>
+                                    <el-option label="已解锁" value="1"></el-option>
+                                    <el-option label="已领取" value="2"></el-option>
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :span="8">
+                            <div class="grid-content bg-purple">
+                                <el-button type="primary" @click='searchData'>搜索</el-button>
+                            </div>
+                        </el-col>
+                    </el-row>
+                    <el-header>数据总览</el-header>
+                    <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%"
+                        border>
+                        <el-table-column label="发放日期">
+                            <template slot-scope="scope">${ scope.row.create_date }</template>
+                        </el-table-column>
+                        <el-table-column label="红包方案">
+                            <template slot-scope="scope">${ scope.row.contract_name }</template>
+                        </el-table-column>
+                        <el-table-column label="QQ昵称">
+                            <template slot-scope="scope">${ scope.row.qq_name }</template>
+                        </el-table-column>
+                        <el-table-column label="手机号">
+                            <template slot-scope="scope">${ scope.row.mobile }</template>
+                        </el-table-column>
+                        <el-table-column label="红包金额">
+                            <template slot-scope="scope">${ scope.row.award }</template>
+                        </el-table-column>
+                        <el-table-column label="有效期">
+                            <template slot-scope="scope">${ scope.row.expire }</template>
+                        </el-table-column>
+                        <el-table-column label="是否领取">
+                            <template slot-scope="scope">
+                                <span v-if='scope.row.state == 0'>
+                                    否
+                                </span>
+                                <span v-else>
+                                    是
+                                </span>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <div class="pagination-box">
+                        <el-pagination background @current-change="handleCurrentChange" :page-size="pageSize" :current-page="currentPage" layout="total, prev, pager, next, jumper"
+                            :total="planTableData.recordCount">
+                        </el-pagination>
+                    </div>
+                </div>
+            </el-col>
+        </el-row>
+
     </div>
-    <div class="tab">
-        <table>
-            <tr>
-                <td>开始时间：
-                    <input type="datetime-local" class="startTime">
-                </td>
-                <td>结束时间：
-                    <input type="datetime-local" class="endTime">
-                </td>
-                <td>用户手机号：
-                    <input type="text" class="phone">
-                </td>
-            </tr>
-            <tr>
-                <td>红包方案：
-                    <input type="text" class="coupon_plan">
-                </td>
-                <td>红包状态：
-                      <select name="selectAge" class="state">
-                          <option value="">全部</option>
-                          <option value="0">未解锁</option>
-                          <option value="1">已解锁</option>
-                          <option value="2">已领取</option>
-                      </select>
-                </td>
-            </tr>
-        </table>
-        <div class="operateBox">
-            <input type="button" value="搜索" class="search">
-        </div>
-    </div>
-    <div class="Tin-table">
-        <div id="pagedata">
-        </div>
-        <div class="Page-in-admin">
-            <div class="page" id="page">
-            </div>
-        </div>
-    </div>
-</div>
-<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
-{% endblock %}
+
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#app',
+            delimiters: ['${', '}'],
+            data: {
+                s_time:'',
+                e_time:'',
+                mobile:'',
+                hongbao:'',
+                select: '',
+                searchValue: '',
+                activeNav: '6-2',
+                rowStyle: {
+                    'text-align': 'center'
+                },
+                planTableData: {},
+                page: 1,
+                pageSize: 10,
+                currentPage: 1,
+            },
+            created: function () {
+                var that = this;
+                that.getDataList(1, 10);
+            },
+            mounted: function() {
+              document.body.style.opacity = 1;
+            },
+            methods: {
+                handleCurrentChange: function (val) {
+                    app.currentPage = val;
+                    app.getDataList(app.currentPage, app.pageSize);
+                },
+                getDataList: function (page, pageSize) {
+                    var that = this;
+                    $.ajax({
+                        type: "get",
+                        url: '/coupon/coupons/?page=' + that.currentPage + '&pageSize=' + that.pageSize + '&create_0=' + (that.s_time?that.s_time:'') + '&create_1='+ (that.e_time?that.e_time:'') +
+                        '&user_mobile='+ that.mobile +'&contract_contains='+ that.hongbao +'&state='+that.select,
+                        async: true,
+                        success: function (res) {
+                            console.log(res);
+                            if (res.code == 0) {
+                                app.planTableData = res;
+                            } else {
+                                that.$notify.error({
+                                    title: '错误',
+                                    message: res.detail
+                                });
+                            }
+                        }
+                    });
+                },
+                searchData: function () {
+                    var that = this;
+					console.log(that.s_time)
+                    app.currentPage = 1;
+                    app.getDataList();
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

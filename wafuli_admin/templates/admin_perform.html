@@ -1,61 +1,149 @@
-{% extends "base.html" %} {% load staticfiles %} {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/admin_perform.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/datePicker.css' %}" /> {% endblock css %} {% block js %}
-<script type="text/javascript" src="{% static 'js/jquery.date_input.pack.js' %}"></script>
-<script type="text/javascript"> 
-    //添加token
-    $.ajaxSetup({
-        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
-    });
-    $(function () {
-        $(".home25").toggleClass("on");
-        var data = '<table width="100%"><tr><th>开始时间</th><th>结束时间</th><th>员工ID(邀请人ID)</th><th>员工姓名</th><th>邀请人结算金额</th>' +
-            '[results]<tr><td>{startdate}</td><td>{enddate}</td><td>{username}</td><td>{inviter_code}</td><td>{amount}</td>' +
-            '</tr>[/results]</table>';
-        var dataUrl = '/restapi/perform/';
-        function pagecallback() {
-            console.log('this is a 回调函数');
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <style>
+    body {
+          opacity: 0;
         }
-        $("#pagedata").ajaxPage({
-            url: '/restapi/perform/',
-            pageId: $("#page"),
-            pageSize: 6,
-            run: true,
-            content: data,
-            complete: pagecallback,
-        });
-        $('.s_btn').click(function(){
-            var value = $('.s_ipt').val();
-            if(!value){
-                alert('搜索框不能为空');
-            }
-            $("#pagedata").ajaxPage({
-                url: '/restapi/perform/?search='+value,
-                pageId: $("#page"),
-                pageSize: 6,
-                run: true,
-                content: data,
-                complete: pagecallback,
-            });
-        })  
-    });    
-</script> {% endblock js %} {% block right %}
-<div class="wrapper">
-    <div class="top">
-        <span>搜索条件</span>
-    </div>
-    <div class="searchBox">
-        <input type="text" class="s_ipt" placeholder="你要搜索点什么..." />
-        <input type="button" class="s_btn" value="搜索">
-    </div>
-    <div class="Tin-table">
-        <div id="pagedata">
+    .grid-content{
+      padding: 25px 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <el-row :gutter="20" style="width: 100%;">
+      <el-col :span="3">
+        {% include "leftNav.html" %}
+      </el-col>
+      <el-col :span="21">
+        <div class="container">
+            <el-row :gutter="20">
+              <el-col :span="4">
+                <div class="grid-content bg-purple">
+                    <el-input v-model="searchValue" placeholder="请输入内容"></el-input>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="grid-content bg-purple">
+                    <el-button type="primary" @click="searchData">搜索</el-button>
+                </div>
+              </el-col>
+            </el-row>
+          <el-table
+            :header-cell-style="rowStyle"
+            :row-style="rowStyle"
+            ref="multipleTable"
+            :data="planTableData.results"
+            style="width: 100%"
+            border>
+            <el-table-column
+              label="开始时间">
+              <template slot-scope="scope">${ scope.row.startdate }</template>
+            </el-table-column>
+            <el-table-column
+              label="结束时间">
+              <template slot-scope="scope">${ scope.row.enddate }</template>
+            </el-table-column>
+            <el-table-column
+              label="员工ID（邀请人ID）">
+              <template slot-scope="scope">${ scope.row.username }</template>
+            </el-table-column>
+            <el-table-column
+              label="员工姓名">
+              <template slot-scope="scope">${ scope.row.inviter_code }</template>
+            </el-table-column>
+            <el-table-column
+              label="邀请人结算金额">
+              <template slot-scope="scope">${ scope.row.amount }</template>
+            </el-table-column>
+          </el-table>
+          <div class="pagination-box">
+            <el-pagination
+              background
+              @current-change="handleCurrentChange"
+              :page-size="pageSize"
+              :current-page="currentPage"
+              layout="total, prev, pager, next, jumper"
+              :total="planTableData.recordCount">
+            </el-pagination>
+          </div>
         </div>
-        <div class="Page-in-admin">
-            <div class="page" id="page">
-            </div>
-        </div>
-    </div>
-</div>
-<iframe id="myIFrame" scrolling="yes" style="display:none" frameborder=1></iframe>
-{% endblock %}
+      </el-col>
+    </el-row>
+
+  </div>
+	
+	<script type="text/javascript">
+		var app = new Vue({
+      el: '#app',
+      delimiters: ['${', '}'],
+      data: {
+        input:'',
+        searchValue:'',
+        activeNav: '1-4',
+        hongbaoPlan:[],
+        ruleForm: {
+          hongbao_plan: [],
+          send_user: '2',
+          userlist: ''
+        },
+        dialogPlanVisible: false,
+        rowStyle: {
+          'text-align': 'center'
+        },
+        planTableData:{},
+        page: 1,
+        pageSize: 10,
+        currentPage: 1,
+      },
+      created: function() {
+        var that = this;
+        this.getDataList(1,10);
+      },
+      mounted: function() {
+        document.body.style.opacity = 1;
+      },
+      methods: {
+        handleCurrentChange: function (val) {
+          app.currentPage = val;
+          app.getDataList(app.currentPage,app.pageSize);
+        },
+        getDataList: function(page, pageSize) {
+          var that = this;
+          $.ajax({
+              type: "get",
+              url: '/restapi/perform/?page=' + that.currentPage + '&pageSize=' + that.pageSize +'&search=' +that.searchValue,
+              async: true,
+              success: function(res) {
+                console.log(res);
+                if(res.code == 0) {
+                  app.planTableData = res;
+                } else {
+                  that.$notify.error({
+                    title: '错误',
+                    message: res.detail
+                  });
+                }
+              }
+          });
+        },
+        searchData:function(){
+          app.currentPage = 1;
+          app.getDataList();
+        }
+      }
+    })
+	</script>
+</body>
+</html>

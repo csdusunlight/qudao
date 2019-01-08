@@ -1028,7 +1028,7 @@ def admin_withdraw(request):
 @has_post_permission('004')
 def admin_withdraw_autoaudit(request):
     admin_user = request.user
-    with cache.lock("autowithdraw_lock", blocking_timeout=60):
+    with cache.lock("autowithdraw_lock", timeout=60):
         if request.method == "GET":
             ret = {}
             withlist = WithdrawLog.objects.filter(audit_state='1', amount__lt=50000).all()
@@ -1047,6 +1047,7 @@ def admin_withdraw_autoaudit(request):
             ret['sum'] = dic['sum'] or 0
             return JsonResponse(ret)
         if request.method == "POST":
+            # time.sleep(10)
             batch_list = []
             init_withlist = []
             withlist = WithdrawLog.objects.filter(audit_state='1', amount__lt=50000).all()

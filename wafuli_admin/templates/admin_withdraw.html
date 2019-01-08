@@ -219,6 +219,9 @@
             <el-table-column label="申请时间">
               <template slot-scope="scope">${ scope.row.submit_time.split("T")[0] }</template>
             </el-table-column>
+            <el-table-column label="金额">
+              <template slot-scope="scope">${ scope.row.amount }</template>
+            </el-table-column>
             <el-table-column label="处理人">
               <template slot-scope="scope">${ scope.row.admin_mobile }</template>
             </el-table-column>
@@ -485,6 +488,7 @@
                     if (action == 'confirm') {
                       $.ajax({
                         url: '/Admin/withdraw_autoaudit/',
+                        type: "POST",
                         dataType: 'json',
                         data: {
                           csrfmiddlewaretoken: that.csrf_token,

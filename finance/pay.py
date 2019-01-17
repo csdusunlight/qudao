@@ -68,9 +68,7 @@ def batch_transfer_to_zhifubao(account_list, payer='wafuli', payer_name=u"福利
             amount=amount,
             remark=remark
         )
-        
-        print 'start'
-        print result
+
         msg = result['msg']
         if msg == 'Success':
             suc_num += 1

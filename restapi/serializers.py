@@ -8,7 +8,7 @@ from rest_framework import serializers
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
     Announcement, WithdrawLog, Mark, BookLog
 from account.models import MyUser, ApplyLog, Message,ApplyLogForChannel,ApplyLogForFangdan
-from wafuli_admin.models import DayStatis
+from wafuli_admin.models import DayStatis, Message_Log
 from wafuli.models import Company
 from statistic.models import UserDetailStatis, UserAverageStatis,\
     PerformanceStatistics
@@ -296,4 +296,9 @@ class PerformStatisSerializer(serializers.ModelSerializer):
     inviter_code = serializers.CharField(source='user.invite_code')
     class Meta:
         model = PerformanceStatistics
+        fields = '__all__'
+
+class MessageLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message_Log
         fields = '__all__'

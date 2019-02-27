@@ -6,14 +6,14 @@ Created on 2017年11月24日
 '''
 import datetime
 
-from wafuli_admin.models import Dict
+from wafuli_admin.models import Dict, Message_Log
 from weixin.settings import submit_investlog_notify_templateid,\
     book_invest_notify_templateid, withdraw_success_notify_templateid,\
     withdraw_apply_notify_templateid, withdraw_fail_notify_templateid,\
     common_remark
 from dragon.settings import APPID, FULIUNION_DOMAIN
 from weixin.models import WeiXinUser
-from account.varify import httpconn
+from account.varify import httpconn, sendmsg_bydhst
 import logging
 logger = logging.getLogger('wafuli')
 
@@ -156,3 +156,11 @@ def sendWeixinNotify(user_obj_list, type):
             kwarg.update(data=data, touser=openid)
             ret = httpconn(url, kwarg, 1)
             logger.info(ret)
+
+@shared_task
+def send_msgs(rtable):
+    for item in rtable:
+        mobile = item[0]
+        content = item[1]
+        sendmsg_bydhst(mobile, content)
+        log = Message_Log.objects.create(mobile, content)

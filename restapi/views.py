@@ -4,24 +4,26 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework import generics, permissions
 import django_filters
+from rest_framework.viewsets import ModelViewSet
+
 from public.Paginations import MyPageNumberPagination
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
     Announcement, WithdrawLog, Mark, Company, BookLog
 from public.permissions import CsrfExemptSessionAuthentication, IsAdmin
-from restapi.serializers import UserSerializer, InvestLogSerializer,\
-    TransListSerializer, NoticeSerializer, ProjectSerializer,\
-    SubscribeShipSerializer, AnnouncementSerializer, DayStatisSerializer,\
-    ApplyLogSerializer, WithdrawLogSerializer, UserDetailStatisSerializer,\
-    UserAverageStatisSerializer, MarkSerializer, CompanySerializer,\
-    BookLogSerializer, DocumentSerializer, MesssageSerializer,\
-    PerformStatisSerializer, ProjectSerializerForAdmin
+from restapi.serializers import UserSerializer, InvestLogSerializer, \
+    TransListSerializer, NoticeSerializer, ProjectSerializer, \
+    SubscribeShipSerializer, AnnouncementSerializer, DayStatisSerializer, \
+    ApplyLogSerializer, WithdrawLogSerializer, UserDetailStatisSerializer, \
+    UserAverageStatisSerializer, MarkSerializer, CompanySerializer, \
+    BookLogSerializer, DocumentSerializer, MesssageSerializer, \
+    PerformStatisSerializer, ProjectSerializerForAdmin, MessageLogSerializer
 from account.models import MyUser, ApplyLog, Message
 from rest_framework.filters import SearchFilter,OrderingFilter
 from public.permissions import IsOwnerOrStaff, IsSelfOrStaff
 from restapi.Filters import InvestLogFilter, SubscribeShipFilter, UserFilter,\
     ApplyLogFilter, TranslistFilter, WithdrawLogFilter, ProjectFilter
 from django.db.models import Q
-from wafuli_admin.models import DayStatis
+from wafuli_admin.models import DayStatis, Message_Log
 from statistic.models import UserDetailStatis, UserAverageStatis,\
     PerformanceStatistics
 from rest_framework.exceptions import ValidationError
@@ -386,3 +388,12 @@ class PerformStatisList(BaseViewMixin, generics.ListAPIView):
     pagination_class = MyPageNumberPagination
     filter_backends = (SearchFilter,)
     search_fields = ('user__username', )
+
+class MsgLogViewSet(ModelViewSet):
+    queryset = Message_Log.objects.all()
+    permission_classes = (IsAdmin,)
+    serializer_class = MessageLogSerializer
+    pagination_class = MyPageNumberPagination
+    filter_backends = (SearchFilter,)
+    search_fields = ('mobile','content' )
+    

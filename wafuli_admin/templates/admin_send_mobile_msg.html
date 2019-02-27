@@ -77,10 +77,17 @@
                     <el-input v-model="searchValue" placeholder="请输入内容"></el-input>
                 </div>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="4">
                 <div class="grid-content bg-purple">
                     <el-button type="primary" @click="searchData">搜索</el-button>
                 </div>
+              </el-col>
+              <el-col :span="6">
+                <el-upload style="margin-right: 20px;" class="avatar-uploader" action="/restapi/erlei_msgs/import_msg_excel/" :data="unloadData" name="file" accept=".xls"
+                    :show-file-list="false" :on-success="handleAvatarSuccess" :on-error="handleAvatarError" :before-upload="beforeAvatarUpload">
+                    <el-button size="small" type="primary">点击上传</el-button>
+                    <div slot="tip" class="el-upload__tip">&nbsp;只能上传xls文件</div>
+                </el-upload>
               </el-col>
             </el-row>
           <el-table
@@ -124,6 +131,10 @@
       delimiters: ['${', '}'],
       data: {
         activeNav: '1-5',
+        unloadData: {
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          test: 'jzy'
+        },
         msgTableData: [],
         searchValue:'',
         rowStyle: {
@@ -180,7 +191,7 @@
         searchData:function(){
           app.currentPage = 1;
           app.getDataList();
-        }
+        },
         submitForm: function(formName) {
           var that = this;
           this.$refs[formName].validate(function(valid) {
@@ -256,6 +267,35 @@
             title: '错误',
             message: '请检查网络连接'
           });
+        },
+         //上传文件
+        beforeAvatarUpload: function (file) {
+            console.log(file)
+            this.$message('正在上传...')
+        },
+        handleAvatarSuccess: function (res, file) {
+            var that = this;
+            console.log(res);
+            if (res.code == 0) {
+                that.$notify({
+                    title: '上传成功',
+                    message: '成功数量：' + res.num + '条',
+                    type: 'success'
+                });
+                that.getDataList();
+            } else {
+                that.$notify.error({
+                    title: '错误',
+                    message: res.msg
+                });
+            }
+        },
+        handleAvatarError: function (res, file) {
+            var that = this;
+            that.$notify.error({
+                title: '错误',
+                message: '上传失败'
+            });
         }
       }
     })

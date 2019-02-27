@@ -158,9 +158,10 @@ def sendWeixinNotify(user_obj_list, type):
             logger.info(ret)
 
 @shared_task
-def send_msgs(rtable):
+def send_msgs_erlei(rtable):
     for item in rtable:
         mobile = item[0]
         content = item[1]
+        mobile = str(int(float(mobile)))
         sendmsg_bydhst(mobile, content)
-        log = Message_Log.objects.create(mobile, content)
+        log = Message_Log.objects.create(mobile=mobile, content=content)

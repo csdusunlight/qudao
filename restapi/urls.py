@@ -1,6 +1,12 @@
 
 from django.conf.urls import url, include
+from rest_framework import routers
+
 from restapi import views
+
+router = routers.SimpleRouter()
+router.register(r'erlei_msgs', views.MsgLogViewSet)
+
 urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls',namespace='rest_framework')),
     url(r'^projects/$', views.ProjectList.as_view()),
@@ -54,5 +60,9 @@ urlpatterns = [
     url(r'^msgs/$', views.MessageList.as_view(), ),
     url(r'^perform/$', views.PerformStatisList.as_view(), ),
     url(r'^msgs/(?P<pk>[0-9]+)/$',views.MessageDetail.as_view(),kwargs={'partial':True}, name='sitemessagedetail'),
-    
+
+    url(r'^msgs/(?P<pk>[0-9]+)/$',views.MessageDetail.as_view(),kwargs={'partial':True}, name='sitemessagedetail'),
+
 ]
+
+urlpatterns += router.urls

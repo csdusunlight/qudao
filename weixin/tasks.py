@@ -162,6 +162,6 @@ def send_msgs_erlei(rtable):
     for item in rtable:
         mobile = item[0]
         content = item[1]
-        mobile = str(int(mobile))
+        mobile = str(int(float(mobile)))
         sendmsg_bydhst(mobile, content)
         log = Message_Log.objects.create(mobile=mobile, content=content)

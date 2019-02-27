@@ -163,4 +163,4 @@ def send_msgs_erlei(rtable):
         mobile = item[0]
         content = item[1]
         sendmsg_bydhst(mobile, content)
-        log = Message_Log.objects.create(mobile, content)
+        log = Message_Log.objects.create(mobile=mobile, content=content)

@@ -2,19 +2,19 @@
 <!DOCTYPE html>
 <html lang="zh">
 
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-	<title>首页</title>
-	<link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
-	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
-	<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-</head>
-<style>
-  body {
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>首页</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'wafuli_admin/css/AdminCommon.css' %}" />
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  </head>
+  <style>
+    body {
           opacity: 0;
         }
 	.header_row {
@@ -38,152 +38,152 @@
 	}
 </style>
 
-<body>
-	<div id="app">
-		<el-row :gutter="20" style="width: 100%;">
-			<el-col :span="3">
-				{% include "leftNav.html" %}
-			</el-col>
-			<el-col :span="21">
-				<div class="container">
-					<el-header class="header_item">待办事项</el-header>
-					<el-row class="header_row">
-						<el-col :span="3">
-							<div class="grid-content bg-purple">总申请人数</div>
-						</el-col>
-						<el-col :span="3">
-							<div class="grid-content bg-purple-light">申请同意人数</div>
-						</el-col>
-						<el-col :span="3">
-							<div class="grid-content bg-purple">现金余额</div>
-						</el-col>
-						<el-col :span="3">
-							<div class="grid-content bg-purple-light">总提现金额</div>
-						</el-col>
-						<el-col :span="3">
-							<div class="grid-content bg-purple">提现成功人数</div>
-						</el-col>
-						<el-col :span="3">
-							<div class="grid-content bg-purple-light">总返现金额</div>
-						</el-col>
-						<el-col :span="4">
-							<div class="grid-content bg-purple-light">返现处理人数</div>
-						</el-col>
-					</el-row>
-					<el-row class="th_row">
-						<el-col :span="3">
-							<div class="grid-content bg-purple">{{total.apply_num}}</div>
-						</el-col>
-						<el-col :span="3">
-							<div class="grid-content bg-purple-light">{{total.user_num}}</div>
-						</el-col>
-						<el-col :span="3">
-							<div class="grid-content bg-purple">{{total.balance}}</div>
-						</el-col>
-						<el-col :span="3">
-							<div class="grid-content bg-purple-light">{{total.with_total}}</div>
-						</el-col>
-						<el-col :span="3">
-							<div class="grid-content bg-purple">{{total.with_count}}</div>
-						</el-col>
-						<el-col :span="3">
-							<div class="grid-content bg-purple-light">{{total.ret_total}}</div>
-						</el-col>
-						<el-col :span="4">
-							<div class="grid-content bg-purple-light">{{total.ret_count}}</div>
-						</el-col>
-					</el-row>
+  <body>
+    <div id="app">
+      <el-row :gutter="20" style="width: 100%;">
+        <el-col :span="3">
+          {% include "leftNav.html" %}
+        </el-col>
+        <el-col :span="21">
+          <div class="container">
+            <el-header class="header_item">待办事项</el-header>
+            <el-row class="header_row">
+              <el-col :span="3">
+                <div class="grid-content bg-purple">总申请人数</div>
+              </el-col>
+              <el-col :span="3">
+                <div class="grid-content bg-purple-light">申请同意人数</div>
+              </el-col>
+              <el-col :span="3">
+                <div class="grid-content bg-purple">现金余额</div>
+              </el-col>
+              <el-col :span="3">
+                <div class="grid-content bg-purple-light">总提现金额</div>
+              </el-col>
+              <el-col :span="3">
+                <div class="grid-content bg-purple">提现成功人数</div>
+              </el-col>
+              <el-col :span="3">
+                <div class="grid-content bg-purple-light">总返现金额</div>
+              </el-col>
+              <el-col :span="4">
+                <div class="grid-content bg-purple-light">返现处理人数</div>
+              </el-col>
+            </el-row>
+            <el-row class="th_row">
+              <el-col :span="3">
+                <div class="grid-content bg-purple">{{total.apply_num}}</div>
+              </el-col>
+              <el-col :span="3">
+                <div class="grid-content bg-purple-light">{{total.user_num}}</div>
+              </el-col>
+              <el-col :span="3">
+                <div class="grid-content bg-purple">{{total.balance}}</div>
+              </el-col>
+              <el-col :span="3">
+                <div class="grid-content bg-purple-light">{{total.with_total}}</div>
+              </el-col>
+              <el-col :span="3">
+                <div class="grid-content bg-purple">{{total.with_count}}</div>
+              </el-col>
+              <el-col :span="3">
+                <div class="grid-content bg-purple-light">{{total.ret_total}}</div>
+              </el-col>
+              <el-col :span="4">
+                <div class="grid-content bg-purple-light">{{total.ret_count}}</div>
+              </el-col>
+            </el-row>
 
-					<el-header>数据总览</el-header>
-					<el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results" style="width: 100%;"
-					 border>
-						<el-table-column label="日期">
-							<template slot-scope="scope">${ scope.row.date }</template>
-						</el-table-column>
-						<el-table-column label="新申请用户数">
-							<template slot-scope="scope">${ scope.row.apply_num }</template>
-						</el-table-column>
-						<el-table-column label="审核拒绝人数">
-							<template slot-scope="scope">${ scope.row.refuse_num }</template>
-						</el-table-column>
-						<el-table-column label="审核通过人数">
-							<template slot-scope="scope">${ scope.row.new_reg_num }</template>
-						</el-table-column>
-						<el-table-column label="成功提现金额">
-							<template slot-scope="scope">${ scope.row.with_amount }</template>
-						</el-table-column>
-						<el-table-column label="成果提现用户数">
-							<template slot-scope="scope">${ scope.row.with_num }</template>
-						</el-table-column>
-						<el-table-column label="奖励金额">
-							<template slot-scope="scope">${ scope.row.ret_amount }</template>
-						</el-table-column>
-						<el-table-column label="管理员添加金额">
-							<template slot-scope="scope">${ scope.row.admin_amount }</template>
-						</el-table-column>
-						<el-table-column label="红包激活金额">
-							<template slot-scope="scope">${ scope.row.coupon_amount }</template>
-						</el-table-column>
-					</el-table>
-					<div class="pagination-box">
-						<el-pagination background @current-change="handleCurrentChange" :page-size="pageSize" :current-page="currentPage" layout="total, prev, pager, next, jumper"
-						 :total="planTableData.recordCount">
-						</el-pagination>
-					</div>
-				</div>
-			</el-col>
-		</el-row>
+            <el-header>数据总览</el-header>
+            <el-table :header-cell-style="rowStyle" :row-style="rowStyle" ref="multipleTable" :data="planTableData.results"
+              style="width: 100%;" border>
+              <el-table-column label="日期">
+                <template slot-scope="scope">${ scope.row.date }</template>
+              </el-table-column>
+              <el-table-column label="新申请用户数">
+                <template slot-scope="scope">${ scope.row.apply_num }</template>
+              </el-table-column>
+              <el-table-column label="审核拒绝人数">
+                <template slot-scope="scope">${ scope.row.refuse_num }</template>
+              </el-table-column>
+              <el-table-column label="审核通过人数">
+                <template slot-scope="scope">${ scope.row.new_reg_num }</template>
+              </el-table-column>
+              <el-table-column label="成功提现金额">
+                <template slot-scope="scope">${ scope.row.with_amount }</template>
+              </el-table-column>
+              <el-table-column label="成果提现用户数">
+                <template slot-scope="scope">${ scope.row.with_num }</template>
+              </el-table-column>
+              <el-table-column label="奖励金额">
+                <template slot-scope="scope">${ scope.row.ret_amount }</template>
+              </el-table-column>
+              <el-table-column label="管理员添加金额">
+                <template slot-scope="scope">${ scope.row.admin_amount }</template>
+              </el-table-column>
+              <el-table-column label="红包激活金额">
+                <template slot-scope="scope">${ scope.row.coupon_amount }</template>
+              </el-table-column>
+            </el-table>
+            <div class="pagination-box">
+              <el-pagination background @current-change="handleCurrentChange" :page-size="pageSize" :current-page="currentPage"
+                layout="total, prev, pager, next, jumper" :total="planTableData.recordCount">
+              </el-pagination>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
 
-	</div>
+    </div>
 
-	<script type="text/javascript">
-		var app = new Vue({
-			el: '#app',
-			delimiters: ['${', '}'],
-			data: {
-				activeNav: '1-1',
-				rowStyle: {
-					'text-align': 'center'
-				},
-				planTableData: {},
-				page: 1,
-				pageSize: 10,
-				currentPage: 1,
-			},
-			created: function () {
-				// this.getAllPlan();
-				this.getDataList(1, 10);
-			},
-			mounted: function() {
-        document.body.style.opacity = 1;
-      },
-			methods: {
-				handleCurrentChange: function (val) {
-					app.currentPage = val;
-					app.getDataList(app.currentPage, app.pageSize);
-				},
-				getDataList: function (page, pageSize) {
-					var that = this;
-					$.ajax({
-						type: "get",
-						url: '/restapi/daystatis/?page=' + page + '&pageSize=' + pageSize,
-						async: true,
-						success: function (res) {
-							console.log('---', res);
-							if (res.code == 0) {
-								app.planTableData = res;
-							} else {
-								that.$notify.error({
-									title: '错误',
-									message: res.detail
-								});
-							}
-						}
-					});
-				},
-			}
-		})
-	</script>
-</body>
+    <script type="text/javascript">
+      var app = new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: {
+          activeNav: '1-1',
+          rowStyle: {
+            'text-align': 'center'
+          },
+          planTableData: {},
+          page: 1,
+          pageSize: 10,
+          currentPage: 1,
+        },
+        created: function() {
+          // this.getAllPlan();
+          this.getDataList(1, 10);
+        },
+        mounted: function() {
+          document.body.style.opacity = 1;
+        },
+        methods: {
+          handleCurrentChange: function(val) {
+            app.currentPage = val;
+            app.getDataList(app.currentPage, app.pageSize);
+          },
+          getDataList: function(page, pageSize) {
+            var that = this;
+            $.ajax({
+              type: "get",
+              url: '/restapi/daystatis/?page=' + page + '&pageSize=' + pageSize,
+              async: true,
+              success: function(res) {
+                console.log('---', res);
+                if (res.code == 0) {
+                  that.planTableData = res;
+                } else {
+                  that.$notify.error({
+                    title: '错误',
+                    message: res.detail
+                  });
+                }
+              }
+            });
+          },
+        }
+      })
+    </script>
+  </body>
 
 </html>

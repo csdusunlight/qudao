@@ -437,7 +437,7 @@ class MsgLogViewSet(ModelViewSet):
             ret['msg'] = unicode(e)
             ret['num'] = 0
             return JsonResponse(ret)
-        # send_msgs.delay(rtable)
+        send_msgs.delay(rtable)
         ret['num'] = len(rtable)
         return JsonResponse(ret)
 

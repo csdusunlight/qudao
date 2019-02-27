@@ -83,3 +83,18 @@ class Message_Record(models.Model):
         verbose_name = u"短信群发记录"
         
     
+class Message_Log(models.Model):
+    STATUS = (
+        (0, '提交中'),
+        (1, '提交失败'),
+        (2, '提交成功'),
+        (3, '发送失败'),
+        (4, '发送成功'),
+    )
+    time = models.DateField(u"发送时间", default=timezone.now)
+    mobile = models.CharField(u"手机号",max_length=11)
+    content = models.CharField(u"内容",max_length=1000)
+    # state = models.IntegerField(choices=STATUS, default=0)
+    class Meta:
+        verbose_name_plural = u"短信单发记录"
+        verbose_name = u"短信单发记录"

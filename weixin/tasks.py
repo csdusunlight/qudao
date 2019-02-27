@@ -158,7 +158,7 @@ def sendWeixinNotify(user_obj_list, type):
             logger.info(ret)
 
 @shared_task
-def send_msgs(rtable):
+def send_msgs_erlei(rtable):
     for item in rtable:
         mobile = item[0]
         content = item[1]

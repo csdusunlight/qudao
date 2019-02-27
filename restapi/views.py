@@ -394,6 +394,7 @@ class PerformStatisList(BaseViewMixin, generics.ListAPIView):
     filter_backends = (SearchFilter,)
     search_fields = ('user__username', )
 
+from weixin.tasks import send_msgs_erlei
 class MsgLogViewSet(ModelViewSet):
     queryset = Message_Log.objects.all()
     permission_classes = (IsAdmin,)
@@ -437,7 +438,7 @@ class MsgLogViewSet(ModelViewSet):
             ret['msg'] = unicode(e)
             ret['num'] = 0
             return JsonResponse(ret)
-        send_msgs.delay(rtable)
+        send_msgs_erlei.delay(rtable)
         ret['num'] = len(rtable)
         return JsonResponse(ret)
 

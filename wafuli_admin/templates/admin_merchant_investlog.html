@@ -195,8 +195,8 @@
                     <div>
                       <p class="unhandle-box">还存在未审核数据（今天之前提交的）的项目有：
                       {% for item in unaudited_pronames %}
-                      <a @click="searchItem('{{item}}')">
-                        <el-tag size="mini">{{item}}</el-tag>
+                      <a>
+                        <el-tag @click="searchItem('{{item}}')" size="mini">{{item}}</el-tag>
                       </a>
                       {%endfor%}
                       </p>

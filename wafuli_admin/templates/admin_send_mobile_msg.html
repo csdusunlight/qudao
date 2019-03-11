@@ -70,6 +70,7 @@
           </el-form>
       </el-col>
       <el-col :span="21">
+        <el-header>短信数据</el-header>
         <div class="container">
             <el-row :gutter="20">
               <el-col :span="4">
@@ -85,7 +86,7 @@
               <el-col :span="6">
                 <el-upload style="margin-right: 20px;" class="avatar-uploader" action="/restapi/erlei_msgs/import_msg_excel/" :data="unloadData" name="file" accept=".xls"
                     :show-file-list="false" :on-success="handleAvatarSuccess" :on-error="handleAvatarError" :before-upload="beforeAvatarUpload">
-                    <el-button size="small" type="primary">点击上传</el-button>
+                    <el-button size="small" type="primary">表格发送短信</el-button>
                     <div slot="tip" class="el-upload__tip">&nbsp;只能上传xls文件</div>
                 </el-upload>
               </el-col>
@@ -178,7 +179,7 @@
               success: function(res) {
                 console.log(res);
                 if(res.code == 0) {
-                  app.planTableData = res;
+                  app.msgTableData = res;
                 } else {
                   that.$notify.error({
                     title: '错误',

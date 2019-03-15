@@ -142,7 +142,7 @@ def sendmsg_by189(app_id, app_secret, access_token, token, timestamp, phone):
 
 
 
-def sendmsg_bydhst(phone, msg=None):
+def sendmsg_bydhst(phone, msg=None, sign='【福利联盟】'):
     raw_pass = '4i38lwX8'
     m2 = md5()   
     m2.update(raw_pass)   
@@ -158,7 +158,7 @@ def sendmsg_bydhst(phone, msg=None):
                      'msgid':'2c92825934837c4d0134837dcba00150',
                      'phones':phone,
                      'content':content,
-                     'sign':'【福利联盟】',
+                     'sign':sign,
                      'subcode':'',
                      'sendtime':'',
     }

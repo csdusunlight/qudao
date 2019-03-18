@@ -468,12 +468,12 @@ class UpMsgLogViewSet(ModelViewSet):
         if json_ret:
             result = json_ret.get('result', '-1')
             if result == '0':
-                delivers = result['delivers']
+                delivers = json_ret['delivers']
                 for deliver in delivers:
                     phone = deliver['phone']
                     content = deliver['content']
                     subcode = deliver['subcode']
                     delivertime = datetime.datetime.strptime(deliver['delivertime'], '%Y-%m-%d %H:%M:%S')
-                    Message_Up_Log.objects.update_or_create(subcode=subcode, defaults=dict(mobile=phone,
-                            content=content, delivertime=delivertime))
+                    Message_Up_Log.objects.update_or_create(mobile=phone,
+                            content=content, delivertime=delivertime,subcode=subcode)
         return JsonResponse({'code':0})

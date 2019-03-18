@@ -4,7 +4,7 @@ import traceback
 
 import xlrd
 import logging
-from django.shortcuts import render
+import datetime
 
 # Create your views here.
 from rest_framework import generics, permissions
@@ -29,7 +29,7 @@ from rest_framework.filters import SearchFilter,OrderingFilter
 from public.permissions import IsOwnerOrStaff, IsSelfOrStaff
 from restapi.Filters import InvestLogFilter, SubscribeShipFilter, UserFilter,\
     ApplyLogFilter, TranslistFilter, WithdrawLogFilter, ProjectFilter
-from django.db.models import Q, datetime
+from django.db.models import Q
 from wafuli_admin.models import DayStatis, Message_Log, Message_Up_Log
 from statistic.models import UserDetailStatis, UserAverageStatis,\
     PerformanceStatistics
@@ -453,6 +453,7 @@ class UpMsgLogViewSet(ModelViewSet):
     pagination_class = MyPageNumberPagination
     filter_backends = (SearchFilter,)
     search_fields = ('mobile','content')
+    @list_route(methods=['post'])
     def obtain_up_msgs(self, request, *args, **kwargs):
         raw_pass = '4i38lwX8'
         m2 = md5()

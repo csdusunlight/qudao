@@ -101,7 +101,7 @@ class Message_Log(models.Model):
 
 class Message_Up_Log(models.Model):
     subcode = models.CharField(max_length=100)
-    time = models.DateField(u"发送时间", default=timezone.now)
+    time = models.DateTimeField(u"发送时间", default=timezone.now)
     mobile = models.CharField(u"手机号",max_length=11)
     content = models.CharField(u"内容",max_length=1000)
     # state = models.IntegerField(choices=STATUS, default=0)

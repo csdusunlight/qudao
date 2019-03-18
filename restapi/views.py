@@ -475,5 +475,5 @@ class UpMsgLogViewSet(ModelViewSet):
                     subcode = deliver['subcode']
                     delivertime = datetime.datetime.strptime(deliver['delivertime'], '%Y-%m-%d %H:%M:%S')
                     Message_Up_Log.objects.update_or_create(mobile=phone,
-                            content=content, delivertime=delivertime,subcode=subcode)
+                            content=content, time=delivertime,subcode=subcode)
         return JsonResponse({'code':0})

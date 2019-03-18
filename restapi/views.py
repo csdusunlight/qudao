@@ -3,6 +3,7 @@ import time
 import traceback
 
 import xlrd
+import logging
 from django.shortcuts import render
 
 # Create your views here.
@@ -11,6 +12,7 @@ import django_filters
 from rest_framework.decorators import list_route
 from rest_framework.viewsets import ModelViewSet
 
+from account.varify import httpconn
 from public.Paginations import MyPageNumberPagination
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
     Announcement, WithdrawLog, Mark, Company, BookLog
@@ -21,14 +23,14 @@ from restapi.serializers import UserSerializer, InvestLogSerializer, \
     ApplyLogSerializer, WithdrawLogSerializer, UserDetailStatisSerializer, \
     UserAverageStatisSerializer, MarkSerializer, CompanySerializer, \
     BookLogSerializer, DocumentSerializer, MesssageSerializer, \
-    PerformStatisSerializer, ProjectSerializerForAdmin, MessageLogSerializer
+    PerformStatisSerializer, ProjectSerializerForAdmin, MessageLogSerializer, UpMessageLogSerializer
 from account.models import MyUser, ApplyLog, Message
 from rest_framework.filters import SearchFilter,OrderingFilter
 from public.permissions import IsOwnerOrStaff, IsSelfOrStaff
 from restapi.Filters import InvestLogFilter, SubscribeShipFilter, UserFilter,\
     ApplyLogFilter, TranslistFilter, WithdrawLogFilter, ProjectFilter
-from django.db.models import Q
-from wafuli_admin.models import DayStatis, Message_Log
+from django.db.models import Q, datetime
+from wafuli_admin.models import DayStatis, Message_Log, Message_Up_Log
 from statistic.models import UserDetailStatis, UserAverageStatis,\
     PerformanceStatistics
 from rest_framework.exceptions import ValidationError
@@ -37,6 +39,7 @@ from docs.models import Document
 import re
 from django.http import JsonResponse
 
+logger = logging.getLogger('wafuli')
 # from wafuli.Filters import UserEventFilter
 class BaseViewMixin(object):
     authentication_classes = (CsrfExemptSessionAuthentication,)
@@ -442,3 +445,34 @@ class MsgLogViewSet(ModelViewSet):
         ret['num'] = len(rtable)
         return JsonResponse(ret)
 
+from hashlib import sha1, md5
+class UpMsgLogViewSet(ModelViewSet):
+    queryset = Message_Up_Log.objects.all()
+    permission_classes = (IsAdmin,)
+    serializer_class = UpMessageLogSerializer
+    pagination_class = MyPageNumberPagination
+    filter_backends = (SearchFilter,)
+    search_fields = ('mobile','content')
+    def obtain_up_msgs(self, request, *args, **kwargs):
+        raw_pass = '4i38lwX8'
+        m2 = md5()
+        m2.update(raw_pass)
+        param = {
+            'account': 'dh31921',
+            'password': m2.hexdigest(),
+        }
+        url_msg = 'http://wt.3tong.net/json/sms/Deliver'
+        json_ret = httpconn(url_msg, param, 1)
+        logger.info('json returned from dhst:' + str(json_ret))
+        if json_ret:
+            result = json_ret.get('result', '-1')
+            if result == '0':
+                delivers = result['delivers']
+                for deliver in delivers:
+                    phone = deliver['phone']
+                    content = deliver['content']
+                    subcode = deliver['subcode']
+                    delivertime = datetime.datetime.strptime(deliver['delivertime'], '%Y-%m-%d %H:%M:%S')
+                    Message_Up_Log.objects.update_or_create(subcode=subcode, defaults=dict(mobile=phone,
+                            content=content, delivertime=delivertime))
+        return JsonResponse({'code':0})

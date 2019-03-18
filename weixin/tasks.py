@@ -165,3 +165,4 @@ def send_msgs_erlei(rtable):
         mobile = str(int(float(mobile)))
         sendmsg_bydhst(mobile, content, sign='【来财商贸】')
         log = Message_Log.objects.create(mobile=mobile, content=content)
+

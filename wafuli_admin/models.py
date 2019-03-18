@@ -98,3 +98,13 @@ class Message_Log(models.Model):
     class Meta:
         verbose_name_plural = u"短信单发记录"
         verbose_name = u"短信单发记录"
+
+class Message_Up_Log(models.Model):
+    subcode = models.CharField(max_length=100)
+    time = models.DateField(u"发送时间", default=timezone.now)
+    mobile = models.CharField(u"手机号",max_length=11)
+    content = models.CharField(u"内容",max_length=1000)
+    # state = models.IntegerField(choices=STATUS, default=0)
+    class Meta:
+        verbose_name_plural = u"短信上行记录"
+        verbose_name = u"短信上行记录"

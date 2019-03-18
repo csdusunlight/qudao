@@ -467,7 +467,7 @@ class UpMsgLogViewSet(ModelViewSet):
         logger.info('json returned from dhst:' + str(json_ret))
         if json_ret:
             result = json_ret.get('result', '-1')
-            if result == '0':
+            if result == '0' and 'delivers' in json_ret:
                 delivers = json_ret['delivers']
                 for deliver in delivers:
                     phone = deliver['phone']

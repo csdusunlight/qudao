@@ -455,18 +455,21 @@ class MsgLogViewSet(ModelViewSet):
             'password': m2.hexdigest(),
         }
         url_msg = 'http://wt.3tong.net/json/sms/Deliver'
-        json_ret = httpconn(url_msg, param, 1)
-        logger.info('json returned from dhst:' + str(json_ret))
-        if json_ret:
-            result = json_ret.get('result', '-1')
-            if result == '0' and 'delivers' in json_ret:
-                delivers = json_ret['delivers']
-                for deliver in delivers:
-                    phone = deliver['phone']
-                    content = deliver['content']
-                    subcode = deliver['subcode']
-                    delivertime = datetime.datetime.strptime(deliver['delivertime'], '%Y-%m-%d %H:%M:%S')
-                    Message_Log.objects.update_or_create(mobile=phone,
-                            content=content, time=delivertime,type=1)
+        while True:
+            json_ret = httpconn(url_msg, param, 1)
+            logger.info('json returned from dhst:' + str(json_ret))
+            if json_ret:
+                result = json_ret.get('result', '-1')
+                if result == '0' and 'delivers' in json_ret:
+                    delivers = json_ret['delivers']
+                    for deliver in delivers:
+                        phone = deliver['phone']
+                        content = deliver['content']
+                        delivertime = datetime.datetime.strptime(deliver['delivertime'], '%Y-%m-%d %H:%M:%S')
+                        Message_Log.objects.update_or_create(mobile=phone,
+                                content=content, time=delivertime,type=1)
+                    if len(delivers) >= 150:
+                        continue
+            break
         return JsonResponse({'code':0})
 

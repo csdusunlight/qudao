@@ -74,15 +74,28 @@
             <el-row :gutter="20">
               <el-col :span="4">
                 <div class="grid-content bg-purple">
-                    <el-input v-model="searchValue" placeholder="请输入内容"></el-input>
+                    <el-select v-model="msgType" placeholder="选择短信方式">
+                      <el-option label="发出短信" value="0"></el-option>
+                      <el-option label="回复短信" value="1"></el-option>
+                    </el-select>
                 </div>
               </el-col>
               <el-col :span="4">
                 <div class="grid-content bg-purple">
+                    <el-input v-model="mobile" placeholder="请输入手机号码"></el-input>
+                </div>
+              </el-col>
+              <el-col :span="2">
+                <div class="grid-content bg-purple">
                     <el-button type="primary" @click="searchData">搜索</el-button>
                 </div>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="5">
+                <div class="grid-content bg-purple">
+                    <el-button type="primary" @click="refreshData">刷新数据</el-button>
+                </div>
+              </el-col>
+              <el-col :span="5">
                 <el-upload style="margin-right: 20px;" class="avatar-uploader" action="/restapi/erlei_msgs/import_msg_excel/" :data="unloadData" name="file" accept=".xls"
                     :show-file-list="false" :on-success="handleAvatarSuccess" :on-error="handleAvatarError" :before-upload="beforeAvatarUpload">
                     <el-button size="small" type="primary">表格发送短信</el-button>
@@ -136,7 +149,8 @@
           test: 'jzy'
         },
         msgTableData: [],
-        searchValue:'',
+        mobile:'',
+        msgType: '0',
         rowStyle: {
           'text-align': 'center'
         },
@@ -173,7 +187,7 @@
           var that = this;
           $.ajax({
               type: "get",
-              url: '/restapi/erlei_msgs/?page=' + that.currentPage + '&pageSize=' + that.pageSize +'&search=' +that.searchValue,
+              url: '/restapi/erlei_msgs/?page=' + that.currentPage + '&pageSize=' + that.pageSize +'&mobile=' +that.mobile +'&type=' +that.msgType,
               async: true,
               success: function(res) {
                 console.log(res);
@@ -216,30 +230,47 @@
               }
               console.log('data');
               $.ajax({
-                  url: "/Admin/send_multiple_msg/",
-                  dataType:"json",
-                  async: false,
-                  type:"POST",
-                  data: data,
-                  success:function(ret){
-                      if(ret.code=='0'){
-                          console.log(ret);
-                          that.$notify.success({
-                            title: '提示',
-                            message: '发送信息人数：' + ret.num
-                          });
-                      }
-                      else {
-                          alert(ret.res_msg);
-                      }
-                  },
-                  error:function(){
-                      alert("请检查网络连接");
-                  }
+                url: "/Admin/send_multiple_msg/",
+                dataType:"json",
+                async: false,
+                type:"POST",
+                data: data,
+                success:function(ret){
+                    if(ret.code=='0'){
+                        console.log(ret);
+                        that.$notify.success({
+                          title: '提示',
+                          message: '发送信息人数：' + ret.num
+                        });
+                    }
+                    else {
+                        alert(ret.res_msg);
+                    }
+                },
+                error:function(){
+                    alert("请检查网络连接");
+                }
               });
             } else {
               console.log('error submit!!');
               return false;
+            }
+          });
+        },
+        refreshData: function() {
+          $.ajax({
+            url: "/restapi/erlei_msgs/obtain_up_msgs/",
+            dataType:"json",
+            data: {
+              csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            async: false,
+            type:"POST",
+            success:function(ret){
+              location.reload()
+            },
+            error:function(){
+                alert("请检查网络连接");
             }
           });
         },

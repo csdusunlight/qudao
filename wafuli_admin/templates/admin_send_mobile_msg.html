@@ -261,6 +261,9 @@
           $.ajax({
             url: "/restapi/erlei_msgs/obtain_up_msgs/",
             dataType:"json",
+            data: {
+              csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
             async: false,
             type:"POST",
             success:function(ret){

@@ -99,6 +99,7 @@ class Message_Log(models.Model):
     class Meta:
         verbose_name_plural = u"短信单发记录"
         verbose_name = u"短信单发记录"
+        ordering = ('-time',)
 #
 # class Message_Up_Log(models.Model):
 #     subcode = models.CharField(max_length=100)

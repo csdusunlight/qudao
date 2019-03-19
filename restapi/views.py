@@ -23,7 +23,7 @@ from restapi.serializers import UserSerializer, InvestLogSerializer, \
     ApplyLogSerializer, WithdrawLogSerializer, UserDetailStatisSerializer, \
     UserAverageStatisSerializer, MarkSerializer, CompanySerializer, \
     BookLogSerializer, DocumentSerializer, MesssageSerializer, \
-    PerformStatisSerializer, ProjectSerializerForAdmin, MessageLogSerializer, UpMessageLogSerializer
+    PerformStatisSerializer, ProjectSerializerForAdmin, MessageLogSerializer
 from account.models import MyUser, ApplyLog, Message
 from rest_framework.filters import SearchFilter,OrderingFilter
 from public.permissions import IsOwnerOrStaff, IsSelfOrStaff

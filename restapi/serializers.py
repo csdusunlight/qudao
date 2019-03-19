@@ -8,7 +8,7 @@ from rest_framework import serializers
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
     Announcement, WithdrawLog, Mark, BookLog
 from account.models import MyUser, ApplyLog, Message,ApplyLogForChannel,ApplyLogForFangdan
-from wafuli_admin.models import DayStatis, Message_Log, Message_Up_Log
+from wafuli_admin.models import DayStatis, Message_Log
 from wafuli.models import Company
 from statistic.models import UserDetailStatis, UserAverageStatis,\
     PerformanceStatistics

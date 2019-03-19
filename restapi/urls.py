@@ -6,8 +6,6 @@ from restapi import views
 
 router = routers.SimpleRouter()
 router.register(r'erlei_msgs', views.MsgLogViewSet)
-router.register(r'erlei_msgs_up', views.UpMsgLogViewSet)
-
 urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls',namespace='rest_framework')),
     url(r'^projects/$', views.ProjectList.as_view()),

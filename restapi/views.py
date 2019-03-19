@@ -404,8 +404,8 @@ class MsgLogViewSet(ModelViewSet):
     permission_classes = (IsAdmin,)
     serializer_class = MessageLogSerializer
     pagination_class = MyPageNumberPagination
-    filter_backends = (SearchFilter,)
-    search_fields = ('mobile','content')
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filter_fields = ('mobile','type')
     @list_route(methods=['post'])
     def import_msg_excel(self,request):
         ret = {'code': 0}

@@ -75,7 +75,7 @@ class Invest_Record(models.Model):
     remark = models.CharField(u"备注", max_length=100,blank=True)
 
 class Message_Record(models.Model):
-    time = models.DateField(u"群发时间", default=timezone.now)
+    time = models.DateTimeField(u"群发时间", default=timezone.now)
     msgid = models.CharField(u"批次号",max_length=32)
     content = models.CharField(max_length=200)
     class Meta:
@@ -91,7 +91,7 @@ class Message_Log(models.Model):
         (3, '发送失败'),
         (4, '发送成功'),
     )
-    time = models.DateField(u"发送时间", default=timezone.now)
+    time = models.DateTimeField(u"发送时间", default=timezone.now)
     mobile = models.CharField(u"手机号",max_length=11)
     content = models.CharField(u"内容",max_length=1000)
     state = models.IntegerField(choices=STATUS, default=0)

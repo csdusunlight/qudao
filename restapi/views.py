@@ -30,7 +30,7 @@ from public.permissions import IsOwnerOrStaff, IsSelfOrStaff
 from restapi.Filters import InvestLogFilter, SubscribeShipFilter, UserFilter,\
     ApplyLogFilter, TranslistFilter, WithdrawLogFilter, ProjectFilter
 from django.db.models import Q
-from wafuli_admin.models import DayStatis, Message_Log, Message_Up_Log
+from wafuli_admin.models import DayStatis, Message_Log
 from statistic.models import UserDetailStatis, UserAverageStatis,\
     PerformanceStatistics
 from rest_framework.exceptions import ValidationError
@@ -397,6 +397,7 @@ class PerformStatisList(BaseViewMixin, generics.ListAPIView):
     filter_backends = (SearchFilter,)
     search_fields = ('user__username', )
 
+from hashlib import md5
 from weixin.tasks import send_msgs_erlei
 class MsgLogViewSet(ModelViewSet):
     queryset = Message_Log.objects.all()
@@ -444,15 +445,6 @@ class MsgLogViewSet(ModelViewSet):
         send_msgs_erlei.delay(rtable)
         ret['num'] = len(rtable)
         return JsonResponse(ret)
-
-from hashlib import sha1, md5
-class UpMsgLogViewSet(ModelViewSet):
-    queryset = Message_Up_Log.objects.all()
-    permission_classes = (IsAdmin,)
-    serializer_class = UpMessageLogSerializer
-    pagination_class = MyPageNumberPagination
-    filter_backends = (SearchFilter,)
-    search_fields = ('mobile','content')
     @list_route(methods=['post'])
     def obtain_up_msgs(self, request, *args, **kwargs):
         raw_pass = '4i38lwX8'
@@ -474,6 +466,7 @@ class UpMsgLogViewSet(ModelViewSet):
                     content = deliver['content']
                     subcode = deliver['subcode']
                     delivertime = datetime.datetime.strptime(deliver['delivertime'], '%Y-%m-%d %H:%M:%S')
-                    Message_Up_Log.objects.update_or_create(mobile=phone,
-                            content=content, time=delivertime,subcode=subcode)
+                    Message_Log.objects.update_or_create(mobile=phone,
+                            content=content, time=delivertime,type=1)
         return JsonResponse({'code':0})
+

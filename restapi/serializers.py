@@ -302,8 +302,8 @@ class MessageLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message_Log
         fields = '__all__'
-
-class UpMessageLogSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Message_Up_Log
-        fields = '__all__'
+#
+# class UpMessageLogSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Message_Up_Log
+#         fields = '__all__'

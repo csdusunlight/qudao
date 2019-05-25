@@ -411,6 +411,7 @@ class MsgLogViewSet(ModelViewSet):
     @list_route(methods=['post'])
     def import_msg_excel(self,request):
         ret = {'code': 0}
+        print(123123)
         file = request.FILES.get('file')
         #     print file.name
         tempfile = './out' + str(int(time.time())) + '.xls'
@@ -463,9 +464,11 @@ class MsgLogViewSet(ModelViewSet):
         nrows = table.nrows
         ncols = table.ncols
         if not content:
+            ret['code'] = 1
             ret['msg'] = u"内容不能为空"
             return JsonResponse(ret)
-        if ncols != 2:
+        if ncols != 1:
+            ret['code'] = 2
             ret['msg'] = u"文件格式必须只有一列，手机号"
             return JsonResponse(ret)
         rtable = []

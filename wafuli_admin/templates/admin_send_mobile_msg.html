@@ -150,7 +150,7 @@
         </el-form-item>
         <el-form-item label="选择手机号" label-width="150px">
           <el-upload style="margin-right: 20px;" class="avatar-uploader" action="/restapi/erlei_msgs/import_msg_excel_fix/" :data="unloadData" name="file" accept=".xls"
-              :show-file-list="false" :on-success="handleAvatarSuccess" :on-error="handleAvatarError" :before-upload="beforeAvatarUploadFix" :disabled="unloadData.content">
+              :show-file-list="false" :on-success="handleAvatarSuccess" :on-error="handleAvatarError" :before-upload="beforeAvatarUploadFix" :disabled="!unloadData.content">
               <el-button size="small" type="primary">表格发送短信</el-button>
               <div slot="tip" class="el-upload__tip">&nbsp;只能上传xls文件</div>
           </el-upload>

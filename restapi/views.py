@@ -12,7 +12,7 @@ import django_filters
 from rest_framework.decorators import list_route
 from rest_framework.viewsets import ModelViewSet
 
-from account.varify import httpconn
+from account.varify import httpconn, send_multimsg_bydhst
 from public.Paginations import MyPageNumberPagination
 from wafuli.models import Project, InvestLog, TransList, Notice, SubscribeShip,\
     Announcement, WithdrawLog, Mark, Company, BookLog
@@ -398,7 +398,9 @@ class PerformStatisList(BaseViewMixin, generics.ListAPIView):
     search_fields = ('user__username', )
 
 from hashlib import md5
-from weixin.tasks import send_msgs_erlei
+from weixin.tasks import send_msgs_erlei, send_msgs_erlei_multi
+
+
 class MsgLogViewSet(ModelViewSet):
     queryset = Message_Log.objects.all()
     permission_classes = (IsAdmin,)
@@ -445,6 +447,45 @@ class MsgLogViewSet(ModelViewSet):
         send_msgs_erlei.delay(rtable)
         ret['num'] = len(rtable)
         return JsonResponse(ret)
+
+    @list_route(methods=['post'])
+    def import_msg_excel_fix(self,request):
+        ret = {'code': 0}
+        file = request.FILES.get('file')
+        content = request.POST.get('content')
+        #     print file.name
+        tempfile = './out' + str(int(time.time())) + '.xls'
+        with open(tempfile, 'wb+') as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
+        data = xlrd.open_workbook(tempfile)
+        table = data.sheets()[0]
+        nrows = table.nrows
+        ncols = table.ncols
+        if not content:
+            ret['msg'] = u"内容不能为空"
+            return JsonResponse(ret)
+        if ncols != 2:
+            ret['msg'] = u"文件格式必须只有一列，手机号"
+            return JsonResponse(ret)
+        rtable = []
+        mobile_list = []
+        try:
+            for i in range(1, nrows):
+                temp = []
+                duplic = False
+                cell = table.cell(i, 0)
+                mobile = str(cell.value)
+                rtable.append(temp)
+        except Exception, e:
+            traceback.print_exc()
+            ret['msg'] = unicode(e)
+            ret['num'] = 0
+            return JsonResponse(ret)
+        send_msgs_erlei_multi.delay(rtable, content)
+        ret['num'] = len(rtable)
+        return JsonResponse(ret)
+
     @list_route(methods=['post'])
     def obtain_up_msgs(self, request, *args, **kwargs):
         raw_pass = '4i38lwX8'

@@ -6,6 +6,8 @@ Created on 2017年11月24日
 '''
 import datetime
 
+import itertools
+
 from wafuli_admin.models import Dict, Message_Log
 from weixin.settings import submit_investlog_notify_templateid,\
     book_invest_notify_templateid, withdraw_success_notify_templateid,\
@@ -13,7 +15,7 @@ from weixin.settings import submit_investlog_notify_templateid,\
     common_remark
 from dragon.settings import APPID, FULIUNION_DOMAIN
 from weixin.models import WeiXinUser
-from account.varify import httpconn, sendmsg_bydhst
+from account.varify import httpconn, sendmsg_bydhst, send_multimsg_bydhst
 import logging
 logger = logging.getLogger('wafuli')
 
@@ -166,3 +168,18 @@ def send_msgs_erlei(rtable):
         sendmsg_bydhst(mobile, content, sign='【来财商贸】')
         log = Message_Log.objects.create(mobile=mobile, content=content)
 
+@shared_task
+def send_msgs_erlei_multi(phone_list, content):
+    if not content or len(content)==0 or len(phone_list)==0:
+        return 0
+    phone_list = iter(set(phone_list))
+    item = list(itertools.islice(phone_list, 500))
+    tnum = 0
+    while item:
+        phones = ','.join(item)
+        print(phones)
+        reg = send_multimsg_bydhst(phones, content)
+        if reg==0:
+            tnum += len(item)
+        item = list(itertools.islice(phone_list, 500))
+    return tnum

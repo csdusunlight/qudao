@@ -171,7 +171,7 @@ def sendmsg_bydhst(phone, msg=None, sign='【福利联盟】'):
             return code
     return None
 #群发短信
-def send_multimsg_bydhst(phones, content):
+def send_multimsg_bydhst(phones, content, sign='【福利联盟】'):
     raw_pass = '4i38lwX8'
     m2 = md5()   
     m2.update(raw_pass)
@@ -184,7 +184,7 @@ def send_multimsg_bydhst(phones, content):
          'msgid':msgid,
          'phones':phones,
          'content':content,
-         'sign':'【福利联盟】',
+         'sign':sign,
          'subcode':'',
          'sendtime':'',
     }

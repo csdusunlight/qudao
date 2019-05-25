@@ -475,11 +475,10 @@ class MsgLogViewSet(ModelViewSet):
         mobile_list = []
         try:
             for i in range(1, nrows):
-                temp = []
                 duplic = False
                 cell = table.cell(i, 0)
                 mobile = str(cell.value)
-                rtable.append(temp)
+                rtable.append(mobile)
         except Exception, e:
             traceback.print_exc()
             ret['msg'] = unicode(e)

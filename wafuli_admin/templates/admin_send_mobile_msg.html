@@ -103,6 +103,11 @@
                     <div slot="tip" class="el-upload__tip">&nbsp;只能上传xls文件</div>
                 </el-upload>
               </el-col>
+              <el-col :span="2">
+                <div class="grid-content bg-purple">
+                    <el-button type="primary" @click="sendMsgFix">批量发送相同短信</el-button>
+                </div>
+              </el-col>
             </el-row>
           <el-table
             :header-cell-style="rowStyle"
@@ -138,6 +143,20 @@
         </div>
       </el-col>
     </el-row>
+    <el-dialog width="400px" title="批量发送相同短信" :visible.sync="sendMsgDialog">
+      <el-form>
+        <el-form-item label="短信内容" label-width="150px">
+          <el-input type="textarea" v-model="unloadData.content"></el-input>
+        </el-form-item>
+        <el-form-item label="选择手机号" label-width="150px">
+          <el-upload style="margin-right: 20px;" class="avatar-uploader" action="/restapi/erlei_msgs/import_msg_excel_fix/" :data="unloadData" name="file" accept=".xls"
+              :show-file-list="false" :on-success="handleAvatarSuccess" :on-error="handleAvatarError" :before-upload="beforeAvatarUploadFix" :disabled="unloadData.content">
+              <el-button size="small" type="primary">表格发送短信</el-button>
+              <div slot="tip" class="el-upload__tip">&nbsp;只能上传xls文件</div>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
   
   <script type="text/javascript">
@@ -148,7 +167,7 @@
         activeNav: '1-5',
         unloadData: {
           csrfmiddlewaretoken: '{{ csrf_token }}',
-          test: 'jzy'
+          content: ''
         },
         msgTableData: [],
         mobile:'',
@@ -172,6 +191,7 @@
         page: 1,
         pageSize: 10,
         currentPage: 1,
+        sendMsgDialog: false
       },
       created: function() {
         var that = this;
@@ -181,6 +201,9 @@
         document.body.style.opacity = 1;
       },
       methods: {
+        sendMsgFix: function () {
+          this.sendMsgDialog = true;
+        },
         handleCurrentChange: function (val) {
           app.currentPage = val;
           app.getDataList(app.currentPage,app.pageSize);
@@ -307,6 +330,16 @@
             console.log(file)
             this.$message('正在上传...')
         },
+         //上传文件
+        beforeAvatarUploadFix: function (file) {
+          console.log(file)
+          if (this.unloadData.content) {
+            this.$message('正在上传...')
+          } else {
+            this.$message('请先填写短信内容')
+            return false
+          }
+        },
         handleAvatarSuccess: function (res, file) {
             var that = this;
             console.log(res);
@@ -316,6 +349,7 @@
                     message: '成功数量：' + res.num + '条',
                     type: 'success'
                 });
+                that.sendMsgDialog = false;
                 that.getDataList();
             } else {
                 that.$notify.error({

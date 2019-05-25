@@ -477,7 +477,7 @@ class MsgLogViewSet(ModelViewSet):
             for i in range(1, nrows):
                 duplic = False
                 cell = table.cell(i, 0)
-                mobile = str(cell.value)
+                mobile = str(int(float(cell.value)))
                 rtable.append(mobile)
         except Exception, e:
             traceback.print_exc()

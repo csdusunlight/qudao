@@ -178,7 +178,7 @@ def send_msgs_erlei_multi(phone_list, content):
     while item:
         phones = ','.join(item)
         print(phones)
-        reg = send_multimsg_bydhst(phones, content)
+        reg = send_multimsg_bydhst(phones, content, sign='【来财商贸】')
         if reg==0:
             tnum += len(item)
         item = list(itertools.islice(phone_list, 500))
